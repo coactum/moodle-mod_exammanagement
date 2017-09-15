@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <XMLDB PATH="mod/exammanagement/db" VERSION="20170915" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
+    <TABLES>
+      <TABLE NAME="exammanagement" COMMENT="Default comment for tool_exammanagement, please edit me">
+        <FIELDS>
+          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        </FIELDS>
+        <KEYS>
+          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        </KEYS>
+      </TABLE>
+    </TABLES>
+  </XMLDB>
