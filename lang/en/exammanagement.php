@@ -25,7 +25,22 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//mainpage
 $string['maintitle'] = 'Overview';
+
+//addnewinstance
+$string['modulename'] = 'Exam management';
+$string['modulenameplural'] = 'Exam managements';
+$string['exammanagementname'] = 'Exam Management';
+$string['exammanagementname_help'] = 'You should not use another name as the standart ...';
+$string['exammanagementdescription'] = 'Description:';
+$string['exammanagementdescriptiontext'] = 'Descriptiontext ....';
+$string['exammanagementfieldset'] = 'Further Information';
+$string['exammanagementfieldset1'] = 'Further Information1';
+$string['exammanagementfieldset2'] = 'Further Information2';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
+
+//veraltet?
 $string['pluginname'] = 'Exam management';
+
