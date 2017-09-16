@@ -34,9 +34,9 @@ $e  = optional_param('e', 0, PARAM_INT);
 if ($id) {
     $cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
     $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $moduleinstance = $DB->get_record('mod_exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($e) {
-    $moduleinstance = $DB->get_record('mod_exammanagement', array('id' => $n), '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('exammanagement', array('id' => $n), '*', MUST_EXIST);
     $course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
     $cm             = get_coursemodule_from_instance('exammanagement', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
@@ -47,13 +47,13 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$event = \mod_exammanagement\event\course_module_viewed::create(array(
-    'objectid' => $moduleinstance->id,
-    'context' => $modulecontext
-));
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('mod_exammanagement', $moduleinstance);
-$event->trigger();
+// $event = \mod_exammanagement\event\course_module_viewed::create(array(
+//     'objectid' => $moduleinstance->id,
+//     'context' => $modulecontext
+// ));
+// $event->add_record_snapshot('course', $course);
+// $event->add_record_snapshot('exammanagement', $moduleinstance);
+// $event->trigger();
 
 $PAGE->set_url('/mod/exammanagement/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
