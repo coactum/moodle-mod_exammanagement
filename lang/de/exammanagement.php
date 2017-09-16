@@ -31,6 +31,7 @@ $string['maintitle'] = 'Prüfungsorganisation';
 //addnewinstance
 $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
+$string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagementname_help'] = 'Bitte keinen anderen Namen verwenden als den Standardnamen ...';
 $string['exammanagementdescription'] = 'Beschreibung:';

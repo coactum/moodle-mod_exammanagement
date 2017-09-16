@@ -31,6 +31,7 @@ $string['maintitle'] = 'Overview';
 //addnewinstance
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
+$string['modulename_help'] = 'Dies ist der Hilfetext, welcher bei der Auswahl einer neuen Aktivität angezeigt wird ...';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagementname_help'] = 'You should not use another name as the standart ...';
 $string['exammanagementdescription'] = 'Description:';
