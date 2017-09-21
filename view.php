@@ -79,5 +79,12 @@ echo $OUTPUT->header();
 // render page body
 echo $OUTPUT->heading('Yay! It works!');
 
+echo ' id: ';
+var_dump($id);
+echo '<br> cm:';
+var_dump($cm);
+echo '<br> moduleinstance:';
+var_dump ($moduleinstance);
+
 // Finish the page.
 echo $OUTPUT->footer();

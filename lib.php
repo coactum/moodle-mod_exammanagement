@@ -37,9 +37,11 @@ defined('MOODLE_INTERNAL') || die();
  */
 function exammanagement_supports($feature) {
     switch ($feature) {
-        case FEATURE_GRADE_HAS_GRADE:
+    	case FEATURE_MOD_INTRO:
             return true;
-        case FEATURE_MOD_INTRO:
+    	case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
             return true;
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -280,11 +282,21 @@ function exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $fo
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
  *
  * @param navigation_node $exammanagementnode An object representing the navigation tree node.
- * @param stdClass $course.
- * @param stdClass $module.
- * @param cm_info $cm.
- */
-function exammanagement_extend_navigation($exammanagementnode, $course, $module, $cm) {
+ * @param  stdClass $course Course object
+ * @param  context_course $coursecontext Course context
+*/
+
+function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
+		$modinfo = get_fast_modinfo($course); // get mod_fast_modinfo from $course
+		$index = 1;	//set index
+		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
+			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
+				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
+				$node = navigation_node::create(get_string('modulename', 'exammanagement'), $url, navigation_node::TYPE_CUSTOM);
+				$exammanagementnode->add_node($node);
+				}
+			$index++;
+		}
 }
 
 /**
