@@ -31,17 +31,15 @@ $string['maintitle'] = 'Prüfungsorganisation';
 //addnewinstance
 $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
-$string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
+$string['modulename_help'] = 'Dies ist der Hilfetext, welcher bei der Auswahl einer neuen Aktivität angezeigt wird ...';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagementname_help'] = 'Bitte keinen anderen Namen verwenden als den Standardnamen ...';
 $string['exammanagementdescription'] = 'Beschreibung:';
 $string['exammanagementdescriptiontext'] = 'Beschreibungstext ....';
 $string['exammanagementfieldset'] = 'Weitere Einstellungen';
-$string['exammanagementfieldset1'] = 'Weitere Einstellungen1';
-$string['exammanagementfieldset2'] = 'Weitere Einstellungen2';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
+$string['pluginadministration'] = 'exam management administration';
 
-//veraltet?
 $string['pluginname'] = 'Prüfungsorganisation';
 

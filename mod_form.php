@@ -68,10 +68,8 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_exammanagement settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
-        
         $mform->addElement('header', get_string('exammanagementfieldset', 'mod_exammanagement'), get_string('exammanagementfieldset', 'mod_exammanagement'));
-        $mform->addElement('static', 'label2', get_string('exammanagementfieldset1', 'mod_exammanagement'), get_string('exammanagementfieldset2', 'mod_exammanagement'));
+        $mform->addElement('static', 'label2', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
 
 
         // Add standard grading elements.

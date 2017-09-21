@@ -31,17 +31,15 @@ $string['maintitle'] = 'Overview';
 //addnewinstance
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
-$string['modulename_help'] = 'Dies ist der Hilfetext, welcher bei der Auswahl einer neuen Aktivität angezeigt wird ...';
+$string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagementname_help'] = 'You should not use another name as the standart ...';
 $string['exammanagementdescription'] = 'Description:';
 $string['exammanagementdescriptiontext'] = 'Descriptiontext ....';
 $string['exammanagementfieldset'] = 'Further Information';
-$string['exammanagementfieldset1'] = 'Further Information1';
-$string['exammanagementfieldset2'] = 'Further Information2';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
+$string['pluginadministration'] = 'exam management administration';
 
-//veraltet?
 $string['pluginname'] = 'Exam management';
 

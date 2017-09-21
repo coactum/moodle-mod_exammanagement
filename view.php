@@ -28,7 +28,7 @@ require_once(__DIR__.'/lib.php');
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
 
-// ... module instance id.
+// ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
 if ($id) {
@@ -47,19 +47,37 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-// $event = \mod_exammanagement\event\course_module_viewed::create(array(
-//     'objectid' => $moduleinstance->id,
-//     'context' => $modulecontext
-// ));
-// $event->add_record_snapshot('course', $course);
-// $event->add_record_snapshot('exammanagement', $moduleinstance);
-// $event->trigger();
+$event = \mod_exammanagement\event\course_module_viewed::create(array(
+    'objectid' => $moduleinstance->id,
+    'context' => $modulecontext
+));
+$event->add_record_snapshot('course', $course);
+$event->add_record_snapshot('exammanagement', $moduleinstance);
+$event->trigger();
 
+// Print the page header.
 $PAGE->set_url('/mod/exammanagement/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+/*
+ * Other things you may want to set - remove if not needed.
+ * $PAGE->set_cacheable(false);
+ * $PAGE->set_focuscontrol('some-html-id');
+ * $PAGE->add_body_class('newmodule-'.$somevar);
+ */
+ 
+// Output starts here.
 echo $OUTPUT->header();
 
+// Conditions to show the intro can change to look for own settings or whatever.
+// if ($moduleinstance->intro) {
+//     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
+// }
+
+// render page body
+echo $OUTPUT->heading('Yay! It works!');
+
+// Finish the page.
 echo $OUTPUT->footer();
