@@ -36,7 +36,7 @@ if ($id) {
     $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $moduleinstance = $DB->get_record('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($e) {
-    $moduleinstance = $DB->get_record('exammanagement', array('id' => $n), '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
     $course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
     $cm             = get_coursemodule_from_instance('exammanagement', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
@@ -77,14 +77,39 @@ echo $OUTPUT->header();
 // }
 
 // render page body
-echo $OUTPUT->heading('Yay! It works!');
+echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
-echo ' id: ';
-var_dump($id);
-echo '<br> cm:';
-var_dump($cm);
-echo '<br> moduleinstance:';
-var_dump ($moduleinstance);
+// Übersicht PO (später in eigenem Template usw. rendern)
+echo get_string('yourrole', 'mod_exammanagement');
+
+$roles = get_user_roles($modulecontext, $USER->id);
+foreach ($roles as $role) {
+    $rolestr[]= role_get_name($role, $modulecontext);
+}
+$rolestr = implode(', ', $rolestr);
+echo $rolestr.'.<br>';
+
+//create table
+echo '<div class="table">';
+echo '<div class="table-row">';
+echo '<div class="table-cell">Vor der Prüfung</div>';
+echo '<div class="table-cell">Für die Prüfung</div>';
+echo '<div class="table-cell">Nach der Korrektur</div>';
+echo '<div class="table-cell">Nach der Prüfung</div>';
+echo '</div>';
+echo '</div>';
+
+//debug info
+
+if($USER->username=="admin"){
+	echo '<br>';
+	echo ' id: ';
+	var_dump($id);
+	echo '<br> cm:';
+	var_dump($cm);
+	echo '<br> moduleinstance:';
+	var_dump ($moduleinstance);
+}
 
 // Finish the page.
 echo $OUTPUT->footer();

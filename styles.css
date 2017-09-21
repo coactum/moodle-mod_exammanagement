@@ -1,0 +1,11 @@
+.table {
+  display: table;
+  margin-top:50px;
+}
+.table-row {
+  display: table-row;
+}
+.table-cell {
+  display: table-cell;
+  background-color: red;
+}

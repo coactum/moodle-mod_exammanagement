@@ -25,12 +25,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//Mainpage
+//view.php
 $string['maintitle'] = 'Prüfungsorganisation';
+$string['yourrole']= 'Ihre aktuelle(n) Rolle(n) ist/sind ';
 
-//addnewinstance
+//universal
 $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
+$string['pluginname'] = 'Prüfungsorganisation';
+
+//addnewinstance
 $string['modulename_help'] = 'Dies ist der Hilfetext, welcher bei der Auswahl einer neuen Aktivität angezeigt wird ...';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagementname_help'] = 'Bitte keinen anderen Namen verwenden als den Standardnamen ...';
@@ -40,6 +44,3 @@ $string['exammanagementfieldset'] = 'Weitere Einstellungen';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
 $string['pluginadministration'] = 'exam management administration';
-
-$string['pluginname'] = 'Prüfungsorganisation';
-

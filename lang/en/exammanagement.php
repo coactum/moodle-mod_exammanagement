@@ -25,12 +25,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//mainpage
-$string['maintitle'] = 'Overview';
+//view.php
+$string['maintitle'] = 'Exam management';
+$string['yourrole']= 'Your current role(s) is/are ';
 
-//addnewinstance
+//universal
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
+$string['pluginname'] = 'Exam management';
+
+//addnewinstance
 $string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagementname_help'] = 'You should not use another name as the standart ...';
@@ -41,5 +45,4 @@ $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
 
-$string['pluginname'] = 'Exam management';
 
