@@ -50,9 +50,9 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
 
     'mod/exammanagement:addinstance' => [
-        'riskbitmask' => RISK_XSS, RISK_SPAM,
+        'riskbitmask' => RISK_XSS | RISK_SPAM,
         'captype' => 'write',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
         ],
@@ -60,10 +60,9 @@ $capabilities = [
     'mod/exammanagement:view' => [
         'riskbitmask' => RISK_PRIVACY
         'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
-            'student' => CAP_PREVENT,
         ],
     ],
 ];

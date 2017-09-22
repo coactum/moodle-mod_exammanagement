@@ -57,7 +57,7 @@ $event->trigger();
 
 // Print the page header.
 $PAGE->set_url('/mod/exammanagement/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($moduleinstance->name));
+$PAGE->set_title(format_string($moduleinstance->name).' ('.get_string('modulename','mod_exammanagement').')');
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
@@ -76,10 +76,11 @@ echo $OUTPUT->header();
 //     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
 // }
 
-// render page body
-echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+// render page body (Übersicht PO, später in eigenem Template usw. rendern)
 
-// Übersicht PO (später in eigenem Template usw. rendern)
+echo '<form action="" method="post">';
+
+echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 echo get_string('yourrole', 'mod_exammanagement');
 
 $roles = get_user_roles($modulecontext, $USER->id);
@@ -90,7 +91,7 @@ $rolestr = implode(', ', $rolestr);
 echo $rolestr.'.<br>';
 
 $appointment=1;
-echo '<h4 class="padding">'.get_string('appointment', 'mod_exammanagement').$appointment.'</h4>';
+echo '<h4 class="margin">'.get_string('appointment', 'mod_exammanagement').$appointment.'</h4>';
 
 //create table
 echo '<div class="table">';
@@ -137,6 +138,7 @@ echo '<div class="table-cell"> </div>';
 echo '<div class="table-cell"><a href="">Prüfungsdaten löschen</a></div>';
 echo '</div>';
 echo '</div>';
+echo '</form>';
 
 //debug info
 
