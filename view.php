@@ -89,13 +89,52 @@ foreach ($roles as $role) {
 $rolestr = implode(', ', $rolestr);
 echo $rolestr.'.<br>';
 
+$appointment=1;
+echo '<h4 class="padding">'.get_string('appointment', 'mod_exammanagement').$appointment.'</h4>';
+
 //create table
 echo '<div class="table">';
 echo '<div class="table-row">';
-echo '<div class="table-cell">Vor der Prüfung</div>';
-echo '<div class="table-cell">Für die Prüfung</div>';
-echo '<div class="table-cell">Nach der Korrektur</div>';
-echo '<div class="table-cell">Nach der Prüfung</div>';
+echo '<div class="table-cell"><h5>Vor der Prüfung</h5></div>';
+echo '<div class="table-cell"><h5>Für die Prüfung</h5></div>';
+echo '<div class="table-cell"><h5>Nach der Korrektur</h5></div>';
+echo '<div class="table-cell"><h5>Nach der Prüfung</h5></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Raum auswählen</a></div>';
+echo '<div class="table-cell"><a href="">Sitzplätze festlegen</a></div>';
+echo '<div class="table-cell"><a href="">Bonuspunkte importieren</a></div>';
+echo '<div class="table-cell"><a href="">Punkte für Klausureinsicht als PDF exportieren</a></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Datum und Zeit festlegen</a></div>';
+echo '<div class="table-cell"><a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a></div>';
+echo '<div class="table-cell"><a href="">Notenschlüßel konfigurieren</a></div>';
+echo '<div class="table-cell"><a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Teilnehmer hinzufügen</a></div>';
+echo '<div class="table-cell"><a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a></div>';
+echo '<div class="table-cell"><a href="">Prüfungsergebnisse eingeben</a></div>';
+echo '<div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Aufgaben konfigurieren</a></div>';
+echo '<div class="table-cell"><a href="">Sitzplätze bzw. Prüfungsetiketten exportieren</a></div>';
+echo '<div class="table-cell"><a href="">Eingegebene Ergebnisse prüfen</a></div>';
+echo '<div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Freitextfeld bearbeiten</a></div>';
+echo '<div class="table-cell"><a href="">Teilnehmerlisten exportieren</a></div>';
+echo '<div class="table-cell"> </div>';
+echo '<div class="table-cell"><a href="">Ergebnisse für das Prüfungsamt als Excel-Dokument oder PAUL Text-Datei exportieren</a></div>';
+echo '</div>';
+echo '<div class="table-row">';
+echo '<div class="table-cell"><a href="">Nachricht an die Teilnehmer schreiben</a></div>';
+echo '<div class="table-cell"> </div>';
+echo '<div class="table-cell"> </div>';
+echo '<div class="table-cell"><a href="">Prüfungsdaten löschen</a></div>';
 echo '</div>';
 echo '</div>';
 

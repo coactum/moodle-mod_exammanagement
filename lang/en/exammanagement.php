@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 //view.php
 $string['maintitle'] = 'Exam management';
 $string['yourrole']= 'Your current role(s) is/are ';
+$string['appointment']= 'Appointment ';
 
 //universal
 $string['modulename'] = 'Exam management';

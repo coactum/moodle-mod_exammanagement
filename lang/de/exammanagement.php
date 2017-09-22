@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 //view.php
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['yourrole']= 'Ihre aktuelle(n) Rolle(n) ist/sind ';
+$string['appointment']= 'Prüfungstermin ';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
