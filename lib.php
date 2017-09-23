@@ -292,7 +292,7 @@ function exammanagement_extend_navigation_course($exammanagementnode, $course, $
 		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
 			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
 				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
-				$node = navigation_node::create(get_string('modulename', 'exammanagement'), $url, navigation_node::TYPE_CUSTOM);
+				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM);
 				$exammanagementnode->add_node($node);
 				}
 			$index++;
