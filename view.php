@@ -47,6 +47,7 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
+//events
 $event = \mod_exammanagement\event\course_module_viewed::create(array(
     'objectid' => $moduleinstance->id,
     'context' => $modulecontext
@@ -76,8 +77,7 @@ echo $OUTPUT->header();
 //     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
 // }
 
-// set basic content
-
+// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
 echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
 $roles = get_user_roles($modulecontext, $USER->id);
@@ -92,20 +92,16 @@ $page = new \mod_exammanagement\output\exammanagement_overview($rolestr);
 // displaying basic content.
 echo $output->render($page);
 
-// for testing index.php
-echo '<a href="http://localhost:8888/moodle33/mod/exammanagement/index.php">Testlink zu index.php</a>';
-
-//displaying debug info
-
+//displaying debug info (to be moved to renderer)
 if($USER->username=="admin"){
-	echo '<br>';
-	echo ' id: ';
-	var_dump($id);
-	echo '<br> cm:';
-	var_dump($cm);
-	echo '<br> moduleinstance:';
-	var_dump ($moduleinstance);
+	//echo 'test <br>';
+	//var_dump($id);
+	//var_dump($cm);
+	//var_dump($course);
+	//var_dump($moduleinstance);
+	$output = $PAGE->get_renderer('mod_exammanagement');
+	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
+	echo $output->render($page);
 }
-
 // Finish the page.
 echo $OUTPUT->footer();
