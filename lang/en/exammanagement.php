@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//view.php
+//exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
 $string['yourrole']= 'Your current role(s) is/are ';
-$string['appointment']= 'Appointment ';
+$string['overview']= 'Overview';
 
 //universal
 $string['modulename'] = 'Exam management';

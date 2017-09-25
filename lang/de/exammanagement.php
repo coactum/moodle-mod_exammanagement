@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//view.php
+//exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['yourrole']= 'Ihre aktuelle(n) Rolle(n) ist/sind ';
-$string['appointment']= 'Prüfungstermin ';
+$string['overview']= 'Überblick';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
