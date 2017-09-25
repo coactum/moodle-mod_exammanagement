@@ -1,0 +1,74 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template exammanagement/exammanagement_overview
+
+    Example context (json):
+    {
+        "comment": "Example comment for the context"
+    }
+}}
+<h2>{{#str}}maintitle, exammanagement{{/str}}</h2>
+<form action="" method="post">
+    <div>{{#str}}yourrole, mod_exammanagement{{/str}}{{comment}}
+        <h4 class="margin">appointment, mod_exammanagement</h4>
+        <div class="table">
+            <div class="table-row">
+                <div class="table-cell"><h5>Vor der Prüfung</h5></div>
+                <div class="table-cell"><h5>Für die Prüfung</h5></div>
+                <div class="table-cell"><h5>Nach der Korrektur</h5></div>
+                <div class="table-cell"><h5>Nach der Prüfung</h5></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Raum auswählen</a></div>
+                <div class="table-cell"><a href="">Sitzplätze festlegen</a></div>
+                <div class="table-cell"><a href="">Bonuspunkte importieren</a></div>
+                <div class="table-cell"><a href="">Punkte für Klausureinsicht als PDF exportieren</a></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Datum und Zeit festlegen</a></div>
+                <div class="table-cell"><a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a></div>
+                <div class="table-cell"><a href="">Notenschlüßel konfigurieren</a></div>
+                <div class="table-cell"><a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Teilnehmer hinzufügen</a></div>
+                <div class="table-cell"><a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a></div>
+                <div class="table-cell"><a href="">Prüfungsergebnisse eingeben</a></div>
+                <div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Aufgaben konfigurieren</a></div>
+                <div class="table-cell"><a href="">Sitzplätze bzw. Prüfungsetiketten exportieren</a></div>
+                <div class="table-cell"><a href="">Eingegebene Ergebnisse prüfen</a></div>
+                <div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Freitextfeld bearbeiten</a></div>
+                <div class="table-cell"><a href="">Teilnehmerlisten exportieren</a></div>
+                <div class="table-cell"> </div>
+                <div class="table-cell"><a href="">Ergebnisse für das Prüfungsamt als Excel-Dokument oder PAUL Text-Datei exportieren</a></div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell"><a href="">Nachricht an die Teilnehmer schreiben</a></div>
+                <div class="table-cell"> </div>
+                <div class="table-cell"> </div>
+                <div class="table-cell"><a href="">Prüfungsdaten löschen</a></div>
+            </div>
+        </div>
+    </div>
+</form>
