@@ -49,13 +49,9 @@ class exammanagement_debug_infos implements renderable, templatable {
      */
     public function __construct($id, $cm, $course, $moduleinstance) {
         $this->id = $id;
-        $this->cm = $cm;
-        $this->course = $course;
-        $this->moduleinstance = $moduleinstance;
-        var_dump($id);
-        var_dump($cm);
-        var_dump($course);
-        var_dump($moduleinstance);
+        $this->cm = json_encode($cm);
+        $this->course = json_encode($course);
+        $this->moduleinstance = json_encode($moduleinstance);
     }
     /**
      * Export this data so it can be used as the context for a mustache template.
