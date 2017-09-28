@@ -23,52 +23,50 @@
     }
 }}
 <form action="" method="post">
-    <div>
-        {{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}
+    <div class="container-fluid">
+        <div class="row">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
         <h5 class="margin">{{#str}}overview, mod_exammanagement{{/str}}</h5>
-        <div class="table">
-            <div class="table-row">
-                <div class="table-cell"><h5>Vor der Prüfung</h5></div>
-                <div class="table-cell"><h5>Für die Prüfung</h5></div>
-                <div class="table-cell"><h5>Nach der Korrektur</h5></div>
-                <div class="table-cell"><h5>Nach der Prüfung</h5></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Raum auswählen</a></div>
-                <div class="table-cell"><a href="">Sitzplätze festlegen</a></div>
-                <div class="table-cell"><a href="">Bonuspunkte importieren</a></div>
-                <div class="table-cell"><a href="">Punkte für Klausureinsicht als PDF exportieren</a></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Datum und Zeit festlegen</a></div>
-                <div class="table-cell"><a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a></div>
-                <div class="table-cell"><a href="">Notenschlüßel konfigurieren</a></div>
-                <div class="table-cell"><a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Teilnehmer hinzufügen</a></div>
-                <div class="table-cell"><a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a></div>
-                <div class="table-cell"><a href="">Prüfungsergebnisse eingeben</a></div>
-                <div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Aufgaben konfigurieren</a></div>
-                <div class="table-cell"><a href="">Sitzplätze bzw. Prüfungsetiketten exportieren</a></div>
-                <div class="table-cell"><a href="">Eingegebene Ergebnisse prüfen</a></div>
-                <div class="table-cell"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Freitextfeld bearbeiten</a></div>
-                <div class="table-cell"><a href="">Teilnehmerlisten exportieren</a></div>
-                <div class="table-cell"> </div>
-                <div class="table-cell"><a href="">Ergebnisse für das Prüfungsamt als Excel-Dokument oder PAUL Text-Datei exportieren</a></div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><a href="">Nachricht an die Teilnehmer schreiben</a></div>
-                <div class="table-cell"> </div>
-                <div class="table-cell"> </div>
-                <div class="table-cell"><a href="">Prüfungsdaten löschen</a></div>
-            </div>
+        <div class="row">
+            <div class="col-md-3"><h5>Vor der Prüfung</h5></div>
+            <div class="col-md-3"><h5>Für die Prüfung</h5></div>
+            <div class="col-md-3"><h5>Nach der Korrektur</h5></div>
+            <div class="col-md-3"><h5>Nach der Prüfung</h5></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Raum auswählen</a></div>
+            <div class="col-md-3"><a href="">Sitzplätze festlegen</a></div>
+            <div class="col-md-3"><a href="">Bonuspunkte importieren</a></div>
+            <div class="col-md-3"><a href="">Punkte für Klausureinsicht als PDF exportieren</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Datum und Zeit festlegen</a></div>
+            <div class="col-md-3"><a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a></div>
+            <div class="col-md-3"><a href="">Notenschlüßel konfigurieren</a></div>
+            <div class="col-md-3"><a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Teilnehmer hinzufügen</a></div>
+            <div class="col-md-3"><a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a></div>
+            <div class="col-md-3"><a href="">Prüfungsergebnisse eingeben</a></div>
+            <div class="col-md-3"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Aufgaben konfigurieren</a></div>
+            <div class="col-md-3"><a href="">Sitzplätze bzw. Prüfungsetiketten exportieren</a></div>
+            <div class="col-md-3"><a href="">Eingegebene Ergebnisse prüfen</a></div>
+            <div class="col-md-3"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Freitextfeld bearbeiten</a></div>
+            <div class="col-md-3"><a href="">Teilnehmerlisten exportieren</a></div>
+            <div class="col-md-3"> </div>
+            <div class="col-md-3"><a href="">Ergebnisse für das Prüfungsamt als Excel-Dokument oder PAUL Text-Datei exportieren</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><a href="">Nachricht an die Teilnehmer schreiben</a></div>
+            <div class="col-md-3"> </div>
+            <div class="col-md-3"> </div>
+            <div class="col-md-3"><a href="">Prüfungsdaten löschen</a></div>
         </div>
     </div>
 </form>
