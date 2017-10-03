@@ -24,49 +24,245 @@
 }}
 <form action="" method="post">
     <div class="container-fluid">
-        <div class="row">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
-        <h5 class="margin">{{#str}}overview, mod_exammanagement{{/str}}</h5>
+        <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
+        <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h5>
+        {{!Heading}}
         <div class="row">
             <div class="col-md-3"><h5>Vor der Prüfung</h5></div>
             <div class="col-md-3"><h5>Für die Prüfung</h5></div>
             <div class="col-md-3"><h5>Nach der Korrektur</h5></div>
             <div class="col-md-3"><h5>Nach der Prüfung</h5></div>
         </div>
+        <hr />
+        {{!row1}}
         <div class="row">
-            <div class="col-md-3"><a href="">Raum auswählen</a></div>
-            <div class="col-md-3"><a href="">Sitzplätze festlegen</a></div>
-            <div class="col-md-3"><a href="">Bonuspunkte importieren</a></div>
-            <div class="col-md-3"><a href="">Punkte für Klausureinsicht als PDF exportieren</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/set.png" alt="icon state">
+            <div class="card-block text-success">
+              <h4 class="card-title">Räume auswählen</h4>
+              <p class="card-text">Es wurden bereits Räume ausgewählt</p>
+              <a href="#" class="btn btn-success w-100">Räume auswählen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Sitzplätze zuweisen</h4>
+              <p class="card-text">Bisher wurden keine Sitzplätze zugewiesen</p>
+              <a href="#" class="btn btn-warning w-100">Sitzplätze zuweisen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Bonuspunkte importieren</h4>
+              <p class="card-text">Bisher wurden keine Bonuspunkte importiert</p>
+              <a href="#" class="btn btn-warning w-100">Bonuspunkte importieren</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <div class="card-block">
+              <h4 class="card-title">Punkte für Klausureinsicht als PDF exportieren</h4>
+              <p class="card-text">Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+            </div>
+          </div>
         </div>
+        {{!row2}}
         <div class="row">
-            <div class="col-md-3"><a href="">Datum und Zeit festlegen</a></div>
-            <div class="col-md-3"><a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a></div>
-            <div class="col-md-3"><a href="">Notenschlüßel konfigurieren</a></div>
-            <div class="col-md-3"><a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Datum und Zeit festlegen</h4>
+              <p class="card-text">Bisher wurden noch kein Datum und keine Zeit festgelegt</p>
+              <a href="#" class="btn btn-warning w-100">Datum und Zeit festlegen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Datum und Zeit für Teilnehmer sichtbar schalten</h4>
+              <p class="card-text">Bisher sind das Datum und die Zeit für die Teilnehmer unsichtbar</p>
+              <a href="#" class="btn btn-warning w-100">Für Teilnehmer sichtbar schalten</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Notenschlüßel konfigurieren</h4>
+              <p class="card-text">Bisher wurde kein Notenschlüßel konfiguriert</p>
+              <a href="#" class="btn btn-warning w-100">Notenschlüßel konfigurieren</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <div class="card-block">
+              <h4 class="card-title">Ergebnisse mit Prozentangaben als PDF exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+            </div>
+          </div>
         </div>
+        {{!row3}}
         <div class="row">
-            <div class="col-md-3"><a href="">Teilnehmer hinzufügen</a></div>
-            <div class="col-md-3"><a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a></div>
-            <div class="col-md-3"><a href="">Prüfungsergebnisse eingeben</a></div>
-            <div class="col-md-3"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Teilnehmer hinzufügen</h4>
+              <p class="card-text">Bisher wurden keine Teilnehmer hinzugefügt</p>
+              <a href="#" class="btn btn-warning w-100">Teilnehmer hinzufügen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Räume und Sitzplätze für Teilnehmer sichtbar schalten</h4>
+              <p class="card-text">Bisher sind die Räume und die Sitzplätze für die Teilnehmer unsichtbar</p>
+              <a href="#" class="btn btn-warning w-100">Für Teilnehmer sichtbar schalten</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Prüfungsergebnisse eingeben</h4>
+              <p class="card-text">Bisher wurden keine Prüfungsergebnisse eingegeben</p>
+              <a href="#" class="btn btn-warning w-100">Prüfungsergebnisse eingeben</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/excel.png" alt="icon excel">
+            <div class="card-block">
+              <h4 class="card-title">Ergebnisse und Statistik als Excel-Dokument exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse und Statistiken als Excel-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">Excel-Datei generieren</a>
+            </div>
+          </div>
         </div>
+        {{!row4}}
         <div class="row">
-            <div class="col-md-3"><a href="">Aufgaben konfigurieren</a></div>
-            <div class="col-md-3"><a href="">Sitzplätze bzw. Prüfungsetiketten exportieren</a></div>
-            <div class="col-md-3"><a href="">Eingegebene Ergebnisse prüfen</a></div>
-            <div class="col-md-3"><a href="">Ergebnisse und Statistik als Excel-Dokument exportieren</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Aufgaben konfigurieren</h4>
+              <p class="card-text">Bisher wurden keine Aufgaben konfiguriert</p>
+              <a href="#" class="btn btn-warning w-100">Aufgaben konfigurieren</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Sitzplan exportieren</h4>
+              <p class="card-text">Ein Sitzplan kann als PDF-Dokument exportiert werden</p>
+              <a href="#" class="btn btn-warning w-100">Sitzplan exportieren</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Prüfungsergebnisse eingeben</h4>
+              <p class="card-text">Bisher wurden keine Prüfungsergebnisse eingegeben</p>
+              <a href="#" class="btn btn-warning w-100">Prüfungsergebnisse eingeben</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <div class="card-block">
+              <h4 class="card-title">Ergebnisse und Statistik als PDF-Dokument exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse und Statistiken als PDF-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+            </div>
+          </div>
         </div>
+        {{!row5}}
         <div class="row">
-            <div class="col-md-3"><a href="">Freitextfeld bearbeiten</a></div>
-            <div class="col-md-3"><a href="">Teilnehmerlisten exportieren</a></div>
-            <div class="col-md-3"> </div>
-            <div class="col-md-3"><a href="">Ergebnisse für das Prüfungsamt als Excel-Dokument oder PAUL Text-Datei exportieren</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Freitextfeld bearbeiten</h4>
+              <p class="card-text">Bisher ist das Freitextfeld leer</p>
+              <a href="#" class="btn btn-warning w-100">Freitextfeld bearbeiten</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/barcode.png" alt="icon barcode">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Prüfungsetiketten exportieren</h4>
+              <p class="card-text">Prüfungsetiketten können als Barcodes exportiert werden</p>
+              <a href="#" class="btn btn-warning w-100">Prüfungsetiketten exportieren</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Eingegebene Ergebnisse prüfen</h4>
+              <p class="card-text">Die bisher eingegebnen Prüfungsergebnisse können hier geprüft werden.</p>
+              <a href="#" class="btn btn-warning w-100">Ergebnisse prüfen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/excel.png" alt="icon excel">
+            <div class="card-block">
+              <h4 class="card-title">Ergebnisse für das Prüfungsamt als Excel-Dokument exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse für das Prüfungsamt als Excel-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">Excel-Dokument generieren</a>
+            </div>
+          </div>
         </div>
+        {{!row6}}
         <div class="row">
-            <div class="col-md-3"><a href="">Nachricht an die Teilnehmer schreiben</a></div>
-            <div class="col-md-3"> </div>
-            <div class="col-md-3"> </div>
-            <div class="col-md-3"><a href="">Prüfungsdaten löschen</a></div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Nachricht an die Teilnehmer schreiben</h4>
+              <p class="card-text">Bisher wurde keine Nachricht an die Teilnehmer verschickt.</p>
+              <a href="#" class="btn btn-warning w-100">Nachricht verfassen</a>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <div class="card-block text-warning">
+              <h4 class="card-title">Teilnehmerlisten exportieren</h4>
+              <p class="card-text">Die Teilnehmerlisten können nach Name oder nach Sitzplatz sortiert exportiert werden.</p>
+              <div class="row"><a href="#" class="btn btn-warning">Nach Name</a><a href="#" class="btn btn-warning m-l-1">Nach Platz</a></div>
+            </div>
+          </div>
+          <div class="card mb-3 col-md-3">
+              {{!empty}}
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/text.png" alt="icon text">
+            <div class="card-block">
+              <h4 class="card-title">Ergebnisse für das Prüfungsamt als PAUL-Text-Dokument exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse für das Prüfungsamt als PAUL-Text-Dokument exportiert werden.</p>
+              <a href="#" class="btn btn-success w-100">Text-Dokument generieren</a>
+            </div>
+          </div>
+        </div>
+        {{!row7}}
+        <div class="row">
+          <div class="card mb-3 col-md-3">
+            {{!empty}}
+          </div>
+          <div class="card mb-3 col-md-3">
+            {{!empty}}
+          </div>
+          <div class="card mb-3 col-md-3">
+            {{!empty}}
+          </div>
+          <div class="card mb-3 col-md-3">
+            <img class="card-img-top img-responsive" src="pix/not_set.png" alt="icon state">
+            <div class="card-block">
+              <h4 class="card-title">Prüfungsdaten löschen</h4>
+              <p class="card-text">Hier können die Prüfungsdaten gelöscht werden.</p>
+              <a href="#" class="btn btn-success w-100">Prüfungsdaten löschen</a>
+            </div>
+          </div>
+        </div>
+        {{!progress bar}}
+        <h6>Fortschritt:</h6>
+        <div class="progress">
+          <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
         </div>
     </div>
 </form>
