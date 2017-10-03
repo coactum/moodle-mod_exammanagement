@@ -25,7 +25,7 @@
 <form action="" method="post">
     <div class="container-fluid">
         <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
-        <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h5>
+        <h3 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h3>
         {{!Heading}}
         <div class="row">
             <div class="col-md-3"><h5>Vor der Prüfung</h5></div>
@@ -65,7 +65,7 @@
             <div class="card-block">
               <h4 class="card-title">Punkte für Klausureinsicht als PDF exportieren</h4>
               <p class="card-text">Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+              <a href="#" class="btn btn-info w-100">PDF generieren</a>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@
             <div class="card-block">
               <h4 class="card-title">Ergebnisse mit Prozentangaben als PDF exportieren</h4>
               <p class="card-text">Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+              <a href="#" class="btn btn-info w-100">PDF generieren</a>
             </div>
           </div>
         </div>
@@ -131,11 +131,11 @@
             </div>
           </div>
           <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/excel.png" alt="icon excel">
+            <img class="card-img-top img-responsive" src="pix/excel_pdf.png" alt="icon excel pdf">
             <div class="card-block">
-              <h4 class="card-title">Ergebnisse und Statistik als Excel-Dokument exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse und Statistiken als Excel-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">Excel-Datei generieren</a>
+              <h4 class="card-title">Ergebnisse und Statistik exportieren</h4>
+              <p class="card-text">Hier können die Ergenisse und Statistiken als Excel- oder PDF-Dokument exportiert werden.</p>
+              <div class="row"><a href="#" class="btn btn-info">Excel</a><a href="#" class="btn btn-info m-l-1">PDF</a></div>
             </div>
           </div>
         </div>
@@ -151,26 +151,26 @@
           </div>
           <div class="card mb-3 col-md-3">
             <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block text-warning">
+            <div class="card-block">
               <h4 class="card-title">Sitzplan exportieren</h4>
               <p class="card-text">Ein Sitzplan kann als PDF-Dokument exportiert werden</p>
-              <a href="#" class="btn btn-warning w-100">Sitzplan exportieren</a>
+              <a href="#" class="btn btn-info w-100">Sitzplan exportieren</a>
             </div>
           </div>
           <div class="card mb-3 col-md-3">
             <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
             <div class="card-block text-warning">
-              <h4 class="card-title">Prüfungsergebnisse eingeben</h4>
-              <p class="card-text">Bisher wurden keine Prüfungsergebnisse eingegeben</p>
-              <a href="#" class="btn btn-warning w-100">Prüfungsergebnisse eingeben</a>
+              <h4 class="card-title">Eingegebene Ergebnisse prüfen</h4>
+              <p class="card-text">Die bisher eingegebenen Prüfungsergebnisse können hier geprüft werden.</p>
+              <a href="#" class="btn btn-warning w-100">Ergebnisse prüfen</a>
             </div>
           </div>
           <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
+            <img class="card-img-top img-responsive" src="pix/excel_text.png" alt="icon excel text">
             <div class="card-block">
-              <h4 class="card-title">Ergebnisse und Statistik als PDF-Dokument exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse und Statistiken als PDF-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">PDF generieren</a>
+              <h4 class="card-title">Ergebnisse für das Prüfungsamt exportieren</h4>
+              <p class="card-text">Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
+              <div class="row"><a href="#" class="btn btn-info">Excel</a><a href="#" class="btn btn-info m-l-1">PAUL-Text</a></div>
             </div>
           </div>
         </div>
@@ -186,27 +186,17 @@
           </div>
           <div class="card mb-3 col-md-3">
             <img class="card-img-top img-responsive" src="pix/barcode.png" alt="icon barcode">
-            <div class="card-block text-warning">
+            <div class="card-block">
               <h4 class="card-title">Prüfungsetiketten exportieren</h4>
               <p class="card-text">Prüfungsetiketten können als Barcodes exportiert werden</p>
-              <a href="#" class="btn btn-warning w-100">Prüfungsetiketten exportieren</a>
+              <a href="#" class="btn btn-info w-100">Prüfungsetiketten exportieren</a>
             </div>
           </div>
           <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Eingegebene Ergebnisse prüfen</h4>
-              <p class="card-text">Die bisher eingegebnen Prüfungsergebnisse können hier geprüft werden.</p>
-              <a href="#" class="btn btn-warning w-100">Ergebnisse prüfen</a>
-            </div>
+            {{!empty}}
           </div>
           <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/excel.png" alt="icon excel">
-            <div class="card-block">
-              <h4 class="card-title">Ergebnisse für das Prüfungsamt als Excel-Dokument exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse für das Prüfungsamt als Excel-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">Excel-Dokument generieren</a>
-            </div>
+            {{!empty}}
           </div>
         </div>
         {{!row6}}
@@ -221,46 +211,27 @@
           </div>
           <div class="card mb-3 col-md-3">
             <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block text-warning">
+            <div class="card-block">
               <h4 class="card-title">Teilnehmerlisten exportieren</h4>
               <p class="card-text">Die Teilnehmerlisten können nach Name oder nach Sitzplatz sortiert exportiert werden.</p>
-              <div class="row"><a href="#" class="btn btn-warning">Nach Name</a><a href="#" class="btn btn-warning m-l-1">Nach Platz</a></div>
+              <div class="row"><a href="#" class="btn btn-info ">Nach Name</a><a href="#" class="btn btn-info m-l-1">Nach Platz</a></div>
             </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-              {{!empty}}
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/text.png" alt="icon text">
-            <div class="card-block">
-              <h4 class="card-title">Ergebnisse für das Prüfungsamt als PAUL-Text-Dokument exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse für das Prüfungsamt als PAUL-Text-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-success w-100">Text-Dokument generieren</a>
-            </div>
-          </div>
-        </div>
-        {{!row7}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            {{!empty}}
-          </div>
-          <div class="card mb-3 col-md-3">
-            {{!empty}}
           </div>
           <div class="card mb-3 col-md-3">
             {{!empty}}
           </div>
           <div class="card mb-3 col-md-3">
             <img class="card-img-top img-responsive" src="pix/not_set.png" alt="icon state">
-            <div class="card-block">
+            <div class="card-block text-warning">
               <h4 class="card-title">Prüfungsdaten löschen</h4>
               <p class="card-text">Hier können die Prüfungsdaten gelöscht werden.</p>
-              <a href="#" class="btn btn-success w-100">Prüfungsdaten löschen</a>
+              <a href="#" class="btn btn-danger w-100">Prüfungsdaten löschen</a>
             </div>
           </div>
         </div>
         {{!progress bar}}
-        <h6>Fortschritt:</h6>
+        <hr />
+        <h4>Fortschritt:</h4>
         <div class="progress">
           <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
         </div>
