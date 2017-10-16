@@ -1,0 +1,49 @@
+*::before{
+    box-sizing: border-box;
+
+}
+.exmammanagement-summary{
+    position:relative;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+
+}
+.exmammanagement-summary > li{
+      position: relative;
+      margin-bottom: 15px;
+}
+
+.exmammanagement-summary > li::after{
+	clear:both;
+}
+
+.exmammanagement-summary > li > .fa{
+      width: 30px;
+      height: 30px;
+      font-size: 15px;
+      line-height: 30px;
+      position: absolute;
+      color: #666;
+      background: #d2d6de;
+      background-color: rgb(210, 214, 222);
+      border-radius: 50%;
+      text-align: center;
+      left: 18px;
+      top: 0;
+}
+
+.exmammanagement-summary > li > .card{
+      margin-left: 60px;
+}
+
+.exmammanagement-summary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #ddd;
+    left: 31px;
+    margin: 0;
+    border-radius: 2px;
+}
