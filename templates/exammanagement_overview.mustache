@@ -25,6 +25,9 @@
 
 <form>
    <div class="container-fluid">
+      <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
+      <h3 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h3>
+
       <ul class="exmammanagement-summary list-unstyled">
           <li class="item">
             <i class="fa fa-square-o" aria-hidden="true"></i>
@@ -32,62 +35,60 @@
               <div class="card-block">
                 <h4 class="card-title">Vor der Prüfung</h4>
                 <div class="card-text">
-                  <ul class="list-unstyled">
-                      <li>
-                        <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
-                        <p>
-                          <i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt
-                        </p>
-                      </li>
-                      <li>
-                        Datum und Zeit festlegen
-                      </li>
-                      <li>
-                        Teilnehmer hinzufügen
-                      </li>
-                      <li>
-                        Aufgaben konfigurieren
-                      </li>
-                      <li>
-                        Freitextfeld bearbeiten
-                      </li>
-                      <li>
-                        Nachricht an Teilnehmer schreiben
-                      </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
-            <div class="card">
-              <div class="card-block">
-                <h4 class="card-title">Vor der Prüfung</h4>
-                <div class="card-text">
-                  <ul class="list-unstyled">
-                      <li>
-                        <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
-                        <p>
-                          <i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt
-                        </p>
-                      </li>
-                      <li>
-                        Datum und Zeit festlegen
-                      </li>
-                      <li>
-                        Teilnehmer hinzufügen
-                      </li>
-                      <li>
-                        Aufgaben konfigurieren
-                      </li>
-                      <li>
-                        Freitextfeld bearbeiten
-                      </li>
-                      <li>
-                        Nachricht an Teilnehmer schreiben
-                      </li>
-                  </ul>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> <a href="">Datum und Zeit festlegen</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits ein Datum und eine Uhrzeit festgelegt</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-users" aria-hidden="true"></i> <a href="">Teilnehmer hinzufügen</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-tasks" aria-hidden="true"></i> <a href="">Aufgaben konfigurieren</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-block">
+                          <div class="card-text">
+                            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben</a>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,8 +102,6 @@
 
 <form action="" method="post">
     <div class="container-fluid">
-        <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
-        <h3 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h3>
         {{!Heading}}
         <div class="row">
             <div class="col-md-3"><h5>Vor der Prüfung</h5></div>
