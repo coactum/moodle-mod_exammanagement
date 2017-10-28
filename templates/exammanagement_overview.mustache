@@ -26,65 +26,312 @@
 <form>
    <div class="container-fluid">
       <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
-      <h3 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h3>
+      <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>
 
       <ul class="exmammanagement-summary list-unstyled">
+          {{!before_exam}}
           <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
+            <i class="fa fa-check-square-o text-success" aria-hidden="true"></i>
             <div class="card">
               <div class="card-block">
-                <h4 class="card-title">Vor der Prüfung</h4>
+                <div class="row">
+                  <h4 class="card-title col-xs-11">Vor der Prüfung</h4>
+                  <button type="button" class="close col-xs-1" data-toggle="tooltip" title="Minimieren!" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
                 <div class="card-text">
                   <div class="row row-eq-height">
                       <div class="card col-md-6">
-                        <div class="card-block">
-                          <div class="card-text">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
                             <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt</p>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt.</p>
                           </div>
                         </div>
                       </div>
                       <div class="card col-md-6">
-                        <div class="card-block">
-                          <div class="card-text">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
                             <i class="fa fa-calendar" aria-hidden="true"></i> <a href="">Datum und Zeit festlegen</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits ein Datum und eine Uhrzeit festgelegt</p>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits ein Datum und eine Uhrzeit festgelegt.</p>
                           </div>
                         </div>
                       </div>
                   </div>
                   <div class="row row-eq-height">
                       <div class="card col-md-6">
-                        <div class="card-block">
-                          <div class="card-text">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
                             <i class="fa fa-users" aria-hidden="true"></i> <a href="">Teilnehmer hinzufügen</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt</p>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt.</p>
                           </div>
                         </div>
                       </div>
                       <div class="card col-md-6">
-                        <div class="card-block">
-                          <div class="card-text">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
                             <i class="fa fa-tasks" aria-hidden="true"></i> <a href="">Aufgaben konfigurieren</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert</p>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert.</p>
                           </div>
                         </div>
                       </div>
                   </div>
                   <div class="row row-eq-height">
                       <div class="card col-md-6">
-                        <div class="card-block">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten (optional)</a>
+                          </div>
                           <div class="card-text">
-                            <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet</p>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet.</p>
                           </div>
                         </div>
                       </div>
                       <div class="card col-md-6">
-                        <div class="card-block">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben (optional)</a>
+                          </div>
                           <div class="card-text">
-                            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben</a>
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben</p>
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {{!for_exam}}
+          <li class="item">
+            <i class="fa fa-square-o" aria-hidden="true"></i>
+            <div class="card border border-success">
+              <div class="card-block">
+                <div class="row">
+                  <h4 class="card-title col-xs-11">Für die Prüfung</h4>
+                  <button type="button" class="close col-xs-1" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-text">
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-refresh" aria-hidden="true"></i> <a href="">Sitzplätze automatisch zuweisen</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Sitzplätze hinzugefügt.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Sitzplan exportieren (optional)</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-barcode" aria-hidden="true"></i> <a href="">Prüfungsetiketten exportieren (optional)</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Teilnehmerlisten exportieren (optional)
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row"><a href="#" class="btn btn-info col-sm-4">Name</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4">Sitzplatz</a></div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {{!after_grading}}
+          <li class="item">
+            <i class="fa fa-square-o" aria-hidden="true"></i>
+            <div class="card border border-success">
+              <div class="card-block">
+                <div class="row">
+                  <h4 class="card-title col-xs-11">Nach der Korrektur</h4>
+                  <button type="button" class="close col-xs-1" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-text">
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <a href="">Bonuspunkte importieren</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Bonuspunkte importiert.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-key" aria-hidden="true"></i> <a href="">Notenschlüßel konfigurieren</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Der Notenschlüßel wurde konfiguriert.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> <a href="">Prüfungsergebnisse eingeben</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden Prüfungsergebnisse eingegeben.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-binoculars" aria-hidden="true"></i> <a href="">Eingegebene Ergebnisse prüfen (optional)</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {{!after_exam}}
+          <li class="item">
+            <i class="fa fa-square-o" aria-hidden="true"></i>
+            <div class="card border border-success">
+              <div class="card-block">
+                <div class="row">
+                  <h4 class="card-title col-xs-11">Nach der Prüfung</h4>
+                  <button type="button" class="close col-xs-1" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="card-text">
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Punkte für Klausureinsicht als PDF exportieren</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-download" aria-hidden="true"></i> Ergebnisse und Statistik exportieren
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row"><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Ergebnisse für das Prüfungsamt exportieren</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row"><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-text-o" aria-hidden="true"></i> Text</a></div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-text">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-trash" aria-hidden="true"></i> <a href="">Prüfungsdaten löschen</a>
+                          </div>
+                          <div class="card-text">
+                            <p><i class="fa fa-check-circle text-danger" aria-hidden="true"></i> Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
                           </div>
                         </div>
                       </div>
@@ -304,12 +551,6 @@
               <a href="#" class="btn btn-danger w-100">Prüfungsdaten löschen</a>
             </div>
           </div>
-        </div>
-        {{!progress bar}}
-        <hr />
-        <h4>Fortschritt:</h4>
-        <div class="progress">
-          <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
         </div>
     </div>
 </form>
