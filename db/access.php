@@ -65,4 +65,12 @@ $capabilities = [
             'teacher' => CAP_ALLOW,
         ],
     ],
+    'mod/exammanagement:addtime' => [
+        'riskbitmask' => RISK_PRIVACY
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'teacher' => CAP_ALLOW,
+        ],
+    ],
 ];
