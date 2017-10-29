@@ -80,27 +80,28 @@ echo $OUTPUT->header();
 // set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
 echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
+//check for user_roles
 $roles = get_user_roles($modulecontext, $USER->id);
 foreach ($roles as $role) {
     $rolestr[]= role_get_name($role, $modulecontext);
 }
 $rolestr = implode(', ', $rolestr);
 
+//check if stages are completed
+$firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST);
+
+//call renderer
 $output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($rolestr);
+$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted);
 
 // displaying basic content.
 echo $output->render($page);
 
 //displaying debug info (to be moved to renderer)
 if($USER->username=="admin"){
-	//echo 'test <br>';
-	//var_dump($id);
-	//var_dump($cm);
-	//var_dump($course);
-	//var_dump($moduleinstance);
+	
 	$output = $PAGE->get_renderer('mod_exammanagement');
-	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
+	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted);
 	echo $output->render($page);
 }
 // Finish the page.

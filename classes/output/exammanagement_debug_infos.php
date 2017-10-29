@@ -42,16 +42,18 @@ class exammanagement_debug_infos implements renderable, templatable {
     protected $cm;
     protected $course;
     protected $moduleinstance;
+    protected $firststagecompleted;
 
     /**
      * Construct this renderable.
      * @param int $... The course record for this page.
      */
-    public function __construct($id, $cm, $course, $moduleinstance) {
+    public function __construct($id, $cm, $course, $moduleinstance, $firststagecompleted) {
         $this->id = $id;
         $this->cm = json_encode($cm);
         $this->course = json_encode($course);
         $this->moduleinstance = json_encode($moduleinstance);
+        $this->firststagecompleted = $firststagecompleted;
     }
     /**
      * Export this data so it can be used as the context for a mustache template.
@@ -65,6 +67,7 @@ class exammanagement_debug_infos implements renderable, templatable {
         $data->cm = $this->cm;
         $data->course = $this->course;
         $data->moduleinstance = $this->moduleinstance;
+        $data->firststagecompleted = $this->firststagecompleted;
         return $data;
     }
 

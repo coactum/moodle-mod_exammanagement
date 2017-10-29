@@ -31,83 +31,93 @@
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}
           <li class="item">
-            <i class="fa fa-check-square-o text-success" aria-hidden="true"></i>
+            {{#firststagecompleted}}<i class="fa fa-check-square-o text-success" aria-hidden="true"></i>{{/firststagecompleted}}
+            {{^firststagecompleted}}<i class="fa fa-square-o" aria-hidden="true"></i>{{/firststagecompleted}}
             <div class="card">
               <div class="card-block">
                 <div class="row">
                   <h4 class="card-title col-xs-11">Vor der Prüfung</h4>
-                  <button type="button" class="close col-xs-1" data-toggle="tooltip" title="Minimieren!" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+                  {{#firststagecompleted}}
+                    <button type="button" class="close col-xs-1" data-toggle="tooltip" title="Minimieren" aria-label="Minimize">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  {{/firststagecompleted}}
+                  {{^firststagecompleted}}
+                    <button type="button" class="close col-xs-1" data-toggle="tooltip" title="Maximieren" aria-label="Maximize">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                  {{/firststagecompleted}}
                 </div>
-                <div class="card-text">
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-calendar" aria-hidden="true"></i> <a href="">Datum und Zeit festlegen</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits ein Datum und eine Uhrzeit festgelegt.</p>
+                {{^firststagecompleted}} {{!später noch firststagevisible als Bedingung hinzufügen bzw. im controller checken}}
+                  <div class="card-text">
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt.</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-calendar" aria-hidden="true"></i> <a href="">Datum und Zeit festlegen</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits ein Datum und eine Uhrzeit festgelegt.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-users" aria-hidden="true"></i> <a href="">Teilnehmer hinzufügen</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-tasks" aria-hidden="true"></i> <a href="">Aufgaben konfigurieren</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten (optional)</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben (optional)</a>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-users" aria-hidden="true"></i> <a href="">Teilnehmer hinzufügen</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-tasks" aria-hidden="true"></i> <a href="">Aufgaben konfigurieren</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert.</p>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten (optional)</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben (optional)</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben.</p>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
+               {{/firststagecompleted}}
               </div>
             </div>
           </li>
@@ -347,6 +357,7 @@
    </div>
 </form>
 
+<!-- to be deleted
 <form action="" method="post">
     <div class="container-fluid">
         {{!Heading}}
@@ -554,3 +565,4 @@
         </div>
     </div>
 </form>
+ -->
