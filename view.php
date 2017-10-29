@@ -90,9 +90,13 @@ $rolestr = implode(', ', $rolestr);
 //check if stages are completed
 $firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST);
 
+//check date and time
+$date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
+$time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+
 //call renderer
 $output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted);
+$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted, $date, $time);
 
 // displaying basic content.
 echo $output->render($page);
@@ -101,7 +105,7 @@ echo $output->render($page);
 if($USER->username=="admin"){
 	
 	$output = $PAGE->get_renderer('mod_exammanagement');
-	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted);
+	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted, $date, $time);
 	echo $output->render($page);
 }
 // Finish the page.

@@ -27,6 +27,8 @@
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="firststageready" TYPE="boolean" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="stores if first stage is already completed"/>
+          <FIELD NAME="date" TYPE="date" NOTNULL="false" SEQUENCE="false" COMMENT="date of exam"/>
+          <FIELD NAME="time" TYPE="time" NOTNULL="false" SEQUENCE="false" COMMENT="time of exam"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />

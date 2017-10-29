@@ -40,14 +40,19 @@ class exammanagement_overview implements renderable, templatable {
 
     protected $rolestr;
     protected $firststagecompleted;
+    protected $date;
+	protected $time;
+
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($rolestr, $firststagecompleted) {
+    public function __construct($rolestr, $firststagecompleted, $date, $time) {
         $this->rolestr = $rolestr;
         $this->firststagecompleted = $firststagecompleted;
+        $this->date = $date;
+        $this->time = $time;
     }
 
     /**
@@ -60,6 +65,8 @@ class exammanagement_overview implements renderable, templatable {
         $data = new stdClass();
         $data->rolestr = $this->rolestr;
         $data->firststagecompleted = $this->firststagecompleted;
+        $data->date = $this->date;
+        $data->time = $this->time;
         return $data;
     }
 
