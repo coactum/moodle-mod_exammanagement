@@ -94,14 +94,18 @@ $firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecomplete
 $date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
 $time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
 
-//call renderer
+//rendering and displaying basic content (overview).
 $output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted, $date, $time);
-
-// displaying basic content.
+$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted, $date, $time); 
 echo $output->render($page);
 
-//displaying debug info (to be moved to renderer)
+//rendering and displaying set_date_time
+$output = $PAGE->get_renderer('mod_exammanagement');
+$page = new \mod_exammanagement\output\exammanagement_set_date_time($date, $time);
+
+echo $output->render($page);
+
+//rendering and displaying debug info (to be moved to renderer)
 if($USER->username=="admin"){
 	
 	$output = $PAGE->get_renderer('mod_exammanagement');

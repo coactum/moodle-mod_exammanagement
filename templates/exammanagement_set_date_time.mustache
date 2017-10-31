@@ -1,12 +1,16 @@
-<hr />
 <h2>Debug-Information</h2>
-<a href="http://localhost:8888/moodle33/mod/exammanagement/index.php">Testlink zu index.php</a>
-<pre>
-    <br> id: {{id}}
-    <br> cm: {{cm}}
-    <br> course: {{course}}
-    <br> moduleinstance: {{moduleinstance}}
-    <br> firststagecompleted: {{firststagecompleted}} {{^firststagecompleted}} 0 {{/firststagecompleted}}
-    <br> Date of exam: {{date}}
-    <br> Time of exam: {{time}}
-</pre>
+<p>Datum der Prüfung (Tag, Monat, Jahr)</p>
+
+<form action="" method="post">
+  <div class="form-group">
+    <label for="set_date">Datum</label>
+    <input type="date" class="form-control" id="set_date" aria-describedby="date" placeholder="Datum eingeben" value="{{date}}">
+  </div>
+  <div class="form-group">
+    <label for="set_time">Zeit</label>
+    <input type="time" class="form-control" id="set_time" placeholder="Zeit eingeben" value="{{time}}">
+  </div>
+  <button type="submit" class="btn btn-primary">Datum und Zeit festlegen</button>
+</form>
+
+{{pageurl}}
