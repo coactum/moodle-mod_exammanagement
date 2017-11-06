@@ -36,18 +36,27 @@ use stdClass;
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
 class exammanagement_set_date_time implements renderable, templatable {
 
-    protected $date;
-    protected $time;
+    protected $cmid;
+    protected $day;
+    protected $month;
+    protected $year;
+    protected $hour;
+    protected $minute;
 
     /**
      * Construct this renderable.
      * @param int $... The course record for this page.
      */
-    public function __construct($date, $time) {
-        $this->date = $date;
-        $this->time = $time;
+    public function __construct($cmid, $day, $month, $year, $hour, $minute) {
+        $this->cmid = $cmid;
+        $this->day = $day;
+        $this->month = $month;
+        $this->year = $year;
+        $this->hour = $hour;
+        $this->minute = $minute;
     }
     /**
      * Export this data so it can be used as the context for a mustache template.
@@ -57,8 +66,13 @@ class exammanagement_set_date_time implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
-        $data->date = $this->date;
-        $data->time = $this->time;
+        $data->cmid = $this->cmid;
+        $data->day = $this->day;
+        $data->month = $this->month;
+        $data->year = $this->year;
+        $data->hour = $this->hour;
+        $data->minute = $this->minute;
+
         return $data;
     }
 

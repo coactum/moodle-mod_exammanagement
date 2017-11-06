@@ -31,14 +31,18 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$setday = optional_param('setday', 0, PARAM_INT);
+$setmonth = optional_param('setmonth', 0, PARAM_INT);
+$setyear = optional_param('setyear', 0, PARAM_INT);
+$sethour = optional_param('sethour', 0, PARAM_INT);
+$setminute = optional_param('setminute', 0, PARAM_INT);
+
 if ($id) {
     $cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
-    //$course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $course = get_course($cm->course);
     $moduleinstance = $DB->get_record('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($e) {
     $moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
-    //$course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
     $course = get_course($moduleinstance->course);
     $cm             = get_coursemodule_from_instance('exammanagement', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
@@ -48,18 +52,19 @@ if ($id) {
 require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
+//$coursecontext = context_course::instance($course->id);
 
 //events
-$event = \mod_exammanagement\event\course_module_viewed::create(array(
-    'objectid' => $moduleinstance->id,
-    'context' => $modulecontext
-));
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('exammanagement', $moduleinstance);
-$event->trigger();
+// $event = \mod_exammanagement\event\set_date_time_viewed::create(array(
+//     'objectid' => $moduleinstance->id,
+//     'context' => $coursecontext
+// ));
+// $event->add_record_snapshot('course', $course);
+// $event->add_record_snapshot('exammanagement', $moduleinstance);
+// $event->trigger();
 
 // Print the page header.
-$PAGE->set_url('/mod/exammanagement/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/exammanagement/set_date_time.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name).' ('.get_string('modulename','mod_exammanagement').')');
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
@@ -74,45 +79,53 @@ $PAGE->set_context($modulecontext);
 // Output starts here.
 echo $OUTPUT->header();
 
-// Conditions to show the intro can change to look for own settings or whatever.
-// if ($moduleinstance->intro) {
-//     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
-// }
+//if called from overviewpage
 
-// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
-echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
 
-//check for user_roles
-$roles = get_user_roles($modulecontext, $USER->id);
-foreach ($roles as $role) {
-    $rolestr[]= role_get_name($role, $modulecontext);
+	//get date and time from DB
+	$date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
+	$time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+
+	//disassemble $date to day, month and year
+	$temp = explode ('-', $date);
+	$day=$temp[2];
+	$month=$temp[1];
+	$year=$temp[0];
+
+	//disassemble $time to hour and minute
+	$temp = explode (':', $time);
+	$hour=$temp[0];
+	$minute=$temp[1];
+
+	//rendering and displaying page
+	$output = $PAGE->get_renderer('mod_exammanagement');
+	$page = new \mod_exammanagement\output\exammanagement_set_date_time($cm->id, $day, $month, $year, $hour, $minute); //
+
+	echo $output->render($page);
+
 }
-$rolestr = implode(', ', $rolestr);
 
-//check if stages are completed
-$firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST);
+//if called from itself
 
-//check date and time
-$date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
-$time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+if ($setday && $setmonth && $setyear && $sethour && $setminute){
 
-//rendering and displaying basic content (overview).
-$output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($cm->id, $rolestr, $firststagecompleted, $date, $time); 
-echo $output->render($page);
+	// combine day+month+year and save it in DB->date ...
+	$DB->update_record($exammanagement_data, $obj);
 
-//rendering and displaying set_date_time
-$output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_set_date_time($date, $time);
+	// combine hour and minute and save in DB ->time ...
 
-echo $output->render($page);
+	redirect ('/mod/exammanagement/view.php?id='.array('id' => $cm->id));
+
+}
 
 //rendering and displaying debug info (to be moved to renderer)
 if($USER->username=="admin"){
 	
 	$output = $PAGE->get_renderer('mod_exammanagement');
-	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted, $date, $time);
+	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
 	echo $output->render($page);
+	echo 'Days from param'.$setday.$setmonth.$setyear.$sethour.$setminute;
 }
 // Finish the page.
 echo $OUTPUT->footer();

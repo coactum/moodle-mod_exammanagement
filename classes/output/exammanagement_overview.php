@@ -38,6 +38,7 @@ use stdClass;
  */
 class exammanagement_overview implements renderable, templatable {
 
+    protected $cmid;
     protected $rolestr;
     protected $firststagecompleted;
     protected $date;
@@ -48,7 +49,8 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($rolestr, $firststagecompleted, $date, $time) {
+    public function __construct($cmid, $rolestr, $firststagecompleted, $date, $time) {
+        $this->cmid = $cmid;
         $this->rolestr = $rolestr;
         $this->firststagecompleted = $firststagecompleted;
         $this->date = $date;
@@ -63,6 +65,7 @@ class exammanagement_overview implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
+        $data->cmid = $this->cmid;
         $data->rolestr = $this->rolestr;
         $data->firststagecompleted = $this->firststagecompleted;
         $data->date = $this->date;

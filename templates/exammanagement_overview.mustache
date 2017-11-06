@@ -39,7 +39,7 @@
                   <h4 class="card-title col-xs-11">Vor der Prüfung</h4>
                   <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_one" aria-expanded="false" aria-controls="phase_one">
                       <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                    </a>
+                  </a>
                 </div>
                 {{#firststagecompleted}}<div class="collapse phase_one">{{/firststagecompleted}}
                 {{^firststagecompleted}}<div class="collapse.show phase_one">{{/firststagecompleted}}
@@ -58,7 +58,7 @@
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-calendar" aria-hidden="true"></i> <a href="">Datum und Zeit festlegen</a>
+                                <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
                               </div>
                               <div class="card-text m-l-1">
                                 {{#date}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Prüfung findet am {{date}} um {{time}} Uhr statt.</p>{{/date}}

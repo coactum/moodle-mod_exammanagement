@@ -1,12 +1,16 @@
 <hr />
-<h2>Debug-Information</h2>
-<a href="http://localhost:8888/moodle33/mod/exammanagement/index.php">Testlink zu index.php</a>
-<pre>
-    <br> id: {{id}}
-    <br> cm: {{cm}}
-    <br> course: {{course}}
-    <br> moduleinstance: {{moduleinstance}}
-    <br> firststagecompleted: {{firststagecompleted}} {{^firststagecompleted}} 0 {{/firststagecompleted}}
-    <br> Date of exam: {{date}}
-    <br> Time of exam: {{time}}
-</pre>
+<div class="row">
+    <h2 class="col-sx-11">Debug-Information</h2>
+    <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".debug_infos" aria-expanded="false" aria-controls="debug_infos">
+      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+    </a>
+</div>
+<div class="collapse debug_infos">
+    <a href="http://localhost:8888/moodle33/mod/exammanagement/index.php">Testlink zu index.php</a>
+    <pre>
+        <br> id: {{id}}
+        <br> cm: {{cm}}
+        <br> course: {{course}}
+        <br> moduleinstance: {{moduleinstance}}
+    </pre>
+</div>

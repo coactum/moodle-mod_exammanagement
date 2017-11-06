@@ -1,16 +1,29 @@
-<h2>Debug-Information</h2>
-<p>Datum der Prüfung (Tag, Monat, Jahr)</p>
+<h2>Datum und Uhrzeit hinzufügen</h2>
 
-<form action="" method="post">
-  <div class="form-group">
-    <label for="set_date">Datum</label>
-    <input type="date" class="form-control" id="set_date" aria-describedby="date" placeholder="Datum eingeben" value="{{date}}">
+<form action="set_date_time.php?id={{cmid}}" method="post">
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="setday">Tag</label>
+      <input type="text" class="form-control" id="setday" name ="setday" aria-describedby="day" placeholder="Tag eingeben" value="{{day}}" size="2">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="setmonth">Monat</label>
+      <input type="text" class="form-control" id="setmonth" name ="setmonth" aria-describedby="month" placeholder="Monat eingeben" value="{{month}}" size="2">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="setyear">Jahr</label>
+      <input type="text" class="form-control" id="setyear" name ="setyear" aria-describedby="year" placeholder="Jahr eingeben" value="{{year}}" size="4">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="set_time">Zeit</label>
-    <input type="time" class="form-control" id="set_time" placeholder="Zeit eingeben" value="{{time}}">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="sethour">Stunde</label>
+      <input type="text" class="form-control" id="sethour" name ="sethour" aria-describedby="hour" placeholder="Stunde eingeben" value="{{hour}}" size="2">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="setminute">Minute</label>
+      <input type="text" class="form-control" id="setminute" name ="setminute" aria-describedby="minute" placeholder="Minute eingeben" value="{{minute}}" size="2">
+    </div>
   </div>
   <button type="submit" class="btn btn-primary">Datum und Zeit festlegen</button>
 </form>
-
-{{pageurl}}
