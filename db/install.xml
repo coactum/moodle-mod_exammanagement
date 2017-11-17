@@ -26,7 +26,7 @@
           <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances"/>
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
-          <FIELD NAME="firststageready" TYPE="tinyint" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="stores if first stage is already completed"/>
+          <FIELD NAME="firststageready" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="stores if first stage is already completed"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
