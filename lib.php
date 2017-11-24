@@ -67,6 +67,8 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     $moduleinstance->timecreated = time();
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
+    
+    $moduleinstance->id = $DB->insert_record('exammanagement_data');
 
     return $moduleinstance->id;
 }
