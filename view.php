@@ -73,26 +73,27 @@ $PAGE->set_context($modulecontext);
 echo $OUTPUT->header();
 
 // Conditions to show the intro can change to look for own settings or whatever.
-// if ($moduleinstance->intro) {
-//     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
-// }
+ if ($moduleinstance->intro) {
+     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
+ }
 
 // set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
 echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
-//check for user_roles
-$roles = get_user_roles($modulecontext, $USER->id);
-foreach ($roles as $role) {
-    $rolestr[]= role_get_name($role, $modulecontext);
-}
-$rolestr = implode(', ', $rolestr);
+//check for user_roles (not working for Moodle 3.4 -> to be deleted)
+//$roles = get_user_roles($modulecontext, $USER->id);
+//foreach ($roles as $role) {
+//    $rolestr[]= role_get_name($role, $modulecontext);
+//}
+//$rolestr = implode(', ', $rolestr);
 
-//check if stages are completed
-$firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST);
+//check if stages are completed // to be moved to renderer
+//$firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST); //not working  
+$firststagecompleted = false;
 
 //call renderer
 $output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($rolestr, $firststagecompleted);
+$page = new \mod_exammanagement\output\exammanagement_overview($firststagecompleted);
 
 // displaying basic content.
 echo $output->render($page);
