@@ -68,7 +68,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
     
-    $moduleinstance->id = $DB->insert_record('exammanagement_data');
+    $moduleinstance->id = $DB->insert_record('exammanagement_data', $moduleinstance);
 
     return $moduleinstance->id;
 }
@@ -107,6 +107,13 @@ function exammanagement_delete_instance($id) {
     }
 
     $DB->delete_records('exammanagement', array('id' => $id));
+    
+    $exists = $DB->get_record('exammanagement_data', array('id' => $id));
+    if (!$exists) {
+        return false;
+    }
+
+    $DB->delete_records('exammanagement_data', array('id' => $id));
 
     return true;
 }
