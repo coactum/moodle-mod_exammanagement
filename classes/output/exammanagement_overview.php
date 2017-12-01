@@ -41,20 +41,26 @@ class exammanagement_overview implements renderable, templatable {
     protected $cmid;
     protected $rolestr;
     protected $firststagecompleted;
-    protected $date;
-	protected $time;
+    protected $day;
+    protected $month;
+    protected $year;
+    protected $hour;
+    protected $minute;
 
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $rolestr, $firststagecompleted, $date, $time) {
+    public function __construct($cmid, $rolestr, $firststagecompleted, $day, $month, $year, $hour, $minute) {
         $this->cmid = $cmid;
         $this->rolestr = $rolestr;
         $this->firststagecompleted = $firststagecompleted;
-        $this->date = $date;
-        $this->time = $time;
+        $this->day = $day;
+        $this->month = $month;
+        $this->year = $year;
+        $this->hour = $hour;
+        $this->minute = $minute;
     }
 
     /**
@@ -68,8 +74,11 @@ class exammanagement_overview implements renderable, templatable {
         $data->cmid = $this->cmid;
         $data->rolestr = $this->rolestr;
         $data->firststagecompleted = $this->firststagecompleted;
-        $data->date = $this->date;
-        $data->time = $this->time;
+        $data->day = $this->day;
+        $data->month = $this->month;
+        $data->year = $this->year;
+        $data->hour = $this->hour;
+        $data->minute = $this->minute;
         return $data;
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <XMLDB PATH="mod/exammanagement/db" VERSION="20171029" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
+  <XMLDB PATH="mod/exammanagement/db" VERSION="20170112" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
     <TABLES>
-      <TABLE NAME="exammanagement" COMMENT="list of plugin-instances">
+      <TABLE NAME="exammanagement" COMMENT="list of plugin-instances with all data">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
           <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course exammanagement activity belongs to"/>
@@ -10,25 +10,9 @@
           <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)"/>
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
-          <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="not relevant for this module"/>
-    	</FIELDS>
-        <KEYS>
-          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
-        </KEYS>
-        <INDEXES>
-          <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
-        </INDEXES>
-      </TABLE>
-      <TABLE NAME="exammanagement_data" COMMENT="exam data for all instances">
-        <FIELDS>
-          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-          <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course the parent instance of the data belongs to "/>
-          <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances"/>
-          <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
-          <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
-          <FIELD NAME="firststageready" TYPE="boolean" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="stores if first stage is already completed"/>
-          <FIELD NAME="date" TYPE="date" NOTNULL="false" SEQUENCE="false" COMMENT="date of exam"/>
-          <FIELD NAME="time" TYPE="time" NOTNULL="false" SEQUENCE="false" COMMENT="time of exam"/>
+          <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
+          <FIELD NAME="date" TYPE="date" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="date of exam"/>
+          <FIELD NAME="time" TYPE="time" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="time of exam"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />

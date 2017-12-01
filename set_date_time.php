@@ -83,20 +83,37 @@ echo $OUTPUT->header();
 
 if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
 
-	//get date and time from DB
-	$date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
-	$time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+	//get date and time from DB (own function)
+	$date = $DB->get_field('exammanagement', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
+	$time = $DB->get_field('exammanagement', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
 
-	//disassemble $date to day, month and year
-	$temp = explode ('-', $date);
-	$day=$temp[2];
-	$month=$temp[1];
-	$year=$temp[0];
+	//disassemble $date to day, month and year //own function
+	if ($date) {
+		$datecomponents = explode("-", $date);
 
-	//disassemble $time to hour and minute
-	$temp = explode (':', $time);
-	$hour=$temp[0];
-	$minute=$temp[1];
+		$day=$datecomponents[2];
+		$month=$datecomponents[1];
+		$year=$datecomponents[0];
+	}
+
+	else{
+		$day='';
+		$month='';
+		$year='';
+	}
+
+	//disassemble $time to hour and minute //own function
+	if ($date) {
+		$timecomponents = explode(":", $time);
+
+		$hour=$timecomponents[0];
+		$minute=$timecomponents[1];
+	}
+
+	else{
+		$hour='';
+		$minute='';
+	}
 
 	//rendering and displaying page
 	$output = $PAGE->get_renderer('mod_exammanagement');
@@ -109,13 +126,17 @@ if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
 //if called from itself
 
 if ($setday && $setmonth && $setyear && $sethour && $setminute){
-
+	global $CFG;
 	// combine day+month+year and save it in DB->date ...
-	$DB->update_record($exammanagement_data, $obj);
-
-	// combine hour and minute and save in DB ->time ...
-
-	redirect ('/mod/exammanagement/view.php?id='.array('id' => $cm->id));
+	
+	$moduleinstance->date=$setyear.'-'.$setmonth.'-'.$setday;
+	$moduleinstance->time=$sethour.':'.$setminute.':00';
+	
+	$DB->update_record("exammanagement", $moduleinstance);
+	
+	$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$id;
+	
+	redirect ($url);
 
 }
 
@@ -125,7 +146,7 @@ if($USER->username=="admin"){
 	$output = $PAGE->get_renderer('mod_exammanagement');
 	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
 	echo $output->render($page);
-	echo 'Days from param'.$setday.$setmonth.$setyear.$sethour.$setminute;
 }
+
 // Finish the page.
 echo $OUTPUT->footer();

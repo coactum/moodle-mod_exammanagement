@@ -61,8 +61,8 @@
                                 <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
                               </div>
                               <div class="card-text m-l-1">
-                                {{#date}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Prüfung findet am {{date}} um {{time}} Uhr statt.</p>{{/date}}
-                                {{^date}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</span></p>{{/date}}
+                                {{#day}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Prüfung findet am {{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} Uhr statt.</p>{{/day}}
+                                {{^day}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</span></p>{{/day}}
                               </div>
                             </div>
                           </div>
@@ -206,8 +206,8 @@
             <i class="fa fa-square-o" aria-hidden="true"></i>
             <div class="card">
               <div class="card-block">
-                {{#date}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8">{{date}} um {{time}} in Raum XX.XX.</span></div>{{/date}}
-                {{^date}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/date}}
+                {{#day}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8">{{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} in Raum XX.XX.</span></div>{{/day}}
+                {{^day}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/day}}
               </div>
             </div>
           </li>

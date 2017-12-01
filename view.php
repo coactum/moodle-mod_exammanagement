@@ -74,44 +74,66 @@ $PAGE->set_context($modulecontext);
 // Output starts here.
 echo $OUTPUT->header();
 
-// Conditions to show the intro can change to look for own settings or whatever.
-// if ($moduleinstance->intro) {
-//     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
-// }
-
 // set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
 echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
-//check for user_roles
-$roles = get_user_roles($modulecontext, $USER->id);
-foreach ($roles as $role) {
-    $rolestr[]= role_get_name($role, $modulecontext);
+// Conditions to show the intro can change to look for own settings or whatever.
+ if ($moduleinstance->intro) {
+     echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
+ }
+
+//check for user_roles /to be deleted
+//$roles = get_user_roles($modulecontext, $USER->id);
+//foreach ($roles as $role) {
+//    $rolestr[]= role_get_name($role, $modulecontext);
+//}
+//$rolestr = implode(', ', $rolestr);
+$rolestr='Test';
+
+//check if stages are completed (to be moved to own function) 
+$firststagecompleted = true; //for testing, later to be calculated depending on if all data is set
+
+//get date and time (to be moved to own function
+$date = $DB->get_field('exammanagement', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
+$time = $DB->get_field('exammanagement', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+
+//disassemble $date and $time (to be moved to own function)
+
+if ($date) {
+	$datecomponents = explode("-", $date);
+
+	$day=$datecomponents[2];
+	$month=$datecomponents[1];
+	$year=$datecomponents[0];
 }
-$rolestr = implode(', ', $rolestr);
+else{
+	$day='';
+	$month='';
+	$year='';
+}
 
-//check if stages are completed
-$firststagecompleted = $DB->get_field('exammanagement_data', 'firststagecompleted', array('id' => $cm->instance), '*', MUST_EXIST);
+if ($time) {
+	$timecomponents = explode(":", $time);
 
-//check date and time
-$date = $DB->get_field('exammanagement_data', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
-$time = $DB->get_field('exammanagement_data', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+	$hour=$timecomponents[0];
+	$minute=$timecomponents[1];
+}
 
+else{
+	$hour='';
+	$minute='';
+}
+	
 //rendering and displaying basic content (overview).
 $output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_overview($cm->id, $rolestr, $firststagecompleted, $date, $time); 
-echo $output->render($page);
-
-//rendering and displaying set_date_time
-$output = $PAGE->get_renderer('mod_exammanagement');
-$page = new \mod_exammanagement\output\exammanagement_set_date_time($date, $time);
-
+$page = new \mod_exammanagement\output\exammanagement_overview($cm->id, $rolestr, $firststagecompleted, $day, $month, $year, $hour, $minute); 
 echo $output->render($page);
 
 //rendering and displaying debug info (to be moved to renderer)
 if($USER->username=="admin"){
 	
 	$output = $PAGE->get_renderer('mod_exammanagement');
-	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted, $date, $time);
+	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted, $day, $month, $year, $hour, $minute);
 	echo $output->render($page);
 }
 // Finish the page.
