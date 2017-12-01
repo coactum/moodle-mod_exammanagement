@@ -30,28 +30,33 @@ use templatable;
 use stdClass;
 
 /**
- * Class containing data for exammanagement_overview
+ * Class containing data for exammanagement_set_date_time
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class exammanagement_debug_infos implements renderable, templatable {
+ 
+class exammanagement_set_date_time implements renderable, templatable {
 
-    protected $id;
-    protected $cm;
-    protected $course;
-    protected $moduleinstance;
+    protected $cmid;
+    protected $day;
+    protected $month;
+    protected $year;
+    protected $hour;
+    protected $minute;
 
     /**
      * Construct this renderable.
      * @param int $... The course record for this page.
      */
-    public function __construct($id, $cm, $course, $moduleinstance) {
-        $this->id = $id;
-        $this->cm = json_encode($cm);
-        $this->course = json_encode($course);
-        $this->moduleinstance = json_encode($moduleinstance);
+    public function __construct($cmid, $day, $month, $year, $hour, $minute) {
+        $this->cmid = $cmid;
+        $this->day = $day;
+        $this->month = $month;
+        $this->year = $year;
+        $this->hour = $hour;
+        $this->minute = $minute;
     }
     /**
      * Export this data so it can be used as the context for a mustache template.
@@ -61,10 +66,13 @@ class exammanagement_debug_infos implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
-        $data->id = $this->id;
-        $data->cm = $this->cm;
-        $data->course = $this->course;
-        $data->moduleinstance = $this->moduleinstance;
+        $data->cmid = $this->cmid;
+        $data->day = $this->day;
+        $data->month = $this->month;
+        $data->year = $this->year;
+        $data->hour = $this->hour;
+        $data->minute = $this->minute;
+
         return $data;
     }
 

@@ -49,6 +49,10 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_exammanagement/exammanagement_overview', $data);
     }
+    public function render_exammanagement_set_date_time(exammanagement_set_date_time $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_exammanagement/exammanagement_set_date_time', $data);
+    }
 	public function render_exammanagement_debug_infos(exammanagement_debug_infos $page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_exammanagement/exammanagement_debug_infos', $data);
