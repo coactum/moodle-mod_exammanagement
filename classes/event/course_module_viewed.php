@@ -15,17 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Defines the view event.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_exammanagement\event;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_exammanagement';
-$plugin->release = '0.1.5';
-$plugin->version = 2017120100;
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_ALPHA;
+/**
+ * The mod_exammanagement instance viewed event class
+ *
+ * If the view mode needs to be stored as well, you may need to
+ * override methods get_url() and get_legacy_log_data(), too.
+ *
+ * @package     mod_exammanagement
+ * @copyright   coactum GmbH 2017
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class course_module_viewed extends \core\event\course_module_viewed {
+
+    /**
+     * Initialize the event
+     */
+    protected function init() {
+        $this->data['objecttable'] = 'exammanagement';
+        parent::init();
+    }
+}

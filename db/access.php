@@ -17,6 +17,28 @@
 /**
  * Plugin capabilities are defined here.
  *
+ * The capabilities are loaded into the database table when the module is
+ * installed or updated. Whenever the capability definitions are updated,
+ * the module version number should be bumped up.
+ *
+ * The system has four possible values for a capability:
+ * CAP_ALLOW, CAP_PREVENT, CAP_PROHIBIT, and inherit (not set).
+ *
+ * It is important that capability names are unique. The naming convention
+ * for capabilities that are specific to modules and blocks is as follows:
+ *   [mod/block]/<plugin_name>:<capabilityname>
+ *
+ * component_name should be the same as the directory name of the mod or block.
+ *
+ * Core moodle capabilities are defined thus:
+ *    moodle/<capabilityclass>:<capabilityname>
+ *
+ * Examples: mod/forum:viewpost
+ *           block/recent_activity:view
+ *           moodle/site:deleteuser
+ *
+ * The variable name for the capability definitions array is $capabilities
+ *
  * @package     mod_exammanagement
  * @category    access
  * @copyright   coactum GmbH 2017
@@ -27,10 +49,26 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-    'mod/exammanagement:enable exam management' => [
-        'riskbitmask' => RISK_PERSONAL,
+    'mod/exammanagement:addinstance' => [
+        'riskbitmask' => RISK_XSS | RISK_SPAM,
         'captype' => 'write',
-        'contextlevel' => exam management,
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+        ],
+    ],
+    'mod/exammanagement:view' => [
+        'riskbitmask' => RISK_PRIVACY
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'teacher' => CAP_ALLOW,
+        ],
+    ],
+    'mod/exammanagement:addtime' => [
+        'riskbitmask' => RISK_PRIVACY
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
         ],

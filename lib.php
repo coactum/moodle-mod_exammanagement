@@ -16,7 +16,12 @@
 
 /**
  * Library of interface functions and constants.
- *
+ * All the core Moodle functions, neeeded to allow the module to work 
+ * integrated in Moodle should be placed here.
+ * All the newmodule specific functions, needed to implement all the module
+ * logic, should go to locallib.php. This will help to save some memory when
+ * Moodle is performing actions across all modules.
+*
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,11 +35,13 @@ defined('MOODLE_INTERNAL') || die();
  * @param string $feature Constant representing the feature.
  * @return true | null True if the feature is supported, null otherwise.
  */
-function mod_exammanagement_supports($feature) {
+function exammanagement_supports($feature) {
     switch ($feature) {
-        case FEATURE_GRADE_HAS_GRADE:
+    	case FEATURE_MOD_INTRO:
             return true;
-        case FEATURE_MOD_INTRO:
+    	case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
             return true;
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -54,14 +61,14 @@ function mod_exammanagement_supports($feature) {
  * @param mod_exammanagement_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function mod_exammanagement_add_instance($moduleinstance, $mform = null) {
+function exammanagement_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
 
-    $id = $DB->insert_record('mod_exammanagement', $moduleinstance);
-
-    return $id;
+    $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
+    
+    return $moduleinstance->id;
 }
 
 /**
@@ -74,13 +81,13 @@ function mod_exammanagement_add_instance($moduleinstance, $mform = null) {
  * @param mod_exammanagement_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function mod_exammanagement_update_instance($moduleinstance, $mform = null) {
+function exammanagement_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    return $DB->update_record('mod_exammanagement', $moduleinstance);
+    return $DB->update_record('exammanagement', $moduleinstance);
 }
 
 /**
@@ -89,15 +96,15 @@ function mod_exammanagement_update_instance($moduleinstance, $mform = null) {
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function mod_exammanagement_delete_instance($id) {
+function exammanagement_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('mod_exammanagement', array('id' => $id));
+    $exists = $DB->get_record('exammanagement', array('id' => $id));
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('mod_exammanagement', array('id' => $id));
+    $DB->delete_records('exammanagement', array('id' => $id));
 
     return true;
 }
@@ -112,10 +119,10 @@ function mod_exammanagement_delete_instance($id) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by the given mod_exammanagement instance.
  */
-function mod_exammanagement_scale_used($moduleinstanceid, $scaleid) {
+function exammanagement_scale_used($moduleinstanceid, $scaleid) {
     global $DB;
 
-    if ($scaleid && $DB->record_exists('mod_exammanagement', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
+    if ($scaleid && $DB->record_exists('exammanagement', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
         return true;
     } else {
         return false;
@@ -130,10 +137,10 @@ function mod_exammanagement_scale_used($moduleinstanceid, $scaleid) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by any mod_exammanagement instance.
  */
-function mod_exammanagement_scale_used_anywhere($scaleid) {
+function exammanagement_scale_used_anywhere($scaleid) {
     global $DB;
 
-    if ($scaleid and $DB->record_exists('mod_exammanagement', array('grade' => -$scaleid))) {
+    if ($scaleid and $DB->record_exists('exammanagement', array('grade' => -$scaleid))) {
         return true;
     } else {
         return false;
@@ -149,7 +156,7 @@ function mod_exammanagement_scale_used_anywhere($scaleid) {
  * @param bool $reset Reset grades in the gradebook.
  * @return void.
  */
-function mod_exammanagement_grade_item_update($moduleinstance, $reset=false) {
+function exammanagement_grade_item_update($moduleinstance, $reset=false) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -171,7 +178,7 @@ function mod_exammanagement_grade_item_update($moduleinstance, $reset=false) {
         $item['reset'] = true;
     }
 
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'mod_exammanagement', $moduleinstance->id, 0, null, $item);
+    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, null, $item);
 }
 
 /**
@@ -180,7 +187,7 @@ function mod_exammanagement_grade_item_update($moduleinstance, $reset=false) {
  * @param stdClass $moduleinstance Instance object.
  * @return grade_item.
  */
-function mod_exammanagement_grade_item_delete($moduleinstance) {
+function exammanagement_grade_item_delete($moduleinstance) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -196,13 +203,13 @@ function mod_exammanagement_grade_item_delete($moduleinstance) {
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int $userid Update grade of specific user only, 0 means all participants.
  */
-function mod_exammanagement_update_grades($moduleinstance, $userid = 0) {
+function exammanagement_update_grades($moduleinstance, $userid = 0) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
     // Populate array of grade objects indexed by userid.
     $grades = array();
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'mod_exammanagement', $moduleinstance->id, 0, $grades);
+    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, $grades);
 }
 
 /**
@@ -219,7 +226,7 @@ function mod_exammanagement_update_grades($moduleinstance, $userid = 0) {
  * @param stdClass $context.
  * @return string[].
  */
-function mod_exammanagement_get_file_areas($course, $cm, $context) {
+function exammanagement_get_file_areas($course, $cm, $context) {
     return array();
 }
 
@@ -240,7 +247,7 @@ function mod_exammanagement_get_file_areas($course, $cm, $context) {
  * @param string $filename.
  * @return file_info Instance or null if not found.
  */
-function mod_exammanagement_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function exammanagement_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
     return null;
 }
 
@@ -258,7 +265,7 @@ function mod_exammanagement_get_file_info($browser, $areas, $course, $cm, $conte
  * @param bool $forcedownload Whether or not force download.
  * @param array $options Additional options affecting the file serving.
  */
-function mod_exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = array()) {
+function exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = array()) {
     global $DB, $CFG;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
@@ -275,11 +282,21 @@ function mod_exammanagement_pluginfile($course, $cm, $context, $filearea, $args,
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
  *
  * @param navigation_node $exammanagementnode An object representing the navigation tree node.
- * @param stdClass $course.
- * @param stdClass $module.
- * @param cm_info $cm.
- */
-function mod_exammanagement_extend_navigation($exammanagementnode, $course, $module, $cm) {
+ * @param  stdClass $course Course object
+ * @param  context_course $coursecontext Course context
+*/
+
+function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
+		$modinfo = get_fast_modinfo($course); // get mod_fast_modinfo from $course
+		$index = 1;	//set index
+		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
+			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
+				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
+				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM);
+				$exammanagementnode->add_node($node);
+				}
+			$index++;
+		}
 }
 
 /**
@@ -291,5 +308,5 @@ function mod_exammanagement_extend_navigation($exammanagementnode, $course, $mod
  * @param settings_navigation $settingsnav {@link settings_navigation}
  * @param navigation_node $exammanagementnode {@link navigation_node}
  */
-function mod_exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
+function exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
 }

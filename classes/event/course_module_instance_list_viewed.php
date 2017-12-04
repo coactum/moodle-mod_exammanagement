@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin event classes are defined here.
+ * The mod_exammanagement instance list viewed event.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -27,15 +27,11 @@ namespace mod_exammanagement\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The testevent event class.
+ * The mod_nexammanagement instance list viewed event class.
  *
- * @package    mod_exammanagement
- * @copyright  coactum GmbH 2017
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_exammanagement
+ * @copyright   coactum GmbH 2017
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class testevent extends testevent {
-
-    // For more information about the Events API, please visit:
-    // https://docs.moodle.org/dev/Event_2
-
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
 }
