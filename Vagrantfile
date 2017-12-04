@@ -113,7 +113,7 @@ config.vm.provision "shell", inline: <<-shell
   composer create-project phpmyadmin/phpmyadmin --repository-url=https://www.phpmyadmin.net/packages.json --no-dev
 
   # Moodle Developer Settings
-  cd /var/www/moodle/
+  cd /var/www/moodle
   cat <<EOF >> config.php
 
 @error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
@@ -122,6 +122,10 @@ $CFG->debug = (E_ALL | E_STRICT); // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SE
 $CFG->debugdisplay = 1; // NOT FOR PRODUCTION SERVERS!
 
 EOF
+
+  # Creating Test Course
+  cd /var/www/moodle
+  sudo -u www-data php admin/tool/generator/cli/maketestcourse.php --shortname=Testkurs1 --size=S
 
 shell
 
