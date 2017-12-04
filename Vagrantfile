@@ -108,6 +108,12 @@ config.vm.provision "shell", inline: <<-shell
   cd /var/www/moodle/mod
   git clone --branch develop https://installuser:steamcoactum16@git.coactum.de/coactum/coactum-moodle-exammanagement.git exammanagement
 
+  # install phpMyAdmin
+  cd 
+  composer create-project phpmyadmin/phpmyadmin --repository-url=https://www.phpmyadmin.net/packages.json --no-dev
+
+
+
 shell
 
 end
