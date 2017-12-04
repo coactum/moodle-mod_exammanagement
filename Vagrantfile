@@ -106,6 +106,7 @@ config.vm.provision "shell", inline: <<-shell
   echo "Installing Moodle 3.3 ..."
   cd /var/www/moodle33
   sudo -u www-data /usr/bin/php admin/cli/install.php --lang='de' --wwwroot='http://panda33.uni-paderborn.de.vm' --dataroot='/var/data33' --dbtype='mysqli' --dbname='moodle33' --dbuser='moodle33' --dbpass='moodle33' --fullname='Moodle 3.3' --shortname='moodle33' --adminpass='Admin1!' --agree-license --non-interactive --allow-unstable
+  mysql moodle33 -e "UPDATE \\`mdl_user\\` SET \\`email\\` = 'admin@test.abcde' WHERE \\`mdl_user\\`.\\`id\\` = 2"
 
   # /usr/bin/php admin/cli/install_database.php --lang='de' --wwwroot='http://panda.uni-paderborn.de.vm' --dataroot='/var/data' --dbtype='mysqli' --dbname='moodle' --dbuser='moodle' --dbpass='moodle' --fullname='Moodle' --shortname='moodle' --adminpass='Admin1!' --agree-license --non-interactive
 
@@ -152,6 +153,7 @@ EOF
   echo "Installing Moodle 3.4 ..."
   cd /var/www/moodle34
   sudo -u www-data /usr/bin/php admin/cli/install.php --lang='de' --wwwroot='http://panda34.uni-paderborn.de.vm' --dataroot='/var/data34' --dbtype='mysqli' --dbname='moodle34' --dbuser='moodle34' --dbpass='moodle34' --fullname='Moodle 3.4' --shortname='moodle34' --adminpass='Admin1!' --agree-license --non-interactive --allow-unstable
+  mysql moodle34 -e "UPDATE \\`mdl_user\\` SET \\`email\\` = 'admin@test.abcde' WHERE \\`mdl_user\\`.\\`id\\` = 2"
 
   # /usr/bin/php admin/cli/install_database.php --lang='de' --wwwroot='http://panda.uni-paderborn.de.vm' --dataroot='/var/data' --dbtype='mysqli' --dbname='moodle' --dbuser='moodle' --dbpass='moodle' --fullname='Moodle' --shortname='moodle' --adminpass='Admin1!' --agree-license --non-interactive
 
