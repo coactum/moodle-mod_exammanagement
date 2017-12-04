@@ -109,10 +109,19 @@ config.vm.provision "shell", inline: <<-shell
   git clone --branch develop https://installuser:steamcoactum16@git.coactum.de/coactum/coactum-moodle-exammanagement.git exammanagement
 
   # install phpMyAdmin
-  cd 
+  cd /var/www/moodle/
   composer create-project phpmyadmin/phpmyadmin --repository-url=https://www.phpmyadmin.net/packages.json --no-dev
 
+  # Moodle Developer Settings
+  cd /var/www/moodle/
+  cat <<EOF >> config.php
 
+@error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
+@ini_set(‘display_errors’, ‘1’); // NOT FOR PRODUCTION SERVERS!
+$CFG->debug = (E_ALL | E_STRICT); // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
+$CFG->debugdisplay = 1; // NOT FOR PRODUCTION SERVERS!
+
+EOF
 
 shell
 
