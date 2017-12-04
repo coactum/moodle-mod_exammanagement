@@ -112,6 +112,8 @@ config.vm.provision "shell", inline: <<-shell
 
   cd /var/www/moodle33/mod
   git clone --branch develop https://installuser:steamcoactum16@git.coactum.de/coactum/coactum-moodle-exammanagement.git exammanagement
+  git remote remove origin
+  git remote add origin ssh://gogs@git.coactum.de:2222/coactum/coactum-moodle-exammanagement.git
 
   # install phpMyAdmin
   cd /var/www/moodle33/
@@ -159,6 +161,8 @@ EOF
 
   cd /var/www/moodle34/mod
   git clone --branch develop https://installuser:steamcoactum16@git.coactum.de/coactum/coactum-moodle-exammanagement.git exammanagement
+  git remote remove origin
+  git remote add origin ssh://gogs@git.coactum.de:2222/coactum/coactum-moodle-exammanagement.git
 
   # install phpMyAdmin
   cd /var/www/moodle34/
