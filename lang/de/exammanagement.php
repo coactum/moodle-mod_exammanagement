@@ -45,3 +45,6 @@ $string['exammanagementfieldset'] = 'Weitere Einstellungen';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
 $string['pluginadministration'] = 'exam management administration';
+
+//capabilities
+$string['exammanagement:addexammanagementinstance'] = 'Neue Instanz des Plugins hinzufügen';

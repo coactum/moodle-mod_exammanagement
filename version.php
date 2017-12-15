@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_exammanagement';
-$plugin->release = '0.1.5';
+$plugin->release = '0.1.8';
 $plugin->version = 2017120100;
 $plugin->requires = 2017051500;
 $plugin->maturity = MATURITY_ALPHA;

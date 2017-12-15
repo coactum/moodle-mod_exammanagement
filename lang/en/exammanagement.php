@@ -46,4 +46,5 @@ $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
 
-
+//capabilities
+$string['exammanagement:addexammanagementinstance'] = 'add new instances of the module';
