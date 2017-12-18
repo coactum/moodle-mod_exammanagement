@@ -49,7 +49,6 @@ class exammanagementInstance{
 	protected $year;
 	protected $hour;
 	protected $minute;
-	protected $rolestr; //to be deleted
 	protected $firststagecompleted; // to be deleted
 
 	public function __construct($id, $e) {
@@ -109,8 +108,6 @@ class exammanagementInstance{
 			$this->minute='';
 		}
 		
-		$this->rolestr='Test'; //to be deleted here and in renderer and template because its not needed
-
 		//check if stages are completed (to be moved to own function) 
 		$this->firststagecompleted = true; //for testing, later to be calculated depending on if all data is set
     }
@@ -180,7 +177,7 @@ class exammanagementInstance{
 		
 		//rendering and displaying basic content (overview).
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->rolestr, $this->firststagecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firststagecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute); 
 		echo $output->render($page);
 
 		//rendering and displaying debug info (to be moved to renderer)
@@ -210,11 +207,25 @@ class exammanagementInstance{
 		}
 	}
 	
+	protected function redirectToOverviewPage(){
+		global $CFG;
+		
+		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
+	
+		redirect ($url);
+	}
+	
 	protected function getFieldFromDB($table, $fieldname){
 		global $DB;
 	
 		$field = $DB->get_field($table, $fieldname, array('id' => $this->cm->instance), '*', MUST_EXIST);
 	
 		return $field;
+	}
+	
+	protected function UpdateRecordInDB($table, $obj){
+		global $DB;
+	
+		return $DB->update_record($table, $obj);
 	}
 }

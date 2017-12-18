@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
-$string['yourrole']= 'Your current role(s) is/are ';
 $string['overview']= 'Overview';
 
 //universal

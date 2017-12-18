@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
-$string['yourrole']= 'Ihre aktuelle(n) Rolle(n) ist/sind ';
 $string['overview']= 'Überblick';
 
 //universal
