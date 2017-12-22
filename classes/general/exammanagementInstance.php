@@ -49,7 +49,10 @@ class exammanagementInstance{
 	protected $year;
 	protected $hour;
 	protected $minute;
-	protected $firststagecompleted; // to be deleted
+	protected $firstphasecompleted;
+	protected $secondphasecompleted;
+	protected $thirdphasecompleted;
+	protected $fourthphasecompleted;
 
 	public function __construct($id, $e) {
 		global $DB, $CFG;
@@ -108,8 +111,11 @@ class exammanagementInstance{
 			$this->minute='';
 		}
 		
-		//check if stages are completed (to be moved to own function) 
-		$this->firststagecompleted = true; //for testing, later to be calculated depending on if all data is set
+		//check if stages are completed
+		$this->firstphasecompleted=$this->checkPhaseCompletion(1);
+		$this->secondphasecompleted=$this->checkPhaseCompletion(2);
+		$this->thirdphasecompleted=$this->checkPhaseCompletion(3);
+		$this->fourthphasecompleted=$this->checkPhaseCompletion(4); 
     }
 	
 	public function getElement($c){ //if some extern functions need some of the objects params
@@ -174,21 +180,40 @@ class exammanagementInstance{
 		
 		$this->setPage();
 		$this-> outputPageHeader();
-		
+				
 		//rendering and displaying basic content (overview).
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firststagecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute); 
 		echo $output->render($page);
 
 		//rendering and displaying debug info (to be moved to renderer)
 		if($USER->username=="admin"){
 	
 			$output = $PAGE->get_renderer('mod_exammanagement');
-			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id, $this->cm, $this->course, $this->moduleinstance, $this->firststagecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute);
+			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id, $this->cm, $this->course, $this->moduleinstance, $this->firstphasecompleted);
 			echo $output->render($page);
 		}
 		
 		$this-> outputFooter();
+ 	}
+ 	
+ 	public function checkPhaseCompletion($phase){
+ 	
+ 	switch ($phase){
+		
+			case 1:
+				if ($this->getFieldFromDB('exammanagement','date') && $this->getFieldFromDB('exammanagement','time')){
+					return "Wert";
+					}
+				else return false;
+			case 2:
+				return false;
+			case 3:
+				return false;
+			case 4:
+				return false;
+ 		}
+ 	
  	}
  	
  	public function startEvent($type){

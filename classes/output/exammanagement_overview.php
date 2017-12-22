@@ -39,7 +39,10 @@ use stdClass;
 class exammanagement_overview implements renderable, templatable {
 
     protected $cmid;
-    protected $firststagecompleted;
+    protected $firstphasecompleted;
+    protected $secondphasecompleted;
+    protected $thirdphasecompleted;
+    protected $fourthphasecompleted;
     protected $day;
     protected $month;
     protected $year;
@@ -51,9 +54,12 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firststagecompleted, $day, $month, $year, $hour, $minute) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $day, $month, $year, $hour, $minute) {
         $this->cmid = $cmid;
-        $this->firststagecompleted = $firststagecompleted;
+        $this->firstphasecompleted = json_encode($firstphasecompleted);
+        $this->secondphasecompleted = $secondphasecompleted;
+        $this->thirdphasecompleted = $thirdphasecompleted;
+        $this->fourthphasecompleted = $fourthphasecompleted;
         $this->day = $day;
         $this->month = $month;
         $this->year = $year;
@@ -70,12 +76,16 @@ class exammanagement_overview implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
-        $data->firststagecompleted = $this->firststagecompleted;
+        $data->firstphasecompleted = $this->firstphasecompleted;
+        $data->secondphasecompleted = $this->secondphasecompleted;
+        $data->thirdphasecompleted = $this->thirdphasecompleted;
+        $data->fourthphasecompleted = $this->fourthphasecompleted;
         $data->day = $this->day;
         $data->month = $this->month;
         $data->year = $this->year;
         $data->hour = $this->hour;
         $data->minute = $this->minute;
+        var_dump($data->firstphasecompleted.' renderer');
         return $data;
     }
 
