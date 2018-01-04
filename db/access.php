@@ -58,7 +58,7 @@ $capabilities = [
         ],
     ],
     'mod/exammanagement:view' => [
-        'riskbitmask' => RISK_PRIVACY
+        'riskbitmask' => RISK_PRIVACY,
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -66,7 +66,7 @@ $capabilities = [
         ],
     ],
     'mod/exammanagement:addtime' => [
-        'riskbitmask' => RISK_PRIVACY
+        'riskbitmask' => RISK_PRIVACY,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
