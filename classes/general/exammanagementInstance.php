@@ -254,6 +254,7 @@ class exammanagementInstance{
 		return $DB->update_record($table, $obj);
 	}
 	
+	############## setDateTime methods (maybe moving this to own object?#########
 	protected function buildDateTimeForm(){
 		global $PAGE, $USER;
 		
@@ -262,70 +263,31 @@ class exammanagementInstance{
 		$setyear = optional_param('setyear', 0, PARAM_INT);
 		$sethour = optional_param('sethour', 0, PARAM_INT);
 		$setminute = optional_param('setminute', 0, PARAM_INT);
-
-		$this->setPage('set_date_time');
-		$this-> outputPageHeader();
 		
 		if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
-
-		//get date and time from DB (own function)
-		$date = $DB->get_field('exammanagement', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
-		$time = $DB->get_field('exammanagement', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
-
-		//disassemble $date to day, month and year //own function
-		if ($date) {
-			$datecomponents = explode("-", $date);
-
-			$day=$datecomponents[2];
-			$month=$datecomponents[1];
-			$year=$datecomponents[0];
-		}
-
-		else{
-			$day='';
-			$month='';
-			$year='';
-		}
-
-		//disassemble $time to hour and minute //own function
-		if ($date) {
-			$timecomponents = explode(":", $time);
-
-			$hour=$timecomponents[0];
-			$minute=$timecomponents[1];
-		}
-
-		else{
-			$hour='';
-			$minute='';
-		}
-
-		//rendering and displaying page
-		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_set_date_time($cm->id, $day, $month, $year, $hour, $minute); //
-
-		echo $output->render($page);
+		
+			$this->setPage('set_date_time');
+			$this-> outputPageHeader();
+			
+			// $this->buildForm(); <- noch in eigener Funktion bauen (siehe form_api)
 
 		}
 		
 		//if called from itself
 
 		if ($setday && $setmonth && $setyear && $sethour && $setminute){
-			global $CFG;
 			// combine day+month+year and save it in DB->date ...
 	
 			$moduleinstance->date=$setyear.'-'.$setmonth.'-'.$setday;
 			$moduleinstance->time=$sethour.':'.$setminute.':00';
 	
-			$DB->update_record("exammanagement", $moduleinstance);
+			$this->UpdateRecordInDB("exammanagement", $moduleinstance);
 	
-			$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$id;
-	
-			redirect ($url);
+			$this->redirectToOverviewPage();
 
 		}
 
-		//rendering and displaying debug info (to be moved to renderer)
+		//rendering and displaying debug info (to be moved to renderer) //eigene Methode
 		if($USER->username=="admin"){
 	
 			$output = $PAGE->get_renderer('mod_exammanagement');
