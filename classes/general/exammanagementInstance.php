@@ -134,11 +134,11 @@ class exammanagementInstance{
 	
 	}
 			
-	protected function setPage(){
+	protected function setPage($substring){
 		global $PAGE;
 		
 		// Print the page header.
-		$PAGE->set_url('/mod/exammanagement/view.php', array('id' => $this->cm->id));
+		$PAGE->set_url('/mod/exammanagement/'.$substring.'.php', array('id' => $this->cm->id));
 		$PAGE->set_title(format_string($this->moduleinstance->name).' ('.get_string('modulename','mod_exammanagement').')');
 		$PAGE->set_heading(format_string($this->course->fullname));
 		$PAGE->set_context($this->modulecontext);
@@ -178,7 +178,7 @@ class exammanagementInstance{
 	
 		global $PAGE, $USER;
 		
-		$this->setPage();
+		$this->setPage('view');
 		$this-> outputPageHeader();
 				
 		//rendering and displaying basic content (overview).
@@ -194,7 +194,7 @@ class exammanagementInstance{
 			echo $output->render($page);
 		}
 		
-		$this-> outputFooter();
+		$this->outputFooter();
  	}
  	
  	public function checkPhaseCompletion($phase){
@@ -252,5 +252,87 @@ class exammanagementInstance{
 		global $DB;
 	
 		return $DB->update_record($table, $obj);
+	}
+	
+	protected function buildDateTimeForm(){
+		global $PAGE, $USER;
+		
+		$setday = optional_param('setday', 0, PARAM_INT);
+		$setmonth = optional_param('setmonth', 0, PARAM_INT);
+		$setyear = optional_param('setyear', 0, PARAM_INT);
+		$sethour = optional_param('sethour', 0, PARAM_INT);
+		$setminute = optional_param('setminute', 0, PARAM_INT);
+
+		$this->setPage('set_date_time');
+		$this-> outputPageHeader();
+		
+		if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
+
+		//get date and time from DB (own function)
+		$date = $DB->get_field('exammanagement', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
+		$time = $DB->get_field('exammanagement', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
+
+		//disassemble $date to day, month and year //own function
+		if ($date) {
+			$datecomponents = explode("-", $date);
+
+			$day=$datecomponents[2];
+			$month=$datecomponents[1];
+			$year=$datecomponents[0];
+		}
+
+		else{
+			$day='';
+			$month='';
+			$year='';
+		}
+
+		//disassemble $time to hour and minute //own function
+		if ($date) {
+			$timecomponents = explode(":", $time);
+
+			$hour=$timecomponents[0];
+			$minute=$timecomponents[1];
+		}
+
+		else{
+			$hour='';
+			$minute='';
+		}
+
+		//rendering and displaying page
+		$output = $PAGE->get_renderer('mod_exammanagement');
+		$page = new \mod_exammanagement\output\exammanagement_set_date_time($cm->id, $day, $month, $year, $hour, $minute); //
+
+		echo $output->render($page);
+
+		}
+		
+		//if called from itself
+
+		if ($setday && $setmonth && $setyear && $sethour && $setminute){
+			global $CFG;
+			// combine day+month+year and save it in DB->date ...
+	
+			$moduleinstance->date=$setyear.'-'.$setmonth.'-'.$setday;
+			$moduleinstance->time=$sethour.':'.$setminute.':00';
+	
+			$DB->update_record("exammanagement", $moduleinstance);
+	
+			$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$id;
+	
+			redirect ($url);
+
+		}
+
+		//rendering and displaying debug info (to be moved to renderer)
+		if($USER->username=="admin"){
+	
+			$output = $PAGE->get_renderer('mod_exammanagement');
+			$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
+			echo $output->render($page);
+		}
+
+		$this->outputFooter();
 	}
 }
