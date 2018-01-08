@@ -43,28 +43,20 @@ class exammanagement_overview implements renderable, templatable {
     protected $secondphasecompleted;
     protected $thirdphasecompleted;
     protected $fourthphasecompleted;
-    protected $day;
-    protected $month;
-    protected $year;
-    protected $hour;
-    protected $minute;
+    protected $examtime;
 
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $day, $month, $year, $hour, $minute) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $examtime) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = json_encode($firstphasecompleted);
         $this->secondphasecompleted = $secondphasecompleted;
         $this->thirdphasecompleted = $thirdphasecompleted;
         $this->fourthphasecompleted = $fourthphasecompleted;
-        $this->day = $day;
-        $this->month = $month;
-        $this->year = $year;
-        $this->hour = $hour;
-        $this->minute = $minute;
+        $this->examtime = $examtime;
     }
 
     /**
@@ -80,12 +72,8 @@ class exammanagement_overview implements renderable, templatable {
         $data->secondphasecompleted = $this->secondphasecompleted;
         $data->thirdphasecompleted = $this->thirdphasecompleted;
         $data->fourthphasecompleted = $this->fourthphasecompleted;
-        $data->day = $this->day;
-        $data->month = $this->month;
-        $data->year = $this->year;
-        $data->hour = $this->hour;
-        $data->minute = $this->minute;
-        var_dump($data->firstphasecompleted.' renderer');
+        $data->examtime = $this->examtime;
+        var_dump($data->firstphasecompleted.' firstphase renderer'. $data->examtime.'examtime renderer');
         return $data;
     }
 

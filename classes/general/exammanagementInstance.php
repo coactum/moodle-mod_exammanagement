@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
+use context_module;
 
 /**
  * class containing all general functions for exammanagement
@@ -42,13 +43,7 @@ class exammanagementInstance{
 	protected $course;
 	protected $moduleinstance;
 	protected $modulecontext;
-	protected $date;
-	protected $time;
-	protected $day;
-	protected $month;
-	protected $year;
-	protected $hour;
-	protected $minute;
+	protected $examtime;
 	protected $firstphasecompleted;
 	protected $secondphasecompleted;
 	protected $thirdphasecompleted;
@@ -76,40 +71,16 @@ class exammanagementInstance{
 			
 			require_login($this->course, true, $this->cm);
 			
-			$this->modulecontext = get_context_instance(CONTEXT_MODULE, $this->cm->id); //veraltet, Methode darunter funktioniert aber nicht
-			//$this->modulecontext = context_module::instance($this->cm->id);	//not working, $this ersetzen bringt nichts, Problem ist :: Operator
-			//$this->modulecontext='1'; //for testing
+			$this->modulecontext = context_module::instance($this->cm->id);
 			
-		//set Date and Time values
+		//set examtime
 		
-		$this->date = $this->getFieldFromDB('exammanagement','date');
-		$this->time = $this->getFieldFromDB('exammanagement','time');
+		if ($this->getFieldFromDB('exammanagement','examtime')){
+				$this->examtime = $this->getFieldFromDB('exammanagement','examtime');
+			} else {
+				$this->examtime = '';
+			}
 		
-		//disassemble date and time (to be deleted if timestampes are used in the future)
-		if ($this->date) {
-			$datecomponents = explode("-", $this->date);
-
-			$this->day=$datecomponents[2];
-			$this->month=$datecomponents[1];
-			$this->year=$datecomponents[0];
-		}
-		else{
-			$this->day='';
-			$this->month='';
-			$this->year='';
-		}
-
-		if ($this->time) {
-			$timecomponents = explode(":", $this->time);
-
-			$this->hour=$timecomponents[0];
-			$this->minute=$timecomponents[1];
-		}
-
-		else{
-			$this->hour='';
-			$this->minute='';
-		}
 		
 		//check if stages are completed
 		$this->firstphasecompleted=$this->checkPhaseCompletion(1);
@@ -183,7 +154,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying basic content (overview).
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->day, $this->month, $this->year, $this->hour, $this->minute); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->examtime); 
 		echo $output->render($page);
 
 		//rendering and displaying debug info (to be moved to renderer)
@@ -192,6 +163,7 @@ class exammanagementInstance{
 			$output = $PAGE->get_renderer('mod_exammanagement');
 			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id, $this->cm, $this->course, $this->moduleinstance, $this->firstphasecompleted);
 			echo $output->render($page);
+			echo $this->examtime;
 		}
 		
 		$this->outputFooter();
@@ -202,7 +174,7 @@ class exammanagementInstance{
  	switch ($phase){
 		
 			case 1:
-				if ($this->getFieldFromDB('exammanagement','date') && $this->getFieldFromDB('exammanagement','time')){
+				if ($this->getFieldFromDB('exammanagement','examtime')){
 					return "Wert";
 					}
 				else return false;
@@ -255,33 +227,29 @@ class exammanagementInstance{
 	}
 	
 	############## setDateTime methods (maybe moving this to own object?#########
-	protected function buildDateTimeForm(){
+	public function outputDateTimePage(){
 		global $PAGE, $USER;
 		
-		$setday = optional_param('setday', 0, PARAM_INT);
-		$setmonth = optional_param('setmonth', 0, PARAM_INT);
-		$setyear = optional_param('setyear', 0, PARAM_INT);
-		$sethour = optional_param('sethour', 0, PARAM_INT);
-		$setminute = optional_param('setminute', 0, PARAM_INT);
+		$examtime = optional_param('examtime', 0, PARAM_INT);
 		
-		if (!$setday && !$setmonth && !$setyear && !$sethour && !$setminute){
+		if (!$examtime){
 		
 			$this->setPage('set_date_time');
 			$this-> outputPageHeader();
-			
-			// $this->buildForm(); <- noch in eigener Funktion bauen (siehe form_api)
+			$this->buildDateTimeForm();
+			echo 'formdate Test';
 
 		}
 		
 		//if called from itself
 
-		if ($setday && $setmonth && $setyear && $sethour && $setminute){
+		if ($examtime){
 			// combine day+month+year and save it in DB->date ...
 	
-			$moduleinstance->date=$setyear.'-'.$setmonth.'-'.$setday;
-			$moduleinstance->time=$sethour.':'.$setminute.':00';
+			$moduleinstance->examtime=$examtime;
 	
 			$this->UpdateRecordInDB("exammanagement", $moduleinstance);
+			echo 'updatetime Test';
 	
 			$this->redirectToOverviewPage();
 
@@ -291,10 +259,42 @@ class exammanagementInstance{
 		if($USER->username=="admin"){
 	
 			$output = $PAGE->get_renderer('mod_exammanagement');
-			$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance);
+			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id,$this->cm,$this->course,$this->moduleinstance, $this->firstphasecompleted);
 			echo $output->render($page);
 		}
 
 		$this->outputFooter();
+	}
+	
+	protected function buildDateTimeForm(){
+		
+		//include form
+		
+		require_once(__DIR__.'/../forms/dateForm.php');
+ 
+		//Instantiate simplehtml_form 
+		$mform = new forms\dateForm();
+ 		var_dump($this);
+		//var_dump(get_parent_class ($mform));
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage();
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  //$mform->set_data($toform);
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
 	}
 }

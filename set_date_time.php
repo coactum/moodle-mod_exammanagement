@@ -32,6 +32,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
+$p->outputDateTimePage();
 
 
 // $setday = optional_param('setday', 0, PARAM_INT);
