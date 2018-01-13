@@ -25,14 +25,17 @@
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
+use mod_exammanagement;
+
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
+//$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
 
+$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 $p->startEvent('view');
 $p->outputOverviewPage();
 

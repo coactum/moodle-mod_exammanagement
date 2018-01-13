@@ -49,7 +49,7 @@ class exammanagementInstance{
 	protected $thirdphasecompleted;
 	protected $fourthphasecompleted;
 
-	public function __construct($id, $e) {
+	private function __construct($id, $e) {
 		global $DB, $CFG;
 
 		$this->id=$id;
@@ -57,12 +57,10 @@ class exammanagementInstance{
 		
         if ($id) {
 				$this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
-				//$course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 				$this->course = get_course($this->cm->course);
 				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
 			} else if ($e) {
 				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
-				//$course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
 				$this->course = get_course($this->moduleinstance->course);
 				$this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
 			} else {
@@ -73,13 +71,19 @@ class exammanagementInstance{
 			
 			$this->modulecontext = context_module::instance($this->cm->id);
 			
-		//set examtime
-		
+		//set examtime for form
 		if ($this->getFieldFromDB('exammanagement','examtime')){
 				$this->examtime = $this->getFieldFromDB('exammanagement','examtime');
 			} else {
 				$this->examtime = '';
 			}
+			
+		//convert examtime to human readable format for template
+		if($this->examtime){
+			$this->hrexamtime=date('d.m.Y', $this->examtime).', '.date('H:i', $this->examtime);
+		} else {
+			$this->hrexamtime = '';
+		}
 		
 		
 		//check if stages are completed
@@ -88,6 +92,16 @@ class exammanagementInstance{
 		$this->thirdphasecompleted=$this->checkPhaseCompletion(3);
 		$this->fourthphasecompleted=$this->checkPhaseCompletion(4); 
     }
+	
+	public static function getInstance($id, $e){ //singleton class
+	
+		static $inst = null;
+			if ($inst === null) {
+				$inst = new exammanagementInstance($id, $e);
+			}
+			return $inst;
+	
+	}
 	
 	public function getElement($c){ //if some extern functions need some of the objects params
 	
@@ -145,7 +159,7 @@ class exammanagementInstance{
 	
  	}
 
-	public function outputOverviewPage(){ //needs rework and splitting into separate functions
+	public function outputOverviewPage(){
 	
 		global $PAGE, $USER;
 		
@@ -154,7 +168,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying basic content (overview).
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->examtime); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->hrexamtime); 
 		echo $output->render($page);
 
 		//rendering and displaying debug info (to be moved to renderer)
@@ -175,7 +189,7 @@ class exammanagementInstance{
 		
 			case 1:
 				if ($this->getFieldFromDB('exammanagement','examtime')){
-					return "Wert";
+					return true;
 					}
 				else return false;
 			case 2:
@@ -226,34 +240,13 @@ class exammanagementInstance{
 		return $DB->update_record($table, $obj);
 	}
 	
-	############## setDateTime methods (maybe moving this to own object?#########
+	############## setDateTime methods #########
 	public function outputDateTimePage(){
 		global $PAGE, $USER;
 		
-		$examtime = optional_param('examtime', 0, PARAM_INT);
-		
-		if (!$examtime){
-		
-			$this->setPage('set_date_time');
-			$this-> outputPageHeader();
-			$this->buildDateTimeForm();
-			echo 'formdate Test';
-
-		}
-		
-		//if called from itself
-
-		if ($examtime){
-			// combine day+month+year and save it in DB->date ...
-	
-			$moduleinstance->examtime=$examtime;
-	
-			$this->UpdateRecordInDB("exammanagement", $moduleinstance);
-			echo 'updatetime Test';
-	
-			$this->redirectToOverviewPage();
-
-		}
+		$this->setPage('set_date_time');
+		$this-> outputPageHeader();
+		$this->buildDateTimeForm();
 
 		//rendering and displaying debug info (to be moved to renderer) //eigene Methode
 		if($USER->username=="admin"){
@@ -266,16 +259,25 @@ class exammanagementInstance{
 		$this->outputFooter();
 	}
 	
+	public function saveDateTime($examtime){
+		
+			$this->moduleinstance->examtime=$examtime;
+	
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage();
+
+	}
+	
 	protected function buildDateTimeForm(){
 		
-		//include form
+		global $CFG;
 		
-		require_once(__DIR__.'/../forms/dateForm.php');
- 
-		//Instantiate simplehtml_form 
-		$mform = new forms\dateForm();
- 		var_dump($this);
-		//var_dump(get_parent_class ($mform));
+		//include form
+		require_once(__DIR__.'/../forms/dateTimeForm.php');
+ 		
+		//Instantiate dateTime_form 
+		$mform = new forms\dateTimeForm();
 			
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -284,13 +286,14 @@ class exammanagementInstance{
 			
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  $this->saveDateTime($fromform->examtime);
 		
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  //$mform->set_data($toform);
+		  $mform->set_data(array('examtime'=>$this->examtime, 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();

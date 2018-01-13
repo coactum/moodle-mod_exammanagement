@@ -30,8 +30,8 @@
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}
           <li class="item">
-            {{#firststagecompleted}}<i class="fa fa-check-square-o text-success" aria-hidden="true"></i>{{/firststagecompleted}}
-            {{^firststagecompleted}}<i class="fa fa-square-o" aria-hidden="true"></i>{{/firststagecompleted}}
+            {{#firstphasecompleted}}<i class="fa fa-check-square-o text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
+            {{^firstphasecompleted}}<i class="fa fa-square-o" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="card">
               <div class="card-block">
                 <div class="row">
@@ -40,8 +40,8 @@
                       <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                   </a>
                 </div>
-                {{#firststagecompleted}}<div class="collapse phase_one">{{/firststagecompleted}}
-                {{^firststagecompleted}}<div class="collapse.show phase_one">{{/firststagecompleted}}
+                {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
+                {{^firstphasecompleted}}<div class="collapse.show phase_one">{{/firstphasecompleted}}
                     <div class="card-text">
                       <div class="row row-eq-height">
                           <div class="card col-md-6">
@@ -60,8 +60,8 @@
                                 <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
                               </div>
                               <div class="card-text m-l-1">
-                                {{#day}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Prüfung findet am {{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} Uhr statt.</p>{{/day}}
-                                {{^day}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</span></p>{{/day}}
+                                {{#hrexamtime}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/hrexamtime}}
+                                {{^hrexamtime}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</span></p>{{/hrexamtime}}
                               </div>
                             </div>
                           </div>
@@ -205,8 +205,8 @@
             <i class="fa fa-square-o" aria-hidden="true"></i>
             <div class="card">
               <div class="card-block">
-                {{#day}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8">{{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} in Raum XX.XX.</span></div>{{/day}}
-                {{^day}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/day}}
+                {{#hrexamtime}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8"> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> in Raum XX.XX.</span></div>{{/hrexamtime}}
+                {{^hrexamtime}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/hrexamtime}}
               </div>
             </div>
           </li>

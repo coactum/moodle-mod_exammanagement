@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
  
-class dateForm extends moodleform {
+class dateTimeForm extends moodleform {
     
     //Add elements to form
     public function definition() {
@@ -39,7 +39,8 @@ class dateForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore! 
  
         $mform->addElement('date_time_selector', 'examtime', 'Beschreibungstext');
-        //$mform->setData('examtime', $this->examtime);
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
     }
     
