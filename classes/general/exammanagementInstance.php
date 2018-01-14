@@ -44,10 +44,6 @@ class exammanagementInstance{
 	protected $moduleinstance;
 	protected $modulecontext;
 	protected $examtime;
-	protected $firstphasecompleted;
-	protected $secondphasecompleted;
-	protected $thirdphasecompleted;
-	protected $fourthphasecompleted;
 
 	private function __construct($id, $e) {
 		global $DB, $CFG;
@@ -84,16 +80,11 @@ class exammanagementInstance{
 		} else {
 			$this->hrexamtime = '';
 		}
-		
-		
-		//check if stages are completed
-		$this->firstphasecompleted=$this->checkPhaseCompletion(1);
-		$this->secondphasecompleted=$this->checkPhaseCompletion(2);
-		$this->thirdphasecompleted=$this->checkPhaseCompletion(3);
-		$this->fourthphasecompleted=$this->checkPhaseCompletion(4); 
     }
 	
-	public static function getInstance($id, $e){ //singleton class
+	#### singleton class ######
+	
+	public static function getInstance($id, $e){
 	
 		static $inst = null;
 			if ($inst === null) {
@@ -103,21 +94,7 @@ class exammanagementInstance{
 	
 	}
 	
-	public function getElement($c){ //if some extern functions need some of the objects params
-	
-		switch ($c){ //get requested element
-		
-			case 'cm':
-				return $this->cm;
-			case 'course':
-				return $this->course;
-			case 'moduleinstance':
-				return $this->moduleinstance;
-			case 'modulecontext':
-				return $this->modulecontext;
-		}
-	
-	}
+	#### multiple #####
 			
 	protected function setPage($substring){
 		global $PAGE;
@@ -158,40 +135,43 @@ class exammanagementInstance{
 		echo $OUTPUT->footer();
 	
  	}
+ 	
+ 	protected function redirectToOverviewPage(){
+		global $CFG;
+		
+		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
+	
+		redirect ($url);
+	}
 
+
+	#### overview ####
 	public function outputOverviewPage(){
 	
-		global $PAGE, $USER;
+		global $PAGE;
 		
 		$this->setPage('view');
 		$this-> outputPageHeader();
 				
 		//rendering and displaying basic content (overview).
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->firstphasecompleted, $this->secondphasecompleted, $this->thirdphasecompleted, $this->fourthphasecompleted, $this->hrexamtime); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->hrexamtime); 
 		echo $output->render($page);
-
-		//rendering and displaying debug info (to be moved to renderer)
-		if($USER->username=="admin"){
-	
-			$output = $PAGE->get_renderer('mod_exammanagement');
-			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id, $this->cm, $this->course, $this->moduleinstance, $this->firstphasecompleted);
-			echo $output->render($page);
-			echo $this->examtime;
-		}
+		
+		$this->debugElementsOverview();
 		
 		$this->outputFooter();
  	}
  	
- 	public function checkPhaseCompletion($phase){
+ 	protected function checkPhaseCompletion($phase){
  	
  	switch ($phase){
 		
 			case 1:
 				if ($this->getFieldFromDB('exammanagement','examtime')){
+					var_dump($this->getFieldFromDB('exammanagement','examtime').'test');
 					return true;
 					}
-				else return false;
 			case 2:
 				return false;
 			case 3:
@@ -202,9 +182,10 @@ class exammanagementInstance{
  	
  	}
  	
+ 	#### events #### 
+ 	
  	public function startEvent($type){
 		
-		//events
 		switch ($type){
 		
 			case 'view':
@@ -218,13 +199,7 @@ class exammanagementInstance{
 		}
 	}
 	
-	protected function redirectToOverviewPage(){
-		global $CFG;
-		
-		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
-	
-		redirect ($url);
-	}
+	#### DB #####
 	
 	protected function getFieldFromDB($table, $fieldname){
 		global $DB;
@@ -240,26 +215,18 @@ class exammanagementInstance{
 		return $DB->update_record($table, $obj);
 	}
 	
-	############## setDateTime methods #########
+	############## feature: setDateTime #########
 	public function outputDateTimePage(){
-		global $PAGE, $USER;
+		global $PAGE;
 		
 		$this->setPage('set_date_time');
 		$this-> outputPageHeader();
 		$this->buildDateTimeForm();
-
-		//rendering and displaying debug info (to be moved to renderer) //eigene Methode
-		if($USER->username=="admin"){
-	
-			$output = $PAGE->get_renderer('mod_exammanagement');
-			$page = new \mod_exammanagement\output\exammanagement_debug_infos($this->id,$this->cm,$this->course,$this->moduleinstance, $this->firstphasecompleted);
-			echo $output->render($page);
-		}
-
+		
 		$this->outputFooter();
 	}
 	
-	public function saveDateTime($examtime){
+	protected function saveDateTime($examtime){
 		
 			$this->moduleinstance->examtime=$examtime;
 	
@@ -297,6 +264,41 @@ class exammanagementInstance{
 		  
 		  //displays the form
 		  $mform->display();
+		}
+	
+	}
+	
+	########### debugging ########
+	
+	public function debugElementsOverview(){
+		echo '<h4> Debug-Information </h4>';
+		echo('id:'.$this->debugElement('id').'<br>');
+		echo('e:'.$this->debugElement('e').'<br>');
+		echo('cm:'.json_encode($this->debugElement('cm')).'<br>');
+		echo('course:'.json_encode($this->debugElement('course')).'<br>');
+		echo('moduleinstance:'.json_encode($this->debugElement('moduleinstance')).'<br>');
+		echo('modulecontext:'.json_encode($this->debugElement('modulecontext')).'<br>');
+		echo('examtime:'.json_encode($this->debugElement('examtime')).'<br>');
+	}
+	
+	protected function debugElement($c){ //if some extern functions need some of the objects params
+	
+		switch ($c){ //get requested element
+		
+			case 'id':
+				return $this->id;
+			case 'e':
+				return $this->e;
+			case 'cm':
+				return $this->cm;
+			case 'course':
+				return $this->course;
+			case 'moduleinstance':
+				return $this->moduleinstance;
+			case 'modulecontext':
+				return $this->modulecontext;
+			case 'examtime':
+				return $this->examtime;
 		}
 	
 	}

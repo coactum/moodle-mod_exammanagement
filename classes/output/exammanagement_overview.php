@@ -52,7 +52,7 @@ class exammanagement_overview implements renderable, templatable {
      */
     public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime) {
         $this->cmid = $cmid;
-        $this->firstphasecompleted = json_encode($firstphasecompleted);
+        $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
         $this->thirdphasecompleted = $thirdphasecompleted;
         $this->fourthphasecompleted = $fourthphasecompleted;
