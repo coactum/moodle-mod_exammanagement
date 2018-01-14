@@ -15,42 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for exammanagement
+ * class containing dateForm for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace mod_exammanagement\output;
+ 
+namespace mod_exammanagement\general\forms;
+use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
-use plugin_renderer_base;
-use renderable;
-
-/**
- * Renderer class for exammanagement
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class renderer extends plugin_renderer_base {
-
-     /**
-     * Defer to template.
-     *
-     * @param exammanagement_overview $page
-     *
-     * @return string html for the page
-     */
-    public function render_exammanagement_overview(exammanagement_overview $page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('mod_exammanagement/exammanagement_overview', $data);
+//moodleform is defined in formslib.php
+global $CFG;
+require_once("$CFG->libdir/formslib.php");
+ 
+class textfieldForm extends moodleform {
+    
+    //Add elements to form
+    public function definition() {
+ 
+        $mform = $this->_form; // Don't forget the underscore! 
+ 
+        $mform->addElement('textarea', 'textfield', 'textfeld', 'wrap="virtual" rows="20" cols="50"');
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
+        $this->add_action_buttons();
     }
-    public function render_quick_test_page() {
-        return parent::render_from_template('mod_exammanagement/quick_test_page', array());
+    
+    //Custom validation should be added here
+    function validation($data, $files) {
+        return array();
     }
-
 }

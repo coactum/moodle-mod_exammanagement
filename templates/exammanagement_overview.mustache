@@ -92,10 +92,11 @@
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten (optional)</a>
+                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten (optional)</a>
                               </div>
                               <div class="card-text">
-                                <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet.</p>
+                                {{#textfield}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-align-justify" aria-hidden="true"></i> {{textfield}}</p>{{/textfield}}
+                                {{^textfield}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i></span> Es wurden noch kein Inhalt für das Textfeld festgelegt.</span></p>{{/textfield}}
                               </div>
                             </div>
                           </div>

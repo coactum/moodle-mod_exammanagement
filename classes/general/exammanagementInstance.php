@@ -141,7 +141,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -167,12 +167,33 @@ class exammanagementInstance{
 		}
  	}
  	
+ 	protected function getTextfield(){
+		if ($this->getFieldFromDB('exammanagement','textfield')){
+				return $this->getFieldFromDB('exammanagement','textfield');
+			} else {
+				return '';
+			}
+	}
+	
+	protected function getShortenedTextfield(){
+		$textfield=$this->getTextfield();
+
+		if ($textfield && strlen($textfield>14)){
+				$shtextfield=substr($textfield, 0, 2).' ...';
+				return $shtextfield;
+			} elseif($textfield) {
+				return $textfield;
+			} else{
+				return '';
+			}
+	}
+ 	
  	protected function checkPhaseCompletion($phase){
  	
  	switch ($phase){
 		
 			case 1:
-				if ($this->getExamtime()){
+				if ($this->getExamtime()&&$this->getTextfield()){
 					return true;
 					}
 			case 2:
@@ -264,6 +285,60 @@ class exammanagementInstance{
  
 		  //Set default data (if any)
 		  $mform->set_data(array('examtime'=>$this->getExamtime(), 'id'=>$this->id));
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
+	}
+	
+	######### feature: textfield
+	
+	public function outputTextfieldPage(){
+		global $PAGE;
+		
+		$this->setPage('textfield');
+		$this-> outputPageHeader();
+		$this->buildTextfieldForm();
+		
+		$this->outputFooter();
+	}
+	
+	protected function saveTextfield($textfield){
+		
+			$this->moduleinstance->textfield=$textfield;
+	
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage();
+
+	}
+	
+	protected function buildTextfieldForm(){
+		
+		global $CFG;
+		
+		//include form
+		require_once(__DIR__.'/../forms/textfieldForm.php');
+ 		
+		//Instantiate Textfield_form 
+		$mform = new forms\textfieldForm();
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage();
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  $this->saveTextfield($fromform->textfield);
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  $mform->set_data(array('textfield'=>$this->getTextfield(), 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
