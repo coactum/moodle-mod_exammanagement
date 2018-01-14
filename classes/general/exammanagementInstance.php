@@ -43,7 +43,6 @@ class exammanagementInstance{
 	protected $course;
 	protected $moduleinstance;
 	protected $modulecontext;
-	protected $examtime;
 
 	private function __construct($id, $e) {
 		global $DB, $CFG;
@@ -67,19 +66,6 @@ class exammanagementInstance{
 			
 			$this->modulecontext = context_module::instance($this->cm->id);
 			
-		//set examtime for form
-		if ($this->getFieldFromDB('exammanagement','examtime')){
-				$this->examtime = $this->getFieldFromDB('exammanagement','examtime');
-			} else {
-				$this->examtime = '';
-			}
-			
-		//convert examtime to human readable format for template
-		if($this->examtime){
-			$this->hrexamtime=date('d.m.Y', $this->examtime).', '.date('H:i', $this->examtime);
-		} else {
-			$this->hrexamtime = '';
-		}
     }
 	
 	#### singleton class ######
@@ -153,9 +139,9 @@ class exammanagementInstance{
 		$this->setPage('view');
 		$this-> outputPageHeader();
 				
-		//rendering and displaying basic content (overview).
+		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->hrexamtime); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -163,13 +149,30 @@ class exammanagementInstance{
 		$this->outputFooter();
  	}
  	
+ 	protected function getExamtime(){		//get examtime (for form)
+		if ($this->getFieldFromDB('exammanagement','examtime')){
+				return $this->getFieldFromDB('exammanagement','examtime');
+			} else {
+				return '';
+			}
+	}
+	
+	protected function getHrExamtime() {	//convert examtime to human readable format for template
+		$examtime=$this->getExamtime();
+		if($examtime){
+			$hrexamtime=date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			return $hrexamtime;
+		} else {
+			return '';
+		}
+ 	}
+ 	
  	protected function checkPhaseCompletion($phase){
  	
  	switch ($phase){
 		
 			case 1:
-				if ($this->getFieldFromDB('exammanagement','examtime')){
-					var_dump($this->getFieldFromDB('exammanagement','examtime').'test');
+				if ($this->getExamtime()){
 					return true;
 					}
 			case 2:
@@ -260,7 +263,7 @@ class exammanagementInstance{
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  $mform->set_data(array('examtime'=>$this->examtime, 'id'=>$this->id));
+		  $mform->set_data(array('examtime'=>$this->getExamtime(), 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
@@ -278,7 +281,6 @@ class exammanagementInstance{
 		echo('course:'.json_encode($this->debugElement('course')).'<br>');
 		echo('moduleinstance:'.json_encode($this->debugElement('moduleinstance')).'<br>');
 		echo('modulecontext:'.json_encode($this->debugElement('modulecontext')).'<br>');
-		echo('examtime:'.json_encode($this->debugElement('examtime')).'<br>');
 	}
 	
 	protected function debugElement($c){ //if some extern functions need some of the objects params
@@ -297,8 +299,6 @@ class exammanagementInstance{
 				return $this->moduleinstance;
 			case 'modulecontext':
 				return $this->modulecontext;
-			case 'examtime':
-				return $this->examtime;
 		}
 	
 	}
