@@ -12,7 +12,7 @@
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
-          <FIELD NAME="textfield" TYPE="longtext"  NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
+          <FIELD NAME="textfield" TYPE="text" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
