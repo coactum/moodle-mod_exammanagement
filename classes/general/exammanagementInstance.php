@@ -178,8 +178,8 @@ class exammanagementInstance{
 	protected function getShortenedTextfield(){
 		$textfield=$this->getTextfield();
 
-		if ($textfield && strlen($textfield>14)){
-				$shtextfield=substr($textfield, 0, 2).' ...';
+		if ($textfield && strlen($textfield)>49){
+				$shtextfield=substr($textfield, 0, 49).' ...';
 				return $shtextfield;
 			} elseif($textfield) {
 				return $textfield;
