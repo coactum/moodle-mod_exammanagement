@@ -46,4 +46,5 @@ $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungs
 $string['pluginadministration'] = 'exam management administration';
 
 //capabilities
-$string['exammanagement:addexammanagementinstance'] = 'Neue Instanz des Plugins hinzufügen';
+$string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';
+$string['exammanagement:viewinstance'] = 'Prüfungsorganisation ansehen';

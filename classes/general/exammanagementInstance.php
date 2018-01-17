@@ -136,6 +136,8 @@ class exammanagementInstance{
 	
 		global $PAGE;
 		
+		require_capability('mod/exammanagement:viewinstance', $this->modulecontext); //noch fixen
+		
 		$this->setPage('view');
 		$this-> outputPageHeader();
 				
