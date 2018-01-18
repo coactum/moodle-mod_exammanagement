@@ -36,9 +36,6 @@
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
-        <INDEXES>
-          <INDEX NAME="places" UNIQUE="false" FIELDS="places"/>
-        </INDEXES>
       </TABLE>
     </TABLES>
   </XMLDB>
