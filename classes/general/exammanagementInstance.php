@@ -143,7 +143,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -186,6 +186,14 @@ class exammanagementInstance{
 			} elseif($textfield) {
 				return $textfield;
 			} else{
+				return '';
+			}
+	}
+	
+	protected function getParticipantsCount(){
+		if ($this->getFieldFromDB('exammanagement','participants')){
+				return $this->getFieldFromDB('exammanagement','participants');
+			} else {
 				return '';
 			}
 	}
@@ -294,7 +302,7 @@ class exammanagementInstance{
 	
 	}
 	
-	######### feature: textfield
+	######### feature: textfield ##########
 	
 	public function outputTextfieldPage(){
 		global $PAGE;
@@ -341,6 +349,60 @@ class exammanagementInstance{
  
 		  //Set default data (if any)
 		  $mform->set_data(array('textfield'=>$this->getTextfield(), 'id'=>$this->id));
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
+	}
+
+######### feature: addParticipants ##########
+	
+	public function outputaddParticipantsPage(){
+		global $PAGE;
+		
+		$this->setPage('textfield');
+		$this-> outputPageHeader();
+		$this->buildaddParticipantsForm();
+		
+		$this->outputFooter();
+	}
+	
+	protected function saveParticipants($participants){
+		
+			$this->moduleinstance->participants=$participants;
+	
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage();
+
+	}
+	
+	protected function buildaddParticipantsForm(){
+		
+		global $CFG;
+		
+		//include form
+		require_once(__DIR__.'/../forms/addParticipantsForm.php');
+ 		
+		//Instantiate Textfield_form 
+		$mform = new forms\addParticipantsForm();
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage();
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  $this->saveParticipants($fromform->participants);
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  $mform->set_data(array('participants'=>$this->getParticipantsCount(), 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();

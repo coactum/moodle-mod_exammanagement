@@ -45,13 +45,15 @@ class exammanagement_overview implements renderable, templatable {
     protected $fourthphasecompleted;
     protected $hrexamtime;
     protected $textfield;
+    protected $participants;
+
 
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -59,6 +61,8 @@ class exammanagement_overview implements renderable, templatable {
         $this->fourthphasecompleted = $fourthphasecompleted;
         $this->hrexamtime = $hrexamtime;
         $this->textfield = $textfield;
+        $this->participants = $participants;
+
     }
 
     /**
@@ -76,6 +80,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->fourthphasecompleted = $this->fourthphasecompleted;
         $data->hrexamtime = $this->hrexamtime;
         $data->textfield = $this->textfield;
+        $data->participants = $this->participants;
         return $data;
     }
 

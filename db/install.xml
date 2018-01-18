@@ -14,6 +14,7 @@
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
+          <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as json array"/>
           <FIELD NAME="temprooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temp rooms for exammanagement instance as json array"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
