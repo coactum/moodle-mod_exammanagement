@@ -13,12 +13,31 @@
           <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
+          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
+          <FIELD NAME="temprooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temp rooms for exammanagement instance as json array"/>
+          <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
         <INDEXES>
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+        </INDEXES>
+      </TABLE>
+      <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
+        <FIELDS>
+          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+          <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for room"/>
+          <FIELD NAME="description" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="displayable description of room"/>
+          <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>
+          <FIELD NAME="places" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="places in each room"/>
+          <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
+    	</FIELDS>
+        <KEYS>
+          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        </KEYS>
+        <INDEXES>
+          <INDEX NAME="places" UNIQUE="false" FIELDS="places"/>
         </INDEXES>
       </TABLE>
     </TABLES>
