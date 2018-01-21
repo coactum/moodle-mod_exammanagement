@@ -73,7 +73,7 @@
                                 <i class="fa fa-users" aria-hidden="true"></i> <a href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
                               </div>
                               <div class="card-text">
-                                {{#participants}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i> Es wurden bereits {{participants}} Teilnehmer zur Prüfung hinzugefügt.<i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/participants}}
+                                {{#participants}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Prüfungsteilnehmer: {{participants}} <i class="fa fa-users" aria-hidden="true"></i></p>{{/participants}}
                                 {{^participants}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</span></p>{{/participants}}
                               </div>
                             </div>

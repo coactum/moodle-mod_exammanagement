@@ -64,7 +64,7 @@ $capabilities = [
     ],
     
     'mod/exammanagement:viewinstance' => [
-        'riskbitmask' => RISK_XSS,
+        'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -73,6 +73,20 @@ $capabilities = [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
+    
+    'mod/exammanagement:takeexams'=> [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_PROHIBIT,
+            'coursecreator' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_ALLOW,
             'guest' => CAP_PROHIBIT,
         ],
     ],

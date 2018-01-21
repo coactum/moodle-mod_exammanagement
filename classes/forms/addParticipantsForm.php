@@ -38,11 +38,11 @@ class addParticipantsForm extends moodleform {
  
         $mform = $this->_form; // Don't forget the underscore! 
  
-		$mform->addElement('button', 'intro', 'Alle Kursteilnehmer als Prüfungsteilnehmer hinzufügen');
 		$mform->addElement('hidden', 'id', 'dummy');
-        $mform->addElement('textarea', 'textfield', 'for testing', 'wrap="virtual" rows="20" cols="50"'); //for testing
-        $mform->setType('id', PARAM_INT);
-        $this->add_action_buttons();
+		$mform->setType('id', PARAM_INT);
+		$mform->addElement('hidden', 'participants', 'dummy');
+		$mform->setType('participants', PARAM_RAW);		
+        $this->add_action_buttons(true,'Alle Teilnehmer des Kurses zur Prüfung hinzufügen');
     }
     
     //Custom validation should be added here

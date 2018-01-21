@@ -192,7 +192,9 @@ class exammanagementInstance{
 	
 	protected function getParticipantsCount(){
 		if ($this->getFieldFromDB('exammanagement','participants')){
-				return $this->getFieldFromDB('exammanagement','participants');
+				$temp= explode(",", $this->getFieldFromDB('exammanagement','participants'));
+				$participantsCount=count($temp);
+				return $participantsCount;
 			} else {
 				return '';
 			}
@@ -378,6 +380,22 @@ class exammanagementInstance{
 
 	}
 	
+	protected function getCourseParticipantsIDs(){
+			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
+			$CourseParticipantsID;
+			
+			foreach ($CourseParticipants as $key => $value){
+				$temp=get_object_vars($value);
+				$CourseParticipantsID[$key] = $temp['id'];
+			}
+			
+			$CourseParticipantsID = implode(',', $CourseParticipantsID);
+			
+			return $CourseParticipantsID;
+			
+	
+	}
+	
 	protected function buildaddParticipantsForm(){
 		
 		global $CFG;
@@ -402,7 +420,7 @@ class exammanagementInstance{
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  $mform->set_data(array('participants'=>$this->getParticipantsCount(), 'id'=>$this->id));
+		  $mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
