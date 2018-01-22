@@ -24,6 +24,7 @@
  
 namespace mod_exammanagement\general\forms;
 use moodleform;
+use mod_exammanagement;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,12 +38,19 @@ class addParticipantsForm extends moodleform {
     public function definition() {
  
         $mform = $this->_form; // Don't forget the underscore! 
- 
-		$mform->addElement('hidden', 'id', 'dummy');
+        
+        $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
-		$mform->addElement('hidden', 'participants', 'dummy');
-		$mform->setType('participants', PARAM_RAW);		
-        $this->add_action_buttons(true,'Alle Teilnehmer des Kurses zur Prüfung hinzufügen');
+ 		
+ 		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+ 		$CourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
+ 		
+ 		foreach($CourseParticipantsIDs as $key => $value){
+			$mform->addElement('checkbox', 'participants['.$value.']', $obj->getParticipantData($value));
+					
+ 		}
+ 		
+		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
     }
     
     //Custom validation should be added here

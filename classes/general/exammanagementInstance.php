@@ -245,6 +245,14 @@ class exammanagementInstance{
 		return $field;
 	}
 	
+	protected function getRecordFromDB($table, $condition){
+		global $DB;
+	
+		$record = $DB->get_record($table, $condition);
+	
+		return $record;
+	}
+	
 	protected function UpdateRecordInDB($table, $obj){
 		global $DB;
 	
@@ -370,8 +378,11 @@ class exammanagementInstance{
 		$this->outputFooter();
 	}
 	
-	protected function saveParticipants($participants){
+	protected function saveParticipants($participantsArr){
 		
+			$sortedParticipantsArr=$this->sortParticipantsIDs($participantsArr);
+			$participants=implode(',', $sortedParticipantsArr);;
+			
 			$this->moduleinstance->participants=$participants;
 	
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
@@ -380,7 +391,7 @@ class exammanagementInstance{
 
 	}
 	
-	protected function getCourseParticipantsIDs(){
+	public function getCourseParticipantsIDs($format){
 			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
 			$CourseParticipantsID;
 			
@@ -389,10 +400,46 @@ class exammanagementInstance{
 				$CourseParticipantsID[$key] = $temp['id'];
 			}
 			
-			$CourseParticipantsID = implode(',', $CourseParticipantsID);
-			
+			if ($format=='String'){
+				$CourseParticipantsID = implode(',', $CourseParticipantsID);
+			}
+		
 			return $CourseParticipantsID;
 			
+	
+	}
+	
+	public function getCourseParticipantsIDsSortedByLastName(){
+			$CourseParticipantsIDs=$this->getCourseParticipantsIDs();
+			
+			foreach ($CourseParticipants as $key => $value){
+				$temp=get_object_vars($value);
+				$CourseParticipantsID[$key] = $temp['id'];
+			}
+			
+			if ($format=='String'){
+				$CourseParticipantsID = implode(',', $CourseParticipantsID);
+			}
+		
+			return $CourseParticipantsID;
+			
+	
+	}
+	
+	public function sortParticipantsIDs($ParticipantIDs){
+			$CourseParticipantsIDs=$this->getCourseParticipantsIDs('Array');
+			
+			asort($CourseParticipantsIDs);
+		
+			return $CourseParticipantsIDs;
+			
+	
+	}
+	
+	public function filterCheckedParticipants($participants){
+			var_dump($participants);
+			
+			return $participants->participants;
 	
 	}
 	
@@ -404,7 +451,7 @@ class exammanagementInstance{
 		require_once(__DIR__.'/../forms/addParticipantsForm.php');
  		
 		//Instantiate Textfield_form 
-		$mform = new forms\addParticipantsForm();
+		$mform = new forms\addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 			
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -413,19 +460,40 @@ class exammanagementInstance{
 			
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-		  $this->saveParticipants($fromform->participants);
+		  
+		  $participants=$this->filterCheckedParticipants($fromform);
+		  
+		  $this->saveParticipants($participants);
 		
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  $mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		  $mform->set_data(array('participants'=>$this->getCourseParticipantsIDs('Array'), 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
 		}
 	
+	}
+	
+	public function getParticipantData($userid){
+		
+		global $CFG;
+		
+		//get userdata
+		
+		$user = $this->getRecordFromDB('user', array('id'=>$userid));
+		
+		//assemble user information
+		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.$user->firstname.' '.$user->lastname.'</a></strong>';
+		$userimage = '';
+		
+		$str= $profilelink.$userimage;
+				
+		return $str;
 	}
 	
 	########### debugging ########
