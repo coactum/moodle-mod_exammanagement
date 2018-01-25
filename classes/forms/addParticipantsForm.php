@@ -43,13 +43,23 @@ class addParticipantsForm extends moodleform {
 		$mform->setType('id', PARAM_INT);
  		
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
- 		$CourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
+ 		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
+ 		$checkedParticipantsIDs = $obj->getSavedParticipants();
  		
- 		foreach($CourseParticipantsIDs as $key => $value){
-			$mform->addElement('checkbox', 'participants['.$value.']', $obj->getParticipantData($value));
+ 		foreach($allCourseParticipantsIDs as $key => $value){
+			$mform->addElement('advcheckbox', 'participants['.$value.']', $obj->getParticipantData($value), null, array('group' => 1));
+
+			
+			foreach($checkedParticipantsIDs as $key2 => $value2){
+				if($allCourseParticipantsIDs[$key]==$value2){
+					$mform->setDefault('participants['.$value.']', true);
+				}
+			}
 					
  		}
  		
+ 		//$this->add_checkbox_controller(1, 'Alle auswählen', ''); //klappt nicht wenn unterschiedliche values Werte für checked bei verbundenen Checkboxes
+
 		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
     }
     

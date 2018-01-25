@@ -152,8 +152,8 @@ class exammanagementInstance{
  	}
  	
  	protected function getExamtime(){		//get examtime (for form)
-		if ($this->getFieldFromDB('exammanagement','examtime')){
-				return $this->getFieldFromDB('exammanagement','examtime');
+		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
+				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
 			} else {
 				return '';
 			}
@@ -170,8 +170,8 @@ class exammanagementInstance{
  	}
  	
  	protected function getTextfield(){
-		if ($this->getFieldFromDB('exammanagement','textfield')){
-				return $this->getFieldFromDB('exammanagement','textfield');
+		if ($this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance))){
+				return $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
 			} else {
 				return '';
 			}
@@ -191,13 +191,14 @@ class exammanagementInstance{
 	}
 	
 	protected function getParticipantsCount(){
-		if ($this->getFieldFromDB('exammanagement','participants')){
-				$temp= explode(",", $this->getFieldFromDB('exammanagement','participants'));
+		$participants=$this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+		if ($participants){
+				$temp= explode(",", $participants);
 				$participantsCount=count($temp);
 				return $participantsCount;
 			} else {
 				return '';
-			}
+		}
 	}
  	
  	protected function checkPhaseCompletion($phase){
@@ -237,10 +238,10 @@ class exammanagementInstance{
 	
 	#### DB #####
 	
-	protected function getFieldFromDB($table, $fieldname){
+	protected function getFieldFromDB($table, $fieldname, $condition){
 		global $DB;
 	
-		$field = $DB->get_field($table, $fieldname, array('id' => $this->cm->instance), '*', MUST_EXIST);
+		$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
 	
 		return $field;
 	}
@@ -380,8 +381,7 @@ class exammanagementInstance{
 	
 	protected function saveParticipants($participantsArr){
 		
-			$sortedParticipantsArr=$this->sortParticipantsIDs($participantsArr);
-			$participants=implode(',', $sortedParticipantsArr);;
+			$participants=implode(',', $participantsArr);;
 			
 			$this->moduleinstance->participants=$participants;
 	
@@ -426,20 +426,22 @@ class exammanagementInstance{
 	
 	}
 	
-	public function sortParticipantsIDs($ParticipantIDs){
-			$CourseParticipantsIDs=$this->getCourseParticipantsIDs('Array');
+	public function filterCheckedParticipants($obj){
 			
-			asort($CourseParticipantsIDs);
-		
-			return $CourseParticipantsIDs;
+			$obj= get_object_vars($obj);
+			$paricipantsArray=$obj["participants"];
+			$participants=array();
 			
-	
-	}
-	
-	public function filterCheckedParticipants($participants){
-			var_dump($participants);
+			foreach ($paricipantsArray as $key => $value){
+				if ($value==1){
+					array_push($participants, $key);	
+				}
+				
+			}
 			
-			return $participants->participants;
+			asort($participants);
+			
+			return $participants;
 	
 	}
 	
@@ -494,6 +496,18 @@ class exammanagementInstance{
 		$str= $profilelink.$userimage;
 				
 		return $str;
+	}
+	
+	public function getSavedParticipants(){
+		
+		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+
+		if ($participants){
+				$participantsArray = explode(",", $participants);
+				return $participantsArray;
+			} else {
+				return '';
+		}
 	}
 	
 	########### debugging ########
