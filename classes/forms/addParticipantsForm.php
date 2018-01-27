@@ -41,14 +41,17 @@ class addParticipantsForm extends moodleform {
         
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
+		
+		$mform->addElement('html', '<h3>Teilnehmer hinzufügen</h3><div class="row"><div class="col-xs-3"><h4 class="text-center">Auswahl</h4></div><div class="col-xs-3"><h4 class="text-center">Teilnehmer</h4></div><div class="col-xs-3"><h4 class="text-center">Benutzerbild</h4></div><div class="col-xs-3"><h4 class="text-center">Gruppen</h4></div>');
  		
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();
  		
  		foreach($allCourseParticipantsIDs as $key => $value){
-			$mform->addElement('advcheckbox', 'participants['.$value.']', $obj->getParticipantData($value), null, array('group' => 1));
-
+			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+			$mform->addElement('advcheckbox', 'participants['.$value.']', '', null, array('group' => 1));
+			$mform->addElement('html', '</div>'.$obj->getParticipantDataAsStr($value).'</div>');
 			
 			foreach($checkedParticipantsIDs as $key2 => $value2){
 				if($allCourseParticipantsIDs[$key]==$value2){

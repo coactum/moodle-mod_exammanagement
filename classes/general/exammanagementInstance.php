@@ -481,7 +481,7 @@ class exammanagementInstance{
 	
 	}
 	
-	public function getParticipantData($userid){
+	public function getParticipantDataAsStr($userid){
 		
 		global $CFG;
 		
@@ -490,10 +490,10 @@ class exammanagementInstance{
 		$user = $this->getRecordFromDB('user', array('id'=>$userid));
 		
 		//assemble user information
-		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.$user->firstname.' '.$user->lastname.'</a></strong>';
-		$userimage = '';
+		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
+		$userimage = $this->getUserPicture($user);
 		
-		$str= $profilelink.$userimage;
+		$str= '<div class="col-xs-3">'.$profilelink.'</div><div class="col-xs-3">'.$userimage.'</div>';
 				
 		return $str;
 	}
@@ -508,6 +508,14 @@ class exammanagementInstance{
 			} else {
 				return '';
 		}
+	}
+	
+	protected function getUserPicture($user){
+		
+		global $OUTPUT;
+		
+		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
+	
 	}
 	
 	########### debugging ########
