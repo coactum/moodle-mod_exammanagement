@@ -42,8 +42,10 @@ class addParticipantsForm extends moodleform {
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
 		
-		$mform->addElement('html', '<h3>Teilnehmer hinzufügen</h3><div class="row"><div class="col-xs-3"><h4 class="text-center">Auswahl</h4></div><div class="col-xs-3"><h4 class="text-center">Teilnehmer</h4></div><div class="col-xs-3"><h4 class="text-center">Benutzerbild</h4></div><div class="col-xs-3"><h4 class="text-center">Gruppen</h4></div>');
- 		
+		$mform->addElement('html', '<h3>Teilnehmer hinzufügen</h3>');
+		$mform->addElement('html', '<p>Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p>');	
+		$mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4 class="text-center">Auswahl</h4></div><div class="col-xs-3"><h4 class="text-center">Teilnehmer</h4></div><div class="col-xs-3"><h4 class="text-center">Benutzerbild</h4></div><div class="col-xs-3"><h4 class="text-center">Gruppen</h4></div>');
+
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();

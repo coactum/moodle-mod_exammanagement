@@ -38,7 +38,9 @@ class dateTimeForm extends moodleform {
  
         $mform = $this->_form; // Don't forget the underscore! 
  
-        $mform->addElement('date_time_selector', 'examtime', 'Beschreibungstext');
+        $mform->addElement('html', '<h3>Prüfungstermin festlegen</h3>');
+ 		$mform->addElement('html', '<p>Datum und Uhrzeit der Prüfung setzen.</p>'); 		
+        $mform->addElement('date_time_selector', 'examtime', '');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
