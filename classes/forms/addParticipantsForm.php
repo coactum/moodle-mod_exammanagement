@@ -36,6 +36,8 @@ class addParticipantsForm extends moodleform {
     
     //Add elements to form
     public function definition() {
+    
+        global $PAGE;
  
         $mform = $this->_form; // Don't forget the underscore! 
         
@@ -50,21 +52,31 @@ class addParticipantsForm extends moodleform {
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();
  		
+ 		if(!$checkedParticipantsIDs){
+ 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+			$this->add_checkbox_controller(1, 'Alle auswählen', '');
+			$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
+
+		} else{
+			$mform->addElement('advcheckbox', 'checkall', '', null, array('group' => 1, 'id' => 'checkboxgroup1',));
+		}
+		
+		$PAGE->requires->js_call_amd('exammanagement/chooseParticipants', 'enable_cb');
+ 		
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 			$mform->addElement('advcheckbox', 'participants['.$value.']', '', null, array('group' => 1));
 			$mform->addElement('html', '</div>'.$obj->getParticipantDataAsStr($value).'</div>');
 			
-			foreach($checkedParticipantsIDs as $key2 => $value2){
-				if($allCourseParticipantsIDs[$key]==$value2){
-					$mform->setDefault('participants['.$value.']', true);
+			if($checkedParticipantsIDs){
+				foreach($checkedParticipantsIDs as $key2 => $value2){
+					if($allCourseParticipantsIDs[$key]==$value2){
+						$mform->setDefault('participants['.$value.']', true);
+					}
 				}
-			}
-					
+			}		
  		}
- 		
- 		//$this->add_checkbox_controller(1, 'Alle auswählen', ''); //klappt nicht wenn unterschiedliche values Werte für checked bei verbundenen Checkboxes
-
+		
 		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
     }
     
