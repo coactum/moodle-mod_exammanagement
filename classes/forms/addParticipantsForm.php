@@ -58,10 +58,12 @@ class addParticipantsForm extends moodleform {
 			$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
 		} else{
-			$mform->addElement('advcheckbox', 'checkall', '', null, array('group' => 1, 'id' => 'checkboxgroup1',));
+		 	$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+			$mform->addElement('advcheckbox', 'checkall', 'Alle auswählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));			
+			$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 		}
 		
-		$PAGE->requires->js_call_amd('exammanagement/chooseParticipants', 'enable_cb');
+		$PAGE->requires->js_call_amd('exammanagement/select_all_choices', 'enable_cb');
  		
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
