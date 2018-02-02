@@ -37,16 +37,18 @@ class addParticipantsForm extends moodleform {
     //Add elements to form
     public function definition() {
     
-        global $PAGE;
+        global $PAGE, $CFG;
  
         $mform = $this->_form; // Don't forget the underscore! 
         
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
 		
-		$mform->addElement('html', '<h3>Teilnehmer hinzufügen</h3>');
-		$mform->addElement('html', '<p>Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p>');	
-		$mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4 class="text-center">Auswahl</h4></div><div class="col-xs-3"><h4 class="text-center">Teilnehmer</h4></div><div class="col-xs-3"><h4 class="text-center">Benutzerbild</h4></div><div class="col-xs-3"><h4 class="text-center">Gruppen</h4></div>');
+		$mform->addElement('html', '<h3>Kursteilnehmer hinzufügen</h3>');
+
+		###### add Participants from Course ######
+		$mform->addElement('html', '<div class="row"><div class="col-xs-8"><p class="Course">Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p></div><div class="col-xs-4"><label class="exammanagement-switch pull-right" title="Umschalten zwischen Kurs- und Dateiimport"><input type="checkbox"><span class="exammanagement-slider round"></span></label></div>');	
+		$mform->addElement('html', '<div class="course"><div class="row"><div class="col-xs-3"><h4 class="text-center">Auswahl</h4></div><div class="col-xs-3"><h4 class="text-center">Teilnehmer</h4></div><div class="col-xs-3"><h4 class="text-center">Benutzerbild</h4></div><div class="col-xs-3"><h4 class="text-center">Gruppen</h4></div>');
 
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
@@ -71,8 +73,22 @@ class addParticipantsForm extends moodleform {
 				}
 			}		
  		}
+
+		$mform->addElement('html', '</div></div></div><h3>Weitere Teilnehmer hinzufügen</h3>');
 		
+		###### add Participants from File ######
+		
+		$maxbytes=$CFG->maxbytes;
+
+		$mform->addElement('html', '<div class="file">');
+		$mform->addElement('filepicker', 'userfile', 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
+		
+		$mform->addElement('filepicker', 'userfile', 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+		$mform->addElement('html', '</div>');
+
+		### action buttons ###
 		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
+
     }
     
     //Custom validation should be added here
