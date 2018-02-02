@@ -52,18 +52,11 @@ class addParticipantsForm extends moodleform {
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();
  		
- 		if(!$checkedParticipantsIDs){
- 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-			$this->add_checkbox_controller(1, 'Alle auswählen', '');
-			$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
+ 		$PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
 
-		} else{
-		 	$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-			$mform->addElement('advcheckbox', 'checkall', 'Alle auswählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));			
-			$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
-		}
-		
-		$PAGE->requires->js_call_amd('exammanagement/select_all_choices', 'enable_cb');
+ 		$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+		$mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));			
+		$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
  		
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
