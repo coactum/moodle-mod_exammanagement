@@ -14,9 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Ticks or unticks all checkboxes when clicking the Select all or Deselect all elements when viewing the response overview.
+ * switching between course and file import
  *
- * @module      mod_exammanagement/select_all_choices
+ * @module      mod_exammanagement/switch_importmode
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,10 +24,25 @@
 define(['jquery'], function($) {
 
    return {
-        enable_cb: function() {
-           $("#checkboxgroup1").click(function () {
-             $('input.checkboxgroup1').not(this).prop('checked', this.checked);
-           });
+        switch_mode: function() {
+            $(".file").hide();
+
+/*
+            $("#switch_importmode").click(function(){ //not working (maybe because of Ajax?)
+                $(".course").toggle();
+                $(".file").toggle();
+
+            });
+ */
+
+            $("#switch_to_file").click(function(){
+                $(".course").hide();
+                $(".file").show();
+            });
+            $("#switch_to_course").click(function(){
+                $(".file").hide();
+                $(".course").show();
+            });
         }
     };
 

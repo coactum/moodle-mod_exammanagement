@@ -38,24 +38,27 @@ class addParticipantsForm extends moodleform {
     public function definition() {
     
         global $PAGE, $CFG;
+        
+        $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
+        $PAGE->requires->js_call_amd('mod_exammanagement/switch_importmode', 'switch_mode'); //call jquery for switching between course import and import from file
  
         $mform = $this->_form; // Don't forget the underscore! 
         
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
 		
-		$mform->addElement('html', '<h3>Kursteilnehmer hinzufügen</h3>');
+		$mform->addElement('html', '<h3 class="course">Kursteilnehmer hinzufügen</h3>');
+		$mform->addElement('html', '<h3 class="file">Weitere Teilnehmer hinzufügen</h3>');
+
 
 		###### add Participants from Course ######
-		$mform->addElement('html', '<div class="row"><div class="col-xs-8"><p class="Course">Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p></div><div class="col-xs-4"><label class="exammanagement-switch pull-right" title="Umschalten zwischen Kurs- und Dateiimport"><input type="checkbox"><span class="exammanagement-slider round"></span></label></div>');	
+		$mform->addElement('html', '<div class="row"><div class="col-xs-8"><p class="course">Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p><p class="file">Teilnehmer aus einer Datei zur Prüfung hinzufügen.</p></div><div class="col-xs-4"><label id="switch_to_file" class="exammanagement-switch course pull-right" title="Umschalten zwischen Kurs- und Dateiimport"><input type="checkbox"><span class="exammanagement-slider round"></span></label><label id="switch_to_course" class="exammanagement-switch file pull-right" title="Umschalten zwischen Kurs- und Dateiimport"><input type="checkbox"><span class="exammanagement-slider round"></span></label></div>');	
 		$mform->addElement('html', '<div class="course"><div class="row"><div class="col-xs-3"><h4>Teilnehmer</h4></div><div class="col-xs-3"><h4>E-Mail bzw. Matrikelnummer</h4></div><div class="col-xs-3"><h4>Gruppen</h4></div><div class="col-xs-3"><h4>Quelle</h4></div></div>');
 
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();
- 		
- 		$PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
-
+ 
  		$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 		$mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));			
 		$mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
@@ -76,8 +79,10 @@ class addParticipantsForm extends moodleform {
 			}		
  		}
 
+		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
+
 		$mform->addElement('html', '</div></div></div>');
-		
+				
 		###### add Participants from File ######
 		
 		$maxbytes=$CFG->maxbytes;
@@ -87,9 +92,6 @@ class addParticipantsForm extends moodleform {
 		
 		$mform->addElement('filepicker', 'userfile', 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
 		$mform->addElement('html', '</div>');
-
-		### action buttons ###
-		$this->add_action_buttons(true,'Zur Prüfung hinzufügen');
 
     }
     
