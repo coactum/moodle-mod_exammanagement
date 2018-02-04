@@ -477,29 +477,60 @@ class exammanagementInstance{
 	
 	}
 	
-	public function getParticipantDataAsStr($userid){
+	public function getSavedParticipants(){
 		
-		global $CFG;
-		
-		//get userdata
-		
-		$user = $this->getRecordFromDB('user', array('id'=>$userid));
-		
-		//assemble user information
-		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
-		$userimage = $this->getUserPicture($user);
-		$usergroups= $this->getParticipantsGroupNames($userid);
-		
-		$str= '<div class="col-xs-3">'.$profilelink.'</div><div class="col-xs-3">'.$userimage.'</div><div class="col-xs-3">'.$usergroups.'</div>';
-				
-		return $str;
+		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+
+		if ($participants){
+				$participantsArray = explode(",", $participants);
+				return $participantsArray;
+			} else {
+				return '';
+		}
 	}
 	
-	protected function getParticipantsGroupNames($uid){
+	public function getUser($userid){
+				
+		$user = $this->getRecordFromDB('user', array('id'=>$userid));
+
+		return $user;
+	
+	}
+	
+	public function getUserPicture($userid){
+		
+		global $OUTPUT;
+		
+		$user = $this->getUser($userid);
+		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
+	
+	}
+	
+	public function getUserProfileLink($userid){
+		
+		global $CFG;
+			
+		$user = $this->getUser($userid);
+		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
+		
+		return $profilelink;
+	
+	}
+	
+	public function getUserMail($userid){
+		
+		$user = $this->getUser($userid);
+		$usermail = $user->email;
+		
+		return $usermail;
+	
+	}
+	
+	public function getParticipantsGroupNames($userid){
 		
 		global $CFG;
 
-		$userGroups = groups_get_user_groups($this->course->id, $userid=$uid);
+		$userGroups = groups_get_user_groups($this->course->id, $userid);
 		$groupNameStr='';
 		
 		foreach ($userGroups as $key => $value){
@@ -517,27 +548,6 @@ class exammanagementInstance{
 		return $groupNameStr;
 	
 	}
-	
-	public function getSavedParticipants(){
-		
-		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
-
-		if ($participants){
-				$participantsArray = explode(",", $participants);
-				return $participantsArray;
-			} else {
-				return '';
-		}
-	}
-	
-	protected function getUserPicture($user){
-		
-		global $OUTPUT;
-		
-		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
-	
-	}
-	
 	
 	########### Export PDFS ####
 	
