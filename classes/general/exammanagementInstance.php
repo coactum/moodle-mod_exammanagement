@@ -208,7 +208,7 @@ class exammanagementInstance{
  	switch ($phase){
 		
 			case 1:
-				if ($this->getExamtime()&&$this->getTextfield()&&$this->getParticipantsCount()){
+				if ($this->getExamtime()&&$this->getParticipantsCount()){
 					return true;
 					}
 			case 2:

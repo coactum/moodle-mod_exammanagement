@@ -27,21 +27,10 @@ define(['jquery'], function($) {
         switch_mode: function() {
             $(".file").hide();
 
-/*
-            $("#switch_importmode").click(function(){ //not working (maybe because of Ajax?)
+            $("#switch_importmode").click(function(){
                 $(".course").toggle();
                 $(".file").toggle();
 
-            });
- */
-
-            $("#switch_to_file").click(function(){
-                $(".course").hide();
-                $(".file").show();
-            });
-            $("#switch_to_course").click(function(){
-                $(".file").hide();
-                $(".course").show();
             });
         }
     };
