@@ -39,8 +39,10 @@ class textfieldForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore! 
  
  		$mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
- 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>'); 		
-        $mform->addElement('textarea', 'textfield', '', 'wrap="virtual" rows="20" cols="50"');
+ 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');
+ 		$mform->addElement('editor', 'textfield', '');
+		$mform->setType('textfield', PARAM_RAW);		
+        //$mform->addElement('textarea', 'textfield', '', 'wrap="virtual" rows="20" cols="50"');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();

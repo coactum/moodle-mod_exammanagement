@@ -49,3 +49,4 @@ $string['pluginadministration'] = 'exam management administration';
 $string['exammanagement:addinstance'] = 'Add new exam organization';
 $string['exammanagement:viewinstance'] = 'View exam organization';
 $string['exammanagement:takeexams'] = 'Take exams';
+$string['exammanagement:sendgroupmessage'] = 'Send group message to participants';

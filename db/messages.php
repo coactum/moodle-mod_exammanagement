@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = [
 
-    'exam management messages' => array(
-        'capability' => 'exam management messages'
+    'groupmessage' => array(
+        'capability' => 'mod/exammanagement:sendgroupmessage'
     ),
 ];

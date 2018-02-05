@@ -15,17 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Send messages to all participants for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require(__DIR__.'/../../config.php');
+require_once(__DIR__.'/lib.php');
 
-$plugin->component = 'mod_exammanagement'; // Full name of the plugin (used for diagnostics)
-$plugin->release = '0.2.5';
-$plugin->version = 2018013100;	// The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2017051500; // Requires this Moodle version
-$plugin->maturity = MATURITY_ALPHA;
+use mod_exammanagement;
+
+// Course_module ID, or
+$id = optional_param('id', 0, PARAM_INT);
+
+// ... module instance id - should be named as the first character of the module
+$e  = optional_param('e', 0, PARAM_INT);
+
+$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+
+$p->sendGroupMessage();

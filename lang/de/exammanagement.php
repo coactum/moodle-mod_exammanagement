@@ -49,3 +49,4 @@ $string['pluginadministration'] = 'exam management administration';
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';
 $string['exammanagement:viewinstance'] = 'Prüfungsorganisation ansehen';
 $string['exammanagement:takeexams'] = 'Prüfung ablegen';
+$string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
