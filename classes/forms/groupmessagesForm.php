@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing textfieldForm for exammanagement
+ * class containing groupmessagesForm for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -31,19 +31,17 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
  
-class textfieldForm extends moodleform {
+class groupmessagesForm extends moodleform {
     
     //Add elements to form
     public function definition() {
  
         $mform = $this->_form; // Don't forget the underscore! 
  
- 		$mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
- 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');
- 		$mform->addElement('editor', 'textfield', '');
-		$mform->setType('textfield', PARAM_RAW);		
-        //$mform->addElement('textarea', 'textfield', '', 'wrap="virtual" rows="20" cols="50"');
-        $mform->addElement('hidden', 'id', 'dummy');
+ 		$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
+ 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
+        $mform->addElement('textarea', 'groupmessages_content', '', 'wrap="virtual" rows="20" cols="50"');
+		$mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
     }

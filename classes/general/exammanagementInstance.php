@@ -171,12 +171,21 @@ class exammanagementInstance{
 		}
  	}
  	
- 	protected function getTextFromTextfield(){
+ 	protected function getTextfieldObject(){
  	
  		$textfield= $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
+		
+		$textfield =json_decode($textfield);
+		
+		return $textfield;
+	}
+	
+ 	protected function getTextFromTextfield(){
+ 	
+ 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$text=explode(',', $textfield);
-				return $text[0];
+				$text=$textfield->text;
+				return $text;
 			} else {
 				return '';
 			}
@@ -184,17 +193,17 @@ class exammanagementInstance{
 	
 	protected function getFormatFromTextfield(){
  	
- 		$textfield= $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$text=explode(',', $textfield);
-				return $text[1];
+				$format=$textfield->format;
+				return $format;
 			} else {
 				return '';
 			}
 	}
 	
 	protected function getShortenedTextfield(){
-		$textfield=$this->getTextFromTextfield();
+		$textfield=format_string($this->getTextFromTextfield());
 
 		if ($textfield && strlen($textfield)>49){
 				$shtextfield=substr($textfield, 0, 49).' ...';
@@ -339,9 +348,9 @@ class exammanagementInstance{
 		$this->outputFooter();
 	}
 	
-	protected function saveTextfield($text, $format){
+	protected function saveTextfield($fromform){
 		
-			$textfield=$text.','.$format;
+			$textfield=json_encode($fromform->textfield);
 			
 			$this->moduleinstance->textfield=$textfield;
 				
@@ -367,7 +376,7 @@ class exammanagementInstance{
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 		  
-		  $this->saveTextfield($fromform->textfield['text'], $fromform->textfield['format']);
+		  $this->saveTextfield($fromform);
 		
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -576,9 +585,9 @@ class exammanagementInstance{
 		
 		var_dump($user);
 		
-		//$messageid = $this->sendSingleMessage($user, $subject, $text);
+		$messageid = $this->sendSingleMessage($user, $subject, $text);
 		
-		//echo $messageid;
+		echo $messageid;
 	
 	
 	}
@@ -588,14 +597,14 @@ class exammanagementInstance{
 		global $USER;
 		
 		$message = new \core\message\message();
-		$message->component = 'moodle'; // the component sending the message. Along with name this must exist in the table message_providers
-		$message->name = 'instantmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
+		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
+		$message->name = 'groupmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
 		$message->userfrom = $USER; // user object
 		$message->userto = $user; // user object
-		$message->subject = 'message subject 1'; // very short one-line subject
-		$message->fullmessage = 'message body'; // raw text
+		$message->subject = $subject; // very short one-line subject
+		$message->fullmessage = $text; // raw text
 		$message->fullmessageformat = FORMAT_MARKDOWN; // text format
-		$message->fullmessagehtml = '<p>message body</p>'; // html rendered version
+		$message->fullmessagehtml = '<p>'.$text.'</p>'; // html rendered version
 		$message->smallmessage = 'small message'; // useful for plugins like sms or twitter
 		$message->notification = '0';
 		$message->contexturl = 'http://GalaxyFarFarAway.com';
@@ -605,20 +614,20 @@ class exammanagementInstance{
 		$message->set_additional_content('email', $content);
 		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
  
-		// Create a file instance.
-		$usercontext = context_user::instance($user->id);
-		$file = new stdClass;
-		$file->contextid = $usercontext->id;
-		$file->component = 'user';
-		$file->filearea  = 'private';
-		$file->itemid    = 0;
-		$file->filepath  = '/';
-		$file->filename  = '1.txt';
-		$file->source    = 'test';
- 
-		$fs = get_file_storage();
-		$file = $fs->create_file_from_string($file, 'file1 content');
-		$message->attachment = $file;
+		//// Create a file instance.
+		//	$usercontext = context_user::instance($user->id);
+		// 	$file = new stdClass;
+		// 	$file->contextid = $usercontext->id;
+		// 	$file->component = 'user';
+		// 	$file->filearea  = 'private';
+		// 	$file->itemid    = 0;
+		// 	$file->filepath  = '/';
+		// 	$file->filename  = '1.txt';
+		// 	$file->source    = 'test';
+		//  
+		// 	$fs = get_file_storage();
+		// 	$file = $fs->create_file_from_string($file, 'file1 content');
+		// 	$message->attachment = $file;
  
 		$messageid = message_send($message);
 		
