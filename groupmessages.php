@@ -35,4 +35,4 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-$p->sendGroupMessage();
+$p->outputGroupmessagesPage();

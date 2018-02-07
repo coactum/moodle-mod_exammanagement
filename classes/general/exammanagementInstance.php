@@ -124,12 +124,28 @@ class exammanagementInstance{
 	
  	}
  	
- 	protected function redirectToOverviewPage(){
+ 	protected function redirectToOverviewPage($message, $type){
 		global $CFG;
 		
 		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
 	
-		redirect ($url);
+		switch ($type) {
+    		case 'success':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
+        		break;
+    		case 'warning':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
+        		break;
+    		case 'error':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+        	case 'info':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
+        		break;
+        	default:
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+		}
 	}
 
 
@@ -138,7 +154,7 @@ class exammanagementInstance{
 	
 		global $PAGE;
 		
-		require_capability('mod/exammanagement:viewinstance', $this->modulecontext); //noch fixen
+		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
 		
 		$this->setPage('view');
 		$this-> outputPageHeader();
@@ -302,7 +318,7 @@ class exammanagementInstance{
 	
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	
-			$this->redirectToOverviewPage();
+			$this->redirectToOverviewPage('Uhrzeit und Datum erfolgreich gesetzt', 'success');
 
 	}
 	
@@ -317,7 +333,7 @@ class exammanagementInstance{
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage();
+			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
 			
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -329,61 +345,6 @@ class exammanagementInstance{
  
 		  //Set default data (if any)
 		  $mform->set_data(array('examtime'=>$this->getExamtime(), 'id'=>$this->id));
-		  
-		  //displays the form
-		  $mform->display();
-		}
-	
-	}
-	
-	######### feature: textfield ##########
-	
-	public function outputTextfieldPage(){
-		global $PAGE;
-		
-		$this->setPage('textfield');
-		$this-> outputPageHeader();
-		$this->buildTextfieldForm();
-		
-		$this->outputFooter();
-	}
-	
-	protected function saveTextfield($fromform){
-		
-			$textfield=json_encode($fromform->textfield);
-			
-			$this->moduleinstance->textfield=$textfield;
-				
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-	
-			$this->redirectToOverviewPage();
-
-	}
-	
-	protected function buildTextfieldForm(){
-				
-		//include form
-		require_once(__DIR__.'/../forms/textfieldForm.php');
- 		
-		//Instantiate Textfield_form 
-		$mform = new forms\textfieldForm();
-			
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage();
-			
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-		  
-		  $this->saveTextfield($fromform);
-		
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
- 
-		  //Set default data (if any)
-		  $mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
@@ -411,7 +372,7 @@ class exammanagementInstance{
 	
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	
-			$this->redirectToOverviewPage();
+			$this->redirectToOverviewPage('Teilnehmer zur Prüfung hinzugefügt', 'success');
 
 	}
 	
@@ -480,7 +441,7 @@ class exammanagementInstance{
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage();
+			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
 			
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -575,20 +536,124 @@ class exammanagementInstance{
 	
 	}
 	
-	########### Send Groupmessage to all Participants ####
+	######### feature: textfield ##########
+	
+	public function outputTextfieldPage(){
+		global $PAGE;
+		
+		$this->setPage('textfield');
+		$this-> outputPageHeader();
+		$this->buildTextfieldForm();
+		
+		$this->outputFooter();
+	}
+	
+	protected function saveTextfield($fromform){
+		
+			$textfield=json_encode($fromform->textfield);
+			
+			$this->moduleinstance->textfield=$textfield;
+				
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage('Inhalt gespeichert', 'success');
 
-	public function sendGroupMessage(){
+	}
+	
+	protected function buildTextfieldForm(){
+				
+		//include form
+		require_once(__DIR__.'/../forms/textfieldForm.php');
+ 		
+		//Instantiate Textfield_form 
+		$mform = new forms\textfieldForm();
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  
+		  $this->saveTextfield($fromform);
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  $mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
+	}
+	
+	########### Send Groupmessage to all Participants ####
+	
+	public function outputGroupmessagesPage(){
+		global $PAGE;
+		
+		$this->setPage('groupmessage');
+		$this-> outputPageHeader();
+		$this->buildGroupmessagesForm();
+		
+		$this->outputFooter();
+	}
+	
+	protected function buildGroupmessagesForm(){
+				
+		//include form
+		require_once(__DIR__.'/../forms/groupmessagesForm.php');
+ 		
+		//Instantiate Textfield_form 
+		$mform = new forms\groupmessagesForm();
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  
+		  var_dump($fromform);
+		  
+		  $this->sendGroupMessage($fromform->groupmessages_content);
+		  //$this->redirectToOverviewPage('Nachricht verschickt', 'success');
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  $mform->set_data(array('id'=>$this->id));
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
+	}
+	
+	public function sendGroupMessage($content){
 		
 		$user=$this->getUser(22);
 		$subject="testsubject";
-		$text="Testtext";
+		$text=$content;
 		
 		var_dump($user);
+		echo '<br>';
+		var_dump($subject);
+		echo '<br>';
+		var_dump($text);
+		echo '<br>';
+
 		
 		$messageid = $this->sendSingleMessage($user, $subject, $text);
 		
-		echo $messageid;
-	
+		return $messageid;	
 	
 	}
 	
