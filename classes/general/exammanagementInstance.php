@@ -124,7 +124,7 @@ class exammanagementInstance{
 	
  	}
  	
- 	protected function redirectToOverviewPage($message, $type){
+ 	public function redirectToOverviewPage($message, $type){
 		global $CFG;
 		
 		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
@@ -231,7 +231,7 @@ class exammanagementInstance{
 			}
 	}
 	
-	protected function getParticipantsCount(){
+	public function getParticipantsCount(){
 		$participants=$this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
 		if ($participants){
 				$temp= explode(",", $participants);
@@ -609,7 +609,7 @@ class exammanagementInstance{
 		require_once(__DIR__.'/../forms/groupmessagesForm.php');
  		
 		//Instantiate Textfield_form 
-		$mform = new forms\groupmessagesForm();
+		$mform = new forms\groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
 			
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -618,11 +618,9 @@ class exammanagementInstance{
 			
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-		  
-		  var_dump($fromform);
-		  
+		  		  
 		  $this->sendGroupMessage($fromform->groupmessages_content);
-		  //$this->redirectToOverviewPage('Nachricht verschickt', 'success');
+		  //$this->redirectToOverviewPage('Nachricht verschickt', 'success'); //auskommentiert fürs testen
 		
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -639,21 +637,30 @@ class exammanagementInstance{
 	
 	public function sendGroupMessage($content){
 		
-		$user=$this->getUser(22);
+		global $CFG;
+		
+		var_dump($CFG);
 		$subject="testsubject";
 		$text=$content;
-		
-		var_dump($user);
-		echo '<br>';
+		$participants=$this->getSavedParticipants();
+
 		var_dump($subject);
 		echo '<br>';
 		var_dump($text);
 		echo '<br>';
+		var_dump($participants);
+		echo '<br>';
+		
+		foreach ($participants as $key => $value){
 
+			$user=$this->getUser($value);
+			
+			var_dump($user->id);
+			echo '<br>';
 		
-		$messageid = $this->sendSingleMessage($user, $subject, $text);
-		
-		return $messageid;	
+			$this->sendSingleMessage($user, $subject, $text);
+			
+		}
 	
 	}
 	

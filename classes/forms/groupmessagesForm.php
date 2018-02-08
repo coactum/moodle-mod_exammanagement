@@ -39,11 +39,21 @@ class groupmessagesForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore! 
  
  		$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
- 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
-        $mform->addElement('textarea', 'groupmessages_content', '', 'wrap="virtual" rows="20" cols="50"');
-		$mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
-        $this->add_action_buttons();
+ 		
+ 		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+ 		$participantsCount = $obj->getParticipantsCount();
+ 		
+ 		if($participantsCount){
+ 		
+			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen '.$participantsCount.' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
+			$mform->addElement('textarea', 'groupmessages_content', '', 'wrap="virtual" rows="20" cols="50"');
+			$mform->addElement('hidden', 'id', 'dummy');
+			$mform->setType('id', PARAM_INT);
+			$this->add_action_buttons();
+		}
+		else{
+			$obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+		}
     }
     
     //Custom validation should be added here
