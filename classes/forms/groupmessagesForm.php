@@ -46,10 +46,11 @@ class groupmessagesForm extends moodleform {
  		if($participantsCount){
  		
 			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen '.$participantsCount.' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
-			$mform->addElement('textarea', 'groupmessages_content', '', 'wrap="virtual" rows="20" cols="50"');
+			$mform->addElement('textarea', 'groupmessages_subject', 'Betreff', 'wrap="virtual" rows="1" cols="50"');
+			$mform->addElement('textarea', 'groupmessages_content', 'Inhalt', 'wrap="virtual" rows="10" cols="50"');
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
-			$this->add_action_buttons();
+			$this->add_action_buttons(true,'Mail abschicken');
 		}
 		else{
 			$obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');

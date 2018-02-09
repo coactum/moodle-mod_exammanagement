@@ -619,7 +619,7 @@ class exammanagementInstance{
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 		  		  
-		  $this->sendGroupMessage($fromform->groupmessages_content);
+		  $this->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
 		  //$this->redirectToOverviewPage('Nachricht verschickt', 'success'); //auskommentiert fürs testen
 		
 		} else {
@@ -635,30 +635,17 @@ class exammanagementInstance{
 	
 	}
 	
-	public function sendGroupMessage($content){
+	public function sendGroupMessage($subject, $content){
 		
-		global $CFG;
-		
-		var_dump($CFG);
-		$subject="testsubject";
-		$text=$content;
+		$mailsubject="PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
+		$mailtext=$content;
 		$participants=$this->getSavedParticipants();
 
-		var_dump($subject);
-		echo '<br>';
-		var_dump($text);
-		echo '<br>';
-		var_dump($participants);
-		echo '<br>';
-		
 		foreach ($participants as $key => $value){
 
 			$user=$this->getUser($value);
-			
-			var_dump($user->id);
-			echo '<br>';
 		
-			$this->sendSingleMessage($user, $subject, $text);
+			$this->sendSingleMessage($user, $mailsubject, $mailtext);
 			
 		}
 	
@@ -666,7 +653,7 @@ class exammanagementInstance{
 	
 	protected function sendSingleMessage($user, $subject, $text){
 	
-		global $USER;
+		global $USER, $CFG;
 		
 		$message = new \core\message\message();
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
@@ -677,12 +664,17 @@ class exammanagementInstance{
 		$message->fullmessage = $text; // raw text
 		$message->fullmessageformat = FORMAT_MARKDOWN; // text format
 		$message->fullmessagehtml = '<p>'.$text.'</p>'; // html rendered version
-		$message->smallmessage = 'small message'; // useful for plugins like sms or twitter
+		$message->smallmessage = $text; // useful for plugins like sms or twitter
 		$message->notification = '0';
 		$message->contexturl = 'http://GalaxyFarFarAway.com';
 		$message->contexturlname = 'Context name';
-		$message->replyto = "random@example.com";
-		$content = array('*' => array('header' => ' test ', 'footer' => ' test ')); // Extra content for specific processor
+		$message->replyto = "noreply@imt.uni-paderborn.de";
+		
+		$header = ' test ';
+		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
+		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
+		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
+		
 		$message->set_additional_content('email', $content);
 		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
  
@@ -701,6 +693,8 @@ class exammanagementInstance{
 		// 	$file = $fs->create_file_from_string($file, 'file1 content');
 		// 	$message->attachment = $file;
  
+ 		var_dump($message);
+
 		$messageid = message_send($message);
 		
 		return $messageid;
