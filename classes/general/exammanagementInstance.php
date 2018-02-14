@@ -161,7 +161,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -241,13 +241,24 @@ class exammanagementInstance{
 				return '';
 		}
 	}
+	
+	public function getRoomsCount(){
+		$rooms=$this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		if ($rooms){
+				$temp= explode(",", $rooms);
+				$roomsCount=count($temp);
+				return $roomsCount;
+			} else {
+				return '';
+		}
+	}
  	
  	protected function checkPhaseCompletion($phase){
  	
  	switch ($phase){
 		
 			case 1:
-				if ($this->getExamtime()&&$this->getParticipantsCount()){
+				if ($this->getRoomsCount()&&$this->getExamtime()&&$this->getParticipantsCount()){
 					return true;
 					}
 			case 2:
@@ -295,10 +306,151 @@ class exammanagementInstance{
 		return $record;
 	}
 	
+	protected function getRecordsFromDB($table, $condition){
+		global $DB;
+	
+		$records = $DB->get_records($table, $condition);
+		
+		return $records;
+	}
+		
 	protected function UpdateRecordInDB($table, $obj){
 		global $DB;
 	
 		return $DB->update_record($table, $obj);
+	}
+	
+	######### feature: chooseRooms ##########
+	
+	public function outputchooseRoomsPage(){
+		global $PAGE;
+		
+		$this->setPage('chooseRooms');
+		$this-> outputPageHeader();
+		$this->buildchooseRoomsForm();
+		
+		$this->outputFooter();
+	}
+	
+	protected function saveRooms($roomsArr){
+		
+			$rooms=implode(',', $roomsArr);;
+			
+			$this->moduleinstance->rooms=$rooms;
+	
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage('Räume für die Prüfung wurden ausgewählt', 'success');
+
+	}
+	
+	public function getRoomObj($roomID){
+		$room = $this->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
+		
+		return $room;
+	}
+	
+	public function getallRoomIDs($format){
+			$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+			$allRoomsIDs;
+			
+			if ($allRooms){
+				foreach ($allRooms as $key => $value){
+					$temp=get_object_vars($value);
+					$allRoomsIDs[$key] = $temp['id'];
+				}
+			
+				if ($format=='String'){
+					$allsRoomsIDs = implode(',', $allRoomsIDs);
+				}
+		
+				return $allRoomsIDs;
+				
+			} else{
+				return false;
+			}
+	
+	}
+	
+	public function getallRoomsIDsSortedByName(){ //to be reworked
+			$allRoomsIDs=$this->getallRoomsIDs('Array');
+			
+			foreach ($allRooms as $key => $value){
+				$temp=get_object_vars($value);
+				$allRoomsIDS[$key] = $temp['id'];
+			}
+			
+			if ($format=='String'){
+				$allRoomsIDs = implode(',', $allRoomsIDs);
+			}
+		
+			return $allRoomsIDs;
+			
+	
+	}
+	
+	public function filterCheckedRooms($obj){
+			
+			$obj= get_object_vars($obj);
+			$roomsArray=$obj["rooms"];
+			$rooms=array();
+			
+			foreach ($roomsArray as $key => $value){
+				if ($value==1){
+					array_push($rooms, $key);	
+				}
+				
+			}
+			
+			asort($rooms); //sort checked roomes ids for saving in DB
+			
+			return $rooms;
+	
+	}
+	
+	protected function buildchooseRoomsForm(){
+				
+		//include form
+		require_once(__DIR__.'/../forms/chooseRoomsForm.php');
+ 		
+		//Instantiate Textfield_form 
+		$mform = new forms\chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+			
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+		  
+		  $rooms=$this->filterCheckedRooms($fromform);
+		  
+		  $this->saveRooms($rooms);
+		
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+ 
+		  //Set default data (if any)
+		  $mform->set_data(array('rooms'=>$this->getallRoomIDs('Array'), 'id'=>$this->id));
+		  
+		  //displays the form
+		  $mform->display();
+		}
+	
+	}
+	
+	public function getSavedRooms(){
+		
+		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+
+		if ($rooms){
+				$roomsArray = explode(",", $rooms);
+				return $roomsArray;
+			} else {
+				return '';
+		}
 	}
 	
 	############## feature: setDateTime #########
@@ -357,7 +509,7 @@ class exammanagementInstance{
 	public function outputaddParticipantsPage(){
 		global $PAGE;
 		
-		$this->setPage('textfield');
+		$this->setPage('addParticipants');
 		$this-> outputPageHeader();
 		$this->buildaddParticipantsForm();
 		
@@ -377,25 +529,8 @@ class exammanagementInstance{
 	}
 	
 	public function getCourseParticipantsIDs($format){
-			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
+			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
 			$CourseParticipantsID;
-			
-			foreach ($CourseParticipants as $key => $value){
-				$temp=get_object_vars($value);
-				$CourseParticipantsID[$key] = $temp['id'];
-			}
-			
-			if ($format=='String'){
-				$CourseParticipantsID = implode(',', $CourseParticipantsID);
-			}
-		
-			return $CourseParticipantsID;
-			
-	
-	}
-	
-	public function getCourseParticipantsIDsSortedByLastName(){
-			$CourseParticipantsIDs=$this->getCourseParticipantsIDs();
 			
 			foreach ($CourseParticipants as $key => $value){
 				$temp=get_object_vars($value);
@@ -424,7 +559,7 @@ class exammanagementInstance{
 				
 			}
 			
-			asort($participants);
+			asort($participants); //sort checked participants ids for saving in DB
 			
 			return $participants;
 	
