@@ -350,42 +350,51 @@ class exammanagementInstance{
 		return $room;
 	}
 	
-	public function getallRoomIDs($format){
-			$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
-			$allRoomsIDs;
-			
-			if ($allRooms){
-				foreach ($allRooms as $key => $value){
-					$temp=get_object_vars($value);
-					$allRoomsIDs[$key] = $temp['id'];
-				}
-			
-				if ($format=='String'){
-					$allsRoomsIDs = implode(',', $allRoomsIDs);
-				}
+	public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
+		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+		$allRoomsIDs;
 		
-				return $allRoomsIDs;
-				
-			} else{
-				return false;
+		if ($allRooms){
+			foreach ($allRooms as $key => $value){
+				$temp=get_object_vars($value);
+				$allRoomsIDs[$key] = $temp['id'];
 			}
+		
+			if ($format=='String'){
+				$allsRoomsIDs = implode(',', $allRoomsIDs);
+			}
+	
+			return $allRoomsIDs;
+			
+		} else{
+			return false;
+		}
 	
 	}
 	
-	public function getallRoomsIDsSortedByName(){ //to be reworked
-			$allRoomsIDs=$this->getallRoomsIDs('Array');
-			
+	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
+		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+		$allRoomNames;
+		$allRoomIDs;
+		
+		if ($allRooms){
 			foreach ($allRooms as $key => $value){
 				$temp=get_object_vars($value);
-				$allRoomsIDS[$key] = $temp['id'];
-			}
-			
-			if ($format=='String'){
-				$allRoomsIDs = implode(',', $allRoomsIDs);
+				$allRoomNames[$key] = $temp['name'];
 			}
 		
-			return $allRoomsIDs;
+			foreach ($allRooms as $key => $value){
+				$temp=get_object_vars($value);
+				$allRoomIDs[$key] = $temp['id'];
+			}
 			
+			array_multisort($allRoomNames, $allRoomIDs);
+			
+			return $allRoomIDs;
+			
+		} else{
+			return false;
+		}
 	
 	}
 	
@@ -397,7 +406,8 @@ class exammanagementInstance{
 			
 			foreach ($roomsArray as $key => $value){
 				if ($value==1){
-					array_push($rooms, $key);	
+					array_push($rooms, $key);
+					var_dump($rooms);	
 				}
 				
 			}
@@ -433,7 +443,7 @@ class exammanagementInstance{
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  $mform->set_data(array('rooms'=>$this->getallRoomIDs('Array'), 'id'=>$this->id));
+		  $mform->set_data(array('id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();
@@ -591,7 +601,7 @@ class exammanagementInstance{
  
 		  //Set default data (if any)
 		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-		  $mform->set_data(array('participants'=>$this->getCourseParticipantsIDs('Array'), 'id'=>$this->id));
+		  $mform->set_data(array('id'=>$this->id));
 		  
 		  //displays the form
 		  $mform->display();

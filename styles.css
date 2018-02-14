@@ -56,3 +56,30 @@
   		display: flex;
   	}
 }
+
+.exammanagement-rooms .svg{
+	position:fixed;
+	top: 40%;
+	left: 40%;
+	width:350px;
+	height:350px;
+	background:white;
+	overflow: hidden;
+	z-index:1000;
+	display:none;
+	border: 2px solid black;
+
+}
+
+#show:hover + .svg{
+ 	display:block;
+}
+
+svg {
+	transition: -webkit-transform 0.25s ease;
+}
+
+svg:active {
+    background-color: white;
+	-webkit-transform: scale(2);
+}

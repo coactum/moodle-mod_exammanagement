@@ -55,12 +55,11 @@ class chooseRoomsForm extends moodleform {
 		$mform->addElement('html', '<p class="choose">Räume für die Prüfung auswählen (Standardräume oder Benutzerdefinierte).</p><p class="import">Neue Räume als Standardräume importieren.</p>');	
 		
 		###### chooseRooms ######
-		$mform->addElement('html', '<div class="choose"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-3"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div></div>');
+		$mform->addElement('html', '<div class="choose exammanagement-rooms"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-3"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div></div>');
 
  		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
- 		$allRoomIDs= $obj->getallRoomIDs('Array');
+ 		$allRoomIDs= $obj->getAllRoomIDsSortedByName();
  		$checkedRoomIDs = $obj->getSavedRooms();
- 		var_dump($checkedRoomIDs);
  
  		$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 		$mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));			
@@ -71,8 +70,11 @@ class chooseRoomsForm extends moodleform {
 				$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 				$mform->addElement('advcheckbox', 'rooms['.$value.']', $obj->getRoomObj($value)->name, null, array('group' => 1));
 				$mform->addElement('html', '</div><div class="col-xs-3"> '.$obj->getRoomObj($value)->description.' </div>');
-				$mform->addElement('html', '<div class="col-xs-3"> '.$obj->getRoomObj($value)->seatingplan.' </div>');
-				$mform->addElement('html', '<div class="col-xs-3"> Standardraum </div></div>');
+				$mform->addElement('html', '<div class="col-xs-3">');
+				if ($obj->getRoomObj($value)->seatingplan){
+					$mform->addElement('html', '<a id="show" href="#">Ja</a><div class="svg hidden">'.$obj->getRoomObj($value)->seatingplan.'</div>');
+				}
+				$mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div></div>');
 
 				if($checkedRoomIDs){
 					foreach($checkedRoomIDs as $key2 => $value2){
