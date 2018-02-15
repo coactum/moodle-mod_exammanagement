@@ -75,6 +75,8 @@ class chooseRoomsForm extends moodleform {
 				$mform->addElement('html', '<div class="col-xs-3">');
 				if ($obj->getRoomObj($value)->seatingplan){
 					$mform->addElement('html', '<a id="show" href="#">Ja</a><div class="svg hidden">'.$obj->getRoomObj($value)->seatingplan.'</div>');
+				} else {
+					$mform->addElement('html', ' Nein ');
 				}
 				$mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div></div>');
 

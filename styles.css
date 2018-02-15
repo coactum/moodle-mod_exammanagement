@@ -74,12 +74,3 @@
 #show:hover + .svg{
  	display:block;
 }
-
-svg {
-	transition: -webkit-transform 0.25s ease;
-}
-
-svg:active {
-    background-color: white;
-	-webkit-transform: scale(2);
-}

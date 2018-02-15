@@ -270,7 +270,11 @@ class exammanagementInstance{
 				
 				foreach ($roomsArray as $key => $value){
 					$temp = $this->getRoomObj($value);
-					array_push($roomNames, $temp->name);
+					
+					if ($temp){
+						array_push($roomNames, $temp->name);
+						}
+					
 					}
 				
 				asort($roomNames);
@@ -319,7 +323,7 @@ class exammanagementInstance{
 		}
 	}
 	
-	#### Moodle DB functions #####
+	#### wrapped Moodle DB functions #####
 	
 	protected function getFieldFromDB($table, $fieldname, $condition){
 		global $DB;
@@ -503,16 +507,28 @@ class exammanagementInstance{
 	
 	public function addDefaultRooms(){
 		
+		global $CFG;
+		
 		$records= array();
 		
-		$roomObj = new stdClass();
-		$roomObj->name='test';
-		$roomObj->description='test';
-		$roomObj->seatingplan='test';
-		$roomObj->places='test';
-		$roomObj->misc='';
+		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.csv');
 		
-		array_push($records, $roomObj);
+		foreach ($defaultRoomsFile as $key => $roomstr){
+			
+			$roomParameters=explode('+', $roomstr);
+			
+			var_dump($roomParameters[2]); //testing
+			
+			$roomObj = new stdClass();
+			$roomObj->name=$roomParameters[0];
+ 			$roomObj->description=$roomParameters[1];
+ 			$roomObj->seatingplan=$roomParameters[2];
+ 			$roomObj->places=$roomParameters[3];
+ 			$roomObj->misc=NULL;
+ 		
+ 			array_push($records, $roomObj);
+		
+		}
 		
 		$this->InsertBulkRecordsInDB('exammanagement_rooms', $records);
 		
