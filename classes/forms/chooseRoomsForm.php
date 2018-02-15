@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing dateForm for exammanagement
+ * class containing chooseRoomsForm for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -42,22 +42,24 @@ class chooseRoomsForm extends moodleform {
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
  
+		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+		
         $mform = $this->_form; // Don't forget the underscore! 
         
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
 		
-		$mform->addElement('html', '<div class="row"><div class="col-xs-8">');
+		$mform->addElement('html', '<div class="row"><div class="col-xs-6">');
 		$mform->addElement('html', '<h3 class="choose">Räume auswählen</h3>');
-		$mform->addElement('html', '<h3 class="import">Neue Standardräume hinzufügen</h3>');
+		$mform->addElement('html', '<h3 class="import">Neue Räume hinzufügen</h3>');
 
-		$mform->addElement('html', '</div><div class="col-xs-4"><button type="button" id="switch_mode_rooms" class="btn btn-primary" title="Umschalten zwischen Raumwahl und -import"><span class="import">Raumwahl</span><span class="choose">Import von neuen Standardräumen</span></button></div></div>');
-		$mform->addElement('html', '<p class="choose">Räume für die Prüfung auswählen (Standardräume oder Benutzerdefinierte).</p><p class="import">Neue Räume als Standardräume importieren.</p>');	
+		$mform->addElement('html', '</div><div class="col-xs-6"><button type="button" id="switch_mode_rooms" class="btn btn-primary" title="Umschalten zwischen Raumwahl und -import"><span class="import">Raumwahl</span><span class="choose">Neue Räume hinzufügen</span></button>');
+		$mform->addElement('html', '<a href="'.$obj->getModuleUrl("addDefaultRooms").'" class="btn btn-primary import" title="Standardräume import"><span>Standardräume importieren</span></a></div>');
+		$mform->addElement('html', '<p class="choose">Räume für die Prüfung auswählen (Standardräume oder Benutzerdefinierte).</p><p class="import">Neue Prüfungsräume anlegen.</p>');	
 		
 		###### chooseRooms ######
 		$mform->addElement('html', '<div class="choose exammanagement-rooms"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-3"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div></div>');
 
- 		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
  		$allRoomIDs= $obj->getAllRoomIDsSortedByName();
  		$checkedRoomIDs = $obj->getSavedRooms();
  

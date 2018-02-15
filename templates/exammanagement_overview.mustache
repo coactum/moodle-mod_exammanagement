@@ -212,8 +212,15 @@
             <i class="fa fa-square-o" aria-hidden="true"></i>
             <div class="card">
               <div class="card-block">
-                {{#hrexamtime}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8"> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> in Raum XX.XX.</span></div>{{/hrexamtime}}
-                {{^hrexamtime}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/hrexamtime}}
+                <div class="row">
+                    <h4 class="card-title col-sm-6">Prüfungstermin:</h4>
+                    <span class="col-sm-6">
+                      {{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
+                      {{#hrexamtime}}{{#roomnames}} | {{/roomnames}}{{/hrexamtime}}
+                      {{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
+                      {{^hrexamtime}}{{^roomnames}}<p class="card-title">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
+                    </span>
+                </div>
               </div>
             </div>
           </li>

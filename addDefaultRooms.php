@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * choose rooms for mod_exammanagement.
+ * adds default rooms for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -35,4 +35,4 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-$p->outputchooseRoomsPage();
+$p->addDefaultRooms();

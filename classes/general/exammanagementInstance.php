@@ -27,7 +27,7 @@ namespace mod_exammanagement\general;
 defined('MOODLE_INTERNAL') || die();
 use context_module;
 use tcpdf;
-
+use \stdClass;
 
 /**
  * class containing all general functions for exammanagement
@@ -82,14 +82,14 @@ class exammanagementInstance{
 	
 	}
 	
-	#### multiple #####
+	#### wrapped general moodle functions #####
 			
 	protected function setPage($substring){
 		global $PAGE;
 		
 		// Print the page header.
 		$PAGE->set_url('/mod/exammanagement/'.$substring.'.php', array('id' => $this->cm->id));
-		$PAGE->set_title(format_string($this->moduleinstance->name).' ('.get_string('modulename','mod_exammanagement').')');
+		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($this->moduleinstance->name));
 		$PAGE->set_heading(format_string($this->course->fullname));
 		$PAGE->set_context($this->modulecontext);
 
@@ -124,11 +124,19 @@ class exammanagementInstance{
 	
  	}
  	
- 	public function redirectToOverviewPage($message, $type){
-		global $CFG;
+ 	public function getModuleUrl($component){
+ 		
+ 		global $CFG;
 		
-		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
-	
+ 		$url=$CFG->wwwroot.'/mod/exammanagement/'.$component.'.php?id='.$this->id;
+ 		
+ 		return $url;
+ 	}
+ 	
+ 	public function redirectToOverviewPage($message, $type){
+		
+		$url = $this->getModuleUrl('view');
+		
 		switch ($type) {
     		case 'success':
         		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
@@ -161,7 +169,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -243,11 +251,34 @@ class exammanagementInstance{
 	}
 	
 	public function getRoomsCount(){
-		$rooms=$this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
 		if ($rooms){
-				$temp= explode(",", $rooms);
-				$roomsCount=count($temp);
+				$temp = explode(",", $rooms);
+				$roomsCount = count($temp);
 				return $roomsCount;
+			} else {
+				return '';
+		}
+	}
+	
+	public function getChoosenRoomNames(){
+		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$roomNames = array();
+		
+		if ($rooms){
+				$roomsArray = explode(",", $rooms);
+				
+				foreach ($roomsArray as $key => $value){
+					$temp = $this->getRoomObj($value);
+					array_push($roomNames, $temp->name);
+					}
+				
+				asort($roomNames);
+				
+				$roomsStr = implode(", ", $roomNames);
+				
+				return $roomsStr;
+				
 			} else {
 				return '';
 		}
@@ -288,7 +319,7 @@ class exammanagementInstance{
 		}
 	}
 	
-	#### DB #####
+	#### Moodle DB functions #####
 	
 	protected function getFieldFromDB($table, $fieldname, $condition){
 		global $DB;
@@ -320,6 +351,12 @@ class exammanagementInstance{
 		return $DB->update_record($table, $obj);
 	}
 	
+	protected function InsertBulkRecordsInDB($table, $dataobjects){
+		global $DB;
+		
+		$DB->insert_records($table, $dataobjects);
+	}
+	
 	######### feature: chooseRooms ##########
 	
 	public function outputchooseRoomsPage(){
@@ -334,13 +371,13 @@ class exammanagementInstance{
 	
 	protected function saveRooms($roomsArr){
 		
-			$rooms=implode(',', $roomsArr);;
+		$rooms=implode(',', $roomsArr);;
 			
-			$this->moduleinstance->rooms=$rooms;
+		$this->moduleinstance->rooms=$rooms;
 	
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	
-			$this->redirectToOverviewPage('Räume für die Prüfung wurden ausgewählt', 'success');
+		$this->redirectToOverviewPage('Räume für die Prüfung wurden ausgewählt', 'success');
 
 	}
 	
@@ -407,12 +444,11 @@ class exammanagementInstance{
 			foreach ($roomsArray as $key => $value){
 				if ($value==1){
 					array_push($rooms, $key);
-					var_dump($rooms);	
 				}
 				
 			}
 			
-			asort($rooms); //sort checked roomes ids for saving in DB
+			sort($rooms); //sort checked roomes ids for saving in DB
 			
 			return $rooms;
 	
@@ -461,6 +497,27 @@ class exammanagementInstance{
 			} else {
 				return '';
 		}
+	}
+	
+	############## feature: add default rooms ############
+	
+	public function addDefaultRooms(){
+		
+		$records= array();
+		
+		$roomObj = new stdClass();
+		$roomObj->name='test';
+		$roomObj->description='test';
+		$roomObj->seatingplan='test';
+		$roomObj->places='test';
+		$roomObj->misc='';
+		
+		array_push($records, $roomObj);
+		
+		$this->InsertBulkRecordsInDB('exammanagement_rooms', $records);
+		
+		$this->redirectToOverviewPage('Standardräume angelegt', 'success');
+		
 	}
 	
 	############## feature: setDateTime #########
@@ -569,7 +626,7 @@ class exammanagementInstance{
 				
 			}
 			
-			asort($participants); //sort checked participants ids for saving in DB
+			sort($participants); //sort checked participants ids for saving in DB
 			
 			return $participants;
 	

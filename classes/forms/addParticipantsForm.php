@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing dateForm for exammanagement
+ * class containing addParticipantsForm for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
