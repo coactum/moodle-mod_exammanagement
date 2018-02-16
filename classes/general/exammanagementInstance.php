@@ -169,7 +169,7 @@ class exammanagementInstance{
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -287,6 +287,34 @@ class exammanagementInstance{
 				return '';
 		}
 	}
+	
+	public function isStateOfPlacesCorrect(){
+		
+		$StateOfPlaces = $this->getStateOfPlaces();
+		
+		if ($StateOfPlaces == 'set'){
+			return true;
+		
+		} else {
+			return false;
+		
+		}
+		
+	}
+	
+	public function isStateOfPlacesError(){
+		
+		$StateOfPlaces = $this->getStateOfPlaces();
+		
+		if ($StateOfPlaces == 'error'){
+			return true;
+		
+		} else {
+			return false;
+		
+		}
+		
+	}
  	
  	protected function checkPhaseCompletion($phase){
  	
@@ -295,9 +323,15 @@ class exammanagementInstance{
 			case 1:
 				if ($this->getRoomsCount()&&$this->getExamtime()&&$this->getParticipantsCount()){
 					return true;
+					} else {
+						return false;
 					}
 			case 2:
-				return false;
+				if ($this->isStateOfPlacesCorrect()){
+					return true;
+					} else {
+						return false;
+					}
 			case 3:
 				return false;
 			case 4:
@@ -919,11 +953,81 @@ class exammanagementInstance{
 	
 	}
 	
+	########### assign places #######
+	
+	public function assignPlaces(){
+	
+		$choosenRoomsArray = $this->getSavedRooms();
+		$UserIDsArray = $this->getSavedParticipants();
+		
+		if(!$choosenRoomsArray){
+			$this->unsetStateOfPlaces('error');
+			$this->redirectToOverviewPage('Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+		
+		} elseif(!$UserIDsArray){
+			$this->unsetStateOfPlaces('error');
+			$this->redirectToOverviewPage('Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+		
+		}
+		
+		foreach($choosenRoomsArray as $key => $roomID){
+			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
+			
+			$Places = json_decode($RoomObj->places);	//get Places of this Room
+			
+			foreach($Places as $key => $placeID){
+				$currentUserID = array_pop($UserIDsArray);
+				
+				$this->assignPlaceToUser($currentUserID, $placeID);
+				
+				if(!$UserIDsArray){						//if all users have a place: stop
+					break;
+				}
+			}
+		}
+		
+		if($UserIDsArray){								//if users are left without a room
+			var_dump($UserIDsArray);
+			$this->unsetStateOfPlaces('error');
+			$this->redirectToOverviewPage('Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+		
+		}
+	
+		$this->moduleinstance->stateofplaces='set';
+						
+		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		
+		$this->redirectToOverviewPage('Plätze zugewiesen', 'success');
+	
+	}
+	
+	protected function assignPlaceToUser($userid, $place){
+		
+		echo $userid.' sitz nun an Platz '.$place.'<br>'; //to be changed into saving this pairings into DB
+	}
+	
+	protected function unsetStateofPlaces($type){
+		$this->moduleinstance->stateofplaces=$type;
+		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	}
+	
+	protected function getStateOfPlaces(){
+		
+		$StateOfPlaces = $this->getFieldFromDB('exammanagement','stateofplaces', array('id' => $this->cm->instance));
+		
+		return $StateOfPlaces;
+		
+	}
+	
 	########### Export PDFS ####
 	
 	public function exportDemoPDF(){
 		
 		global $CFG;
+		
+		if(!$this->getStateOfPlaces()){
+			$this->redirectToOverviewPage('Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+		}
 			
 		//============================================================+
 		// File name   : example_001.php

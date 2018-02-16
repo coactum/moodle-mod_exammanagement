@@ -48,6 +48,8 @@ class exammanagement_overview implements renderable, templatable {
     protected $participants;
     protected $rooms;
     protected $roomnames;
+    protected $stateofplacescorrect;
+    protected $stateofplaceserror;
 
 
 
@@ -56,7 +58,7 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants, $rooms, $roomnames) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -67,7 +69,8 @@ class exammanagement_overview implements renderable, templatable {
         $this->participants = $participants;
         $this->rooms = $rooms;
         $this->roomnames = $roomnames;
-
+        $this->stateofplacescorrect = $stateofplacescorrect;
+        $this->stateofplaceserror = $stateofplaceserror;
     }
 
     /**
@@ -88,6 +91,8 @@ class exammanagement_overview implements renderable, templatable {
         $data->participants = $this->participants;
         $data->rooms = $this->rooms;
         $data->roomnames = $this->roomnames;
+        $data->stateofplacescorrect = $this->stateofplacescorrect;
+        $data->stateofplaceserror = $this->stateofplaceserror;
         return $data;
     }
 
