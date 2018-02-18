@@ -17,6 +17,8 @@
           <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
           <FIELD NAME="temprooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temp rooms for exammanagement instance as json array"/>
           <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
+          <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
+          <FIELD NAME="roomplacevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>

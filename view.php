@@ -33,11 +33,21 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+// relevant if called from itself and information is set visible for users
+$datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
+
+$roomplacevisible = optional_param('roomplacevisible', 0, PARAM_RAW);
+
+$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_INT);
+
+$calledfromformrp = optional_param('calledfromformrp', 0, PARAM_INT);
+
+
 //$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 $p->startEvent('view');
-$p->outputOverviewPage();
+$p->outputOverviewPage($datetimevisible, $roomplacevisible, $calledfromformdt, $calledfromformrp);
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)

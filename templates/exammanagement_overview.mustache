@@ -23,7 +23,18 @@
     }
 }}
 
-<form>
+{{#js}}
+require(['jquery'], function($) {
+  $("#datetimevisible input").click(function () {
+      $('#datetimevisible').submit();
+  });
+
+  $("#roomplacevisible input").click(function () {
+      $('#roomplacevisible').submit();
+  });
+});
+{{/js}}
+
    <div class="container-fluid">
       <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>
 
@@ -159,39 +170,51 @@
                         </div>
                     </div>
                     <div class="row row-eq-height">
-                        <div class="card col-md-6">
+                      <div class="card col-md-6">
+                        <form id="datetimevisible" action="view.php">
                           <div class="card-body">
                             <div class="card-header m-b-1">
-                              <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a>
+                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
+                              <input type="hidden" name="id" value="{{cmid}}"/>
+                              <input type="hidden" name="calledfromformdt" value="true"/>
+                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten</span>
                             </div>
                             <div class="card-text">
-                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
+                              {{#datetimevisible}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
+                              {{^datetimevisible}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
                             </div>
                           </div>
-                        </div>
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-barcode" aria-hidden="true"></i> <a href="">Prüfungsetiketten exportieren (optional)</a>
-                            </div>
-                            <div class="card-text">
-                              <p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
-                            </div>
+                        </form>
+                      </div>
+                      <div class="card col-md-6">
+                        <div class="card-body">
+                          <div class="card-header m-b-1">
+                            <i class="fa fa-barcode" aria-hidden="true"></i> <a href="">Prüfungsetiketten exportieren (optional)</a>
+                          </div>
+                          <div class="card-text">
+                            <p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
                           </div>
                         </div>
+                      </div>
                     </div>
                     <div class="row row-eq-height">
-                        <div class="card col-md-6">
+                      <div class="card col-md-6">
+                        <form id="roomplacevisible" action="view.php">
                           <div class="card-body">
                             <div class="card-header m-b-1">
-                              <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a>
+                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomplacevisible" value="true"  {{#roomplacevisible}}checked {{/roomplacevisible}}><span class="exammanagement-slider round"></span></label>
+                              <input type="hidden" name="id" value="{{cmid}}"/>
+                              <input type="hidden" name="calledfromformrp" value="true"/>
+                              <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten</span>
                             </div>
                             <div class="card-text">
-                              <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
+                              {{#roomplacevisible}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
+                              {{^roomplacevisible}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
                             </div>
                           </div>
-                        </div>
-                        <div class="card col-md-6">
+                        </form>
+                      </div>
+                      <div class="card col-md-6">
                           <div class="card-body">
                             <div class="card-header m-b-1">
                               <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Teilnehmerlisten exportieren (optional)
@@ -203,7 +226,7 @@
                               <div class="row"><a href="#" class="btn btn-info col-sm-4">Name</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4">Sitzplatz</a></div>
                             </div>
                           </div>
-                        </div>
+                      </div>
                     </div>
                   </div>
               </div>

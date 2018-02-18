@@ -158,18 +158,30 @@ class exammanagementInstance{
 
 
 	#### overview ####
-	public function outputOverviewPage(){
+	public function outputOverviewPage($datetimevisible, $roomplacevisible , $calledfromformdt, $calledfromformrp){
 	
 		global $PAGE;
 		
 		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
 		
+		echo 'test: '.$datetimevisible.$roomplacevisible;
+		
+		if($calledfromformdt){
+			$this-saveStateOfDateTimeVisibility($datetimevisible);
+			
+		}
+		
+		if($calledfromformrp){
+			$this-saveStateOfRoomPlaceVisibility($roomplacevisible);
+
+		}
+
 		$this->setPage('view');
-		$this-> outputPageHeader();
+		$this-> outputPageHeader();	
 				
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError()); 
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError(), $this->isDateTimeVisible(),$this->isRoomPlaceVisible()); 
 		echo $output->render($page);
 		
 		$this->debugElementsOverview();
@@ -327,7 +339,7 @@ class exammanagementInstance{
 						return false;
 					}
 			case 2:
-				if ($this->isStateOfPlacesCorrect()){
+				if ($this->isStateOfPlacesCorrect()&&$this->isDateTimeVisible()&&$this->isRoomPlaceVisible()){
 					return true;
 					} else {
 						return false;
@@ -535,6 +547,22 @@ class exammanagementInstance{
 			} else {
 				return '';
 		}
+	}
+	
+	protected function isDateTimeVisible(){
+		
+		$isDateTimeVisible = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+		
+		return $isDateTimeVisible;
+		
+	}
+	
+	protected function isRoomPlaceVisible(){
+		
+		$isRoomPlaceVisible = $this->getFieldFromDB('exammanagement','roomplacevisible', array('id' => $this->cm->instance));
+		
+		return $isRoomPlaceVisible;
+		
 	}
 	
 	############## feature: add default rooms ############
@@ -1019,13 +1047,41 @@ class exammanagementInstance{
 		
 	}
 	
+	########### show Information to users ##############
+	
+	protected function saveStateOfDateTimeVisibility($fromform){
+		
+			$DateTimeVisible=$fromform;
+			
+			$this->moduleinstance->datetimevisible=$DateTimeVisible;
+			
+			var_dump($DateTimeVisible);
+				
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage('Informationen sichtbar geschaltet', 'success');
+
+	}
+	
+	protected function saveStateOfRoomPlaceVisibility($fromform){
+		
+			$RoomPlaceVisible=$fromform;
+			
+			$this->moduleinstance->datetimevisible=$RoomPlaceVisible;
+				
+			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+	
+			$this->redirectToOverviewPage('Informationen sichtbar geschaltet', 'success');
+
+	}
+	
 	########### Export PDFS ####
 	
 	public function exportDemoPDF(){
 		
 		global $CFG;
 		
-		if(!$this->getStateOfPlaces()){
+		if(!$this->isStateOfPlacesCorrect() || !$this->isStateOfPlacesError()){
 			$this->redirectToOverviewPage('Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
 		}
 			
