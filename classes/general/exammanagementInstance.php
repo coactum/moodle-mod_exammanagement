@@ -863,7 +863,13 @@ class exammanagementInstance{
 		  // or on the first display of the form.
  
 		  //Set default data (if any)
-		  $mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
+		  
+		  if ($this->getTextFromTextfield() && $this->getFormatFromTextfield()){
+		 		$mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
+		  } else {
+				$mform->set_data(array('id'=>$this->id));
+		  }
+		  
 		  
 		  //displays the form
 		  $mform->display();
