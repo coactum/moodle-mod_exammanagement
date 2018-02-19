@@ -1055,13 +1055,9 @@ class exammanagementInstance{
 
 	########### show Information to users ##############
 
-	protected function saveStateOfDateTimeVisibility($fromform){
+	protected function saveStateOfDateTimeVisibility($datetimevisible){
 
-			$DateTimeVisible=$fromform;
-
-			$this->moduleinstance->datetimevisible=$DateTimeVisible;
-
-			var_dump($DateTimeVisible);
+			$this->moduleinstance->datetimevisible=$datetimevisible;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
@@ -1069,11 +1065,9 @@ class exammanagementInstance{
 
 	}
 
-	protected function saveStateOfRoomPlaceVisibility($fromform){
+	protected function saveStateOfRoomPlaceVisibility($roomplacevisible){
 
-			$RoomPlaceVisible=$fromform;
-
-			$this->moduleinstance->datetimevisible=$RoomPlaceVisible;
+			$this->moduleinstance->roomplacevisible=$roomplacevisible;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 

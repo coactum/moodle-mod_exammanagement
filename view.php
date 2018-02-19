@@ -47,7 +47,7 @@ $calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 $p->startEvent('view');
-$p->outputOverviewPage($datetimevisible, $roomplacevisible, $calledfromformdt, $calledfromformrp);
+$p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)
