@@ -38,9 +38,9 @@ $datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
 
 $roomplacevisible = optional_param('roomplacevisible', 0, PARAM_RAW);
 
-$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_INT);
+$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
 
-$calledfromformrp = optional_param('calledfromformrp', 0, PARAM_INT);
+$calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 
 
 //$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
