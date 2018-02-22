@@ -164,8 +164,6 @@ class exammanagementInstance{
 
 		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
 
-		echo 'test: calledfromformdt '.$calledfromformdt.' calledfromformrp  '. $calledfromformrp.' datetimevisible '.$datetimevisible.'roomplacevisible'.$roomplacevisible;
-
 		if($calledfromformdt){
 			$this->saveStateOfDateTimeVisibility($datetimevisible);
 
