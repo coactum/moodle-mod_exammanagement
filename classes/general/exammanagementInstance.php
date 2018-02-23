@@ -156,6 +156,22 @@ class exammanagementInstance{
 		}
 	}
 
+	public function ConcatHelptextStr($langstr){
+
+		$helptextstr= '';
+		$helptextstr.= '<div class="alert alert-info alert-dismissible fade in" role="alert">';
+		$helptextstr.= '<div class="row">';
+		$helptextstr.= '<h4 class="alert-heading col-xs-11">'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
+		$helptextstr.= '<button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		$helptextstr.= '</div>';
+		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement').'</p>';
+		$helptextstr.= '<hr>';
+		$helptextstr.= '<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
+		$helptextstr.= '</div>';
+
+		return $helptextstr;
+
+	}
 
 	#### overview ####
 	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
@@ -613,8 +629,15 @@ class exammanagementInstance{
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Uhrzeit und Datum erfolgreich gesetzt', 'success');
+			$this->redirectToOverviewPage('Datum und Uhrzeit erfolgreich gesetzt', 'success');
 
+	}
+
+	protected function resetDateTime(){
+
+		$this->UpdateRecordInDB("exammanagement", NULL);
+
+		$this->redirectToOverviewPage('Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
 	}
 
 	protected function buildDateTimeForm(){
@@ -632,7 +655,12 @@ class exammanagementInstance{
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-		  $this->saveDateTime($fromform->examtime);
+
+			if (!empty($fromform->resetdatetime)) { // not working
+    		$this->resetDateTime();
+  		} else {
+				$this->saveDateTime($fromform->examtime);
+			}
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

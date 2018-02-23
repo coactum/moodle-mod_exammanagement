@@ -21,7 +21,7 @@
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 namespace mod_exammanagement\general\forms;
 use moodleform;
 
@@ -30,22 +30,27 @@ defined('MOODLE_INTERNAL') || die();
 //moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
- 
+
 class dateTimeForm extends moodleform {
-    
+
     //Add elements to form
     public function definition() {
- 
-        $mform = $this->_form; // Don't forget the underscore! 
- 
+
+        $mform = $this->_form; // Don't forget the underscore!
+
+        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $mform->addElement('html', $obj->ConcatHelptextStr('setDateTime'));
+
         $mform->addElement('html', '<h3>Prüfungstermin festlegen</h3>');
- 		$mform->addElement('html', '<p>Datum und Uhrzeit der Prüfung setzen.</p>'); 		
+ 		    $mform->addElement('html', '<div class="row"><p class="col-xs-8">Datum und Uhrzeit der Prüfung setzen.</p><span class="col-xs-4">');
+        $mform->addElement('button', 'resetdatetime', get_string("resetDateTime", "mod_exammanagement"));
+        $mform->addElement('html', '</span></div>');
         $mform->addElement('date_time_selector', 'examtime', '');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
     }
-    
+
     //Custom validation should be added here
     function validation($data, $files) {
         return array();

@@ -27,15 +27,25 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
-$string['overview']= 'Overview';
+$string['overview'] = 'Overview';
+
+//dateTimeForm.php
+
+$string['resetDateTime'] = 'Reset appointment'; 
+
+//helptexts
+$string['helptext_str'] = 'Help text';
+$string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';
+$string['helptext_setDateTime']= 'Here goes the description of this feature site.';
+
+//error
+$string['missingidandcmid'] = 'Course id missing (missingcmid)';
 
 //universal
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
-$string['helptext_str'] = 'Help text';
-$string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 
 //addnewinstance
 $string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
