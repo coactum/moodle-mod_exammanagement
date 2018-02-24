@@ -21,7 +21,7 @@
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 namespace mod_exammanagement\general\forms;
 use moodleform;
 
@@ -30,33 +30,36 @@ defined('MOODLE_INTERNAL') || die();
 //moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
- 
+
 class groupmessagesForm extends moodleform {
-    
+
     //Add elements to form
     public function definition() {
- 
-        $mform = $this->_form; // Don't forget the underscore! 
- 
- 		$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
- 		
- 		$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
- 		$participantsCount = $obj->getParticipantsCount();
- 		
+
+        $mform = $this->_form; // Don't forget the underscore!
+
+        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $mform->addElement('html', $obj->ConcatHelptextStr('sendGroupmessages'));
+
+     	$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
+
+     	$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+     	$participantsCount = $obj->getParticipantsCount();
+
  		if($participantsCount){
- 		
-			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen '.$participantsCount.' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
-			$mform->addElement('textarea', 'groupmessages_subject', 'Betreff', 'wrap="virtual" rows="1" cols="50"');
-			$mform->addElement('textarea', 'groupmessages_content', 'Inhalt', 'wrap="virtual" rows="10" cols="50"');
+
+			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen <strong>'.$participantsCount.'</strong> zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
+			$mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
+			$mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,'Mail abschicken');
-		}
+		    }
 		else{
-			$obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
-		}
-    }
-    
+		    $obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+	   		}
+        }
+
     //Custom validation should be added here
     function validation($data, $files) {
         return array();

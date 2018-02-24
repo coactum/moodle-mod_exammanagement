@@ -41,8 +41,7 @@ class dateTimeForm extends moodleform {
         $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $mform->addElement('html', $obj->ConcatHelptextStr('setDateTime'));
 
-        $mform->addElement('html', '<h3>Prüfungstermin festlegen</h3>');
- 		    $mform->addElement('html', '<div class="row"><p class="col-xs-8">Datum und Uhrzeit der Prüfung setzen.</p><span class="col-xs-4">');
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-8">Prüfungstermin festlegen</h3><span class="col-xs-4">');
         $mform->addElement('button', 'resetdatetime', get_string("resetDateTime", "mod_exammanagement"));
         $mform->addElement('html', '</span></div>');
         $mform->addElement('date_time_selector', 'examtime', '');

@@ -31,13 +31,16 @@ $string['overview'] = 'Overview';
 
 //dateTimeForm.php
 
-$string['resetDateTime'] = 'Reset appointment'; 
+$string['resetDateTime'] = 'Reset appointment';
 
 //helptexts
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';
+$string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
+$string['helptext_setTextfield']= 'Here goes the description of this feature site.';
+$string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 
 //error
 $string['missingidandcmid'] = 'Course id missing (missingcmid)';

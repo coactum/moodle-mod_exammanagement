@@ -21,7 +21,7 @@
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 namespace mod_exammanagement\general\forms;
 use moodleform;
 
@@ -30,24 +30,27 @@ defined('MOODLE_INTERNAL') || die();
 //moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
- 
+
 class textfieldForm extends moodleform {
-    
+
     //Add elements to form
     public function definition() {
- 
-        $mform = $this->_form; // Don't forget the underscore! 
- 
- 		$mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
- 		$mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');
- 		$mform->addElement('editor', 'textfield', '');
-		$mform->setType('textfield', PARAM_RAW);		
-        //$mform->addElement('textarea', 'textfield', '', 'wrap="virtual" rows="20" cols="50"');
+
+        $mform = $this->_form; // Don't forget the underscore!
+
+        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $mform->addElement('html', $obj->ConcatHelptextStr('setTextfield'));
+
+ 		    $mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
+ 		    $mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');
+ 		    $mform->addElement('editor', 'textfield', '');
+		    $mform->setType('textfield', PARAM_RAW);
+
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
     }
-    
+
     //Custom validation should be added here
     function validation($data, $files) {
         return array();
