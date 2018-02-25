@@ -589,18 +589,34 @@ class exammanagementInstance{
 
 		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.csv');
 
+		var_dump($defaultRoomsFile);
+
 		foreach ($defaultRoomsFile as $key => $roomstr){
 
-			$roomParameters=explode('+', $roomstr);
+			$roomParameters=explode(':', $roomstr);
 
 			var_dump($roomParameters[2]); //testing
 
 			$roomObj = new stdClass();
 			$roomObj->name=$roomParameters[0];
  			$roomObj->description=$roomParameters[1];
- 			$roomObj->seatingplan=$roomParameters[2];
- 			$roomObj->places=$roomParameters[3];
- 			$roomObj->misc=NULL;
+
+			$svgAsBase64 = 'data:image/svg+xml;base64,'.$roomParameters[2];
+
+			if(strstr($svgAsBase64, 'image/svg+xml')){
+					$svgStr = base64_decode(substr($svgAsBase64, strlen('data:image/svg+xml;base64,')));
+			} else if (strstr($svgAsBase64,'image/png')){	// not needed at the moment
+					$svgStr = base64_decode(substr($svgAsBase64, strlen('data:image/png;base64,')));
+			}	else {
+					$svgStr ='';
+					echo "Plugin Error: Unknown file type.";
+			}
+
+			var_dump($svgStr);
+
+ 			$roomObj->seatingplan = $svgStr;
+ 			$roomObj->places = $roomParameters[3];
+ 			$roomObj->misc = NULL;
 
  			array_push($records, $roomObj);
 

@@ -39,6 +39,7 @@ $string['helptext_link'] = 'A detailed explanation of the mentioned elements and
 $string['helptext_overview']= 'Here goes the description of this feature site.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
+$string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 
