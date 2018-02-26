@@ -33,19 +33,44 @@ require(['jquery'], function($) {
       $('#roomplacevisible').submit();
   });
 });
+
+showMore = function() {
+
+			helptextboxcontent = jQuery.find('.helptextboxcontent');
+			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
+
+			helptextbox = jQuery.find('.helptextbox');
+			jQuery(helptextbox).css({
+			      "height": jQuery(helptextbox).height(),
+			      "max-height": 9999
+			    })
+			    .animate({
+			      "height": helptextboxcontentheight
+			    });
+
+
+			readMore = jQuery.find('.read-more');
+			jQuery(readMore).fadeOut();
+			return false;	    
+		};
 {{/js}}
 
    <div class="container-fluid">
       <div class="alert alert-info alert-dismissible fade in" role="alert">
-          <div class="row">
-              <h4 class="alert-heading col-xs-11">{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
-              <button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
+          <div class="helptextbox">
+    		      <div class="helptextboxcontent">
+                  <div class="row">
+                      <h4 class="alert-heading col-xs-11">{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
+                      <button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
+                  <hr>
+                  <p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>
+                  <p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p>
+              </div>
           </div>
-          <p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
-          <hr>
-          <p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>
       </div>
 
       <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>

@@ -134,9 +134,26 @@ input:checked + .exammanagement-slider:before {
 
 .exammanagement-slider.round:before {
   border-radius: 50%;
-} 
+}
 
 .exammanagement-showInformationText {
   position: absolute;
   left: 70px;
-} 
+}
+
+.helptextbox{
+  max-height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.helptextbox .read-more {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 100px 0 0px;
+    background-image: linear-gradient(to bottom, transparent, #d9edf7);
+}
