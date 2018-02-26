@@ -71,13 +71,19 @@ class chooseRoomsForm extends moodleform {
 
  		if ($allRoomIDs){
 			foreach($allRoomIDs as $key => $value){
+
+        $roomObj=$obj->getRoomObj($value);
 				$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-				$mform->addElement('advcheckbox', 'rooms['.$value.']', $obj->getRoomObj($value)->name, null, array('group' => 1));
-				$mform->addElement('html', '</div><div class="col-xs-3"> '.$obj->getRoomObj($value)->description.' </div>');
+				$mform->addElement('advcheckbox', 'rooms['.$value.']', $roomObj->name, null, array('group' => 1));
+				$mform->addElement('html', '</div><div class="col-xs-3"> '.$roomObj->description.' </div>');
 				$mform->addElement('html', '<div class="col-xs-3">');
-				if ($obj->getRoomObj($value)->seatingplan){
-					$mform->addElement('html', '<a id="show" href="#">Ja</a><div class="svg hidden">'.$obj->getRoomObj($value)->seatingplan.'</div>');
-				} else {
+				if ($roomObj->seatingplan){
+
+          $svgStr = base64_decode($roomObj->seatingplan);
+
+					$mform->addElement('html', '<a id="show" href="#">Ja</a><div class="svg hidden">'.$svgStr.'</div>');
+
+        } else {
 					$mform->addElement('html', ' Nein ');
 				}
 				$mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div></div>');
