@@ -395,6 +395,13 @@ EOF;
 
  	}
 
+	#### participants view ####
+
+	public function test(){
+			var_dump(json_decode($this->getFieldFromDB('exammanagement','assignedPlaces', array('id' => $this->cm->instance))));
+
+	}
+
  	#### events ####
 
  	public function startEvent($type){
@@ -840,12 +847,12 @@ EOF;
 
 	}
 
-	public function getUserMail($userid){
+	public function getUserMatrNr($userid){
 
 		$user = $this->getUser($userid);
-		$usermail = $user->email;
+		$userMatrNr = '-';
 
-		return $usermail;
+		return $userMatrNr;
 
 	}
 
@@ -1062,28 +1069,31 @@ EOF;
 
 		foreach($choosenRoomsArray as $key => $roomID){
 			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
+			$placesStr = '[';
 
 			$Places = json_decode($RoomObj->places);	//get Places of this Room
 
 			foreach($Places as $key => $placeID){
 				$currentUserID = array_pop($UserIDsArray);
 
-				$this->assignPlaceToUser($currentUserID, $placeID);
+				$placesStr .= $this->assignPlaceToUser($currentUserID, $placeID);
 
 				if(!$UserIDsArray){						//if all users have a place: stop
+
 					break;
 				}
 			}
 		}
 
 		if($UserIDsArray){								//if users are left without a room
-			var_dump($UserIDsArray);
 			$this->unsetStateOfPlaces('error');
 			$this->redirectToOverviewPage('Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
 		}
 
 		$this->moduleinstance->stateofplaces='set';
+
+		$this->savePlacesAssignment($placesStr);
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
@@ -1093,7 +1103,19 @@ EOF;
 
 	protected function assignPlaceToUser($userid, $place){
 
-		echo $userid.' sitz nun an Platz '.$place.'<br>'; //to be changed into saving this pairings into DB
+		$placesStr = '{"'.$userid.'":"'.$place.'"}';
+		 return $placesStr;
+	}
+
+	protected function savePlacesAssignment($placesStr){
+
+		$placesStr .=']';
+
+		$this->moduleinstance->assignedplaces=$placesStr;
+
+		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+		$this->test();
 	}
 
 	protected function unsetStateofPlaces($type){

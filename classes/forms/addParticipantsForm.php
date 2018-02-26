@@ -58,7 +58,7 @@ class addParticipantsForm extends moodleform {
 		$mform->addElement('html', '<p class="course">Teilnehmer aus dem Kurs zur Prüfung hinzufügen.</p><p class="file">Teilnehmer aus einer Datei zur Prüfung hinzufügen.</p>');
 
 		###### add Participants from Course ######
-		$mform->addElement('html', '<div class="course"><div class="row"><div class="col-xs-3"><h4>Teilnehmer</h4></div><div class="col-xs-3"><h4>E-Mail bzw. Matrikelnummer</h4></div><div class="col-xs-3"><h4>Gruppen</h4></div><div class="col-xs-3"><h4>Quelle</h4></div></div>');
+		$mform->addElement('html', '<div class="course"><div class="row"><div class="col-xs-3"><h4>Teilnehmer</h4></div><div class="col-xs-3"><h4>Matrikelnummer</h4></div><div class="col-xs-3"><h4>Gruppen</h4></div><div class="col-xs-3"><h4>Quelle</h4></div></div>');
 
  		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
  		$checkedParticipantsIDs = $obj->getSavedParticipants();
@@ -70,7 +70,7 @@ class addParticipantsForm extends moodleform {
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 			$mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$obj->getUserPicture($value).' '.$obj->getUserProfileLink($value), null, array('group' => 1));
-			$mform->addElement('html', '</div><div class="col-xs-3">'.$obj->getUserMail($value).'</div>');
+			$mform->addElement('html', '</div><div class="col-xs-3">'.$obj->getUserMatrNr($value).'</div>');
 			$mform->addElement('html', '<div class="col-xs-3">'.$obj->getParticipantsGroupNames($value).'</div>');
 			$mform->addElement('html', '<div class="col-xs-3"> PANDA Kurs </div></div>');
 
