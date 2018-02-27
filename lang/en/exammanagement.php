@@ -65,5 +65,6 @@ $string['pluginadministration'] = 'exam management administration';
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';
 $string['exammanagement:viewinstance'] = 'View exam organization';
+$string['exammanagement:viewparticipantspage'] = 'View participants page';
 $string['exammanagement:takeexams'] = 'Take exams';
 $string['exammanagement:sendgroupmessage'] = 'Send group message to participants';

@@ -62,7 +62,7 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-    
+
     'mod/exammanagement:viewinstance' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
@@ -76,7 +76,21 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-    
+
+		'mod/exammanagement:viewparticipantspage' => [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
+
     'mod/exammanagement:takeexams'=> [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',

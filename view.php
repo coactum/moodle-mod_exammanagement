@@ -47,7 +47,7 @@ $calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 $p->startEvent('view');
-$p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+$p->determinePageType($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)
@@ -66,11 +66,11 @@ $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $
 //  } else {
 //      print_error(get_string('missingidandcmid', mod_exammanagement));
 //  }
-//  
+//
 //  require_login($course, true, $cm);
-// 
+//
 // $modulecontext = context_module::instance($cm->id);
-// 
+//
 // //events
 // $event = \mod_exammanagement\event\course_module_viewed::create(array(
 //     'objectid' => $moduleinstance->id,
@@ -79,7 +79,7 @@ $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $
 // $event->add_record_snapshot('course', $course);
 // $event->add_record_snapshot('exammanagement', $moduleinstance);
 // $event->trigger();
-// 
+//
 // // Print the page header.
 // $PAGE->set_url('/mod/exammanagement/view.php', array('id' => $cm->id));
 // $PAGE->set_title(format_string($moduleinstance->name).' ('.get_string('modulename','mod_exammanagement').')');
@@ -92,13 +92,13 @@ $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $
  * $PAGE->set_focuscontrol('some-html-id');
  * $PAGE->add_body_class('newmodule-'.$somevar);
  */
- 
+
 // Output starts here.
 // echo $OUTPUT->header();
-// 
+//
 // // set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
 // echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
-// 
+//
 // // Conditions to show the intro can change to look for own settings or whatever.
 //  if ($moduleinstance->intro) {
 //      echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox mod_introbox', 'newmoduleintro');
@@ -111,19 +111,19 @@ $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $
 //}
 //$rolestr = implode(', ', $rolestr);
 // $rolestr='Test';
-// 
-// //check if stages are completed (to be moved to own function) 
+//
+// //check if stages are completed (to be moved to own function)
 // $firststagecompleted = true; //for testing, later to be calculated depending on if all data is set
-// 
+//
 // //get date and time (to be moved to own function
 // $date = $DB->get_field('exammanagement', 'date', array('id' => $cm->instance), '*', MUST_EXIST);
 // $time = $DB->get_field('exammanagement', 'time', array('id' => $cm->instance), '*', MUST_EXIST);
-// 
+//
 // //disassemble $date and $time (to be moved to own function)
-// 
+//
 // if ($date) {
 // 	$datecomponents = explode("-", $date);
-// 
+//
 // 	$day=$datecomponents[2];
 // 	$month=$datecomponents[1];
 // 	$year=$datecomponents[0];
@@ -133,27 +133,27 @@ $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $
 // 	$month='';
 // 	$year='';
 // }
-// 
+//
 // if ($time) {
 // 	$timecomponents = explode(":", $time);
-// 
+//
 // 	$hour=$timecomponents[0];
 // 	$minute=$timecomponents[1];
 // }
-// 
+//
 // else{
 // 	$hour='';
 // 	$minute='';
 // }
-// 	
+//
 // //rendering and displaying basic content (overview).
 // $output = $PAGE->get_renderer('mod_exammanagement');
-// $page = new \mod_exammanagement\output\exammanagement_overview($cm->id, $rolestr, $firststagecompleted, $day, $month, $year, $hour, $minute); 
+// $page = new \mod_exammanagement\output\exammanagement_overview($cm->id, $rolestr, $firststagecompleted, $day, $month, $year, $hour, $minute);
 // echo $output->render($page);
-// 
+//
 // //rendering and displaying debug info (to be moved to renderer)
 // if($USER->username=="admin"){
-// 	
+//
 // 	$output = $PAGE->get_renderer('mod_exammanagement');
 // 	$page = new \mod_exammanagement\output\exammanagement_debug_infos($id,$cm,$course,$moduleinstance, $firststagecompleted, $day, $month, $year, $hour, $minute);
 // 	echo $output->render($page);

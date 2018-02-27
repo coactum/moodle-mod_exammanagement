@@ -203,6 +203,19 @@ EOF;
 	}
 
 	#### overview ####
+
+	public function determinePageType($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
+
+			if (has_capability('mod/exammanagement:viewinstance', $this->modulecontext)){
+					$this->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+
+			} elseif (has_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext)){
+					$this->outputParticipantsView($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+
+			}
+
+	}
+
 	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
 
 		global $PAGE;
@@ -397,9 +410,43 @@ EOF;
 
 	#### participants view ####
 
-	public function test(){
-			var_dump(json_decode($this->getFieldFromDB('exammanagement','assignedPlaces', array('id' => $this->cm->instance))));
+	public function outputParticipantsView(){
 
+		global $PAGE;
+
+		require_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext);
+
+		$this->setPage('view');
+		$this-> outputPageHeader();
+
+		//rendering and displaying content
+		$output = $PAGE->get_renderer('mod_exammanagement');
+		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->isDateTimeVisible(), $this->isRoomPlaceVisible());
+		echo $output->render($page);
+
+		$this->outputFooter();
+ 	}
+
+	protected function isParticipant(){
+
+			global $USER;
+
+			$participantsList = json_decode($this->getFieldFromDB('exammanagement', 'participants', array('id' => $this->cm->instance)));
+
+			if ($participantsList){
+					foreach ($participantsList as $key => $value){
+							if($USER->id == $value){
+								var_dump($participantsList);
+
+									return true;
+							} else{
+								var_dump('false');
+
+									return false;
+
+							}
+					}
+			}
 	}
 
  	#### events ####
@@ -726,7 +773,7 @@ EOF;
 
 	protected function saveParticipants($participantsArr){
 
-			$participants=implode(',', $participantsArr);;
+			$participants=json_encode($participantsArr);;
 
 			$this->moduleinstance->participants=$participants;
 
@@ -812,7 +859,7 @@ EOF;
 		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
 
 		if ($participants){
-				$participantsArray = explode(",", $participants);
+				$participantsArray = json_decode($participants);
 				return $participantsArray;
 			} else {
 				return '';
@@ -1115,7 +1162,6 @@ EOF;
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-		$this->test();
 	}
 
 	protected function unsetStateofPlaces($type){
