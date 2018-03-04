@@ -210,7 +210,7 @@ EOF;
 					$this->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
 
 			} elseif (has_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext)){
-					$this->outputParticipantsView($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+					$this->outputParticipantsView();
 
 			}
 

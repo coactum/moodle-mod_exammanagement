@@ -146,7 +146,7 @@ showMore = function() {
                               </div>
                               <div class="card-text">
                                 {{#textfield}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> {{textfield}}</p>{{/textfield}}
-                                {{^textfield}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Inhalt für das Textfeld festgelegt.</span></p>{{/textfield}}
+                                {{^textfield}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurde noch kein Inhalt für das Textfeld eingetragen.</span></p>{{/textfield}}
                               </div>
                             </div>
                           </div>
@@ -156,7 +156,7 @@ showMore = function() {
                                 <i class="fa fa-envelope" aria-hidden="true"></i> <a href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben (optional)</a>
                               </div>
                               <div class="card-text">
-                                <p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer geschickt werden.</p>
+                                <p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
                               </div>
                             </div>
                           </div>
@@ -190,7 +190,7 @@ showMore = function() {
                             </div>
                             <div class="card-text">
                               {{#stateofplacescorrect}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
-                              {{#stateofplaceserror}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgtreten. Bitte Wiederholen.</span></p>{{/stateofplaceserror}}
+                              {{#stateofplaceserror}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</span></p>{{/stateofplaceserror}}
                               {{^stateofplacescorrect}}{{^stateofplaceserror}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch keine Sitzplätze zugewiesen.</span></p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
                             </div>
                           </div>
