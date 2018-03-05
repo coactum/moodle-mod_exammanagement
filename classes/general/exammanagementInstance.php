@@ -1045,6 +1045,8 @@ EOF;
 
 		}
 
+		$this->redirectToOverviewPage('Nachricht erfolgreich versendet.', 'success');
+
 	}
 
 	protected function sendSingleMessage($user, $subject, $text){
@@ -1066,7 +1068,7 @@ EOF;
 		$message->contexturlname = 'Context name';
 		$message->replyto = "noreply@imt.uni-paderborn.de";
 
-		$header = ' test ';
+		$header = '';
 		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
 		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
@@ -1089,7 +1091,7 @@ EOF;
 		// 	$file = $fs->create_file_from_string($file, 'file1 content');
 		// 	$message->attachment = $file;
 
- 		var_dump($message);
+ 		//var_dump($message);
 
 		$messageid = message_send($message);
 
