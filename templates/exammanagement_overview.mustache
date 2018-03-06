@@ -214,11 +214,11 @@ showMore = function() {
                               <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
                               <input type="hidden" name="id" value="{{cmid}}"/>
                               <input type="hidden" name="calledfromformdt" value="true"/>
-                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten</span>
+                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten (optional)</span>
                             </div>
                             <div class="card-text">
-                              {{#datetimevisible}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
-                              {{^datetimevisible}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
+                              {{#datetimevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
+                              {{^datetimevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
                             </div>
                           </div>
                         </form>
@@ -242,11 +242,11 @@ showMore = function() {
                               <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomplacevisible" value="1"  {{#roomplacevisible}}checked {{/roomplacevisible}}><span class="exammanagement-slider round"></span></label>
                               <input type="hidden" name="id" value="{{cmid}}"/>
                               <input type="hidden" name="calledfromformrp" value="true"/>
-                              <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten</span>
+                              <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten (optional)</span>
                             </div>
                             <div class="card-text">
-                              {{#roomplacevisible}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
-                              {{^roomplacevisible}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
+                              {{#roomplacevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
+                              {{^roomplacevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
                             </div>
                           </div>
                         </form>

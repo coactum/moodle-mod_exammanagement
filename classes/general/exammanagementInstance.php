@@ -395,7 +395,7 @@ EOF;
 						return false;
 					}
 			case 2:
-				if ($this->isStateOfPlacesCorrect()&&$this->isDateTimeVisible()&&$this->isRoomPlaceVisible()){
+				if ($this->isStateOfPlacesCorrect()){
 					return true;
 					} else {
 						return false;
@@ -472,27 +472,55 @@ EOF;
 
 	protected function getRoomForParticipants(){
 
-			$roomState = $this->isRoomPlaceVisible();
-			$roomsArr = $this->getSavedRooms();
+			global $USER;
 
-			if($roomState){
-						var_dump($roomsArr);
-						return 'test';
+			$roomState = $this->isRoomPlaceVisible();
+			$assignmentArray = $this->getAssignedPlaces();
+			$participantsRoom =  false;
+
+			if($roomState && $assignmentArray){
+						foreach ($assignmentArray as $key => $assignment){
+								if ($assignment->userid == $USER->id){
+										$participantsRoom = $assignment->room;
+								}
+						}
+
+						return $participantsRoom;
+
 			} else{
+						$this->throwError("Räume nicht sichtbar oder keine Zuweisung getätigt");
 						return false;
 			}
 	}
 
 	protected function getPlaceForParticipants(){
 
-			$placesState = $this->isRoomPlaceVisible();
-			$roomsArr = $this->getSavedRooms();
+			global $USER;
 
-			if($placesState){
-						return 'test';
+			$placesState = $this->isRoomPlaceVisible();
+			$assignmentArray = $this->getAssignedPlaces();
+			$participantsPlace =  false;
+
+			if($placesState && $assignmentArray){
+						foreach ($assignmentArray as $key => $assignment){
+								if ($assignment->userid == $USER->id){
+										$participantsPlace = $assignment->place;
+								}
+						}
+
+						return $participantsPlace;
+
 			} else{
+						$this->throwError("Plätze nicht sichtbar oder keine Zuweisung getätigt");
 						return false;
 			}
+	}
+
+	#### errors ####
+
+	public function throwError($errorMessage){
+			echo $errorMessage;
+
 	}
 
  	#### events ####
@@ -1171,14 +1199,16 @@ EOF;
 
 		foreach($choosenRoomsArray as $key => $roomID){
 			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
-			$placesStr = '[';
+			$assignmentArray = array();
+			$newAssignmentObj = '';
 
 			$Places = json_decode($RoomObj->places);	//get Places of this Room
 
 			foreach($Places as $key => $placeID){
 				$currentUserID = array_pop($UserIDsArray);
 
-				$placesStr .= $this->assignPlaceToUser($currentUserID, $placeID);
+				$newAssignmentObj = $this->assignPlaceToUser($currentUserID, $RoomObj->name, $placeID);
+				array_push($assignmentArray, $newAssignmentObj);
 
 				if(!$UserIDsArray){						//if all users have a place: stop
 
@@ -1195,7 +1225,7 @@ EOF;
 
 		$this->moduleinstance->stateofplaces='set';
 
-		$this->savePlacesAssignment($placesStr);
+		$this->savePlacesAssignment($assignmentArray);
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
@@ -1203,17 +1233,20 @@ EOF;
 
 	}
 
-	protected function assignPlaceToUser($userid, $place){
+	protected function assignPlaceToUser($userid, $room, $place){
 
-		$placesStr = '{"'.$userid.'":"'.$place.'"}';
-		 return $placesStr;
+		$assignment = new stdClass();
+
+		$assignment->userid = $userid;
+		$assignment->room = $room;
+		$assignment->place = $place;
+
+		 return $assignment;
 	}
 
-	protected function savePlacesAssignment($placesStr){
+	protected function savePlacesAssignment($assignmentArray){
 
-		$placesStr .=']';
-
-		$this->moduleinstance->assignedplaces=$placesStr;
+		$this->moduleinstance->assignedplaces=json_encode($assignmentArray);
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
@@ -1229,6 +1262,14 @@ EOF;
 		$StateOfPlaces = $this->getFieldFromDB('exammanagement','stateofplaces', array('id' => $this->cm->instance));
 
 		return $StateOfPlaces;
+
+	}
+
+	protected function getAssignedPlaces(){
+
+		$getAssignedPlaces = json_decode($this->getFieldFromDB('exammanagement','assignedplaces', array('id' => $this->cm->instance)));
+
+		return $getAssignedPlaces;
 
 	}
 
