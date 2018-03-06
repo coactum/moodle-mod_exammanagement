@@ -29,13 +29,61 @@
       <h4>Informationen zur Prüfung</h4>
       <div class = "row">
           <p class = "col-xs-6">
-              Status:
+              <b>Status:</b>
           </p>
           <p class="col-xs-6">
-            {{#isparticipant}}Sie sind zur Prüfung angemeldet{{/isparticipant}}
-            {{^isparticipant}}Sie sind zur Prüfung angemeldet{{/isparticipant}}
+            {{#isparticipant}}Sie sind zur Prüfung angemeldet.{{/isparticipant}}
+            {{^isparticipant}}Sie sind nicht zur Prüfung angemeldet.{{/isparticipant}}
           </p>
       </div>
+      {{#isparticipant}}
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Datum:</b>
+          </p>
+          <p class="col-xs-6">
+            {{#examdate}}{{examdate}}{{/examdate}}
+            {{^examdate}}Es wurde noch kein Datum für die Prüfung festgelegt.{{/examdate}}
+          </p>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Uhrzeit:</b>
+          </p>
+          <p class="col-xs-6">
+            {{#examtime}}{{examtime}}{{/examtime}}
+            {{^examtime}}Es wurde noch keine Uhrzeit für die Prüfung festgelegt.{{/examtime}}
+          </p>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Raum:</b>
+          </p>
+          <p class="col-xs-6">
+            {{#room}}{{room}}{{/room}}
+            {{^room}}Es wurde noch kein Prüfungsraum zugewiesen.{{/room}}
+          </p>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Platz:</b>
+          </p>
+          <p class="col-xs-6">
+            {{#place}}{{place}}{{/place}}
+            {{^place}}Es wurde noch kein Sitzplatz zugewiesen.{{/place}}
+          </p>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Hinweis:</b>
+          </p>
+          <p class="col-xs-6">
+            {{#isparticipant}}Als Hilfsmittel für die Klausur sind ein doppelseitig beschriebenes DinA4 Blatt und Taschentücher erlaubt.{{/isparticipant}}
+            {{^isparticipant}}Es ist kein Prüfungshinweis verfügbar.{{/isparticipant}}
+          </p>
+      </div>
+      {{/isparticipant}}
+</div>
 <!--
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}

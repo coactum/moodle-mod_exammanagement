@@ -249,17 +249,17 @@ EOF;
 		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
 				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
 			} else {
-				return '';
+				return false;
 			}
 	}
 
 	protected function getHrExamtime() {	//convert examtime to human readable format for template
 		$examtime=$this->getExamtime();
 		if($examtime){
-			$hrexamtime=date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			$hrexamtime = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
 			return $hrexamtime;
 		} else {
-			return '';
+			return false;
 		}
  	}
 
@@ -279,7 +279,7 @@ EOF;
 				$text=$textfield->text;
 				return $text;
 			} else {
-				return '';
+				return false;
 			}
 	}
 
@@ -290,7 +290,7 @@ EOF;
 				$format=$textfield->format;
 				return $format;
 			} else {
-				return '';
+				return false;
 			}
 	}
 
@@ -303,29 +303,29 @@ EOF;
 			} elseif($textfield) {
 				return $textfield;
 			} else{
-				return '';
+				return false;
 			}
 	}
 
 	public function getParticipantsCount(){
 		$participants=$this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
 		if ($participants){
-				$temp= explode(",", $participants);
+				$temp= json_decode($participants);
 				$participantsCount=count($temp);
 				return $participantsCount;
 			} else {
-				return '';
+				return false;
 		}
 	}
 
 	public function getRoomsCount(){
 		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
 		if ($rooms){
-				$temp = explode(",", $rooms);
-				$roomsCount = count($temp);
+				$roomsArr = json_decode($rooms);
+				$roomsCount = count($roomsArr);
 				return $roomsCount;
 			} else {
-				return '';
+				return false;
 		}
 	}
 
@@ -334,7 +334,7 @@ EOF;
 		$roomNames = array();
 
 		if ($rooms){
-				$roomsArray = explode(",", $rooms);
+				$roomsArray = json_decode($rooms);
 
 				foreach ($roomsArray as $key => $value){
 					$temp = $this->getRoomObj($value);
@@ -352,7 +352,7 @@ EOF;
 				return $roomsStr;
 
 			} else {
-				return '';
+				return false;
 		}
 	}
 
@@ -421,7 +421,7 @@ EOF;
 
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->isDateTimeVisible(), $this->isRoomPlaceVisible());
+		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->isDateTimeVisible(), $this->getRoomForParticipants(), $this->getPlaceForParticipants() ,$this->isRoomPlaceVisible());
 		echo $output->render($page);
 
 		$this->outputFooter();
@@ -435,17 +435,63 @@ EOF;
 
 			if ($participantsList){
 					foreach ($participantsList as $key => $value){
+
 							if($USER->id == $value){
-								var_dump($participantsList);
 
 									return true;
-							} else{
-								var_dump('false');
-
-									return false;
-
 							}
 					}
+
+					return false;
+			}
+	}
+
+	protected function getDateForParticipants(){
+
+			$dateState = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+			$examtime = $this->getExamtime();
+
+			if($dateState && $examtime){
+						return date('d.m.Y', $examtime);
+			} else{
+						return false;
+			}
+	}
+
+	protected function getTimeForParticipants(){
+
+			$timeState = $this->isDateTimeVisible();
+			$examtime = $this->getExamtime();
+
+			if($timeState && $examtime){
+						return date('H:i', $examtime);
+			} else{
+						return false;
+			}
+	}
+
+	protected function getRoomForParticipants(){
+
+			$roomState = $this->isRoomPlaceVisible();
+			$roomsArr = $this->getSavedRooms();
+
+			if($roomState){
+						var_dump($roomsArr);
+						return 'test';
+			} else{
+						return false;
+			}
+	}
+
+	protected function getPlaceForParticipants(){
+
+			$placesState = $this->isRoomPlaceVisible();
+			$roomsArr = $this->getSavedRooms();
+
+			if($placesState){
+						return 'test';
+			} else{
+						return false;
 			}
 	}
 
@@ -518,7 +564,7 @@ EOF;
 
 	protected function saveRooms($roomsArr){
 
-		$rooms=implode(',', $roomsArr);;
+		$rooms=json_encode($roomsArr);
 
 		$this->moduleinstance->rooms=$rooms;
 
@@ -639,10 +685,10 @@ EOF;
 		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
 
 		if ($rooms){
-				$roomsArray = explode(",", $rooms);
+				$roomsArray = json_decode($rooms);
 				return $roomsArray;
 			} else {
-				return '';
+				return false;
 		}
 	}
 
@@ -650,15 +696,22 @@ EOF;
 
 		$isDateTimeVisible = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
 
-		return $isDateTimeVisible;
-
+		if($isDateTimeVisible){
+				return true;
+		} else {
+				return false;
+		}
 	}
 
 	protected function isRoomPlaceVisible(){
 
 		$isRoomPlaceVisible = $this->getFieldFromDB('exammanagement','roomplacevisible', array('id' => $this->cm->instance));
 
-		return $isRoomPlaceVisible;
+		if($isRoomPlaceVisible){
+				return true;
+		} else {
+				return false;
+		}
 
 	}
 
@@ -862,7 +915,7 @@ EOF;
 				$participantsArray = json_decode($participants);
 				return $participantsArray;
 			} else {
-				return '';
+				return false;
 		}
 	}
 
@@ -908,7 +961,7 @@ EOF;
 		global $CFG;
 
 		$userGroups = groups_get_user_groups($this->course->id, $userid);
-		$groupNameStr='';
+		$groupNameStr = false;
 
 		foreach ($userGroups as $key => $value){
 			if ($value){
