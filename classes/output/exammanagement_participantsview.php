@@ -42,22 +42,20 @@ class exammanagement_participantsview implements renderable, templatable {
     protected $isparticipant;
     protected $examdate;
     protected $examtime;
-	protected $datetimevisible;
-	protected $roomplacevisible;
+	protected $textfield;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $isparticipant, $examdate, $examtime, $datetimevisible, $room, $place, $roomplacevisible) {
+    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield) {
         $this->cmid = $cmid;
         $this->isparticipant = $isparticipant;
         $this->examdate = $examdate;
         $this->examtime = $examtime;
-        $this->datetimevisible = $datetimevisible;
         $this->room = $room;
         $this->place = $place;
-        $this->roomplacevisible = $roomplacevisible;
+        $this->textfield = $textfield;
     }
 
     /**
@@ -72,11 +70,9 @@ class exammanagement_participantsview implements renderable, templatable {
         $data->isparticipant = $this->isparticipant;
         $data->examdate = $this->examdate;
         $data->examtime = $this->examtime;
-        $data->datetimevisible = $this->datetimevisible;
         $data->room = $this->room;
         $data->place = $this->place;
-        $data->roomplacevisible = $this->roomplacevisible;
-        var_dump($data);
+        $data->textfield = $this->textfield;
         return $data;
     }
 

@@ -421,7 +421,7 @@ EOF;
 
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->isDateTimeVisible(), $this->getRoomForParticipants(), $this->getPlaceForParticipants() ,$this->isRoomPlaceVisible());
+		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->getRoomForParticipants(), $this->getPlaceForParticipants(), $this->getTextFromTextfield());
 		echo $output->render($page);
 
 		$this->outputFooter();
@@ -481,7 +481,7 @@ EOF;
 			if($roomState && $assignmentArray){
 						foreach ($assignmentArray as $key => $assignment){
 								if ($assignment->userid == $USER->id){
-										$participantsRoom = $assignment->room;
+										$participantsRoom = $assignment->roomname;
 								}
 						}
 
