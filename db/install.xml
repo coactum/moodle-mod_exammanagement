@@ -32,6 +32,7 @@
       <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+          <FIELD NAME="roomid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="internal room_id"/>
           <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for room"/>
           <FIELD NAME="description" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="displayable description of room"/>
           <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>

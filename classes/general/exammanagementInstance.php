@@ -751,20 +751,21 @@ EOF;
 
 		$records= array();
 
-		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.csv');
+		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.txt');
 
 		foreach ($defaultRoomsFile as $key => $roomstr){
 
 			$roomParameters=explode('+', $roomstr);
 
 			$roomObj = new stdClass();
-			$roomObj->name=$roomParameters[0];
- 			$roomObj->description=$roomParameters[1];
+			$roomObj->roomid=$roomParameters[0];
+			$roomObj->name=$roomParameters[1];
+ 			$roomObj->description=$roomParameters[2];
 
-			$svgStr = base64_encode($roomParameters[2]);
+			$svgStr = base64_encode($roomParameters[3]);
 
  			$roomObj->seatingplan = $svgStr;
- 			$roomObj->places = $roomParameters[3];
+ 			$roomObj->places = $roomParameters[4];
  			$roomObj->misc = NULL;
 
  			array_push($records, $roomObj);
@@ -1207,13 +1208,18 @@ EOF;
 			foreach($Places as $key => $placeID){
 				$currentUserID = array_pop($UserIDsArray);
 
-				$newAssignmentObj = $this->assignPlaceToUser($currentUserID, $RoomObj->name, $placeID);
+				$newAssignmentObj = $this->assignPlaceToUser($currentUserID, $RoomObj->roomid, $RoomObj->name, $placeID);
 				array_push($assignmentArray, $newAssignmentObj);
 
 				if(!$UserIDsArray){						//if all users have a place: stop
 
 					break;
 				}
+			}
+
+			if(!$UserIDsArray){						//if all users have a place: stop
+
+				break;
 			}
 		}
 
@@ -1233,12 +1239,13 @@ EOF;
 
 	}
 
-	protected function assignPlaceToUser($userid, $room, $place){
+	protected function assignPlaceToUser($userid, $roomid, $roomname, $place){
 
 		$assignment = new stdClass();
 
 		$assignment->userid = $userid;
-		$assignment->room = $room;
+		$assignment->roomid = $roomid;
+		$assignment->roomname = $roomname;
 		$assignment->place = $place;
 
 		 return $assignment;
