@@ -133,9 +133,9 @@ class exammanagementInstance{
  		return $url;
  	}
 
- 	public function redirectToOverviewPage($message, $type){
+ 	public function redirectToOverviewPage($anchor, $message, $type){
 
-		$url = $this->getModuleUrl('view');
+		$url = $this->getModuleUrl('view').'#'.$anchor;
 
 		switch ($type) {
     		case 'success':
@@ -598,7 +598,7 @@ EOF;
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-		$this->redirectToOverviewPage('Räume für die Prüfung wurden ausgewählt', 'success');
+		$this->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
 
 	}
 
@@ -686,7 +686,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -774,7 +774,7 @@ EOF;
 
 		$this->InsertBulkRecordsInDB('exammanagement_rooms', $records);
 
-		$this->redirectToOverviewPage('Standardräume angelegt', 'success');
+		$this->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
 
 	}
 
@@ -795,7 +795,7 @@ EOF;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Datum und Uhrzeit erfolgreich gesetzt', 'success');
+			$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
 
 	}
 
@@ -803,7 +803,7 @@ EOF;
 
 		$this->UpdateRecordInDB("exammanagement", NULL);
 
-		$this->redirectToOverviewPage('Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
+		$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
 	}
 
 	protected function buildDateTimeForm(){
@@ -817,7 +817,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -855,13 +855,17 @@ EOF;
 
 	protected function saveParticipants($participantsArr){
 
-			$participants=json_encode($participantsArr);;
+			$participants=json_encode($participantsArr);
 
-			$this->moduleinstance->participants=$participants;
+			$this->moduleinstance->participants = $participants;
+			$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
+
+			var_dump($this->moduleinstance->participants);
+			var_dump($this->moduleinstance->userinformation);
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Teilnehmer zur Prüfung hinzugefügt', 'success');
+			$this->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 
 	}
 
@@ -913,7 +917,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -976,10 +980,18 @@ EOF;
 
 	}
 
-	public function getUserMatrNr($userid){
+	public function getUserMatrNrPO($userid){
 
-		$user = $this->getUser($userid);
+		$usersinformation = json_decode($this->getUsersInformationPO());
+
 		$userMatrNr = '-';
+
+		foreach($usersinformation as $key => $user){
+				if ($user->moodleid == $userid){
+						$userMatrNr = $user->matrNr;
+				}
+
+		}
 
 		return $userMatrNr;
 
@@ -1008,6 +1020,53 @@ EOF;
 
 	}
 
+	public function assignMatrNrToUser($userid){
+
+			$user = $this->getUser($userid); // for temp matrNr
+
+			// constructing test MatrN., later needs to be readed from csv-File
+
+			$matrNr = 70 . $user->id;;
+
+			$array = str_split($user->firstname);
+
+			$matrNr .= ord($array[0]);
+			$matrNr .= ord($array[2]);
+
+			$matrNr = substr($matrNr, 0, 6);
+
+			return $matrNr;
+
+	}
+
+	public function getUsersInformationPO(){
+			$usersinformation = $this->getFieldFromDB('exammanagement','userinformation', array('id' => $this->cm->instance));
+			return $usersinformation;
+	}
+
+
+	public function setUsersInformationPO($participantsArray){ //needs Array of moodle ids at the moment, later other mapping neccessary
+			$usersInformationArray = array();
+
+			foreach($participantsArray as $key => $participantID){
+
+					array_push($usersInformationArray, $this->setUserInformationPO($participantID, $this->assignMatrNrToUser($participantID)));
+
+			}
+
+			$usersInformation = json_encode($usersInformationArray);
+
+			return $usersInformation;
+
+	}
+
+	public function setUserInformationPO($uid, $matrNr){
+			$user = new stdClass;
+			 $user->moodleid = $uid;
+			 $user->matrNr = $matrNr;
+			return $user;
+	}
+
 	######### feature: textfield ##########
 
 	public function outputTextfieldPage(){
@@ -1028,7 +1087,7 @@ EOF;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Inhalt gespeichert', 'success');
+			$this->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
 	}
 
@@ -1043,7 +1102,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -1074,6 +1133,10 @@ EOF;
 	public function outputGroupmessagesPage(){
 		global $PAGE;
 
+		if(!$this->getParticipantsCount()){
+			$this->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
+		}
+
 		$this->setPage('groupmessage');
 		$this-> outputPageHeader();
 		$this->buildGroupmessagesForm();
@@ -1092,13 +1155,13 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('Vorgang abgebrochen', 'warning');
+			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
 		  $this->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
-		  //$this->redirectToOverviewPage('Nachricht verschickt', 'success'); //auskommentiert fürs testen
+		  $this->redirectToOverviewPage('beforeexam', 'Nachricht verschickt', 'success');
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -1127,7 +1190,7 @@ EOF;
 
 		}
 
-		$this->redirectToOverviewPage('Nachricht erfolgreich versendet.', 'success');
+		$this->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
 
 	}
 
@@ -1190,11 +1253,11 @@ EOF;
 
 		if(!$choosenRoomsArray){
 			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+			$this->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
 		} elseif(!$UserIDsArray){
 			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+			$this->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
 		}
 
@@ -1225,7 +1288,7 @@ EOF;
 
 		if($UserIDsArray){								//if users are left without a room
 			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+			$this->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
 		}
 
@@ -1235,7 +1298,7 @@ EOF;
 
 		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-		$this->redirectToOverviewPage('Plätze zugewiesen', 'success');
+		$this->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
 
 	}
 
@@ -1288,7 +1351,7 @@ EOF;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Informationen sichtbar geschaltet', 'success');
+			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
 	}
 
@@ -1298,7 +1361,7 @@ EOF;
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('Informationen sichtbar geschaltet', 'success');
+			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
 	}
 
@@ -1309,7 +1372,7 @@ EOF;
 		global $CFG;
 
 		if(!$this->isStateOfPlacesCorrect() || !$this->isStateOfPlacesError()){
-			$this->redirectToOverviewPage('Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+			$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
 		}
 
 		//============================================================+

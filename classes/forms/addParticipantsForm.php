@@ -70,7 +70,7 @@ class addParticipantsForm extends moodleform {
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 			$mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$obj->getUserPicture($value).' '.$obj->getUserProfileLink($value), null, array('group' => 1));
-			$mform->addElement('html', '</div><div class="col-xs-3">'.$obj->getUserMatrNr($value).'</div>');
+			$mform->addElement('html', '</div><div class="col-xs-3">'.$obj->getUserMatrNrPO($value).'</div>');
 			$mform->addElement('html', '<div class="col-xs-3">'.$obj->getParticipantsGroupNames($value).'</div>');
 			$mform->addElement('html', '<div class="col-xs-3"> PANDA Kurs </div></div>');
 

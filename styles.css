@@ -48,6 +48,13 @@
     border-radius: 2px;
 }
 
+.exmammanagement-summary div:target{
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+
+
+}
+
 @media (min-width: 768px){
 	.row-eq-height {
   		display: -webkit-box;
