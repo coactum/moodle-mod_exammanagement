@@ -81,7 +81,7 @@ class chooseRoomsForm extends moodleform {
 
           $svgStr = base64_decode($roomObj->seatingplan);
 
-					$mform->addElement('html', '<a id="show" href="#">Ja</a><div class="svg hidden">'.$svgStr.'</div>');
+					$mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle text-success"></i></a><div class="svg hidden">'.$svgStr.'</div>');
 
         } else {
 					$mform->addElement('html', ' Nein ');
@@ -97,6 +97,7 @@ class chooseRoomsForm extends moodleform {
 				}
 			}
 
+      $mform->addElement('html', '<b>Hinweis:</b><p>Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen des selben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz benutzt werden kann. "2 Plätze frei" bedeutet, dass jeder 3. Platz benutzt werden kann.</p>');
 			$this->add_action_buttons(true,'Räume für Prüfung auswählen');
 
 		} else{

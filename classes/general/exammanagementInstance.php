@@ -572,6 +572,12 @@ EOF;
 		return $DB->update_record($table, $obj);
 	}
 
+	protected function InsertRecordInDB($table, $dataobject){
+		global $DB;
+
+		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
+	}
+
 	protected function InsertBulkRecordsInDB($table, $dataobjects){
 		global $DB;
 
@@ -749,7 +755,7 @@ EOF;
 
 		global $CFG;
 
-		$records= array();
+		//$records= array();
 
 		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.txt');
 
@@ -768,11 +774,12 @@ EOF;
  			$roomObj->places = $roomParameters[4];
  			$roomObj->misc = NULL;
 
- 			array_push($records, $roomObj);
+ 			//array_push($records, $roomObj);
 
+			$this->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
 		}
 
-		$this->InsertBulkRecordsInDB('exammanagement_rooms', $records);
+		//$this->InsertBulkRecordsInDB('exammanagement_rooms', $records); // to big for bulkrecord insert
 
 		$this->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
 
@@ -859,9 +866,6 @@ EOF;
 
 			$this->moduleinstance->participants = $participants;
 			$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
-
-			var_dump($this->moduleinstance->participants);
-			var_dump($this->moduleinstance->userinformation);
 
 			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
@@ -986,11 +990,13 @@ EOF;
 
 		$userMatrNr = '-';
 
-		foreach($usersinformation as $key => $user){
-				if ($user->moodleid == $userid){
-						$userMatrNr = $user->matrNr;
-				}
+		if ($usersinformation){
+			foreach($usersinformation as $key => $user){
+					if ($user->moodleid == $userid){
+							$userMatrNr = $user->matrNr;
+					}
 
+			}
 		}
 
 		return $userMatrNr;
