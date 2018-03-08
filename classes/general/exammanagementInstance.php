@@ -1256,6 +1256,8 @@ EOF;
 
 		$choosenRoomsArray = $this->getSavedRooms();
 		$UserIDsArray = $this->getSavedParticipants();
+		$newAssignmentObj = '';
+		$assignmentArray = array();
 
 		if(!$choosenRoomsArray){
 			$this->unsetStateOfPlaces('error');
@@ -1268,9 +1270,8 @@ EOF;
 		}
 
 		foreach($choosenRoomsArray as $key => $roomID){
+
 			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
-			$assignmentArray = array();
-			$newAssignmentObj = '';
 
 			$Places = json_decode($RoomObj->places);	//get Places of this Room
 
@@ -1281,13 +1282,11 @@ EOF;
 				array_push($assignmentArray, $newAssignmentObj);
 
 				if(!$UserIDsArray){						//if all users have a place: stop
-
-					break;
+					break 2;
 				}
 			}
 
 			if(!$UserIDsArray){						//if all users have a place: stop
-
 				break;
 			}
 		}
