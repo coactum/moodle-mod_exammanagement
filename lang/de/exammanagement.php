@@ -73,8 +73,9 @@ Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren univ
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
 
-//errors
+//errors and permissions
 $string['missingidandcmid'] = 'Kurs ID fehlt (missingcmid)';
+$string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
@@ -98,3 +99,4 @@ $string['exammanagement:viewinstance'] = 'Prüfungsorganisation ansehen';
 $string['exammanagement:viewparticipantspage'] = 'Teilnehmeransicht ansehen';
 $string['exammanagement:takeexams'] = 'Prüfung ablegen';
 $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
+$string['exammanagement:addDefaultRooms'] = 'Standardräume importieren';

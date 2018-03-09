@@ -56,8 +56,12 @@ class chooseRoomsForm extends moodleform {
 		$mform->addElement('html', '<h3 class="import">Neue Räume hinzufügen</h3>');
 
 		$mform->addElement('html', '</div><div class="col-xs-6"><button type="button" id="switch_mode_rooms" class="btn btn-primary" title="Umschalten zwischen Raumwahl und -import"><span class="import">Raumwahl</span><span class="choose">Neue Räume hinzufügen</span></button>');
-		$mform->addElement('html', '<a href="'.$obj->getModuleUrl("addDefaultRooms").'" class="btn btn-primary import" title="Standardräume importieren"><span>Standardräume importieren</span></a></div></div>');
-		$mform->addElement('html', '<p class="choose">Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p><p class="import">Sie können zudem selbst neue Räume in die Liste der verfügbaren Prüfungsräume aufnehmen.</p>');
+
+    if($obj->checkCapability('mod/exammanagement:adddefaultrooms')){
+        $mform->addElement('html', '<a href="'.$obj->getModuleUrl("addDefaultRooms").'" class="btn btn-primary import" title="Standardräume importieren"><span>Standardräume importieren</span></a>');
+    }
+
+    $mform->addElement('html', '</div></div><p class="choose">Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p><p class="import">Sie können zudem selbst neue Räume in die Liste der verfügbaren Prüfungsräume aufnehmen.</p>');
 
 		###### chooseRooms ######
 		$mform->addElement('html', '<div class="choose exammanagement-rooms"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-3"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div></div>');

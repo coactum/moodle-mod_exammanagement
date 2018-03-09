@@ -117,4 +117,17 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
+		'mod/exammanagement:adddefaultrooms'=> [
+        'riskbitmask' => RISK_XSS, RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
 ];

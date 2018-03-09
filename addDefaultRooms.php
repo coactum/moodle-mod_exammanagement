@@ -35,4 +35,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-$p->addDefaultRooms();
+if($p->checkCapability('mod/exammanagement:adddefaultrooms')){
+    $p->addDefaultRooms();
+} else {
+    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+}

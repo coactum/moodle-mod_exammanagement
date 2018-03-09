@@ -61,7 +61,7 @@ class exammanagementInstance{
 				$this->course = get_course($this->moduleinstance->course);
 				$this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
 			} else {
-				print_error(get_string('missingidandcmid', mod_exammanagement));
+				print_error(get_string('missingidandcmid', 'mod_exammanagement'));
 			}
 
 			require_login($this->course, true, $this->cm);
@@ -135,7 +135,11 @@ class exammanagementInstance{
 
  	public function redirectToOverviewPage($anchor, $message, $type){
 
-		$url = $this->getModuleUrl('view').'#'.$anchor;
+		$url = $this->getModuleUrl('view');
+
+		if ($anchor){
+				$url .= '#'.$anchor;
+		}
 
 		switch ($type) {
     		case 'success':
@@ -155,6 +159,14 @@ class exammanagementInstance{
         		break;
 		}
 	}
+
+	public function checkCapability($capname){
+				if (has_capability($capname, $this->modulecontext)){
+						return true;
+				} else {
+						return false;
+				}
+		}
 
 	public function ConcatHelptextStr($langstr){
 
@@ -203,18 +215,6 @@ EOF;
 	}
 
 	#### overview ####
-
-	public function determinePageType($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
-
-			if (has_capability('mod/exammanagement:viewinstance', $this->modulecontext)){
-					$this->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
-
-			} elseif (has_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext)){
-					$this->outputParticipantsView();
-
-			}
-
-	}
 
 	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
 
@@ -488,7 +488,6 @@ EOF;
 						return $participantsRoom;
 
 			} else{
-						$this->throwError("Räume nicht sichtbar oder keine Zuweisung getätigt");
 						return false;
 			}
 	}
@@ -511,7 +510,6 @@ EOF;
 						return $participantsPlace;
 
 			} else{
-						$this->throwError("Plätze nicht sichtbar oder keine Zuweisung getätigt");
 						return false;
 			}
 	}

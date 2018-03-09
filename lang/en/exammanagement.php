@@ -43,8 +43,9 @@ $string['helptext_addParticipants']= 'Here goes the description of this feature 
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 
-//error
+//errors and permissions
 $string['missingidandcmid'] = 'Course id missing (missingcmid)';
+$string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 
 //universal
 $string['modulename'] = 'Exam management';
@@ -68,3 +69,4 @@ $string['exammanagement:viewinstance'] = 'View exam organization';
 $string['exammanagement:viewparticipantspage'] = 'View participants page';
 $string['exammanagement:takeexams'] = 'Take exams';
 $string['exammanagement:sendgroupmessage'] = 'Send group message to participants';
+$string['exammanagement:addDefaultRooms'] = 'Import default rooms';

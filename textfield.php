@@ -35,4 +35,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-$p->outputTextfieldPage();
+if($p->checkCapability('mod/exammanagement:viewinstance')){
+  $p->outputTextfieldPage();
+} else {
+    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+}

@@ -36,4 +36,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-$p->outputDateTimePage();
+if($p->checkCapability('mod/exammanagement:viewinstance')){
+    $p->outputDateTimePage();
+} else {
+    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+}

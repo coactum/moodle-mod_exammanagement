@@ -46,8 +46,19 @@ $calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 //$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+
+if ($p->checkCapability('mod/exammanagement:viewinstance')){
+    $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+    var_dump($CFG);
+
+} elseif ($p->checkCapability('mod/exammanagement:viewparticipantspage')){
+    $p->outputParticipantsView();
+
+} else{
+    redirect ($CFG->wwwroot, 'Sie haben keine gültigen Rechte.', null, \core\output\notification::NOTIFY_ERROR);
+}
+
 $p->startEvent('view');
-$p->determinePageType($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)
