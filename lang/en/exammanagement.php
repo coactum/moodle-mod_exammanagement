@@ -53,12 +53,8 @@ $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
 
 //addnewinstance
-$string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
+$string['modulename_help'] = 'The PANDA exammanagement allows you easy organizing the exams for your course and makes it possible to manage even large exams with many participants.';
 $string['exammanagementname'] = 'Exam Management';
-$string['exammanagementname_help'] = 'You should not use another name as the standart ...';
-$string['exammanagementdescription'] = 'Description:';
-$string['exammanagementdescriptiontext'] = 'Descriptiontext ....';
-$string['exammanagementfieldset'] = 'Further Information';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
