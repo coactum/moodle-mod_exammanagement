@@ -57,7 +57,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'exammanagementname', 'mod_exammanagement');
+        // $mform->addHelpButton('name', 'exammanagementname', 'mod_exammanagement');
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
@@ -68,8 +68,8 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_exammanagement settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('header', get_string('exammanagementfieldset', 'mod_exammanagement'), get_string('exammanagementfieldset', 'mod_exammanagement'));
-        $mform->addElement('static', 'label2', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
+        // $mform->addElement('header', get_string('exammanagementfieldset', 'mod_exammanagement'), get_string('exammanagementfieldset', 'mod_exammanagement'));
+        // $mform->addElement('static', 'label2', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
 
 
         // Add standard grading elements.

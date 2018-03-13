@@ -90,7 +90,14 @@ class chooseRoomsForm extends moodleform {
         } else {
 					$mform->addElement('html', ' Nein ');
 				}
-				$mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div></div>');
+
+        if ($roomObj->type=='defaultroom'){
+            $mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div>');
+        } else {
+            $mform->addElement('html', '</div><div class="col-xs-3"> Externer Raum </div>');
+        }
+
+        $mform->addElement('html', '</div>');
 
 				if($checkedRoomIDs){
 					foreach($checkedRoomIDs as $key2 => $value2){

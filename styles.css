@@ -149,7 +149,7 @@ input:checked + .exammanagement-slider:before {
 }
 
 .helptextbox{
-  max-height: 200px;
+  max-height: 100px;
   position: relative;
   overflow: hidden;
 }

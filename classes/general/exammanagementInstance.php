@@ -770,6 +770,7 @@ EOF;
 
  			$roomObj->seatingplan = $svgStr;
  			$roomObj->places = $roomParameters[4];
+			$roomObj->type = 'defaultroom';
  			$roomObj->misc = NULL;
 
  			//array_push($records, $roomObj);
