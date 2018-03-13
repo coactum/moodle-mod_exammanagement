@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_exammanagement';
-$plugin->release = '0.1.5';
-$plugin->version = 2017120100;
-$plugin->requires = 2017051500;
+$plugin->component = 'mod_exammanagement'; // Full name of the plugin (used for diagnostics)
+$plugin->release = '1.0.1';
+$plugin->version = 2018031000;	// The current module version (Date: YYYYMMDDXX)
+$plugin->requires = 2017051500; // Requires this Moodle version
 $plugin->maturity = MATURITY_ALPHA;

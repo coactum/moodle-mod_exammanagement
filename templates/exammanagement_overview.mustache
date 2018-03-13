@@ -23,16 +23,81 @@
     }
 }}
 
-<form>
+{{#js}}
+
+showMore = function() {
+
+			helptextboxcontent = jQuery.find('.helptextboxcontent');
+			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
+
+			helptextbox = jQuery.find('.helptextbox');
+			jQuery(helptextbox).css({
+			      "height": jQuery(helptextbox).height(),
+			      "max-height": 9999
+			    })
+			    .animate({
+			      "height": helptextboxcontentheight
+			    });
+
+
+			readMore = jQuery.find('.read-more');
+			jQuery(readMore).fadeOut();
+			return false;	    
+		};
+
+ajaxtoogle = function(command, value){
+    console.log(command, value);
+
+    if(command=='room'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformrp': true, 'roomplacevisible': Number(!value)},
+            success: function(response) {
+            },
+            error: function(response) {
+              alert('Fehler beim Speichern.')
+            }
+        });
+    } else if(command=='datetime'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(!value)},
+            success: function(response) {
+            },
+            error: function(response) {
+              alert('Fehler beim Speichern.')
+            }
+        });
+    }
+}
+
+{{/js}}
+
    <div class="container-fluid">
-      <div class="m-y-1">{{#str}}yourrole, mod_exammanagement{{/str}}{{rolestr}}</div>
+      <div class="alert alert-info alert-dismissible fade in" role="alert">
+          <div class="helptextbox">
+    		      <div class="helptextboxcontent">
+                  <div class="row">
+                      <h4 class="alert-heading col-xs-11">{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
+                      <button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
+                  <hr>
+                  <p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>
+                  <p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p>
+              </div>
+          </div>
+      </div>
+
       <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>
 
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}
-          <li class="item">
-            {{#firststagecompleted}}<i class="fa fa-check-square-o text-success" aria-hidden="true"></i>{{/firststagecompleted}}
-            {{^firststagecompleted}}<i class="fa fa-square-o" aria-hidden="true"></i>{{/firststagecompleted}}
+          <li class="item" id="beforeexam">
+            {{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
+            {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="card">
               <div class="card-block">
                 <div class="row">
@@ -41,17 +106,18 @@
                       <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                   </a>
                 </div>
-                {{#firststagecompleted}}<div class="collapse phase_one">{{/firststagecompleted}}
-                {{^firststagecompleted}}<div class="collapse.show phase_one">{{/firststagecompleted}}
+                {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
+                {{^firstphasecompleted}}<div class="collapse.show phase_one">{{/firstphasecompleted}}
                     <div class="card-text">
                       <div class="row row-eq-height">
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-building-o" aria-hidden="true"></i> <a href="">Räume auswählen</a>
+                                <i class="fa fa-building-o" aria-hidden="true"></i> <a href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
                               </div>
-                              <div class="card-text m-l-1">
-                                <p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Räume ausgewählt.</p>
+                              <div class="card-text">
+                                {{#rooms}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Räume: {{rooms}} <i class="fa fa-building-o" aria-hidden="true"></i></p>{{/rooms}}
+                                {{^rooms}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
                               </div>
                             </div>
                           </div>
@@ -61,8 +127,8 @@
                                 <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
                               </div>
                               <div class="card-text m-l-1">
-                                {{#day}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Prüfung findet am {{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} Uhr statt.</p>{{/day}}
-                                {{^day}}<p><span class="fa-stack text-warning"><i class="fa fa-circle-o fa-stack-2x"></i><i class="fa fa-question fa-stack-1x"></i></span> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</span></p>{{/day}}
+                                {{#hrexamtime}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/hrexamtime}}
+                                {{^hrexamtime}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
                               </div>
                             </div>
                           </div>
@@ -71,20 +137,21 @@
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-users" aria-hidden="true"></i> <a href="">Teilnehmer hinzufügen</a>
+                                <i class="fa fa-users" aria-hidden="true"></i> <a href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
                               </div>
                               <div class="card-text">
-                                <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Teilnehmer hinzugefügt.</p>
+                                {{#participants}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Prüfungsteilnehmer: {{participants}} <i class="fa fa-users" aria-hidden="true"></i></p>{{/participants}}
+                                {{^participants}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
                               </div>
                             </div>
                           </div>
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-tasks" aria-hidden="true"></i> <a href="">Aufgaben konfigurieren</a>
+                                <i class="fa fa-tasks" aria-hidden="true"></i> <a>Aufgaben konfigurieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                               </div>
                               <div class="card-text">
-                                <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Aufgaben konfiguriert.</p>
+                                <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Aufgaben konfiguriert.</p>
                               </div>
                             </div>
                           </div>
@@ -93,20 +160,21 @@
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="">Freitextfeld bearbeiten (optional)</a>
+                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten (optional)</a>
                               </div>
                               <div class="card-text">
-                                <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Das Freitextfeld wurde bereits bearbeitet.</p>
+                                {{#textfield}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> {{textfield}}</p>{{/textfield}}
+                                {{^textfield}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
                               </div>
                             </div>
                           </div>
                           <div class="card col-md-6">
                             <div class="card-body">
                               <div class="card-header m-b-1">
-                                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="">Nachricht an Teilnehmer schreiben (optional)</a>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben (optional)</a>
                               </div>
                               <div class="card-text">
-                                <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits eine Nachricht an die Teilnehmer geschrieben.</p>
+                                <p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
                               </div>
                             </div>
                           </div>
@@ -117,190 +185,213 @@
             </div>
           </li>
           {{!for_exam}}
-          <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
-            <div class="card border border-success">
+          <li class="item" id="forexam">
+            {{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
+            {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
+            <div class="card">
               <div class="card-block">
                 <div class="row">
                   <h4 class="card-title col-xs-11">Für die Prüfung</h4>
-                  <button type="button" class="close col-xs-1" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_two" aria-expanded="false" aria-controls="phase_two">
+                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                  </a>
                 </div>
-                <div class="card-text">
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-refresh" aria-hidden="true"></i> <a href="">Sitzplätze automatisch zuweisen</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Sitzplätze hinzugefügt.</p>
+                {{#secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}
+                {{#firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse.show phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
+                {{^firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
+                    <div class="card-text">
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-refresh" aria-hidden="true"></i> <a href="assignPlaces.php?id={{cmid}}">Sitzplätze automatisch zuweisen</a>
+                            </div>
+                            <div class="card-text">
+                              {{#stateofplacescorrect}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
+                              {{#stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
+                              {{^stateofplacescorrect}}{{^stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
+                            </div>
                           </div>
                         </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Sitzplan exportieren (optional)</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogle('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
+                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten (optional)</span>
+                            </div>
+                            <div class="card-text">
+                              {{#datetimevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
+                              {{^datetimevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
+                            </div>
+                          </div>
                       </div>
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Sitzplan exportieren (optional)</a>
+                            <i class="fa fa-barcode" aria-hidden="true"></i> <a>Prüfungsetiketten exportieren (optional)</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+                            <p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="row row-eq-height">
+                      <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomplacevisible" value="1" onclick="ajaxtoogle('room', jQuery(this).prop('checked')); return true"  {{#roomplacevisible}}checked {{/roomplacevisible}}><span class="exammanagement-slider round"></span></label>
+                              <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten (optional)</span>
+                            </div>
+                            <div class="card-text">
+                              {{#roomplacevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
+                              {{^roomplacevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
+                            </div>
+                          </div>
+                      </div>
+                      <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Teilnehmerlisten exportieren (optional) <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
+                            </div>
+                            <div class="card-footer">
+                              <div class="row"><a class="btn btn-info col-sm-4">Name</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4">Sitzplatz</a></div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Datum und Zeit für Teilnehmer sichtbar schalten</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-barcode" aria-hidden="true"></i> <a href="">Prüfungsetiketten exportieren (optional)</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-toggle-on" aria-hidden="true"></i> <a href="">Räume und Sitzplätze für Teilnehmer sichtbar schalten</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Die Informationen wurden sichtbar geschaltet.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Teilnehmerlisten exportieren (optional)
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
-                          </div>
-                          <div class="card-footer">
-                            <div class="row"><a href="#" class="btn btn-info col-sm-4">Name</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4">Sitzplatz</a></div>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
               </div>
             </div>
           </li>
           {{!exam}}
           <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
+            <i class="fa fa-fw" aria-hidden="true"></i>
             <div class="card">
               <div class="card-block">
-                {{#day}}<div class="row"><h4 class="card-title col-sm-4">Prüfungstermin:</h4> <span class="col-sm-8">{{day}}.{{month}}.{{year}} um {{hour}}.{{minute}} in Raum XX.XX.</span></div>{{/day}}
-                {{^day}}<h4 class="card-title">Noch kein Prüfungstermin gesetzt.</h4>{{/day}}
+                <div class="row">
+                    <h4 class="card-title col-sm-6">Prüfungstermin:</h4>
+                    <span class="col-sm-6">
+                      {{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
+                      {{#hrexamtime}}{{#roomnames}} | {{/roomnames}}{{/hrexamtime}}
+                      {{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
+                      {{^hrexamtime}}{{^roomnames}}<p class="card-title">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
+                    </span>
+                </div>
               </div>
             </div>
           </li>
           {{!after_grading}}
-          <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
-            <div class="card border border-success">
+          <li class="item" id="aftercorrection">
+            {{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
+            {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
+            <div class="card">
               <div class="card-block">
                 <div class="row">
                   <h4 class="card-title col-xs-11">Nach der Korrektur</h4>
-                  <button type="button" class="close col-xs-1" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_three" aria-expanded="false" aria-controls="phase_three">
+                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                  </a>
                 </div>
-                <div class="card-text">
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-plus" aria-hidden="true"></i> <a href="">Bonuspunkte importieren</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden bereits Bonuspunkte importiert.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-key" aria-hidden="true"></i> <a href="">Notenschlüßel konfigurieren</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Der Notenschlüßel wurde konfiguriert.</p>
+                {{#thirdphasecompleted}}<div class="collapse.show phase_three">{{/thirdphasecompleted}}
+                {{^thirdphasecompleted}}<div class="collapse phase_three">{{/thirdphasecompleted}}
+                  <div class="card-text">
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-plus" aria-hidden="true"></i> <a>Bonuspunkte importieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Bonuspunkte importiert.</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-key" aria-hidden="true"></i> <a>Notenschlüßel konfigurieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurde noch kein Notenschlüßel konfiguriert.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row row-eq-height">
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-pencil" aria-hidden="true"></i> <a>Prüfungsergebnisse eingeben</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Prüfungsergebnisse eingetragen.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card col-md-6">
+                          <div class="card-body">
+                            <div class="card-header m-b-1">
+                              <i class="fa fa-binoculars" aria-hidden="true"></i> <a>Eingegebene Ergebnisse prüfen (optional)</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
+                            </div>
+                            <div class="card-text">
+                              <p> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                   </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-pencil" aria-hidden="true"></i> <a href="">Prüfungsergebnisse eingeben</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Es wurden Prüfungsergebnisse eingegeben.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-binoculars" aria-hidden="true"></i> <a href="">Eingegebene Ergebnisse prüfen (optional)</a>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
               </div>
             </div>
           </li>
           {{!after_exam}}
-          <li class="item">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
-            <div class="card border border-success">
+          <li class="item" id="afterexam">
+            {{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
+            {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
+            <div class="card">
               <div class="card-block">
                 <div class="row">
                   <h4 class="card-title col-xs-11">Nach der Prüfung</h4>
-                  <button type="button" class="close col-xs-1" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_four" aria-expanded="false" aria-controls="phase_four">
+                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                  </a>
                 </div>
+                {{#fourthphasecompleted}}<div class="collapse.show phase_four">{{/fourthphasecompleted}}
+                {{^fourthphasecompleted}}<div class="collapse phase_four">{{/fourthphasecompleted}}
                 <div class="card-text">
                   <div class="row row-eq-height">
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Punkte für Klausureinsicht als PDF exportieren</a>
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Punkte für Klausureinsicht als PDF exportieren</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
+                            <p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
                           </div>
                         </div>
                       </div>
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Ergebnisse mit Prozentangaben als PDF exportieren</a>
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Ergebnisse mit Prozentangaben als PDF exportieren</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+                            <p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
                           </div>
                         </div>
                       </div>
@@ -309,26 +400,26 @@
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-download" aria-hidden="true"></i> Ergebnisse und Statistik exportieren
+                            <i class="fa fa-download" aria-hidden="true"></i> Ergebnisse und Statistik exportieren <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
+                            <p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
                           </div>
                           <div class="card-footer">
-                            <div class="row"><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a></div>
+                            <div class="row"><a class="btn btn-info col-sm-4"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a></div>
                           </div>
                         </div>
                       </div>
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a href="">Ergebnisse für das Prüfungsamt exportieren</a>
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Ergebnisse für das Prüfungsamt exportieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
-                            <p><i class="fa fa-check-circle text-success" aria-hidden="true"></i> Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
+                            <p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
                           </div>
                           <div class="card-footer">
-                            <div class="row"><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a><p class=col-sm-4></p><a href="#" class="btn btn-info col-sm-4"><i class="fa fa-file-text-o" aria-hidden="true"></i> Text</a></div>
+                            <div class="row"><a class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4"><i class="fa fa-file-text-o" aria-hidden="true"></i> Text</a></div>
                           </div>
                         </div>
                       </div>
@@ -343,7 +434,7 @@
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">
-                            <i class="fa fa-trash" aria-hidden="true"></i> <a href="">Prüfungsdaten löschen</a>
+                            <i class="fa fa-trash" aria-hidden="true"></i> <a>Prüfungsdaten löschen</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
                           </div>
                           <div class="card-text">
                             <p><i class="fa fa-check-circle text-danger" aria-hidden="true"></i> Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
@@ -360,214 +451,3 @@
           </li>
       </ul>
    </div>
-</form>
-
-<!-- to be deleted
-<form action="" method="post">
-    <div class="container-fluid">
-        {{!Heading}}
-        <div class="row">
-            <div class="col-md-3"><h5>Vor der Prüfung</h5></div>
-            <div class="col-md-3"><h5>Für die Prüfung</h5></div>
-            <div class="col-md-3"><h5>Nach der Korrektur</h5></div>
-            <div class="col-md-3"><h5>Nach der Prüfung</h5></div>
-        </div>
-        <hr />
-        {{!row1}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/set.png" alt="icon state">
-            <div class="card-block text-success">
-              <h4 class="card-title">Räume auswählen</h4>
-              <p class="card-text">Es wurden bereits Räume ausgewählt</p>
-              <a href="#" class="btn btn-success w-100">Räume auswählen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Sitzplätze zuweisen</h4>
-              <p class="card-text">Bisher wurden keine Sitzplätze zugewiesen</p>
-              <a href="#" class="btn btn-warning w-100">Sitzplätze zuweisen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Bonuspunkte importieren</h4>
-              <p class="card-text">Bisher wurden keine Bonuspunkte importiert</p>
-              <a href="#" class="btn btn-warning w-100">Bonuspunkte importieren</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block">
-              <h4 class="card-title">Punkte für Klausureinsicht als PDF exportieren</h4>
-              <p class="card-text">Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-info w-100">PDF generieren</a>
-            </div>
-          </div>
-        </div>
-        {{!row2}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Datum und Zeit festlegen</h4>
-              <p class="card-text">Bisher wurden noch kein Datum und keine Zeit festgelegt</p>
-              <a href="#" class="btn btn-warning w-100">Datum und Zeit festlegen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Datum und Zeit für Teilnehmer sichtbar schalten</h4>
-              <p class="card-text">Bisher sind das Datum und die Zeit für die Teilnehmer unsichtbar</p>
-              <a href="#" class="btn btn-warning w-100">Für Teilnehmer sichtbar schalten</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Notenschlüßel konfigurieren</h4>
-              <p class="card-text">Bisher wurde kein Notenschlüßel konfiguriert</p>
-              <a href="#" class="btn btn-warning w-100">Notenschlüßel konfigurieren</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block">
-              <h4 class="card-title">Ergebnisse mit Prozentangaben als PDF exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
-              <a href="#" class="btn btn-info w-100">PDF generieren</a>
-            </div>
-          </div>
-        </div>
-        {{!row3}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Teilnehmer hinzufügen</h4>
-              <p class="card-text">Bisher wurden keine Teilnehmer hinzugefügt</p>
-              <a href="#" class="btn btn-warning w-100">Teilnehmer hinzufügen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Räume und Sitzplätze für Teilnehmer sichtbar schalten</h4>
-              <p class="card-text">Bisher sind die Räume und die Sitzplätze für die Teilnehmer unsichtbar</p>
-              <a href="#" class="btn btn-warning w-100">Für Teilnehmer sichtbar schalten</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Prüfungsergebnisse eingeben</h4>
-              <p class="card-text">Bisher wurden keine Prüfungsergebnisse eingegeben</p>
-              <a href="#" class="btn btn-warning w-100">Prüfungsergebnisse eingeben</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/excel_pdf.png" alt="icon excel pdf">
-            <div class="card-block">
-              <h4 class="card-title">Ergebnisse und Statistik exportieren</h4>
-              <p class="card-text">Hier können die Ergenisse und Statistiken als Excel- oder PDF-Dokument exportiert werden.</p>
-              <div class="row"><a href="#" class="btn btn-info">Excel</a><a href="#" class="btn btn-info m-l-1">PDF</a></div>
-            </div>
-          </div>
-        </div>
-        {{!row4}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Aufgaben konfigurieren</h4>
-              <p class="card-text">Bisher wurden keine Aufgaben konfiguriert</p>
-              <a href="#" class="btn btn-warning w-100">Aufgaben konfigurieren</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block">
-              <h4 class="card-title">Sitzplan exportieren</h4>
-              <p class="card-text">Ein Sitzplan kann als PDF-Dokument exportiert werden</p>
-              <a href="#" class="btn btn-info w-100">Sitzplan exportieren</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Eingegebene Ergebnisse prüfen</h4>
-              <p class="card-text">Die bisher eingegebenen Prüfungsergebnisse können hier geprüft werden.</p>
-              <a href="#" class="btn btn-warning w-100">Ergebnisse prüfen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/excel_text.png" alt="icon excel text">
-            <div class="card-block">
-              <h4 class="card-title">Ergebnisse für das Prüfungsamt exportieren</h4>
-              <p class="card-text">Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
-              <div class="row"><a href="#" class="btn btn-info">Excel</a><a href="#" class="btn btn-info m-l-1">PAUL-Text</a></div>
-            </div>
-          </div>
-        </div>
-        {{!row5}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Freitextfeld bearbeiten</h4>
-              <p class="card-text">Bisher ist das Freitextfeld leer</p>
-              <a href="#" class="btn btn-warning w-100">Freitextfeld bearbeiten</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/barcode.png" alt="icon barcode">
-            <div class="card-block">
-              <h4 class="card-title">Prüfungsetiketten exportieren</h4>
-              <p class="card-text">Prüfungsetiketten können als Barcodes exportiert werden</p>
-              <a href="#" class="btn btn-info w-100">Prüfungsetiketten exportieren</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            {{!empty}}
-          </div>
-          <div class="card mb-3 col-md-3">
-            {{!empty}}
-          </div>
-        </div>
-        {{!row6}}
-        <div class="row">
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive w-100" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Nachricht an die Teilnehmer schreiben</h4>
-              <p class="card-text">Bisher wurde keine Nachricht an die Teilnehmer verschickt.</p>
-              <a href="#" class="btn btn-warning w-100">Nachricht verfassen</a>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/pdf.png" alt="icon pdf">
-            <div class="card-block">
-              <h4 class="card-title">Teilnehmerlisten exportieren</h4>
-              <p class="card-text">Die Teilnehmerlisten können nach Name oder nach Sitzplatz sortiert exportiert werden.</p>
-              <div class="row"><a href="#" class="btn btn-info ">Nach Name</a><a href="#" class="btn btn-info m-l-1">Nach Platz</a></div>
-            </div>
-          </div>
-          <div class="card mb-3 col-md-3">
-            {{!empty}}
-          </div>
-          <div class="card mb-3 col-md-3">
-            <img class="card-img-top img-responsive" src="pix/not_set.png" alt="icon state">
-            <div class="card-block text-warning">
-              <h4 class="card-title">Prüfungsdaten löschen</h4>
-              <p class="card-text">Hier können die Prüfungsdaten gelöscht werden.</p>
-              <a href="#" class="btn btn-danger w-100">Prüfungsdaten löschen</a>
-            </div>
-          </div>
-        </div>
-    </div>
-</form>
- -->

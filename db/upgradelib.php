@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Helper function used by the upgrade.php file.
  */
-function mod_exammanagement_helper_function() {
+function exammanagement_helper_function() {
     global $DB;
 
     // Please note that you should always be performing any task using raw (low

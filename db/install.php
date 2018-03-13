@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Custom code to be run on installing the plugin.
  */
-function xmldb_mod_exammanagement_install() {
+function xmldb_exammanagement_install() {
 
     return true;
 }

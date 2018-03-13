@@ -11,8 +11,17 @@
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
-          <FIELD NAME="date" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="date of exam"/>
-          <FIELD NAME="time" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="time of exam"/>
+          <FIELD NAME="categoryid" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
+          <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
+          <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
+          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
+          <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
+          <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
+          <FIELD NAME="assignedplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="assigned places"/>
+          <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
+          <FIELD NAME="roomplacevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
+          <FIELD NAME="userinformation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="specific user information for plugin as json"/>
+          <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
@@ -20,6 +29,21 @@
         <INDEXES>
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
         </INDEXES>
+      </TABLE>
+      <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
+        <FIELDS>
+          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+          <FIELD NAME="roomid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="internal room_id"/>
+          <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for room"/>
+          <FIELD NAME="description" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="displayable description of room"/>
+          <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>
+          <FIELD NAME="places" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="places in each room"/>
+          <FIELD NAME="type" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="room type (standard vs custom)"/>
+          <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
+    	</FIELDS>
+        <KEYS>
+          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        </KEYS>
       </TABLE>
     </TABLES>
   </XMLDB>

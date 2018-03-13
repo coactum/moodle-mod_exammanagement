@@ -39,28 +39,38 @@ use stdClass;
 class exammanagement_overview implements renderable, templatable {
 
     protected $cmid;
-    protected $rolestr;
-    protected $firststagecompleted;
-    protected $day;
-    protected $month;
-    protected $year;
-    protected $hour;
-    protected $minute;
-
+    protected $firstphasecompleted;
+    protected $secondphasecompleted;
+    protected $thirdphasecompleted;
+    protected $fourthphasecompleted;
+    protected $hrexamtime;
+    protected $textfield;
+    protected $participants;
+    protected $rooms;
+    protected $roomnames;
+    protected $stateofplacescorrect;
+    protected $stateofplaceserror;
+	protected $datetimevisible;
+	protected $roomplacevisible;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $rolestr, $firststagecompleted, $day, $month, $year, $hour, $minute) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomplacevisible) {
         $this->cmid = $cmid;
-        $this->rolestr = $rolestr;
-        $this->firststagecompleted = $firststagecompleted;
-        $this->day = $day;
-        $this->month = $month;
-        $this->year = $year;
-        $this->hour = $hour;
-        $this->minute = $minute;
+        $this->firstphasecompleted = $firstphasecompleted;
+        $this->secondphasecompleted = $secondphasecompleted;
+        $this->thirdphasecompleted = $thirdphasecompleted;
+        $this->fourthphasecompleted = $fourthphasecompleted;
+        $this->hrexamtime = $hrexamtime;
+        $this->textfield = $textfield;
+        $this->participants = $participants;
+        $this->rooms = $rooms;
+        $this->roomnames = $roomnames;
+        $this->stateofplacescorrect = $stateofplacescorrect;
+        $this->datetimevisible = $datetimevisible;
+        $this->roomplacevisible = $roomplacevisible;
     }
 
     /**
@@ -72,13 +82,19 @@ class exammanagement_overview implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
-        $data->rolestr = $this->rolestr;
-        $data->firststagecompleted = $this->firststagecompleted;
-        $data->day = $this->day;
-        $data->month = $this->month;
-        $data->year = $this->year;
-        $data->hour = $this->hour;
-        $data->minute = $this->minute;
+        $data->firstphasecompleted = $this->firstphasecompleted;
+        $data->secondphasecompleted = $this->secondphasecompleted;
+        $data->thirdphasecompleted = $this->thirdphasecompleted;
+        $data->fourthphasecompleted = $this->fourthphasecompleted;
+        $data->hrexamtime = $this->hrexamtime;
+        $data->textfield = $this->textfield;
+        $data->participants = $this->participants;
+        $data->rooms = $this->rooms;
+        $data->roomnames = $this->roomnames;
+        $data->stateofplacescorrect = $this->stateofplacescorrect;
+        $data->stateofplaceserror = $this->stateofplaceserror;
+        $data->datetimevisible = $this->datetimevisible;
+        $data->roomplacevisible = $this->roomplacevisible;
         return $data;
     }
 

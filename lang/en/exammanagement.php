@@ -27,8 +27,25 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
-$string['yourrole']= 'Your current role(s) is/are ';
-$string['overview']= 'Overview';
+$string['overview'] = 'Overview';
+
+//dateTimeForm.php
+
+$string['resetDateTime'] = 'Reset appointment';
+
+//helptexts
+$string['helptext_str'] = 'Help text';
+$string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
+$string['helptext_overview']= 'Here goes the description of this feature site.';
+$string['helptext_addRooms']= 'Here goes the description of this feature site.';
+$string['helptext_setDateTime']= 'Here goes the description of this feature site.';
+$string['helptext_addParticipants']= 'Here goes the description of this feature site.';
+$string['helptext_setTextfield']= 'Here goes the description of this feature site.';
+$string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
+
+//errors and permissions
+$string['missingidandcmid'] = 'Course id missing (missingcmid)';
+$string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 
 //universal
 $string['modulename'] = 'Exam management';
@@ -36,14 +53,16 @@ $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
 
 //addnewinstance
-$string['modulename_help'] = 'This is the information text for when you choose a new activity ...';
+$string['modulename_help'] = 'The PANDA exammanagement allows you easy organizing the exams for your course and makes it possible to manage even large exams with many participants.';
 $string['exammanagementname'] = 'Exam Management';
-$string['exammanagementname_help'] = 'You should not use another name as the standart ...';
-$string['exammanagementdescription'] = 'Description:';
-$string['exammanagementdescriptiontext'] = 'Descriptiontext ....';
-$string['exammanagementfieldset'] = 'Further Information';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
 
-
+//capabilities
+$string['exammanagement:addinstance'] = 'Add new exam organization';
+$string['exammanagement:viewinstance'] = 'View exam organization';
+$string['exammanagement:viewparticipantspage'] = 'View participants page';
+$string['exammanagement:takeexams'] = 'Take exams';
+$string['exammanagement:sendgroupmessage'] = 'Send group message to participants';
+$string['exammanagement:addDefaultRooms'] = 'Import default rooms';

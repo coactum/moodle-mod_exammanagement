@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Custom uninstallation procedure.
  */
-function xmldb_mod_exammanagement_uninstall() {
+function xmldb_exammanagement_uninstall() {
 
     return true;
 }

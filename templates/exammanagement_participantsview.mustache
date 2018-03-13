@@ -1,0 +1,88 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template exammanagement/exammanagement_overview
+
+    Example context (json):
+    {
+        "comment": "Example comment for the context"
+    }
+}}
+
+   <div class = "container-fluid">
+      <h3 class = "m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>
+
+      <h4>Informationen zur Prüfung</h4>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Status:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#isparticipant}}<p>Sie sind zur Prüfung angemeldet.</p>{{/isparticipant}}
+            {{^isparticipant}}<p>Sie sind nicht zur Prüfung angemeldet.</p>{{/isparticipant}}
+          </div>
+      </div>
+      {{#isparticipant}}
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Datum:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#examdate}}<p>{{examdate}}</p>{{/examdate}}
+            {{^examdate}}<p>Es wurde noch kein Datum für die Prüfung festgelegt.</p>{{/examdate}}
+          </div>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Uhrzeit:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#examtime}}<p>{{examtime}}</p>{{/examtime}}
+            {{^examtime}}<p>Es wurde noch keine Uhrzeit für die Prüfung festgelegt.</p>{{/examtime}}
+          </div>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Raum:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#room}}<p>{{room}}</p>{{/room}}
+            {{^room}}<p>Es wurde noch kein Prüfungsraum zugewiesen.</p>{{/room}}
+          </div>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Platz:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#place}}<p>{{place}}</p>{{/place}}
+            {{^place}}<p>Es wurde noch kein Sitzplatz zugewiesen.</p>{{/place}}
+          </div>
+      </div>
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Hinweis:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#textfield}}
+                {{{textfield}}}
+            {{/textfield}}
+            {{^textfield}}Es ist kein Prüfungshinweis verfügbar.{{/textfield}}
+          </div>
+      </div>
+      {{/isparticipant}}
+</div>

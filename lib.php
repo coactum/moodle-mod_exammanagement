@@ -16,7 +16,7 @@
 
 /**
  * Library of interface functions and constants.
- * All the core Moodle functions, neeeded to allow the module to work 
+ * All the core Moodle functions, neeeded to allow the module to work
  * integrated in Moodle should be placed here.
  * All the newmodule specific functions, needed to implement all the module
  * logic, should go to locallib.php. This will help to save some memory when
@@ -62,12 +62,13 @@ function exammanagement_supports($feature) {
  * @return int The id of the newly inserted record.
  */
 function exammanagement_add_instance($moduleinstance, $mform = null) {
-    global $DB;
+    global $DB, $PAGE;
 
     $moduleinstance->timecreated = time();
+    $moduleinstance->categoryid = $PAGE->category->name; //set course category
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
-    
+
     return $moduleinstance->id;
 }
 
