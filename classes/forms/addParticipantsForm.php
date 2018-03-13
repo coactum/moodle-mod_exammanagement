@@ -91,10 +91,10 @@ class addParticipantsForm extends moodleform {
 
 		$maxbytes=$CFG->maxbytes;
 
-		$mform->addElement('html', '<div class="file"><h4>Excel-Datei</h4>');
+		$mform->addElement('html', '<div class="file"><h4>Excel-Datei</h4><i class="fa fa-times text-error pull-right"> Diese Funktion befindet sich derzeit in der Entwicklung.</i>');
 		$mform->addElement('filepicker', 'userfile', 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
 
-		$mform->addElement('html', '<h4>PAUL-Datei</h4>');
+		$mform->addElement('html', '<h4>PAUL-Datei</h4><i class="fa fa-times text-error pull-right"> Diese Funktion befindet sich derzeit in der Entwicklung.</i>');
 		$mform->addElement('filepicker', 'userfile', 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
 		$mform->addElement('html', '</div>');
 

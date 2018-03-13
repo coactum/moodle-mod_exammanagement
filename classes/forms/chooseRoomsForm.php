@@ -85,7 +85,7 @@ class chooseRoomsForm extends moodleform {
 
           $svgStr = base64_decode($roomObj->seatingplan);
 
-					$mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle text-success"></i></a><div class="svg hidden">'.$svgStr.'</div>');
+					$mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="svg hidden">'.$svgStr.'</div>');
 
         } else {
 					$mform->addElement('html', ' Nein ');
@@ -114,7 +114,7 @@ class chooseRoomsForm extends moodleform {
 
 		$maxbytes=$CFG->maxbytes;
 
-		$mform->addElement('html', '<div class="import"><h4>Excel-Datei</h4>');
+		$mform->addElement('html', '<div class="import"><h4>Excel-Datei</h4><i class="fa fa-times text-error"> Diese Funktion befindet sich derzeit in der Entwicklung.</i>');
 		$mform->addElement('filepicker', 'userfile', 'Räume aus Excel-Datei als Standardräume importieren (...).', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
 		$mform->addElement('html', '</div>');
 

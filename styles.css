@@ -24,9 +24,9 @@
       line-height: 30px;
       position: absolute;
       color: #666;
-      background: #d2d6de;
-      background-color: rgb(210, 214, 222);
+      background-color: #fff;
       border-radius: 50%;
+      border: 2px solid #d2d6de;
       text-align: center;
       left: 18px;
       top: 0;
@@ -48,7 +48,7 @@
     border-radius: 2px;
 }
 
-.exmammanagement-summary div:target{
+.exmammanagement-summary li:target{
     padding-top: 0px !important;
     margin-top: 0px !important;
 

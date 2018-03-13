@@ -47,11 +47,10 @@ $calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
-if ($p->checkCapability('mod/exammanagement:viewinstance')){
+if ($p->checkCapability('mod/exammanagement:viewinstance')||($p->checkCapability('mod/exammanagement:viewparticipantspage')&&$p->checkCapability('mod/exammanagement:viewinstance'))){
     $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
-    var_dump($CFG);
 
-} elseif ($p->checkCapability('mod/exammanagement:viewparticipantspage')){
+} elseif ($p->checkCapability('mod/exammanagement:viewparticipantspage')&&(!$p->checkCapability('mod/exammanagement:viewinstance'))){
     $p->outputParticipantsView();
 
 } else{

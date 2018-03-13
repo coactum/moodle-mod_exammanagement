@@ -222,12 +222,12 @@ EOF;
 
 		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
 
-		if($calledfromformdt){
+		if($calledfromformdt&&$this->checkCapability('mod/exammanagement:adddefaultrooms')){
 			$this->saveStateOfDateTimeVisibility($datetimevisible);
 
 		}
 
-		if($calledfromformrp){
+		if($calledfromformrp&&$this->checkCapability('mod/exammanagement:adddefaultrooms')){
 			$this->saveStateOfRoomPlaceVisibility($roomplacevisible);
 
 		}

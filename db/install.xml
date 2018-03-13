@@ -11,11 +11,11 @@
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
+          <FIELD NAME="categoryid" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
-          <FIELD NAME="temprooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temp rooms for exammanagement instance as json array"/>
           <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
           <FIELD NAME="assignedplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="assigned places"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
@@ -38,6 +38,7 @@
           <FIELD NAME="description" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="displayable description of room"/>
           <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>
           <FIELD NAME="places" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="places in each room"/>
+          <FIELD NAME="type" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="room type (standard vs custom)"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
