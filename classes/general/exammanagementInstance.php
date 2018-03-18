@@ -1277,44 +1277,54 @@ EOF;
 
 	public function assignPlaces(){
 
-		$choosenRoomsArray = $this->getSavedRooms();
-		$UserIDsArray = $this->getSavedParticipants();
-		$newAssignmentObj = '';
+		$savedRoomsArray = $this->getSavedRooms();
+		$participantsIDsArray = $this->getSavedParticipants();
 		$assignmentArray = array();
+		$newAssignmentObj = '';
 
-		if(!$choosenRoomsArray){
+		if(!$savedRoomsArray){
 			$this->unsetStateOfPlaces('error');
 			$this->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
-		} elseif(!$UserIDsArray){
+		} elseif(!$participantsIDsArray){
 			$this->unsetStateOfPlaces('error');
 			$this->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
 		}
 
-		foreach($choosenRoomsArray as $key => $roomID){
+		foreach($savedRoomsArray as $key => $roomID){
 
 			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
 
 			$Places = json_decode($RoomObj->places);	//get Places of this Room
 
+			$assignmentRoomObj = new stdClass();
+
+			$assignmentRoomObj->roomid = $RoomObj->roomid;
+			$assignmentRoomObj->roomname = $RoomObj->name;
+			$assignmentRoomObj->assignments = array();
+
 			foreach($Places as $key => $placeID){
-				$currentUserID = array_pop($UserIDsArray);
+				$currentParticipantID = array_pop($participantsIDsArray);
 
-				$newAssignmentObj = $this->assignPlaceToUser($currentUserID, $RoomObj->roomid, $RoomObj->name, $placeID);
-				array_push($assignmentArray, $newAssignmentObj);
+				$newAssignmentObj = $this->assignPlaceToUser($currentParticipantID, $placeID);
+				array_push($assignmentRoomObj->assignments, $newAssignmentObj);
 
-				if(!$UserIDsArray){						//if all users have a place: stop
+				if(!$participantsIDsArray){						//if all users have a place: stop
+					array_push($assignmentArray, $assignmentRoomObj);
 					break 2;
 				}
+
 			}
 
-			if(!$UserIDsArray){						//if all users have a place: stop
+			array_push($assignmentArray, $assignmentRoomObj);
+			
+			if(!$participantsIDsArray){						//if all users have a place: stop
 				break;
 			}
 		}
 
-		if($UserIDsArray){								//if users are left without a room
+		if($participantsIDsArray){								//if users are left without a room
 			$this->unsetStateOfPlaces('error');
 			$this->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
@@ -1330,13 +1340,11 @@ EOF;
 
 	}
 
-	protected function assignPlaceToUser($userid, $roomid, $roomname, $place){
+	protected function assignPlaceToUser($userid, $place){
 
 		$assignment = new stdClass();
 
 		$assignment->userid = $userid;
-		$assignment->roomid = $roomid;
-		$assignment->roomname = $roomname;
 		$assignment->place = $place;
 
 		 return $assignment;
@@ -1468,19 +1476,18 @@ EOF;
 
 		//hier weitermachen und Array zunächst nach Namen sortieren und dann in Tabelle ausgeben bzw. in koaLA Vorlagencode ab Zeile 95 weiter machen
 
-
 		// Array nach Teilnehmernamen sortieren (dafür entweder Teilnehmernamen in Assignmentarray speichern oder aber hier für jede uid Namen, Vornamen und Matrikelnummer zu Array hinzufügen)
 		usort($assignedPlaces, function($a, $b){ //sort array by place
     		return strcmp($a->roomname, $b->roomname);
 		});
 
 		var_dump($assignedPlaces);
+		echo '<br />';
 
-		foreach ($assignedPlaces as $p){
+		foreach ($assignedPlaces as $room){
 
-			$currentroom = $p->roomname;
-			var_dump($currentroom);
-			var_dump($p->place);
+			var_dump($room->roomname);
+			var_dump($room->assignments);
 
 
 		}
