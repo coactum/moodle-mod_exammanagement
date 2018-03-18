@@ -32,6 +32,15 @@ $string['overview']= 'Überblick';
 //dateTimeForm.php
 $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
 
+//participant list
+$string['participantslist'] = 'Teilnehmerliste';
+$string['internal_use'] = 'Nur für die Prüfungsorganisation!';
+$string['lastname'] = 'Name';
+$string['firstname'] = 'Vorname';
+$string['matrno'] = 'Matr.-Nr.';
+$string['room'] = 'Raum';
+$string['place'] = 'Platz';
+
 //helptexts
 $string['helptext_str'] = 'Hilfetext';
 $string['helptext_link'] = 'Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link:';

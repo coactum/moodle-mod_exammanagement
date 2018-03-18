@@ -82,6 +82,20 @@ class exammanagementInstance{
 
 	}
 
+	#### getter for object properties
+
+	public function getModuleinstance(){
+
+			return $this->moduleinstance;
+
+	}
+
+	public function getCourse(){
+
+			return $this->course;
+
+	}
+
 	#### wrapped general moodle functions #####
 
 	protected function setPage($substring){
@@ -237,7 +251,7 @@ EOF;
 
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError(), $this->isDateTimeVisible(),$this->isRoomPlaceVisible());
+		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtimeTemplate(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError(), $this->isDateTimeVisible(),$this->isRoomPlaceVisible());
 		echo $output->render($page);
 
 		//$this->debugElementsOverview();
@@ -245,7 +259,7 @@ EOF;
 		$this->outputFooter();
  	}
 
- 	protected function getExamtime(){		//get examtime (for form)
+ 	public function getExamtime(){		//get examtime (for form)
 		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
 				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
 			} else {
@@ -253,10 +267,20 @@ EOF;
 			}
 	}
 
-	protected function getHrExamtime() {	//convert examtime to human readable format for template
+	public function getHrExamtimeTemplate() {	//convert examtime to human readable format for template
 		$examtime=$this->getExamtime();
 		if($examtime){
-			$hrexamtime = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			$hrexamtimetemplate = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			return $hrexamtimetemplate;
+		} else {
+			return false;
+		}
+ 	}
+
+	public function getHrExamtime() {	//convert examtime to human readable format for template
+		$examtime=$this->getExamtime();
+		if($examtime){
+			$hrexamtime = date('d.m.Y', $examtime).' '.date('H:i', $examtime);
 			return $hrexamtime;
 		} else {
 			return false;
@@ -1371,115 +1395,124 @@ EOF;
 
 	########### Export PDFS ####
 
-	public function exportDemoPDF(){
+	public function exportParticipantsListNames(){
 
 		global $CFG;
 
-		if(!$this->isStateOfPlacesCorrect() || !$this->isStateOfPlacesError()){
+		define("WIDTH_COLUMN_NAME", 200);
+		define("WIDTH_COLUMN_FORENAME", 150);
+		define("WIDTH_COLUMN_MATNO", 60);
+		define("WIDTH_COLUMN_ROOM", 90);
+		define("WIDTH_COLUMN_PLACE", 70);
+
+		if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
 			$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+		} else if(!$this->getExamtime()){
+			$this->redirectToOverviewPage('forexam', 'Noch kein Prüfungsdatum eingetragen.', 'error');
 		}
-
-		//============================================================+
-		// File name   : example_001.php
-		// Begin       : 2008-03-04
-		// Last Update : 2013-05-14
-		//
-		// Description : Example 001 for TCPDF class
-		//               Default Header and Footer
-		//
-		// Author: Nicola Asuni
-		//
-		// (c) Copyright:
-		//               Nicola Asuni
-		//               Tecnick.com LTD
-		//               www.tecnick.com
-		//               info@tecnick.com
-		//============================================================+
-
-		/**
-		 * Creates an example PDF TEST document using TCPDF
-		 * @package com.tecnick.tcpdf
-		 * @abstract TCPDF - Example: Default Header and Footer
-		 * @author Nicola Asuni
-		 * @since 2008-03-04
-		 */
 
 		// Include the main TCPDF library (search for installation path).
 		require_once(__DIR__.'/../../../../config.php');
 		require_once($CFG->libdir.'/pdflib.php');
 
 		// create new PDF document
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf = new \mod_exammanagement\pdfs\participantsListNames(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
 
 		// set document information
 		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('Nicola Asuni');
-		$pdf->SetTitle('TCPDF Example 001');
-		$pdf->SetSubject('TCPDF Tutorial');
-		$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-		// set default header data
-		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-		$pdf->setFooterData(array(0,64,0), array(0,64,128));
-
-		// set header and footer fonts
-		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		$pdf->SetAuthor('PANDA');
+		$pdf->SetTitle($this->getCourse()->fullname);
+		$pdf->SetSubject(get_string('participantslist', 'mod_exammanagement'));
+		$pdf->SetKeywords(get_string('participantslist', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
 
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
+		// set default header data
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
 		// set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetMargins(25, 50, 25);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-		// set auto page breaks
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		//set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, 19);
 
 		// set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 		// set some language-dependent strings (optional)
-		if (@file_exists(__DIR__.'/lang/eng.php')) {
-			require_once(__DIR__.'/lang/eng.php');
-			$pdf->setLanguageArray($l);
-		}
+		// if (@file_exists(__DIR__.'/lang/eng.php')) {
+		// 	require_once(__DIR__.'/lang/eng.php');
+		// 	$pdf->setLanguageArray($l);
+		// }
 
 		// ---------------------------------------------------------
-
-		// set default font subsetting mode
-		$pdf->setFontSubsetting(true);
 
 		// Set font
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
-		$pdf->SetFont('helvetica', 'BI', 12);
+		$pdf->SetFont('helvetica', '', 10);
 
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
 		$pdf->AddPage();
 
-		// set text shadow effect
-		$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+		// get users and construct content for document
+		$assignedPlaces = $this->getAssignedPlaces();
+		$fill = false;
+		$previousRoom;
+		$tbl = $this->getParticipantsListTableHeader();
 
-		// Set some content to print
-		$html = 'Hallo';
+		//hier weitermachen und Array zunächst nach Namen sortieren und dann in Tabelle ausgeben bzw. in koaLA Vorlagencode ab Zeile 95 weiter machen
+
+
+		// Array nach Teilnehmernamen sortieren (dafür entweder Teilnehmernamen in Assignmentarray speichern oder aber hier für jede uid Namen, Vornamen und Matrikelnummer zu Array hinzufügen)
+		usort($assignedPlaces, function($a, $b){ //sort array by place
+    		return strcmp($a->roomname, $b->roomname);
+		});
+
+		var_dump($assignedPlaces);
+
+		foreach ($assignedPlaces as $p){
+
+			$currentroom = $p->roomname;
+			var_dump($currentroom);
+			var_dump($p->place);
+
+
+		}
 
 		// Print text using writeHTMLCell()
-		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
-		$pdf->Output('example_001.pdf', 'D');
+		//$pdf->Output('example_001.pdf', 'D');
 
 		//============================================================+
 		// END OF FILE
 		//============================================================+
 
+		}
+
+		public function getParticipantsListTableHeader() { // to bemoved to pdf object
+			$tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+			$tbl .= "<thead>";
+			$tbl .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "</tr>";
+			$tbl .= "</thead>";
+
+			return $tbl;
 		}
 
 	########### debugging ########

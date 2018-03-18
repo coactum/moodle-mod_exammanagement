@@ -36,7 +36,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
 if($p->checkCapability('mod/exammanagement:viewinstance')){
-    $p->exportDemoPDF();
+    $p->exportParticipantsListNames();
 } else {
     $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

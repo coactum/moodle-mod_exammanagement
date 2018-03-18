@@ -33,6 +33,15 @@ $string['overview'] = 'Overview';
 
 $string['resetDateTime'] = 'Reset appointment';
 
+//participant list
+$string['participantslist'] = 'list of participants';
+$string['internal_use'] = 'FOR INTERNAL USE ONLY';
+$string['lastname'] = 'Name';
+$string['firstname'] = 'Firstname';
+$string['matrno'] = 'Matr.-no.';
+$string['room'] = 'Room';
+$string['place'] = 'Place';
+
 //helptexts
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
