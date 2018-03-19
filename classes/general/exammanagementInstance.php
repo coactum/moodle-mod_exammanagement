@@ -979,7 +979,7 @@ EOF;
 		}
 	}
 
-	public function getUser($userid){
+	public function getMoodleUser($userid){
 
 		$user = $this->getRecordFromDB('user', array('id'=>$userid));
 
@@ -991,7 +991,7 @@ EOF;
 
 		global $OUTPUT;
 
-		$user = $this->getUser($userid);
+		$user = $this->getMoodleUser($userid);
 		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
 
 	}
@@ -1000,7 +1000,7 @@ EOF;
 
 		global $CFG;
 
-		$user = $this->getUser($userid);
+		$user = $this->getMoodleUser($userid);
 		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
 
 		return $profilelink;
@@ -1051,7 +1051,7 @@ EOF;
 
 	public function assignMatrNrToUser($userid){
 
-			$user = $this->getUser($userid); // for temp matrNr
+			$user = $this->getMoodleUser($userid); // for temp matrNr
 
 			// constructing test MatrN., later needs to be readed from csv-File
 
@@ -1213,7 +1213,7 @@ EOF;
 
 		foreach ($participants as $key => $value){
 
-			$user=$this->getUser($value);
+			$user=$this->getMoodleUser($value);
 
 			$this->sendSingleMessage($user, $mailsubject, $mailtext);
 
@@ -1318,7 +1318,7 @@ EOF;
 			}
 
 			array_push($assignmentArray, $assignmentRoomObj);
-			
+
 			if(!$participantsIDsArray){						//if all users have a place: stop
 				break;
 			}
@@ -1408,7 +1408,7 @@ EOF;
 		global $CFG;
 
 		define("WIDTH_COLUMN_NAME", 200);
-		define("WIDTH_COLUMN_FORENAME", 150);
+		define("WIDTH_COLUMN_FIRSTNAME", 150);
 		define("WIDTH_COLUMN_MATNO", 60);
 		define("WIDTH_COLUMN_ROOM", 90);
 		define("WIDTH_COLUMN_PLACE", 70);
@@ -1424,7 +1424,7 @@ EOF;
 		require_once($CFG->libdir.'/pdflib.php');
 
 		// create new PDF document
-		$pdf = new \mod_exammanagement\pdfs\participantsListNames(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf = new \mod_exammanagement\pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 
 		// set document information
@@ -1441,7 +1441,7 @@ EOF;
 		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
 		// set margins
-		$pdf->SetMargins(25, 50, 25);
+		$pdf->SetMargins(25, 55, 25);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 		//set auto page breaks
@@ -1462,7 +1462,7 @@ EOF;
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
-		$pdf->SetFont('helvetica', '', 10);
+		$pdf->SetFont('freeserif', '', 10);
 
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
@@ -1474,32 +1474,68 @@ EOF;
 		$previousRoom;
 		$tbl = $this->getParticipantsListTableHeader();
 
-		//hier weitermachen und Array zunächst nach Namen sortieren und dann in Tabelle ausgeben bzw. in koaLA Vorlagencode ab Zeile 95 weiter machen
+		foreach ($assignedPlaces as $roomObj){
+			$currentRoom = $roomObj;
 
-		// Array nach Teilnehmernamen sortieren (dafür entweder Teilnehmernamen in Assignmentarray speichern oder aber hier für jede uid Namen, Vornamen und Matrikelnummer zu Array hinzufügen)
-		usort($assignedPlaces, function($a, $b){ //sort array by place
-    		return strcmp($a->roomname, $b->roomname);
-		});
+			if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+					//new room -> finish and print current table and begin new page
+					$tbl .= "</table>";
+					$pdf->writeHTML($tbl, true, false, false, false, '');
+					$pdf->AddPage();
+					$fill = false;
+					$tbl = $this->getParticipantsListTableHeader();
+				}
 
-		var_dump($assignedPlaces);
-		echo '<br />';
+				usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
+					$aFirstname = $this->getMoodleUser($a->userid)->firstname;
+					$aLastname = $this->getMoodleUser($a->userid)->lastname;
+					$bFirstname = $this->getMoodleUser($b->userid)->firstname;
+					$bLastname = $this->getMoodleUser($b->userid)->lastname;
 
-		foreach ($assignedPlaces as $room){
+					if ($aLastname == $bLastname) { //if names are even sort by first name
+							return strcmp($aFirstname, $bFirstname);
+					} else{
+							return strcmp($aLastname, $bLastname); // else sort by last name
+					}
 
-			var_dump($room->roomname);
-			var_dump($room->assignments);
+				});
 
+			foreach ($roomObj->assignments as $assignment){
+				$user = $this->getMoodleUser($assignment->userid);
+
+				$tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+				$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
+				$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
+				$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $this->getUserMatrNrPO($assignment->userid) . "</td>";
+				$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
+				$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
+				$tbl .= "</tr>";
+
+				$fill = !$fill;
+
+			}
+
+			$previousRoom = $currentRoom;
 
 		}
 
+		$tbl .= "</table>";
+
 		// Print text using writeHTMLCell()
-		//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+		$pdf->writeHTML($tbl, true, false, false, false, '');
+
+		//generate filename without umlaute
+		$umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+		$replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+		$filenameUmlaute = get_string("participantslist_names", "mod_exammanagement") . $this->moduleinstance->categoryid . '' . $this->getCourse()->fullname.'.pdf';
+		$filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
-		//$pdf->Output('example_001.pdf', 'D');
+		$pdf->Output($filename, 'D');
 
 		//============================================================+
 		// END OF FILE
@@ -1512,7 +1548,7 @@ EOF;
 			$tbl .= "<thead>";
 			$tbl .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
 			$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+			$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
 			$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
 			$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
 			$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";

@@ -33,7 +33,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 // Extend the TCPDF class to create custom Header and Footer
-class participantsListNames extends TCPDF {
+class participantsList extends TCPDF {
 
   public function Header() {
 
@@ -46,20 +46,20 @@ class participantsListNames extends TCPDF {
     $p = \mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
 
     $this->ImageEps(__DIR__.'/../../data/upb_logo_full.ai', 25, 12, 70);
-    $this->SetFont('helvetica', 'B', 22);
+    $this->SetFont('freeserif', 'B', 22);
     $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
     $this->SetTextColor(255, 0, 0);
-    $this->SetFont('helvetica', 'B', 10);
+    $this->SetFont('freeserif', 'B', 10);
     $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
     $this->SetTextColor(0, 0, 0);
-    $this->SetFont('helvetica', '', 14);
-    $this->MultiCell(130, 5, $p->getCourse()->fullname, 0, 'L', 0, 0, 25, 40);
-    $this->MultiCell(26, 5, $p->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
+    $this->SetFont('freeserif', '', 14);
+    $this->MultiCell(130, 50, $p->getModuleinstance()->categoryid . ' / ' . $p->getCourse()->fullname . ' ('. $p->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
+    $this->MultiCell(26, 50, $p->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
   }
 
   public function Footer() {
     $this->SetY(-16); // 1.6 cm from bottom
-    $this->SetFont('helvetica', 'BI', 12);
+    $this->SetFont('freeserif', 'BI', 12);
     $this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
   }
 }

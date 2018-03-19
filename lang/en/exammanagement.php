@@ -35,6 +35,7 @@ $string['resetDateTime'] = 'Reset appointment';
 
 //participant list
 $string['participantslist'] = 'list of participants';
+$string['participantslist_names'] = 'list of participants (names)';
 $string['internal_use'] = 'FOR INTERNAL USE ONLY';
 $string['lastname'] = 'Name';
 $string['firstname'] = 'Firstname';
