@@ -47,7 +47,7 @@ class exammanagementInstance{
 	protected $modulecontext;
 
 	private function __construct($id, $e) {
-		global $DB, $CFG;
+		global $DB;
 
 		$this->id=$id;
 		$this->e=$e;
@@ -102,7 +102,7 @@ class exammanagementInstance{
 		global $PAGE;
 
 		// Print the page header.
-		$PAGE->set_url('/mod/exammanagement/'.$substring.'.php', array('id' => $this->cm->id));
+		$PAGE->set_url($this->getExammanagementUrl($substring, $this->cm->id));
 		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($this->moduleinstance->name));
 		$PAGE->set_heading(format_string($this->course->fullname));
 		$PAGE->set_context($this->modulecontext);
@@ -138,18 +138,23 @@ class exammanagementInstance{
 
  	}
 
- 	public function getModuleUrl($component){
+ 	public function getExammanagementUrl($component, $id){
 
- 		global $CFG;
+ 		$url= $this->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
- 		$url=$CFG->wwwroot.'/mod/exammanagement/'.$component.'.php?id='.$this->id;
+ 		return $url;
+ 	}
+
+	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
+
+ 		$url= new \moodle_url($url, array('key' => 'value', 'id' => $id, $param => $value));
 
  		return $url;
  	}
 
  	public function redirectToOverviewPage($anchor, $message, $type){
 
-		$url = $this->getModuleUrl('view');
+		$url = $this->getExammanagementUrl('view', $this->cm->id);
 
 		if ($anchor){
 				$url .= '#'.$anchor;
@@ -775,20 +780,16 @@ EOF;
 
 	public function addDefaultRooms(){
 
-		global $CFG;
-
-		//$records= array();
-
-		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.txt');
+		$defaultRoomsFile = file($this->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
 
 		foreach ($defaultRoomsFile as $key => $roomstr){
 
-			$roomParameters=explode('+', $roomstr);
+			$roomParameters = explode('+', $roomstr);
 
 			$roomObj = new stdClass();
-			$roomObj->roomid=$roomParameters[0];
-			$roomObj->name=$roomParameters[1];
- 			$roomObj->description=$roomParameters[2];
+			$roomObj->roomid = $roomParameters[0];
+			$roomObj->name = $roomParameters[1];
+ 			$roomObj->description = $roomParameters[2];
 
 			$svgStr = base64_encode($roomParameters[3]);
 
@@ -998,10 +999,8 @@ EOF;
 
 	public function getUserProfileLink($userid){
 
-		global $CFG;
-
 		$user = $this->getMoodleUser($userid);
-		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
+		$profilelink = '<strong><a href="'.$this->getMoodleUrl('/user/view.php', $user->id, 'course', $this->course->id).'">'.fullname($user).'</a></strong>';
 
 		return $profilelink;
 
@@ -1028,15 +1027,13 @@ EOF;
 
 	public function getParticipantsGroupNames($userid){
 
-		global $CFG;
-
 		$userGroups = groups_get_user_groups($this->course->id, $userid);
 		$groupNameStr = false;
 
 		foreach ($userGroups as $key => $value){
 			if ($value){
 				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$CFG->wwwroot.'/user/index.php?id='.$this->course->id.'&amp;group='.$value2.'">'.groups_get_group_name($value2).'</a></strong>, ';
+					$groupNameStr.='<strong><a href="'.$this->getMoodleUrl('/user/index.php', $this->course->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>, ';
 				}
 			}
 			else{
@@ -1225,7 +1222,7 @@ EOF;
 
 	protected function sendSingleMessage($user, $subject, $text){
 
-		global $USER, $CFG;
+		global $USER;
 
 		$message = new \core\message\message();
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
@@ -1243,7 +1240,7 @@ EOF;
 		$message->replyto = "noreply@imt.uni-paderborn.de";
 
 		$header = '';
-		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
+		$url = $this->getMoodleUrl("/mod/exammanagement/view.php", array('key' => 'value', 'id' => $this->id));
 		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
@@ -1415,8 +1412,6 @@ EOF;
 
 		if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
 			$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
-		} else if(!$this->getExamtime()){
-			$this->redirectToOverviewPage('forexam', 'Noch kein Prüfungsdatum eingetragen.', 'error');
 		}
 
 		// Include the main TCPDF library (search for installation path).
@@ -1555,8 +1550,6 @@ EOF;
 
 			if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
 				$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
-			} else if(!$this->getExamtime()){
-				$this->redirectToOverviewPage('forexam', 'Noch kein Prüfungsdatum eingetragen.', 'error');
 			}
 
 			// Include the main TCPDF library (search for installation path).
