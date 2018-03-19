@@ -1431,8 +1431,8 @@ EOF;
 		$pdf->SetCreator(PDF_CREATOR);
 		$pdf->SetAuthor('PANDA');
 		$pdf->SetTitle($this->getCourse()->fullname);
-		$pdf->SetSubject(get_string('participantslist', 'mod_exammanagement'));
-		$pdf->SetKeywords(get_string('participantslist', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
+		$pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
+		$pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
 
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -1542,6 +1542,138 @@ EOF;
 		//============================================================+
 
 		}
+
+		public function exportParticipantsListPlaces(){
+
+			global $CFG;
+
+			define("WIDTH_COLUMN_NAME", 200);
+			define("WIDTH_COLUMN_FIRSTNAME", 150);
+			define("WIDTH_COLUMN_MATNO", 60);
+			define("WIDTH_COLUMN_ROOM", 90);
+			define("WIDTH_COLUMN_PLACE", 70);
+
+			if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
+				$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+			} else if(!$this->getExamtime()){
+				$this->redirectToOverviewPage('forexam', 'Noch kein Prüfungsdatum eingetragen.', 'error');
+			}
+
+			// Include the main TCPDF library (search for installation path).
+			require_once(__DIR__.'/../../../../config.php');
+			require_once($CFG->libdir.'/pdflib.php');
+
+			// create new PDF document
+			$pdf = new \mod_exammanagement\pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+
+			// set document information
+			$pdf->SetCreator(PDF_CREATOR);
+			$pdf->SetAuthor('PANDA');
+			$pdf->SetTitle($this->getCourse()->fullname);
+			$pdf->SetSubject(get_string('participantslist_places', 'mod_exammanagement'));
+			$pdf->SetKeywords(get_string('participantslist_places', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
+
+			// set default monospaced font
+			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+			// set default header data
+			$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+			// set margins
+			$pdf->SetMargins(25, 55, 25);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+			//set auto page breaks
+			$pdf->SetAutoPageBreak(TRUE, 19);
+
+			// set image scale factor
+			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+			// set some language-dependent strings (optional)
+			// if (@file_exists(__DIR__.'/lang/eng.php')) {
+			// 	require_once(__DIR__.'/lang/eng.php');
+			// 	$pdf->setLanguageArray($l);
+			// }
+
+			// ---------------------------------------------------------
+
+			// Set font
+			// dejavusans is a UTF-8 Unicode font, if you only need to
+			// print standard ASCII chars, you can use core fonts like
+			// helvetica or times to reduce file size.
+			$pdf->SetFont('freeserif', '', 10);
+
+			// Add a page
+			// This method has several options, check the source code documentation for more information.
+			$pdf->AddPage();
+
+			// get users and construct content for document
+			$assignedPlaces = $this->getAssignedPlaces();
+			$fill = false;
+			$previousRoom;
+			$tbl = $this->getParticipantsListTableHeader();
+
+			foreach ($assignedPlaces as $roomObj){
+				$currentRoom = $roomObj;
+
+				if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+						//new room -> finish and print current table and begin new page
+						$tbl .= "</table>";
+						$pdf->writeHTML($tbl, true, false, false, false, '');
+						$pdf->AddPage();
+						$fill = false;
+						$tbl = $this->getParticipantsListTableHeader();
+					}
+
+					usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
+
+						return strcmp($a->place, $b->place); // sort by place
+
+					});
+
+				foreach ($roomObj->assignments as $assignment){
+					$user = $this->getMoodleUser($assignment->userid);
+
+					$tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+					$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
+					$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
+					$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $this->getUserMatrNrPO($assignment->userid) . "</td>";
+					$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
+					$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
+					$tbl .= "</tr>";
+
+					$fill = !$fill;
+
+				}
+
+				$previousRoom = $currentRoom;
+
+			}
+
+			$tbl .= "</table>";
+
+			// Print text using writeHTMLCell()
+
+			$pdf->writeHTML($tbl, true, false, false, false, '');
+
+			//generate filename without umlaute
+			$umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+			$replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+			$filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . $this->moduleinstance->categoryid . '' . $this->getCourse()->fullname.'.pdf';
+			$filename = preg_replace($umlaute, $replace, $filenameUmlaute);
+
+			// ---------------------------------------------------------
+
+			// Close and output PDF document
+			// This method has several options, check the source code documentation for more information.
+			$pdf->Output($filename, 'D');
+
+			//============================================================+
+			// END OF FILE
+			//============================================================+
+
+			}
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object
 			$tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";

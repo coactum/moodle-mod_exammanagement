@@ -34,7 +34,8 @@ $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
-$string['participantslist_names'] = 'Teilnehmerliste(Namen)';
+$string['participantslist_names'] = 'Teilnehmerliste_Namen';
+$string['participantslist_places'] = 'Teilnehmerliste_Plätze';
 $string['internal_use'] = 'Nur für die Prüfungsorganisation!';
 $string['lastname'] = 'Name';
 $string['firstname'] = 'Vorname';
