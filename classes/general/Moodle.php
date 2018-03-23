@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
+use exammanagement;
 
 /**
  * class containing all db wrapper functions for moodle
@@ -34,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class MoodleDB{
+class Moodle{
 
 	#### singleton class ######
 
@@ -42,54 +43,57 @@ class MoodleDB{
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new MoodleDB();
+				$inst = new Moodle();
 			}
 			return $inst;
 
 	}
 
-	#### wrapped Moodle DB functions #####
+	#### wrapped general moodle functions #####
 
-	public function getFieldFromDB($table, $fieldname, $condition){
-		global $DB;
+	public function setPage($substring, $id, $e){
+		global $PAGE;
 
-		$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-		return $field;
+		// Print the page header.
+		$PAGE->set_url($ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id));
+		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
+		$PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
+		$PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
+
+		/*
+		 * Other things you may want to set - remove if not needed.
+		 * $PAGE->set_cacheable(false);
+		 * $PAGE->set_focuscontrol('some-html-id');
+		 * $PAGE->add_body_class('newmodule-'.$somevar);
+		 */
+
 	}
 
-	public function getRecordFromDB($table, $condition){
-		global $DB;
+	public function outputPageHeader($id, $e){
+		global $OUTPUT;
 
-		$record = $DB->get_record($table, $condition);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-		return $record;
-	}
+		echo $OUTPUT->header();
 
-	public function getRecordsFromDB($table, $condition){
-		global $DB;
+		// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
+		echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
 
-		$records = $DB->get_records($table, $condition);
+		// Conditions to show the intro can change to look for own settings or whatever.
+ 		if ($ExammanagementInstanceObj->getModuleinstance()->intro) {
+     		echo $OUTPUT->box(format_module_intro('exammanagement', $ExammanagementInstanceObj->getModuleinstance(), $ExammanagementInstanceObj->getCm()->id), 'generalbox mod_introbox', 'newmoduleintro');
+ 		}
+ 	}
 
-		return $records;
-	}
+ 	public function outputFooter(){
 
-	public function UpdateRecordInDB($table, $obj){
-		global $DB;
+ 		global $OUTPUT;
 
-		return $DB->update_record($table, $obj);
-	}
+		// Finish the page.
+		echo $OUTPUT->footer();
 
-	public function InsertRecordInDB($table, $dataobject){
-		global $DB;
-
-		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
-	}
-
-	// public function InsertBulkRecordsInDB($table, $dataobjects){ // not used at the moment
-	// 	global $DB;
-	//
-	// 	$DB->insert_records($table, $dataobjects);
-	// }
+ 	}
 
 }

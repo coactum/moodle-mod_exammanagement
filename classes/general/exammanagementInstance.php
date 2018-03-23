@@ -99,47 +99,19 @@ class exammanagementInstance{
 
 	}
 
-	#### wrapped general moodle functions #####
+	public function getCm(){
 
-	protected function setPage($substring){
-		global $PAGE;
-
-		// Print the page header.
-		$PAGE->set_url($this->getExammanagementUrl($substring, $this->cm->id));
-		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($this->moduleinstance->name));
-		$PAGE->set_heading(format_string($this->course->fullname));
-		$PAGE->set_context($this->modulecontext);
-
-		/*
-		 * Other things you may want to set - remove if not needed.
-		 * $PAGE->set_cacheable(false);
-		 * $PAGE->set_focuscontrol('some-html-id');
-		 * $PAGE->add_body_class('newmodule-'.$somevar);
-		 */
+			return $this->cm;
 
 	}
 
-	protected function outputPageHeader(){
-		global $OUTPUT;
-		echo $OUTPUT->header();
+	public function getModulecontext(){
 
-		// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
-		echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+			return $this->modulecontext;
 
-		// Conditions to show the intro can change to look for own settings or whatever.
- 		if ($this->moduleinstance->intro) {
-     		echo $OUTPUT->box(format_module_intro('exammanagement', $this->moduleinstance, $this->cm->id), 'generalbox mod_introbox', 'newmoduleintro');
- 		}
- 	}
+	}
 
- 	protected function outputFooter(){
-
- 		global $OUTPUT;
-
-		// Finish the page.
-		echo $OUTPUT->footer();
-
- 	}
+	#### universal functions for exammanagement ####
 
  	public function getExammanagementUrl($component, $id){
 
@@ -147,48 +119,6 @@ class exammanagementInstance{
 
  		return $url;
  	}
-
-	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
-
- 		$url= new \moodle_url($url, array('key' => 'value', 'id' => $id, $param => $value));
-
- 		return $url;
- 	}
-
- 	public function redirectToOverviewPage($anchor, $message, $type){
-
-		$url = $this->getExammanagementUrl('view', $this->cm->id);
-
-		if ($anchor){
-				$url .= '#'.$anchor;
-		}
-
-		switch ($type) {
-    		case 'success':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
-        		break;
-    		case 'warning':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
-        		break;
-    		case 'error':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
-        		break;
-        	case 'info':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
-        		break;
-        	default:
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
-        		break;
-		}
-	}
-
-	public function checkCapability($capname){
-				if (has_capability($capname, $this->modulecontext)){
-						return true;
-				} else {
-						return false;
-				}
-		}
 
 	public function ConcatHelptextStr($langstr){
 
@@ -236,11 +166,57 @@ EOF;
 
 	}
 
+	// ab hier weiter machen und in Moodle Obj verschieben
+
+	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
+
+ 		$url= new \moodle_url($url, array('id' => $id, $param => $value));
+
+ 		return $url;
+ 	}
+
+ 	public function redirectToOverviewPage($anchor, $message, $type){
+
+		$url = $this->getExammanagementUrl('view', $this->cm->id);
+
+		if ($anchor){
+				$url .= '#'.$anchor;
+		}
+
+		switch ($type) {
+    		case 'success':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
+        		break;
+    		case 'warning':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
+        		break;
+    		case 'error':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+        	case 'info':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
+        		break;
+        	default:
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+		}
+	}
+
+	public function checkCapability($capname){
+				if (has_capability($capname, $this->modulecontext)){
+						return true;
+				} else {
+						return false;
+				}
+		}
+
 	#### overview ####
 
 	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
 
 		global $PAGE;
+
+		$MoodleObj = Moodle::getInstance();
 
 		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
 
@@ -254,8 +230,8 @@ EOF;
 
 		}
 
-		$this->setPage('view');
-		$this-> outputPageHeader();
+		$MoodleObj->setPage('view', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
@@ -264,7 +240,7 @@ EOF;
 
 		//$this->debugElementsOverview();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
  	}
 
  	public function getExamtime(){		//get examtime (for form)
@@ -446,17 +422,19 @@ EOF;
 
 		global $PAGE;
 
+		$MoodleObj = Moodle::getInstance();
+
 		require_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext);
 
-		$this->setPage('view');
-		$this-> outputPageHeader();
+		$MoodleObj->setPage('view', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 
 		//rendering and displaying content
 		$output = $PAGE->get_renderer('mod_exammanagement');
 		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->getRoomForParticipants(), $this->getPlaceForParticipants(), $this->getTextFromTextfield());
 		echo $output->render($page);
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
  	}
 
 	protected function isParticipant(){
@@ -617,13 +595,14 @@ EOF;
 	######### feature: chooseRooms ##########
 
 	public function outputchooseRoomsPage(){
-		global $PAGE;
 
-		$this->setPage('chooseRooms');
-		$this-> outputPageHeader();
+		$MoodleObj = Moodle::getInstance();
+
+		$MoodleObj->setPage('chooseRooms', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 		$this->buildchooseRoomsForm();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
 	}
 
 	protected function saveRooms($roomsArr){
@@ -825,13 +804,14 @@ EOF;
 
 	############## feature: setDateTime #########
 	public function outputDateTimePage(){
-		global $PAGE;
 
-		$this->setPage('set_date_time');
-		$this-> outputPageHeader();
+		$MoodleObj = Moodle::getInstance();
+
+		$MoodleObj->setPage('set_date_time', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 		$this->buildDateTimeForm();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
 	}
 
 	protected function saveDateTime($examtime){
@@ -893,13 +873,14 @@ EOF;
 ######### feature: addParticipants ##########
 
 	public function outputaddParticipantsPage(){
-		global $PAGE;
 
-		$this->setPage('addParticipants');
-		$this-> outputPageHeader();
+		$MoodleObj = Moodle::getInstance();
+
+		$MoodleObj->setPage('addParticipants', $this->id, $this->e);
+		$MoodleObj->outputPageHeader($this->id, $this->e);
 		$this->buildaddParticipantsForm();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
 	}
 
 	protected function saveParticipants($participantsArr){
@@ -1129,13 +1110,14 @@ EOF;
 	######### feature: textfield ##########
 
 	public function outputTextfieldPage(){
-		global $PAGE;
 
-		$this->setPage('textfield');
-		$this-> outputPageHeader();
+		$MoodleObj = Moodle::getInstance();
+
+		$MoodleObj->setPage('textfield', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 		$this->buildTextfieldForm();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
 	}
 
 	protected function saveTextfield($fromform){
@@ -1192,17 +1174,18 @@ EOF;
 	########### Send Groupmessage to all Participants ####
 
 	public function outputGroupmessagesPage(){
-		global $PAGE;
+
+		$MoodleObj = Moodle::getInstance();
 
 		if(!$this->getParticipantsCount()){
 			$this->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
 		}
 
-		$this->setPage('groupmessage');
-		$this-> outputPageHeader();
+		$MoodleObj->setPage('groupmessage', $this->id, $this->e);
+		$MoodleObj-> outputPageHeader($this->id, $this->e);
 		$this->buildGroupmessagesForm();
 
-		$this->outputFooter();
+		$MoodleObj->outputFooter();
 	}
 
 	protected function buildGroupmessagesForm(){
@@ -1275,7 +1258,7 @@ EOF;
 		$message->replyto = "noreply@imt.uni-paderborn.de";
 
 		$header = '';
-		$url = $this->getMoodleUrl("/mod/exammanagement/view.php", array('key' => 'value', 'id' => $this->id));
+		$url = $this->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
 		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
