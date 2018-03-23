@@ -25,6 +25,8 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
+use exammanagement;
+use general;
 use context_module;
 use tcpdf;
 use \stdClass;
@@ -47,7 +49,8 @@ class exammanagementInstance{
 	protected $modulecontext;
 
 	private function __construct($id, $e) {
-		global $DB;
+
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$this->id=$id;
 		$this->e=$e;
@@ -55,9 +58,9 @@ class exammanagementInstance{
         if ($id) {
 				$this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
 				$this->course = get_course($this->cm->course);
-				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
+				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
 			} else if ($e) {
-				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
+				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $e), '*', MUST_EXIST);
 				$this->course = get_course($this->moduleinstance->course);
 				$this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
 			} else {
@@ -577,39 +580,39 @@ EOF;
 		return $field;
 	}
 
-	protected function getRecordFromDB($table, $condition){
-		global $DB;
+	// protected function getRecordFromDB($table, $condition){
+	// 	global $DB;
+	//
+	// 	$record = $DB->get_record($table, $condition);
+	//
+	// 	return $record;
+	// }
 
-		$record = $DB->get_record($table, $condition);
+	// protected function getRecordsFromDB($table, $condition){
+	// 	global $DB;
+	//
+	// 	$records = $DB->get_records($table, $condition);
+	//
+	// 	return $records;
+	// }
 
-		return $record;
-	}
+	// protected function UpdateRecordInDB($table, $obj){ // in DBobj and fully transfered
+	// 	global $DB;
+	//
+	// 	return $DB->update_record($table, $obj);
+	// }
 
-	protected function getRecordsFromDB($table, $condition){
-		global $DB;
+	// protected function InsertRecordInDB($table, $dataobject){
+	// 	global $DB;
+	//
+	// 	return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
+	// }
 
-		$records = $DB->get_records($table, $condition);
-
-		return $records;
-	}
-
-	protected function UpdateRecordInDB($table, $obj){
-		global $DB;
-
-		return $DB->update_record($table, $obj);
-	}
-
-	protected function InsertRecordInDB($table, $dataobject){
-		global $DB;
-
-		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
-	}
-
-	protected function InsertBulkRecordsInDB($table, $dataobjects){
-		global $DB;
-
-		$DB->insert_records($table, $dataobjects);
-	}
+	// protected function InsertBulkRecordsInDB($table, $dataobjects){
+	// 	global $DB;
+	//
+	// 	$DB->insert_records($table, $dataobjects);
+	// }
 
 	######### feature: chooseRooms ##########
 
@@ -625,24 +628,32 @@ EOF;
 
 	protected function saveRooms($roomsArr){
 
+		$MoodleDBObj = MoodleDB::getInstance();
+
 		$rooms=json_encode($roomsArr);
 
 		$this->moduleinstance->rooms=$rooms;
 
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 		$this->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
 
 	}
 
 	public function getRoomObj($roomID){
-		$room = $this->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
 
 		return $room;
 	}
 
 	public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
-		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
 		$allRoomsIDs;
 
 		if ($allRooms){
@@ -664,7 +675,10 @@ EOF;
 	}
 
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
-		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
 		$allRoomNames;
 		$allRoomIDs;
 
@@ -780,6 +794,8 @@ EOF;
 
 	public function addDefaultRooms(){
 
+		$MoodleDBObj = MoodleDB::getInstance();
+
 		$defaultRoomsFile = file($this->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
 
 		foreach ($defaultRoomsFile as $key => $roomstr){
@@ -800,10 +816,8 @@ EOF;
 
  			//array_push($records, $roomObj);
 
-			$this->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
+			$MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
 		}
-
-		//$this->InsertBulkRecordsInDB('exammanagement_rooms', $records); // to big for bulkrecord insert
 
 		$this->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
 
@@ -822,9 +836,11 @@ EOF;
 
 	protected function saveDateTime($examtime){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$this->moduleinstance->examtime=$examtime;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
 
@@ -832,7 +848,9 @@ EOF;
 
 	protected function resetDateTime(){
 
-		$this->UpdateRecordInDB("exammanagement", NULL);
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", NULL);
 
 		$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
 	}
@@ -886,12 +904,18 @@ EOF;
 
 	protected function saveParticipants($participantsArr){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$participants=json_encode($participantsArr);
 
-			$this->moduleinstance->participants = $participants;
-			$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
+			$this->moduleinstance->participants = NULL;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if ($participants!="null"){
+					$this->moduleinstance->participants = $participants;
+					$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
+			}
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			$this->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 
@@ -928,9 +952,16 @@ EOF;
 
 			}
 
-			sort($participants); //sort checked participants ids for saving in DB
+			if ($participants){
 
-			return $participants;
+				sort($participants); //sort checked participants ids for saving in DB
+
+				return $participants;
+
+			} else {
+				return Null;
+
+			}
 
 	}
 
@@ -982,7 +1013,9 @@ EOF;
 
 	public function getMoodleUser($userid){
 
-		$user = $this->getRecordFromDB('user', array('id'=>$userid));
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
 
 		return $user;
 
@@ -1107,11 +1140,13 @@ EOF;
 
 	protected function saveTextfield($fromform){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$textfield=json_encode($fromform->textfield);
 
 			$this->moduleinstance->textfield=$textfield;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			$this->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
@@ -1291,6 +1326,8 @@ EOF;
 
 		foreach($savedRoomsArray as $key => $roomID){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
 
 			$Places = json_decode($RoomObj->places);	//get Places of this Room
@@ -1331,7 +1368,7 @@ EOF;
 
 		$this->savePlacesAssignment($assignmentArray);
 
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 		$this->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
 
@@ -1349,15 +1386,21 @@ EOF;
 
 	protected function savePlacesAssignment($assignmentArray){
 
+		$MoodleDBObj = MoodleDB::getInstance();
+
 		$this->moduleinstance->assignedplaces=json_encode($assignmentArray);
 
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 	}
 
 	protected function unsetStateofPlaces($type){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
 		$this->moduleinstance->stateofplaces=$type;
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	}
 
 	protected function getStateOfPlaces(){
@@ -1380,9 +1423,11 @@ EOF;
 
 	protected function saveStateOfDateTimeVisibility($datetimevisible){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$this->moduleinstance->datetimevisible=$datetimevisible;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
@@ -1390,9 +1435,11 @@ EOF;
 
 	protected function saveStateOfRoomPlaceVisibility($roomplacevisible){
 
+			$MoodleDBObj = MoodleDB::getInstance();
+
 			$this->moduleinstance->roomplacevisible=$roomplacevisible;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
