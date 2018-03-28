@@ -28,10 +28,6 @@ use TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
-global $CFG;
-require_once("$CFG->libdir/formslib.php");
-
 // Extend the TCPDF class to create custom Header and Footer
 class participantsList extends TCPDF {
 
@@ -43,7 +39,7 @@ class participantsList extends TCPDF {
     // ... module instance id - should be named as the first character of the module
     $e  = optional_param('e', 0, PARAM_INT);
 
-    $p = \mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+    $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
 
     $this->ImageEps(__DIR__.'/../../data/upb_logo_full.ai', 25, 12, 70);
     $this->SetFont('freeserif', 'B', 22);
@@ -53,8 +49,8 @@ class participantsList extends TCPDF {
     $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
     $this->SetTextColor(0, 0, 0);
     $this->SetFont('freeserif', '', 14);
-    $this->MultiCell(130, 50, $p->getModuleinstance()->categoryid . ' / ' . $p->getCourse()->fullname . ' ('. $p->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
-    $this->MultiCell(26, 50, $p->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
+    $this->MultiCell(130, 50, $ExammanagementInstanceObj->getModuleinstance()->categoryid . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
+    $this->MultiCell(26, 50, $ExammanagementInstanceObj->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
   }
 
   public function Footer() {

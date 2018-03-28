@@ -36,15 +36,16 @@ class groupmessagesForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = \mod_exammanagement\general\Moodle::getInstance();
+
         $mform = $this->_form; // Don't forget the underscore!
 
-        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $obj->ConcatHelptextStr('sendGroupmessages'));
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
 
-     	$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
+     	  $mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
 
-     	$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-     	$participantsCount = $obj->getParticipantsCount();
+     	  $participantsCount = $ExammanagementInstanceObj->getParticipantsCount();
 
  		if($participantsCount){
 
@@ -56,9 +57,9 @@ class groupmessagesForm extends moodleform {
 			$this->add_action_buttons(true,'Mail abschicken');
 		    }
 		else{
-		    $obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+      $MoodleObj->redirectToOverviewPage($this->id, $this->e, '', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
 	   		}
-        }
+    }
 
     //Custom validation should be added here
     function validation($data, $files) {

@@ -38,8 +38,8 @@ class textfieldForm extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $obj->ConcatHelptextStr('setTextfield'));
+        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setTextfield'));
 
  		    $mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
  		    $mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');

@@ -22,10 +22,10 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_exammanagement\general;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-
-use mod_exammanagement;
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -33,10 +33,11 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$MoodleObj = Moodle::getInstance();
 
-if($p->checkCapability('mod/exammanagement:adddefaultrooms')){
-    $p->addDefaultRooms();
+if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms', $id, $e)){
+    $ExammanagementInstanceObj->addDefaultRooms();
 } else {
-    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

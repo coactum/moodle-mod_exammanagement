@@ -25,7 +25,6 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
-use exammanagement;
 
 /**
  * class containing all db wrapper functions for moodle
@@ -95,5 +94,51 @@ class Moodle{
 		echo $OUTPUT->footer();
 
  	}
+
+	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
+
+ 		$url = new \moodle_url($url, array('id' => $id, $param => $value));
+
+ 		return $url;
+ 	}
+
+ 	public function redirectToOverviewPage($id, $e, $anchor, $message, $type){
+
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+
+		$url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
+
+		if ($anchor){
+				$url .= '#'.$anchor;
+		}
+
+		switch ($type) {
+    		case 'success':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
+        		break;
+    		case 'warning':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
+        		break;
+    		case 'error':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+        	case 'info':
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
+        		break;
+        	default:
+        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		break;
+		}
+	}
+
+	public function checkCapability($capname, $id, $e){
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+
+			if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())){
+					return true;
+			} else {
+					return false;
+			}
+	}
 
 }

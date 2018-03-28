@@ -22,10 +22,10 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ namespace mod_exammanagement\general;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-
-use mod_exammanagement;
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -42,22 +42,21 @@ $calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
 
 $calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
 
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-//$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
+$MoodleObj = Moodle::getInstance();
 
-$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
+    $ExammanagementInstanceObj->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
 
-if ($p->checkCapability('mod/exammanagement:viewinstance')||($p->checkCapability('mod/exammanagement:viewparticipantspage')&&$p->checkCapability('mod/exammanagement:viewinstance'))){
-    $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
-
-} elseif ($p->checkCapability('mod/exammanagement:viewparticipantspage')&&(!$p->checkCapability('mod/exammanagement:viewinstance'))){
-    $p->outputParticipantsView();
+} elseif ($MoodleObj->checkCapability('mod/exammanagement:viewparticipantspage', $id, $e)){
+    $ExammanagementInstanceObj->outputParticipantsView();
 
 } else{
     redirect ($CFG->wwwroot, 'Sie haben keine gültigen Rechte.', null, \core\output\notification::NOTIFY_ERROR);
 }
 
-$p->startEvent('view');
+$ExammanagementInstanceObj->startEvent('view');
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)

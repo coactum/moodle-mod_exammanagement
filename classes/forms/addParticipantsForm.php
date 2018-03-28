@@ -24,7 +24,6 @@
 
 namespace mod_exammanagement\general\forms;
 use moodleform;
-use mod_exammanagement;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,13 +38,14 @@ class addParticipantsForm extends moodleform {
 
         global $PAGE, $CFG;
 
+        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/switch_importmode', 'switch_mode'); //call jquery for switching between course import and import from file
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $obj->ConcatHelptextStr('addParticipants'));
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
         $mform->addElement('hidden', 'id', 'dummy');
 		$mform->setType('id', PARAM_INT);
@@ -60,8 +60,8 @@ class addParticipantsForm extends moodleform {
 		###### add Participants from Course ######
 		$mform->addElement('html', '<div class="course"><div class="row"><div class="col-xs-3"><h4>Teilnehmer</h4></div><div class="col-xs-3"><h4>Matrikelnummer</h4></div><div class="col-xs-3"><h4>Gruppen</h4></div><div class="col-xs-3"><h4>Quelle</h4></div></div>');
 
- 		$allCourseParticipantsIDs= $obj->getCourseParticipantsIDs('Array');
- 		$checkedParticipantsIDs = $obj->getSavedParticipants();
+ 		$allCourseParticipantsIDs= $ExammanagementInstanceObj->getCourseParticipantsIDs('Array');
+ 		$checkedParticipantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
 
  		$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
 		$mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
@@ -69,9 +69,9 @@ class addParticipantsForm extends moodleform {
 
  		foreach($allCourseParticipantsIDs as $key => $value){
 			$mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-			$mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$obj->getUserPicture($value).' '.$obj->getUserProfileLink($value), null, array('group' => 1));
-			$mform->addElement('html', '</div><div class="col-xs-3">'.$obj->getUserMatrNrPO($value).'</div>');
-			$mform->addElement('html', '<div class="col-xs-3">'.$obj->getParticipantsGroupNames($value).'</div>');
+			$mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
+			$mform->addElement('html', '</div><div class="col-xs-3">'.$ExammanagementInstanceObj->getUserMatrNrPO($value).'</div>');
+			$mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
 			$mform->addElement('html', '<div class="col-xs-3"> PANDA Kurs </div></div>');
 
 			if($checkedParticipantsIDs){
