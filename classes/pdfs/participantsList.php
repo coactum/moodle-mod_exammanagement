@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\pdfs;
 use mod_exammanagement;
-use TCPDF;
+use \TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 

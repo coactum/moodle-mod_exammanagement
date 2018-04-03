@@ -170,37 +170,6 @@ EOF;
 
 	#### overview ####
 
-	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
-
-		global $PAGE;
-
-		$MoodleObj = Moodle::getInstance();
-
-		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
-
-		if($calledfromformdt&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
-			$this->saveStateOfDateTimeVisibility($datetimevisible);
-
-		}
-
-		if($calledfromformrp&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
-			$this->saveStateOfRoomPlaceVisibility($roomplacevisible);
-
-		}
-
-		$MoodleObj->setPage('view', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-
-		//rendering and displaying content
-		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtimeTemplate(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError(), $this->isDateTimeVisible(),$this->isRoomPlaceVisible());
-		echo $output->render($page);
-
-		//$this->debugElementsOverview();
-
-		$MoodleObj->outputFooter();
- 	}
-
  	public function getExamtime(){		//get examtime (for form)
 		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
 				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
@@ -229,7 +198,7 @@ EOF;
 		}
  	}
 
- 	protected function getTextfieldObject(){
+ 	public function getTextfieldObject(){
 
  		$textfield= $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
 
@@ -238,7 +207,7 @@ EOF;
 		return $textfield;
 	}
 
- 	protected function getTextFromTextfield(){
+ 	public function getTextFromTextfield(){
 
  		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
@@ -249,7 +218,7 @@ EOF;
 			}
 	}
 
-	protected function getFormatFromTextfield(){
+	public function getFormatFromTextfield(){
 
  		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
@@ -260,7 +229,7 @@ EOF;
 			}
 	}
 
-	protected function getShortenedTextfield(){
+	public function getShortenedTextfield(){
 		$textfield=format_string($this->getTextFromTextfield());
 
 		if ($textfield && strlen($textfield)>49){
@@ -350,7 +319,7 @@ EOF;
 
 	}
 
- 	protected function checkPhaseCompletion($phase){
+ 	public function checkPhaseCompletion($phase){
 
  	switch ($phase){
 
@@ -376,26 +345,7 @@ EOF;
 
 	#### participants view ####
 
-	public function outputParticipantsView(){
-
-		global $PAGE;
-
-		$MoodleObj = Moodle::getInstance();
-
-		require_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext);
-
-		$MoodleObj->setPage('view', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-
-		//rendering and displaying content
-		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->getRoomForParticipants(), $this->getPlaceForParticipants(), $this->getTextFromTextfield());
-		echo $output->render($page);
-
-		$MoodleObj->outputFooter();
- 	}
-
-	protected function isParticipant(){
+	public function isParticipant(){
 
 			global $USER;
 
@@ -414,7 +364,7 @@ EOF;
 			}
 	}
 
-	protected function getDateForParticipants(){
+	public function getDateForParticipants(){
 
 			$dateState = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
 			$examtime = $this->getExamtime();
@@ -426,7 +376,7 @@ EOF;
 			}
 	}
 
-	protected function getTimeForParticipants(){
+	public function getTimeForParticipants(){
 
 			$timeState = $this->isDateTimeVisible();
 			$examtime = $this->getExamtime();
@@ -438,7 +388,7 @@ EOF;
 			}
 	}
 
-	protected function getRoomForParticipants(){
+	public function getRoomForParticipants(){
 
 			global $USER;
 
@@ -460,7 +410,7 @@ EOF;
 			}
 	}
 
-	protected function getPlaceForParticipants(){
+	public function getPlaceForParticipants(){
 
 			global $USER;
 
@@ -707,7 +657,7 @@ EOF;
 		}
 	}
 
-	protected function isDateTimeVisible(){
+	public function isDateTimeVisible(){
 
 		$isDateTimeVisible = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
 
@@ -718,7 +668,7 @@ EOF;
 		}
 	}
 
-	protected function isRoomPlaceVisible(){
+	public function isRoomPlaceVisible(){
 
 		$isRoomPlaceVisible = $this->getFieldFromDB('exammanagement','roomplacevisible', array('id' => $this->cm->instance));
 
