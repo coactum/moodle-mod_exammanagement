@@ -37,7 +37,11 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-  $ExammanagementInstanceObj->outputchooseRoomsPage();
+  $MoodleObj->setPage('chooseRooms', $id, $e);
+  $MoodleObj-> outputPageHeader($id, $e);
+  $ExammanagementInstanceObj->buildchooseRoomsForm();
+
+  $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

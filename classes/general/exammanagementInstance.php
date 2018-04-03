@@ -502,17 +502,6 @@ EOF;
 
 	######### feature: chooseRooms ##########
 
-	public function outputchooseRoomsPage(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		$MoodleObj->setPage('chooseRooms', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-		$this->buildchooseRoomsForm();
-
-		$MoodleObj->outputFooter();
-	}
-
 	protected function saveRooms($roomsArr){
 
 		$MoodleDBObj = MoodleDB::getInstance();
@@ -610,7 +599,7 @@ EOF;
 
 	}
 
-	protected function buildchooseRoomsForm(){
+	public function buildchooseRoomsForm(){
 
 		//include form
 		require_once(__DIR__.'/../forms/chooseRoomsForm.php');
@@ -677,40 +666,6 @@ EOF;
 		} else {
 				return false;
 		}
-
-	}
-
-	############## feature: add default rooms ############
-
-	public function addDefaultRooms(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance();
-
-		$defaultRoomsFile = file($MoodleObj->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
-
-		foreach ($defaultRoomsFile as $key => $roomstr){
-
-			$roomParameters = explode('+', $roomstr);
-
-			$roomObj = new stdClass();
-			$roomObj->roomid = $roomParameters[0];
-			$roomObj->name = $roomParameters[1];
- 			$roomObj->description = $roomParameters[2];
-
-			$svgStr = base64_encode($roomParameters[3]);
-
- 			$roomObj->seatingplan = $svgStr;
- 			$roomObj->places = $roomParameters[4];
-			$roomObj->type = 'defaultroom';
- 			$roomObj->misc = NULL;
-
- 			//array_push($records, $roomObj);
-
-			$MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
-		}
-
-		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Standardräume angelegt', 'success');
 
 	}
 
