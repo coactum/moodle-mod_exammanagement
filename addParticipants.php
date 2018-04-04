@@ -37,7 +37,14 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
 $MoodleObj = Moodle::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-    $ExammanagementInstanceObj->outputaddParticipantsPage();
+
+    $MoodleObj = Moodle::getInstance();
+
+    $MoodleObj->setPage('addParticipants', $id, $e);
+    $MoodleObj->outputPageHeader($id, $e);
+    $ExammanagementInstanceObj->buildaddParticipantsForm();
+
+    $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

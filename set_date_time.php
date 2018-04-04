@@ -37,7 +37,14 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-    $ExammanagementInstanceObj->outputDateTimePage();
+
+  		$MoodleObj = Moodle::getInstance();
+
+  		$MoodleObj->setPage('set_date_time', $id, $e);
+  		$MoodleObj-> outputPageHeader($id, $e);
+  		$ExammanagementInstanceObj->buildDateTimeForm();
+
+  		$MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

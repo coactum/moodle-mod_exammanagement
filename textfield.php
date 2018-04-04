@@ -37,7 +37,14 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-  $ExammanagementInstanceObj->outputTextfieldPage();
+
+    $MoodleObj = Moodle::getInstance();
+
+		$MoodleObj->setPage('textfield', $id, $e);
+		$MoodleObj-> outputPageHeader($id, $e);
+		$ExammanagementInstanceObj->buildTextfieldForm();
+
+		$MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

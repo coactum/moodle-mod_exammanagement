@@ -670,16 +670,6 @@ EOF;
 	}
 
 	############## feature: setDateTime #########
-	public function outputDateTimePage(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		$MoodleObj->setPage('set_date_time', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-		$this->buildDateTimeForm();
-
-		$MoodleObj->outputFooter();
-	}
 
 	protected function saveDateTime($examtime){
 
@@ -704,7 +694,7 @@ EOF;
 		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
 	}
 
-	protected function buildDateTimeForm(){
+	public function buildDateTimeForm(){
 
 		//include form
 		require_once(__DIR__.'/../forms/dateTimeForm.php');
@@ -742,17 +732,6 @@ EOF;
 	}
 
 ######### feature: addParticipants ##########
-
-	public function outputaddParticipantsPage(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		$MoodleObj->setPage('addParticipants', $this->id, $this->e);
-		$MoodleObj->outputPageHeader($this->id, $this->e);
-		$this->buildaddParticipantsForm();
-
-		$MoodleObj->outputFooter();
-	}
 
 	protected function saveParticipants($participantsArr){
 
@@ -818,7 +797,7 @@ EOF;
 
 	}
 
-	protected function buildaddParticipantsForm(){
+	public function buildaddParticipantsForm(){
 
 		//include form
 		require_once(__DIR__.'/../forms/addParticipantsForm.php');
@@ -987,17 +966,6 @@ EOF;
 
 	######### feature: textfield ##########
 
-	public function outputTextfieldPage(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		$MoodleObj->setPage('textfield', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-		$this->buildTextfieldForm();
-
-		$MoodleObj->outputFooter();
-	}
-
 	protected function saveTextfield($fromform){
 
 			$MoodleDBObj = MoodleDB::getInstance();
@@ -1013,7 +981,7 @@ EOF;
 
 	}
 
-	protected function buildTextfieldForm(){
+	public function buildTextfieldForm(){
 
 		//include form
 		require_once(__DIR__.'/../forms/textfieldForm.php');
@@ -1054,22 +1022,7 @@ EOF;
 
 	########### Send Groupmessage to all Participants ####
 
-	public function outputGroupmessagesPage(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		if(!$this->getParticipantsCount()){
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
-		}
-
-		$MoodleObj->setPage('groupmessage', $this->id, $this->e);
-		$MoodleObj-> outputPageHeader($this->id, $this->e);
-		$this->buildGroupmessagesForm();
-
-		$MoodleObj->outputFooter();
-	}
-
-	protected function buildGroupmessagesForm(){
+	public function buildGroupmessagesForm(){
 
 		//include form
 		require_once(__DIR__.'/../forms/groupmessagesForm.php');
