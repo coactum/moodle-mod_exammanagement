@@ -28,6 +28,8 @@ use \TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir.'/pdflib.php');
+require_once(__DIR__.'/../general/exammanagementInstance.php');
 // Extend the TCPDF class to create custom Header and Footer
 class participantsList extends TCPDF {
 
@@ -39,7 +41,7 @@ class participantsList extends TCPDF {
     // ... module instance id - should be named as the first character of the module
     $e  = optional_param('e', 0, PARAM_INT);
 
-    $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
+    $ExammanagementInstanceObj = \exammanagementInstance::getInstance($id,$e);
 
     $this->ImageEps(__DIR__.'/../../data/upb_logo_full.ai', 25, 12, 70);
     $this->SetFont('freeserif', 'B', 22);

@@ -48,18 +48,25 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 $MoodleObj = Moodle::getInstance();
 
-if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
+$MoodleDBObj = MoodleDB::getInstance();
 
-  require_capability('mod/exammanagement:viewinstance', $ExammanagementInstanceObj->getModulecontext());
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){ // if teacher
 
-  if($calledfromformdt&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
-    $ExammanagementInstanceObj->saveStateOfDateTimeVisibility($datetimevisible);
+  if($calledfromformdt&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){ // saveDateTime
 
-  }
+  			$ExammanagementInstanceObj->moduleinstance->datetimevisible=$datetimevisible;
 
-  if($calledfromformrp&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
-    $ExammanagementInstanceObj->saveStateOfRoomPlaceVisibility($roomplacevisible);
+  			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
+  			$MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Informationen sichtbar geschaltet', 'success');
+
+  } elseif($calledfromformrp&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){ // saveRoomPlace
+
+     $ExammanagementInstanceObj->moduleinstance->roomplacevisible=$roomplacevisible;
+
+     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+     $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Informationen sichtbar geschaltet', 'success');
   }
 
   $MoodleObj->setPage('view', $id, $e);
@@ -74,9 +81,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
 
   $MoodleObj->outputFooter();
 
-} elseif ($MoodleObj->checkCapability('mod/exammanagement:viewparticipantspage', $id, $e)){
+} elseif ($MoodleObj->checkCapability('mod/exammanagement:viewparticipantspage', $id, $e)){ // student view
 
-  require_capability('mod/exammanagement:viewparticipantspage', $ExammanagementInstanceObj->getModulecontext());
+  //require_capability('mod/exammanagement:viewparticipantspage', $ExammanagementInstanceObj->getModulecontext());
 
   $MoodleObj->setPage('view', $id, $e);
   $MoodleObj-> outputPageHeader($id, $e);

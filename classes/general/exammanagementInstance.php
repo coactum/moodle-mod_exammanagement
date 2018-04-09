@@ -45,7 +45,7 @@ class exammanagementInstance{
 	protected $e;
 	protected $cm;
 	protected $course;
-	protected $moduleinstance;
+	public $moduleinstance;
 	protected $modulecontext;
 
 	private function __construct($id, $e) {
@@ -108,6 +108,15 @@ class exammanagementInstance{
 	public function getModulecontext(){
 
 			return $this->modulecontext;
+
+	}
+
+	#### setter for object properties
+
+	public function setModuleinstance($field, $value){
+
+			$this->moduleinstance->$field = $value;
+			echo $this->moduleinstance;
 
 	}
 
@@ -397,10 +406,12 @@ EOF;
 			$participantsRoom =  false;
 
 			if($roomState && $assignmentArray){
-						foreach ($assignmentArray as $key => $assignment){
+						foreach ($assignmentArray as $key => $room){
+							foreach ($room->assignments as $key => $assignment){
 								if ($assignment->userid == $USER->id){
-										$participantsRoom = $assignment->roomname;
+										$participantsRoom = $room->roomname;
 								}
+							}
 						}
 
 						return $participantsRoom;
@@ -419,10 +430,12 @@ EOF;
 			$participantsPlace =  false;
 
 			if($placesState && $assignmentArray){
-						foreach ($assignmentArray as $key => $assignment){
+						foreach ($assignmentArray as $key => $room){
+							foreach ($room->assignments as $key => $assignment){
 								if ($assignment->userid == $USER->id){
 										$participantsPlace = $assignment->place;
 								}
+							}
 						}
 
 						return $participantsPlace;
@@ -1130,77 +1143,7 @@ EOF;
 
 	########### assign places #######
 
-	public function assignPlaces(){
-
-		$MoodleObj = Moodle::getInstance();
-
-		$savedRoomsArray = $this->getSavedRooms();
-		$participantsIDsArray = $this->getSavedParticipants();
-		$assignmentArray = array();
-		$newAssignmentObj = '';
-
-		if(!$savedRoomsArray){
-			$this->unsetStateOfPlaces('error');
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		} elseif(!$participantsIDsArray){
-			$this->unsetStateOfPlaces('error');
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		}
-
-		foreach($savedRoomsArray as $key => $roomID){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
-
-			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
-
-			$Places = json_decode($RoomObj->places);	//get Places of this Room
-
-			$assignmentRoomObj = new stdClass();
-
-			$assignmentRoomObj->roomid = $RoomObj->roomid;
-			$assignmentRoomObj->roomname = $RoomObj->name;
-			$assignmentRoomObj->assignments = array();
-
-			foreach($Places as $key => $placeID){
-				$currentParticipantID = array_pop($participantsIDsArray);
-
-				$newAssignmentObj = $this->assignPlaceToUser($currentParticipantID, $placeID);
-				array_push($assignmentRoomObj->assignments, $newAssignmentObj);
-
-				if(!$participantsIDsArray){						//if all users have a place: stop
-					array_push($assignmentArray, $assignmentRoomObj);
-					break 2;
-				}
-
-			}
-
-			array_push($assignmentArray, $assignmentRoomObj);
-
-			if(!$participantsIDsArray){						//if all users have a place: stop
-				break;
-			}
-		}
-
-		if($participantsIDsArray){								//if users are left without a room
-			$this->unsetStateOfPlaces('error');
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		}
-
-		$this->moduleinstance->stateofplaces='set';
-
-		$this->savePlacesAssignment($assignmentArray);
-
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Plätze zugewiesen', 'success');
-
-	}
-
-	protected function assignPlaceToUser($userid, $place){
+	public function assignPlaceToUser($userid, $place){
 
 		$assignment = new stdClass();
 
@@ -1210,7 +1153,7 @@ EOF;
 		 return $assignment;
 	}
 
-	protected function savePlacesAssignment($assignmentArray){
+	public function savePlacesAssignment($assignmentArray){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -1220,7 +1163,7 @@ EOF;
 
 	}
 
-	protected function unsetStateofPlaces($type){
+	public function unsetStateofPlaces($type){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -1229,7 +1172,7 @@ EOF;
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	}
 
-	protected function getStateOfPlaces(){
+	public function getStateOfPlaces(){
 
 		$StateOfPlaces = $this->getFieldFromDB('exammanagement','stateofplaces', array('id' => $this->cm->instance));
 
@@ -1237,7 +1180,7 @@ EOF;
 
 	}
 
-	protected function getAssignedPlaces(){
+	public function getAssignedPlaces(){
 
 		$getAssignedPlaces = json_decode($this->getFieldFromDB('exammanagement','assignedplaces', array('id' => $this->cm->instance)));
 
@@ -1245,313 +1188,7 @@ EOF;
 
 	}
 
-	########### show Information to users ##############
-
-	protected function saveStateOfDateTimeVisibility($datetimevisible){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
-
-			$this->moduleinstance->datetimevisible=$datetimevisible;
-
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Informationen sichtbar geschaltet', 'success');
-
-	}
-
-	protected function saveStateOfRoomPlaceVisibility($roomplacevisible){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
-
-			$this->moduleinstance->roomplacevisible=$roomplacevisible;
-
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Informationen sichtbar geschaltet', 'success');
-
-	}
-
 	########### Export PDFS ####
-
-	public function exportParticipantsListNames(){
-
-		global $CFG;
-
-		//include pdf
-		require_once(__DIR__.'/../pdfs/participantsList.php');
-
-		define("WIDTH_COLUMN_NAME", 200);
-		define("WIDTH_COLUMN_FIRSTNAME", 150);
-		define("WIDTH_COLUMN_MATNO", 60);
-		define("WIDTH_COLUMN_ROOM", 90);
-		define("WIDTH_COLUMN_PLACE", 70);
-
-		$MoodleObj = Moodle::getInstance();
-
-		if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
-		}
-
-		// Include the main TCPDF library (search for installation path).
-		require_once(__DIR__.'/../../../../config.php');
-		require_once($CFG->libdir.'/pdflib.php');
-
-		// create new PDF document
-		$pdf = new \mod_exammanagement\pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-
-		// set document information
-		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('PANDA');
-		$pdf->SetTitle($this->getCourse()->fullname);
-		$pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
-		$pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
-
-		// set default monospaced font
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-		// set default header data
-		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-		// set margins
-		$pdf->SetMargins(25, 55, 25);
-		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-		//set auto page breaks
-		$pdf->SetAutoPageBreak(TRUE, 19);
-
-		// set image scale factor
-		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-		// set some language-dependent strings (optional)
-		// if (@file_exists(__DIR__.'/lang/eng.php')) {
-		// 	require_once(__DIR__.'/lang/eng.php');
-		// 	$pdf->setLanguageArray($l);
-		// }
-
-		// ---------------------------------------------------------
-
-		// Set font
-		// dejavusans is a UTF-8 Unicode font, if you only need to
-		// print standard ASCII chars, you can use core fonts like
-		// helvetica or times to reduce file size.
-		$pdf->SetFont('freeserif', '', 10);
-
-		// Add a page
-		// This method has several options, check the source code documentation for more information.
-		$pdf->AddPage();
-
-		// get users and construct content for document
-		$assignedPlaces = $this->getAssignedPlaces();
-		$fill = false;
-		$previousRoom;
-		$tbl = $this->getParticipantsListTableHeader();
-
-		foreach ($assignedPlaces as $roomObj){
-			$currentRoom = $roomObj;
-
-			if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-					//new room -> finish and print current table and begin new page
-					$tbl .= "</table>";
-					$pdf->writeHTML($tbl, true, false, false, false, '');
-					$pdf->AddPage();
-					$fill = false;
-					$tbl = $this->getParticipantsListTableHeader();
-				}
-
-				usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
-					$aFirstname = $this->getMoodleUser($a->userid)->firstname;
-					$aLastname = $this->getMoodleUser($a->userid)->lastname;
-					$bFirstname = $this->getMoodleUser($b->userid)->firstname;
-					$bLastname = $this->getMoodleUser($b->userid)->lastname;
-
-					if ($aLastname == $bLastname) { //if names are even sort by first name
-							return strcmp($aFirstname, $bFirstname);
-					} else{
-							return strcmp($aLastname, $bLastname); // else sort by last name
-					}
-
-				});
-
-			foreach ($roomObj->assignments as $assignment){
-				$user = $this->getMoodleUser($assignment->userid);
-
-				$tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-				$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
-				$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
-				$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $this->getUserMatrNrPO($assignment->userid) . "</td>";
-				$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
-				$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
-				$tbl .= "</tr>";
-
-				$fill = !$fill;
-
-			}
-
-			$previousRoom = $currentRoom;
-
-		}
-
-		$tbl .= "</table>";
-
-		// Print text using writeHTMLCell()
-
-		$pdf->writeHTML($tbl, true, false, false, false, '');
-
-		//generate filename without umlaute
-		$umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-		$replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-		$filenameUmlaute = get_string("participantslist_names", "mod_exammanagement") . $this->moduleinstance->categoryid . '' . $this->getCourse()->fullname.'.pdf';
-		$filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-		// ---------------------------------------------------------
-
-		// Close and output PDF document
-		// This method has several options, check the source code documentation for more information.
-		$pdf->Output($filename, 'D');
-
-		//============================================================+
-		// END OF FILE
-		//============================================================+
-
-		}
-
-		public function exportParticipantsListPlaces(){
-
-			global $CFG;
-
-			//include pdf
-			require_once(__DIR__.'/../pdfs/participantsList.php');
-
-			define("WIDTH_COLUMN_NAME", 200);
-			define("WIDTH_COLUMN_FIRSTNAME", 150);
-			define("WIDTH_COLUMN_MATNO", 60);
-			define("WIDTH_COLUMN_ROOM", 90);
-			define("WIDTH_COLUMN_PLACE", 70);
-
-			$MoodleObj = Moodle::getInstance();
-
-			if(!$this->isStateOfPlacesCorrect() || $this->isStateOfPlacesError()){
-				$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
-			}
-
-			// Include the main TCPDF library (search for installation path).
-			require_once(__DIR__.'/../../../../config.php');
-			require_once($CFG->libdir.'/pdflib.php');
-
-			// create new PDF document
-			$pdf = new \mod_exammanagement\pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-
-			// set document information
-			$pdf->SetCreator(PDF_CREATOR);
-			$pdf->SetAuthor('PANDA');
-			$pdf->SetTitle($this->getCourse()->fullname);
-			$pdf->SetSubject(get_string('participantslist_places', 'mod_exammanagement'));
-			$pdf->SetKeywords(get_string('participantslist_places', 'mod_exammanagement') . ', ' . $this->getCourse()->fullname);
-
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-			// set default header data
-			$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-			// set margins
-			$pdf->SetMargins(25, 55, 25);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-			//set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 19);
-
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-			// set some language-dependent strings (optional)
-			// if (@file_exists(__DIR__.'/lang/eng.php')) {
-			// 	require_once(__DIR__.'/lang/eng.php');
-			// 	$pdf->setLanguageArray($l);
-			// }
-
-			// ---------------------------------------------------------
-
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('freeserif', '', 10);
-
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-
-			// get users and construct content for document
-			$assignedPlaces = $this->getAssignedPlaces();
-			$fill = false;
-			$previousRoom;
-			$tbl = $this->getParticipantsListTableHeader();
-
-			foreach ($assignedPlaces as $roomObj){
-				$currentRoom = $roomObj;
-
-				if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-						//new room -> finish and print current table and begin new page
-						$tbl .= "</table>";
-						$pdf->writeHTML($tbl, true, false, false, false, '');
-						$pdf->AddPage();
-						$fill = false;
-						$tbl = $this->getParticipantsListTableHeader();
-					}
-
-					usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
-
-						return strcmp($a->place, $b->place); // sort by place
-
-					});
-
-				foreach ($roomObj->assignments as $assignment){
-					$user = $this->getMoodleUser($assignment->userid);
-
-					$tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-					$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
-					$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
-					$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $this->getUserMatrNrPO($assignment->userid) . "</td>";
-					$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
-					$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
-					$tbl .= "</tr>";
-
-					$fill = !$fill;
-
-				}
-
-				$previousRoom = $currentRoom;
-
-			}
-
-			$tbl .= "</table>";
-
-			// Print text using writeHTMLCell()
-
-			$pdf->writeHTML($tbl, true, false, false, false, '');
-
-			//generate filename without umlaute
-			$umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-			$replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-			$filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . $this->moduleinstance->categoryid . '' . $this->getCourse()->fullname.'.pdf';
-			$filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-			// ---------------------------------------------------------
-
-			// Close and output PDF document
-			// This method has several options, check the source code documentation for more information.
-			$pdf->Output($filename, 'D');
-
-			//============================================================+
-			// END OF FILE
-			//============================================================+
-
-			}
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object
 			$tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
