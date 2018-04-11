@@ -127,4 +127,118 @@ class exammanagementForms{
 
 	}
 
+	public function buildaddParticipantsForm(){
+
+		//include form
+		require_once(__DIR__.'/addParticipantsForm.php');
+
+		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate Textfield_form
+		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+		  $participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
+
+		  $ExammanagementInstanceObj->saveParticipants($participants);
+
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+
+		  //Set default data (if any)
+		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		  $mform->set_data(array('id'=>$this->id));
+
+		  //displays the form
+		  $mform->display();
+		}
+
+	}
+
+	public function buildTextfieldForm(){
+
+		//include form
+		require_once(__DIR__.'/textfieldForm.php');
+
+		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate Textfield_form
+		$mform = new textfieldForm();
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+			$ExammanagementInstanceObj->saveTextfield($fromform);
+
+		} else {
+			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+			// or on the first display of the form.
+
+			//Set default data (if any)
+
+			$text = $ExammanagementInstanceObj->getTextFromTextfield();
+			$format = $ExammanagementInstanceObj->getFormatFromTextfield();
+			if ($text && $format){
+				$mform->set_data(array('textfield'=>['text' => $text, 'format' => $format], 'id'=>$this->id));
+			} else {
+				$mform->set_data(array('id'=>$this->id));
+			}
+
+
+			//displays the form
+			$mform->display();
+		}
+
+	}
+
+	public function buildGroupmessagesForm(){
+
+		//include form
+		require_once(__DIR__.'/groupmessagesForm.php');
+
+		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate Textfield_form
+		$mform = new groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+		  $ExammanagementInstanceObj->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
+		  $MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht verschickt', 'success');
+
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+
+		  //Set default data (if any)
+		  $mform->set_data(array('id'=>$this->id));
+
+		  //displays the form
+		  $mform->display();
+		}
+
+	}
+
 }

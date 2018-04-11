@@ -732,42 +732,6 @@ EOF;
 
 	}
 
-	public function buildaddParticipantsForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/addParticipantsForm.php');
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		//Instantiate Textfield_form
-		$mform = new forms\addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $participants=$this->filterCheckedParticipants($fromform);
-
-		  $this->saveParticipants($participants);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
-
 	public function getSavedParticipants(){
 
 		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
@@ -916,80 +880,7 @@ EOF;
 
 	}
 
-	public function buildTextfieldForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/textfieldForm.php');
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		//Instantiate Textfield_form
-		$mform = new forms\textfieldForm();
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $this->saveTextfield($fromform);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-
-		  if ($this->getTextFromTextfield() && $this->getFormatFromTextfield()){
-		 		$mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
-		  } else {
-				$mform->set_data(array('id'=>$this->id));
-		  }
-
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
-
 	########### Send Groupmessage to all Participants ####
-
-	public function buildGroupmessagesForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/groupmessagesForm.php');
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		//Instantiate Textfield_form
-		$mform = new forms\groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $this->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
-		  $MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht verschickt', 'success');
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
 
 	public function sendGroupMessage($subject, $content){
 

@@ -39,7 +39,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementFormsObj = forms\exammanagementForms::getInstance($id, $e);
 
-
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
   		$MoodleObj->setPage('set_date_time');

@@ -24,8 +24,11 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\forms;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -33,8 +36,9 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
+$ExammanagementFormsObj = forms\exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -44,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('groupmessage');
     $MoodleObj-> outputPageHeader();
-    $ExammanagementInstanceObj->buildGroupmessagesForm();
+    $ExammanagementFormsObj->buildGroupmessagesForm();
 
     $MoodleObj->outputFooter();
   } else {
