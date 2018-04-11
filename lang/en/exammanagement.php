@@ -55,7 +55,7 @@ $string['helptext_setTextfield']= 'Here goes the description of this feature sit
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 
 //errors and permissions
-$string['missingidandcmid'] = 'Course id missing (missingcmid)';
+$string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 
 //universal

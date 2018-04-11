@@ -85,7 +85,7 @@ Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
 
 //errors and permissions
-$string['missingidandcmid'] = 'Kurs ID fehlt (missingcmid)';
+$string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
 
 //universal

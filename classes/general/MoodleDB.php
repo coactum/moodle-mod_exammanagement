@@ -21,7 +21,7 @@
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
@@ -42,13 +42,13 @@ class MoodleDB{
 
 	#### wrapped Moodle DB functions #####
 
-	public function getFieldFromDB($table, $fieldname, $condition){
-		global $DB;
-
-		$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
-
-		return $field;
-	}
+	// public function getFieldFromDB($table, $fieldname, $condition){ // not used at the moment
+	// 	global $DB;
+  //
+	// 	$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
+  //
+	// 	return $field;
+	// }
 
 	public function getRecordFromDB($table, $condition){
 		global $DB;

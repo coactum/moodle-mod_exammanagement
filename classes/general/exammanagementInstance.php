@@ -25,10 +25,8 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
-use mod_exammanagement;
-use general;
+use mod_exammanagement\event;
 use context_module;
-use tcpdf;
 use \stdClass;
 
 class exammanagementInstance{
@@ -172,15 +170,15 @@ EOF;
 	#### overview ####
 
  	public function getExamtime(){		//get examtime (for form)
-		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
-				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
+		if ($this->moduleinstance->examtime){
+				return $this->moduleinstance->examtime;
 			} else {
 				return false;
 			}
 	}
 
 	public function getHrExamtimeTemplate() {	//convert examtime to human readable format for template
-		$examtime=$this->getExamtime();
+		$examtime = $this->getExamtime();
 		if($examtime){
 			$hrexamtimetemplate = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
 			return $hrexamtimetemplate;
@@ -190,7 +188,7 @@ EOF;
  	}
 
 	public function getHrExamtime() {	//convert examtime to human readable format for template
-		$examtime=$this->getExamtime();
+		$examtime = $this->getExamtime();
 		if($examtime){
 			$hrexamtime = date('d.m.Y', $examtime).' '.date('H:i', $examtime);
 			return $hrexamtime;
@@ -201,7 +199,7 @@ EOF;
 
  	public function getTextfieldObject(){
 
- 		$textfield= $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield= $this->moduleinstance->textfield;
 
 		$textfield =json_decode($textfield);
 
@@ -210,9 +208,9 @@ EOF;
 
  	public function getTextFromTextfield(){
 
- 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$text=$textfield->text;
+				$text = $textfield->text;
 				return $text;
 			} else {
 				return false;
@@ -221,9 +219,9 @@ EOF;
 
 	public function getFormatFromTextfield(){
 
- 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$format=$textfield->format;
+				$format = $textfield->format;
 				return $format;
 			} else {
 				return false;
@@ -231,10 +229,10 @@ EOF;
 	}
 
 	public function getShortenedTextfield(){
-		$textfield=format_string($this->getTextFromTextfield());
+		$textfield = format_string($this->getTextFromTextfield());
 
 		if ($textfield && strlen($textfield)>49){
-				$shtextfield=substr($textfield, 0, 49).' ...';
+				$shtextfield = substr($textfield, 0, 49).' ...';
 				return $shtextfield;
 			} elseif($textfield) {
 				return $textfield;
@@ -244,10 +242,10 @@ EOF;
 	}
 
 	public function getParticipantsCount(){
-		$participants=$this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+		$participants = $this->moduleinstance->participants;
 		if ($participants){
-				$temp= json_decode($participants);
-				$participantsCount=count($temp);
+				$temp = json_decode($participants);
+				$participantsCount = count($temp);
 				return $participantsCount;
 			} else {
 				return false;
@@ -255,7 +253,7 @@ EOF;
 	}
 
 	public function getRoomsCount(){
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 		if ($rooms){
 				$roomsArr = json_decode($rooms);
 				$roomsCount = count($roomsArr);
@@ -266,7 +264,7 @@ EOF;
 	}
 
 	public function getChoosenRoomNames(){
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 		$roomNames = array();
 
 		if ($rooms){
@@ -325,7 +323,7 @@ EOF;
  	switch ($phase){
 
 			case 1:
-				if ($this->getRoomsCount()&&$this->getExamtime()&&$this->getParticipantsCount()){
+				if ($this->getRoomsCount() && $this->getExamtime() && $this->getParticipantsCount()){
 					return true;
 					} else {
 						return false;
@@ -350,7 +348,7 @@ EOF;
 
 			global $USER;
 
-			$participantsList = json_decode($this->getFieldFromDB('exammanagement', 'participants', array('id' => $this->cm->instance)));
+			$participantsList = json_decode($this->moduleinstance->participants);
 
 			if ($participantsList){
 					foreach ($participantsList as $key => $value){
@@ -367,7 +365,7 @@ EOF;
 
 	public function getDateForParticipants(){
 
-			$dateState = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+			$dateState = $this->moduleinstance->datetimevisible;
 			$examtime = $this->getExamtime();
 
 			if($dateState && $examtime){
@@ -448,10 +446,12 @@ EOF;
 
  	public function startEvent($type){
 
+		require_once(__DIR__.'/../event/course_module_viewed.php');
+
 		switch ($type){
 
 			case 'view':
-				$event = \mod_exammanagement\event\course_module_viewed::create(array(
+				$event = event\course_module_viewed::create(array(
 					'objectid' => $this->moduleinstance->id,
 					'context' => $this->modulecontext
 				));
@@ -463,13 +463,13 @@ EOF;
 
 	#### wrapped Moodle DB functions #####
 
-	protected function getFieldFromDB($table, $fieldname, $condition){
-		global $DB;
-
-		$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
-
-		return $field;
-	}
+	// protected function getFieldFromDB($table, $fieldname, $condition){
+	// 	global $DB;
+	//
+	// 	$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
+	//
+	// 	return $field;
+	// }
 
 	// protected function getRecordFromDB($table, $condition){
 	// 	global $DB;
@@ -606,7 +606,7 @@ EOF;
 
 	public function getSavedRooms(){
 
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 
 		if ($rooms){
 				$roomsArray = json_decode($rooms);
@@ -618,7 +618,7 @@ EOF;
 
 	public function isDateTimeVisible(){
 
-		$isDateTimeVisible = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+		$isDateTimeVisible = $this->moduleinstance->datetimevisible;
 
 		if($isDateTimeVisible){
 				return true;
@@ -629,7 +629,7 @@ EOF;
 
 	public function isRoomPlaceVisible(){
 
-		$isRoomPlaceVisible = $this->getFieldFromDB('exammanagement','roomplacevisible', array('id' => $this->cm->instance));
+		$isRoomPlaceVisible = $this->moduleinstance->roomplacevisible;
 
 		if($isRoomPlaceVisible){
 				return true;
@@ -734,7 +734,7 @@ EOF;
 
 	public function getSavedParticipants(){
 
-		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+		$participants = $this->moduleinstance->participants;
 
 		if ($participants){
 				$participantsArray = json_decode($participants);
@@ -836,7 +836,7 @@ EOF;
 	}
 
 	public function getUsersInformationPO(){
-			$usersinformation = $this->getFieldFromDB('exammanagement','userinformation', array('id' => $this->cm->instance));
+			$usersinformation = $this->moduleinstance->userinformation;
 			return $usersinformation;
 	}
 
@@ -987,7 +987,7 @@ EOF;
 
 	public function getStateOfPlaces(){
 
-		$StateOfPlaces = $this->getFieldFromDB('exammanagement','stateofplaces', array('id' => $this->cm->instance));
+		$StateOfPlaces = $this->moduleinstance->stateofplaces;
 
 		return $StateOfPlaces;
 
@@ -995,7 +995,7 @@ EOF;
 
 	public function getAssignedPlaces(){
 
-		$getAssignedPlaces = json_decode($this->getFieldFromDB('exammanagement','assignedplaces', array('id' => $this->cm->instance)));
+		$getAssignedPlaces = json_decode($this->moduleinstance->assignedplaces);
 
 		return $getAssignedPlaces;
 

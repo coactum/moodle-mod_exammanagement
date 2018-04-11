@@ -24,6 +24,8 @@
 
 namespace mod_exammanagement\general;
 
+use moodle_url;
+
 defined('MOODLE_INTERNAL') || die();
 
 class Moodle{
@@ -98,7 +100,7 @@ class Moodle{
 
 	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
 
- 		$url = new \moodle_url($url, array('id' => $id, $param => $value));
+ 		$url = new moodle_url($url, array('id' => $id, $param => $value));
 
  		return $url;
  	}
