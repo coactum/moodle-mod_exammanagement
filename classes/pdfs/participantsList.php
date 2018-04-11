@@ -23,8 +23,8 @@
  */
 
 namespace mod_exammanagement\pdfs;
-use mod_exammanagement;
-use \TCPDF;
+use mod_exammanagement\general;
+use TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -42,7 +42,7 @@ class participantsList extends TCPDF {
     // ... module instance id - should be named as the first character of the module
     $e  = optional_param('e', 0, PARAM_INT);
 
-    $ExammanagementInstanceObj = \exammanagementInstance::getInstance($id,$e);
+    $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($id,$e);
 
     $this->ImageEps(__DIR__.'/../../data/upb_logo_full.ai', 25, 12, 70);
     $this->SetFont('freeserif', 'B', 22);

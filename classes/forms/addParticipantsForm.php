@@ -23,6 +23,7 @@
  */
 
 namespace mod_exammanagement\forms;
+use mod_exammanagement\general;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,6 +32,8 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
+require_once(__DIR__.'/../general/exammanagementInstance.php');
+
 class addParticipantsForm extends moodleform {
 
     //Add elements to form
@@ -38,7 +41,7 @@ class addParticipantsForm extends moodleform {
 
         global $PAGE, $CFG;
 
-        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/switch_importmode', 'switch_mode'); //call jquery for switching between course import and import from file

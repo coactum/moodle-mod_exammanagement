@@ -23,6 +23,8 @@
  */
 
 namespace mod_exammanagement\forms;
+use mod_exammanagement\general;
+
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,13 +33,16 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
+require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/Moodle.php');
+
 class groupmessagesForm extends moodleform {
 
     //Add elements to form
     public function definition() {
 
-        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $MoodleObj = \mod_exammanagement\general\Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = general\Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $mform = $this->_form; // Don't forget the underscore!
 

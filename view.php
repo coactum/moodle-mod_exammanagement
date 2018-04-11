@@ -24,8 +24,12 @@
 
  namespace mod_exammanagement\general;
 
+use mod_exammanagement\output;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+
+require_once(__DIR__.'/classes/output/exammanagement_overview.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -74,7 +78,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
-  $page = new \mod_exammanagement\output\exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomPlaceVisible());
+  $page = new output\exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomPlaceVisible());
   echo $output->render($page);
 
   //$this->debugElementsOverview();
@@ -92,7 +96,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
-  $page = new \mod_exammanagement\output\exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->isParticipant(), $ExammanagementInstanceObj->getDateForParticipants(), $ExammanagementInstanceObj->getTimeForParticipants(), $ExammanagementInstanceObj->getRoomForParticipants(), $ExammanagementInstanceObj->getPlaceForParticipants(), $ExammanagementInstanceObj->getTextFromTextfield());
+  $page = new output\exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->isParticipant(), $ExammanagementInstanceObj->getDateForParticipants(), $ExammanagementInstanceObj->getTimeForParticipants(), $ExammanagementInstanceObj->getRoomForParticipants(), $ExammanagementInstanceObj->getPlaceForParticipants(), $ExammanagementInstanceObj->getTextFromTextfield());
   echo $output->render($page);
 
   $MoodleObj->outputFooter();

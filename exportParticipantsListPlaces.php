@@ -24,6 +24,8 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\pdfs;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
@@ -57,7 +59,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     require_once($CFG->libdir.'/pdflib.php');
 
     // create new PDF document
-    $pdf = new \mod_exammanagement\pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf = new pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 
     // set document information
@@ -126,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         });
 
       foreach ($roomObj->assignments as $assignment){
-        $user = $this->getMoodleUser($assignment->userid);
+        $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";

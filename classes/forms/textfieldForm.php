@@ -23,6 +23,8 @@
  */
 
 namespace mod_exammanagement\forms;
+use mod_exammanagement\general;
+
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,6 +33,8 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
+require_once(__DIR__.'/../general/exammanagementInstance.php');
+
 class textfieldForm extends moodleform {
 
     //Add elements to form
@@ -38,7 +42,7 @@ class textfieldForm extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setTextfield'));
 
  		    $mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
