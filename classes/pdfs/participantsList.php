@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+
 // Extend the TCPDF class to create custom Header and Footer
 class participantsList extends TCPDF {
 

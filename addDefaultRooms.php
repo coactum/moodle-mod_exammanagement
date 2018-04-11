@@ -36,11 +36,9 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms', $id, $e)){
-
-    $MoodleDBObj = MoodleDB::getInstance();
+if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
   	$defaultRoomsFile = file($MoodleObj->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
 
@@ -65,8 +63,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms', $id, $e)){
   			$MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
   		}
 
-  		$MoodleObj->redirectToOverviewPage($id, $e, 'beforeexam', 'Standardräume angelegt', 'success');
+  		$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
 
 } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

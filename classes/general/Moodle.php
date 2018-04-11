@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for exammanagement
+ * class containing all db wrapper functions for moodle
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -26,23 +26,24 @@ namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * class containing all db wrapper functions for moodle
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 class Moodle{
+
+	protected $id;
+	protected $e;
+
+	private function __construct($id, $e) {
+		$this->id = $id;
+		$this->e = $e;
+
+	}
 
 	#### singleton class ######
 
-	public static function getInstance(){
+	public static function getInstance($id, $e){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new Moodle();
+				$inst = new Moodle($id, $e);
 			}
 			return $inst;
 
@@ -50,10 +51,10 @@ class Moodle{
 
 	#### wrapped general moodle functions #####
 
-	public function setPage($substring, $id, $e){
+	public function setPage($substring){
 		global $PAGE;
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		// Print the page header.
 		$PAGE->set_url($ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id));
@@ -70,10 +71,10 @@ class Moodle{
 
 	}
 
-	public function outputPageHeader($id, $e){
+	public function outputPageHeader(){
 		global $OUTPUT;
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		echo $OUTPUT->header();
 
@@ -102,9 +103,9 @@ class Moodle{
  		return $url;
  	}
 
- 	public function redirectToOverviewPage($id, $e, $anchor, $message, $type){
+ 	public function redirectToOverviewPage($anchor, $message, $type){
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		$url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
 
@@ -131,8 +132,8 @@ class Moodle{
 		}
 	}
 
-	public function checkCapability($capname, $id, $e){
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+	public function checkCapability($capname){
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 			if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())){
 					return true;

@@ -34,21 +34,19 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-
-    $MoodleObj = Moodle::getInstance();
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!$ExammanagementInstanceObj->getParticipantsCount()){
-      $MoodleObj->redirectToOverviewPage($id, $e, 'beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
+      $MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
     }
 
-    $MoodleObj->setPage('groupmessage', $id, $e);
-    $MoodleObj-> outputPageHeader($id, $e);
+    $MoodleObj->setPage('groupmessage');
+    $MoodleObj-> outputPageHeader();
     $ExammanagementInstanceObj->buildGroupmessagesForm();
 
     $MoodleObj->outputFooter();
   } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

@@ -34,17 +34,15 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    $MoodleObj = Moodle::getInstance();
-
-		$MoodleObj->setPage('textfield', $id, $e);
-		$MoodleObj-> outputPageHeader($id, $e);
+		$MoodleObj->setPage('textfield');
+		$MoodleObj-> outputPageHeader();
 		$ExammanagementInstanceObj->buildTextfieldForm();
 
 		$MoodleObj->outputFooter();
 } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

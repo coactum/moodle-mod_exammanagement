@@ -24,8 +24,11 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\forms;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -33,15 +36,15 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
+$ExammanagementFormsObj = forms\exammanagementForms::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-  $MoodleObj->setPage('chooseRooms', $id, $e);
-  $MoodleObj-> outputPageHeader($id, $e);
-  $ExammanagementInstanceObj->buildchooseRoomsForm();
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+  $MoodleObj->setPage('chooseRooms');
+  $MoodleObj-> outputPageHeader();
+  $ExammanagementFormsObj->buildChooseRoomsForm();
 
   $MoodleObj->outputFooter();
 } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

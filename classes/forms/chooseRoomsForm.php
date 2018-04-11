@@ -22,7 +22,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general\forms;
+namespace mod_exammanagement\forms;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -42,7 +42,7 @@ class chooseRoomsForm extends moodleform {
         $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
 
         $ExammanagementInstanceObj = \mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $MoodleObj = \mod_exammanagement\general\Moodle::getInstance();
+        $MoodleObj = \mod_exammanagement\general\Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $mform = $this->_form; // Don't forget the underscore!
 

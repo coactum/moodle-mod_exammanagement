@@ -34,9 +34,9 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
@@ -49,10 +49,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
     define("WIDTH_COLUMN_ROOM", 90);
     define("WIDTH_COLUMN_PLACE", 70);
 
-    $MoodleObj = Moodle::getInstance();
-
     if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
-      $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).
@@ -178,5 +176,5 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
     //============================================================+
 
 } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for exammanagement
+ * class containing all general functions for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -30,14 +30,6 @@ use general;
 use context_module;
 use tcpdf;
 use \stdClass;
-
-/**
- * class containing all general functions for exammanagement
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
 class exammanagementInstance{
 
@@ -124,7 +116,7 @@ class exammanagementInstance{
 
  	public function getExammanagementUrl($component, $id){
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
  		$url= $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
@@ -515,10 +507,10 @@ EOF;
 
 	######### feature: chooseRooms ##########
 
-	protected function saveRooms($roomsArr){
+	public function saveRooms($roomsArr){
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$rooms=json_encode($roomsArr);
 
@@ -526,7 +518,7 @@ EOF;
 
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
+		$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
 
 	}
 
@@ -612,41 +604,6 @@ EOF;
 
 	}
 
-	public function buildchooseRoomsForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/chooseRoomsForm.php');
-
-		$MoodleObj = Moodle::getInstance();
-
-		//Instantiate Textfield_form
-		$mform = new forms\chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $rooms=$this->filterCheckedRooms($fromform);
-
-		  $this->saveRooms($rooms);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
-
 	public function getSavedRooms(){
 
 		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
@@ -684,72 +641,37 @@ EOF;
 
 	############## feature: setDateTime #########
 
-	protected function saveDateTime($examtime){
+	public function saveDateTime($examtime){
 
 			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 			$this->moduleinstance->examtime=$examtime;
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
 
 	}
 
-	protected function resetDateTime(){
+	public function resetDateTime(){
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", NULL);
+		$this->moduleinstance->examtime = NULL;
 
-		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
-	}
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-	public function buildDateTimeForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/dateTimeForm.php');
-
-		$MoodleObj = Moodle::getInstance();
-
-		//Instantiate dateTime_form
-		$mform = new forms\dateTimeForm();
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-			if (!empty($fromform->resetdatetime)) { // not working
-    		$this->resetDateTime();
-  		} else {
-				$this->saveDateTime($fromform->examtime);
-			}
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('examtime'=>$this->getExamtime(), 'id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
+		$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
 	}
 
 ######### feature: addParticipants ##########
 
-	protected function saveParticipants($participantsArr){
+	public function saveParticipants($participantsArr){
 
 			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 			$participants=json_encode($participantsArr);
 
@@ -762,7 +684,7 @@ EOF;
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 
 	}
 
@@ -815,7 +737,7 @@ EOF;
 		//include form
 		require_once(__DIR__.'/../forms/addParticipantsForm.php');
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new forms\addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -823,7 +745,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Vorgang abgebrochen', 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -879,7 +801,7 @@ EOF;
 
 	public function getUserProfileLink($userid){
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$user = $this->getMoodleUser($userid);
 		$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $user->id, 'course', $this->course->id).'">'.fullname($user).'</a></strong>';
@@ -909,7 +831,7 @@ EOF;
 
 	public function getParticipantsGroupNames($userid){
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$userGroups = groups_get_user_groups($this->course->id, $userid);
 		$groupNameStr = false;
@@ -979,10 +901,10 @@ EOF;
 
 	######### feature: textfield ##########
 
-	protected function saveTextfield($fromform){
+	public function saveTextfield($fromform){
 
 			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 			$textfield=json_encode($fromform->textfield);
 
@@ -990,7 +912,7 @@ EOF;
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Inhalt gespeichert', 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
 	}
 
@@ -999,7 +921,7 @@ EOF;
 		//include form
 		require_once(__DIR__.'/../forms/textfieldForm.php');
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new forms\textfieldForm();
@@ -1007,7 +929,7 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Vorgang abgebrochen', 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -1040,7 +962,7 @@ EOF;
 		//include form
 		require_once(__DIR__.'/../forms/groupmessagesForm.php');
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new forms\groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -1048,13 +970,13 @@ EOF;
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Vorgang abgebrochen', 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
 		  $this->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
-		  $MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Nachricht verschickt', 'success');
+		  $MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht verschickt', 'success');
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -1071,7 +993,7 @@ EOF;
 
 	public function sendGroupMessage($subject, $content){
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$mailsubject="PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
 		$mailtext=$content;
@@ -1085,7 +1007,7 @@ EOF;
 
 		}
 
-		$MoodleObj->redirectToOverviewPage($this->id, $this->e, 'beforeexam', 'Nachricht erfolgreich versendet.', 'success');
+		$MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
 
 	}
 
@@ -1093,7 +1015,7 @@ EOF;
 
 		global $USER;
 
-		$MoodleObj = Moodle::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$message = new \core\message\message();
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers

@@ -15,24 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for exammanagement
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace mod_exammanagement\general;
-
-defined('MOODLE_INTERNAL') || die();
-
-/**
  * class containing all db wrapper functions for moodle
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
+namespace mod_exammanagement\general;
+
+defined('MOODLE_INTERNAL') || die();
 
 class MoodleDB{
 

@@ -57,7 +57,7 @@ class groupmessagesForm extends moodleform {
 			$this->add_action_buttons(true,'Mail abschicken');
 		    }
 		else{
-      $MoodleObj->redirectToOverviewPage($this->id, $this->e, '', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+      $MoodleObj->redirectToOverviewPage('', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
 	   		}
     }
 

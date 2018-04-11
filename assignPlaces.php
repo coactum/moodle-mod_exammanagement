@@ -37,12 +37,10 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleObj = Moodle::getInstance();
+$MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
-
-    $MoodleObj = Moodle::getInstance();
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
     $participantsIDsArray = $ExammanagementInstanceObj->getSavedParticipants();
@@ -51,11 +49,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
 
     if(!$savedRoomsArray){
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
-      $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     } elseif(!$participantsIDsArray){
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
-      $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     }
 
@@ -93,7 +91,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
 
     if($participantsIDsArray){								//if users are left without a room
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
-      $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     }
 
@@ -103,8 +101,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance', $id, $e)){
 
     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-    $MoodleObj->redirectToOverviewPage($id, $e, 'forexam', 'Plätze zugewiesen', 'success');
+    $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
 
 } else {
-    $MoodleObj->redirectToOverviewPage($id, $e, '', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }
