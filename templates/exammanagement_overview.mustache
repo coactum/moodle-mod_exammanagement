@@ -100,12 +100,12 @@ ajaxtoogle = function(command, value){
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="card">
               <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Vor der Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_one" aria-expanded="false" aria-controls="phase_one">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+								<a type="button" data-toggle="collapse" data-target=".phase_one" aria-expanded="false" aria-controls="phase_one">
+		                <div class="row">
+													<h4 class="card-title col-xs-11">{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
+		                      <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+		                </div>
+								</a>
                 {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
                 {{^firstphasecompleted}}<div class="collapse.show phase_one">{{/firstphasecompleted}}
                     <div class="card-text">
@@ -190,12 +190,12 @@ ajaxtoogle = function(command, value){
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
             <div class="card">
               <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Für die Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_two" aria-expanded="false" aria-controls="phase_two">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+                	<a type="button" data-toggle="collapse" data-target=".phase_two" aria-expanded="false" aria-controls="phase_two">
+			                <div class="row">
+														<h4 class="card-title col-xs-11">{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
+			                      <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+			                </div>
+									</a>
                 {{#secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}
                 {{#firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse.show phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
                 {{^firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
@@ -285,7 +285,7 @@ ajaxtoogle = function(command, value){
             <div class="card">
               <div class="card-block">
                 <div class="row">
-                    <h4 class="card-title col-sm-6">Prüfungstermin:</h4>
+                    <h4 class="card-title col-sm-6">{{#str}}exam_appointment, mod_exammanagement{{/str}}:</h4>
                     <span class="col-sm-6">
                       {{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
                       {{#hrexamtime}}{{#roomnames}} | {{/roomnames}}{{/hrexamtime}}
@@ -302,12 +302,12 @@ ajaxtoogle = function(command, value){
             {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
             <div class="card">
               <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Nach der Korrektur</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_three" aria-expanded="false" aria-controls="phase_three">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+								<a type="button" data-toggle="collapse" data-target=".phase_three" aria-expanded="false" aria-controls="phase_three">
+		                <div class="row">
+												<h4 class="card-title col-xs-11">{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
+		                     <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+		                </div>
+								</a>
                 {{#thirdphasecompleted}}<div class="collapse.show phase_three">{{/thirdphasecompleted}}
                 {{^thirdphasecompleted}}<div class="collapse phase_three">{{/thirdphasecompleted}}
                   <div class="card-text">
@@ -365,12 +365,12 @@ ajaxtoogle = function(command, value){
             {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
             <div class="card">
               <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Nach der Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_four" aria-expanded="false" aria-controls="phase_four">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+								<a type="button" data-toggle="collapse" data-target=".phase_four" aria-expanded="false" aria-controls="phase_four">
+		                <div class="row">
+													<h4 class="card-title col-xs-11">{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
+		                      <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+		                </div>
+								</a>
                 {{#fourthphasecompleted}}<div class="collapse.show phase_four">{{/fourthphasecompleted}}
                 {{^fourthphasecompleted}}<div class="collapse phase_four">{{/fourthphasecompleted}}
                 <div class="card-text">

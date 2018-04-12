@@ -27,7 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
-$string['overview']= 'Überblick';
+$string['overview'] = 'Überblick';
+$string['phase_one'] = 'Vor der Prüfung';
+$string['phase_two'] = 'Für die Prüfung';
+$string['phase_three'] = 'Nach der Korrektur';
+$string['phase_four'] = 'Nach der Prüfung';
+$string['exam_appointment'] = 'Prüfungstermin';
 
 //dateTimeForm.php
 $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';

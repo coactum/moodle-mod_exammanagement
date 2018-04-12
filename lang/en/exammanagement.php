@@ -28,6 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
 $string['overview'] = 'Overview';
+$string['phase_one'] = 'Before exam';
+$string['phase_two'] = 'For exam';
+$string['phase_three'] = 'After correction';
+$string['phase_four'] = 'After exam';
+$string['exam_appointment'] = 'Exam appointment';
 
 //dateTimeForm.php
 

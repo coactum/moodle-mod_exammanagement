@@ -107,6 +107,15 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
 $ExammanagementInstanceObj->startEvent('view');
 
+
+//for testing
+// global $SESSION;
+//
+// var_dump($SESSION);
+//
+// set_user_preference('helptexts','10011001');
+// var_dump(get_user_preferences());
+
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)
 //#####################################################################
