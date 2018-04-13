@@ -78,6 +78,19 @@ ajaxtoogle = function(command, value){
             }
         });
     }
+
+		$(document).on('click', '.panel-heading span.clickable', function(e){
+	    var $this = $(this);
+		if(!$this.hasClass('panel-collapsed')) {
+			$this.parents('.panel').find('.panel-body').slideUp();
+			$this.addClass('panel-collapsed');
+			$this.find('i').removeClass('fa fa-caret-up').addClass('fa fa-caret-down');
+		} else {
+			$this.parents('.panel').find('.panel-body').slideDown();
+			$this.removeClass('panel-collapsed');
+			$this.find('i').removeClass('fa fa-caret-down').addClass('fa fa-caret-up');
+		}
+	})
 }
 
 {{/js}}
@@ -119,75 +132,134 @@ ajaxtoogle = function(command, value){
                 {{^firstphasecompleted}}<div class="collapse.show phase_one">{{/firstphasecompleted}}
                     <div class="card-text">
                       <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-building-o" aria-hidden="true"></i> <a href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
-                              </div>
-                              <div class="card-text">
-                                {{#rooms}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Räume: {{rooms}} <i class="fa fa-building-o" aria-hidden="true"></i></p>{{/rooms}}
-                                {{^rooms}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
-                              </div>
-                              <div class="card-text m-l-1">
-                                {{#hrexamtime}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/hrexamtime}}
-                                {{^hrexamtime}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-users" aria-hidden="true"></i> <a href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
-                              </div>
-                              <div class="card-text">
-                                {{#participants}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Prüfungsteilnehmer: {{participants}} <i class="fa fa-users" aria-hidden="true"></i></p>{{/participants}}
-                                {{^participants}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-tasks" aria-hidden="true"></i> <a>Aufgaben konfigurieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                              </div>
-                              <div class="card-text">
-                                <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Aufgaben konfiguriert.</p>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten (optional)</a>
-                              </div>
-                              <div class="card-text">
-                                {{#textfield}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> {{textfield}}</p>{{/textfield}}
-                                {{^textfield}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben (optional)</a>
-                              </div>
-                              <div class="card-text">
-                                <p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Prüfungsräume</h3>
+																<span class="statebar col-md-4">
+																		{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i> Erfolgreich</span>{{/rooms}}
+																		{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i> Nicht gesetzt</span>{{/rooms}}
+																		<span class="label label-default pull-right">Zwingend</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#rooms}}<p> Es wurden bereits die folgenden {{rooms}} Räume ausgewählt: {{roomnames}}</p>{{/rooms}}
+																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Prüfungsdatum</h3>
+																<span class="statebar col-md-4">
+																		{{#hrexamtime}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i> Erfolgreich</span>{{/hrexamtime}}
+																		{{^hrexamtime}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i> Nicht gesetzt</span>{{/hrexamtime}}
+																		<span class="label label-default pull-right">Zwingend</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#hrexamtime}}<p> Die Prüfung findet am {{hrexamtime}} statt.</p>{{/hrexamtime}}
+															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="set_date_time.php?id={{cmid}}">Datum festlegen</a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row row-eq-height">
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Prüfungsteilnehmer</h3>
+																<span class="statebar col-md-4">
+																	{{#participants}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i> Erfolgreich</span>{{/participants}}
+																	{{^participants}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i> Nicht gesetzt</span>{{/participants}}
+																	<span class="label label-default pull-right">Zwingend</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#participants}}<p> Zur Prüfung sind {{participants}} Teilnehmer angemeldet.</p>{{/participants}}
+																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Prüfungsaufgaben</h3>
+																<span class="statebar col-md-4">
+																	{{#hrexamtime}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i> Erfolgreich</span>{{/hrexamtime}}
+																	{{^hrexamtime}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i> Nicht gesetzt</span>{{/hrexamtime}}
+																	<span class="label label-default pull-right">Optional</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#hrexamtime}}<p> Prüfungsaufgaben</p>{{/hrexamtime}}
+															{{^hrexamtime}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/hrexamtime}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="">Aufgaben konfigurieren</a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row row-eq-height">
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Freitextfeld</h3>
+																<span class="statebar col-md-4">
+																	{{#textfield}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i> Erfolgreich</span>{{/textfield}}
+																	{{^textfield}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i> Nicht gesetzt</span>{{/textfield}}
+																	<span class="label label-default pull-right">Optional</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#textfield}}<p> Im Textfeld steht folgender Inhalt: {{textfield}}</p>{{/textfield}}
+																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Nachricht an Teilnehmer</h3>
+																<span class="statebar col-md-4">
+																	<span class="label label-default pull-right">Optional</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info" href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben</a>
+														</div>
+													</div>
+												</div>
+											</div>
                     </div>
                 </div>
               </div>

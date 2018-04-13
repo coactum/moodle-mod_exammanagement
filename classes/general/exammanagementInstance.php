@@ -180,7 +180,7 @@ EOF;
 	public function getHrExamtimeTemplate() {	//convert examtime to human readable format for template
 		$examtime = $this->getExamtime();
 		if($examtime){
-			$hrexamtimetemplate = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			$hrexamtimetemplate = date('d.m.Y', $examtime).' um '.date('H:i', $examtime);
 			return $hrexamtimetemplate;
 		} else {
 			return false;
