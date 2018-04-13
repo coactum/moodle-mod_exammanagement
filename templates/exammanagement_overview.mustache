@@ -47,12 +47,10 @@ showMore = function() {
 
 ajaxtoogle = function(command, value){
 
-		value = !value;
-
-    if(command=='room'){
+		if(command=='room'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value)},
             success: function(response) {
             },
             error: function(response) {
@@ -62,7 +60,7 @@ ajaxtoogle = function(command, value){
     } else if(command=='place'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(value)},
             success: function(response) {
             },
             error: function(response) {
@@ -72,7 +70,7 @@ ajaxtoogle = function(command, value){
     } else if(command=='datetime'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(value)},
             success: function(response) {
             },
             error: function(response) {
