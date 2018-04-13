@@ -46,8 +46,6 @@ $calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
 $calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
 $calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
 
-var_dump($datetimevisible, $roomvisible, $placevisible, $calledfromformdt, $calledfromformroom, $calledfromformplace);
-
 global $PAGE, $CFG;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
@@ -60,28 +58,24 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   if($calledfromformdt){ // saveDateTime
 
-  			$ExammanagementInstanceObj->moduleinstance->datetimevisible=$datetimevisible;
+  			$ExammanagementInstanceObj->moduleinstance->datetimevisible = $datetimevisible;
 
   			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
   			$MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
-  } elseif($calledfromformroom){ // saveRoomPlace
+  } elseif($calledfromformroom){ // saveRoom
 
-     $ExammanagementInstanceObj->moduleinstance->roomvisible=$roomvisible;
-
-     var_dump('setRoomVisibility');
+     $ExammanagementInstanceObj->moduleinstance->roomvisible = $roomvisible;
 
      $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
      $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
   }
 
-  elseif($calledfromformplace){ // saveRoomPlace
+  elseif($calledfromformplace){ // savePlace
 
-     $ExammanagementInstanceObj->moduleinstance->placevisible=$placevisible;
-
-     var_dump('setPlaceVisibility');
+     $ExammanagementInstanceObj->moduleinstance->placevisible = $placevisible;
 
      $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 

@@ -46,7 +46,8 @@ showMore = function() {
 		};
 
 ajaxtoogle = function(command, value){
-    console.log(command, value);
+
+		value = !value;
 
     if(command=='room'){
         jQuery.ajax ({
