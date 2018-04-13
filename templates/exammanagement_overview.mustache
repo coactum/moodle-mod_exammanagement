@@ -51,7 +51,17 @@ ajaxtoogle = function(command, value){
     if(command=='room'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformrp': true, 'roomplacevisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(!value)},
+            success: function(response) {
+            },
+            error: function(response) {
+              alert('Fehler beim Speichern.')
+            }
+        });
+    } else if(command=='place'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(!value)},
             success: function(response) {
             },
             error: function(response) {
@@ -252,13 +262,20 @@ ajaxtoogle = function(command, value){
                       <div class="card col-md-6">
                           <div class="card-body">
                             <div class="card-header m-b-1">
-                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomplacevisible" value="1" onclick="ajaxtoogle('room', jQuery(this).prop('checked')); return true"  {{#roomplacevisible}}checked {{/roomplacevisible}}><span class="exammanagement-slider round"></span></label>
                               <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten (optional)</span>
                             </div>
                             <div class="card-text">
-                              {{#roomplacevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
-                              {{^roomplacevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
-                            </div>
+															<div>
+																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogle('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>
+																{{#roomvisible}}<p class="exammanagement-showInformationText">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomvisible}}
+	                              {{^roomvisible}}<p class="exammanagement-showInformationText">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>{{/roomvisible}}
+															</div>
+															<div>
+																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogle('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>
+																{{#placevisible}}<p class="exammanagement-showInformationText">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</span></p>{{/placevisible}}
+																{{^placevisible}}<p class="exammanagement-showInformationText">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/placevisible}}
+															</div>
+														</div>
                           </div>
                       </div>
                       <div class="card col-md-6">

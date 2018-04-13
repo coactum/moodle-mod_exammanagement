@@ -51,13 +51,14 @@ class exammanagement_overview implements renderable, templatable {
     protected $stateofplacescorrect;
     protected $stateofplaceserror;
 	protected $datetimevisible;
-	protected $roomplacevisible;
+	protected $roomvisible;
+  protected $placevisible;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomplacevisible) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -70,7 +71,8 @@ class exammanagement_overview implements renderable, templatable {
         $this->roomnames = $roomnames;
         $this->stateofplacescorrect = $stateofplacescorrect;
         $this->datetimevisible = $datetimevisible;
-        $this->roomplacevisible = $roomplacevisible;
+        $this->roomvisible = $roomvisible;
+        $this->placevisible = $placevisible;
     }
 
     /**
@@ -94,7 +96,8 @@ class exammanagement_overview implements renderable, templatable {
         $data->stateofplacescorrect = $this->stateofplacescorrect;
         $data->stateofplaceserror = $this->stateofplaceserror;
         $data->datetimevisible = $this->datetimevisible;
-        $data->roomplacevisible = $this->roomplacevisible;
+        $data->roomvisible = $this->roomvisible;
+        $data->placevisible = $this->placevisible;
         return $data;
     }
 

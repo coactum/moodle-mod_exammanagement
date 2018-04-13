@@ -42,7 +42,9 @@ class exammanagement_participantsview implements renderable, templatable {
     protected $isparticipant;
     protected $examdate;
     protected $examtime;
-	protected $textfield;
+    protected $room;
+    protected $place;
+	  protected $textfield;
 
     /**
      * Construct this renderable.

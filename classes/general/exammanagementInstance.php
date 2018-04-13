@@ -391,7 +391,7 @@ EOF;
 
 			global $USER;
 
-			$roomState = $this->isRoomPlaceVisible();
+			$roomState = $this->isRoomVisible();
 			$assignmentArray = $this->getAssignedPlaces();
 			$participantsRoom =  false;
 
@@ -415,7 +415,7 @@ EOF;
 
 			global $USER;
 
-			$placesState = $this->isRoomPlaceVisible();
+			$placesState = $this->isPlaceVisible();
 			$assignmentArray = $this->getAssignedPlaces();
 			$participantsPlace =  false;
 
@@ -627,11 +627,23 @@ EOF;
 		}
 	}
 
-	public function isRoomPlaceVisible(){
+	public function isRoomVisible(){
 
-		$isRoomPlaceVisible = $this->moduleinstance->roomplacevisible;
+		$isRoomVisible = $this->moduleinstance->roomvisible;
 
-		if($isRoomPlaceVisible){
+		if($isRoomVisible){
+				return true;
+		} else {
+				return false;
+		}
+
+	}
+
+	public function isPlaceVisible(){
+
+		$isPlaceVisible = $this->moduleinstance->placevisible;
+
+		if($isPlaceVisible){
 				return true;
 		} else {
 				return false;

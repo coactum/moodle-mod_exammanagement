@@ -39,12 +39,14 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 // relevant if called from itself and information is set visible for users
 $datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
-
-$roomplacevisible = optional_param('roomplacevisible', 0, PARAM_RAW);
+$roomvisible = optional_param('roomvisible', 0, PARAM_RAW);
+$placevisible = optional_param('placevisible', 0, PARAM_RAW);
 
 $calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
+$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
+$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
 
-$calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
+var_dump($datetimevisible, $roomvisible, $placevisible, $calledfromformdt, $calledfromformroom, $calledfromformplace);
 
 global $PAGE, $CFG;
 
@@ -56,7 +58,7 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teacher
 
-  if($calledfromformdt&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){ // saveDateTime
+  if($calledfromformdt){ // saveDateTime
 
   			$ExammanagementInstanceObj->moduleinstance->datetimevisible=$datetimevisible;
 
@@ -64,9 +66,22 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   			$MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
 
-  } elseif($calledfromformrp&&$MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){ // saveRoomPlace
+  } elseif($calledfromformroom){ // saveRoomPlace
 
-     $ExammanagementInstanceObj->moduleinstance->roomplacevisible=$roomplacevisible;
+     $ExammanagementInstanceObj->moduleinstance->roomvisible=$roomvisible;
+
+     var_dump('setRoomVisibility');
+
+     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+     $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+  }
+
+  elseif($calledfromformplace){ // saveRoomPlace
+
+     $ExammanagementInstanceObj->moduleinstance->placevisible=$placevisible;
+
+     var_dump('setPlaceVisibility');
 
      $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
@@ -78,7 +93,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
-  $page = new output\exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomPlaceVisible());
+  $page = new output\exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomVisible(),$ExammanagementInstanceObj->isPlaceVisible());
   echo $output->render($page);
 
   //$this->debugElementsOverview();
