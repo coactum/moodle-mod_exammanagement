@@ -27,7 +27,7 @@ namespace mod_exammanagement\general;
 defined('MOODLE_INTERNAL') || die();
 use mod_exammanagement\event;
 use context_module;
-use \stdClass;
+use stdClass;
 
 class exammanagementInstance{
 

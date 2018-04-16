@@ -6,7 +6,8 @@
     position:relative;
     margin-bottom: 30px;
     padding-bottom: 10px;
-
+    word-wrap: break-word;
+    word-break: break-all;
 }
 .exmammanagement-summary > li{
       position: relative;
@@ -32,7 +33,7 @@
       top: 0;
 }
 
-.exmammanagement-summary > li > .card{
+.exmammanagement-summary > li > .panel{
       margin-left: 60px;
 }
 
@@ -51,6 +52,21 @@
 .exmammanagement-summary li:target{
     padding-top: 0px !important;
     margin-top: 0px !important;
+}
+
+.mainpanel::before {
+    position: absolute;
+    display: block;
+    top: 8px;
+    left: 36px;
+    content: '';
+    width: 0px;
+    height: 0px;
+    border: inherit;
+    border-width: 12px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
 }
 
 @media (min-width: 768px){
@@ -164,6 +180,8 @@ input:checked + .exammanagement-slider:before {
 }
 
 /* copied from bootstrap */
+
+/* panel */
 
 .panel {
   margin-bottom: 20px;
