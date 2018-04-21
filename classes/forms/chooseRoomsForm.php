@@ -23,7 +23,8 @@
  */
 
 namespace mod_exammanagement\forms;
-use mod_exammanagement\general;
+use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
 
 use moodleform;
 
@@ -46,8 +47,8 @@ class chooseRoomsForm extends moodleform {
     $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
     $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
 
-    $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-    $MoodleObj = general\Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+    $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+    $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
     $mform = $this->_form; // Don't forget the underscore!
 

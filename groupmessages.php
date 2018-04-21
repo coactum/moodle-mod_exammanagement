@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms;
+use mod_exammanagement\forms\exammanagementForms;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -37,7 +37,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = forms\exammanagementForms::getInstance($id, $e);
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){

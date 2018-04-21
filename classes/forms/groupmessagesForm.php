@@ -23,7 +23,8 @@
  */
 
 namespace mod_exammanagement\forms;
-use mod_exammanagement\general;
+use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
 
 use moodleform;
 
@@ -41,8 +42,8 @@ class groupmessagesForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        $ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $MoodleObj = general\Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $mform = $this->_form; // Don't forget the underscore!
 

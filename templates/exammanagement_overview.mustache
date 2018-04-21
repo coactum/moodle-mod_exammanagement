@@ -45,16 +45,18 @@ showMore = function() {
 			return false;	    
 		};
 
-ajaxtoogle = function(command, value){
+ajaxtoogleInformation = function(command, value){
 
 		if(command=='room'){
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value)},
             success: function(response) {
+							$('.roomVisible').toggle();
+							$('.roomNotVisible').toggle();
             },
             error: function(response) {
-              alert('Fehler beim Speichern.')
+							alert('Fehler. Bitte erneut versuchen')
             }
         });
     } else if(command=='place'){
@@ -62,9 +64,11 @@ ajaxtoogle = function(command, value){
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(value)},
             success: function(response) {
+							$('.placeVisible').toggle();
+							$('.placeNotVisible').toggle();
             },
             error: function(response) {
-              alert('Fehler beim Speichern.')
+							alert('Fehler. Bitte erneut versuchen')
             }
         });
     } else if(command=='datetime'){
@@ -72,26 +76,20 @@ ajaxtoogle = function(command, value){
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(value)},
             success: function(response) {
-							alert('Hat geklappt');
-            },
+							$('.datetimeVisible').toggle();
+							$('.datetimeNotVisible').toggle();
+						},
             error: function(response) {
-              alert('Fehler beim Speichern.')
+              alert('Fehler. Bitte erneut versuchen')
             }
         });
     }
+}
 
-		$(document).on('click', '.panel-heading span.clickable', function(e){
-	    var $this = $(this);
-		if(!$this.hasClass('panel-collapsed')) {
-			$this.parents('.panel').find('.panel-body').slideUp();
-			$this.addClass('panel-collapsed');
-			$this.find('i').removeClass('fa fa-caret-up').addClass('fa fa-caret-down');
-		} else {
-			$this.parents('.panel').find('.panel-body').slideDown();
-			$this.removeClass('panel-collapsed');
-			$this.find('i').removeClass('fa fa-caret-down').addClass('fa fa-caret-up');
-		}
-	})
+ajaxtooglePhase = function(phase){
+		$(phase).slideToggle("slow");;
+		$(phase+'_maximize').toggle();
+		$(phase+'_minimize').toggle();
 }
 
 {{/js}}
@@ -123,11 +121,10 @@ ajaxtoogle = function(command, value){
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="panel panel-primary mainpanel">
               <div class="panel-heading">
-								<a type="button" data-toggle="collapse" data-target=".phase_one" aria-expanded="false" aria-controls="phase_one">
-		                <div class="row">
-													<h4 class="col-xs-11">{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
-		                      <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-		                </div>
+								<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.phase_one'); return true;">
+		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
+		                <span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_one_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_one_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
                 {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
@@ -311,12 +308,18 @@ ajaxtoogle = function(command, value){
                       <div class="card col-md-6">
                           <div class="card-body">
                             <div class="card-header m-b-1">
-                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogle('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
+                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
                               <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten (optional)</span>
                             </div>
                             <div class="card-text">
-                              {{#datetimevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
-                              {{^datetimevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
+                              {{#datetimevisible}}
+																	<p class="datetimeVisible collapse.show">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="datetimeNotVisible collapse">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+															{{/datetimevisible}}
+                              {{^datetimevisible}}
+																	<p class="datetimeVisible collapse">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="datetimeNotVisible collapse.show">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+															{{/datetimevisible}}
                             </div>
                           </div>
                       </div>
@@ -339,14 +342,26 @@ ajaxtoogle = function(command, value){
                             </div>
                             <div class="card-text">
 															<div>
-																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogle('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>
-																{{#roomvisible}}<p class="exammanagement-showInformationText">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomvisible}}
-	                              {{^roomvisible}}<p class="exammanagement-showInformationText">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>{{/roomvisible}}
+																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>
+																{{#roomvisible}}
+																		<p class="exammanagement-showInformationText roomVisible collapse.show">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
+																		<p class="exammanagement-showInformationText roomNotVisible collapse">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																{{/roomvisible}}
+	                              {{^roomvisible}}
+																		<p class="exammanagement-showInformationText roomNotVisible collapse.show">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																		<p class="exammanagement-showInformationText roomVisible collapse">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
+																{{/roomvisible}}
 															</div>
 															<div>
-																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogle('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>
-																{{#placevisible}}<p class="exammanagement-showInformationText">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</span></p>{{/placevisible}}
-																{{^placevisible}}<p class="exammanagement-showInformationText">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/placevisible}}
+																<label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>
+																{{#placevisible}}
+																		<p class="exammanagement-showInformationText placeVisible collapse.show">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																		<p class="exammanagement-showInformationText placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																{{/placevisible}}
+																{{^placevisible}}
+																		<p class="exammanagement-showInformationText placeNotVisible collapse.show">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																		<p class="exammanagement-showInformationText placeVisible collapse">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																{{/placevisible}}
 															</div>
 														</div>
                           </div>
@@ -607,3 +622,10 @@ ajaxtoogle = function(command, value){
         <!-- /Panel -->
 
      </div>
+		 <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+		   <div class="card-header">Header</div>
+		   <div class="card-body">
+		     <h5 class="card-title">Secondary card title</h5>
+		     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		   </div>
+		 </div>

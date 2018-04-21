@@ -6,8 +6,7 @@
     position:relative;
     margin-bottom: 30px;
     padding-bottom: 10px;
-    word-wrap: break-word;
-    word-break: break-all;
+    overflow-wrap: break-word;
 }
 .exmammanagement-summary > li{
       position: relative;
@@ -69,13 +68,44 @@
     border-left-color: transparent;
 }
 
-@media (min-width: 768px){
+.mainpanel > .panel-heading span { /* minimize/maximize buttons */
+    position: relative;
+    bottom: 30px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 6px 12px;
+    border-radius: 4px
+}
+
+/* @media (min-width: 768px){
 	.row-eq-height {
   		display: -webkit-box;
   		display: -webkit-flex;
   		display: -ms-flexbox;
   		display: flex;
+      flex-wrap: wrap;
   	}
+} */
+
+@media (min-width: 768px){
+    .row-eq-height, .row-eq-height > div[class*='col-'] {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        flex:1 0 auto;
+    }
+
+    .row-eq-height .panel {
+       display: flex;
+       flex-direction: column;
+       align-content: stretch;
+    }
+
+    .row-eq-height .panel-body {
+       display: flex;
+       flex-grow:1;
+    }
 }
 
 .exammanagement-rooms .svg{

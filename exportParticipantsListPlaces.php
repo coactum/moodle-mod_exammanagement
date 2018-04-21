@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\pdfs;
+use mod_exammanagement\pdfs\participantsList;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -59,7 +59,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     require_once($CFG->libdir.'/pdflib.php');
 
     // create new PDF document
-    $pdf = new pdfs\participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf = new participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 
     // set document information

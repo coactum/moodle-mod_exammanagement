@@ -25,9 +25,10 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
-use mod_exammanagement\event;
+use mod_exammanagement\event\course_module_viewed;
 use context_module;
 use stdClass;
+use core\message\message;
 
 class exammanagementInstance{
 
@@ -98,15 +99,6 @@ class exammanagementInstance{
 	public function getModulecontext(){
 
 			return $this->modulecontext;
-
-	}
-
-	#### setter for object properties
-
-	public function setModuleinstance($field, $value){
-
-			$this->moduleinstance->$field = $value;
-			echo $this->moduleinstance;
 
 	}
 
@@ -451,7 +443,7 @@ EOF;
 		switch ($type){
 
 			case 'view':
-				$event = event\course_module_viewed::create(array(
+				$event = course_module_viewed::create(array(
 					'objectid' => $this->moduleinstance->id,
 					'context' => $this->modulecontext
 				));
@@ -920,7 +912,7 @@ EOF;
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$message = new \core\message\message();
+		$message = new message();
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
 		$message->name = 'groupmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
 		$message->userfrom = $USER; // user object

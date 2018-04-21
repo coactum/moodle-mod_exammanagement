@@ -24,7 +24,8 @@
 
 namespace mod_exammanagement\forms;
 
-use mod_exammanagement\general;
+use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -58,8 +59,8 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/chooseRoomsForm.php');
 
-		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -94,8 +95,8 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/dateTimeForm.php');
 
-		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate dateTime_form
 		$mform = new dateTimeForm();
@@ -132,8 +133,8 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/addParticipantsForm.php');
 
-		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -169,8 +170,8 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/textfieldForm.php');
 
-		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new textfieldForm();
@@ -211,8 +212,8 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/groupmessagesForm.php');
 
-		$MoodleObj = general\Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = general\exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));

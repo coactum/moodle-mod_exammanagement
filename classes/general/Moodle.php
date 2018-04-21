@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use moodle_url;
+use core\output\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -117,19 +118,19 @@ class Moodle{
 
 		switch ($type) {
     		case 'success':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
+        		redirect ($url, $message, null, notification::NOTIFY_SUCCESS);
         		break;
     		case 'warning':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
+        		redirect ($url, $message, null, notification::NOTIFY_WARNING);
         		break;
     		case 'error':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		redirect ($url, $message, null, notification::NOTIFY_ERROR);
         		break;
         	case 'info':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
+        		redirect ($url, $message, null, notification::NOTIFY_INFO);
         		break;
         	default:
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
+        		redirect ($url, $message, null, notification::NOTIFY_ERROR);
         		break;
 		}
 	}
