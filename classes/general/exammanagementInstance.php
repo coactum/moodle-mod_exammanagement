@@ -643,6 +643,21 @@ EOF;
 
 	}
 
+	public function getTaskCount(){
+
+		$tasks = $this->getTasks();
+
+		if($tasks){
+				$taskcount = count($tasks);
+				return $taskcount;
+		} else {
+				return false;
+		}
+
+	}
+
+
+
 	############## feature: setDateTime #########
 
 	public function saveDateTime($examtime){
@@ -867,6 +882,28 @@ EOF;
 			return $user;
 	}
 
+	######### feature: configure tasks ##########
+
+	public function saveTasks($fromform){
+
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			$tasks = json_encode($fromform->task);
+			$this->moduleinstance->tasks=$tasks;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
+
+	}
+
+	public function getTasks(){
+
+			$tasks = json_decode($this->moduleinstance->tasks);
+			return $tasks;
+	}
+
 	######### feature: textfield ##########
 
 	public function saveTextfield($fromform){
@@ -874,7 +911,7 @@ EOF;
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			$textfield=json_encode($fromform->textfield);
+			$textfield = json_encode($fromform->textfield);
 
 			$this->moduleinstance->textfield=$textfield;
 

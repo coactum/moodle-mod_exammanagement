@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints participants form for mod_exammanagement.
+ * Prints textfield form for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -41,11 +41,11 @@ $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    $MoodleObj->setPage('addParticipants');
-    $MoodleObj->outputPageHeader();
-    $ExammanagementFormsObj->buildAddParticipantsForm();
+		$MoodleObj->setPage('configureTasks');
+		$MoodleObj-> outputPageHeader();
+		$ExammanagementFormsObj->buildConfigureTasksForm();
 
-    $MoodleObj->outputFooter();
+		$MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

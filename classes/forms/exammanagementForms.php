@@ -128,7 +128,7 @@ class exammanagementForms{
 
 	}
 
-	public function buildaddParticipantsForm(){
+	public function buildAddParticipantsForm(){
 
 		//include form
 		require_once(__DIR__.'/addParticipantsForm.php');
@@ -150,6 +150,41 @@ class exammanagementForms{
 		  $participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
 
 		  $ExammanagementInstanceObj->saveParticipants($participants);
+
+		} else {
+		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		  // or on the first display of the form.
+
+		  //Set default data (if any)
+		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		  $mform->set_data(array('id'=>$this->id));
+
+		  //displays the form
+		  $mform->display();
+		}
+
+	}
+
+	public function buildConfigureTasksForm(){
+
+		//include form
+		require_once(__DIR__.'/configureTasksForm.php');
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate Textfield_form
+		$mform = new configureTasksForm(null, array('id'=>$this->id, 'e'=>$this->e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+		  //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+			$ExammanagementInstanceObj->saveTasks($fromform);
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

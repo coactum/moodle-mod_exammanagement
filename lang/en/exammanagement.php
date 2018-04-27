@@ -35,8 +35,14 @@ $string['phase_four'] = 'After exam';
 $string['exam_appointment'] = 'Exam appointment';
 
 //dateTimeForm.php
-
 $string['resetDateTime'] = 'Reset appointment';
+
+//configureTasksForm.php
+$string['configure_tasks'] = 'Configure Tasks';
+$string['configure_tasks_text'] = 'Configure tasks for the exam';
+$string['add_remove_tasks'] = 'Add or remove tasks:';
+$string['task'] = 'Task';
+$string['points'] = 'Points';
 
 //participant list
 $string['participantslist'] = 'list of participants';
@@ -56,6 +62,7 @@ $string['helptext_overview']= 'Here goes the description of this feature site.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
+$string['helptext_configureTasks']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 

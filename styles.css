@@ -126,6 +126,11 @@
  	display:block;
 }
 
+.task_spacing{
+  padding-left: 24.24px;
+  padding-right: 24.24px;
+}
+
 /* show information switches*/
 
  /* The switch - the box around the slider */

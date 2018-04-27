@@ -197,23 +197,23 @@ ajaxtooglePhase = function(phase){
 													</div>
 												</div>
 												<div class="col-md-6">
-													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
+													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
 														<div class="panel-heading">
 															<div class="row">
 																<h3 class="panel-title col-md-8">Prüfungsaufgaben</h3>
 																<span class="statebar col-md-4">
-																	{{#hrexamtime}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/hrexamtime}}
-																	{{^hrexamtime}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/hrexamtime}}
+																	{{#taskcount}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/taskcount}}
+																	{{^taskcount}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/taskcount}}
 																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
 																</span>
 															</div>
 														</div>
 														<div class="panel-body">
-															{{#hrexamtime}}<p> Prüfungsaufgaben</p>{{/hrexamtime}}
-															{{^hrexamtime}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/hrexamtime}}
+															{{#taskcount}}<p> Es wurden bereits {{taskcount}} Prüfungsaufgaben angelegt.</p>{{/taskcount}}
+															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="">Aufgaben konfigurieren</a>
+															<a class="btn btn-info" href="configureTasks.php?id={{cmid}}">Aufgaben konfigurieren</a>
 														</div>
 													</div>
 												</div>
