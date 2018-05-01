@@ -84,7 +84,25 @@ ajaxtoogleInformation = function(command, value){
             }
         });
     }
-}
+};
+
+addtask = function(){
+
+		count = parseInt($(".form-group:nth-of-type(5) .col-md-9 input:last").prop("id").slice(-1));
+		newcount = count+1;
+
+		$(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing">' + newcount + '</span>');
+		$(".form-group:nth-of-type(5) .col-md-9").append('<div class="form-group  fitem  "><label class="col-form-label sr-only" for="id_task_' + newcount + '"></label><span data-fieldtype="text"><input class="form-control " name="task[' + newcount + ']" id="id_task_' + newcount + '" value="10" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[' + newcount + ']" style="display: none;"></div></div> ');
+};
+
+removetask = function(){
+		count = parseInt($(".form-group:nth-of-type(5) .col-md-9 input:last").prop("id").slice(-1));
+
+		if (count > 1){
+				$(".form-group:nth-of-type(4) .col-md-9 :last-child").remove();
+				$(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
+		}
+};
 
 ajaxtooglePhase = function(phase){
 		$(phase).slideToggle("slow");;
@@ -629,3 +647,178 @@ ajaxtooglePhase = function(phase){
 		     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 		   </div>
 		 </div>
+
+<form autocomplete="off" action="http://panda33.uni-paderborn.de.vm/mod/exammanagement/configureTasks.php" method="post" accept-charset="utf-8" id="mform1" class="mform">
+	<div style="display: none;"><input name="id" value="148" type="hidden">
+<input name="sesskey" value="vqdzJati6Z" type="hidden">
+<input name="_qf__mod_exammanagement_forms_configureTasksForm" value="1" type="hidden">
+</div>
+
+<div class="alert alert-info alert-dismissible fade in" role="alert"><div class="helptextbox"><div class="helptextboxcontent"><div class="row"><h4 class="alert-heading col-xs-11">Hilfetext</h4><button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div><p>Hier können Aufgaben gesetzt werden ...</p><hr><p class="mb-0">Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link: <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p><p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p></div></div></div><script>
+showMore = function() {
+
+			helptextboxcontent = jQuery.find('.helptextboxcontent');
+			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
+
+			helptextbox = jQuery.find('.helptextbox');
+			jQuery(helptextbox).css({
+			      "height": jQuery(helptextbox).height(),
+			      "max-height": 9999
+			    })
+			    .animate({
+			      "height": helptextboxcontentheight
+			    });
+
+
+			readMore = jQuery.find('.read-more');
+			jQuery(readMore).fadeOut();
+			return false;	    
+		};
+</script><h3>Aufgaben konfigurieren</h3><p>Hier können die Aufgaben der Prüfung konfiguriert werden.</p><div class="form-group row  fitem  ">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">
+
+
+
+        </span>
+        <label class="col-form-label d-inline " for="fgroup_id_tasks_buttonarray">
+            Aufgaben hinzufügen oder entfernen:
+        </label>
+    </div>
+    <div class="col-md-9 form-inline felement" data-fieldtype="group">
+
+            <div class="form-group  fitem  ">
+    <label class="col-form-label " for="id_add_task">
+
+
+
+    </label>
+    <span data-fieldtype="button">
+            <button class="btn btn-secondary" name="add_task" id="id_add_task" type="button" onclick="addtask(); return true;">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+    </span>
+    <div class="form-control-feedback" id="id_error_add_task" style="display: none;">
+
+    </div>
+</div>
+
+            <div class="form-group  fitem  ">
+    <label class="col-form-label " for="id_remove_task">
+
+
+
+    </label>
+    <span data-fieldtype="button">
+            <button class="btn btn-secondary" name="remove_task" id="id_remove_task" type="button" onclick="removetask(); return true;">
+                <i class="fa fa-minus" aria-hidden="true"></i>
+            </button>
+    </span>
+    <div class="form-control-feedback" id="id_error_remove_task" style="display: none;">
+
+    </div>
+</div>
+        <div class="form-control-feedback" id="id_error_" style="display: none;">
+
+        </div>
+    </div>
+</div><div class="form-group row  fitem  ">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">
+
+
+
+        </span>
+        <label class="col-form-label d-inline " for="fgroup_id_tasknumbers_array">
+            Aufgabe
+        </label>
+    </div>
+    <div class="col-md-9 form-inline felement" data-fieldtype="group">
+
+            <span class="task_spacing">1</span>
+        <div class="form-control-feedback" id="id_error_" style="display: none;">
+
+        </div>
+    </div>
+</div><div class="form-group row  fitem  ">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">
+
+
+
+        </span>
+        <label class="col-form-label d-inline " for="fgroup_id_tasks_array">
+            Punkte
+        </label>
+    </div>
+    <div class="col-md-9 form-inline felement" data-fieldtype="group">
+
+            <div class="form-group  fitem  ">
+    <label class="col-form-label sr-only" for="id_task_1">
+
+
+
+    </label>
+    <span data-fieldtype="text">
+    <input class="form-control " name="task[1]" id="id_task_1" value="" size="1" type="text">
+    </span>
+    <div class="form-control-feedback" id="id_error_task[1]" style="display: none;">
+
+    </div>
+</div>
+        <div class="form-control-feedback" id="id_error_" style="display: none;">
+
+        </div>
+    </div>
+</div><div class="form-group row  fitem  ">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">
+
+
+
+        </span>
+        <label class="col-form-label d-inline " for="fgroup_id_buttonar">
+
+        </label>
+    </div>
+    <div class="col-md-9 form-inline felement" data-fieldtype="group">
+
+            <div class="form-group  fitem  ">
+    <label class="col-form-label " for="id_submitbutton">
+
+
+
+    </label>
+    <span data-fieldtype="submit">
+        <input class="btn
+                    btn-primary
+
+                    " name="submitbutton" id="id_submitbutton" value="Änderungen speichern" type="submit">
+    </span>
+    <div class="form-control-feedback" id="id_error_submitbutton" style="display: none;">
+
+    </div>
+</div>
+
+            <div class="form-group  fitem   btn-cancel">
+    <label class="col-form-label " for="id_cancel">
+
+
+
+    </label>
+    <span data-fieldtype="submit">
+        <input class="btn
+
+                    btn-secondary
+                    " name="cancel" id="id_cancel" value="Abbrechen" onclick="skipClientValidation = true; return true;" type="submit">
+    </span>
+    <div class="form-control-feedback" id="id_error_cancel" style="display: none;">
+
+    </div>
+</div>
+        <div class="form-control-feedback" id="id_error_" style="display: none;">
+
+        </div>
+    </div>
+</div>
+</form>

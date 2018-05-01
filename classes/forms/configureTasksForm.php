@@ -58,22 +58,38 @@ class configureTasksForm extends moodleform {
         $tasknumbers_array = array();
         $tasks_array = array();
         $attributes = array('size'=>'1'); // length of input field
+        $totalpoints = 0;
 
-        foreach($tasks as $key => $points){
-            //number of task
+        if ($tasks){
 
-            $number = $key + 1;
-            array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing">'.$number.'</span>'));
+          foreach($tasks as $key => $points){
+              //number of task
 
-            //input field with points
-            array_push($tasks_array, $mform->createElement('text', 'task['.$key.']', '', $attributes));
-            $mform->setType('task['.$key.']', PARAM_INT);
-            $mform->setDefault('task['.$key.']', $points);
+              $number = $key + 1;
+              $totalpoints .= $points;
+
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing">'.$number.'</span>'));
+
+              //input field with points
+              array_push($tasks_array, $mform->createElement('text', 'task['.$key.']', '', $attributes));
+              $mform->setType('task['.$number.']', PARAM_INT);
+              $mform->setDefault('task['.$number.']', $points);
+          }
+
+          $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
+          $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
+
+        } else {
+          array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing">1</span>'));
+          array_push($tasks_array, $mform->createElement('text', 'task[0]', '', $attributes));
+
+          $mform->setType('task[0]', PARAM_INT);
+
+          $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
+          $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
         }
 
-        $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
-        $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
-
+        $mform->addelement('html', '<div class="row"><span class="col-md-3">Gesamtpunkte:</span><span class="col-md-9>"'.$totalpoints.'</span></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
