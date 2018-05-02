@@ -39,10 +39,11 @@ $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
 
 //configureTasksForm.php
 $string['configure_tasks'] = 'Aufgaben konfigurieren';
-$string['configure_tasks_text'] = 'Hier können die Aufgaben der Prüfung konfiguriert werden.';
+$string['configure_tasks_text'] = 'Hier kann die Maximalpunktzahl für jede Aufgabe der Prüfung eingestellt werden.';
 $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
 $string['points'] = 'Punkte';
+$string['total'] = 'Summe';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';

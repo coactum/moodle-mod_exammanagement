@@ -46,6 +46,7 @@ class exammanagement_overview implements renderable, templatable {
     protected $hrexamtime;
     protected $textfield;
     protected $taskcount;
+    protected $tasktotalpoints;
     protected $participants;
     protected $rooms;
     protected $roomnames;
@@ -59,7 +60,7 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $taskcount, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -67,6 +68,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->fourthphasecompleted = $fourthphasecompleted;
         $this->hrexamtime = $hrexamtime;
         $this->taskcount = $taskcount;
+        $this->tasktotalpoints = $tasktotalpoints;
         $this->textfield = $textfield;
         $this->participants = $participants;
         $this->rooms = $rooms;
@@ -92,6 +94,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->fourthphasecompleted = $this->fourthphasecompleted;
         $data->hrexamtime = $this->hrexamtime;
         $data->taskcount = $this->taskcount;
+        $data->tasktotalpoints = $this->tasktotalpoints;
         $data->textfield = $this->textfield;
         $data->participants = $this->participants;
         $data->rooms = $this->rooms;

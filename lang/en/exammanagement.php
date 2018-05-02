@@ -43,6 +43,7 @@ $string['configure_tasks_text'] = 'Configure tasks for the exam';
 $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
+$string['total'] = 'Total';
 
 //participant list
 $string['participantslist'] = 'list of participants';

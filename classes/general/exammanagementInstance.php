@@ -656,6 +656,21 @@ EOF;
 
 	}
 
+	public function getTaskTotalPoints(){
+
+		$tasks = $this->getTasks();
+		$totalpoints = 0;
+
+		if($tasks){
+				foreach($tasks as $key => $points){
+						$totalpoints += $points;
+					}
+				return $totalpoints;
+		} else {
+				return false;
+		}
+
+	}
 
 
 	############## feature: setDateTime #########

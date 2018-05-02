@@ -54,11 +54,11 @@ class configureTasksForm extends moodleform {
 
         //create list of tasks
         $tasks = $ExammanagementInstanceObj->getTasks();
+        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
         $tasknumbers_array = array();
         $tasks_array = array();
         $attributes = array('size'=>'1'); // length of input field
-        $totalpoints = 0;
 
         if ($tasks){
 
@@ -66,14 +66,13 @@ class configureTasksForm extends moodleform {
               //number of task
 
               $number = $key + 1;
-              $totalpoints .= $points;
 
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing">'.$number.'</span>'));
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$number.'</strong></span>'));
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$key.']', '', $attributes));
-              $mform->setType('task['.$number.']', PARAM_INT);
-              $mform->setDefault('task['.$number.']', $points);
+              $mform->setType('task['.$key.']', PARAM_INT);
+              $mform->setDefault('task['.$key.']', $points);
           }
 
           $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
@@ -89,7 +88,7 @@ class configureTasksForm extends moodleform {
           $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
         }
 
-        $mform->addelement('html', '<div class="row"><span class="col-md-3">Gesamtpunkte:</span><span class="col-md-9>"'.$totalpoints.'</span></div>');
+        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
