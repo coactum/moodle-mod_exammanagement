@@ -38,10 +38,16 @@ class configureTasksForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        global $PAGE;
+
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureTasks'));
+
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'add_task'); //call jquery for adding tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'remove_task'); //call jquery for removing
 
  		    $mform->addElement('html', '<h3>'.get_string('configure_tasks', 'mod_exammanagement').'</h3>');
  		    $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
