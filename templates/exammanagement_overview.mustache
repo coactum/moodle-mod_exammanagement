@@ -86,47 +86,60 @@ ajaxtoogleInformation = function(command, value){
     }
 };
 
-addtask = function(){
-
-		count = parseInt($(".form-group:nth-of-type(5) .col-md-9 input:last").prop("id").split('task_')[1]);
-		newcount = count+1;
-		pointsofnewtask = 10;
-
-		$(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing">' + newcount + '</span>');
-		$(".form-group:nth-of-type(5) .col-md-9").append('<div class="form-group  fitem  "><label class="col-form-label sr-only" for="id_task_' + newcount + '"></label><span data-fieldtype="text"><input class="form-control " name="task[' + newcount + ']" id="id_task_' + newcount + '" value="' + pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[' + newcount + ']" style="display: none;"></div></div> ');
-
-		totalpoints = parseInt($("#totalpoints").text());
-		totalpoints += pointsofnewtask;
-		$("#totalpoints").text(totalpoints);
-};
-
-removetask = function(){
-		count = parseInt($(".form-group:nth-of-type(5) .col-md-9 input:last").prop("id").slice(-1));
-
-		if (count > 1){
-
-				pointsofremovedtask = parseInt($(".form-group:nth-of-type(5) .col-md-9 .form-group:last input").val());
-				$(".form-group:nth-of-type(4) .col-md-9 :last-child").remove();
-				$(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
-
-				totalpoints = parseInt($("#totalpoints").text());
-				if ($.isNumeric(pointsofremovedtask)){
-					totalpoints -= pointsofremovedtask;
-				}
-
-				$("#totalpoints").text(totalpoints);
-		}
-};
-
-$( "input" ).change(function() {
-  alert( "Handler for .change() called." );
-});
-
 ajaxtooglePhase = function(phase){
 		$(phase).slideToggle("slow");;
 		$(phase+'_maximize').toggle();
 		$(phase+'_minimize').toggle();
 }
+
+addtask = function(){
+
+		taskcount = getTaskCount();
+		newtaskcount = taskcount+1;
+		pointsofnewtask = 10;
+
+		$(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing">' + newtaskcount + '</span>');
+		$(".form-group:nth-of-type(5) .col-md-9").append('<div class="form-group  fitem  "><label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text"><input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="' + pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[' + newtaskcount + ']" style="display: none;"></div></div> ');
+
+		totalpoints = getTotalpoints();
+		$("#totalpoints").text(totalpoints);
+};
+
+removetask = function(){
+		taskcount = getTaskCount();
+
+		if (taskcount > 1){
+				$(".form-group:nth-of-type(4) .col-md-9 :last-child").remove();
+				$(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
+
+				totalpoints = getTotalpoints();
+				$("#totalpoints").text(totalpoints);
+		}
+};
+
+getTotalpoints = function(){
+	var totalpoints = 0;
+
+	$(".form-group input.form-control").each(function () {
+				totalpoints += parseInt($(this).val());
+		});
+
+	return totalpoints;
+}
+
+getTaskCount = function(){
+	var taskcount = 0;
+
+	$(".form-group input.form-control").each(function () {
+				taskcount += 1;
+		});
+
+	return taskcount;
+}
+
+$( ".form-group" ).on( "change", "input", function() {
+  $("#totalpoints").text(getTotalpoints());
+});
 
 {{/js}}
 
@@ -778,7 +791,7 @@ showMore = function() {
 
     </label>
     <span data-fieldtype="text">
-    <input class="form-control " name="task[1]" id="id_task_1" value="" size="1" type="text">
+    <input class="form-control " name="task[1]" id="id_task_1" value="0" size="1" type="text">
     </span>
     <div class="form-control-feedback" id="id_error_task[1]" style="display: none;">
 

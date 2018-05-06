@@ -83,6 +83,7 @@ class configureTasksForm extends moodleform {
           array_push($tasks_array, $mform->createElement('text', 'task[0]', '', $attributes));
 
           $mform->setType('task[0]', PARAM_INT);
+          $mform->setDefault('task[0]', 0);
 
           $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
           $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
