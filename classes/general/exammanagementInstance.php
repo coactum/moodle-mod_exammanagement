@@ -1060,19 +1060,33 @@ EOF;
 	########### Export PDFS ####
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object
-			$tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-			$tbl .= "<thead>";
-			$tbl .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-			$tbl .= "</tr>";
-			$tbl .= "</thead>";
+			$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+			$header .= "<thead>";
+			$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+			$header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+			$header .= "</tr>";
+			$header .= "</thead>";
 
-			return $tbl;
+			return $header;
 		}
+
+		public function getSeatingPlanTableHeader() { // to bemoved to pdf object
+
+				$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+				$header .= "<thead>";
+				$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+				$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+				$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+				$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+				$header .= "</tr>";
+				$header .= "</thead>";
+
+				return $header;
+			}
 
 	########### debugging ########
 

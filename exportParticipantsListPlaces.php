@@ -118,7 +118,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $pdf->writeHTML($tbl, true, false, false, false, '');
           $pdf->AddPage();
           $fill = false;
-          $tbl = $this->getParticipantsListTableHeader();
+          $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
         }
 
         usort($roomObj->assignments, function($a, $b){ //sort array by custom user function

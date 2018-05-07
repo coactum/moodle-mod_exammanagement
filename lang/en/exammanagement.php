@@ -56,6 +56,14 @@ $string['matrno'] = 'Matr.-no.';
 $string['room'] = 'Room';
 $string['place'] = 'Place';
 
+//seatingplan
+$string['seatingplan'] = 'Seating plan';
+$string['total_seats'] = 'Total seats';
+$string['lecture_room'] = 'Lecture room';
+$string['places_differ'] = 'This plan may differ from the actual seating numeration.';
+$string['places_alternative'] = 'In this case use numeration on this plan.';
+$string['numbered_seats_usable_seats'] = 'numbered seats = used seats';
+
 //helptexts
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';

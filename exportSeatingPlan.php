@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\pdfs\participantsList;
+use mod_exammanagement\pdfs\seatingPlan;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -37,19 +37,14 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
     //include pdf
-    require_once(__DIR__.'/classes/pdfs/participantsList.php');
-
-    define("WIDTH_COLUMN_NAME", 200);
-    define("WIDTH_COLUMN_FIRSTNAME", 150);
-    define("WIDTH_COLUMN_MATNO", 60);
-    define("WIDTH_COLUMN_ROOM", 90);
-    define("WIDTH_COLUMN_PLACE", 70);
+    require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
 
     if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
@@ -59,16 +54,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     require_once(__DIR__.'/../../config.php');
     require_once($CFG->libdir.'/pdflib.php');
 
-    // create new PDF document
-    $pdf = new participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    define("WIDTH_COLUMN_MATNO", 60);
+    define("WIDTH_COLUMN_ROOM", 90);
+    define("WIDTH_COLUMN_PLACE", 70);
 
+    // create new PDF document
+    $pdf = new seatingPlan(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetAuthor('PANDA');
     $pdf->SetTitle($ExammanagementInstanceObj->getCourse()->fullname);
-    $pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
-    $pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname);
+    $pdf->SetSubject(get_string('seatingplan', 'mod_exammanagement'));
+    $pdf->SetKeywords(get_string('seatingplan', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname);
 
     // set default monospaced font
     $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -76,39 +74,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // set default header data
     $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
-    // set margins
+    //set margins
     $pdf->SetMargins(25, 55, 25);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
     //set auto page breaks
     $pdf->SetAutoPageBreak(TRUE, 19);
 
-    // set image scale factor
+    //set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-    // set some language-dependent strings (optional)
-    // if (@file_exists(__DIR__.'/lang/eng.php')) {
-    // 	require_once(__DIR__.'/lang/eng.php');
-    // 	$pdf->setLanguageArray($l);
-    // }
+    // Set font
+    $pdf->SetFont('freeserif', '', 10);
 
     // ---------------------------------------------------------
 
-    // Set font
-    // dejavusans is a UTF-8 Unicode font, if you only need to
-    // print standard ASCII chars, you can use core fonts like
-    // helvetica or times to reduce file size.
-    $pdf->SetFont('freeserif', '', 10);
-
-    // Add a page
-    // This method has several options, check the source code documentation for more information.
     $pdf->AddPage();
 
     // get users and construct content for document
     $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
     $fill = false;
     $previousRoom;
-    $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
+    $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
+    $numberofPlaces = 22;
 
     foreach ($assignedPlaces as $roomObj){
       $currentRoom = $roomObj;
@@ -119,21 +107,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $pdf->writeHTML($tbl, true, false, false, false, '');
           $pdf->AddPage();
           $fill = false;
-          $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
+          $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
         }
 
         usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
 
-          $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->firstname;
-          $aLastname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->lastname;
-          $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b->userid)->firstname;
-          $bLastname = $ExammanagementInstanceObj->getMoodleUser($b->userid)->lastname;
-
-          if ($aLastname == $bLastname) { //if names are even sort by first name
-              return strcmp($aFirstname, $bFirstname);
-          } else{
-              return strcmp($aLastname, $bLastname); // else sort by last name
-          }
+          return strcmp($a->place, $b->place); // sort by place
 
         });
 
@@ -141,8 +120,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $ExammanagementInstanceObj->getUserMatrNrPO($assignment->userid) . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
@@ -159,13 +136,140 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $tbl .= "</table>";
 
     // Print text using writeHTMLCell()
-
     $pdf->writeHTML($tbl, true, false, false, false, '');
+
+
+    foreach ($assignedPlaces as $roomObj){
+
+      $roomName = $roomObj->roomname;
+
+    	switch ($roomName) {
+    		case "AudiMax":
+    			$x = 30;
+    			$y = 30;
+    			$width = 250;
+    			break;
+
+    		case "C1":
+    			$x = 50;
+    			$y = 30;
+    			$width = 180;
+    			break;
+
+    		case "C2":
+    			$x = 70;
+    			$y = 50;
+    			$width = 140;
+    			break;
+
+    		case "G":
+    			$x = 35;
+    			$y = 45;
+    			$width = 225;
+    			break;
+
+    		case "P52.01":
+    			$x = 35;
+    			$y = 50;
+    			$width = 225;
+    			break;
+
+    		case "P52.03":
+    			$x = 55;
+    			$y = 50;
+    			$width = 175;
+    			break;
+
+    		case "P62.01":
+    			$x = 35;
+    			$y = 55;
+    			$width = 225;
+    			break;
+
+    		case "P62.03":
+    			$x = 70;
+    			$y = 60;
+    			$width = 140;
+    			break;
+
+    		case "P72.01":
+    			$x = 45;
+    			$y = 45;
+    			$width = 200;
+    			break;
+
+    		case "P72.03":
+    			$x = 60;
+    			$y = 45;
+    			$width = 180;
+    			break;
+
+    		case "O0.207":
+    			$x = 25;
+    			$y = 55;
+    			$width = 240;
+    			break;
+
+    		case "O1.267":
+    			$x = 85;
+    			$y = 50;
+    			$width = 120;
+    			break;
+
+    		case "L1":
+    		case "L2":
+    			$x = 80;
+    			$y = 30;
+    			$width = 140;
+    			break;
+
+    		case "L1.202":
+    			$x = 80;
+    			$y = 30;
+    			$width = 140;
+    			break;
+
+    		case "Eggelandhalle":
+    			$x = 100;
+    			$y = 30;
+    			$width = 140;
+    			break;
+
+    		// any case where no plan is available -> Sporthalle, "not set"
+    		default:return;
+
+      }
+
+      // ---------------------------------------------------------
+
+      $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
+      $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
+
+      $pdf->setPrintHeader(false);
+      $pdf->addPage('L', 'A4');
+      $pdf->SetFont('freeserif', '', 20);
+      $pdf->Text(0, 15, get_string('seatingplan', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+      $pdf->Text(15, 15, get_string('lecture_room', 'mod_exammanagement'));
+      $pdf->SetFont('freeserif', 'B', 25);
+      $pdf->Text(15, 25, $roomName);
+      $pdf->SetFont('freeserif', '', 10);
+      $pdf->Text(15, 180, get_string('places_differ', 'mod_exammanagement'));
+      $pdf->Text(15, 185, get_string('places_alternative', 'mod_exammanagement'));
+      $pdf->Text(15, 180, $maxSeats, false, false, true, 0, 0, 'R');
+      $pdf->setTextColor(204, 0, 0);
+      $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+      $pdf->setTextColor(0, 0, 0);
+      //$pdf->ImageEps('data/upb_logo_full.ai', $x, $y, $width);
+      //$pdf->ImageEps('../extensions/exam_organization/images/' . $roomObj->roomid . '.svg', $x, $y, $width);
+      //$pdf->writeHTML($svgFile, true, false, false, false, '');
+      //$pdf->ImageSVG('@'.$svgFile, $x=15, $y=30, $w='', $h='', $link='http://www.tcpdf.org', $align='', $palign='', $border=1, $fitonpage=false);
+    }
+
 
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("participantslist_names", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '' . $ExammanagementInstanceObj->getCourse()->fullname.'.pdf';
+    $filenameUmlaute = get_string("seatingplan", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '' . $ExammanagementInstanceObj->getCourse()->fullname.'.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------
@@ -177,7 +281,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //============================================================+
     // END OF FILE
     //============================================================+
-
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }
