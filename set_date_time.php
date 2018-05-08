@@ -36,10 +36,23 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$resetdatetime  = optional_param('resetdatetime', 0, PARAM_RAW);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+
+      if ($resetdatetime){
+
+        $ExammanagementInstanceObj->moduleinstance->examtime = NULL;
+
+        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum zurückgesetzt', 'success');
+      }
 
   		$MoodleObj->setPage('set_date_time');
   		$MoodleObj-> outputPageHeader();

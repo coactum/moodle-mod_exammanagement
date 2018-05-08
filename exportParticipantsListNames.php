@@ -123,7 +123,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
 
         usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
-
+          global $ExammanagementInstanceObj;
           $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->firstname;
           $aLastname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->lastname;
           $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b->userid)->firstname;

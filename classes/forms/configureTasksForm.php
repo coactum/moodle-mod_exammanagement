@@ -46,8 +46,8 @@ class configureTasksForm extends moodleform {
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureTasks'));
 
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'add_task'); //call jquery for adding tasks
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'remove_task'); //call jquery for removing
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
  		    $mform->addElement('html', '<h3>'.get_string('configure_tasks', 'mod_exammanagement').'</h3>');
  		    $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
@@ -62,6 +62,10 @@ class configureTasksForm extends moodleform {
         $tasks = $ExammanagementInstanceObj->getTasks();
         $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
+        if (!$totalpoints){
+          $totalpoints = 0;
+        }
+
         $tasknumbers_array = array();
         $tasks_array = array();
         $attributes = array('size'=>'1'); // length of input field
@@ -71,9 +75,7 @@ class configureTasksForm extends moodleform {
           foreach($tasks as $key => $points){
               //number of task
 
-              $number = $key + 1;
-
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$number.'</strong></span>'));
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$key.'</strong></span>'));
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$key.']', '', $attributes));
@@ -85,11 +87,11 @@ class configureTasksForm extends moodleform {
           $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
         } else {
-          array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing">1</span>'));
-          array_push($tasks_array, $mform->createElement('text', 'task[0]', '', $attributes));
+          array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
+          array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
 
-          $mform->setType('task[0]', PARAM_INT);
-          $mform->setDefault('task[0]', 0);
+          $mform->setType('task[1]', PARAM_INT);
+          $mform->setDefault('task[1]', 0);
 
           $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
           $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);

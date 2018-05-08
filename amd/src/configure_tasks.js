@@ -23,68 +23,67 @@
 
 define(['jquery'], function($) {
 
-  return {
-      init: function() {
-          $( ".form-group" ).on( "change", "input", function() {
-              $("#totalpoints").text(getTotalpoints());
-          });
-      }
+  var getTotalpoints = function() {
+    var totalpoints = 0;
+
+    $(".form-group input.form-control").each(function() {
+      totalpoints += parseInt($(this).val());
+    });
+
+    return totalpoints;
+  };
+
+  var getTaskCount = function() {
+    var taskcount = 0;
+
+    $(".form-group input.form-control").each(function() {
+      taskcount += 1;
+    });
+
+    return taskcount;
   };
 
   return {
-      addtask: function(){
+    init: function() {
+      $(".form-group").on("change", "input", function() {
+        $("#totalpoints").text(getTotalpoints());
+      });
+    },
+    addtask: function() {
 
-          $("#add_task").click(function () {
+      $("#id_add_task").click(function() {
 
-          		taskcount = getTaskCount();
-          		newtaskcount = taskcount+1;
-          		pointsofnewtask = 10;
+        var taskcount = getTaskCount();
+        var newtaskcount = taskcount + 1;
+        var pointsofnewtask = 10;
 
-          		$(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing">' + newtaskcount + '</span>');
-          		$(".form-group:nth-of-type(5) .col-md-9").append('<div class="form-group  fitem  "><label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text"><input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="' + pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[' + newtaskcount + ']" style="display: none;"></div></div> ');
+        var temp = '<div class="form-group  fitem  ">';
+        temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
+        temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
+        temp += pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[';
+        temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
-          		totalpoints = getTotalpoints();
-          		$("#totalpoints").text(totalpoints);
-          }
-      }
-  };
+        $(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
+        $(".form-group:nth-of-type(5) .col-md-9").append(temp);
 
-  return {
-      removetask: function(){
+        var totalpoints = getTotalpoints();
+        $("#totalpoints").text(totalpoints);
+      });
+    },
+    removetask: function() {
 
-          $("#add_task").click(function () {
+      $("#id_remove_task").click(function() {
 
-              taskcount = getTaskCount();
+        var taskcount = getTaskCount();
 
-            	if (taskcount > 1){
-            			$(".form-group:nth-of-type(4) .col-md-9 :last-child").remove();
-            			$(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
+        if (taskcount > 1) {
+          $(".form-group:nth-of-type(4) .col-md-9 span:last").remove();
+          $(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
 
-            			totalpoints = getTotalpoints();
-            			$("#totalpoints").text(totalpoints);
-            	}
-          }
-      }
-  };
-
-    var getTotalpoints = function(){
-    	var totalpoints = 0;
-
-    	$(".form-group input.form-control").each(function () {
-    				totalpoints += parseInt($(this).val());
-    		});
-
-    	return totalpoints;
+          var totalpoints = getTotalpoints();
+          $("#totalpoints").text(totalpoints);
+        }
+      });
     }
-
-    var getTaskCount = function(){
-    	var taskcount = 0;
-
-    	$(".form-group input.form-control").each(function () {
-    				taskcount += 1;
-    		});
-
-    	return taskcount;
-    }
-
+  };
 });
