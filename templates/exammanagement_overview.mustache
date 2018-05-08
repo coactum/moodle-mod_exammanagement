@@ -144,11 +144,11 @@ ajaxtooglePhase = function(phase){
 															</div>
 														</div>
 														<div class="panel-body">
-																{{#rooms}}<p> Es wurden bereits die folgenden {{rooms}} Räume ausgewählt: {{roomnames}}</p>{{/rooms}}
+																{{#rooms}}<p> Es wurden bereits die folgenden <strong> {{rooms}} Räume </strong> ausgewählt: <strong>{{roomnames}}</strong></p>{{/rooms}}
 																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
+															<a class="btn btn-info pull-right" href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
 														</div>
 													</div>
 												</div>
@@ -165,11 +165,11 @@ ajaxtooglePhase = function(phase){
 															</div>
 														</div>
 														<div class="panel-body">
-															{{#hrexamtime}}<p> Die Prüfung findet am {{hrexamtime}} statt.</p>{{/hrexamtime}}
+															{{#hrexamtime}}<p> Die Prüfung findet am <strong> {{hrexamtime}} </strong> statt.</p>{{/hrexamtime}}
 															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="set_date_time.php?id={{cmid}}">Datum festlegen</a>
+															<a class="btn btn-info pull-right" href="set_date_time.php?id={{cmid}}">Datum festlegen</a>
 														</div>
 													</div>
 												</div>
@@ -188,11 +188,11 @@ ajaxtooglePhase = function(phase){
 															</div>
 														</div>
 														<div class="panel-body">
-																{{#participants}}<p> Zur Prüfung sind {{participants}} Teilnehmer angemeldet.</p>{{/participants}}
+																{{#participants}}<p> Zur Prüfung sind <strong> {{participants}} TeilnehmerInnen </strong>.</p>{{/participants}}
 																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
+															<a class="btn btn-info pull-right" href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
 														</div>
 													</div>
 												</div>
@@ -213,7 +213,7 @@ ajaxtooglePhase = function(phase){
 															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="configureTasks.php?id={{cmid}}">Aufgaben konfigurieren</a>
+															<a class="btn btn-info pull-right" href="configureTasks.php?id={{cmid}}">Aufgaben konfigurieren</a>
 														</div>
 													</div>
 												</div>
@@ -236,7 +236,7 @@ ajaxtooglePhase = function(phase){
 																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info" href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten</a>
+															<a class="btn btn-info pull-right" href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten</a>
 														</div>
 													</div>
 												</div>
@@ -268,64 +268,82 @@ ajaxtooglePhase = function(phase){
             {{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
 						<div class="panel panel-primary mainpanel">
-              <div class="panel-heading">
-                	<a type="button" data-toggle="collapse" data-target=".phase_two" aria-expanded="false" aria-controls="phase_two">
-			                <div class="row">
-														<h4 class="col-xs-11">{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
-			                      <span class="col-xs-1 close" data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-			                </div>
+								<div class="panel-heading">
+									<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.phase_two'); return true;">
+											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
+											<span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_one_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+											<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_one_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 									</a>
-							</div>
+								</div>
                 {{#secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}
                 {{#firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse.show phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
                 {{^firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
                     <div class="panel-body">
-                    <div class="row row-eq-height">
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-refresh" aria-hidden="true"></i> <a href="assignPlaces.php?id={{cmid}}">Sitzplätze automatisch zuweisen</a>
-                            </div>
-                            <div class="card-text">
-                              {{#stateofplacescorrect}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
-                              {{#stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
-                              {{^stateofplacescorrect}}{{^stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Sitzplan exportieren (optional)</a>
-                            </div>
-                            <div class="card-text">
-                              <p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
-                            </div>
-														<div class="card-footer">
-															<a class="btn btn-info" href="exportSeatingPlan.php?id={{cmid}}">Sitzplan exportieren</a>
+                    	<div class="row row-eq-height">
+                        <div class="col-md-6">
+														<div class="panel {{#stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-warning{{/stateofplacescorrect}}">
+															<div class="panel-heading">
+																<div class="row">
+																	<h3 class="panel-title col-md-6">Sitzplatzzuweisung</h3>
+																	<span class="statebar col-md-6">
+																			{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/rooms}}
+																			{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/rooms}}
+																			<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span>
+																	</span>
+																</div>
+															</div>
+															<div class="panel-body">
+																{{#stateofplacescorrect}}<p>Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
+																{{#stateofplaceserror}}<p>Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
+																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
+															</div>
+															<div class="panel-footer">
+																<a class="btn btn-info pull-right" href="assignPlaces.php?id={{cmid}}">Sitzplätze automatisch zuweisen</a>
+															</div>
 														</div>
-                          </div>
                         </div>
+												<div class="col-md-6">
+													<div class="panel panel-info">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-md-8">Sitzplan</h3>
+																<span class="statebar col-md-4">
+																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+														</div>
+														<div class="panel-footer">
+															<a class="btn btn-info pull-right" href="exportSeatingPlan.php?id={{cmid}}">Sitzplan exportieren</a>
+														</div>
+													</div>
+												</div>
                     </div>
                     <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
-                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten (optional)</span>
-                            </div>
-                            <div class="card-text">
-                              {{#datetimevisible}}
-																	<p class="datetimeVisible collapse.show">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
-																	<p class="datetimeNotVisible collapse">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
-															{{/datetimevisible}}
-                              {{^datetimevisible}}
-																	<p class="datetimeVisible collapse">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
-																	<p class="datetimeNotVisible collapse.show">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
-															{{/datetimevisible}}
-                            </div>
-                          </div>
-                      </div>
+											<div class="col-md-6">
+												<div class="panel panel-info">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-md-8">Sichtbarkeit des Prüfungsdatums (optional)</h3>
+															<span class="statebar col-md-4">
+																<label class="exammanagement-switch pull-right" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														{{#datetimevisible}}
+																<p class="datetimeVisible collapse.show">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeNotVisible collapse">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+														{{/datetimevisible}}
+														{{^datetimevisible}}
+																<p class="datetimeVisible collapse">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeNotVisible collapse.show">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+														{{/datetimevisible}}
+													</div>
+												</div>
+											</div>
                       <div class="card col-md-6">
                         <div class="card-body">
                           <div class="card-header m-b-1">

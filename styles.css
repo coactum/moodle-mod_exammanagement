@@ -193,11 +193,6 @@ input:checked + .exammanagement-slider:before {
   border-radius: 50%;
 }
 
-.exammanagement-showInformationText {
-  position: absolute;
-  left: 70px;
-}
-
 .helptextbox{
   max-height: 100px;
   position: relative;
