@@ -123,8 +123,8 @@ ajaxtooglePhase = function(phase){
               <div class="panel-heading">
 								<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.phase_one'); return true;">
 		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
-		                <span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_one_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_one_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+		                <span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
                 {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
@@ -137,9 +137,9 @@ ajaxtooglePhase = function(phase){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Prüfungsräume</h3>
 																<span class="statebar col-xs-6">
-																		{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/rooms}}
-																		{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/rooms}}
-																		<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span>
+																		{{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -148,7 +148,7 @@ ajaxtooglePhase = function(phase){
 																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
+															<a class="btn btn-info pull-right" href="chooseRooms.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -156,11 +156,11 @@ ajaxtooglePhase = function(phase){
 													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Prüfungsdatum</h3>
-																<span class="statebar col-xs-4">
-																		{{#hrexamtime}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/hrexamtime}}
-																		{{^hrexamtime}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/hrexamtime}}
-																		<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span>
+																<h3 class="panel-title col-xs-6">Prüfungsdatum</h3>
+																<span class="statebar col-xs-6">
+																		{{#hrexamtime}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		{{^hrexamtime}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -169,7 +169,7 @@ ajaxtooglePhase = function(phase){
 															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="set_date_time.php?id={{cmid}}">Datum festlegen</a>
+															<a class="btn btn-info pull-right" href="set_date_time.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -179,11 +179,11 @@ ajaxtooglePhase = function(phase){
 													<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Prüfungsteilnehmer</h3>
-																<span class="statebar col-xs-4">
-																	{{#participants}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/participants}}
-																	{{^participants}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/participants}}
-																	<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span>
+																<h3 class="panel-title col-xs-6">Prüfungsteilnehmer</h3>
+																<span class="statebar col-xs-6">
+																	{{#participants}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	{{^participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -192,7 +192,7 @@ ajaxtooglePhase = function(phase){
 																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
+															<a class="btn btn-info pull-right" href="addParticipants.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -200,11 +200,11 @@ ajaxtooglePhase = function(phase){
 													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Prüfungsaufgaben</h3>
-																<span class="statebar col-xs-4">
-																	{{#taskcount}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/taskcount}}
-																	{{^taskcount}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/taskcount}}
-																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
+																<h3 class="panel-title col-xs-6">Prüfungsaufgaben</h3>
+																<span class="statebar col-xs-6">
+																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -213,7 +213,7 @@ ajaxtooglePhase = function(phase){
 															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="configureTasks.php?id={{cmid}}">Aufgaben konfigurieren</a>
+															<a class="btn btn-info pull-right" href="configureTasks.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -223,11 +223,11 @@ ajaxtooglePhase = function(phase){
 													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-warning{{/textfield}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Freitextfeld</h3>
-																<span class="statebar col-xs-4">
-																	{{#textfield}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/textfield}}
-																	{{^textfield}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/textfield}}
-																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
+																<h3 class="panel-title col-xs-6">Freitextfeld</h3>
+																<span class="statebar col-xs-6">
+																	{{#textfield}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	{{^textfield}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -236,7 +236,7 @@ ajaxtooglePhase = function(phase){
 																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten</a>
+															<a class="btn btn-info pull-right" href="textfield.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -244,9 +244,9 @@ ajaxtooglePhase = function(phase){
 													<div class="panel panel-info">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Nachricht an Teilnehmer</h3>
-																<span class="statebar col-xs-4">
-																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
+																<h3 class="panel-title col-xs-6">Nachricht an Teilnehmer</h3>
+																<span class="statebar col-xs-6">
+																	<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -254,7 +254,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben</a>
+															<a class="btn btn-info pull-right" href="groupmessages.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -271,8 +271,8 @@ ajaxtooglePhase = function(phase){
 								<div class="panel-heading">
 									<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.phase_two'); return true;">
 											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
-											<span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_two_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-											<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_two_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+											<span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+											<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 									</a>
 								</div>
                 {{#secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}
@@ -284,11 +284,11 @@ ajaxtooglePhase = function(phase){
 														<div class="panel {{#stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-warning{{/stateofplacescorrect}}">
 															<div class="panel-heading">
 																<div class="row">
-																	<h3 class="panel-title col-xs-6">Sitzplatzzuweisung</h3>
+																	<h3 class="panel-title col-xs-6">Automatische Sitzplatzzuweisung</h3>
 																	<span class="statebar col-xs-6">
-																			{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/rooms}}
-																			{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/rooms}}
-																			<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span>
+																			{{#stateofplacescorrect}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</div>
 															</div>
@@ -298,7 +298,7 @@ ajaxtooglePhase = function(phase){
 																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
 															</div>
 															<div class="panel-footer">
-																<a class="btn btn-info pull-right" href="assignPlaces.php?id={{cmid}}">Sitzplätze automatisch zuweisen</a>
+																<a class="btn btn-info pull-right" href="assignPlaces.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  hidden-sm-up" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a>
 															</div>
 														</div>
                         </div>
@@ -306,9 +306,9 @@ ajaxtooglePhase = function(phase){
 													<div class="panel panel-info">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Sitzplan</h3>
-																<span class="statebar col-xs-4">
-																	<span class="label label-default pull-right"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span></span>
+																<h3 class="panel-title col-xs-6">Sitzplan</h3>
+																<span class="statebar col-xs-6">
+																	<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -316,7 +316,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="exportSeatingPlan.php?id={{cmid}}">Sitzplan exportieren</a>
+															<a class="btn btn-info pull-right" href="exportSeatingPlan.php?id={{cmid}}"><span class="hidden-xs-down">{{#str}}export_seatingplan, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_seatingplan, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -326,8 +326,8 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Sichtbarkeit des Prüfungsdatums (optional)</h3>
-															<span class="statebar col-xs-4">
+															<h3 class="panel-title col-xs-6">Sichtbarkeit des Prüfungsdatums</h3>
+															<span class="statebar col-xs-6">
 																<label class="exammanagement-switch pull-right" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
 															</span>
 														</div>
@@ -348,11 +348,10 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Prüfungsetiketten (optional)</h3>
-															<span class="statebar col-xs-4">
-																<!--<span class="label label-default pull-right">
-																				<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
-																		<span class="label text-error pull-right">
+															<h3 class="panel-title col-xs-6">Prüfungsetiketten</h3>
+															<span class="statebar col-xs-6">
+																<!--<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																<span class="label text-error pull-right">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
 															</span>
@@ -362,7 +361,7 @@ ajaxtooglePhase = function(phase){
 														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a class="btn btn-info pull-right" href="">Prüfungsetiketten exportieren</a>
+														<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
 											</div>
@@ -372,15 +371,20 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Sichtbarkeit der Prüfungsräume und Sitzplätze (optional)</h3>
-															<span class="statebar col-xs-4">
+															<h3 class="panel-title col-xs-6">Sichtbarkeit der Prüfungsräume und Sitzplätze</h3>
+															<span class="statebar col-xs-6">
 															</span>
 														</div>
 													</div>
 													<div class="panel-body">
 														<div class="row">
 																<div class="col-xs-6">
-																		<strong class="exammanagement-showInformationText">Prüfungsräume</strong><label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>
+																		<div class="row">
+																				<strong class="col-xs-6">Prüfungsräume</strong>
+																				<span class="col-xs-6">
+																					<label class="exammanagement-switch pull-right" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>
+																				</span>
+																		</div>
 																		{{#roomvisible}}
 																				<p class="roomVisible collapse.show">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="roomNotVisible collapse">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
@@ -391,7 +395,12 @@ ajaxtooglePhase = function(phase){
 																		{{/roomvisible}}
 																</div>
 																<div class="col-xs-6">
-																		<strong class="exammanagement-showInformationText">Sitzplätze</strong><label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>
+																		<div class="row">
+																					<strong class="col-xs-8">Sitzplätze</strong>
+																					<span class="col-xs-4">
+																						<label class="exammanagement-switch pull-right" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>
+																					</span>
+																		</div>
 																		{{#placevisible}}
 																				<p class="placeVisible collapse.show">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
@@ -409,11 +418,9 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Teilnehmerlisten (optional)</h3>
-															<span class="statebar col-xs-4">
-																<span class="label label-default pull-right">
-																		<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>
-																</span>
+															<h3 class="panel-title col-xs-6">Teilnehmerlisten</h3>
+															<span class="statebar col-xs-6">
+																	<span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
 													</div>
@@ -421,7 +428,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-info">Name</a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-info pull-right">Sitzplatz</a>
+														<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-info"><span class="hidden-xs-down">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-info pull-right"><span class="hidden-xs-down">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
 											</div>
@@ -437,8 +444,8 @@ ajaxtooglePhase = function(phase){
 							<div class="panel-heading">
 								<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.examappointment'); return true;">
 										<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}:</h4>
-										<span class="{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}} examappointment_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}} examappointment_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+										<span class="{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
 							{{#firstphasecompleted}}{{#secondphasecompleted}}<div class="collapse.show examappointment">{{/secondphasecompleted}}{{/firstphasecompleted}}
@@ -481,10 +488,9 @@ ajaxtooglePhase = function(phase){
 														<div class="panel panel-info">
 															<div class="panel-heading">
 																<div class="row">
-																	<h3 class="panel-title col-xs-8">Bonuspunkte (optional)</h3>
-																	<span class="statebar col-xs-4">
-																		<!--<span class="label label-default pull-right">
-																						<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+																	<h3 class="panel-title col-xs-6">Bonuspunkte</h3>
+																	<span class="statebar col-xs-6">
+																		<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																				<span class="label text-error pull-right">
 																						<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																		</span>
@@ -495,7 +501,7 @@ ajaxtooglePhase = function(phase){
 																	<p>Es wurden noch keine Bonuspunkte importiert.</p>
 															</div>
 															<div class="panel-footer">
-																<a class="btn btn-info pull-right" href="">Bonuspunkte importieren</a>
+																<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>
 															</div>
 														</div>
 											</div>
@@ -503,10 +509,9 @@ ajaxtooglePhase = function(phase){
 													<div class="panel panel-info">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Notenschlüßel (optional)</h3>
-																<span class="statebar col-xs-4">
-																	<!--<span class="label label-default pull-right">
-																					<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+																<h3 class="panel-title col-xs-6">Notenschlüßel</h3>
+																<span class="statebar col-xs-6">
+																	<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																			<span class="label text-error pull-right">
 																					<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																	</span>
@@ -517,7 +522,7 @@ ajaxtooglePhase = function(phase){
 																<p>Es wurde noch kein Notenschlüßel konfiguriert.</p>
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="">Notenschlüßel konfigurieren</a>
+															<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
                         </div>
@@ -527,13 +532,11 @@ ajaxtooglePhase = function(phase){
 														<div class="panel panel-info">
 															<div class="panel-heading">
 																<div class="row">
-																	<h3 class="panel-title col-xs-8">Prüfungsergebnisse</h3>
-																	<span class="statebar col-xs-4">
-																			<!-- <span class="statebar col-xs-6">
-																				{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/rooms}}
-																				{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/rooms}}
-																				<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span> -->
-
+																	<h3 class="panel-title col-xs-6">Prüfungsergebnisse</h3>
+																	<span class="statebar col-xs-6">
+																			<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																			{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																			<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
 																			<span class="label text-error pull-right">
 																						<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																			</span>
@@ -544,7 +547,7 @@ ajaxtooglePhase = function(phase){
 																	<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>
 															</div>
 															<div class="panel-footer">
-																<a class="btn btn-info pull-right" href="">Prüfungsergebnisse eingeben</a>
+																<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>
 															</div>
 														</div>
 											</div>
@@ -552,10 +555,9 @@ ajaxtooglePhase = function(phase){
 													<div class="panel panel-info">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-8">Ergebnisübersicht (optional)</h3>
-																<span class="statebar col-xs-4">
-																	<!--<span class="label label-default pull-right">
-																					<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+																<h3 class="panel-title col-xs-6">Ergebnisübersicht</h3>
+																<span class="statebar col-xs-6">
+																	<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																			<span class="label text-error pull-right">
 																					<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																	</span>
@@ -566,7 +568,7 @@ ajaxtooglePhase = function(phase){
 																<p> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
 														</div>
 														<div class="panel-footer">
-															<a class="btn btn-info pull-right" href="">Ergebnisse prüfen</a>
+															<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-sm-up" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
                         </div>
@@ -583,8 +585,8 @@ ajaxtooglePhase = function(phase){
 							<div class="panel-heading">
 								<a type="button" aria-expanded="false" onclick="ajaxtooglePhase('.phase_four'); return true;">
 										<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
-										<span class="{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}} phase_four_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}} phase_four_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+										<span class="{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
                 {{#fourthphasecompleted}}<div class="collapse.show phase_four">{{/fourthphasecompleted}}
@@ -595,10 +597,9 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Punkte für Klausureinsicht (optional)</h3>
-															<span class="statebar col-xs-4">
-																<!--<span class="label label-default pull-right">
-																				<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
+															<span class="statebar col-xs-6">
+																<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label text-error pull-right">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
@@ -609,7 +610,7 @@ ajaxtooglePhase = function(phase){
 														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a class="btn btn-info pull-right" href="">Als PDF exportieren</a>
+														<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
                       </div>
@@ -617,10 +618,9 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Ergebnisse mit Prozentangaben (optional)</h3>
-															<span class="statebar col-xs-4">
-																<!--<span class="label label-default pull-right">
-																				<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+															<h3 class="panel-title col-xs-6">Ergebnisse mit Prozentangaben</h3>
+															<span class="statebar col-xs-6">
+																<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label text-error pull-right">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
@@ -631,7 +631,7 @@ ajaxtooglePhase = function(phase){
 														<p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a class="btn btn-info pull-right" href="">Als PDF exportieren</a>
+														<a class="btn btn-info pull-right" href=""><span class="hidden-xs-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
                       </div>
@@ -641,10 +641,9 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Ergebnisse und Statistik (optional)</h3>
+															<h3 class="panel-title col-xs-8">Ergebnisse und Statistik</h3>
 															<span class="statebar col-xs-4">
-																<!--<span class="label label-default pull-right">
-																				<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+																<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label text-error pull-right">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
@@ -655,7 +654,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a href="" class="btn btn-info">Als PDF exportieren</a><a href="" class="btn btn-info pull-right">Als Excel-Dokument exportieren</a>
+														<a href="" class="btn btn-info"><span class="hidden-xs-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-info pull-right"><span class="hidden-xs-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
                       </div>
@@ -663,12 +662,11 @@ ajaxtooglePhase = function(phase){
 												<div class="panel panel-info">
 													<div class="panel-heading">
 														<div class="row">
-															<h3 class="panel-title col-xs-8">Ergebnisse für das Prüfungsamt</h3>
-															<span class="statebar col-xs-4">
-																<!-- <span class="statebar col-xs-6">
-																	{{#rooms}}<span class="label label-success pull-right"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> Erfolgreich</span></span>{{/rooms}}
-																	{{^rooms}}<span class="label label-warning pull-right"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> Nicht gesetzt</span></span>{{/rooms}}
-																	<span class="label label-default pull-right"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> Zwingend</span></span> -->
+															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>
+															<span class="statebar col-xs-6">
+																<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																<span class="label label-default pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
 																		<span class="label text-error pull-right">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
@@ -679,7 +677,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<a href="" class="btn btn-info">Als PAUL-Text-Dokument exportieren</a><a href="" class="btn btn-info pull-right">Als Excel-Dokument exportieren</a>
+														<a href="" class="btn btn-info"><span class="hidden-xs-down">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-info pull-right"><span class="hidden-xs-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-sm-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>
 													</div>
 												</div>
                       </div>
@@ -688,8 +686,7 @@ ajaxtooglePhase = function(phase){
 													<div class="panel-heading">
 															<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
 															<span class="statebar">
-																<!--<span class="label label-default pull-right style='position: relative;bottom: 15px;'">
-																				<i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> Optional</span>-->
+																<!-- <span class="label label-default pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label text-error pull-right" style="position: relative;bottom: 15px;">
 																				<i class="fa fa-times pull-right"> Derzeit in Entwicklung.</i>
 																</span>
@@ -699,7 +696,7 @@ ajaxtooglePhase = function(phase){
 															<p>Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
 													</div>
 													<div class="panel-footer text-xs-center">
-														<a href="" class="btn btn-info">Prüfungsdaten löschen</a>
+														<a href="" class="btn btn-info"><span class="hidden-xs-down">{{#str}}delete_examdata, mod_exammanagement{{/str}}</span><i class="fa fa-trash hidden-sm-up" aria-hidden="true" title="{{#str}}delete_examdata, mod_exammanagement{{/str}}"></i></a>
 													</div>
                       </div>
                 </div>

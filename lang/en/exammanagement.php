@@ -28,11 +28,42 @@ defined('MOODLE_INTERNAL') || die();
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
 $string['overview'] = 'Overview';
+
+//exammanagement_overview.mustache phases
 $string['phase_one'] = 'Before exam';
 $string['phase_two'] = 'For exam';
 $string['phase_three'] = 'After correction';
 $string['phase_four'] = 'After exam';
 $string['exam_appointment'] = 'Exam appointment';
+$string['minimize_phase'] = 'Minimize phase';
+$string['maximize_phase'] = 'Maximize phase';
+
+//exammanagement_overview.mustache states
+$string['state_optional'] = 'Optional';
+$string['state_required'] = 'Required';
+$string['state_success'] = 'Success';
+$string['state_notset'] = 'Not set';
+
+//exammanagement_overview.mustache work stages buttons
+$string['choose_rooms'] = 'Choose rooms';
+$string['set_date'] = 'Set date';
+$string['add_participants'] = 'Add participants';
+$string['configure_tasks'] = 'Configure tasks';
+$string['edit_textfield'] = 'Edit textfield';
+$string['send_groupmessage'] = 'Write message';
+$string['assign_places'] = 'Assign places';
+$string['export_seatingplan'] = 'Export seatingplan';
+$string['export_barcodes'] = 'Export barcodes';
+$string['export_participantslist_names'] = 'Sorted by names';
+$string['export_participantslist_places'] = 'Sorted by places';
+$string['import_bonuspoints'] = 'Import bonuspoints';
+$string['configure_gradingscale'] = 'Configure grading scale';
+$string['add_examresults'] = 'Add results';
+$string['check_results'] = 'Check results';
+$string['export_as_pdf'] = 'Export PDF';
+$string['export_as_excel'] = 'Export excel file';
+$string['export_as_paultext'] = 'Export text file';
+$string['delete_examdata'] = 'Delete exam data';
 
 //dateTimeForm.php
 $string['resetDateTime'] = 'Reset appointment';

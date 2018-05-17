@@ -28,11 +28,42 @@ defined('MOODLE_INTERNAL') || die();
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['overview'] = 'Überblick';
+
+//exammanagement_overview.mustache phases
 $string['phase_one'] = 'Vor der Prüfung';
 $string['phase_two'] = 'Für die Prüfung';
 $string['phase_three'] = 'Nach der Korrektur';
 $string['phase_four'] = 'Nach der Prüfung';
 $string['exam_appointment'] = 'Prüfungstermin';
+$string['minimize_phase'] = 'Phase minimieren';
+$string['maximize_phase'] = 'Phase öffnen';
+
+//exammanagement_overview.mustache states
+$string['state_optional'] = 'Optional';
+$string['state_required'] = 'Zwingend';
+$string['state_success'] = 'Erfolgreich';
+$string['state_notset'] = 'Nicht gesetzt';
+
+//exammanagement_overview.mustache workstages buttons
+$string['choose_rooms'] = 'Räume auswählen';
+$string['set_date'] = 'Datum festlegen';
+$string['add_participants'] = 'Teilnehmer hinzufügen';
+$string['configure_tasks'] = 'Aufgaben konfigurieren';
+$string['edit_textfield'] = 'Freitextfeld bearbeiten';
+$string['send_groupmessage'] = 'Nachricht schreiben';
+$string['assign_places'] = 'Sitzplätze zuweisen';
+$string['export_seatingplan'] = 'Sitzplan exportieren';
+$string['export_barcodes'] = 'Prüfungsetiketten exportieren';
+$string['export_participantslist_names'] = 'Nach Namen geordnet';
+$string['export_participantslist_places'] = 'Nach Sitzplätzen geordnet';
+$string['import_bonuspoints'] = 'Bonuspunkte importieren';
+$string['configure_gradingscale'] = 'Notenschlüssel konfigurieren';
+$string['add_examresults'] = 'Ergebnisse eintragen';
+$string['check_results'] = 'Ergebnisse prüfen';
+$string['export_as_pdf'] = 'PDF exportieren';
+$string['export_as_excel'] = 'Excel-Dokument exportieren';
+$string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
+$string['delete_examdata'] = 'Prüfungsdaten löschen';
 
 //dateTimeForm.php
 $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';

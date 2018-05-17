@@ -86,27 +86,25 @@
   	}
 } */
 
-@media (min-width: 768px){
-    .row-eq-height, .row-eq-height > div[class*='col-'] {
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        flex:1 0 auto;
-    }
+.row-eq-height, .row-eq-height > div[class*='col-'] {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex:1 0 auto;
+}
 
-    .row-eq-height .panel {
-       display: flex;
-       flex-direction: column;
-       align-content: stretch;
-       width: 100%;
-    }
+.row-eq-height .panel {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  width: 100%;
+}
 
-    .row-eq-height .panel-body {
-       display: flex;
-       flex-grow:1;
-    }
+.row-eq-height .panel-body {
+  display: flex;
+  flex-grow:1;
 }
 
 .exammanagement-rooms .svg{
