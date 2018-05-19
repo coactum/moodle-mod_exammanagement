@@ -38,8 +38,12 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+		if(!$ExammanagementInstanceObj->getParticipantsCount()){
+			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
+		}
 
 		$MoodleObj->setPage('textfield');
 		$MoodleObj-> outputPageHeader();
