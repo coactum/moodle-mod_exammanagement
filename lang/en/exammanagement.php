@@ -44,6 +44,7 @@ $string['state_required'] = 'Required';
 $string['state_success'] = 'Success';
 $string['state_notset'] = 'Not set';
 $string['state_notpossible'] = 'Not possible yet';
+$string['state_loading'] = 'Loading ...';
 
 //exammanagement_overview.mustache work stages buttons
 $string['choose_rooms'] = 'Choose rooms';

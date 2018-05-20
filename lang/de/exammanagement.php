@@ -44,6 +44,7 @@ $string['state_required'] = 'Zwingend';
 $string['state_success'] = 'Erfolgreich';
 $string['state_notset'] = 'Nicht gesetzt';
 $string['state_notpossible'] = 'Noch nicht möglich';
+$string['state_loading'] = 'Lädt ...';
 
 //exammanagement_overview.mustache workstages buttons
 $string['choose_rooms'] = 'Räume auswählen';
