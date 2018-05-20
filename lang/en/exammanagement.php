@@ -98,6 +98,8 @@ $string['places_alternative'] = 'In this case use numeration on this plan.';
 $string['numbered_seats_usable_seats'] = 'numbered seats = used seats';
 
 //helptexts
+$string['help'] = 'Help';
+
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';

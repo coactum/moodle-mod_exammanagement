@@ -98,6 +98,8 @@ $string['places_alternative'] = 'In diesem Fall nutzen Sie bitte die Nummerierun
 $string['numbered_seats_usable_seats'] = 'nummerierte Sitze = benutzbare Sitze';
 
 //helptexts
+$string['help'] = 'Hilfe';
+
 $string['helptext_str'] = 'Hilfetext';
 $string['helptext_link'] = 'Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
 $string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. DozentInnen und/oder deren MitarbeiterInnen sehen hier alle für das Durchführen einer Prüfung nötigen und hilfreichen Arbeitsschritte. <br /><br />

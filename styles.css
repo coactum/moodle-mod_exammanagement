@@ -1,3 +1,17 @@
+/* exammanagement_overview.mustache - helptextpanel triangle */
+
+.helptextpanel-arrow {
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 25px solid #d9edf7;
+  position: absolute;
+  right: 32px;
+  top: 86px;
+}
+
+/* exammanagement_overview.mustache - timeline */
 *::before{
     box-sizing: border-box;
 
@@ -76,16 +90,7 @@
     border-radius: 4px
 }
 
-/* @media (min-width: 768px){
-	.row-eq-height {
-  		display: -webkit-box;
-  		display: -webkit-flex;
-  		display: -ms-flexbox;
-  		display: flex;
-      flex-wrap: wrap;
-  	}
-} */
-
+/* row-equal-height */
 .row-eq-height, .row-eq-height > div[class*='col-'] {
   display: -webkit-box;
   display: -moz-box;
@@ -107,6 +112,7 @@
   flex-grow:1;
 }
 
+/* chooseRooms.php - SVG Overlay */
 .exammanagement-rooms .svg{
 	position:fixed;
 	top: 40%;
@@ -124,6 +130,8 @@
 #show:hover + .svg{
  	display:block;
 }
+
+/* configureTasks.php - spacing between Tasknumbers */
 
 .task_spacing{
   padding-left: 24.24px;
