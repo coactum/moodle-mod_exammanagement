@@ -70,6 +70,22 @@ $string['delete_examdata'] = 'Prüfungsdaten löschen';
 //dateTimeForm.php
 $string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
 
+//addParticipantsForm.php
+$string['view_participants'] = 'Teilnehmer ansehen';
+$string['import_participants'] = 'Teilnehmer hinzufügen';
+$string['add_participants_from_file'] = 'Teilnehmer aus einer Datei zur Prüfung hinzufügen.';
+$string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
+$string['participants'] = 'Teilnehmer';
+$string['matriculation_number'] = 'Matrikelnummer';
+$string['course_groups'] = 'Kursgruppen';
+$string['import_source'] = 'Quelle des Imports';
+$string['add_to_exam'] = 'Zur Prüfung hinzufügen';
+$string['excel_file'] = 'Excel-Datei';
+$string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
+$string['paul_file'] = 'PAUL-Datei';
+$string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
+$string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
+
 //configureTasksForm.php
 $string['configure_tasks'] = 'Aufgaben konfigurieren';
 $string['configure_tasks_text'] = 'Hier kann die Maximalpunktzahl für jede Aufgabe der Prüfung eingestellt werden.';

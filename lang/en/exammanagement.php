@@ -70,6 +70,22 @@ $string['delete_examdata'] = 'Delete exam data';
 //dateTimeForm.php
 $string['resetDateTime'] = 'Reset appointment';
 
+//addParticipantsForm.php
+$string['view_participants'] = 'View participants';
+$string['import_participants'] = 'Import participants';
+$string['add_participants_from_file'] = 'Add participants from file to the exam.';
+$string['view_added_partipicants'] = 'List of all participants added to the exam.';
+$string['participants'] = 'Participants';
+$string['matriculation_number'] = 'Matriculation number';
+$string['course_groups'] = 'Groups in course';
+$string['import_source'] = 'Source of import';
+$string['add_to_exam'] = 'Add to exam';
+$string['excel_file'] = 'Excel file';
+$string['import_from_excel_file'] = 'Import participants from excel file (matriculation number in any column) and add them to course.';
+$string['paul_file'] = 'PAUL file';
+$string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
+$string['no_participants_added'] = 'No participants added.';
+
 //configureTasksForm.php
 $string['configure_tasks'] = 'Configure Tasks';
 $string['configure_tasks_text'] = 'Configure tasks for the exam';
