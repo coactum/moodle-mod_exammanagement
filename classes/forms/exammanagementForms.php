@@ -159,8 +159,11 @@ class exammanagementForms{
 
 			if (!$excel_file && !$paul_file){
 				//saveParticipants in DB
+				$participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
 
-				$ExammanagementInstanceObj->saveParticipants($participants);
+				$ExammanagementInstanceObj->saveParticipants($participants, '');
+
+				$$ExammanagementInstanceObj->clearTempParticipants();
 
 			} else if($paul_file){
 
@@ -192,12 +195,11 @@ class exammanagementForms{
 
 			}
 
-			// reload page with participants for final user confirmation and saving of not saved
+			// reload page with participants for final user confirmation and saving
 			if(!$moodleuseridsarray){
 					$moodleuseridsarray="null";
 			}
 
-			var_dump($moodleuseridsarray);
 			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp');
 
 		} else {

@@ -78,7 +78,7 @@ $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Te
 $string['participants'] = 'Teilnehmer';
 $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
-$string['import_source'] = 'Quelle des Imports';
+$string['import_state'] = 'Status';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['excel_file'] = 'Excel-Datei';
 $string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
@@ -86,6 +86,8 @@ $string['paul_file'] = 'PAUL-Datei';
 $string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
 $string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['read_file'] = 'Datei einlesen';
+$string['state_added_to_exam'] = 'Prüfungsteilnehmer';
+$string['state_temporary'] = 'Temporär eingelesen';
 
 //configureTasksForm.php
 $string['configure_tasks'] = 'Aufgaben konfigurieren';

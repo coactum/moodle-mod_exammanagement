@@ -731,8 +731,6 @@ public function checkIfValidMatrNr($mnr) {
 								$this->moduleinstance->tmpparticipants = $participants;
 						}
 
-						var_dump($this->moduleinstance);
-
 						$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 						redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
 
@@ -741,6 +739,7 @@ public function checkIfValidMatrNr($mnr) {
 
 					if ($participants!="null"){
 							$this->moduleinstance->participants = $participants;
+							$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
 							$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
 					}
 
@@ -750,23 +749,23 @@ public function checkIfValidMatrNr($mnr) {
 			}
 	}
 
-	public function getCourseParticipantsIDs($format){
-			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
-			$CourseParticipantsID;
-
-			foreach ($CourseParticipants as $key => $value){
-				$temp=get_object_vars($value);
-				$CourseParticipantsID[$key] = $temp['id'];
-			}
-
-			if ($format=='String'){
-				$CourseParticipantsID = implode(',', $CourseParticipantsID);
-			}
-
-			return $CourseParticipantsID;
-
-
-	}
+	// public function getCourseParticipantsIDs($format){ //not used at the moment
+	// 		$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
+	// 		$CourseParticipantsID;
+	//
+	// 		foreach ($CourseParticipants as $key => $value){
+	// 			$temp=get_object_vars($value);
+	// 			$CourseParticipantsID[$key] = $temp['id'];
+	// 		}
+	//
+	// 		if ($format=='String'){
+	// 			$CourseParticipantsID = implode(',', $CourseParticipantsID);
+	// 		}
+	//
+	// 		return $CourseParticipantsID;
+	//
+	//
+	// }
 
 	public function filterCheckedParticipants($obj){
 
@@ -801,6 +800,18 @@ public function checkIfValidMatrNr($mnr) {
 		if ($participants){
 				$participantsArray = json_decode($participants);
 				return $participantsArray;
+			} else {
+				return false;
+		}
+	}
+
+	public function getTempParticipants(){
+
+		$tmpparticipants = $this->moduleinstance->tmpparticipants;
+
+		if ($tmpparticipants){
+				$tmpParticipantsArray = json_decode($tmpparticipants);
+				return $tmpParticipantsArray;
 			} else {
 				return false;
 		}
