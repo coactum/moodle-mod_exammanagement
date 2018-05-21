@@ -26,6 +26,7 @@ namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
+use mod_exammanagement\ldap\ldapManager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -132,9 +133,11 @@ class exammanagementForms{
 
 		//include form
 		require_once(__DIR__.'/addParticipantsForm.php');
+		require_once(__DIR__.'/../ldap/ldapManager.php');
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
 		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -147,9 +150,55 @@ class exammanagementForms{
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-		  $participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
+			// retrieve Files from form
+			$paul_file = $mform->get_file_content('participantslist_paul');
+			$excel_file = $mform->get_file_content('participantslist_excel');
+			$filecontentarray = array();
+			$matriculationnumbersarray = array();
+			$moodleuseridsarray = array();
 
-		  $ExammanagementInstanceObj->saveParticipants($participants);
+			if (!$excel_file && !$paul_file){
+				//saveParticipants in DB
+
+				$ExammanagementInstanceObj->saveParticipants($participants);
+
+			} else if($paul_file){
+
+				// get matriculation numbers from paul file as an array
+
+				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
+				$matriculationnumbersarray = explode("	", $filecontentarray[1]); // from 2nd line: get all potential numbers
+
+				foreach ($matriculationnumbersarray as $key => $pmatrnr) { // Validate if matrnr
+						if (!$ExammanagementInstanceObj->checkIfValidMatrNr($pmatrnr)){ //if not a valid matrnr
+								unset($matriculationnumbersarray[$key]);
+						}
+				}
+
+				// convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
+				 foreach($matriculationnumbersarray as $key => $matrnr){
+					 	$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+					 	if ($moodleuserid){
+							array_push($moodleuseridsarray, $moodleuserid);
+						}
+				 }
+
+			} else if($excel_file){
+				// get matriculation numbers from excel file
+
+				// convert matriculation numbers to moodle userdis using LDAP
+
+				//remember moodle ids
+
+			}
+
+			// reload page with participants for final user confirmation and saving of not saved
+			if(!$moodleuseridsarray){
+					$moodleuseridsarray="null";
+			}
+
+			var_dump($moodleuseridsarray);
+			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp');
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

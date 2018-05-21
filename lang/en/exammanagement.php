@@ -85,6 +85,7 @@ $string['import_from_excel_file'] = 'Import participants from excel file (matric
 $string['paul_file'] = 'PAUL file';
 $string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
 $string['no_participants_added'] = 'No participants added.';
+$string['read_file'] = 'Read file';
 
 //configureTasksForm.php
 $string['configure_tasks'] = 'Configure Tasks';

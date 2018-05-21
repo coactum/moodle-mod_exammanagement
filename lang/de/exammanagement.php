@@ -85,6 +85,7 @@ $string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importie
 $string['paul_file'] = 'PAUL-Datei';
 $string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
 $string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
+$string['read_file'] = 'Datei einlesen';
 
 //configureTasksForm.php
 $string['configure_tasks'] = 'Aufgaben konfigurieren';

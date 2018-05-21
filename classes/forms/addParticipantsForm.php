@@ -88,21 +88,26 @@ class addParticipantsForm extends moodleform{
         //
         //$mform->addElement('html', '</div></div>');
 
-        $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div></div>');
+        $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
+
+        $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
+
+        $mform->addElement('html', '</div>');
 
         ###### add Participants from File ######
 
         $maxbytes=$CFG->maxbytes;
 
         $mform->addElement('html', '<div class="importparticipants collapse"><h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
-        $mform->addElement('filepicker', 'userfile', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
+        $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
 
         $mform->addElement('html', '<h4>'.get_string("paul_file", "mod_exammanagement").'</h4>');
-        $mform->addElement('filepicker', 'userfile', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+        $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+
+        $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
+        //$mform->addElement('button', 'read_file', get_string("read_file", "mod_exammanagement"));
+
         $mform->addElement('html', '</div>');
-
-        $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
-
     }
 
     //Custom validation should be added here
