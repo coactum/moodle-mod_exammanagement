@@ -16,7 +16,7 @@
 /**
  * switching between course and file import
  *
- * @module      mod_exammanagement/switch_importmode
+ * @module      mod_exammanagement/switch_mode_participants
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,12 +24,16 @@
 define(['jquery'], function($) {
 
    return {
-        switch_mode: function() {
-            $(".file").hide();
+        switch_mode_participants: function() {
 
-            $("#switch_importmode").click(function(){
-                $(".course").toggle();
-                $(".file").toggle();
+            $("#switchmode_to_import").click(function(){
+                $(".viewparticipants").toggle();
+                $(".importparticipants").toggle();
+
+            });
+            $("#switchmode_to_view").click(function(){
+                $(".viewparticipants").toggle();
+                $(".importparticipants").toggle();
 
             });
         }
