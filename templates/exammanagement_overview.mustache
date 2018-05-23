@@ -345,15 +345,13 @@ ajaxtoogleInformation = function(command, value){
 												</div>
 											</div>
 											<div class="col-xs-6">
-												<div class="panel panel-danger">
+												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Prüfungsetiketten</h3>
 															<span class="statebar col-xs-6">
-																<!-- {{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span> -->
-																<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																		<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</span>
 														</div>
@@ -362,7 +360,7 @@ ajaxtoogleInformation = function(command, value){
 														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!--{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}-->
+														{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 													</div>
 												</div>
 											</div>

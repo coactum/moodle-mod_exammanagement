@@ -116,6 +116,10 @@ $string['places_differ'] = 'This plan may differ from the actual seating numerat
 $string['places_alternative'] = 'In this case use numeration on this plan.';
 $string['numbered_seats_usable_seats'] = 'numbered seats = used seats';
 
+// examlabels
+$string['examlabels'] = 'exam labels';
+$string['required_label_type'] = 'required label type: Avery Zweckform L4744';
+
 //helptexts
 $string['help'] = 'Help';
 

@@ -1109,6 +1109,20 @@ public function checkIfValidMatrNr($mnr) {
 				return $header;
 			}
 
+		public function buildChecksumExamLabels($ean) {
+				$s = preg_replace("/([^\d])/", "", $ean);
+				if (strlen($s) != 12) {
+					return false;
+				}
+
+				$check = 0;
+				for ($i = 0; $i < 12; $i++) {
+					$check += (($i % 2) * 2 + 1) * $s{$i};
+				}
+
+				return (10 - ($check % 10)) % 10;
+		}
+
 	########### debugging ########
 
 	public function debugElementsOverview(){

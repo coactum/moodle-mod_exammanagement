@@ -116,6 +116,10 @@ $string['places_differ'] = 'Dieser Plan kann von der tatsächlichen Platznummer
 $string['places_alternative'] = 'In diesem Fall nutzen Sie bitte die Nummerierung dieses Plans.';
 $string['numbered_seats_usable_seats'] = 'nummerierte Sitze = benutzbare Sitze';
 
+// examlabels
+$string['examlabels'] = 'Prüfungsetiketten';
+$string['required_label_type'] = 'Benötigter Etikettentyp:Avery Zweckform L4744';
+
 //helptexts
 $string['help'] = 'Hilfe';
 
