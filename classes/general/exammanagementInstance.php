@@ -117,42 +117,24 @@ class exammanagementInstance{
 	public function ConcatHelptextStr($langstr){
 
 		$helptextstr= '';
-		$helptextstr.= '<div class="alert alert-info alert-dismissible fade in" role="alert">';
-		$helptextstr.= '<div class="helptextbox">';
-		$helptextstr.= '<div class="helptextboxcontent">';
-		$helptextstr.= '<div class="row">';
-		$helptextstr.= '<h4 class="alert-heading col-xs-11">'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
-		$helptextstr.= '<button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		$helptextstr.= '<div class="panel panel-info helptextpanel collapse">';
+		$helptextstr.= '<div class="panel-heading">';
+		$helptextstr.= '<h4>'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
 		$helptextstr.= '</div>';
+		$helptextstr.= '<div class="panel-body">';
 		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement').'</p>';
-		$helptextstr.= '<hr>';
-		$helptextstr.= '<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
-		$helptextstr.= '<p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p>';
 		$helptextstr.= '</div>';
+		$helptextstr.= '<div class="panel-footer">';
+		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').'<a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 
 		$helptextstr.= <<< EOF
 <script>
-showMore = function() {
-
-			helptextboxcontent = jQuery.find('.helptextboxcontent');
-			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
-
-			helptextbox = jQuery.find('.helptextbox');
-			jQuery(helptextbox).css({
-			      "height": jQuery(helptextbox).height(),
-			      "max-height": 9999
-			    })
-			    .animate({
-			      "height": helptextboxcontentheight
-			    });
-
-
-			readMore = jQuery.find('.read-more');
-			jQuery(readMore).fadeOut();
-			return false;	    
-		};
+toogleHelptextPanel = function(){
+	$('.helptextpanel').slideToggle("slow");
+	$('.helptextpanel-icon').toggle();
+};
 </script>
 EOF;
 

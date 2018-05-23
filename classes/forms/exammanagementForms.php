@@ -27,6 +27,7 @@ namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\ldap\ldapManager;
+use PHPExcel_IOFactory;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -134,6 +135,7 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/addParticipantsForm.php');
 		require_once(__DIR__.'/../ldap/ldapManager.php');
+		require_once("$CFG->libdir/phpexcel/PHPExcel.php");
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
@@ -156,6 +158,7 @@ class exammanagementForms{
 			$filecontentarray = array();
 			$matriculationnumbersarray = array();
 			$moodleuseridsarray = array();
+			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
 
 			if (!$excel_file && !$paul_file){
 				//saveParticipants in DB
@@ -172,7 +175,7 @@ class exammanagementForms{
 				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
 				$matriculationnumbersarray = explode("	", $filecontentarray[1]); // from 2nd line: get all potential numbers
 
-				foreach ($matriculationnumbersarray as $key => $pmatrnr) { // Validate if matrnr
+				foreach ($matriculationnumbersarray as $key => $pmatrnr) { // Validate potential matrnr
 						if (!$ExammanagementInstanceObj->checkIfValidMatrNr($pmatrnr)){ //if not a valid matrnr
 								unset($matriculationnumbersarray[$key]);
 						}
@@ -181,12 +184,27 @@ class exammanagementForms{
 				// convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
 				 foreach($matriculationnumbersarray as $key => $matrnr){
 					 	$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-					 	if ($moodleuserid){
+					 	if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 							array_push($moodleuseridsarray, $moodleuserid);
 						}
 				 }
 
 			} else if($excel_file){
+				//$PHPExcelObj = PHPExcel_IOFactory::load($excel_file);
+				//var_dump($PHPExcelObj);
+
+				var_dump(file_get_submitted_draft_itemid('participantslist_excel'));
+
+				//$fs = get_file_storage('participantslist_excel');
+				$fs = get_file_storage();
+
+				var_dump($fs);
+				//$fs->get_area_files(...);
+				//moodle_url::make_pluginfile_url(...)
+
+
+				//$url = $CFG->wwwroot/pluginfile.php/$contextid/$component/$filearea/arbitrary/extra/infomation.ext;
+ 				var_dump($url);
 				// get matriculation numbers from excel file
 
 				// convert matriculation numbers to moodle userdis using LDAP
