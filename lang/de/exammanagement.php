@@ -90,12 +90,16 @@ $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
 $string['state_temporary'] = 'Temporär eingelesen';
 
 //configureTasksForm.php
-$string['configure_tasks'] = 'Aufgaben konfigurieren';
+$string['configure_tasks_str'] = 'Aufgaben konfigurieren';
 $string['configure_tasks_text'] = 'Hier kann die Maximalpunktzahl für jede Aufgabe der Prüfung eingestellt werden.';
 $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
 $string['points'] = 'Punkte';
 $string['total'] = 'Summe';
+
+//configureGradingscaleForm.php
+$string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
+$string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten ist';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
@@ -163,6 +167,7 @@ $string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und de
 Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren universitären E-Mail-Account geschickt und können so z. B. einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
+$string['helptext_configureGradingscale']= 'Hier kan der Notenschlüßel konfiguriert werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';

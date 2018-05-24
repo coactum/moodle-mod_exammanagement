@@ -90,12 +90,16 @@ $string['state_added_to_exam'] = 'Participants of exam';
 $string['state_temporary'] = 'Temporary';
 
 //configureTasksForm.php
-$string['configure_tasks'] = 'Configure Tasks';
+$string['configure_tasks_str'] = 'Configure Tasks';
 $string['configure_tasks_text'] = 'Configure tasks for the exam';
 $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
 $string['total'] = 'Total';
+
+//configureGradingscaleForm.php
+$string['configure_gradingscale_str'] = 'Configure grading scale';
+$string['configure_gradingscale_totalpoints'] = 'Number of total points';
 
 //participant list
 $string['participantslist'] = 'list of participants';
@@ -132,6 +136,7 @@ $string['helptext_addParticipants']= 'Here goes the description of this feature 
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
+$string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';

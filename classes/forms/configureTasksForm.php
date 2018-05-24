@@ -49,7 +49,7 @@ class configureTasksForm extends moodleform {
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
- 		    $mform->addElement('html', '<h3>'.get_string('configure_tasks', 'mod_exammanagement').'</h3>');
+ 		    $mform->addElement('html', '<h3>'.get_string('configure_tasks_str', 'mod_exammanagement').'</h3>');
  		    $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
         //group for add and remove tasks buttons

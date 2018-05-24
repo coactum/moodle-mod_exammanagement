@@ -1078,6 +1078,28 @@ public function checkIfValidMatrNr($mnr) {
 
 	}
 
+	######### feature: configure tasks ##########
+
+	public function saveGradingscale($fromform){
+
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			$gradingscale = json_encode($fromform->gradingsteppoints);
+			$this->moduleinstance->gradingscale=$gradingscale;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
+
+	}
+
+	public function getGradingscale(){
+
+			$gradingscale = json_decode($this->moduleinstance->gradingscale);
+			return $gradingscale;
+	}
+
 	########### Export PDFS ####
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object
