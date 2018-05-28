@@ -27,12 +27,115 @@ defined('MOODLE_INTERNAL') || die();
 
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
-$string['overview']= 'Überblick';
+$string['overview'] = 'Überblick';
+
+//exammanagement_overview.mustache phases
+$string['phase_one'] = 'Vor der Prüfung';
+$string['phase_two'] = 'Für die Prüfung';
+$string['phase_three'] = 'Nach der Korrektur';
+$string['phase_four'] = 'Nach der Prüfung';
+$string['exam_appointment'] = 'Prüfungstermin';
+$string['minimize_phase'] = 'Phase minimieren';
+$string['maximize_phase'] = 'Phase öffnen';
+
+//exammanagement_overview.mustache states
+$string['state_optional'] = 'Optional';
+$string['state_required'] = 'Zwingend';
+$string['state_success'] = 'Erfolgreich';
+$string['state_notset'] = 'Nicht gesetzt';
+$string['state_notpossible'] = 'Noch nicht möglich';
+$string['state_loading'] = 'Lädt ...';
+
+//exammanagement_overview.mustache workstages buttons
+$string['choose_rooms'] = 'Räume auswählen';
+$string['set_date'] = 'Datum festlegen';
+$string['add_participants'] = 'Teilnehmer hinzufügen';
+$string['configure_tasks'] = 'Aufgaben konfigurieren';
+$string['edit_textfield'] = 'Freitextfeld bearbeiten';
+$string['send_groupmessage'] = 'Nachricht schreiben';
+$string['assign_places'] = 'Sitzplätze zuweisen';
+$string['export_seatingplan'] = 'Sitzplan exportieren';
+$string['export_barcodes'] = 'Prüfungsetiketten exportieren';
+$string['export_participantslist_names'] = 'Nach Namen geordnet';
+$string['export_participantslist_places'] = 'Nach Sitzplätzen geordnet';
+$string['import_bonuspoints'] = 'Bonuspunkte importieren';
+$string['configure_gradingscale'] = 'Notenschlüssel konfigurieren';
+$string['add_examresults'] = 'Ergebnisse eintragen';
+$string['check_results'] = 'Ergebnisse prüfen';
+$string['export_as_pdf'] = 'PDF exportieren';
+$string['export_as_excel'] = 'Excel-Dokument exportieren';
+$string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
+$string['delete_examdata'] = 'Prüfungsdaten löschen';
 
 //dateTimeForm.php
-$string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
+$string['set_date_time'] = 'Prüfungstermin festlegen';
+
+//addParticipantsForm.php
+$string['view_participants'] = 'Teilnehmer ansehen';
+$string['import_participants'] = 'Teilnehmer hinzufügen';
+$string['add_participants_from_file'] = 'Teilnehmer aus einer Datei zur Prüfung hinzufügen.';
+$string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
+$string['participants'] = 'Teilnehmer';
+$string['matriculation_number'] = 'Matrikelnummer';
+$string['course_groups'] = 'Kursgruppen';
+$string['import_state'] = 'Status';
+$string['add_to_exam'] = 'Zur Prüfung hinzufügen';
+$string['excel_file'] = 'Excel-Datei';
+$string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
+$string['paul_file'] = 'PAUL-Datei';
+$string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
+$string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
+$string['read_file'] = 'Datei einlesen';
+$string['state_added_to_exam'] = 'Prüfungsteilnehmer';
+$string['state_temporary'] = 'Temporär eingelesen';
+
+//configureTasksForm.php
+$string['configure_tasks_str'] = 'Aufgaben konfigurieren';
+$string['configure_tasks_text'] = 'Hier kann die Maximalpunktzahl für jede Aufgabe der Prüfung eingestellt werden.';
+$string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
+$string['task'] = 'Aufgabe';
+$string['points'] = 'Punkte';
+$string['total'] = 'Summe';
+
+//textfield.php
+$string['add_text_str'] = 'Freitext hinzufügen';
+$string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.';
+
+//groupmessagesForm.php
+$string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
+$string['groupmessages_text_1'] = 'Der unten eingegebene Text wird allen ';
+$string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.';
+
+//configureGradingscaleForm.php
+$string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
+$string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten ist';
+
+//participant list
+$string['participantslist'] = 'Teilnehmerliste';
+$string['participantslist_names'] = 'Teilnehmerliste_Namen';
+$string['participantslist_places'] = 'Teilnehmerliste_Plätze';
+$string['internal_use'] = 'Nur für die Prüfungsorganisation!';
+$string['lastname'] = 'Name';
+$string['firstname'] = 'Vorname';
+$string['matrno'] = 'Matr.-Nr.';
+$string['room'] = 'Raum';
+$string['place'] = 'Platz';
+
+// seatingplan
+$string['seatingplan'] = 'Sitzplan';
+$string['total_seats'] = 'Plätze';
+$string['lecture_room'] = 'Hörsaal';
+$string['places_differ'] = 'Dieser Plan kann von der tatsächlichen Platznummerierung abweichen.';
+$string['places_alternative'] = 'In diesem Fall nutzen Sie bitte die Nummerierung dieses Plans.';
+$string['numbered_seats_usable_seats'] = 'nummerierte Sitze = benutzbare Sitze';
+
+// examlabels
+$string['examlabels'] = 'Prüfungsetiketten';
+$string['required_label_type'] = 'Benötigter Etikettentyp:Avery Zweckform L4744';
 
 //helptexts
+$string['help'] = 'Hilfe';
+
 $string['helptext_str'] = 'Hilfetext';
 $string['helptext_link'] = 'Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
 $string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. DozentInnen und/oder deren MitarbeiterInnen sehen hier alle für das Durchführen einer Prüfung nötigen und hilfreichen Arbeitsschritte. <br /><br />
@@ -63,6 +166,7 @@ Das Hinzufügen von TeilnehmerInnen ist der wichtigste Arbeitsschritt in der Pr�
 <ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation sinnvoll nutzen zu können müssen hier alle an der Prüfung teilnehmende Studierende als Prüfungsteilnehmer hinzugefügt werden.
 <li>Werden neue TeilnehmerInnen zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li></ul>
 <strong>Achtung:</strong> Wenn es bei der Erstellung der Instanz nicht explizit ausgewählt wurde sind nicht automatisch alle KursteilnehmerInnen in PANDA auch Prüfungsteilnehmer. Diese müssen hier manuell hinzugefügt werden damit die Prüfungsorganisation funktioniert.';
+$string['helptext_configureTasks']= 'Hier können Aufgaben gesetzt werden ...';
 $string['helptext_setTextfield']= 'Hier kann ein beliebiger <strong>Freitext</strong> für die Prüfung eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Ansicht angezeigt wird. <br /> <br />
 Auf diese Weise können den PrüfungsteilnehmerInnen etwa unkompliziert Hinweise zu den in der Prüfung erlaubten Hilfsmitteln mitgeteilt werden. Neben einfachen Texten können dabei auch komplexere Elemente wie etwa Bilder oder (soweit von Moodle unterstützt) sogar Formeln verwendet werden. <br /> <br />
 Diese Funktion ist rein optional. Wenn Sie also z.B. keine Hinweise für die PrüfungsteilnehmerInnen haben können Sie das unten stehende Feld auch einfach leer lassen und auf den Button „Abbrechen“ klicken. <br /> <br />
@@ -72,9 +176,10 @@ $string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und de
 Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren universitären E-Mail-Account geschickt und können so z. B. einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
+$string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 
 //errors and permissions
-$string['missingidandcmid'] = 'Kurs ID fehlt (missingcmid)';
+$string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
 
 //universal
@@ -83,7 +188,7 @@ $string['modulenameplural'] = 'Prüfungsorganisationen';
 $string['pluginname'] = 'Prüfungsorganisation';
 
 //addnewinstance
-$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfache online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
+$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';

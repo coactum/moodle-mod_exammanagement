@@ -13,13 +13,17 @@
           <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
           <FIELD NAME="categoryid" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
-          <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
-          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
+          <FIELD NAME="tmpparticipants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temorary participants for exam as array sorted by ids"/>
+          <FIELD NAME="tasks" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="count of tasks and points per taks as jsonstring"/>
+          <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="content and format of textfield as jsonstring"/>
+          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
           <FIELD NAME="assignedplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="assigned places"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
-          <FIELD NAME="roomplacevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
+          <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
+          <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
+          <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="gradingscale for exam as json array"/>
           <FIELD NAME="userinformation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="specific user information for plugin as json"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>

@@ -22,10 +22,13 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_exammanagement\general;
+
+use mod_exammanagement\forms\exammanagementForms;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-
-use mod_exammanagement;
+require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -33,10 +36,20 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+$MoodleObj = Moodle::getInstance($id, $e);
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-if($p->checkCapability('mod/exammanagement:viewinstance')){
-  $p->outputTextfieldPage();
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+		if(!$ExammanagementInstanceObj->getParticipantsCount()){
+			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
+		}
+
+		$MoodleObj->setPage('textfield');
+		$MoodleObj-> outputPageHeader();
+		$ExammanagementFormsObj->buildTextfieldForm();
+
+		$MoodleObj->outputFooter();
 } else {
-    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

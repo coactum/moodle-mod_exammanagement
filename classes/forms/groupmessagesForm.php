@@ -22,7 +22,10 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general\forms;
+namespace mod_exammanagement\forms;
+use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
+
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,34 +34,41 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
+require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/Moodle.php');
+
 class groupmessagesForm extends moodleform {
 
     //Add elements to form
     public function definition() {
 
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
         $mform = $this->_form; // Don't forget the underscore!
 
-        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $obj->ConcatHelptextStr('sendGroupmessages'));
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('groupmessages_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
 
-     	$mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
 
-     	$obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-     	$participantsCount = $obj->getParticipantsCount();
+     	  $participantsCount = $ExammanagementInstanceObj->getParticipantsCount();
 
  		if($participantsCount){
 
-			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen <strong>'.$participantsCount.'</strong> zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
-			$mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
+			$mform->addElement('html', '<p>'.get_string('groupmessages_text_1', 'mod_exammanagement').'<strong>'.$participantsCount.'</strong>'.get_string('groupmessages_text_2', 'mod_exammanagement').'</p>');
+
+      $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
 			$mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,'Mail abschicken');
 		    }
 		else{
-		    $obj->redirectToOverviewPage('Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+      $MoodleObj->redirectToOverviewPage('', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
 	   		}
-        }
+    }
 
     //Custom validation should be added here
     function validation($data, $files) {

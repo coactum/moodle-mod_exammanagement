@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for exammanagement
+ * class containing all general functions for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -25,17 +25,11 @@
 namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
+use mod_exammanagement\event\course_module_viewed;
 use context_module;
-use tcpdf;
-use \stdClass;
-
-/**
- * class containing all general functions for exammanagement
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+use stdClass;
+use core\message\message;
+use core\output\notification;
 
 class exammanagementInstance{
 
@@ -43,11 +37,12 @@ class exammanagementInstance{
 	protected $e;
 	protected $cm;
 	protected $course;
-	protected $moduleinstance;
+	public $moduleinstance;
 	protected $modulecontext;
 
 	private function __construct($id, $e) {
-		global $DB, $CFG;
+
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$this->id=$id;
 		$this->e=$e;
@@ -55,9 +50,9 @@ class exammanagementInstance{
         if ($id) {
 				$this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
 				$this->course = get_course($this->cm->course);
-				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
+				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
 			} else if ($e) {
-				$this->moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
+				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $e), '*', MUST_EXIST);
 				$this->course = get_course($this->moduleinstance->course);
 				$this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
 			} else {
@@ -82,131 +77,64 @@ class exammanagementInstance{
 
 	}
 
-	#### wrapped general moodle functions #####
+	#### getter for object properties
 
-	protected function setPage($substring){
-		global $PAGE;
+	public function getModuleinstance(){
 
-		// Print the page header.
-		$PAGE->set_url('/mod/exammanagement/'.$substring.'.php', array('id' => $this->cm->id));
-		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($this->moduleinstance->name));
-		$PAGE->set_heading(format_string($this->course->fullname));
-		$PAGE->set_context($this->modulecontext);
-
-		/*
-		 * Other things you may want to set - remove if not needed.
-		 * $PAGE->set_cacheable(false);
-		 * $PAGE->set_focuscontrol('some-html-id');
-		 * $PAGE->add_body_class('newmodule-'.$somevar);
-		 */
+			return $this->moduleinstance;
 
 	}
 
-	protected function outputPageHeader(){
-		global $OUTPUT;
-		echo $OUTPUT->header();
+	public function getCourse(){
 
-		// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
-		echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+			return $this->course;
 
-		// Conditions to show the intro can change to look for own settings or whatever.
- 		if ($this->moduleinstance->intro) {
-     		echo $OUTPUT->box(format_module_intro('exammanagement', $this->moduleinstance, $this->cm->id), 'generalbox mod_introbox', 'newmoduleintro');
- 		}
- 	}
+	}
 
- 	protected function outputFooter(){
+	public function getCm(){
 
- 		global $OUTPUT;
+			return $this->cm;
 
-		// Finish the page.
-		echo $OUTPUT->footer();
+	}
 
- 	}
+	public function getModulecontext(){
 
- 	public function getModuleUrl($component){
+			return $this->modulecontext;
 
- 		global $CFG;
+	}
 
- 		$url=$CFG->wwwroot.'/mod/exammanagement/'.$component.'.php?id='.$this->id;
+	#### universal functions for exammanagement ####
+
+ 	public function getExammanagementUrl($component, $id){
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+ 		$url= $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
  		return $url;
  	}
 
- 	public function redirectToOverviewPage($anchor, $message, $type){
-
-		$url = $this->getModuleUrl('view');
-
-		if ($anchor){
-				$url .= '#'.$anchor;
-		}
-
-		switch ($type) {
-    		case 'success':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_SUCCESS);
-        		break;
-    		case 'warning':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_WARNING);
-        		break;
-    		case 'error':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
-        		break;
-        	case 'info':
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_INFO);
-        		break;
-        	default:
-        		redirect ($url, $message, null, \core\output\notification::NOTIFY_ERROR);
-        		break;
-		}
-	}
-
-	public function checkCapability($capname){
-				if (has_capability($capname, $this->modulecontext)){
-						return true;
-				} else {
-						return false;
-				}
-		}
-
 	public function ConcatHelptextStr($langstr){
 
 		$helptextstr= '';
-		$helptextstr.= '<div class="alert alert-info alert-dismissible fade in" role="alert">';
-		$helptextstr.= '<div class="helptextbox">';
-		$helptextstr.= '<div class="helptextboxcontent">';
-		$helptextstr.= '<div class="row">';
-		$helptextstr.= '<h4 class="alert-heading col-xs-11">'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
-		$helptextstr.= '<button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		$helptextstr.= '<div class="panel panel-info helptextpanel collapse">';
+		$helptextstr.= '<div class="panel-heading">';
+		$helptextstr.= '<h4>'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
 		$helptextstr.= '</div>';
+		$helptextstr.= '<div class="panel-body">';
 		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement').'</p>';
-		$helptextstr.= '<hr>';
-		$helptextstr.= '<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
-		$helptextstr.= '<p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p>';
 		$helptextstr.= '</div>';
+		$helptextstr.= '<div class="panel-footer">';
+		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').'<a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 
 		$helptextstr.= <<< EOF
 <script>
-showMore = function() {
-
-			helptextboxcontent = jQuery.find('.helptextboxcontent');
-			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
-
-			helptextbox = jQuery.find('.helptextbox');
-			jQuery(helptextbox).css({
-			      "height": jQuery(helptextbox).height(),
-			      "max-height": 9999
-			    })
-			    .animate({
-			      "height": helptextboxcontentheight
-			    });
-
-
-			readMore = jQuery.find('.read-more');
-			jQuery(readMore).fadeOut();
-			return false;	    
-		};
+toogleHelptextPanel = function(){
+	$('.helptextpanel').slideToggle("slow");
+	$('.helptextpanel-icon').toggle();
+};
 </script>
 EOF;
 
@@ -216,89 +144,70 @@ EOF;
 
 	#### overview ####
 
-	public function outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible){
-
-		global $PAGE;
-
-		require_capability('mod/exammanagement:viewinstance', $this->modulecontext);
-
-		if($calledfromformdt&&$this->checkCapability('mod/exammanagement:adddefaultrooms')){
-			$this->saveStateOfDateTimeVisibility($datetimevisible);
-
-		}
-
-		if($calledfromformrp&&$this->checkCapability('mod/exammanagement:adddefaultrooms')){
-			$this->saveStateOfRoomPlaceVisibility($roomplacevisible);
-
-		}
-
-		$this->setPage('view');
-		$this-> outputPageHeader();
-
-		//rendering and displaying content
-		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_overview($this->cm->id, $this->checkPhaseCompletion(1), $this->checkPhaseCompletion(2), $this->checkPhaseCompletion(3), $this->checkPhaseCompletion(4), $this->getHrExamtime(), $this->getShortenedTextfield(), $this->getParticipantsCount(), $this->getRoomsCount(), $this->getChoosenRoomNames(), $this->isStateOfPlacesCorrect(), $this->isStateOfPlacesError(), $this->isDateTimeVisible(),$this->isRoomPlaceVisible());
-		echo $output->render($page);
-
-		//$this->debugElementsOverview();
-
-		$this->outputFooter();
- 	}
-
- 	protected function getExamtime(){		//get examtime (for form)
-		if ($this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance))){
-				return $this->getFieldFromDB('exammanagement','examtime', array('id' => $this->cm->instance));
+ 	public function getExamtime(){		//get examtime (for form)
+		if ($this->moduleinstance->examtime){
+				return $this->moduleinstance->examtime;
 			} else {
 				return false;
 			}
 	}
 
-	protected function getHrExamtime() {	//convert examtime to human readable format for template
-		$examtime=$this->getExamtime();
+	public function getHrExamtimeTemplate() {	//convert examtime to human readable format for template
+		$examtime = $this->getExamtime();
 		if($examtime){
-			$hrexamtime = date('d.m.Y', $examtime).', '.date('H:i', $examtime);
+			$hrexamtimetemplate = date('d.m.Y', $examtime).' um '.date('H:i', $examtime);
+			return $hrexamtimetemplate;
+		} else {
+			return false;
+		}
+ 	}
+
+	public function getHrExamtime() {	//convert examtime to human readable format for template
+		$examtime = $this->getExamtime();
+		if($examtime){
+			$hrexamtime = date('d.m.Y', $examtime).' '.date('H:i', $examtime);
 			return $hrexamtime;
 		} else {
 			return false;
 		}
  	}
 
- 	protected function getTextfieldObject(){
+ 	public function getTextfieldObject(){
 
- 		$textfield= $this->getFieldFromDB('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield= $this->moduleinstance->textfield;
 
 		$textfield =json_decode($textfield);
 
 		return $textfield;
 	}
 
- 	protected function getTextFromTextfield(){
+ 	public function getTextFromTextfield(){
 
- 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$text=$textfield->text;
+				$text = $textfield->text;
 				return $text;
 			} else {
 				return false;
 			}
 	}
 
-	protected function getFormatFromTextfield(){
+	public function getFormatFromTextfield(){
 
- 		$textfield= $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+ 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$format=$textfield->format;
+				$format = $textfield->format;
 				return $format;
 			} else {
 				return false;
 			}
 	}
 
-	protected function getShortenedTextfield(){
-		$textfield=format_string($this->getTextFromTextfield());
+	public function getShortenedTextfield(){
+		$textfield = format_string($this->getTextFromTextfield());
 
 		if ($textfield && strlen($textfield)>49){
-				$shtextfield=substr($textfield, 0, 49).' ...';
+				$shtextfield = substr($textfield, 0, 49).' ...';
 				return $shtextfield;
 			} elseif($textfield) {
 				return $textfield;
@@ -308,10 +217,10 @@ EOF;
 	}
 
 	public function getParticipantsCount(){
-		$participants=$this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+		$participants = $this->moduleinstance->participants;
 		if ($participants){
-				$temp= json_decode($participants);
-				$participantsCount=count($temp);
+				$temp = json_decode($participants);
+				$participantsCount = count($temp);
 				return $participantsCount;
 			} else {
 				return false;
@@ -319,7 +228,7 @@ EOF;
 	}
 
 	public function getRoomsCount(){
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 		if ($rooms){
 				$roomsArr = json_decode($rooms);
 				$roomsCount = count($roomsArr);
@@ -330,7 +239,7 @@ EOF;
 	}
 
 	public function getChoosenRoomNames(){
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 		$roomNames = array();
 
 		if ($rooms){
@@ -384,12 +293,12 @@ EOF;
 
 	}
 
- 	protected function checkPhaseCompletion($phase){
+ 	public function checkPhaseCompletion($phase){
 
  	switch ($phase){
 
 			case 1:
-				if ($this->getRoomsCount()&&$this->getExamtime()&&$this->getParticipantsCount()){
+				if ($this->getRoomsCount() && $this->getExamtime() && $this->getParticipantsCount()){
 					return true;
 					} else {
 						return false;
@@ -410,28 +319,11 @@ EOF;
 
 	#### participants view ####
 
-	public function outputParticipantsView(){
-
-		global $PAGE;
-
-		require_capability('mod/exammanagement:viewparticipantspage', $this->modulecontext);
-
-		$this->setPage('view');
-		$this-> outputPageHeader();
-
-		//rendering and displaying content
-		$output = $PAGE->get_renderer('mod_exammanagement');
-		$page = new \mod_exammanagement\output\exammanagement_participantsview($this->cm->id, $this->isParticipant(), $this->getDateForParticipants(), $this->getTimeForParticipants(), $this->getRoomForParticipants(), $this->getPlaceForParticipants(), $this->getTextFromTextfield());
-		echo $output->render($page);
-
-		$this->outputFooter();
- 	}
-
-	protected function isParticipant(){
+	public function isParticipant(){
 
 			global $USER;
 
-			$participantsList = json_decode($this->getFieldFromDB('exammanagement', 'participants', array('id' => $this->cm->instance)));
+			$participantsList = json_decode($this->moduleinstance->participants);
 
 			if ($participantsList){
 					foreach ($participantsList as $key => $value){
@@ -446,9 +338,9 @@ EOF;
 			}
 	}
 
-	protected function getDateForParticipants(){
+	public function getDateForParticipants(){
 
-			$dateState = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+			$dateState = $this->moduleinstance->datetimevisible;
 			$examtime = $this->getExamtime();
 
 			if($dateState && $examtime){
@@ -458,7 +350,7 @@ EOF;
 			}
 	}
 
-	protected function getTimeForParticipants(){
+	public function getTimeForParticipants(){
 
 			$timeState = $this->isDateTimeVisible();
 			$examtime = $this->getExamtime();
@@ -470,19 +362,21 @@ EOF;
 			}
 	}
 
-	protected function getRoomForParticipants(){
+	public function getRoomForParticipants(){
 
 			global $USER;
 
-			$roomState = $this->isRoomPlaceVisible();
+			$roomState = $this->isRoomVisible();
 			$assignmentArray = $this->getAssignedPlaces();
 			$participantsRoom =  false;
 
 			if($roomState && $assignmentArray){
-						foreach ($assignmentArray as $key => $assignment){
+						foreach ($assignmentArray as $key => $room){
+							foreach ($room->assignments as $key => $assignment){
 								if ($assignment->userid == $USER->id){
-										$participantsRoom = $assignment->roomname;
+										$participantsRoom = $room->roomname;
 								}
+							}
 						}
 
 						return $participantsRoom;
@@ -492,19 +386,21 @@ EOF;
 			}
 	}
 
-	protected function getPlaceForParticipants(){
+	public function getPlaceForParticipants(){
 
 			global $USER;
 
-			$placesState = $this->isRoomPlaceVisible();
+			$placesState = $this->isPlaceVisible();
 			$assignmentArray = $this->getAssignedPlaces();
 			$participantsPlace =  false;
 
 			if($placesState && $assignmentArray){
-						foreach ($assignmentArray as $key => $assignment){
+						foreach ($assignmentArray as $key => $room){
+							foreach ($room->assignments as $key => $assignment){
 								if ($assignment->userid == $USER->id){
 										$participantsPlace = $assignment->place;
 								}
+							}
 						}
 
 						return $participantsPlace;
@@ -525,10 +421,12 @@ EOF;
 
  	public function startEvent($type){
 
+		require_once(__DIR__.'/../event/course_module_viewed.php');
+
 		switch ($type){
 
 			case 'view':
-				$event = \mod_exammanagement\event\course_module_viewed::create(array(
+				$event = course_module_viewed::create(array(
 					'objectid' => $this->moduleinstance->id,
 					'context' => $this->modulecontext
 				));
@@ -540,80 +438,79 @@ EOF;
 
 	#### wrapped Moodle DB functions #####
 
-	protected function getFieldFromDB($table, $fieldname, $condition){
-		global $DB;
+	// protected function getFieldFromDB($table, $fieldname, $condition){
+	// 	global $DB;
+	//
+	// 	$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
+	//
+	// 	return $field;
+	// }
 
-		$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
+	// protected function getRecordFromDB($table, $condition){
+	// 	global $DB;
+	//
+	// 	$record = $DB->get_record($table, $condition);
+	//
+	// 	return $record;
+	// }
 
-		return $field;
-	}
+	// protected function getRecordsFromDB($table, $condition){
+	// 	global $DB;
+	//
+	// 	$records = $DB->get_records($table, $condition);
+	//
+	// 	return $records;
+	// }
 
-	protected function getRecordFromDB($table, $condition){
-		global $DB;
+	// protected function UpdateRecordInDB($table, $obj){ // in DBobj and fully transfered
+	// 	global $DB;
+	//
+	// 	return $DB->update_record($table, $obj);
+	// }
 
-		$record = $DB->get_record($table, $condition);
+	// protected function InsertRecordInDB($table, $dataobject){
+	// 	global $DB;
+	//
+	// 	return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
+	// }
 
-		return $record;
-	}
-
-	protected function getRecordsFromDB($table, $condition){
-		global $DB;
-
-		$records = $DB->get_records($table, $condition);
-
-		return $records;
-	}
-
-	protected function UpdateRecordInDB($table, $obj){
-		global $DB;
-
-		return $DB->update_record($table, $obj);
-	}
-
-	protected function InsertRecordInDB($table, $dataobject){
-		global $DB;
-
-		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
-	}
-
-	protected function InsertBulkRecordsInDB($table, $dataobjects){
-		global $DB;
-
-		$DB->insert_records($table, $dataobjects);
-	}
+	// protected function InsertBulkRecordsInDB($table, $dataobjects){
+	// 	global $DB;
+	//
+	// 	$DB->insert_records($table, $dataobjects);
+	// }
 
 	######### feature: chooseRooms ##########
 
-	public function outputchooseRoomsPage(){
-		global $PAGE;
+	public function saveRooms($roomsArr){
 
-		$this->setPage('chooseRooms');
-		$this-> outputPageHeader();
-		$this->buildchooseRoomsForm();
-
-		$this->outputFooter();
-	}
-
-	protected function saveRooms($roomsArr){
+		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$rooms=json_encode($roomsArr);
 
 		$this->moduleinstance->rooms=$rooms;
 
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-		$this->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
+		$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
 
 	}
 
 	public function getRoomObj($roomID){
-		$room = $this->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
 
 		return $room;
 	}
 
 	public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
-		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
 		$allRoomsIDs;
 
 		if ($allRooms){
@@ -635,7 +532,10 @@ EOF;
 	}
 
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
-		$allRooms = $this->getRecordsFromDB('exammanagement_rooms', array());
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
 		$allRoomNames;
 		$allRoomIDs;
 
@@ -679,42 +579,9 @@ EOF;
 
 	}
 
-	protected function buildchooseRoomsForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/chooseRoomsForm.php');
-
-		//Instantiate Textfield_form
-		$mform = new forms\chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $rooms=$this->filterCheckedRooms($fromform);
-
-		  $this->saveRooms($rooms);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
-
 	public function getSavedRooms(){
 
-		$rooms = $this->getFieldFromDB('exammanagement','rooms', array('id' => $this->cm->instance));
+		$rooms = $this->moduleinstance->rooms;
 
 		if ($rooms){
 				$roomsArray = json_decode($rooms);
@@ -724,9 +591,9 @@ EOF;
 		}
 	}
 
-	protected function isDateTimeVisible(){
+	public function isDateTimeVisible(){
 
-		$isDateTimeVisible = $this->getFieldFromDB('exammanagement','datetimevisible', array('id' => $this->cm->instance));
+		$isDateTimeVisible = $this->moduleinstance->datetimevisible;
 
 		if($isDateTimeVisible){
 				return true;
@@ -735,11 +602,11 @@ EOF;
 		}
 	}
 
-	protected function isRoomPlaceVisible(){
+	public function isRoomVisible(){
 
-		$isRoomPlaceVisible = $this->getFieldFromDB('exammanagement','roomplacevisible', array('id' => $this->cm->instance));
+		$isRoomVisible = $this->moduleinstance->roomvisible;
 
-		if($isRoomPlaceVisible){
+		if($isRoomVisible){
 				return true;
 		} else {
 				return false;
@@ -747,148 +614,128 @@ EOF;
 
 	}
 
-	############## feature: add default rooms ############
+	public function isPlaceVisible(){
 
-	public function addDefaultRooms(){
+		$isPlaceVisible = $this->moduleinstance->placevisible;
 
-		global $CFG;
-
-		//$records= array();
-
-		$defaultRoomsFile = file($CFG->wwwroot.'/mod/exammanagement/data/rooms.txt');
-
-		foreach ($defaultRoomsFile as $key => $roomstr){
-
-			$roomParameters=explode('+', $roomstr);
-
-			$roomObj = new stdClass();
-			$roomObj->roomid=$roomParameters[0];
-			$roomObj->name=$roomParameters[1];
- 			$roomObj->description=$roomParameters[2];
-
-			$svgStr = base64_encode($roomParameters[3]);
-
- 			$roomObj->seatingplan = $svgStr;
- 			$roomObj->places = $roomParameters[4];
-			$roomObj->type = 'defaultroom';
- 			$roomObj->misc = NULL;
-
- 			//array_push($records, $roomObj);
-
-			$this->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
+		if($isPlaceVisible){
+				return true;
+		} else {
+				return false;
 		}
 
-		//$this->InsertBulkRecordsInDB('exammanagement_rooms', $records); // to big for bulkrecord insert
+	}
 
-		$this->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
+	public function getTaskCount(){
+
+		$tasks = $this->getTasks();
+
+		if($tasks){
+				$taskcount = count($tasks);
+				return $taskcount;
+		} else {
+				return false;
+		}
 
 	}
+
+	public function getTaskTotalPoints(){
+
+		$tasks = $this->getTasks();
+		$totalpoints = 0;
+
+		if($tasks){
+				foreach($tasks as $key => $points){
+						$totalpoints += $points;
+					}
+				return $totalpoints;
+		} else {
+				return false;
+		}
+
+	}
+
 
 	############## feature: setDateTime #########
-	public function outputDateTimePage(){
-		global $PAGE;
 
-		$this->setPage('set_date_time');
-		$this-> outputPageHeader();
-		$this->buildDateTimeForm();
+	public function saveDateTime($examtime){
 
-		$this->outputFooter();
-	}
-
-	protected function saveDateTime($examtime){
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 			$this->moduleinstance->examtime=$examtime;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
-
-	}
-
-	protected function resetDateTime(){
-
-		$this->UpdateRecordInDB("exammanagement", NULL);
-
-		$this->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
-	}
-
-	protected function buildDateTimeForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/dateTimeForm.php');
-
-		//Instantiate dateTime_form
-		$mform = new forms\dateTimeForm();
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-			if (!empty($fromform->resetdatetime)) { // not working
-    		$this->resetDateTime();
-  		} else {
-				$this->saveDateTime($fromform->examtime);
-			}
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('examtime'=>$this->getExamtime(), 'id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
 
 	}
 
 ######### feature: addParticipants ##########
 
-	public function outputaddParticipantsPage(){
-		global $PAGE;
-
-		$this->setPage('addParticipants');
-		$this-> outputPageHeader();
-		$this->buildaddParticipantsForm();
-
-		$this->outputFooter();
+public function checkIfValidMatrNr($mnr) {
+		if (!preg_match("/^\d+$/", $mnr)) {
+			return false;
+		}
+		$first = substr($mnr, 0, 1);
+		$prf   = substr($mnr, strlen($mnr)-1, 1);
+		$mod   = $mnr % 11;
+		if ($first==7 && strlen($mnr)==7) {
+			return true;
+		} else {
+		return (($first==3 || $first==6) /*&& ($mod==0 ? TRUE : ($mod==1 && $prf==0))*/);
 	}
+}
 
-	protected function saveParticipants($participantsArr){
+	public function saveParticipants($participantsArr, $mode){
 
-			$participants=json_encode($participantsArr);
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			$this->moduleinstance->participants = $participants;
-			$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
+			$participants = json_encode($participantsArr);
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if ($mode == 'tmp'){
+						$this->moduleinstance->tmpparticipants = NULL;
 
-			$this->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
+						if ($participants!="null"){
+								$this->moduleinstance->tmpparticipants = $participants;
+						}
 
-	}
+						$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+						redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
 
-	public function getCourseParticipantsIDs($format){
-			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
-			$CourseParticipantsID;
+			} else{
+						$this->moduleinstance->participants = NULL;
 
-			foreach ($CourseParticipants as $key => $value){
-				$temp=get_object_vars($value);
-				$CourseParticipantsID[$key] = $temp['id'];
+					if ($participants!="null"){
+							$this->moduleinstance->participants = $participants;
+							$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
+							$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
+					}
+
+					$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+					$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 			}
-
-			if ($format=='String'){
-				$CourseParticipantsID = implode(',', $CourseParticipantsID);
-			}
-
-			return $CourseParticipantsID;
-
-
 	}
+
+	// public function getCourseParticipantsIDs($format){ //not used at the moment
+	// 		$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
+	// 		$CourseParticipantsID;
+	//
+	// 		foreach ($CourseParticipants as $key => $value){
+	// 			$temp=get_object_vars($value);
+	// 			$CourseParticipantsID[$key] = $temp['id'];
+	// 		}
+	//
+	// 		if ($format=='String'){
+	// 			$CourseParticipantsID = implode(',', $CourseParticipantsID);
+	// 		}
+	//
+	// 		return $CourseParticipantsID;
+	//
+	//
+	// }
 
 	public function filterCheckedParticipants($obj){
 
@@ -903,49 +750,22 @@ EOF;
 
 			}
 
-			sort($participants); //sort checked participants ids for saving in DB
+			if ($participants){
 
-			return $participants;
+				sort($participants); //sort checked participants ids for saving in DB
 
-	}
+				return $participants;
 
-	protected function buildaddParticipantsForm(){
+			} else {
+				return Null;
 
-		//include form
-		require_once(__DIR__.'/../forms/addParticipantsForm.php');
-
-		//Instantiate Textfield_form
-		$mform = new forms\addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $participants=$this->filterCheckedParticipants($fromform);
-
-		  $this->saveParticipants($participants);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
+			}
 
 	}
 
 	public function getSavedParticipants(){
 
-		$participants = $this->getFieldFromDB('exammanagement','participants', array('id' => $this->cm->instance));
+		$participants = $this->moduleinstance->participants;
 
 		if ($participants){
 				$participantsArray = json_decode($participants);
@@ -955,9 +775,23 @@ EOF;
 		}
 	}
 
-	public function getUser($userid){
+	public function getTempParticipants(){
 
-		$user = $this->getRecordFromDB('user', array('id'=>$userid));
+		$tmpparticipants = $this->moduleinstance->tmpparticipants;
+
+		if ($tmpparticipants){
+				$tmpParticipantsArray = json_decode($tmpparticipants);
+				return $tmpParticipantsArray;
+			} else {
+				return false;
+		}
+	}
+
+	public function getMoodleUser($userid){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
 
 		return $user;
 
@@ -967,17 +801,17 @@ EOF;
 
 		global $OUTPUT;
 
-		$user = $this->getUser($userid);
+		$user = $this->getMoodleUser($userid);
 		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
 
 	}
 
 	public function getUserProfileLink($userid){
 
-		global $CFG;
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$user = $this->getUser($userid);
-		$profilelink = '<strong><a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.$this->course->id.'">'.fullname($user).'</a></strong>';
+		$user = $this->getMoodleUser($userid);
+		$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $user->id, 'course', $this->course->id).'">'.fullname($user).'</a></strong>';
 
 		return $profilelink;
 
@@ -1004,7 +838,7 @@ EOF;
 
 	public function getParticipantsGroupNames($userid){
 
-		global $CFG;
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$userGroups = groups_get_user_groups($this->course->id, $userid);
 		$groupNameStr = false;
@@ -1012,7 +846,7 @@ EOF;
 		foreach ($userGroups as $key => $value){
 			if ($value){
 				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$CFG->wwwroot.'/user/index.php?id='.$this->course->id.'&amp;group='.$value2.'">'.groups_get_group_name($value2).'</a></strong>, ';
+					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $this->course->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>, ';
 				}
 			}
 			else{
@@ -1027,7 +861,7 @@ EOF;
 
 	public function assignMatrNrToUser($userid){
 
-			$user = $this->getUser($userid); // for temp matrNr
+			$user = $this->getMoodleUser($userid); // for temp matrNr
 
 			// constructing test MatrN., later needs to be readed from csv-File
 
@@ -1045,7 +879,7 @@ EOF;
 	}
 
 	public function getUsersInformationPO(){
-			$usersinformation = $this->getFieldFromDB('exammanagement','userinformation', array('id' => $this->cm->instance));
+			$usersinformation = $this->moduleinstance->userinformation;
 			return $usersinformation;
 	}
 
@@ -1072,116 +906,50 @@ EOF;
 			return $user;
 	}
 
-	######### feature: textfield ##########
+	######### feature: configure tasks ##########
 
-	public function outputTextfieldPage(){
-		global $PAGE;
+	public function saveTasks($fromform){
 
-		$this->setPage('textfield');
-		$this-> outputPageHeader();
-		$this->buildTextfieldForm();
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$this->outputFooter();
+			$tasks = json_encode($fromform->task);
+			$this->moduleinstance->tasks=$tasks;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
+
 	}
 
-	protected function saveTextfield($fromform){
+	public function getTasks(){
 
-			$textfield=json_encode($fromform->textfield);
+			$tasks = json_decode($this->moduleinstance->tasks);
+			return $tasks;
+	}
+
+	######### feature: textfield ##########
+
+	public function saveTextfield($fromform){
+
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			$textfield = json_encode($fromform->textfield);
 
 			$this->moduleinstance->textfield=$textfield;
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			$this->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
-
-	}
-
-	protected function buildTextfieldForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/textfieldForm.php');
-
-		//Instantiate Textfield_form
-		$mform = new forms\textfieldForm();
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $this->saveTextfield($fromform);
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-
-		  if ($this->getTextFromTextfield() && $this->getFormatFromTextfield()){
-		 		$mform->set_data(array('textfield'=>['text' => $this->getTextFromTextfield(), 'format' => $this->getFormatFromTextfield()], 'id'=>$this->id));
-		  } else {
-				$mform->set_data(array('id'=>$this->id));
-		  }
-
-
-		  //displays the form
-		  $mform->display();
-		}
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
 	}
 
 	########### Send Groupmessage to all Participants ####
 
-	public function outputGroupmessagesPage(){
-		global $PAGE;
-
-		if(!$this->getParticipantsCount()){
-			$this->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
-		}
-
-		$this->setPage('groupmessage');
-		$this-> outputPageHeader();
-		$this->buildGroupmessagesForm();
-
-		$this->outputFooter();
-	}
-
-	protected function buildGroupmessagesForm(){
-
-		//include form
-		require_once(__DIR__.'/../forms/groupmessagesForm.php');
-
-		//Instantiate Textfield_form
-		$mform = new forms\groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$this->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-		} else if ($fromform = $mform->get_data()) {
-		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-		  $this->sendGroupMessage($fromform->groupmessages_subject, $fromform->groupmessages_content);
-		  $this->redirectToOverviewPage('beforeexam', 'Nachricht verschickt', 'success');
-
-		} else {
-		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		  // or on the first display of the form.
-
-		  //Set default data (if any)
-		  $mform->set_data(array('id'=>$this->id));
-
-		  //displays the form
-		  $mform->display();
-		}
-
-	}
-
 	public function sendGroupMessage($subject, $content){
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$mailsubject="PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
 		$mailtext=$content;
@@ -1189,21 +957,23 @@ EOF;
 
 		foreach ($participants as $key => $value){
 
-			$user=$this->getUser($value);
+			$user=$this->getMoodleUser($value);
 
 			$this->sendSingleMessage($user, $mailsubject, $mailtext);
 
 		}
 
-		$this->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
+		$MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
 
 	}
 
 	protected function sendSingleMessage($user, $subject, $text){
 
-		global $USER, $CFG;
+		global $USER;
 
-		$message = new \core\message\message();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+		$message = new message();
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
 		$message->name = 'groupmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
 		$message->userfrom = $USER; // user object
@@ -1219,7 +989,7 @@ EOF;
 		$message->replyto = "noreply@imt.uni-paderborn.de";
 
 		$header = '';
-		$url=$CFG->wwwroot.'/mod/exammanagement/view.php?id='.$this->id;
+		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
 		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
@@ -1251,235 +1021,121 @@ EOF;
 
 	########### assign places #######
 
-	public function assignPlaces(){
-
-		$choosenRoomsArray = $this->getSavedRooms();
-		$UserIDsArray = $this->getSavedParticipants();
-		$newAssignmentObj = '';
-		$assignmentArray = array();
-
-		if(!$choosenRoomsArray){
-			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		} elseif(!$UserIDsArray){
-			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		}
-
-		foreach($choosenRoomsArray as $key => $roomID){
-
-			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
-
-			$Places = json_decode($RoomObj->places);	//get Places of this Room
-
-			foreach($Places as $key => $placeID){
-				$currentUserID = array_pop($UserIDsArray);
-
-				$newAssignmentObj = $this->assignPlaceToUser($currentUserID, $RoomObj->roomid, $RoomObj->name, $placeID);
-				array_push($assignmentArray, $newAssignmentObj);
-
-				if(!$UserIDsArray){						//if all users have a place: stop
-					break 2;
-				}
-			}
-
-			if(!$UserIDsArray){						//if all users have a place: stop
-				break;
-			}
-		}
-
-		if($UserIDsArray){								//if users are left without a room
-			$this->unsetStateOfPlaces('error');
-			$this->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
-		}
-
-		$this->moduleinstance->stateofplaces='set';
-
-		$this->savePlacesAssignment($assignmentArray);
-
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-		$this->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
-
-	}
-
-	protected function assignPlaceToUser($userid, $roomid, $roomname, $place){
+	public function assignPlaceToUser($userid, $place){
 
 		$assignment = new stdClass();
 
 		$assignment->userid = $userid;
-		$assignment->roomid = $roomid;
-		$assignment->roomname = $roomname;
 		$assignment->place = $place;
 
 		 return $assignment;
 	}
 
-	protected function savePlacesAssignment($assignmentArray){
+	public function savePlacesAssignment($assignmentArray){
+
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$this->moduleinstance->assignedplaces=json_encode($assignmentArray);
 
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 	}
 
-	protected function unsetStateofPlaces($type){
+	public function unsetStateofPlaces($type){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
 		$this->moduleinstance->stateofplaces=$type;
-		$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	}
 
-	protected function getStateOfPlaces(){
+	public function getStateOfPlaces(){
 
-		$StateOfPlaces = $this->getFieldFromDB('exammanagement','stateofplaces', array('id' => $this->cm->instance));
+		$StateOfPlaces = $this->moduleinstance->stateofplaces;
 
 		return $StateOfPlaces;
 
 	}
 
-	protected function getAssignedPlaces(){
+	public function getAssignedPlaces(){
 
-		$getAssignedPlaces = json_decode($this->getFieldFromDB('exammanagement','assignedplaces', array('id' => $this->cm->instance)));
+		$getAssignedPlaces = json_decode($this->moduleinstance->assignedplaces);
 
 		return $getAssignedPlaces;
 
 	}
 
-	########### show Information to users ##############
+	######### feature: configure tasks ##########
 
-	protected function saveStateOfDateTimeVisibility($datetimevisible){
+	public function saveGradingscale($fromform){
 
-			$this->moduleinstance->datetimevisible=$datetimevisible;
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$gradingscale = json_encode($fromform->gradingsteppoints);
+			$this->moduleinstance->gradingscale=$gradingscale;
 
-			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
 	}
 
-	protected function saveStateOfRoomPlaceVisibility($roomplacevisible){
+	public function getGradingscale(){
 
-			$this->moduleinstance->roomplacevisible=$roomplacevisible;
+			$gradingscale = json_decode($this->moduleinstance->gradingscale);
 
-			$this->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$this->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
-
+			if($gradingscale){
+					return $gradingscale;
+			} else{
+				return false;
+			}
 	}
 
 	########### Export PDFS ####
 
-	public function exportDemoPDF(){
+		public function getParticipantsListTableHeader() { // to bemoved to pdf object
+			$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+			$header .= "<thead>";
+			$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+			$header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+			$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+			$header .= "</tr>";
+			$header .= "</thead>";
 
-		global $CFG;
-
-		if(!$this->isStateOfPlacesCorrect() || !$this->isStateOfPlacesError()){
-			$this->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+			return $header;
 		}
 
-		//============================================================+
-		// File name   : example_001.php
-		// Begin       : 2008-03-04
-		// Last Update : 2013-05-14
-		//
-		// Description : Example 001 for TCPDF class
-		//               Default Header and Footer
-		//
-		// Author: Nicola Asuni
-		//
-		// (c) Copyright:
-		//               Nicola Asuni
-		//               Tecnick.com LTD
-		//               www.tecnick.com
-		//               info@tecnick.com
-		//============================================================+
+		public function getSeatingPlanTableHeader() { // to bemoved to pdf object
 
-		/**
-		 * Creates an example PDF TEST document using TCPDF
-		 * @package com.tecnick.tcpdf
-		 * @abstract TCPDF - Example: Default Header and Footer
-		 * @author Nicola Asuni
-		 * @since 2008-03-04
-		 */
+				$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+				$header .= "<thead>";
+				$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+				$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+				$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+				$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+				$header .= "</tr>";
+				$header .= "</thead>";
 
-		// Include the main TCPDF library (search for installation path).
-		require_once(__DIR__.'/../../../../config.php');
-		require_once($CFG->libdir.'/pdflib.php');
+				return $header;
+			}
 
-		// create new PDF document
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		public function buildChecksumExamLabels($ean) {
+				$s = preg_replace("/([^\d])/", "", $ean);
+				if (strlen($s) != 12) {
+					return false;
+				}
 
-		// set document information
-		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('Nicola Asuni');
-		$pdf->SetTitle('TCPDF Example 001');
-		$pdf->SetSubject('TCPDF Tutorial');
-		$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+				$check = 0;
+				for ($i = 0; $i < 12; $i++) {
+					$check += (($i % 2) * 2 + 1) * $s{$i};
+				}
 
-		// set default header data
-		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-		$pdf->setFooterData(array(0,64,0), array(0,64,128));
-
-		// set header and footer fonts
-		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-		// set default monospaced font
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-		// set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-		// set auto page breaks
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-		// set image scale factor
-		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-		// set some language-dependent strings (optional)
-		if (@file_exists(__DIR__.'/lang/eng.php')) {
-			require_once(__DIR__.'/lang/eng.php');
-			$pdf->setLanguageArray($l);
-		}
-
-		// ---------------------------------------------------------
-
-		// set default font subsetting mode
-		$pdf->setFontSubsetting(true);
-
-		// Set font
-		// dejavusans is a UTF-8 Unicode font, if you only need to
-		// print standard ASCII chars, you can use core fonts like
-		// helvetica or times to reduce file size.
-		$pdf->SetFont('helvetica', 'BI', 12);
-
-		// Add a page
-		// This method has several options, check the source code documentation for more information.
-		$pdf->AddPage();
-
-		// set text shadow effect
-		$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
-
-		// Set some content to print
-		$html = 'Hallo';
-
-		// Print text using writeHTMLCell()
-		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-
-		// ---------------------------------------------------------
-
-		// Close and output PDF document
-		// This method has several options, check the source code documentation for more information.
-		$pdf->Output('example_001.pdf', 'D');
-
-		//============================================================+
-		// END OF FILE
-		//============================================================+
-
+				return (10 - ($check % 10)) % 10;
 		}
 
 	########### debugging ########

@@ -22,7 +22,9 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general\forms;
+namespace mod_exammanagement\forms;
+use mod_exammanagement\general\exammanagementInstance;
+
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,6 +33,8 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
+require_once(__DIR__.'/../general/exammanagementInstance.php');
+
 class dateTimeForm extends moodleform {
 
     //Add elements to form
@@ -38,12 +42,14 @@ class dateTimeForm extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $obj=\mod_exammanagement\general\exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $obj->ConcatHelptextStr('setDateTime'));
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-8">Prüfungstermin festlegen</h3><span class="col-xs-4">');
-        //$mform->addElement('button', 'resetdatetime', get_string("resetDateTime", "mod_exammanagement"));
-        $mform->addElement('html', '</span></div>');
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('set_date_time', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
+
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setDateTime'));
+
         $mform->addElement('date_time_selector', 'examtime', '');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

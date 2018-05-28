@@ -22,10 +22,13 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_exammanagement\general;
+
+use mod_exammanagement\forms\exammanagementForms;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-
-use mod_exammanagement;
+require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -33,11 +36,29 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$resetdatetime  = optional_param('resetdatetime', 0, PARAM_RAW);
 
-$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+$MoodleObj = Moodle::getInstance($id, $e);
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 
-if($p->checkCapability('mod/exammanagement:viewinstance')){
-    $p->outputDateTimePage();
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+
+      if ($resetdatetime){
+
+        $ExammanagementInstanceObj->moduleinstance->examtime = NULL;
+
+        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum zurückgesetzt', 'success');
+      }
+
+  		$MoodleObj->setPage('set_date_time');
+  		$MoodleObj-> outputPageHeader();
+  		$ExammanagementFormsObj->buildDateTimeForm();
+
+  		$MoodleObj->outputFooter();
 } else {
-    $p->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

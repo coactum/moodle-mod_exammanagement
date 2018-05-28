@@ -25,255 +25,416 @@
 
 {{#js}}
 
-showMore = function() {
+toogleHelptextPanel = function(){
+		$('.helptextpanel').slideToggle("slow");
+		$('.helptextpanel-icon').toggle();
+};
 
-			helptextboxcontent = jQuery.find('.helptextboxcontent');
-			helptextboxcontentheight = jQuery(helptextboxcontent).outerHeight();
+tooglePhase = function(phase){
+		$(phase).slideToggle("slow");
+		$(phase+'_maximize').toggle();
+		$(phase+'_minimize').toggle();
+};
 
-			helptextbox = jQuery.find('.helptextbox');
-			jQuery(helptextbox).css({
-			      "height": jQuery(helptextbox).height(),
-			      "max-height": 9999
-			    })
-			    .animate({
-			      "height": helptextboxcontentheight
-			    });
+ajaxtoogleInformation = function(command, value){
 
+		$('.loadable').toggle();
 
-			readMore = jQuery.find('.read-more');
-			jQuery(readMore).fadeOut();
-			return false;	    
-		};
-
-ajaxtoogle = function(command, value){
-    console.log(command, value);
-
-    if(command=='room'){
+		if(command=='room'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformrp': true, 'roomplacevisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value)},
             success: function(response) {
+							$('.roomVisible').toggle();
+							$('.roomNotVisible').toggle();
+							$('.loadable').toggle();
             },
             error: function(response) {
-              alert('Fehler beim Speichern.')
+							$('.loadable').toggle();
+							alert('Interner Fehler. Bitte erneut versuchen.')
+            }
+        });
+    } else if(command=='place'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(value)},
+            success: function(response) {
+							$('.placeVisible').toggle();
+							$('.placeNotVisible').toggle();
+							$('.loadable').toggle();
+            },
+            error: function(response) {
+							$('.loadable').toggle();
+							alert('Interner Fehler. Bitte erneut versuchen.')
             }
         });
     } else if(command=='datetime'){
         jQuery.ajax ({
             url: './view.php',
-            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(!value)},
+            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(value)},
             success: function(response) {
-            },
+							$('.datetimeVisible').toggle();
+							$('.datetimeNotVisible').toggle();
+							$('.loadable').toggle();
+						},
             error: function(response) {
-              alert('Fehler beim Speichern.')
+							$('.loadable').toggle();
+              alert('Interner Fehler. Bitte erneut versuchen.')
             }
         });
     }
-}
+};
 
 {{/js}}
 
    <div class="container-fluid">
-      <div class="alert alert-info alert-dismissible fade in" role="alert">
-          <div class="helptextbox">
-    		      <div class="helptextboxcontent">
-                  <div class="row">
-                      <h4 class="alert-heading col-xs-11">{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
-                      <button type="button" class="close col-xs-1" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
-                  <hr>
-                  <p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>
-                  <p class="read-more"><a href="#" onclick="return showMore()" class="button">Mehr lesen</a></p>
-              </div>
-          </div>
-      </div>
+			<div class="row">
+				<h4 class="m-y-1 col-xs-10">{{#str}}overview, mod_exammanagement{{/str}}</h4>
+				<span class="m-y-1 col-xs-2"><a type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<span class="helptextpanel helptextpanel-arrow collapse"></span>
+			</div>
 
-      <h4 class="m-y-1">{{#str}}overview, mod_exammanagement{{/str}}</h4>
+			<div class="panel panel-info helptextpanel collapse">
+					<div class="panel-heading">
+							<h4>{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
+					</div>
+					<div class="panel-body">
+						<p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
+					</div>
+					<div class="panel-footer">
+						<p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>
+					</div>
+			</div>
 
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}
           <li class="item" id="beforeexam">
             {{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
-            <div class="card">
-              <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Vor der Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_one" aria-expanded="false" aria-controls="phase_one">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+            <div class="panel panel-primary mainpanel">
+              <div class="panel-heading">
+								<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_one'); return true;">
+		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
+		                <span class="{{#firstphasecompleted}}collapse{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#firstphasecompleted}}collapse.show{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+								</a>
+							</div>
                 {{#firstphasecompleted}}<div class="collapse phase_one">{{/firstphasecompleted}}
                 {{^firstphasecompleted}}<div class="collapse.show phase_one">{{/firstphasecompleted}}
-                    <div class="card-text">
+                    <div class="panel-body">
                       <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-building-o" aria-hidden="true"></i> <a href="chooseRooms.php?id={{cmid}}">Räume auswählen</a>
-                              </div>
-                              <div class="card-text">
-                                {{#rooms}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Räume: {{rooms}} <i class="fa fa-building-o" aria-hidden="true"></i></p>{{/rooms}}
-                                {{^rooms}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-calendar" aria-hidden="true"></i> <a href="set_date_time.php?id={{cmid}}">Datum und Zeit festlegen</a>
-                              </div>
-                              <div class="card-text m-l-1">
-                                {{#hrexamtime}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/hrexamtime}}
-                                {{^hrexamtime}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-users" aria-hidden="true"></i> <a href="addParticipants.php?id={{cmid}}">Teilnehmer hinzufügen</a>
-                              </div>
-                              <div class="card-text">
-                                {{#participants}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Prüfungsteilnehmer: {{participants}} <i class="fa fa-users" aria-hidden="true"></i></p>{{/participants}}
-                                {{^participants}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-tasks" aria-hidden="true"></i> <a>Aufgaben konfigurieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                              </div>
-                              <div class="card-text">
-                                <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Aufgaben konfiguriert.</p>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="row row-eq-height">
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-align-justify" aria-hidden="true"></i> <a href="textfield.php?id={{cmid}}">Freitextfeld bearbeiten (optional)</a>
-                              </div>
-                              <div class="card-text">
-                                {{#textfield}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> {{textfield}}</p>{{/textfield}}
-                                {{^textfield}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card col-md-6">
-                            <div class="card-body">
-                              <div class="card-header m-b-1">
-                                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="groupmessages.php?id={{cmid}}">Nachricht an Teilnehmer schreiben (optional)</a>
-                              </div>
-                              <div class="card-text">
-                                <p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmer versendet werden.</p>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
+												<div class="col-xs-6">
+													<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Prüfungsräume</h3>
+																<span class="statebar col-xs-6">
+																		{{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#rooms}}<p> Es wurden bereits die folgenden <strong> {{rooms}} Räume </strong> ausgewählt: <strong>{{roomnames}}</strong></p>{{/rooms}}
+																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Prüfungsdatum</h3>
+																<span class="statebar col-xs-6">
+																		{{#hrexamtime}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		{{^hrexamtime}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#hrexamtime}}<p> Die Prüfung findet am <strong> {{hrexamtime}} </strong> statt.</p>{{/hrexamtime}}
+															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="set_date_time.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row row-eq-height">
+												<div class="col-xs-6">
+													<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Prüfungsteilnehmer</h3>
+																<span class="statebar col-xs-6">
+																	{{#participants}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	{{^participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#participants}}<p> Zur Prüfung sind <strong> {{participants}} Teilnehmerinnen und Teilnehmer </strong> angemeldet.</p>{{/participants}}
+																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="addParticipants.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Prüfungsaufgaben</h3>
+																<span class="statebar col-xs-6">
+																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#taskcount}}<p> Es wurden bereits <strong> {{taskcount}} Prüfungsaufgaben </strong> mit insgesamt <strong>{{tasktotalpoints}} Punkten </strong> angelegt.</p>{{/taskcount}}
+															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row row-eq-height">
+												<div class="col-xs-6">
+													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}{{#participants}}panel-warning{{/participants}}{{/textfield}}{{^textfield}}{{^participants}}panel-danger{{/participants}}{{/textfield}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Freitextfeld</h3>
+																<span class="statebar col-xs-6">
+																	{{#textfield}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	{{^textfield}}{{#participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
+																	{{^textfield}}{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#textfield}}<p> Im Textfeld steht folgender Inhalt: {{textfield}}</p>{{/textfield}}
+																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
+														</div>
+														<div class="panel-footer">
+															{{#participants}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-warning{{/textfield}} pull-right" href="textfield.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Nachricht an Teilnehmer</h3>
+																<span class="statebar col-xs-6">
+																	{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer versendet werden.</p>
+														</div>
+														<div class="panel-footer">
+															{{#participants}}<a class="btn btn-primary pull-right" href="groupmessages.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+														</div>
+													</div>
+												</div>
+											</div>
                     </div>
                 </div>
-              </div>
             </div>
           </li>
           {{!for_exam}}
           <li class="item" id="forexam">
             {{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
-            <div class="card">
-              <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Für die Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_two" aria-expanded="false" aria-controls="phase_two">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+						<div class="panel panel-primary mainpanel">
+								<div class="panel-heading">
+									<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_two'); return true;">
+											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
+											<span class="{{#firstphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{/firstphasecompleted}}{{#firstphasecompleted}}{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{/firstphasecompleted}}{{^firstphasecompleted}}collapse{{/firstphasecompleted}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+											<span class="{{#firstphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}}{{/firstphasecompleted}}{{#firstphasecompleted}}{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{/firstphasecompleted}}{{^firstphasecompleted}}collapse.show{{/firstphasecompleted}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+									</a>
+								</div>
                 {{#secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}
                 {{#firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse.show phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
                 {{^firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse phase_two">{{/secondphasecompleted}}{{/firstphasecompleted}}
-                    <div class="card-text">
-                    <div class="row row-eq-height">
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-refresh" aria-hidden="true"></i> <a href="assignPlaces.php?id={{cmid}}">Sitzplätze automatisch zuweisen</a>
-                            </div>
-                            <div class="card-text">
-                              {{#stateofplacescorrect}}<p><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i> Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
-                              {{#stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
-                              {{^stateofplacescorrect}}{{^stateofplaceserror}}<p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
-                            </div>
-                          </div>
+                    <div class="panel-body">
+                    	<div class="row row-eq-height">
+                        <div class="col-xs-6">
+														<div class="panel {{#stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}">
+															<div class="panel-heading">
+																<div class="row">
+																	<h3 class="panel-title col-xs-6">Automatische Sitzplatzzuweisung</h3>
+																	<span class="statebar col-xs-6">
+																			{{#stateofplacescorrect}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{#participants}}{{#rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{^participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{#participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{^participants}}{{#rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																	</span>
+																</div>
+															</div>
+															<div class="panel-body">
+																{{#stateofplacescorrect}}<p>Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
+																{{#stateofplaceserror}}<p>Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
+																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
+															</div>
+															<div class="panel-footer">
+																{{#participants}}{{#rooms}}<a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  hidden-md-up" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
+															</div>
+														</div>
                         </div>
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Sitzplan exportieren (optional)</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
-                            </div>
-                          </div>
-                        </div>
+												<div class="col-xs-6">
+													<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Sitzplan</h3>
+																<span class="statebar col-xs-6">
+																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+														</div>
+														<div class="panel-footer">
+															{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}export_seatingplan, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_seatingplan, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+														</div>
+													</div>
+												</div>
                     </div>
                     <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogle('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>
-                              <span class="exammanagement-showInformationText"> Datum und Zeit für Teilnehmer sichtbar schalten (optional)</span>
-                            </div>
-                            <div class="card-text">
-                              {{#datetimevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/datetimevisible}}
-                              {{^datetimevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/datetimevisible}}
-                            </div>
-                          </div>
-                      </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-barcode" aria-hidden="true"></i> <a>Prüfungsetiketten exportieren (optional)</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
-                          </div>
-                        </div>
-                      </div>
+											<div class="col-xs-6">
+												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Sichtbarkeit des Prüfungsdatums</h3>
+															<span class="statebar col-xs-6">
+																{{#hrexamtime}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+																<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																{{^hrexamtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														{{#datetimevisible}}
+																<p class="datetimeVisible collapse.show">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeNotVisible collapse">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+														{{/datetimevisible}}
+														{{^datetimevisible}}
+																<p class="datetimeVisible collapse">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeNotVisible collapse.show">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+														{{/datetimevisible}}
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-6">
+												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Prüfungsetiketten</h3>
+															<span class="statebar col-xs-6">
+																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+													</div>
+												</div>
+											</div>
                     </div>
                     <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <label class="exammanagement-switch" title="Informationen sichtbar schalten"><input type="checkbox" name="roomplacevisible" value="1" onclick="ajaxtoogle('room', jQuery(this).prop('checked')); return true"  {{#roomplacevisible}}checked {{/roomplacevisible}}><span class="exammanagement-slider round"></span></label>
-                              <span class="exammanagement-showInformationText"> Räume und Sitzplätze für Teilnehmer sichtbar schalten (optional)</span>
-                            </div>
-                            <div class="card-text">
-                              {{#roomplacevisible}}<p>Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>{{/roomplacevisible}}
-                              {{^roomplacevisible}}<p>Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</span></p>{{/roomplacevisible}}
-                            </div>
-                          </div>
-                      </div>
-                      <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Teilnehmerlisten exportieren (optional) <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
-                            </div>
-                            <div class="card-footer">
-                              <div class="row"><a class="btn btn-info col-sm-4">Name</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4">Sitzplatz</a></div>
-                            </div>
-                          </div>
-                      </div>
+											<div class="col-xs-6">
+												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Sichtbarkeit der Prüfungsräume und Sitzplätze</h3>
+															<span class="statebar col-xs-6">
+																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														<div class="row">
+																<div class="col-xs-6">
+																		<div class="row">
+																				<strong class="col-xs-6">Prüfungsräume</strong>
+																				<span class="col-xs-6">
+																					{{#stateofplacescorrect}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
+																					<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																				</span>
+																		</div>
+																		{{#roomvisible}}
+																				<p class="roomVisible collapse.show">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="roomNotVisible collapse">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																		{{/roomvisible}}
+																		{{^roomvisible}}
+																				<p class="roomNotVisible collapse.show">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="roomVisible collapse">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
+																		{{/roomvisible}}
+																</div>
+																<div class="col-xs-6">
+																		<div class="row">
+																					<strong class="col-xs-8">Sitzplätze</strong>
+																					<span class="col-xs-4">
+																						{{#stateofplacescorrect}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
+																						<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																					</span>
+																		</div>
+																		{{#placevisible}}
+																				<p class="placeVisible collapse.show">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																		{{/placevisible}}
+																		{{^placevisible}}
+																				<p class="placeNotVisible collapse.show">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeVisible collapse">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																		{{/placevisible}}
+																</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-6">
+												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Teilnehmerlisten</h3>
+															<span class="statebar col-xs-6">
+																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														{{#stateofplacescorrect}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+													</div>
+												</div>
+											</div>
                     </div>
                   </div>
               </div>
@@ -282,77 +443,136 @@ ajaxtoogle = function(command, value){
           {{!exam}}
           <li class="item">
             <i class="fa fa-fw" aria-hidden="true"></i>
-            <div class="card">
-              <div class="card-block">
-                <div class="row">
-                    <h4 class="card-title col-sm-6">Prüfungstermin:</h4>
-                    <span class="col-sm-6">
-                      {{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
-                      {{#hrexamtime}}{{#roomnames}} | {{/roomnames}}{{/hrexamtime}}
-                      {{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
-                      {{^hrexamtime}}{{^roomnames}}<p class="card-title">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
-                    </span>
-                </div>
-              </div>
+						<div class="panel panel-primary mainpanel">
+							<div class="panel-heading">
+								<a type="button" aria-expanded="false" onclick="tooglePhase('.examappointment'); return true;">
+										<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}:</h4>
+										<span class="{{#secondphasecompleted}}collapse.show{{/secondphasecompleted}}{{^secondphasecompleted}}collapse{{/secondphasecompleted}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#secondphasecompleted}}collapse{{/secondphasecompleted}}{{^secondphasecompleted}}collapse.show{{/secondphasecompleted}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+								</a>
+							</div>
+							{{#firstphasecompleted}}{{#secondphasecompleted}}<div class="collapse.show examappointment">{{/secondphasecompleted}}{{/firstphasecompleted}}
+							{{^firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse examappointment">{{/secondphasecompleted}}{{/firstphasecompleted}}
+							{{#firstphasecompleted}}{{^secondphasecompleted}}<div class="collapse examappointment">{{/secondphasecompleted}}{{/firstphasecompleted}}
+							{{^firstphasecompleted}}{{#secondphasecompleted}}<div class="collapse examappointment">{{/secondphasecompleted}}{{/firstphasecompleted}}
+		              <div class="panel-body row">
+											<div class="col-xs-6">
+													{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
+											</div>
+											<div class="col-xs-1">
+													{{#hrexamtime}}{{#roomnames}}|{{/roomnames}}{{/hrexamtime}}
+		                  </div>
+											<div class="col-xs-5">
+													<span class="pull-right">
+														{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
+													</span>
+											</div>
+											{{^hrexamtime}}{{^roomnames}}<p class="col-xs-12 text-xs-center">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
+		              </div>
+							</div>
             </div>
           </li>
           {{!after_grading}}
           <li class="item" id="aftercorrection">
             {{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
             {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
-            <div class="card">
-              <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Nach der Korrektur</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_three" aria-expanded="false" aria-controls="phase_three">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+						<div class="panel panel-primary mainpanel">
+								<div class="panel-heading">
+									<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_three'); return true;">
+											<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
+											<span class="{{#thirdphasecompleted}}collapse.show{{/thirdphasecompleted}}{{^thirdphasecompleted}}collapse{{/thirdphasecompleted}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+											<span class="{{#thirdphasecompleted}}collapse{{/thirdphasecompleted}}{{^thirdphasecompleted}}collapse.show{{/thirdphasecompleted}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+									</a>
+								</div>
                 {{#thirdphasecompleted}}<div class="collapse.show phase_three">{{/thirdphasecompleted}}
                 {{^thirdphasecompleted}}<div class="collapse phase_three">{{/thirdphasecompleted}}
-                  <div class="card-text">
+                  <div class="panel-body">
                     <div class="row row-eq-height">
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-plus" aria-hidden="true"></i> <a>Bonuspunkte importieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Bonuspunkte importiert.</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-key" aria-hidden="true"></i> <a>Notenschlüßel konfigurieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurde noch kein Notenschlüßel konfiguriert.</p>
-                            </div>
-                          </div>
+                        <div class="col-xs-6">
+														<div class="panel panel-danger">
+															<div class="panel-heading">
+																<div class="row">
+																	<h3 class="panel-title col-xs-6">Bonuspunkte</h3>
+																	<span class="statebar col-xs-6">
+																		<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<span class="label label-danger pull-right" title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																		</span>
+																	</span>
+																</div>
+															</div>
+															<div class="panel-body">
+																	<p>Es wurden noch keine Bonuspunkte importiert.</p>
+															</div>
+															<div class="panel-footer">
+																<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a> -->
+															</div>
+														</div>
+											</div>
+											<div class="col-xs-6">
+													<div class="panel {{^gradingscale}}panel-info{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Notenschlüßel</h3>
+																<span class="statebar col-xs-6">
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																{{#gradingscale}}<p>Es wurde bereits ein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
+																{{^gradingscale}}<p>Es wurde noch kein Notenschlüßel konfiguriert.</p>{{/gradingscale}}
+														</div>
+														<div class="panel-footer">
+															<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>
+														</div>
+													</div>
                         </div>
                     </div>
-                    <div class="row row-eq-height">
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-pencil" aria-hidden="true"></i> <a>Prüfungsergebnisse eingeben</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p><i class="fa fa-lg fa-exclamation-triangle text-warning"></i> Es wurden noch keine Prüfungsergebnisse eingetragen.</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card col-md-6">
-                          <div class="card-body">
-                            <div class="card-header m-b-1">
-                              <i class="fa fa-binoculars" aria-hidden="true"></i> <a>Eingegebene Ergebnisse prüfen (optional)</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                            </div>
-                            <div class="card-text">
-                              <p> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
-                            </div>
-                          </div>
+										<div class="row row-eq-height">
+                        <div class="col-xs-6">
+														<div class="panel panel-danger">
+															<div class="panel-heading">
+																<div class="row">
+																	<h3 class="panel-title col-xs-6">Prüfungsergebnisse</h3>
+																	<span class="statebar col-xs-6">
+																			<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																			{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
+																			<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
+																					<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																			</span>
+																	</span>
+																</div>
+															</div>
+															<div class="panel-body">
+																	<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>
+															</div>
+															<div class="panel-footer">
+																<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a> -->
+															</div>
+														</div>
+											</div>
+											<div class="col-xs-6">
+													<div class="panel panel-danger">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Ergebnisübersicht</h3>
+																<span class="statebar col-xs-6">
+																	<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																			<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
+																					<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																	</span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																<p> Hier können bereits eingegebene Prüfungsergebnisse geprüft sowie verändert werden.</p>
+														</div>
+														<div class="panel-footer">
+															<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a> -->
+														</div>
+													</div>
                         </div>
                     </div>
                   </div>
@@ -363,85 +583,124 @@ ajaxtoogle = function(command, value){
           <li class="item" id="afterexam">
             {{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
             {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
-            <div class="card">
-              <div class="card-block">
-                <div class="row">
-                  <h4 class="card-title col-xs-11">Nach der Prüfung</h4>
-                  <a type="button" class="close col-xs-1" data-toggle="collapse" data-target=".phase_four" aria-expanded="false" aria-controls="phase_four">
-                      <span data-toggle="tooltip" title="Phase öffnen / schließen" aria-label="Maximieren und Minimieren"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                  </a>
-                </div>
+						<div class="panel panel-primary mainpanel">
+							<div class="panel-heading">
+								<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_four'); return true;">
+										<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
+										<span class="{{#fourthphasecompleted}}collapse.show{{/fourthphasecompleted}}{{^fourthphasecompleted}}collapse{{/fourthphasecompleted}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+										<span class="{{#fourthphasecompleted}}collapse{{/fourthphasecompleted}}{{^fourthphasecompleted}}collapse.show{{/fourthphasecompleted}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+								</a>
+							</div>
                 {{#fourthphasecompleted}}<div class="collapse.show phase_four">{{/fourthphasecompleted}}
                 {{^fourthphasecompleted}}<div class="collapse phase_four">{{/fourthphasecompleted}}
-                <div class="card-text">
+                <div class="panel-body">
                   <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Punkte für Klausureinsicht als PDF exportieren</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
-                          </div>
-                        </div>
+                      <div class="col-xs-6">
+												<div class="panel panel-danger">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
+															<span class="statebar col-xs-6">
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
+													</div>
+												</div>
                       </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Ergebnisse mit Prozentangaben als PDF exportieren</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
-                          </div>
-                        </div>
+                      <div class="col-xs-6">
+												<div class="panel panel-danger">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Ergebnisse mit Prozentangaben</h3>
+															<span class="statebar col-xs-6">
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+														<p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
+													</div>
+												</div>
                       </div>
                   </div>
                   <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-download" aria-hidden="true"></i> Ergebnisse und Statistik exportieren <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
-                          </div>
-                          <div class="card-footer">
-                            <div class="row"><a class="btn btn-info col-sm-4"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a></div>
-                          </div>
-                        </div>
+                      <div class="col-xs-6">
+												<div class="panel panel-danger">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-8">Ergebnisse und Statistik</h3>
+															<span class="statebar col-xs-4">
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+															<p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
+													</div>
+												</div>
                       </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <a>Ergebnisse für das Prüfungsamt exportieren</a> <i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
-                          </div>
-                          <div class="card-footer">
-                            <div class="row"><a class="btn btn-info col-sm-4"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</a><p class=col-sm-4></p><a class="btn btn-info col-sm-4"><i class="fa fa-file-text-o" aria-hidden="true"></i> Text</a></div>
-                          </div>
-                        </div>
+                      <div class="col-xs-6">
+												<div class="panel panel-danger">
+													<div class="panel-heading">
+														<div class="row">
+															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>
+															<span class="statebar col-xs-6">
+																<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
+																		<span class="label label-danger pull-right" title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																</span>
+															</span>
+														</div>
+													</div>
+													<div class="panel-body">
+															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
+													</div>
+													<div class="panel-footer">
+														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
+													</div>
+												</div>
                       </div>
                   </div>
-                  <div class="row row-eq-height">
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-text">
-                          </div>
-                        </div>
+												<div class="panel panel-danger">
+													<div class="panel-heading">
+															<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
+															<span class="statebar">
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<span class="label label-danger pull-right" style="position: relative;bottom: 15px;" title="Derzeit in Entwicklung">
+																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																</span>
+															</span>
+													</div>
+													<div class="panel-body">
+															<p>Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
+													</div>
+													<div class="panel-footer text-xs-center">
+														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}delete_examdata, mod_exammanagement{{/str}}</span><i class="fa fa-trash hidden-md-up" aria-hidden="true" title="{{#str}}delete_examdata, mod_exammanagement{{/str}}"></i></a> -->
+													</div>
                       </div>
-                      <div class="card col-md-6">
-                        <div class="card-body">
-                          <div class="card-header m-b-1">
-                            <i class="fa fa-trash" aria-hidden="true"></i> <a>Prüfungsdaten löschen</a><i class="fa fa-times text-error pull-right"> Befindet sich derzeit in der Entwicklung.</i>
-                          </div>
-                          <div class="card-text">
-                            <p><i class="fa fa-check-circle text-danger" aria-hidden="true"></i> Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
                 </div>
               </div>
             </div>

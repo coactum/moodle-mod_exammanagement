@@ -22,10 +22,15 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ namespace mod_exammanagement\general;
+
+use mod_exammanagement\output\exammanagement_overview;
+use mod_exammanagement\output\exammanagement_participantsview;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
-use mod_exammanagement;
+require_once(__DIR__.'/classes/output/exammanagement_overview.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -35,29 +40,89 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 // relevant if called from itself and information is set visible for users
 $datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
-
-$roomplacevisible = optional_param('roomplacevisible', 0, PARAM_RAW);
+$roomvisible = optional_param('roomvisible', 0, PARAM_RAW);
+$placevisible = optional_param('placevisible', 0, PARAM_RAW);
 
 $calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
+$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
+$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
 
-$calledfromformrp = optional_param('calledfromformrp', 0, PARAM_RAW);
+global $PAGE, $CFG;
 
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-//$p = new \mod_exammanagement\general\exammanagementInstance($id, $e);
+$MoodleObj = Moodle::getInstance($id, $e);
 
-$p=\mod_exammanagement\general\exammanagementInstance::getInstance($id,$e);
+$MoodleDBObj = MoodleDB::getInstance();
 
-if ($p->checkCapability('mod/exammanagement:viewinstance')||($p->checkCapability('mod/exammanagement:viewparticipantspage')&&$p->checkCapability('mod/exammanagement:viewinstance'))){
-    $p->outputOverviewPage($calledfromformdt, $datetimevisible, $calledfromformrp, $roomplacevisible);
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teacher
 
-} elseif ($p->checkCapability('mod/exammanagement:viewparticipantspage')&&(!$p->checkCapability('mod/exammanagement:viewinstance'))){
-    $p->outputParticipantsView();
+  if($calledfromformdt){ // saveDateTime
+
+  			$ExammanagementInstanceObj->moduleinstance->datetimevisible = $datetimevisible;
+
+  			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+  			$MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+
+  } elseif($calledfromformroom){ // saveRoom
+
+     $ExammanagementInstanceObj->moduleinstance->roomvisible = $roomvisible;
+
+     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+     $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+  }
+
+  elseif($calledfromformplace){ // savePlace
+
+     $ExammanagementInstanceObj->moduleinstance->placevisible = $placevisible;
+
+     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+     $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+  }
+
+  $MoodleObj->setPage('view');
+  $MoodleObj-> outputPageHeader();
+
+  //rendering and displaying content
+  $output = $PAGE->get_renderer('mod_exammanagement');
+  $page = new exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getTaskCount(), $ExammanagementInstanceObj->getTaskTotalPoints(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomVisible(),$ExammanagementInstanceObj->isPlaceVisible(), $ExammanagementInstanceObj->getGradingscale());
+  echo $output->render($page);
+
+  //$this->debugElementsOverview();
+
+  $MoodleObj->outputFooter();
+
+} elseif ($MoodleObj->checkCapability('mod/exammanagement:viewparticipantspage')){ // student view
+
+  //require_capability('mod/exammanagement:viewparticipantspage', $ExammanagementInstanceObj->getModulecontext());
+
+  $MoodleObj->setPage('view');
+  $MoodleObj-> outputPageHeader();
+
+  //rendering and displaying content
+  $output = $PAGE->get_renderer('mod_exammanagement');
+  $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->isParticipant(), $ExammanagementInstanceObj->getDateForParticipants(), $ExammanagementInstanceObj->getTimeForParticipants(), $ExammanagementInstanceObj->getRoomForParticipants(), $ExammanagementInstanceObj->getPlaceForParticipants(), $ExammanagementInstanceObj->getTextFromTextfield());
+  echo $output->render($page);
+
+  $MoodleObj->outputFooter();
 
 } else{
     redirect ($CFG->wwwroot, 'Sie haben keine gültigen Rechte.', null, \core\output\notification::NOTIFY_ERROR);
 }
 
-$p->startEvent('view');
+$ExammanagementInstanceObj->startEvent('view');
+
+
+//for testing
+// global $SESSION;
+//
+// var_dump($SESSION);
+//
+// set_user_preference('helptexts','10011001');
+// var_dump(get_user_preferences());
 
 //#####################################################################
 //old (from plugin template), now in class (exammanagementIsnatnce.php)
