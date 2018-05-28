@@ -55,12 +55,13 @@ class exammanagement_overview implements renderable, templatable {
 	protected $datetimevisible;
 	protected $roomvisible;
   protected $placevisible;
+  protected $gradingscale;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -77,6 +78,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->datetimevisible = $datetimevisible;
         $this->roomvisible = $roomvisible;
         $this->placevisible = $placevisible;
+        $this->gradingscale = $gradingscale;
     }
 
     /**
@@ -104,6 +106,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->datetimevisible = $this->datetimevisible;
         $data->roomvisible = $this->roomvisible;
         $data->placevisible = $this->placevisible;
+        $data->gradingscale = $this->gradingscale;
         return $data;
     }
 

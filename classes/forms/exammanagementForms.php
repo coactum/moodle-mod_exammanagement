@@ -160,6 +160,10 @@ class exammanagementForms{
 			$moodleuseridsarray = array();
 			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
 
+			if(!$savedParticipantsArray){
+					$savedParticipantsArray = array();
+			}
+
 			if (!$excel_file && !$paul_file){
 				//saveParticipants in DB
 				$participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
@@ -365,7 +369,6 @@ class exammanagementForms{
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-			var_dump($fromform);
 			$ExammanagementInstanceObj->saveGradingscale($fromform);
 
 		} else {

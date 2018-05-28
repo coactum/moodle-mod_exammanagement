@@ -56,7 +56,6 @@ class configureGradingscaleForm extends moodleform {
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureGradingscale'));
 
         $mform->addElement('html', '<h3>'.get_string('configure_gradingscale_str', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.$totalpoints.'</strong></span></div>');
 
         if (!$gradingscale){
           $gradingscale = array(
@@ -74,12 +73,9 @@ class configureGradingscaleForm extends moodleform {
         }
 
         //add labels for grading steps
-        var_dump($gradingscale);
-
         $mform->addElement('html', '<div class="row"><p class="col-xs-1"></p>');
 
         foreach($gradingscale as $key => $points){
-            var_dump($key);
             $mform->addElement('html', '<strong class="col-xs-1">'.$key.'</strong>');
         }
 
@@ -89,7 +85,6 @@ class configureGradingscaleForm extends moodleform {
         $mform->addElement('html', '<div class="row"><p class="col-xs-1"></p>');
 
         foreach($gradingscale as $key => $points){
-            var_dump($points);
 
             $key_2 = str_replace('.', '', $key);
 
@@ -104,6 +99,8 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
+
+        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.$totalpoints.'</strong></span></div>');
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
 

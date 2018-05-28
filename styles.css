@@ -1,4 +1,4 @@
-/* exammanagement_overview.mustache - helptextpanel triangle */
+/* exammanagement_overview.mustache - helptextpanel triangle
 
 .helptextpanel-arrow {
   width: 0;
@@ -9,7 +9,7 @@
   position: absolute;
   right: 32px;
   top: 86px;
-}
+}*/
 
 /* exammanagement_overview.mustache - timeline */
 *::before{
@@ -148,8 +148,9 @@
   height: 18px;
 }
 
-/* Hide default HTML checkbox */
+/* Hide default HTML checkbox
 .exammanagement-switch input {display:none;}
+*/
 
 /* The slider */
 .exammanagement-slider {
@@ -199,7 +200,7 @@ input:checked + .exammanagement-slider:before {
   border-radius: 50%;
 }
 
-.helptextbox{
+/*.helptextbox{
   max-height: 100px;
   position: relative;
   overflow: hidden;
@@ -215,6 +216,8 @@ input:checked + .exammanagement-slider:before {
     padding: 100px 0 0px;
     background-image: linear-gradient(to bottom, transparent, #d9edf7);
 }
+
+*/
 
 /* copied from bootstrap */
 
