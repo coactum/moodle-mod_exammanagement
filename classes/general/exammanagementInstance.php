@@ -1085,7 +1085,12 @@ public function checkIfValidMatrNr($mnr) {
 	public function getGradingscale(){
 
 			$gradingscale = json_decode($this->moduleinstance->gradingscale);
-			return $gradingscale;
+
+			if($gradingscale){
+					return $gradingscale;
+			} else{
+				return false;
+			}
 	}
 
 	########### Export PDFS ####
