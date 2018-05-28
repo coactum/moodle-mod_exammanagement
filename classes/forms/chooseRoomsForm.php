@@ -52,22 +52,27 @@ class chooseRoomsForm extends moodleform {
 
     $mform = $this->_form; // Don't forget the underscore!
 
-    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addRooms'));
-
     $mform->addElement('hidden', 'id', 'dummy');
     $mform->setType('id', PARAM_INT);
 
     $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
-    $mform->addElement('html', '<h3 class="choose">Räume auswählen</h3>');
-    $mform->addElement('html', '<h3 class="import">Neue Räume hinzufügen</h3>');
+    $mform->addElement('html', '<h3 class="choose">Räume auswählen</h3></div>');
+    $mform->addElement('html', '<a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
 
-    $mform->addElement('html', '</div><div class="col-xs-6"><button type="button" id="switch_mode_rooms" class="btn btn-primary" title="Umschalten zwischen Raumwahl und -import"><span class="import">Raumwahl</span><span class="choose">Neue Räume hinzufügen</span></button>');
+    //$mform->addElement('html', '<h3 class="import">Neue Räume hinzufügen</h3>');
 
     if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-      $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary import" title="Standardräume importieren"><span>Standardräume importieren</span></a>');
+      $mform->addElement('html', '<div class="col-xs-4"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary pull-right" title="Standardräume importieren"><span>Standardräume importieren</span></a></div>');
     }
 
-    $mform->addElement('html', '</div></div><p class="choose">Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p><p class="import">Sie können zudem selbst neue Räume in die Liste der verfügbaren Prüfungsräume aufnehmen.</p>');
+    $mform->addElement('html', '</div>');
+
+    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addRooms'));
+
+    //$mform->addElement('html', '</div><div class="col-xs-6"><button type="button" id="switch_mode_rooms" class="btn btn-primary" title="Umschalten zwischen Raumwahl und -import"><span class="import">Raumwahl</span><span class="choose">Neue Räume hinzufügen</span></button>');
+
+    $mform->addElement('html', '<p class="choose">Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p>');
+    //$mform->addElement('html', '<p class="import">Sie können zudem selbst neue Räume in die Liste der verfügbaren Prüfungsräume aufnehmen.</p>');
 
     ###### chooseRooms ######
     $mform->addElement('html', '<div class="choose exammanagement-rooms"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-3"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div></div>');
@@ -91,7 +96,7 @@ class chooseRoomsForm extends moodleform {
 
           $svgStr = base64_decode($roomObj->seatingplan);
 
-          $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="svg hidden">'.$svgStr.'</div>');
+          $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="svg collapse">'.$svgStr.'</div>');
 
         } else {
           $mform->addElement('html', ' Nein ');
@@ -125,11 +130,11 @@ class chooseRoomsForm extends moodleform {
 
     ###### import Rooms from File ######
 
-    $maxbytes=$CFG->maxbytes;
+    //$maxbytes=$CFG->maxbytes;
 
-    $mform->addElement('html', '<div class="import"><h4>Excel-Datei</h4><i class="fa fa-times text-error"> Diese Funktion befindet sich derzeit in der Entwicklung.</i>');
-    $mform->addElement('filepicker', 'userfile', 'Räume aus Excel-Datei als Standardräume importieren (...).', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
-    $mform->addElement('html', '</div>');
+    //$mform->addElement('html', '<div class="import"><h4>Excel-Datei</h4><i class="fa fa-times text-error"> Diese Funktion befindet sich derzeit in der Entwicklung.</i>');
+    //$mform->addElement('filepicker', 'userfile', 'Räume aus Excel-Datei als Standardräume importieren (...).', null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv'));
+    //$mform->addElement('html', '</div>');
 
   }
 

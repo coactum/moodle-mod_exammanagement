@@ -51,12 +51,12 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('html', '<div class="row"><div class="col-xs-8">');
+        $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
         $mform->addElement('html', '<h3 class="viewparticipants collapse.show">'.get_string("view_participants", "mod_exammanagement").'</h3>');
         $mform->addElement('html', '<h3 class="importparticipants collapse">'.get_string("import_participants", "mod_exammanagement").'</h3>');
-        $mform->addElement('html', '<a type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
+        $mform->addElement('html', '</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
 
-        $mform->addElement('html', '</div><div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'">'.get_string("import_participants", "mod_exammanagement").'</button><button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'">'.get_string("view_participants", "mod_exammanagement").'</button></div></div>');
+        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'">'.get_string("import_participants", "mod_exammanagement").'</button><button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'">'.get_string("view_participants", "mod_exammanagement").'</button></div></div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
@@ -113,8 +113,8 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('html', '<div class="importparticipants collapse"><h4>'.get_string("paul_file", "mod_exammanagement").'</h4>');
         $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
 
-        $mform->addElement('html', '<h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
-        $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
+        //$mform->addElement('html', '<h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
+        //$mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
 
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 

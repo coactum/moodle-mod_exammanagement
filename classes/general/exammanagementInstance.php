@@ -671,18 +671,6 @@ EOF;
 
 	}
 
-	public function resetDateTime(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		$this->moduleinstance->examtime = NULL;
-
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-		$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich zurückgesetzt', 'success');
-	}
-
 ######### feature: addParticipants ##########
 
 public function checkIfValidMatrNr($mnr) {

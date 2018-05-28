@@ -40,6 +40,8 @@ class configureGradingscaleForm extends moodleform {
 
         global $PAGE;
 
+        $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
+
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -53,9 +55,13 @@ class configureGradingscaleForm extends moodleform {
           $totalpoints = 0;
         }
 
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configure_gradingscale_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
+
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureGradingscale'));
 
-        $mform->addElement('html', '<h3>'.get_string('configure_gradingscale_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.$totalpoints.'</strong></span></div>');
 
         if (!$gradingscale){
           $gradingscale = array(
@@ -99,10 +105,6 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
-
-        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.$totalpoints.'</strong></span></div>');
-
-        $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
 
         $this->add_action_buttons();
 

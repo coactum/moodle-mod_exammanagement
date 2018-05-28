@@ -43,14 +43,18 @@ class configureTasksForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureTasks'));
 
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
- 		    $mform->addElement('html', '<h3>'.get_string('configure_tasks_str', 'mod_exammanagement').'</h3>');
- 		    $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configure_tasks_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
+
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureTasks'));
+
+        $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
         //group for add and remove tasks buttons
         $tasks_buttonarray = array();

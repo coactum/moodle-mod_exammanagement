@@ -47,16 +47,19 @@ class groupmessagesForm extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('add_text_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
 
-     	  $mform->addElement('html', '<h3>Nachrichtentext hinzufügen</h3>');
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
 
      	  $participantsCount = $ExammanagementInstanceObj->getParticipantsCount();
 
  		if($participantsCount){
 
 			$mform->addElement('html', '<p>Der unten eingegebene Text wird allen <strong>'.$participantsCount.'</strong> zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.</p>');
-			$mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
+
+      $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
 			$mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);

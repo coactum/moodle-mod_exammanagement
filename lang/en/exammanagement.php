@@ -68,7 +68,7 @@ $string['export_as_paultext'] = 'Export text file';
 $string['delete_examdata'] = 'Delete exam data';
 
 //dateTimeForm.php
-$string['resetDateTime'] = 'Reset appointment';
+$string['set_date_time'] = 'Set exam date and time';
 
 //addParticipantsForm.php
 $string['view_participants'] = 'View participants';
@@ -96,6 +96,15 @@ $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
 $string['total'] = 'Total';
+
+//textfield.php
+$string['add_text_str'] = 'Add textfield';
+$string['add_text_text'] = 'All text added below will be immediately displayed to the participants in their view.';
+
+//groupmessagesForm.php
+$string['groupmessages_str'] = 'Add Messagetext';
+$string['groupmessages_text_1'] = 'An email with the text added below will be send to all';
+$string['groupmessages_text_2'] = ' participants of the exam.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';

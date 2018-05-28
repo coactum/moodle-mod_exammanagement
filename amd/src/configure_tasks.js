@@ -63,8 +63,8 @@ define(['jquery'], function($) {
         temp += pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[';
         temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
-        $(".form-group:nth-of-type(4) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
-        $(".form-group:nth-of-type(5) .col-md-9").append(temp);
+        $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
+        $(".form-group:nth-of-type(6) .col-md-9").append(temp);
 
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
@@ -77,8 +77,8 @@ define(['jquery'], function($) {
         var taskcount = getTaskCount();
 
         if (taskcount > 1) {
-          $(".form-group:nth-of-type(4) .col-md-9 span:last").remove();
-          $(".form-group:nth-of-type(5) .col-md-9 .form-group:last").remove();
+          $(".form-group:nth-of-type(5) .col-md-9 span:last").remove();
+          $(".form-group:nth-of-type(6) .col-md-9 .form-group:last").remove();
 
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);

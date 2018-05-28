@@ -41,10 +41,15 @@ class textfieldForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('add_text_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '</div>');
+
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setTextfield'));
 
- 		    $mform->addElement('html', '<h3>Freitext hinzufügen</h3>');
- 		    $mform->addElement('html', '<p>Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.</p>');
+ 		    $mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
+
  		    $mform->addElement('editor', 'textfield', '');
 		    $mform->setType('textfield', PARAM_RAW);
 

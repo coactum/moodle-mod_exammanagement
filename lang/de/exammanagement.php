@@ -68,7 +68,7 @@ $string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
 $string['delete_examdata'] = 'Prüfungsdaten löschen';
 
 //dateTimeForm.php
-$string['resetDateTime'] = 'Datum und Zeit zurücksetzen';
+$string['set_date_time'] = 'Prüfungstermin festlegen';
 
 //addParticipantsForm.php
 $string['view_participants'] = 'Teilnehmer ansehen';
@@ -96,6 +96,15 @@ $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
 $string['points'] = 'Punkte';
 $string['total'] = 'Summe';
+
+//textfield.php
+$string['add_text_str'] = 'Freitext hinzufügen';
+$string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.';
+
+//groupmessagesForm.php
+$string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
+$string['groupmessages_text_1'] = 'Der unten eingegebene Text wird allen ';
+$string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
@@ -167,7 +176,7 @@ $string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und de
 Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren universitären E-Mail-Account geschickt und können so z. B. einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
-$string['helptext_configureGradingscale']= 'Hier kan der Notenschlüßel konfiguriert werden ...';
+$string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
