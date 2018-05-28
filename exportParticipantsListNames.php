@@ -165,7 +165,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("participantslist_names", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '' . $ExammanagementInstanceObj->getCourse()->fullname.'.pdf';
+    $filenameUmlaute = get_string("participantslist_names", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname.'.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------

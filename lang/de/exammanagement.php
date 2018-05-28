@@ -188,7 +188,7 @@ $string['modulenameplural'] = 'Prüfungsorganisationen';
 $string['pluginname'] = 'Prüfungsorganisation';
 
 //addnewinstance
-$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfache online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
+$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
