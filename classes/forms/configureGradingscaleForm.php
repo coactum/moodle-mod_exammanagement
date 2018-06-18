@@ -65,16 +65,16 @@ class configureGradingscaleForm extends moodleform {
 
         if (!$gradingscale){
           $gradingscale = array(
-          "1.0" => $totalpoints,
-          "1.3" => round($totalpoints/1.1),
-          "1.7" => round($totalpoints/1.2),
-          "2.0" => round($totalpoints/1.3),
-          "2.3" => round($totalpoints/1.4),
-          "2.7" => round($totalpoints/1.5),
-          "3.0" => round( $totalpoints/1.6),
-          "3.3" => round($totalpoints/1.7),
-          "3.7" => round($totalpoints/1.8),
-          "4.0" => round($totalpoints/2),
+          "1.0" => 0,
+          "1.3" => 0,
+          "1.7" => 0,
+          "2.0" => 0,
+          "2.3" => 0,
+          "2.7" => 0,
+          "3.0" => 0,
+          "3.3" => 0,
+          "3.7" => 0,
+          "4.0" => 0,
           );
         }
 

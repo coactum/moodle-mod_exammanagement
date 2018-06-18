@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -34,6 +35,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/Moodle.php');
 
 class addParticipantsForm extends moodleform{
 
@@ -42,6 +44,7 @@ class addParticipantsForm extends moodleform{
         global $PAGE, $CFG;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_participants', 'switch_mode_participants'); //call jquery for switching between course import and import from file
@@ -56,7 +59,14 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('html', '<h3 class="importparticipants collapse">'.get_string("import_participants", "mod_exammanagement").'</h3>');
         $mform->addElement('html', '</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
 
-        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'">'.get_string("import_participants", "mod_exammanagement").'</button><button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'">'.get_string("view_participants", "mod_exammanagement").'</button></div></div>');
+        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'">'.get_string("import_participants", "mod_exammanagement").'</button>');
+        $mform->addElement('html', '<button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'">'.get_string("view_participants", "mod_exammanagement").'</button>');
+
+        if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
+            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("import_course_participants", "mod_exammanagement").'">'.get_string("import_course_participants", "mod_exammanagement").'</a>');
+        }
+
+        $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
@@ -115,7 +125,7 @@ class addParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<div class="hidden"><h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
         $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
-        $mform->addElement('html', '</div>');        
+        $mform->addElement('html', '</div>');
 
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 

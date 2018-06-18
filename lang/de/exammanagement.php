@@ -73,6 +73,7 @@ $string['set_date_time'] = 'Prüfungstermin festlegen';
 //addParticipantsForm.php
 $string['view_participants'] = 'Teilnehmer ansehen';
 $string['import_participants'] = 'Teilnehmer hinzufügen';
+$string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
 $string['add_participants_from_file'] = 'Teilnehmer aus einer Datei zur Prüfung hinzufügen.';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
 $string['participants'] = 'Teilnehmer';
