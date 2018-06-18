@@ -25,6 +25,7 @@
 namespace mod_exammanagement\ldap;
 
 use mod_exammanagement\general\MoodleDB; // only for testing without real ldap!
+use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -120,6 +121,28 @@ public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testin
 		$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
 
 		return $moodleuserid;
+}
+
+public function getIMTLogin2MatriculationNumberTest($userid){ // only for testing without real ldap!
+		require_once(__DIR__.'/../general/exammanagementInstance.php');
+
+		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		$user = $exammanagementInstanceObj->getMoodleUser($userid);
+
+		// constructing test MatrN., later needs to be readed from csv-File
+
+		$matrNr = 70 . $user->id;;
+
+		$array = str_split($user->firstname);
+
+		$matrNr .= ord($array[0]);
+		$matrNr .= ord($array[2]);
+
+		$matrNr = substr($matrNr, 0, 6);
+
+		return $matrNr;
+
 }
 
 	// public function matriculationNumber2firstName($matNr){

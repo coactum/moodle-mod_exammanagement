@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
 use mod_exammanagement\event\course_module_viewed;
+use mod_exammanagement\ldap\ldapManager;
 use context_module;
 use stdClass;
 use core\message\message;
@@ -710,7 +711,6 @@ public function checkIfValidMatrNr($mnr) {
 					if ($participants!="null"){
 							$this->moduleinstance->participants = $participants;
 							$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
-							$this->moduleinstance->userinformation = $this->setUsersInformationPO($participantsArr);
 					}
 
 					$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
@@ -815,21 +815,17 @@ public function checkIfValidMatrNr($mnr) {
 
 	public function getUserMatrNrPO($userid){
 
-		$usersinformation = json_decode($this->getUsersInformationPO());
+		require_once(__DIR__.'/../ldap/ldapManager.php');
 
-		$userMatrNr = '-';
+		$ldapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
-		if ($usersinformation){
-			foreach($usersinformation as $key => $user){
-					if ($user->moodleid == $userid){
-							$userMatrNr = $user->matrNr;
-					}
+		$userMatrNr = $ldapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
 
-			}
+		if($userMatrNr){
+			return $userMatrNr;
+		} else {
+			return '-';
 		}
-
-		return $userMatrNr;
-
 	}
 
 	public function getParticipantsGroupNames($userid){
@@ -853,53 +849,6 @@ public function checkIfValidMatrNr($mnr) {
 
 		return $groupNameStr;
 
-	}
-
-	public function assignMatrNrToUser($userid){
-
-			$user = $this->getMoodleUser($userid); // for temp matrNr
-
-			// constructing test MatrN., later needs to be readed from csv-File
-
-			$matrNr = 70 . $user->id;;
-
-			$array = str_split($user->firstname);
-
-			$matrNr .= ord($array[0]);
-			$matrNr .= ord($array[2]);
-
-			$matrNr = substr($matrNr, 0, 6);
-
-			return $matrNr;
-
-	}
-
-	public function getUsersInformationPO(){
-			$usersinformation = $this->moduleinstance->userinformation;
-			return $usersinformation;
-	}
-
-
-	public function setUsersInformationPO($participantsArray){ //needs Array of moodle ids at the moment, later other mapping neccessary
-			$usersInformationArray = array();
-
-			foreach($participantsArray as $key => $participantID){
-
-					array_push($usersInformationArray, $this->setUserInformationPO($participantID, $this->assignMatrNrToUser($participantID)));
-
-			}
-
-			$usersInformation = json_encode($usersInformationArray);
-
-			return $usersInformation;
-
-	}
-
-	public function setUserInformationPO($uid, $matrNr){
-			$user = new stdClass;
-			 $user->moodleid = $uid;
-			 $user->matrNr = $matrNr;
-			return $user;
 	}
 
 	######### feature: configure tasks ##########

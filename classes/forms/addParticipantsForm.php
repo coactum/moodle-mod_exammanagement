@@ -59,11 +59,12 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('html', '<h3 class="importparticipants collapse">'.get_string("import_participants", "mod_exammanagement").'</h3>');
         $mform->addElement('html', '</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
 
-        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'">'.get_string("import_participants", "mod_exammanagement").'</button>');
-        $mform->addElement('html', '<button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'">'.get_string("view_participants", "mod_exammanagement").'</button>');
+        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></button>');
+        $mform->addElement('html', '<button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("view_participants", "mod_exammanagement").'</span><i class="fa fa-search hidden-md-up" aria-hidden="true"></i></button>');
+
 
         if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
-            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("import_course_participants", "mod_exammanagement").'">'.get_string("import_course_participants", "mod_exammanagement").'</a>');
+            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');

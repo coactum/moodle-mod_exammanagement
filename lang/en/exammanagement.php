@@ -67,6 +67,9 @@ $string['export_as_excel'] = 'Export excel file';
 $string['export_as_paultext'] = 'Export text file';
 $string['delete_examdata'] = 'Delete exam data';
 
+//chooseRoomsForm.php
+$string['import_default_rooms'] = 'Import default rooms';
+
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
 

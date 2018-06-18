@@ -67,6 +67,9 @@ $string['export_as_excel'] = 'Excel-Dokument exportieren';
 $string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
 $string['delete_examdata'] = 'Prüfungsdaten löschen';
 
+//chooseRoomsForm.php
+$string['import_default_rooms'] = 'Standardräume importieren';
+
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
 

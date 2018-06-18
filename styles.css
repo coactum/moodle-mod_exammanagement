@@ -148,9 +148,11 @@
   height: 18px;
 }
 
-/* Hide default HTML checkbox
-.exammanagement-switch input {display:none;}
-*/
+/* Hide default HTML checkbox */
+.exammanagement-switch input {
+  display: none;
+}
+
 
 /* The slider */
 .exammanagement-slider {
