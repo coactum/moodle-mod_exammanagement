@@ -76,6 +76,7 @@ $string['import_participants'] = 'Import participants';
 $string['import_course_participants'] = 'Import participants from course';
 $string['add_participants_from_file'] = 'Add participants from file to the exam.';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
+$string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
@@ -89,6 +90,7 @@ $string['no_participants_added'] = 'No participants added.';
 $string['read_file'] = 'Read file';
 $string['state_added_to_exam'] = 'Participants of exam';
 $string['state_temporary'] = 'Temporary';
+$string['state_courseparticipant'] = 'Participants of course';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';
@@ -143,6 +145,7 @@ $string['helptext_overview']= 'Here goes the description of this feature site.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
+$string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';

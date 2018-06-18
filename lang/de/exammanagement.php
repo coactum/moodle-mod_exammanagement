@@ -76,6 +76,7 @@ $string['import_participants'] = 'Teilnehmer hinzufügen';
 $string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
 $string['add_participants_from_file'] = 'Teilnehmer aus einer Datei zur Prüfung hinzufügen.';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
+$string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
 $string['participants'] = 'Teilnehmer';
 $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
@@ -89,6 +90,7 @@ $string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung 
 $string['read_file'] = 'Datei einlesen';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
 $string['state_temporary'] = 'Temporär eingelesen';
+$string['state_courseparticipant'] = 'Kursteilnehmer';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Aufgaben konfigurieren';
@@ -167,6 +169,7 @@ Das Hinzufügen von TeilnehmerInnen ist der wichtigste Arbeitsschritt in der Pr�
 <ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation sinnvoll nutzen zu können müssen hier alle an der Prüfung teilnehmende Studierende als Prüfungsteilnehmer hinzugefügt werden.
 <li>Werden neue TeilnehmerInnen zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li></ul>
 <strong>Achtung:</strong> Wenn es bei der Erstellung der Instanz nicht explizit ausgewählt wurde sind nicht automatisch alle KursteilnehmerInnen in PANDA auch Prüfungsteilnehmer. Diese müssen hier manuell hinzugefügt werden damit die Prüfungsorganisation funktioniert.';
+$string['helptext_addCourseParticipants']= 'Hier können die Kursteilnehmer importiert werden ...';
 $string['helptext_configureTasks']= 'Hier können Aufgaben gesetzt werden ...';
 $string['helptext_setTextfield']= 'Hier kann ein beliebiger <strong>Freitext</strong> für die Prüfung eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Ansicht angezeigt wird. <br /> <br />
 Auf diese Weise können den PrüfungsteilnehmerInnen etwa unkompliziert Hinweise zu den in der Prüfung erlaubten Hilfsmitteln mitgeteilt werden. Neben einfachen Texten können dabei auch komplexere Elemente wie etwa Bilder oder (soweit von Moodle unterstützt) sogar Formeln verwendet werden. <br /> <br />

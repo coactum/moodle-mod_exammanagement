@@ -719,23 +719,19 @@ public function checkIfValidMatrNr($mnr) {
 			}
 	}
 
-	// public function getCourseParticipantsIDs($format){ //not used at the moment
-	// 		$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams'); //sorted by last Name
-	// 		$CourseParticipantsID;
-	//
-	// 		foreach ($CourseParticipants as $key => $value){
-	// 			$temp=get_object_vars($value);
-	// 			$CourseParticipantsID[$key] = $temp['id'];
-	// 		}
-	//
-	// 		if ($format=='String'){
-	// 			$CourseParticipantsID = implode(',', $CourseParticipantsID);
-	// 		}
-	//
-	// 		return $CourseParticipantsID;
-	//
-	//
-	// }
+	public function getCourseParticipantsIDs(){
+			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
+			$CourseParticipantsIDsArray;
+
+			foreach ($CourseParticipants as $key => $value){
+				$temp=get_object_vars($value);
+				$CourseParticipantsIDsArray[$key] = $temp['id'];
+			}
+
+			return $CourseParticipantsIDsArray;
+
+
+	}
 
 	public function filterCheckedParticipants($obj){
 
