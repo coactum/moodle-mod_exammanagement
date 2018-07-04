@@ -199,7 +199,7 @@ $string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können S
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
-$string['pluginadministration'] = 'exam management administration';
+$string['pluginadministration'] = 'Administration der Prüfungsverwaltung';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';

@@ -26,6 +26,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-   // TODO: Define the plugin settings page.
-   // https://docs.moodle.org/dev/Admin_settings
+
+      $settings->add(new admin_setting_heading('mod_exammanagement/pluginname', '', new lang_string('pluginadministration', 'mod_exammanagement')));
+
+      // ...
+      $settings->add(new admin_setting_heading('auth_ldap/ldapserversettings',
+                new lang_string('auth_ldap_server_settings', 'auth_ldap'), ''));
+
+      // ...
+      $settings->add(new admin_setting_configtext('auth_ldap/host_url',
+                get_string('auth_ldap_host_url_key', 'auth_ldap'),
+                get_string('auth_ldap_host_url', 'auth_ldap'), '', PARAM_RAW_TRIMMED));
+
+      // ...
+      $settings->add(new admin_setting_button('auth_ldap/host_url',
+                  get_string('auth_ldap_host_url_key', 'auth_ldap'),
+                          get_string('auth_ldap_host_url', 'auth_ldap'), '', PARAM_RAW_TRIMMED));
 }

@@ -30,8 +30,6 @@ use mod_exammanagement\output\exammanagement_participantsview;
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
-require_once(__DIR__.'/classes/output/exammanagement_overview.php');
-
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
 
