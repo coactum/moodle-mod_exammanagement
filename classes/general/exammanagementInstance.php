@@ -632,7 +632,7 @@ EOF;
 		$tasks = $this->getTasks();
 
 		if($tasks){
-				$taskcount = count($tasks);
+				$taskcount = count((array)$tasks);
 				return $taskcount;
 		} else {
 				return false;
@@ -858,7 +858,14 @@ public function checkIfValidMatrNr($mnr) {
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			$tasks = json_encode($fromform->task);
+			$tasks = $fromform->task;
+
+			if($fromform->newtaskcount < 0){
+				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount);
+			}
+
+			$tasks = json_encode($tasks);
+
 			$this->moduleinstance->tasks=$tasks;
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);

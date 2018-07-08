@@ -35,20 +35,25 @@ class exammanagementForms{
 
 	protected $id;
 	protected $e;
+	protected $newtaskcount;
 
-	private function __construct($id, $e) {
+	private function __construct($id, $e, $newtaskcount) {
 		$this->id = $id;
 		$this->e = $e;
+
+		if($newtaskcount){
+				$this->newtaskcount = $newtaskcount;
+		}
 
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e){
+	public static function getInstance($id, $e, $newtaskcount){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new exammanagementForms($id, $e);
+				$inst = new exammanagementForms($id, $e, $newtaskcount);
 			}
 			return $inst;
 
@@ -284,7 +289,7 @@ class exammanagementForms{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate Textfield_form
-		$mform = new configureTasksForm(null, array('id'=>$this->id, 'e'=>$this->e));
+		$mform = new configureTasksForm(null, array('id'=>$this->id, 'e'=>$this->e, 'newtaskcount'=>$this->newtaskcount));
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -301,7 +306,6 @@ class exammanagementForms{
 		  // or on the first display of the form.
 
 		  //Set default data (if any)
-		  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
 		  $mform->set_data(array('id'=>$this->id));
 
 		  //displays the form

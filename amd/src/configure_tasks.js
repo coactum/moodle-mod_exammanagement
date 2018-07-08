@@ -68,6 +68,9 @@ define(['jquery'], function($) {
 
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
+
+        $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val())+1);
+
       });
     },
     removetask: function() {
@@ -82,6 +85,8 @@ define(['jquery'], function($) {
 
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
+
+          $("input[name=newtaskcount]").val($("input[name=newtaskcount]").val()-1);
         }
       });
     }
