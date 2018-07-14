@@ -52,10 +52,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
   			$roomObj->name = $roomParameters[1];
    			$roomObj->description = $roomParameters[2];
 
-  			$svgStr = base64_encode($roomParameters[3]);
+  			$svgStr = base64_encode($roomParameters[4]);
 
    			$roomObj->seatingplan = $svgStr;
-   			$roomObj->places = $roomParameters[4];
+   			$roomObj->places = $roomParameters[3];
   			$roomObj->type = 'defaultroom';
    			$roomObj->misc = NULL;
 

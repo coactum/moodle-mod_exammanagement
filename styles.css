@@ -127,7 +127,7 @@
 
 }
 
-#show:hover + .svg{
+#show:active + .svg{
  	display:block;
 }
 
