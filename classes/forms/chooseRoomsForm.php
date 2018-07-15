@@ -44,7 +44,8 @@ class chooseRoomsForm extends moodleform {
 
     global $PAGE, $CFG;
 
-    $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
+    $PAGE->requires->js_call_amd('mod_exammanagement/disable_doubleselection', 'disable_doubleselection'); //call jquery for disabling double selection of same rooms
+    //$PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
     $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -81,7 +82,7 @@ class chooseRoomsForm extends moodleform {
     $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
 
     $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-    $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
+    //$mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
     $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
     if ($allRoomIDs){
