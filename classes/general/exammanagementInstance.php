@@ -688,10 +688,18 @@ public function checkIfValidMatrNr($mnr) {
 	}
 }
 
-	public function saveParticipants($participantsArr, $mode){
+	public function saveParticipants($participantsArr, $mode, $badmatriculationnumbersArr=''){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			if ($mode == 'tmp'){
+					if ($badmatriculationnumbersArr){
+							array_push($participantsArr, $badmatriculationnumbersArr);
+					} else {
+							array_push($participantsArr, 'null');
+					}
+			}
 
 			$participants = json_encode($participantsArr);
 

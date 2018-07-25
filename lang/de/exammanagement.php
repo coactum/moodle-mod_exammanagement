@@ -84,6 +84,7 @@ $string['participants'] = 'Teilnehmer';
 $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
 $string['import_state'] = 'Status';
+$string['badmatrnr'] = 'Die nachfolgenden Matrikelnummern sind ungültig und werden deshalb nicht zur Prüfung hinzugefügt.';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['excel_file'] = 'Excel-Datei';
 $string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
@@ -94,6 +95,7 @@ $string['read_file'] = 'Datei einlesen';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
 $string['state_temporary'] = 'Temporär eingelesen';
 $string['state_courseparticipant'] = 'Kursteilnehmer';
+$string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Aufgaben konfigurieren';

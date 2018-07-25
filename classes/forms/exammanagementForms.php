@@ -162,6 +162,7 @@ class exammanagementForms{
 			$excel_file = $mform->get_file_content('participantslist_excel');
 			$filecontentarray = array();
 			$matriculationnumbersarray = array();
+			$badmatriculationnumbersarray = array();
 			$moodleuseridsarray = array();
 			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
 
@@ -186,6 +187,7 @@ class exammanagementForms{
 
 				foreach ($matriculationnumbersarray as $key => $pmatrnr) { // Validate potential matrnr
 						if (!$ExammanagementInstanceObj->checkIfValidMatrNr($pmatrnr)){ //if not a valid matrnr
+								array_push($badmatriculationnumbersarray, $matriculationnumbersarray[$key]);
 								unset($matriculationnumbersarray[$key]);
 						}
 				}
@@ -195,8 +197,16 @@ class exammanagementForms{
 					 	$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 					 	if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 							array_push($moodleuseridsarray, $moodleuserid);
+							unset($matriculationnumbersarray[$key]);
 						}
 				 }
+
+				 // push all remaining matriculation numbers that could not be resolved by ldap into the $matriculationnumbersarray
+				 foreach($matriculationnumbersarray as $key => $matrnr){
+				 		array_push($badmatriculationnumbersarray, $matriculationnumbersarray[$key]);
+						unset($matriculationnumbersarray[$key]);
+					}
+
 
 			} else if($excel_file){
 				//$PHPExcelObj = PHPExcel_IOFactory::load($excel_file);
@@ -227,7 +237,7 @@ class exammanagementForms{
 					$moodleuseridsarray="null";
 			}
 
-			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp');
+			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray);
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

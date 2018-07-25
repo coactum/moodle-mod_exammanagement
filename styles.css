@@ -112,32 +112,6 @@
   flex-grow:1;
 }
 
-/* chooseRooms.php - SVG Overlay */
-.exammanagement-rooms .svg{
-	position:fixed;
-	top: 40%;
-	left: 40%;
-	width:350px;
-	height:350px;
-	background:white;
-	overflow: hidden;
-	z-index:1000;
-	display:none;
-	border: 2px solid black;
-
-}
-
-#show:active + .svg{
- 	display:block;
-}
-
-/* configureTasks.php - spacing between Tasknumbers */
-
-.task_spacing{
-  padding-left: 24.24px;
-  padding-right: 24.24px;
-}
-
 /* show information switches*/
 
  /* The switch - the box around the slider */
@@ -220,6 +194,38 @@ input:checked + .exammanagement-slider:before {
 }
 
 */
+
+/* addParticipantsForms.php - invalid matriculation numbers */
+.badmatrnr{
+    color: red;
+    font-weight: bold;
+}
+
+/* chooseRooms.php - SVG Overlay */
+.exammanagement-rooms .svg{
+	position:fixed;
+	top: 40%;
+	left: 40%;
+	width:350px;
+	height:350px;
+	background:white;
+	overflow: hidden;
+	z-index:1000;
+	display:none;
+	border: 2px solid black;
+
+}
+
+#show:active + .svg{
+ 	display:block;
+}
+
+/* configureTasks.php - spacing between Tasknumbers */
+
+.task_spacing{
+  padding-left: 24.24px;
+  padding-right: 24.24px;
+}
 
 /* copied from bootstrap */
 

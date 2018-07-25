@@ -84,6 +84,7 @@ $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
+$string['badmatrnr'] = 'The following numbers are invalid and will not be added to the exam.';
 $string['add_to_exam'] = 'Add to exam';
 $string['excel_file'] = 'Excel file';
 $string['import_from_excel_file'] = 'Import participants from excel file (matriculation number in any column) and add them to course.';
@@ -94,6 +95,7 @@ $string['read_file'] = 'Read file';
 $string['state_added_to_exam'] = 'Participants of exam';
 $string['state_temporary'] = 'Temporary';
 $string['state_courseparticipant'] = 'Participants of course';
+$string['state_badmatrnr'] = 'Bad matriculation number';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';
