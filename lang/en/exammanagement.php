@@ -118,6 +118,11 @@ $string['groupmessages_text_2'] = ' participants of the exam.';
 $string['configure_gradingscale_str'] = 'Configure grading scale';
 $string['configure_gradingscale_totalpoints'] = 'Number of total points';
 
+//inputResultsForm.php
+$string['input_results_str'] = 'Input exam results';
+$string['max_points'] = 'Maximum points';
+$string['save_and_next'] = 'Save and next';
+
 //participant list
 $string['participantslist'] = 'list of participants';
 $string['participantslist_names'] = 'list_of_participants_names)';
@@ -155,6 +160,7 @@ $string['helptext_configureTasks']= 'Here goes the description of this feature s
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 $string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
+$string['helptext_inputResults']= 'Here goes the description of this feature site.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';

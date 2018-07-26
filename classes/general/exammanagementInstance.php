@@ -299,19 +299,23 @@ EOF;
  	switch ($phase){
 
 			case 1:
-				if ($this->getRoomsCount() && $this->getExamtime() && $this->getParticipantsCount()){
+				if ($this->getRoomsCount() && $this->getExamtime() && $this->getParticipantsCount() && $this->getTaskTotalPoints()){
 					return true;
-					} else {
+				} else {
 						return false;
-					}
+				}
 			case 2:
 				if ($this->isStateOfPlacesCorrect()){
 					return true;
-					} else {
+				} else {
 						return false;
-					}
+				}
 			case 3:
-				return false;
+				if ($this->getInputResultsCount()){
+					return true;
+				} else {
+						return false;
+				}
 			case 4:
 				return false;
  		}
@@ -656,6 +660,21 @@ EOF;
 
 	}
 
+	public function getInputResultsCount(){
+
+		$results = $this->getResults();
+		$resultsCount = 0;
+
+		if($results){
+				foreach($results as $key => $points){
+						$resultsCount += 1;
+					}
+				return $resultsCount;
+		} else {
+				return false;
+		}
+
+	}
 
 	############## feature: setDateTime #########
 
@@ -1026,7 +1045,7 @@ public function checkIfValidMatrNr($mnr) {
 
 	}
 
-	######### feature: configure tasks ##########
+	######### feature: configure gradingscale ##########
 
 	public function saveGradingscale($fromform){
 
@@ -1053,6 +1072,33 @@ public function checkIfValidMatrNr($mnr) {
 			}
 	}
 
+######### feature: configure gradingscale ##########
+
+public function saveResults($fromform){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+		$results = json_encode($fromform->$results);
+		$this->moduleinstance->results=$results;
+
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+
+		redirect (getExammanagementUrl('inputResults', $this->id), 'Ergebnis gespeichert', null, notification::NOTIFY_SUCCESS);
+
+}
+
+public function getResults(){
+
+		$results = json_decode($this->moduleinstance->results);
+
+		if($results){
+				return $results;
+		} else{
+			return false;
+		}
+}
 	########### Export PDFS ####
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object

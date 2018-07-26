@@ -196,7 +196,7 @@ ajaxtoogleInformation = function(command, value){
 																<span class="statebar col-xs-6">
 																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
 																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -531,25 +531,24 @@ ajaxtoogleInformation = function(command, value){
                     </div>
 										<div class="row row-eq-height">
                         <div class="col-xs-6">
-														<div class="panel panel-danger">
+														<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}panel-warning{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}{{^taskcount}}panel-danger{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}">
 															<div class="panel-heading">
 																<div class="row">
 																	<h3 class="panel-title col-xs-6">Prüfungsergebnisse</h3>
 																	<span class="statebar col-xs-6">
-																			<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																			{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
-																			<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																					<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
-																			</span>
+																		{{#resultscount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																		{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		{{^resultscount}}{{^stateofplacescorrect}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</div>
 															</div>
 															<div class="panel-body">
-																	<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>
+																{{#resultscount}}<p>Es wurden bisher {{resultscount}} Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
+																{{^resultscount}}<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
 															</div>
 															<div class="panel-footer">
-																<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a> -->
+																{{#stateofplacescorrect}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/stateofplacescorrect}}
 															</div>
 														</div>
 											</div>

@@ -118,6 +118,11 @@ $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als 
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
 $string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten ist';
 
+//inputResultsForm.php
+$string['input_results_str'] = 'Prüfungsergebnisse eintragen';
+$string['max_points'] = 'Maximale Punkte';
+$string['save_and_next'] = 'Speichern und zum Nächsten';
+
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
 $string['participantslist_names'] = 'Teilnehmerliste_Namen';
@@ -186,6 +191,7 @@ Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren univ
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
+$string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
