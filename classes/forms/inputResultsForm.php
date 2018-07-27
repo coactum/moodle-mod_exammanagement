@@ -50,7 +50,19 @@ class inputResultsForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('inputResults'));
 
+        //create input field for matrnr
+        $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
+
+        //create checkboxes for exams state
+        $mform->addElement('html', '<strong><p>'.get_string('exam_state', 'mod_exammanagement').'</p></strong>');
+
+        $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null, array('group' => 1));
+        $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
+        $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
+
         //create list of tasks
+        $mform->addElement('html', '<strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
+
         $tasks = $ExammanagementInstanceObj->getTasks();
         $totalpoints = 0;
 

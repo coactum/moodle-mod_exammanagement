@@ -120,6 +120,12 @@ $string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten
 
 //inputResultsForm.php
 $string['input_results_str'] = 'Prüfungsergebnisse eintragen';
+$string['matrnr_barcode'] = 'Barcode / Matrikelnummer';
+$string['exam_state'] = 'Prüfungsstatus';
+$string['exam_points'] = 'Prüfungspunkte';
+$string['not_participated'] = 'NT';
+$string['fraud_attempt'] = 'Betrugsversuch';
+$string['ill'] = 'Krank';
 $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
 
