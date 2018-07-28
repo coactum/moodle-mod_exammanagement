@@ -80,7 +80,7 @@ class inputResultsForm extends moodleform {
               array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$key.'</strong></span>'));
 
               //points of task
-              array_push($taskspoints_array, $mform->createElement('html', '<span class="task_spacing">'.$points.'</span>'));
+              array_push($taskspoints_array, $mform->createElement('html', '<span class="task_spacing_2">'.$points.'</span>'));
 
               //input field with exam result points
               array_push($points_array, $mform->createElement('text', 'points['.$key.']', '', $attributes));

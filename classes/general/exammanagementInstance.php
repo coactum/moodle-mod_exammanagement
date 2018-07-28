@@ -1078,15 +1078,36 @@ public function saveResults($fromform){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ldapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
-		$results = json_encode($fromform->$results);
-		$this->moduleinstance->results=$results;
+		$results = $this->getResults();
 
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		if(!$results){
+			$results = array();
+		}
 
+		$result = new stdClass();
 
-		redirect (getExammanagementUrl('inputResults', $this->id), 'Ergebnis gespeichert', null, notification::NOTIFY_SUCCESS);
+		$uid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 
+		if($uid){
+			$result->uid = $uid;
+			$result->state = $fromform->state;
+			$result->points = $fromform->points;
+
+			array_push($results, $result);
+
+			$results = json_encode($results);
+			$this->moduleinstance->results = $results;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ergebnis gespeichert', null, notification::NOTIFY_SUCCESS);
+
+		} else{
+			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);
+
+		}
 }
 
 public function getResults(){

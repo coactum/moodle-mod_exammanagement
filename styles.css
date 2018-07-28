@@ -220,11 +220,18 @@ input:checked + .exammanagement-slider:before {
  	display:block;
 }
 
-/* configureTasks.php - spacing between Tasknumbers */
+/* configureTasksForm.php - spacing between task numbers */
 
 .task_spacing{
   padding-left: 24.24px;
   padding-right: 24.24px;
+}
+
+/* inputResultsForm.php - spacing between max points */
+
+.task_spacing_2{
+  padding-left: 17.24px;
+  padding-right: 17.24px;
 }
 
 /* copied from bootstrap */
