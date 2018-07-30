@@ -230,8 +230,8 @@ input:checked + .exammanagement-slider:before {
 /* inputResultsForm.php - spacing between max points */
 
 .task_spacing_2{
-  padding-left: 17.24px;
-  padding-right: 17.24px;
+  padding-left: 19px;
+  padding-right: 19px;
 }
 
 /* copied from bootstrap */
