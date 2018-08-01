@@ -21,39 +21,63 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function($) {
+define(['jquery', 'core/notification'], function($) {
+
+  var getInputId = function (element){
+    var id = element.attr('id').split('_').pop();
+
+    return id;
+  };
 
   var getTotalpoints = function() {
     var totalpoints = 0;
-    var count = 0;
 
     $(".form-group input.form-control").each(function() {
-      if(count !=1){
-          count = 1;
-      } else {
+      if(getInputId($(this)) != "matrnr"){
           totalpoints += parseInt($(this).val());
       }
     });
 
     return totalpoints;
   };
+
   return {
     init: function() {
       $(".form-group").on("change", "input", function() {
-        $("#totalpoints").text(getTotalpoints());
+        if (getInputId($(this)) != "matrnr"){
+          var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
+
+          if (bad_input != -1){
+            $("#totalpoints").text(getTotalpoints());
+          } else {
+            $(this).val(0);
+
+            require(['core/notification'], function(notification) {
+             notification.addNotification({
+               message: "Ungültige Punktzahl",
+               type: "error"
+             });
+            });
+          }
+        }
       });
     },
     check_max_points: function() {
       $(".form-group").on("change", "input", function() {
 
-        var id = 'max_points_'+$(this).attr('id').split('_').pop();
-
-        if(id != "max_points_matrnr"){
+        var id = getInputId($(this));
+        if(id != "matrnr"){
           var current_points = parseInt($(this).val());
-          var max_points = parseInt($("#"+id).text());
+          var max_points = parseInt($("#"+"max_points_"+id).text());
 
           if(current_points > max_points){
             $(this).val(max_points);
+            require(['core/notification'], function(notification) {
+             notification.addNotification({
+               message: "Höchstpunktzahl überschritten",
+               type: "error"
+             });
+           });
           }
         }
       });
