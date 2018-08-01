@@ -16,7 +16,7 @@
 /**
  * functions for tracking changes of input fields, adding and removing tasks
  *
- * @module      mod_exammanagement/select_all_choices
+ * @module      mod_exammanagement/configure_tasks
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -46,7 +46,21 @@ define(['jquery'], function($) {
   return {
     init: function() {
       $(".form-group").on("change", "input", function() {
-        $("#totalpoints").text(getTotalpoints());
+
+        var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
+
+        if (bad_input != -1){
+          $("#totalpoints").text(getTotalpoints());
+        } else {
+          $(this).val(0);
+
+          require(['core/notification'], function(notification) {
+           notification.addNotification({
+             message: "Ungültige Punktzahl",
+             type: "error"
+           });
+          });
+        }
       });
     },
     addtask: function() {

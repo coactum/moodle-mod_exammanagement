@@ -41,6 +41,7 @@ class configureGradingscaleForm extends moodleform {
         global $PAGE;
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init'); //call jquery for tracking input value change events
 
         $mform = $this->_form; // Don't forget the underscore!
 
