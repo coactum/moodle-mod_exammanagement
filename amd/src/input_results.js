@@ -41,9 +41,73 @@ define(['jquery', 'core/notification'], function($) {
     return totalpoints;
   };
 
+  var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+  };
+
   return {
     init: function() {
+
+      $(".form-group input.form-control").each(function() {
+        if (getInputId($(this)) != "matrnr"){
+          $(this).prop( "disabled", true );
+        }
+      });
+      $(".form-group input.checkboxgroup1").each(function() {
+        $(this).prop( "disabled", true );
+      });
+      $("#id_submitbutton").each(function() {
+        $(this).prop( "disabled", true );
+      });
+
       $(".form-group").on("change", "input", function() {
+        if (getInputId($(this)) == "matrnr"){
+           var matrnr = $(this).val();
+           var id = getUrlParameter('id');
+           alert(matrnr);
+           alert(id);
+
+           location.href = "inputResults.php?id="+id+"?matrnr="+matrnr;
+
+            // $.ajax({
+            //    url: "ajaxCheckMatrNr.php?id="+id+"?matrnr="+matrnr,
+            //    cache: false,
+            //    success: function(result){
+            //
+            //      alert('testsuccess');
+            //      alert(result);
+            //
+            //      // input results from db if already entered
+            //
+            //      // enable form
+            //
+            //      $(".form-group input.form-control").each(function() {
+            //        if (getInputId($(this)) != "matrnr"){
+            //          $(this).prop( "disabled", false );
+            //        }
+            //      });
+            //      $(".form-group input.checkboxgroup1").each(function() {
+            //        $(this).prop( "disabled", false );
+            //      });
+            //      $("#id_submitbutton").each(function() {
+            //        $(this).prop( "disabled", false );
+            //      });
+            //
+            //    }
+            //  });
+        }
+
         if (getInputId($(this)) != "matrnr"){
           var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
 
