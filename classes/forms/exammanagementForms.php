@@ -435,13 +435,15 @@ class exammanagementForms{
 		}
 	}
 
-		public function buildInputResultsForm(){
+		public function buildInputResultsForm($matrnr){
 
 			//include form
 			require_once(__DIR__.'/inputResultsForm.php');
+			require_once(__DIR__.'/../ldap/ldapManager.php');
 
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
 			//Instantiate Textfield_form
 			$mform = new inputResultsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -460,9 +462,40 @@ class exammanagementForms{
 			  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			  // or on the first display of the form.
 
-			  //Set default data (if any)
-			  //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-			  $mform->set_data(array('id'=>$this->id));
+				if ($matrnr){
+					if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
+							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+
+							$participantsIds = json_decode($ExammanagementInstanceObj->moduleinstance->participants);
+
+							if(in_array($userid, $participantsIds)){
+								$results = json_decode($ExammanagementInstanceObj->moduleinstance->results);
+
+								foreach($results as $key => $resultObj){
+									if ($resultObj->uid == $userid){
+											$mform->set_data(array('id'=>$this->id, 'matrnr'=>$matrnr, 'state[nt]'=>$resultObj->state->nt, 'state[fa]'=>$resultObj->state->fa, 'state[ill]'=>$resultObj->state->ill));
+
+											foreach ($resultObj->points as $key=>$points){
+												$mform->set_data(array('points['.$key.']'=>$points));
+											}
+											break;
+									}
+								}
+								$mform->set_data(array('id'=>$this->id, 'matrnr'=>$matrnr));
+
+							} else {
+								$mform->set_data(array('id'=>$this->id));
+								\core\notification::add('Ungültige Matrikelnummer', 'error');
+							}
+					} else {
+						$mform->set_data(array('id'=>$this->id));
+						\core\notification::add('Keine gültige Matrikelnummer', 'error');
+
+					}
+				} else {
+						//Set default data (if any)
+						$mform->set_data(array('id'=>$this->id));
+				}
 
 			  //displays the form
 			  $mform->display();

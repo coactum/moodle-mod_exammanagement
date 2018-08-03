@@ -59,55 +59,59 @@ define(['jquery', 'core/notification'], function($) {
   return {
     init: function() {
 
-      $(".form-group input.form-control").each(function() {
-        if (getInputId($(this)) != "matrnr"){
+      var matrnr = $('#id_matrnr').val();
+
+      if(!matrnr){
+        $(".form-group input.form-control").each(function() {
+          if (getInputId($(this)) != "matrnr"){
+            $(this).prop( "disabled", true );
+          }
+        });
+        $(".form-group input.checkboxgroup1").each(function() {
           $(this).prop( "disabled", true );
-        }
-      });
+        });
+        $("#id_submitbutton").each(function() {
+          $(this).prop( "disabled", true );
+        });
+      } else {
+        $('#id_matrnr').prop( "disabled", true );
+      }
+
       $(".form-group input.checkboxgroup1").each(function() {
-        $(this).prop( "disabled", true );
+          if ($(this).prop('checked')){
+            $(".form-group input.form-control").each(function() {
+              if (getInputId($(this)) != "matrnr"){
+                $(this).prop( "disabled", true );
+              }
+            });
+          }
       });
-      $("#id_submitbutton").each(function() {
-        $(this).prop( "disabled", true );
+
+      $(":checkbox").change(function() {
+          var checked = false;
+
+          $(".form-group input.checkboxgroup1").each(function() {
+            if($(this).prop('checked')){
+                checked = true;
+            }
+          });
+
+          if (checked){
+            $(".form-group input.form-control").each(function() {
+              if (getInputId($(this)) != "matrnr"){
+                $(this).prop( "disabled", true );
+              }
+            });
+          } else {
+            $(".form-group input.form-control").each(function() {
+              if (getInputId($(this)) != "matrnr"){
+                $(this).prop( "disabled", false );
+              }
+            });
+          }
       });
 
       $(".form-group").on("change", "input", function() {
-        if (getInputId($(this)) == "matrnr"){
-           var matrnr = $(this).val();
-           var id = getUrlParameter('id');
-           alert(matrnr);
-           alert(id);
-
-           location.href = "inputResults.php?id="+id+"?matrnr="+matrnr;
-
-            // $.ajax({
-            //    url: "ajaxCheckMatrNr.php?id="+id+"?matrnr="+matrnr,
-            //    cache: false,
-            //    success: function(result){
-            //
-            //      alert('testsuccess');
-            //      alert(result);
-            //
-            //      // input results from db if already entered
-            //
-            //      // enable form
-            //
-            //      $(".form-group input.form-control").each(function() {
-            //        if (getInputId($(this)) != "matrnr"){
-            //          $(this).prop( "disabled", false );
-            //        }
-            //      });
-            //      $(".form-group input.checkboxgroup1").each(function() {
-            //        $(this).prop( "disabled", false );
-            //      });
-            //      $("#id_submitbutton").each(function() {
-            //        $(this).prop( "disabled", false );
-            //      });
-            //
-            //    }
-            //  });
-        }
-
         if (getInputId($(this)) != "matrnr"){
           var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
 
@@ -124,6 +128,28 @@ define(['jquery', 'core/notification'], function($) {
             });
           }
         }
+
+        $('#id_matrnr').blur(function() {
+
+           var matrnr = $(this).val();
+           var id = getUrlParameter('id');
+
+           location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
+        });
+      });
+
+      $("#totalpoints").text(getTotalpoints());
+
+      $('#id_submitbutton').click(function() {
+        $(".form-group input.form-control").each(function() {
+          $(this).prop( "disabled", false );
+        });
+        $(".form-group input.checkboxgroup1").each(function() {
+          $(this).prop( "disabled", false );
+        });
+        $("#id_submitbutton").each(function() {
+          $(this).prop( "disabled", false );
+        });
       });
     },
     check_max_points: function() {
