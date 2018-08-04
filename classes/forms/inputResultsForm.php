@@ -45,7 +45,6 @@ class inputResultsForm extends moodleform {
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init'); ////call jquery for tracking input value change events
-        $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'check_max_points'); //call jquery for checking that inputs can not be hihger than max points
 
         $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('input_results_str', 'mod_exammanagement').'</h3>');
         $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');

@@ -61,10 +61,12 @@ define(['jquery', 'core/notification'], function($) {
 
       var matrnr = $('#id_matrnr').val();
 
-      if(!matrnr){
+      if(!matrnr){ // initial disabling of complete form if no matrnr and set focus to matrnr
         $(".form-group input.form-control").each(function() {
           if (getInputId($(this)) != "matrnr"){
             $(this).prop( "disabled", true );
+          } else {
+            $(this).focus();
           }
         });
         $(".form-group input.checkboxgroup1").each(function() {
@@ -73,11 +75,11 @@ define(['jquery', 'core/notification'], function($) {
         $("#id_submitbutton").each(function() {
           $(this).prop( "disabled", true );
         });
-      } else {
+      } else { // initial disabling of field matrnr if it already exists
         $('#id_matrnr').prop( "disabled", true );
       }
 
-      $(".form-group input.checkboxgroup1").each(function() {
+      $(".form-group input.checkboxgroup1").each(function() { // initial disabling point fields if some checkbox is already checked
           if ($(this).prop('checked')){
             $(".form-group input.form-control").each(function() {
               if (getInputId($(this)) != "matrnr"){
@@ -87,23 +89,37 @@ define(['jquery', 'core/notification'], function($) {
           }
       });
 
-      $(":checkbox").change(function() {
+      $(":checkbox").change(function() { //if some checkbox is checked/unchecked
           var checked = false;
+          var changedId = $(this).prop('id'); // get id of changed checkbox
 
-          $(".form-group input.checkboxgroup1").each(function() {
+          $(".form-group input.checkboxgroup1").each(function() { // check if some checkbox is now checked
             if($(this).prop('checked')){
                 checked = true;
             }
           });
 
-          if (checked){
-            $(".form-group input.form-control").each(function() {
+          if (checked){ // if some checkbox is now checked: uncheck all other checkboxes
+            if (changedId == "id_state_nt"){
+                $('#id_state_fa').prop('checked', false);
+                $('#id_state_ill').prop('checked', false);
+            } else if (changedId == "id_state_fa"){
+                $('#id_state_nt').prop('checked', false);
+                $('#id_state_ill').prop('checked', false);
+            } else if (changedId == "id_state_ill"){
+                $('#id_state_nt').prop('checked', false);
+                $('#id_state_fa').prop('checked', false);
+            }
+
+            $(".form-group input.form-control").each(function() { // disable all point-fields and set their value to 0
               if (getInputId($(this)) != "matrnr"){
                 $(this).prop( "disabled", true );
+                $(this).val(0);
+
               }
             });
-          } else {
-            $(".form-group input.form-control").each(function() {
+          } else {  // if no checkbix is now checked
+            $(".form-group input.form-control").each(function() { // enable all point-fields
               if (getInputId($(this)) != "matrnr"){
                 $(this).prop( "disabled", false );
               }
@@ -111,8 +127,10 @@ define(['jquery', 'core/notification'], function($) {
           }
       });
 
-      $(".form-group").on("change", "input", function() {
-        if (getInputId($(this)) != "matrnr"){
+      $(".form-group").on("change", "input", function() { // if some input field changes
+        if (getInputId($(this)) != "matrnr"){ // and it is not the field for matrnr
+
+          // check for bad input
           var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
 
           if (bad_input != -1){
@@ -127,38 +145,10 @@ define(['jquery', 'core/notification'], function($) {
              });
             });
           }
-        }
 
-        $('#id_matrnr').blur(function() {
-
-           var matrnr = $(this).val();
-           var id = getUrlParameter('id');
-
-           location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
-        });
-      });
-
-      $("#totalpoints").text(getTotalpoints());
-
-      $('#id_submitbutton').click(function() {
-        $(".form-group input.form-control").each(function() {
-          $(this).prop( "disabled", false );
-        });
-        $(".form-group input.checkboxgroup1").each(function() {
-          $(this).prop( "disabled", false );
-        });
-        $("#id_submitbutton").each(function() {
-          $(this).prop( "disabled", false );
-        });
-      });
-    },
-    check_max_points: function() {
-      $(".form-group").on("change", "input", function() {
-
-        var id = getInputId($(this));
-        if(id != "matrnr"){
+          // check if max points are exceeded
           var current_points = parseInt($(this).val());
-          var max_points = parseInt($("#"+"max_points_"+id).text());
+          var max_points = parseInt($("#"+"max_points_" + getInputId($(this))).text());
 
           if(current_points > max_points){
             $(this).val(max_points);
@@ -170,6 +160,39 @@ define(['jquery', 'core/notification'], function($) {
            });
           }
         }
+
+        $('#id_matrnr').blur(function() { // reload page if matrnr is entered
+
+           var matrnr = $(this).val();
+           var id = getUrlParameter('id');
+
+           if (matrnr.match(/^\d+$/)){
+              location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
+           } else {
+             $(this).val('');
+             require(['core/notification'], function(notification) {
+              notification.addNotification({
+                message: "Keine gültiges Matrikelnummernformat",
+                type: "error"
+              });
+            });
+           }
+
+        });
+      });
+
+      $("#totalpoints").text(getTotalpoints()); // change totalpoints
+
+      $('#id_submitbutton').click(function() {  // if submittbutton is presses enable complete form (for moodle purposes)
+        $(".form-group input.form-control").each(function() {
+          $(this).prop( "disabled", false );
+        });
+        $(".form-group input.checkboxgroup1").each(function() {
+          $(this).prop( "disabled", false );
+        });
+        $("#id_submitbutton").each(function() {
+          $(this).prop( "disabled", false );
+        });
       });
     },
   };

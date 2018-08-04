@@ -1095,6 +1095,20 @@ public function saveResults($fromform){
 			$result->state = $fromform->state;
 			$result->points = $fromform->points;
 
+			foreach((array) $results as $key => $resultsObj){
+
+					var_dump($resultsObj);
+					var_dump('Gespeicherte UID:');
+					var_dump($resultsObj->uid);
+					var_dump('aktuelle UID:');
+					var_dump($uid);
+
+					if(intval($resultsObj->uid) == intval($uid)){
+						var_dump($results[$key]);
+						unset($results[$key]);
+					}
+			}
+
 			array_push($results, $result);
 
 			$results = json_encode($results);
