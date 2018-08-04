@@ -121,6 +121,7 @@ $string['configure_gradingscale_totalpoints'] = 'Number of total points';
 //inputResultsForm.php
 $string['input_results_str'] = 'Input exam results';
 $string['matrnr_barcode'] = 'Barcode / matriculation number';
+$string['participant'] = 'Participant';
 $string['exam_state'] = 'Exam state';
 $string['exam_points'] = 'Exam points';
 $string['not_participated'] = 'Not participated';
