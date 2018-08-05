@@ -69,7 +69,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
@@ -105,7 +105,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate dateTime_form
+		//Instantiate form
 		$mform = new dateTimeForm();
 
 		//Form processing and displaying is done here
@@ -146,7 +146,7 @@ class exammanagementForms{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
@@ -261,7 +261,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new addCourseParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
@@ -298,7 +298,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new configureTasksForm(null, array('id'=>$this->id, 'e'=>$this->e, 'newtaskcount'=>$this->newtaskcount));
 
 		//Form processing and displaying is done here
@@ -332,7 +332,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new textfieldForm();
 
 		//Form processing and displaying is done here
@@ -374,7 +374,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new groupmessagesForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
@@ -409,7 +409,7 @@ class exammanagementForms{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		//Instantiate Textfield_form
+		//Instantiate form
 		$mform = new configureGradingscaleForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
@@ -525,5 +525,35 @@ class exammanagementForms{
 			  $mform->display();
 			}
 	}
+
+	public function buildShowResultsForm(){
+
+		//include form
+		require_once(__DIR__.'/showResultsForm.php');
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate Form
+		$mform = new showResultsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+		} else {
+			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+			// or on the first display of the form.
+
+			$mform->set_data(array('id'=>$this->id));
+
+			//displays the form
+			$mform->display();
+		}
+}
 
 }

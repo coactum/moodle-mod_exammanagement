@@ -130,6 +130,16 @@ $string['ill'] = 'Krank';
 $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
 
+//showResultsForm.php
+$string['show_results_str'] = 'Übersicht Prüfungsergebnisse';
+$string['matriculation_number_short'] = 'Matr. Nr.';
+$string['result'] = 'Ergebnis';
+$string['cancel'] = 'Zurück zur Prüfungsorganisation';
+$string['nt'] = 'NT';
+$string['fa'] = 'Betrugsversuch';
+$string['ill'] = 'Krank';
+
+
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
 $string['participantslist_names'] = 'Teilnehmerliste_Namen';
@@ -199,6 +209,7 @@ Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
+$string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
