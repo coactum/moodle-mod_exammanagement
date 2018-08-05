@@ -1095,23 +1095,30 @@ public function saveResults($fromform){
 			$result->state = $fromform->state;
 			$result->points = $fromform->points;
 
-			foreach((array) $results as $key => $resultsObj){
+			$newResultsArr = array();
+			$i = 0;
+			$key_array = array($uid);
+			$newresult = true;
 
-					var_dump($resultsObj);
-					var_dump('Gespeicherte UID:');
-					var_dump($resultsObj->uid);
-					var_dump('aktuelle UID:');
-					var_dump($uid);
-
-					if(intval($resultsObj->uid) == intval($uid)){
-						var_dump($results[$key]);
-						unset($results[$key]);
+			foreach($results as $val) { // construct new results array and if new result already exists replace its old version with it
+		    	if (!in_array($val->uid, $key_array)) {
+				  		$newResultsArr[$i] = $val;
+				  } else if (in_array($val->uid, $key_array)){
+						$newResultsArr[$i] = $result;
+						$newresult = false;
 					}
+
+					$i++;
 			}
 
-			array_push($results, $result);
+			if($newresult){	//if result is not already entered
+				array_push($newResultsArr, $result);
+			}
+
+			$results = $newResultsArr;
 
 			$results = json_encode($results);
+
 			$this->moduleinstance->results = $results;
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
@@ -1129,7 +1136,7 @@ public function getResults(){
 		$results = json_decode($this->moduleinstance->results);
 
 		if($results){
-				return $results;
+				return (array) $results;
 		} else{
 			return false;
 		}
