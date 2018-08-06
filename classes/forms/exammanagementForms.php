@@ -452,7 +452,11 @@ class exammanagementForms{
 
 			if ($matrnr){
 				if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
-						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+
+						$ldapConnection = $LdapManagerObj->connect_ldap();
+						$userid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+
+						//$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);	
 
 						$participantsIds = json_decode($ExammanagementInstanceObj->moduleinstance->participants);
 
