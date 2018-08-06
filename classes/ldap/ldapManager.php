@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\ldap;
 
-use mod_exammanagement\general\MoodleDB; // only for testing without real ldap!
+use mod_exammanagement\general\MoodleDB;
 use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 
 defined('MOODLE_INTERNAL') || die();
@@ -118,6 +118,10 @@ class ldapManager{
 	}
 
 	public function studentid2uid($ldapConnection, $pStudentId){
+		require_once(__DIR__.'/../general/MoodleDB.php');
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
 			if (empty($pStudentId)) {
 					throw new Exception("No parameter given");
 			}
@@ -140,6 +144,9 @@ class ldapManager{
 	}
 
 	public function uid2studentid($ldapConnection, $moodleuserid){
+			require_once(__DIR__.'/../general/MoodleDB.php');
+
+			$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
 			$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $moodleuserid));
 
