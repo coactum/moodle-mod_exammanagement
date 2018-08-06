@@ -849,6 +849,7 @@ public function checkIfValidMatrNr($mnr) {
 		require_once(__DIR__.'/../ldap/ldapManager.php');
 
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$ldapConnection = $LdapManagerObj->connect_ldap();
 
 		if($LdapManagerObj->is_LDAP_config()){
 		 		$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $userid);
