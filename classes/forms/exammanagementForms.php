@@ -197,6 +197,7 @@ class exammanagementForms{
 				 foreach($matriculationnumbersarray as $key => $matrnr){
 
 					 if($LdapManagerObj->is_LDAP_config()){
+						 	var_dump($LdapManagerObj->is_LDAP_config());
 							 $ldapConnection = $LdapManagerObj->connect_ldap();
 							 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
 					 } else {
@@ -242,7 +243,7 @@ class exammanagementForms{
 
 			// reload page with participants for final user confirmation and saving
 			if(!$moodleuseridsarray){
-					$moodleuseridsarray="null";
+					$moodleuseridsarray = NULL;
 			}
 
 			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray);

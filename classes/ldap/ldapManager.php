@@ -165,7 +165,7 @@ class ldapManager{
 					throw new Exception("No parameter given");
 			}
 
-			$dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
 			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $pUId . "))";
 
 			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));

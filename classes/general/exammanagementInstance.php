@@ -712,11 +712,15 @@ public function checkIfValidMatrNr($mnr) {
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
+			if(!$participantsArr){
+				$participantsArr = array();
+			}
+
 			if ($mode == 'tmp'){
 					if ($badmatriculationnumbersArr){
 							array_push($participantsArr, $badmatriculationnumbersArr);
 					} else {
-							array_push($participantsArr, 'null');
+							array_push($participantsArr, NULL);
 					}
 			}
 
@@ -725,7 +729,7 @@ public function checkIfValidMatrNr($mnr) {
 			if ($mode == 'tmp'){
 						$this->moduleinstance->tmpparticipants = NULL;
 
-						if ($participants!="null"){
+						if ($participants!=NULL){
 								$this->moduleinstance->tmpparticipants = $participants;
 						}
 
@@ -735,7 +739,7 @@ public function checkIfValidMatrNr($mnr) {
 			} else{
 						$this->moduleinstance->participants = NULL;
 
-					if ($participants!="null"){
+					if ($participants!=NULL){
 							$this->moduleinstance->participants = $participants;
 							$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
 					}
@@ -804,7 +808,7 @@ public function checkIfValidMatrNr($mnr) {
 
 		if ($tmpparticipants){
 				$tmpParticipantsArray = json_decode($tmpparticipants);
-				return (array) $tmpParticipantsArray;
+				return $tmpParticipantsArray;
 			} else {
 				return false;
 		}
