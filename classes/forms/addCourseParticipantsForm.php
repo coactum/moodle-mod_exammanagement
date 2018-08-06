@@ -25,6 +25,8 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\ldap\ldapManager;
+
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -34,6 +36,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/ldapManager.php');
 
 class addCourseParticipantsForm extends moodleform{
 
@@ -42,6 +45,7 @@ class addCourseParticipantsForm extends moodleform{
         global $PAGE, $CFG;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
 
@@ -67,7 +71,7 @@ class addCourseParticipantsForm extends moodleform{
         $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
 
         if(!$participantsIDs){
-            $participantsIDs = array();  
+            $participantsIDs = array();
         }
 
         $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
@@ -75,10 +79,13 @@ class addCourseParticipantsForm extends moodleform{
         $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
         if($participantsIDs){
+          $ldapConnection = $LdapManagerObj->connect_ldap();
+          $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
+
           foreach ($participantsIDs as $key => $value) {
               $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
               $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
-              $mform->addElement('html', '</div><div class="col-xs-3">'.$ExammanagementInstanceObj->getUserMatrNrPO($value).'</div>');
+              $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
               $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
               $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div></div>');
 
@@ -90,11 +97,14 @@ class addCourseParticipantsForm extends moodleform{
         $courseParticipantsIDs = $ExammanagementInstanceObj->getCourseParticipantsIDs();
 
         if($courseParticipantsIDs){
+          $ldapConnection = $LdapManagerObj->connect_ldap();
+          $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
+
           foreach ($courseParticipantsIDs as $key => $value) {
               if(!in_array($value, $participantsIDs)){
                 $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
                 $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
-                $mform->addElement('html', '</div><div class="col-xs-3">'.$ExammanagementInstanceObj->getUserMatrNrPO($value).'</div>');
+                $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_courseparticipant", "mod_exammanagement").'</div></div>');
               }
