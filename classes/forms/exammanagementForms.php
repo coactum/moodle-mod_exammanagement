@@ -49,7 +49,7 @@ class exammanagementForms{
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $newtaskcount){
+	public static function getInstance($id, $e, $newtaskcount = false){
 
 		static $inst = null;
 			if ($inst === null) {

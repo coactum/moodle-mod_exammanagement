@@ -83,24 +83,23 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
         $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
-        usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
-          $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-
-          $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
-          $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;
-          $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b)->firstname;
-          $bLastname = $ExammanagementInstanceObj->getMoodleUser($b)->lastname;
-
-          if ($aLastname == $bLastname) { //if names are even sort by first name
-              return strcmp($aFirstname, $bFirstname);
-          } else{
-              return strcmp($aLastname, $bLastname); // else sort by last name
-          }
-
-        });
-
         if($participantsIDs){
-          foreach ($participantsIDs as $key => $value) {
+            usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
+              $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
+              $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
+              $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;
+              $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b)->firstname;
+              $bLastname = $ExammanagementInstanceObj->getMoodleUser($b)->lastname;
+
+              if ($aLastname == $bLastname) { //if names are even sort by first name
+                  return strcmp($aFirstname, $bFirstname);
+              } else{
+                  return strcmp($aLastname, $bLastname); // else sort by last name
+              }
+            });
+
+            foreach ($participantsIDs as $key => $value) {
               $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
               $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
               $mform->addElement('html', '</div><div class="col-xs-3">'.$ExammanagementInstanceObj->getUserMatrNrPO($value).'</div>');
@@ -113,9 +112,10 @@ class addParticipantsForm extends moodleform{
 
         ###### ... that are temporary imported ######
         $tempParticipantsIDs = $ExammanagementInstanceObj->getTempParticipants();
-        $badmatriculationnumbers = array_pop($tempParticipantsIDs);
 
         if($tempParticipantsIDs){
+          $badmatriculationnumbers = array_pop($tempParticipantsIDs);
+
           foreach ($tempParticipantsIDs as $key => $value) {
               $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
               $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
@@ -123,18 +123,18 @@ class addParticipantsForm extends moodleform{
               $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
               $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_temporary", "mod_exammanagement").'</div></div>');
           }
-        }
 
-        if($badmatriculationnumbers){
-            $mform->addElement('html', '<hr />');
-            $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
+          if($badmatriculationnumbers){
+              $mform->addElement('html', '<hr />');
+              $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
 
-            foreach ($badmatriculationnumbers as $key => $value) {
-              $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-              $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
-              $mform->addElement('html', '<div class="col-xs-3"></div>');
-              $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
-            }
+              foreach ($badmatriculationnumbers as $key => $value) {
+                $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+                $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
+                $mform->addElement('html', '<div class="col-xs-3"></div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
+              }
+          }
         }
 
 

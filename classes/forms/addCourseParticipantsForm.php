@@ -66,6 +66,10 @@ class addCourseParticipantsForm extends moodleform{
         ###### ... that are added to exam ######
         $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
 
+        if(!$participantsIDs){
+            $participantsIDs = array();  
+        }
+
         $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
         $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
         $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');

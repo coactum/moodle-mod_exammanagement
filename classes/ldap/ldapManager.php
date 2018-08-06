@@ -27,8 +27,6 @@ namespace mod_exammanagement\ldap;
 use mod_exammanagement\general\MoodleDB; // only for testing without real ldap!
 use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 
-require_once($CFG->libdir.'/ldaplib.php');
-
 defined('MOODLE_INTERNAL') || die();
 
 defined("LDAP_OU") or define("LDAP_OU", "ou=People");
@@ -37,6 +35,9 @@ defined("LDAP_C") or define("LDAP_C", "c=de");
 defined("LDAP_OBJECTCLASS_STUDENT") or define("LDAP_OBJECTCLASS_STUDENT", "upbStudent");
 defined("LDAP_ATTRIBUTE_STUDID") or define("LDAP_ATTRIBUTE_STUDID", "upbStudentID");
 defined("LDAP_ATTRIBUTE_UID") or define("LDAP_ATTRIBUTE_UID", "uid");
+
+global $CFG;
+require_once($CFG->libdir.'/ldaplib.php');
 
 class ldapManager{
 
