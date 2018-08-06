@@ -62,7 +62,7 @@ class showResultsForm extends moodleform {
           
             $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
             
-            if($LdapManagerObj->get_LDAP_config()){
+            if($LdapManagerObj->is_LDAP_config()){
         				$ldapConnection = $LdapManagerObj->connect_ldap();
                 $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
         		} else {
@@ -133,7 +133,14 @@ class showResultsForm extends moodleform {
                 }                
             }
 
-            $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div><div class="col-sm-2">'.$moodleUser->lastname.'</div><div class="col-sm-2">'.$matrnr.'</div><div class="col-sm-1">'.$room.'</div><div class="col-sm-2">'.$place.'</div><div class="col-sm-2">'.$points.'</div><div class="col-sm-1">'.$result.'</div></div>');
+            $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
+            $mform->addElement('html', '<div class="col-sm-2">'.$moodleUser->lastname.'</div>');
+            $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
+            $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
+            $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
+            $mform->addElement('html', '<div class="col-sm-2">'.$points.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.$result.'</span></div></div>');
+
         }
 
         $mform->addElement('hidden', 'id', 'dummy');
