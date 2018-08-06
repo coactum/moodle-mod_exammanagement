@@ -26,6 +26,7 @@ namespace mod_exammanagement\ldap;
 
 use mod_exammanagement\general\MoodleDB;
 use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
+use Exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -79,6 +80,16 @@ class ldapManager{
 				$config->start_tls
 			);
 
+	}
+
+	public function is_LDAP_config(){
+			$config = get_config('auth_ldap');
+
+			if($config->host_url){
+					return true;
+			} else {
+					return false;
+			}
 	}
 
 	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!

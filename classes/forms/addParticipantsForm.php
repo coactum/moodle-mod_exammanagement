@@ -36,7 +36,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/ldapManager.php');
+require_once(__DIR__.'/../ldap/ldapManager.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
 class addParticipantsForm extends moodleform{
@@ -102,10 +102,14 @@ class addParticipantsForm extends moodleform{
               }
             });
 
-            $ldapConnection = $LdapManagerObj->connect_ldap();
-            $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
+            if($LdapManagerObj->is_LDAP_config()){
+                $LdapManagerObj->connect_ldap();
+            }
 
             foreach ($participantsIDs as $key => $value) {
+
+              $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
+
               $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
               $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
               $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
@@ -122,10 +126,13 @@ class addParticipantsForm extends moodleform{
         if($tempParticipantsIDs){
           $badmatriculationnumbers = array_pop($tempParticipantsIDs);
 
-          $ldapConnection = $LdapManagerObj->connect_ldap();
-          $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
+          if($LdapManagerObj->is_LDAP_config()){
+              $LdapManagerObj->connect_ldap();
+          }
 
           foreach ($tempParticipantsIDs as $key => $value) {
+              $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
+
               $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
               $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
               $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');

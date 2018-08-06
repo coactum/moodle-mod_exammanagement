@@ -840,13 +840,17 @@ public function checkIfValidMatrNr($mnr) {
 
 	}
 
-	public function getUserMatrNrPO($userid){
+	public function getUserMatrNr($userid){
 
 		require_once(__DIR__.'/../ldap/ldapManager.php');
 
-		$ldapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
-		$userMatrNr = $ldapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
+		if($LdapManagerObj->is_LDAP_config()){
+		 		$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $userid);
+		} else {
+				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
+		}
 
 		if($userMatrNr){
 			return $userMatrNr;
@@ -1078,7 +1082,7 @@ public function saveResults($fromform){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$ldapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
 		$results = $this->getResults();
 
@@ -1088,9 +1092,12 @@ public function saveResults($fromform){
 
 		$result = new stdClass();
 
-		$ldapConnection = $LdapManagerObj->connect_ldap();
-		$uid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-		//$uid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+		if($LdapManagerObj->is_LDAP_config()){
+				$ldapConnection = $LdapManagerObj->connect_ldap();
+				$uid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+		} else {
+				$uid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+		}
 
 		if($uid){
 			$result->uid = $uid;

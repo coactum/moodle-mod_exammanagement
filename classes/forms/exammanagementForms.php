@@ -195,12 +195,18 @@ class exammanagementForms{
 				// convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
 				$ldapConnection = $LdapManagerObj->connect_ldap();
 				 foreach($matriculationnumbersarray as $key => $matrnr){
-					 	//$moodleuserid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-					 	$moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-					 	if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
+
+					 if($LdapManagerObj->is_LDAP_config()){
+							 $ldapConnection = $LdapManagerObj->connect_ldap();
+							 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+					 } else {
+						 		$moodleuserid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+					 }
+
+					 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 							array_push($moodleuseridsarray, $moodleuserid);
 							unset($matriculationnumbersarray[$key]);
-						}
+					}
 				 }
 
 				 // push all remaining matriculation numbers that could not be resolved by ldap into the $matriculationnumbersarray
@@ -453,10 +459,12 @@ class exammanagementForms{
 			if ($matrnr){
 				if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
 
-						$ldapConnection = $LdapManagerObj->connect_ldap();
-						$userid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-
-						//$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);	
+						if($LdapManagerObj->is_LDAP_config()){
+								$ldapConnection = $LdapManagerObj->connect_ldap();
+								$userid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+						} else {
+								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+						}
 
 						$participantsIds = json_decode($ExammanagementInstanceObj->moduleinstance->participants);
 
@@ -470,7 +478,7 @@ class exammanagementForms{
 										$case = 'participantwithresults';
 
 										$result = $resultObj;
-										$moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
+										$moodleUser = $ExammanagementInstanceObj->getMoodleUser($userid);
 
 										$firstname = $moodleUser->firstname;
 										$lastname = $moodleUser->lastname;
