@@ -193,8 +193,9 @@ class exammanagementForms{
 				}
 
 				// convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
+				$ldapConnection = $LdapManagerObj->connect_ldap();
 				 foreach($matriculationnumbersarray as $key => $matrnr){
-					 	$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+					 	$moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
 					 	if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 							array_push($moodleuseridsarray, $moodleuserid);
 							unset($matriculationnumbersarray[$key]);

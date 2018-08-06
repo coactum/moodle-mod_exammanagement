@@ -61,7 +61,9 @@ class showResultsForm extends moodleform {
         foreach($results as $key => $resultObj){
           
             $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
-            $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);
+            //$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);
+            $ldapConnection = $LdapManagerObj->connect_ldap();
+            $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
             
             $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
             $room;

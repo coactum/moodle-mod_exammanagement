@@ -27,7 +27,17 @@ namespace mod_exammanagement\ldap;
 use mod_exammanagement\general\MoodleDB; // only for testing without real ldap!
 use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 
+require(__DIR__.'../../../../config.php');
+require_once($CFG->libdir.'/ldaplib.php');
+
 defined('MOODLE_INTERNAL') || die();
+
+defined("LDAP_OU") or define("LDAP_OU", "ou=People");
+defined("LDAP_O") or define("LDAP_O", "o=upb");
+defined("LDAP_C") or define("LDAP_C", "c=de");
+defined("LDAP_OBJECTCLASS_STUDENT") or define("LDAP_OBJECTCLASS_STUDENT", "upbStudent");
+defined("LDAP_ATTRIBUTE_STUDID") or define("LDAP_ATTRIBUTE_STUDID", "upbStudentID");
+defined("LDAP_ATTRIBUTE_UID") or define("LDAP_ATTRIBUTE_UID", "uid");
 
 class ldapManager{
 
@@ -55,235 +65,94 @@ class ldapManager{
 
 	}
 
-	private function __clone() {}
+	public function connect_ldap(){
+			$config = get_config('auth_ldap');
 
-	//caching functions
+			return $connection = ldap_connect_moodle(
+      $config->host_url,
+      $config->ldap_version,
+      $config->user_type,
+      $config->bind_dn,
+      $config->bind_pw,
+      $config->opt_deref,
+      $debuginfo,
+      $config->start_tls
+  );
 
-	public function markForPreload($matriculationNumber){
-		$this->markedForPreload[]=$matriculationNumber;
 	}
 
-	//fire up an big ldap request
-	public function preload(){
-		//add values to local db
-		$matriculationNumberSetsTmp = $this->getLdapDataForMatriculationNumbers($this->markedForPreload);
-		foreach ($matriculationNumberSetsTmp as $mnrSet){
-			$index = $mnrSet["upbStudentID"];
-			$value = $mnrSet;
-			$this->preloadedValues[$index] = $value;
-		}
+	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
+			require_once(__DIR__.'/../general/MoodleDB.php');
 
-		$this->markedForPreload = array();
+			$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+			$temp = explode('_', $matrNr);
+
+			$imtlogin = substr($temp[0], -3);
+
+			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $imtlogin));
+
+			return $moodleuserid;
 	}
 
-	public function isInCache($mnr){
-		if (isset($this->preloadedValues[$mnr])){
-			return TRUE;
-		}
-		return FALSE;
+	public function getIMTLogin2MatriculationNumberTest($userid){ // only for testing without real ldap!
+			require_once(__DIR__.'/../general/exammanagementInstance.php');
+
+			$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+			$user = $exammanagementInstanceObj->getMoodleUser($userid);
+
+			// constructing test MatrN., later needs to be readed from csv-File
+
+			$matrNr = 70 . $user->id;;
+
+			$array = str_split($user->firstname);
+
+			$matrNr .= ord($array[0]);
+			$matrNr .= ord($array[2]);
+
+			$matrNr = substr($matrNr, 0, 6);
+
+			return $matrNr;
+
 	}
 
-	public function getCacheData($mnr){
-		if (isset($this->preloadedValues[$mnr])){
-			$value = $this->preloadedValues[$mnr];
-			return $value;
-		}
-		return FALSE;
+
+	public function studentid2uid($ldapConnection, $pStudentId){
+		   if (empty($pStudentId)) {
+		      throw new Exception("No parameter given");
+   }
+
+    $dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+    $filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_STUDID . "=" . $pStudentId . "))";
+
+    $search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_UID));
+    $entry = ldap_first_entry($ldapConnection, $search);
+
+    $result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
+    ldap_free_result($search);
+
+		$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $result[ 0 ]));
+
+    return $moodleuserid;
 	}
 
-	public function matriculationNumber2imtLogin($matNr){
-		if ($this->isInCache($matNr)){
-			$dataSet = $this->getCacheData($matNr);
-			return $dataSet["uid"];
-		} else {
-			$this->markForPreload($matNr);
-			$this->preload();
-		}
-		//no cache workflow
+	public function uid2studentid($ldapConnection, $moodleuserid){
 
-		$oldErrorReporting = error_reporting(); //temporary disable error reporting
-		error_reporting(0);
-		$result = $this->getLdapData($matNr);
-		if ($result==FALSE) return "LGN".$matNr; //dummy data
-		error_reporting($oldErrorReporting);
-		return $result["imtLogin"];
+			$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $moodleuserid));
+
+	    if (empty($pUId)) {
+	        throw new Exception("No parameter given");
+	    }
+
+	    $dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+	    $filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $pUId . "))";
+
+	    $search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
+	    $entry = ldap_first_entry($ldapConnection, $search);
+
+	    $result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
+	    ldap_free_result($search);
+	    return $result[ 0 ];
 	}
-
-public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
-		require_once(__DIR__.'/../general/MoodleDB.php');
-
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-
-		$temp = explode('_', $matrNr);
-
-		$imtlogin = substr($temp[0], -3);
-
-		$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
-
-		return $moodleuserid;
 }
-
-public function getIMTLogin2MatriculationNumberTest($userid){ // only for testing without real ldap!
-		require_once(__DIR__.'/../general/exammanagementInstance.php');
-
-		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-		$user = $exammanagementInstanceObj->getMoodleUser($userid);
-
-		// constructing test MatrN., later needs to be readed from csv-File
-
-		$matrNr = 70 . $user->id;;
-
-		$array = str_split($user->firstname);
-
-		$matrNr .= ord($array[0]);
-		$matrNr .= ord($array[2]);
-
-		$matrNr = substr($matrNr, 0, 6);
-
-		return $matrNr;
-
-}
-
-	// public function matriculationNumber2firstName($matNr){
-	// 	if ($this->isInCache($matNr)){
-	// 		$dataSet = $this->getCacheData($matNr);
-	// 		return $dataSet["givenName"];
-	// 	} else {
-	// 		$this->markForPreload($matNr);
-	// 		$this->preload();
-	// 	}
-	// 	//no cache workflow
-	//
-	// 	$oldErrorReporting = error_reporting(); //temporary disable error reporting
-	// 	error_reporting(0);
-	// 	$result = $this->getLdapData($matNr);
-	// 	if ($result==FALSE) return "FN".$matNr; //dummy data
-	// 	error_reporting($oldErrorReporting);
-	// 	return $result["firstname"];
-	// }
-	//
-	// public function matriculationNumber2lastName($matNr){
-	// 	if ($this->isInCache($matNr)){
-	// 		$dataSet = $this->getCacheData($matNr);
-	// 		return $dataSet["sn"];
-	// 	} else {
-	// 		$this->markForPreload($matNr);
-	// 		$this->preload();
-	// 	}
-	// 	//no cache workflow
-	//
-	// 	$oldErrorReporting = error_reporting(); //temporary disable error reporting
-	// 	error_reporting(0);
-	// 	$result = $this->getLdapData($matNr);
-	// 	if ($result==FALSE) return "LN".$matNr; //dummy data
-	// 	error_reporting($oldErrorReporting);
-	// 	return $result["lastname"];
-	// }
-	//
-	// public function getFullName($matNr){
-	// 	return $this->matriculationNumber2firstName($matNr)." ".$this->matriculationNumber2lastName($matNr);
-	// }
-	//
-	//
-	// /*
-	//  * get mail address from ldap
-	//  */
-	// public function matriculationNumber2mail($matNr){
-	// 	/*
-	// 	if ($this->isInCache($matNr)){
-	// 		$dataSet = $this->getCacheData($matNr);
-	// 		return $dataSet["upbMailPreferredAddress"];
-	// 	} else {
-	// 		$this->markForPreload($matNr);
-	// 		$this->preload();
-	// 	}
-	// 	*/
-	// 	//no cache workflow
-	//
-	// 	$oldErrorReporting = error_reporting(); //temporary disable error reporting
-	// 	error_reporting(0);
-	// 	$result = $this->getLdapData($matNr);
-	//
-	// 	if ($result==FALSE) return "MAIL".$matNr; //dummy data
-	// 	error_reporting($oldErrorReporting);
-	// 	return $result["upbMailPreferredAddress"];
-	// }
-
-
-	/*
-	 * get ldap data from ldap server and save it (for cache) to the database
-	 *
-	 * @matriculationNumber
-	 * @writeInDataBase write in database for caching
-	 *
-	 * @return an array containing [matnr][imtLogin][LastName][FirstName]
-	 */
-	public function getLdapData($matriculationNumber){
-		$user = array(); //[matnr][imtLogin][LastName][FirstName]
-		try {
-		  $lms_ldap = new lms_ldap();
-		  $lms_ldap->bind( LDAP_LOGIN, LDAP_PASSWORD );
-		}
-		catch ( Exception $e ) {
-			//paul_sync_log("PAUL_SYNC\t" . $e->getMessage(), PAUL_SYNC_LOGLEVEL_ERROR );
-			return FALSE;
-		}
-
-		$uid = $lms_ldap->studentid2uid($matriculationNumber);
-		$user["imtLogin"]=$uid;
-		$ldap_attributes = $lms_ldap->get_ldap_attribute( array( "sn", "givenName", "upbMailPreferredAddress" ), $uid );
-
-		$user["upbMailPreferredAddress"]=$ldap_attributes["upbMailPreferredAddress"];
-		$user["firstname"]=$ldap_attributes["givenName"];
-		$user["lastname"]=$ldap_attributes["sn"];
-		$user["mnr"]=$matriculationNumber;
-		if(!isset($user["firstname"])) return FALSE;
-		if(!isset($user["lastname"])) return FALSE;
-		if(!isset($user["mnr"])) return FALSE;
-
-		//return ldap data
-		return $user;
-	}
-
-
-
-	/*
-	 * get ldap data from ldap server and save it (for cache) to the database
-	 *
-	 * @$arrayOfMatriculationNumbers
-	 *
-	 * @return an array containing [matnr][imtLogin][LastName][FirstName]??
-	 */
-	private function getLdapDataForMatriculationNumbers($arrayOfMatriculationNumbers=TRUE){
-		if ($arrayOfMatriculationNumbers==FALSE) return FALSE;
-
-		$filterString = "";
-		$filterStringFirst=TRUE;
-		//build a filter string
-		foreach ($arrayOfMatriculationNumbers as $matriculationNumber){
-			if ($filterStringFirst){
-				$filterString = "(upbStudentID=".$matriculationNumber.")";
-			} else {
-				$filterString = "(|".$filterString."(upbStudentID=".$matriculationNumber."))";
-			}
-			$filterStringFirst=FALSE;
-		}
-
-		try {
-		  $lms_ldap = new lms_ldap();
-		  $lms_ldap->bind( LDAP_LOGIN, LDAP_PASSWORD );
-		}
-		catch ( Exception $e ) {
-			return FALSE;
-		}
-
-		$ldap_attributes = $lms_ldap->get_ldap_attribute_for_various_data( array( "sn", "givenName", "upbStudentID", "uid", "upbMailPreferredAddress") , $filterString );
-		return $ldap_attributes;
-	}
-
-
-
-}
-
-?>
