@@ -200,7 +200,7 @@ class exammanagementForms{
 							 $ldapConnection = $LdapManagerObj->connect_ldap();
 							 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
 					 } else {
-						 		$moodleuserid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+						 		$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 					 }
 
 					 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant

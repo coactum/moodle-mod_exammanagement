@@ -804,7 +804,7 @@ public function checkIfValidMatrNr($mnr) {
 
 		if ($tmpparticipants){
 				$tmpParticipantsArray = json_decode($tmpparticipants);
-				return $tmpParticipantsArray;
+				return (array) $tmpParticipantsArray;
 			} else {
 				return false;
 		}
@@ -1094,7 +1094,7 @@ public function saveResults($fromform){
 
 		if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
-				$uid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+				$uid = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
 		} else {
 				$uid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 		}

@@ -45,7 +45,7 @@ class addCourseParticipantsForm extends moodleform{
         global $PAGE, $CFG;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+        $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
 

@@ -46,7 +46,7 @@ class addParticipantsForm extends moodleform{
         global $PAGE, $CFG;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+        $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
@@ -144,7 +144,7 @@ class addParticipantsForm extends moodleform{
               $mform->addElement('html', '<hr />');
               $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
 
-              foreach ($badmatriculationnumbers as $key => $value) {
+              foreach ((array) $badmatriculationnumbers as $key => $value) {
                 $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
                 $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
                 $mform->addElement('html', '<div class="col-xs-3"></div>');
