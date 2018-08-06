@@ -27,7 +27,6 @@ namespace mod_exammanagement\ldap;
 use mod_exammanagement\general\MoodleDB; // only for testing without real ldap!
 use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 
-require(__DIR__.'../../../../config.php');
 require_once($CFG->libdir.'/ldaplib.php');
 
 defined('MOODLE_INTERNAL') || die();
@@ -69,15 +68,15 @@ class ldapManager{
 			$config = get_config('auth_ldap');
 
 			return $connection = ldap_connect_moodle(
-      $config->host_url,
-      $config->ldap_version,
-      $config->user_type,
-      $config->bind_dn,
-      $config->bind_pw,
-      $config->opt_deref,
-      $debuginfo,
-      $config->start_tls
-  );
+				$config->host_url,
+				$config->ldap_version,
+				$config->user_type,
+				$config->bind_dn,
+				$config->bind_pw,
+				$config->opt_deref,
+				$debuginfo,
+				$config->start_tls
+			);
 
 	}
 
@@ -117,42 +116,41 @@ class ldapManager{
 
 	}
 
-
 	public function studentid2uid($ldapConnection, $pStudentId){
-		   if (empty($pStudentId)) {
-		      throw new Exception("No parameter given");
-   }
+			if (empty($pStudentId)) {
+					throw new Exception("No parameter given");
+			}
 
-    $dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-    $filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_STUDID . "=" . $pStudentId . "))";
+		$dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+		$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_STUDID . "=" . $pStudentId . "))";
 
-    $search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_UID));
-    $entry = ldap_first_entry($ldapConnection, $search);
+		$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_UID));
+		$entry = ldap_first_entry($ldapConnection, $search);
 
-    $result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
+		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
     ldap_free_result($search);
 
 		$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $result[ 0 ]));
 
-    return $moodleuserid;
+		return $moodleuserid;
 	}
 
 	public function uid2studentid($ldapConnection, $moodleuserid){
 
 			$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $moodleuserid));
 
-	    if (empty($pUId)) {
-	        throw new Exception("No parameter given");
-	    }
+			if (empty($pUId)) {
+					throw new Exception("No parameter given");
+			}
 
-	    $dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-	    $filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $pUId . "))";
+			$dn     = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $pUId . "))";
 
-	    $search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
-	    $entry = ldap_first_entry($ldapConnection, $search);
+			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
+			$entry = ldap_first_entry($ldapConnection, $search);
 
-	    $result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
+			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
 	    ldap_free_result($search);
-	    return $result[ 0 ];
+			return $result[ 0 ];
 	}
 }
