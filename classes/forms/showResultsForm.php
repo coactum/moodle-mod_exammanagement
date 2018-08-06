@@ -64,7 +64,7 @@ class showResultsForm extends moodleform {
             
             if($LdapManagerObj->is_LDAP_config()){
         				$ldapConnection = $LdapManagerObj->connect_ldap();
-                $matrnr = uid2studentid($ldapConnection, $resultObj->uid);
+                $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $resultObj->uid);
         		} else {
         			  $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);	
         		}
