@@ -130,7 +130,7 @@ class ldapManager{
 		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
     ldap_free_result($search);
 
-		if(isst($result[ 0 ])){
+		if(isset($result[ 0 ])){
 				$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $result[ 0 ]));
 				return $moodleuserid;
 		} else{
