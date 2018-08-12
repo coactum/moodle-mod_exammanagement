@@ -25,9 +25,11 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\participantsList;
+use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -36,6 +38,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -110,6 +113,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $previousRoom;
     $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
 
+    if($LdapManagerObj->is_LDAP_config()){
+        $ldapConnection = $LdapManagerObj->connect_ldap();
+    }
+
     foreach ($assignedPlaces as $roomObj){
       $currentRoom = $roomObj;
 
@@ -140,10 +147,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       foreach ($roomObj->assignments as $assignment){
         $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
 
+        if($LdapManagerObj->is_LDAP_config()){
+            $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $assignment->userid);
+        } else {
+            $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($assignment->userid);
+        }
+
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $ExammanagementInstanceObj->getUserMatrNrPO($assignment->userid) . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
         $tbl .= "</tr>";

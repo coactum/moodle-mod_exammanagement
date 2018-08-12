@@ -23,6 +23,12 @@
 
 define(['jquery', 'core/notification'], function($) {
 
+  var getInputId = function (element){
+    var id = element.attr('id').split('_').pop();
+
+    return id;
+  };
+
   return {
     init: function() {
 
@@ -48,6 +54,54 @@ define(['jquery', 'core/notification'], function($) {
           require(['core/notification'], function(notification) {
            notification.addNotification({
              message: "Höchstpunktzahl überschritten",
+             type: "error"
+           });
+          });
+        }
+
+        var inputValue = $(this).val();
+        var inputValueID = getInputId($(this));
+
+        var lastStepValue;
+
+        switch(inputValueID) {
+            case "13":
+                lastStepValue = $("#id_gradingsteppoints_10").val();
+                break;
+            case "17":
+                lastStepValue = $("#id_gradingsteppoints_13").val();
+                break;
+            case "20":
+                lastStepValue = $("#id_gradingsteppoints_17").val();
+                break;
+            case "23":
+                lastStepValue = $("#id_gradingsteppoints_20").val();
+                break;
+            case "27":
+                lastStepValue = $("#id_gradingsteppoints_23").val();
+                break;
+            case "30":
+                lastStepValue = $("#id_gradingsteppoints_27").val();
+                break;
+            case "33":
+                lastStepValue = $("#id_gradingsteppoints_30").val();
+                break;
+            case "37":
+                lastStepValue = $("#id_gradingsteppoints_33").val();
+                break;
+            case "40":
+                lastStepValue = $("#id_gradingsteppoints_37").val();
+                break;
+            default:
+                break;
+        }
+
+        if (inputValue >= lastStepValue){
+          $(this).val(lastStepValue-1);
+
+          require(['core/notification'], function(notification) {
+           notification.addNotification({
+             message: "Punktzahl kann nicht höher oder gleich dem letzten Notenschritt sein",
              type: "error"
            });
           });

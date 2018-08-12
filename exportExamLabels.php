@@ -25,9 +25,11 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\examLabels;
+use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -36,6 +38,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
@@ -111,6 +114,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
     $IDcounter = 0;
 
+    if($LdapManagerObj->is_LDAP_config()){
+        $ldapConnection = $LdapManagerObj->connect_ldap();
+    }
+
     foreach ($assignedPlaces as $roomObj){
 
         usort($roomObj->assignments, function($a, $b){ //sort array of assignments by name
@@ -139,7 +146,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $name = utf8_encode($user->lastname);
         $firstname = utf8_encode($user->firstname);
-        $matrNr = $ExammanagementInstanceObj->getUserMatrNrPO($assignment->userid);
+
+        if($LdapManagerObj->is_LDAP_config()){
+            $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $assignment->userid);
+        } else {
+            $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($assignment->userid);
+        }
+
         $room = $roomObj->roomname;
         $place = $assignment->place;
 
@@ -147,7 +160,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           	$pdf->SetFont('helvetica', '', 12);
           	$pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X1, $y, true);
           	$pdf->SetFont('helvetica', 'B', 12);
-          	$pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrNr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
+          	$pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
           	$pdf->SetFont('helvetica', '', 10);
           	$pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
           	$pdf->MultiCell(21, 5, $semester, 0, 'C', 0, 0, X1, $y + 36, true);
@@ -156,14 +169,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           	$pdf->SetFont('helvetica', 'B', 14);
           	$pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 36, true);
 
-          	$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrNr);
-          	$pdf->write1DBarcode('00000' . $matrNr . $checksum, 'EAN13', X1 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
+          	$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
+          	$pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X1 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
 
         } else { //print right label
             $pdf->SetFont('helvetica', '', 12);
             $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X2, $y, true);
             $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrNr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
+            $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
             $pdf->SetFont('helvetica', '', 10);
             $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
             $pdf->MultiCell(21, 5, $semester, 0, 'C', 0, 0, X2, $y + 36, true);
@@ -172,8 +185,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $pdf->SetFont('helvetica', 'B', 14);
             $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 36, true);
 
-            $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrNr);
-            $pdf->write1DBarcode('00000' . $matrNr . $checksum, 'EAN13', X2 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
+            $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
+            $pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X2 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
         }
 
         $leftLabel = !$leftLabel;

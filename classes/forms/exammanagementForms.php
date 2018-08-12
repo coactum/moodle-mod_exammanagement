@@ -455,6 +455,8 @@ class exammanagementForms{
 
 			$case;
 			$result;
+			$firstname = '';
+			$lastname = '';
 
 			if ($matrnr){
 				if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
@@ -473,19 +475,20 @@ class exammanagementForms{
 
 							$results = json_decode($ExammanagementInstanceObj->moduleinstance->results);
 
-							foreach($results as $key => $resultObj){
-								if ($resultObj->uid == $userid){
-										$case = 'participantwithresults';
+							if($results){
+								foreach($results as $key => $resultObj){
+									if ($resultObj->uid == $userid){
+											$case = 'participantwithresults';
 
-										$result = $resultObj;
-										$moodleUser = $ExammanagementInstanceObj->getMoodleUser($userid);
+											$result = $resultObj;
+											$moodleUser = $ExammanagementInstanceObj->getMoodleUser($userid);
 
-										$firstname = $moodleUser->firstname;
-										$lastname = $moodleUser->lastname;
-										break;
+											$firstname = $moodleUser->firstname;
+											$lastname = $moodleUser->lastname;
+											break;
+									}
 								}
 							}
-
 						} else {
 							$case = 'noparticipant';
 						}

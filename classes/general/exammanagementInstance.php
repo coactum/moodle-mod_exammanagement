@@ -1101,7 +1101,7 @@ public function saveResults($fromform){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
 				$uid = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
 		} else {
-				$uid = $ldapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+				$uid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 		}
 
 		if($uid){

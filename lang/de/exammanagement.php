@@ -135,6 +135,7 @@ $string['show_results_str'] = 'Übersicht Prüfungsergebnisse';
 $string['matriculation_number_short'] = 'Matr. Nr.';
 $string['result'] = 'Ergebnis';
 $string['cancel'] = 'Zurück zur Prüfungsorganisation';
+$string['gradingscale_not_set'] = 'Um automatisch eine Note berechnen zu lassen muss zunächst der Notenschlüßel eingetragen werden.';
 $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';

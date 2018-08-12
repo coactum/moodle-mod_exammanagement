@@ -135,6 +135,7 @@ $string['show_results_str'] = 'Exam results';
 $string['matriculation_number_short'] = 'Matr. no.';
 $string['result'] = 'Result';
 $string['cancel'] = 'Back to exam organisation';
+$string['gradingscale_not_set'] = 'If you want to calculate a grade as the result you have to configure the grading scale.';
 $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
