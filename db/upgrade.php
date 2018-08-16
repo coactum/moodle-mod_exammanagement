@@ -45,7 +45,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2018080600) {
+    if ($oldversion < 2018081700) {
 
         // Define table exammanagement to be created.
         $table = new xmldb_table('exammanagement');
