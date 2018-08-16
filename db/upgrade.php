@@ -57,7 +57,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         }
 
         // Exammanagement savepoint reached.
-        upgrade_mod_savepoint(true, 2018081700, 'lesson');
+        upgrade_mod_savepoint(true, 2018081700, 'exammanagement');
 
     }
 
