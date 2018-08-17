@@ -96,8 +96,13 @@ define(['jquery', 'core/notification'], function($) {
                 break;
         }
 
-        if (inputValue >= lastStepValue){
-          $(this).val(lastStepValue-1);
+        if (parseInt(inputValue) >= parseInt(lastStepValue)){
+          if(lastStepValue>0){
+              $(this).val(lastStepValue-1);
+          } else{
+            $(this).val(0);
+          }
+
 
           require(['core/notification'], function(notification) {
            notification.addNotification({

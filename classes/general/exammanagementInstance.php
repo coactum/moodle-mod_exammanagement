@@ -707,7 +707,7 @@ public function checkIfValidMatrNr($mnr) {
 	}
 }
 
-	public function saveParticipants($participantsArr, $mode, $badmatriculationnumbersArr=''){
+	public function saveParticipants($participantsArr, $mode, $badmatriculationnumbersArr = null){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
