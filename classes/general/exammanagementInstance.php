@@ -852,7 +852,8 @@ public function checkIfValidMatrNr($mnr) {
 		$ldapConnection = $LdapManagerObj->connect_ldap();
 
 		if($LdapManagerObj->is_LDAP_config()){
-		 		$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $userid);
+				$username = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+		 		$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $username);
 		} else {
 				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
 		}
