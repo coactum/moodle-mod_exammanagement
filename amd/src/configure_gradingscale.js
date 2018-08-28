@@ -23,12 +23,6 @@
 
 define(['jquery', 'core/notification'], function($) {
 
-  var getInputId = function (element){
-    var id = element.attr('id').split('_').pop();
-
-    return id;
-  };
-
   return {
     init: function() {
 
@@ -58,59 +52,49 @@ define(['jquery', 'core/notification'], function($) {
            });
           });
         }
+      });
 
-        var inputValue = $(this).val();
-        var inputValueID = getInputId($(this));
+      $("#id_submitbutton").click(function(e){
 
-        var lastStepValue;
+          var inputValue10;
+          var inputValue13;
+          var inputValue17;
+          var inputValue20;
+          var inputValue23;
+          var inputValue27;
+          var inputValue30;
+          var inputValue33;
+          var inputValue37;
+          var inputValue40;
 
-        switch(inputValueID) {
-            case "13":
-                lastStepValue = $("#id_gradingsteppoints_10").val();
-                break;
-            case "17":
-                lastStepValue = $("#id_gradingsteppoints_13").val();
-                break;
-            case "20":
-                lastStepValue = $("#id_gradingsteppoints_17").val();
-                break;
-            case "23":
-                lastStepValue = $("#id_gradingsteppoints_20").val();
-                break;
-            case "27":
-                lastStepValue = $("#id_gradingsteppoints_23").val();
-                break;
-            case "30":
-                lastStepValue = $("#id_gradingsteppoints_27").val();
-                break;
-            case "33":
-                lastStepValue = $("#id_gradingsteppoints_30").val();
-                break;
-            case "37":
-                lastStepValue = $("#id_gradingsteppoints_33").val();
-                break;
-            case "40":
-                lastStepValue = $("#id_gradingsteppoints_37").val();
-                break;
-            default:
-                break;
-        }
+          inputValue10 = parseInt($("#id_gradingsteppoints_10").val());
+          inputValue13 = parseInt($("#id_gradingsteppoints_13").val());
+          inputValue17 = parseInt($("#id_gradingsteppoints_17").val());
+          inputValue20 = parseInt($("#id_gradingsteppoints_20").val());
+          inputValue23 = parseInt($("#id_gradingsteppoints_23").val());
+          inputValue27 = parseInt($("#id_gradingsteppoints_27").val());
+          inputValue30 = parseInt($("#id_gradingsteppoints_30").val());
+          inputValue33 = parseInt($("#id_gradingsteppoints_33").val());
+          inputValue37 = parseInt($("#id_gradingsteppoints_37").val());
+          inputValue40 = parseInt($("#id_gradingsteppoints_40").val());
 
-        if (parseInt(inputValue) >= parseInt(lastStepValue)){
-          if(lastStepValue>0){
-              $(this).val(lastStepValue-1);
+          if(inputValue10<=inputValue13 || inputValue13 <= inputValue17
+            || inputValue17 <= inputValue20 || inputValue20 <= inputValue23
+            || inputValue23 <= inputValue27 || inputValue27 <= inputValue30
+            || inputValue30 <= inputValue33 || inputValue33 <= inputValue37
+            || inputValue37 <= inputValue40){
+
+              e.preventDefault();
+
+              require(['core/notification'], function(notification) {
+               notification.addNotification({
+                 message: "Punktzahl kann nicht höher oder gleich dem letzten Notenschritt sein",
+                 type: "error"
+               });
+              });
           } else{
-            $(this).val(0);
+            $("form").submit();
           }
-
-
-          require(['core/notification'], function(notification) {
-           notification.addNotification({
-             message: "Punktzahl kann nicht höher oder gleich dem letzten Notenschritt sein",
-             type: "error"
-           });
-          });
-        }
       });
     },
   };
