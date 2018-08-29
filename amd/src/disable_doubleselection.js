@@ -25,15 +25,18 @@ define(['jquery'], function($) {
 
    return {
         disable_doubleselection: function() {
-          $('input:checked').each(function() {
+          $('input:checked').each(function() { //check all input checkboxes fields if one is checked and disable its siblings
               $("label:contains('"+$.trim($(this).parent().text())+"') input:not(:checked)").prop( "disabled", true);
           });
-          $("label").on("change", "input", function() {
-            if($("label:contains('"+$.trim($(this).parent().text())+"') input").prop('disabled')){
-              $("label:contains('"+$.trim($(this).parent().text())+"') input:not(:checked)").prop( "disabled", false);
-            } else {
-              $("label:contains('"+$.trim($(this).parent().text())+"') input:not(:checked)").prop( "disabled", true);
-            }
+          $("label").on("change", "input", function() { //if input checkbox changes state
+            var label = $.trim($(this).parent().text());
+
+
+             if($("label:contains('"+ label +"') input").prop('disabled')){
+               $("label:contains('"+ label +"') input:not(:checked)").prop( "disabled", false);
+             } else {
+               $("label:contains('"+ label +"') input:not(:checked)").prop( "disabled", true);
+             }
           });
         }
     };
