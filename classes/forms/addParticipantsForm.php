@@ -173,6 +173,11 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
         $mform->addElement('html', '</div>');
 
+        //for testing
+        $test = $this->_customdata['test'];
+        $mform->addElement('hidden', 'test', $test);
+        $mform->setType('test', PARAM_INT);
+
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 
         $mform->addElement('html', '</div>');

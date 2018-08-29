@@ -36,8 +36,9 @@ class exammanagementForms{
 	protected $id;
 	protected $e;
 	protected $newtaskcount;
+	public $test;
 
-	private function __construct($id, $e, $newtaskcount) {
+	private function __construct($id, $e, $newtaskcount, $test) {
 		$this->id = $id;
 		$this->e = $e;
 
@@ -45,15 +46,18 @@ class exammanagementForms{
 				$this->newtaskcount = $newtaskcount;
 		}
 
+		if($test){
+			$this->test = $test;
+		}
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $newtaskcount = false){
+	public static function getInstance($id, $e, $newtaskcount = false, $test = false){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new exammanagementForms($id, $e, $newtaskcount);
+				$inst = new exammanagementForms($id, $e, $newtaskcount, $test);
 			}
 			return $inst;
 
@@ -144,10 +148,10 @@ class exammanagementForms{
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e, $this->test);
 
 		//Instantiate form
-		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'test'=>$this->test));
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -198,23 +202,33 @@ class exammanagementForms{
 						$ldapConnection = $LdapManagerObj->connect_ldap();
 						foreach($pmatriculationnumbersarray as $key => $matrnr){
 
-							 var_dump('Potenzielle Matrikelnummer gefunden: '.str_replace('"', '', $matrnr));
+							 if($this->test){
+									var_dump('Potenzielle Matrikelnummer gefunden: '.str_replace('"', '', $matrnr));
+							 }
 
 							 if($LdapManagerObj->is_LDAP_config()){
 									 $ldapConnection = $LdapManagerObj->connect_ldap();
 									 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, str_replace('"', '', $matrnr));
-									 var_dump('getestete Matrikelnummer ('.str_replace('"', '', $matrnr).') und dazugehörige Moodleuser id: '.$moodleuserid);
+
+									 if($this->test){
+										 	var_dump('getestete Matrikelnummer ('.str_replace('"', '', $matrnr).') und dazugehörige Moodleuser id: '.$moodleuserid);
+									}
 
 							 } else {
 										$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest(str_replace('"', '', $matrnr));
+										if($this->test){
+		 									var_dump('Keine Verbindung zum LDAP möglich');
+		 							  }
 							 }
 
 							 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 
 									array_push($moodleuseridsarray, $moodleuserid);
 									unset($pmatriculationnumbersarray[$key]);
-									var_dump('Folgende Moodleuser ID wird gespeichert: '.$moodleuserid);
 
+									if($this->test){
+											var_dump('Folgende Moodleuser ID wird gespeichert: '.$moodleuserid);
+									}
 							 }
 						}
 
@@ -222,12 +236,14 @@ class exammanagementForms{
 						foreach($pmatriculationnumbersarray as $key => $matrnr){
 								array_push($badmatriculationnumbersarray, str_replace('"', '', $matrnr));
 								unset($pmatriculationnumbersarray[$key]);
-								var_dump('Array mit allen ungültigen Matrikelnummern: ');
-								var_dump($badmatriculationnumbersarray);
-								var_dump('Array mit allen bis zum Schluss unbehandelten Matrikelnummern: ');
-								var_dump($pmatriculationnumbersarray);
-
 						}
+				}
+
+				if($this->test){
+						var_dump('Array mit allen ungültigen Matrikelnummern: ');
+						var_dump($badmatriculationnumbersarray);
+						var_dump('Array mit allen bis zum Schluss unbehandelten Matrikelnummern: ');
+						var_dump($pmatriculationnumbersarray);
 				}
 
 			} else if($excel_file){
@@ -259,9 +275,12 @@ class exammanagementForms{
 					$moodleuseridsarray = NULL;
 			}
 
-			var_dump('Array mit allen zu speichernden Matrikelnummern: ');
-			var_dump($moodleuseridsarray);
-			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray);
+			if($this->test){
+					var_dump('Array mit allen zu speichernden Matrikelnummern: ');
+					var_dump($moodleuseridsarray);
+			}
+
+			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray, $this->test);
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
