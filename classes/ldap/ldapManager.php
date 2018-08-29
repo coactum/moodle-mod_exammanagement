@@ -146,10 +146,19 @@ class ldapManager{
 		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
     ldap_free_result($search);
 
+		var_dump("Verbindung zum LDAP wurde aufgebaut");
+		var_dump("Folgende Matrikelnummer wird ans LDAP gesendet:");
+		var_dump($pStudentId);
+
 		if(isset($result[ 0 ])){
+				var_dump("Für diese Matrikelnummer wurde folgender IMT-Benutzername gefunden:");
+				var_dump($result[ 0 ]);
 				$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $result[ 0 ]));
+				var_dump("Für diesen Benutzernamen wird in der PANDA-Datenbank ein Benutzer mit der folgenden ID gefunden:");
+				var_dump($moodleuserid);
 				return $moodleuserid;
 		} else{
+				var_dump("Für diese Matrikelnummer wurde kein IMT-Benutzername.");
 			 	return false;
 		}
 	}
@@ -159,7 +168,14 @@ class ldapManager{
 
 			$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
+			var_dump("Verbindung zum LDAP wurde aufgebaut");
+			var_dump("Folgende Moodleuserid wird verarbeitet:");
+			var_dump($moodleuserid);
+
 			$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $moodleuserid));
+
+			var_dump("Folgender Benutzername soll am LDAP überprüft werden:");
+			var_dump($pUId);
 
 			if (empty($pUId)) {
 					throw new Exception("No parameter given");
@@ -174,6 +190,9 @@ class ldapManager{
 			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
 			ldap_free_result($search);
 
+			var_dump("Für diesen Benutzernamen wurde folgende Matrikelnummer gefunden:");
+			var_dump($result[ 0 ]);
+			
 			return $result[ 0 ];
 	}
 }

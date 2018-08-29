@@ -694,9 +694,7 @@ EOF;
 ######### feature: addParticipants ##########
 
 public function checkIfValidMatrNr($mnr) {
-		var_dump('checked MatrNr: '.$mnr);
 		if (!preg_match("/^\d+$/", $mnr)) {
-			var_dump('return false preg_match');
 			return false;
 		}
 		$first = substr($mnr, 0, 1);
@@ -705,7 +703,6 @@ public function checkIfValidMatrNr($mnr) {
 		if ($first==7 && strlen($mnr)==7) {
 			return true;
 		} else {
-			var_dump('return false $first');
 		return (($first==3 || $first==6) /*&& ($mod==0 ? TRUE : ($mod==1 && $prf==0))*/);
 	}
 }

@@ -184,25 +184,13 @@ class exammanagementForms{
 
 				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
 
-				var_dump('Dateiinhalt: ');
-				var_dump($filecontentarray);
-
 				foreach($filecontentarray as $row){
-						var_dump('Zeile: ');
-						var_dump($row);
-
 						$pmatriculationnumbersarray = explode("	", $row); // from 2nd line: get all potential numbers
 
-						var_dump('Array mit potenziellen Matrikelnummern: ');
-						var_dump($pmatriculationnumbersarray);
-
 						foreach ($pmatriculationnumbersarray as $key => $pmatrnr) { // Validate potential matrnr
-							var_dump('checkifValidMatrNr');
 							if (!$ExammanagementInstanceObj->checkIfValidMatrNr(str_replace('"', '', $pmatrnr))){ //if not a valid matrnr
 										//array_push($badmatriculationnumbersarray, $matriculationnumbersarray[$key]);
 										unset($pmatriculationnumbersarray[$key]);
-										var_dump('invalidMatrNr: ');
-										var_dump(str_replace('"', '', $pmatrnr));
 							}
 						}
 
@@ -210,26 +198,22 @@ class exammanagementForms{
 						$ldapConnection = $LdapManagerObj->connect_ldap();
 						foreach($pmatriculationnumbersarray as $key => $matrnr){
 
-							var_dump('Test');
-
-							 var_dump('potenzielle Matrikelnummer: '.str_replace('"', '', $matrnr));
+							 var_dump('Potenzielle Matrikelnummer gefunden: '.str_replace('"', '', $matrnr));
 
 							 if($LdapManagerObj->is_LDAP_config()){
 									 $ldapConnection = $LdapManagerObj->connect_ldap();
 									 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, str_replace('"', '', $matrnr));
-									 var_dump('potenzielle Matrikelnummer: '.str_replace('"', '', $matrnr).' und dazugehörige Moodleuser id: '.$moodleuserid);
+									 var_dump('getestete Matrikelnummer ('.str_replace('"', '', $matrnr).') und dazugehörige Moodleuser id: '.$moodleuserid);
 
 							 } else {
 										$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest(str_replace('"', '', $matrnr));
-										var_dump('potenzielle Matrikelnummer: '.str_replace('"', '', $matrnr).' und dazugehörige Moodleuser id: '.$moodleuserid);
-
 							 }
 
 							 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 
 									array_push($moodleuseridsarray, $moodleuserid);
 									unset($pmatriculationnumbersarray[$key]);
-									var_dump('folgende Moodleuser ID wird gespeichert: '.$moodleuserid);
+									var_dump('Folgende Moodleuser ID wird gespeichert: '.$moodleuserid);
 
 							 }
 						}
@@ -238,8 +222,10 @@ class exammanagementForms{
 						foreach($pmatriculationnumbersarray as $key => $matrnr){
 								array_push($badmatriculationnumbersarray, str_replace('"', '', $matrnr));
 								unset($pmatriculationnumbersarray[$key]);
-								var_dump('Array mit allen ungültigen Matrikelnummern: '.$badmatriculationnumbersarray);
-								var_dump('Array mit allen bis zum Schluss unbehandelten Matrikelnummern: '.$pmatriculationnumbersarray);
+								var_dump('Array mit allen ungültigen Matrikelnummern: ');
+								var_dump($badmatriculationnumbersarray);
+								var_dump('Array mit allen bis zum Schluss unbehandelten Matrikelnummern: ');
+								var_dump($pmatriculationnumbersarray);
 
 						}
 				}
@@ -273,6 +259,8 @@ class exammanagementForms{
 					$moodleuseridsarray = NULL;
 			}
 
+			var_dump('Array mit allen zu speichernden Matrikelnummern: ');
+			var_dump($moodleuseridsarray);
 			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray);
 
 		} else {
