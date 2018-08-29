@@ -58,7 +58,7 @@ class ldapManager{
 		$this->test = $test;		 // only for testing without real ldap!
 	}
 
-	public static function getInstance($id, $e, $test){
+	public static function getInstance($id, $e, $test = false){
 
 		static $inst = null;
 			if ($inst === null) {
