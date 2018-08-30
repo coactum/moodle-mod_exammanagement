@@ -15,6 +15,8 @@
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
           <FIELD NAME="tmpparticipants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temorary participants for exam as array sorted by ids"/>
+          <FIELD NAME="importfileheaders" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="headers of imported paul files as jsonstring"/>
+          <FIELD NAME="tempimportfileheader" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="header of temporary imported paul files as jsonstring"/>
           <FIELD NAME="tasks" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="count of tasks and points per taks as jsonstring"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="content and format of textfield as jsonstring"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>

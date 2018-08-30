@@ -188,6 +188,8 @@ class exammanagementForms{
 
 				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
 
+				$fileheader = $filecontentarray[1];
+
 				foreach($filecontentarray as $row){
 						$pmatriculationnumbersarray = explode("	", $row); // from 2nd line: get all potential numbers
 
@@ -280,7 +282,7 @@ class exammanagementForms{
 					var_dump($moodleuseridsarray);
 			}
 
-			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, 'tmp', $badmatriculationnumbersarray, $this->test);
+			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, $fileheader, 'tmp', $badmatriculationnumbersarray, $this->test);
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

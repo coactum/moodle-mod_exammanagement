@@ -61,5 +61,26 @@ function xmldb_exammanagement_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2018083000) {
+
+       // Define field importfileheaders to be added to exammanagement.
+       $table = new xmldb_table('exammanagement');
+       $field = new xmldb_field('importfileheaders', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+       // Conditionally launch add field for exammanagement.
+       if (!$dbman->field_exists($table, $field)) {
+          $dbman->add_field($table, $field);
+       }
+
+       $field = new xmldb_field('tempimportfileheader', XMLDB_TYPE_TEXT, null, null, null, null, null, 'importfileheaders');
+       // Conditionally launch add field for exammanagement.
+       if (!$dbman->field_exists($table, $field)) {
+          $dbman->add_field($table, $field);
+       }
+
+       // Exammanagement savepoint reached.
+       upgrade_mod_savepoint(true, 2018083000, 'exammanagement');
+    }
+
     return true;
 }

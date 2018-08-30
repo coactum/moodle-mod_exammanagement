@@ -707,7 +707,7 @@ public function checkIfValidMatrNr($mnr) {
 	}
 }
 
-	public function saveParticipants($participantsArr, $mode, $badmatriculationnumbersArr = null, $test = false){
+	public function saveParticipants($participantsArr, $header, $mode, $badmatriculationnumbersArr = NULL, $test = false){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
@@ -729,24 +729,65 @@ public function checkIfValidMatrNr($mnr) {
 			}
 
 			$participants = json_encode($participantsArr);
+			$newfileheader = json_encode($header);
+
+			$tempfileheader = json_decode($this->moduleinstance->tempimportfileheader);
+			$savedFileHeadersArr = json_decode($this->moduleinstance->importfileheaders);
+
+			$fileHeadersArr = array();
 
 			if ($mode == 'tmp'){
 						$this->moduleinstance->tmpparticipants = NULL;
+						$this->moduleinstance->tempimportfileheader = NULL;
 
 						if ($participants!=NULL){
 								$this->moduleinstance->tmpparticipants = $participants;
+						}
+
+						if ($newfileheader!=NULL){
+							$this->moduleinstance->tempimportfileheader = $newfileheader;
 						}
 
 						$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 						redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
 
 			} else{
-						$this->moduleinstance->participants = NULL;
-
 					if ($participants!=NULL){
 							$this->moduleinstance->participants = $participants;
-							$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
+
+							if($tempfileheader){
+									if (!$savedFileHeadersArr){ // falls noch keine header gespeichert
+											// merken welcher Teilnehmer zu header gehört
+											//...
+
+											array_push($fileHeadersArr, $tempfileheader);
+									} else {
+
+											if(in_array($tempfileheader, $savedFileHeadersArr)) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:
+
+												// für vorhandenen Header zugeordnete Teilnehmer ändern
+												// ...
+
+												// und neuen header nicht speichern da schon vorhanden
+												$fileHeadersArr = $savedFileHeadersArr;
+											} else { //falls schon header gespeichert und neuer Header noch nicht in diesen vorhanden
+												// merken welcher Teilnehmer zu header gehört
+												//...
+
+												// und neuen header an array mit gespeicherten headern anhängen
+												$fileHeadersArr = $savedFileHeadersArr;
+												array_push($fileHeadersArr, $tempfileheader);
+											}
+									}
+							}
+
+					} else {
+						$this->moduleinstance->participants = NULL;
 					}
+
+					$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
+					$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
+					$this->moduleinstance->tempimportfileheader = NULL; //clear tmp file headers
 
 					$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
