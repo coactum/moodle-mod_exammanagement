@@ -129,6 +129,8 @@ $string['fraud_attempt'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
+$string['confirm_matrnr'] = 'Zur Bestätigung der Matrikelnummer bitte Enter/Return drücken.';
+$string['input_other_matrnr'] = 'Neue Matrikelnummer eintragen';
 
 //showResultsForm.php
 $string['show_results_str'] = 'Übersicht Prüfungsergebnisse';

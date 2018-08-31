@@ -129,6 +129,8 @@ $string['fraud_attempt'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
 $string['max_points'] = 'Maximum points';
 $string['save_and_next'] = 'Save and next';
+$string['confirm_matrnr'] = 'To confirm the matriculation number please press enter/return.';
+$string['input_other_matrnr'] = 'Input new matriculation number';
 
 //showResultsForm.php
 $string['show_results_str'] = 'Exam results';

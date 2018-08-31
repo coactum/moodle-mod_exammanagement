@@ -41,42 +41,14 @@ define(['jquery', 'core/notification'], function($) {
     return totalpoints;
   };
 
-  var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-  };
-
   return {
     init: function() {
 
       var matrnr = $('#id_matrnr').val();
 
-      if(!matrnr){ // initial disabling of complete form if no matrnr and set focus to matrnr
-        $(".form-group input.form-control").each(function() {
-          if (getInputId($(this)) != "matrnr"){
-            $(this).prop( "disabled", true );
-          } else {
-            $(this).focus();
-          }
-        });
-        $(".form-group input.checkboxgroup1").each(function() {
-          $(this).prop( "disabled", true );
-        });
-        $("#id_submitbutton").each(function() {
-          $(this).prop( "disabled", true );
-        });
-      } else { // initial disabling of field matrnr if it already exists
-        $('#id_matrnr').prop( "disabled", true );
+      if(matrnr){
+        $('#id_matrnr').prop( "disabled", true ); // initial disabling of field matrnr if it already exists
+        $('#id_matrnr').focus();
       }
 
       $(".form-group input.checkboxgroup1").each(function() { // initial disabling point fields if some checkbox is already checked
@@ -160,37 +132,12 @@ define(['jquery', 'core/notification'], function($) {
            });
           }
         }
-
-        $('#id_matrnr').blur(function() { // reload page if matrnr is entered
-
-           var matrnr = $(this).val();
-           var id = getUrlParameter('id');
-
-           if (matrnr.match(/^\d+$/)){
-              location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
-           } else {
-             $(this).val('');
-             require(['core/notification'], function(notification) {
-              notification.addNotification({
-                message: "Keine gültiges Matrikelnummernformat",
-                type: "error"
-              });
-            });
-           }
-
-        });
       });
 
       $("#totalpoints").text(getTotalpoints()); // change totalpoints
 
       $('#id_submitbutton').click(function() {  // if submittbutton is presses enable complete form (for moodle purposes)
-        $(".form-group input.form-control").each(function() {
-          $(this).prop( "disabled", false );
-        });
-        $(".form-group input.checkboxgroup1").each(function() {
-          $(this).prop( "disabled", false );
-        });
-        $("#id_submitbutton").each(function() {
+        $(".id_matrnr").each(function() {
           $(this).prop( "disabled", false );
         });
       });

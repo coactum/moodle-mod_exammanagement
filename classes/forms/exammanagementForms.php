@@ -528,9 +528,11 @@ class exammanagementForms{
 							}
 						} else {
 							$case = 'noparticipant';
+							$matrnr = false;
 						}
 				} else {
 					$case = 'novalidmatrnr';
+					$matrnr = false;
 				}
 			}
 
