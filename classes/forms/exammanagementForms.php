@@ -536,7 +536,9 @@ class exammanagementForms{
 				}
 			}
 
-			var_dump('instantiate new form');
+			var_dump('instantiate new form for following matrnr');
+			var_dump($matrnr);
+
 			//Instantiate Textfield_form
 			$mform = new inputResultsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'matrnr'=>$matrnr, 'firstname'=>$firstname, 'lastname'=>$lastname));
 
@@ -572,7 +574,6 @@ class exammanagementForms{
 			  // or on the first display of the form.
 
 				var_dump('Inhalt nicht validiert oder erste Anzeige des Formulars');
-				var_dump($matrnr);
 
 				switch ($case) {
 				    case 'participantwithresults':
