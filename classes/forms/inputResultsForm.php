@@ -148,9 +148,6 @@ class inputResultsForm extends moodleform {
 
     //Custom validation should be added here
     function validation($data, $files) {
-
-        var_dump('Validiere Formularinhalt vor dem abschicken');
-        var_dump($data);
         return array();
     }
 }
