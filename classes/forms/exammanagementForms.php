@@ -563,7 +563,7 @@ class exammanagementForms{
 				} else {
 						var_dump('nein, speichere Ergebnisse');
 
-						//$ExammanagementInstanceObj->saveResults($fromform);
+						$ExammanagementInstanceObj->saveResults($fromform);
 				}
 
 			} else {

@@ -138,7 +138,7 @@ class inputResultsForm extends moodleform {
 
         $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
 
-        if($this->_customdata['matrnr']){
+        if(!$this->_customdata['matrnr']){
             $mform->addElement('html', '<hr /><strong><p>'.get_string('confirm_matrnr', 'mod_exammanagement').'</p></strong>');
         }
 
