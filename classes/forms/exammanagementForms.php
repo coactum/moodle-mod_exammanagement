@@ -554,14 +554,15 @@ class exammanagementForms{
 				$matrval = $fromform->matrval;
 
 				var_dump('entscheide ob matrikelnummervadation und redirect nötig');
-				var_dump($matrval);
 
 				if ($matrval){
 						var_dump('Ja, führe redirect durch');
 
 						redirect ('inputResults.php?id='.$this->id.'&matrnr='.$fromform->matrnr, null, null, null);
 				} else {
-						var_dump('nein, speichere Ergebnisse');
+						var_dump('nein, speichere folgende Ergebnisse');
+
+						var_dump($fromform);
 
 						$ExammanagementInstanceObj->saveResults($fromform);
 				}

@@ -130,7 +130,7 @@ $string['ill'] = 'Krank';
 $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
 $string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch über Drücken der Enter- bzw. Return-Taste möglich.';
-$string['input_other_matrnr'] = 'Neue Matrikelnummer eintragen';
+$string['input_other_matrnr'] = 'Matrikelnummer ändern';
 
 //showResultsForm.php
 $string['show_results_str'] = 'Übersicht Prüfungsergebnisse';
