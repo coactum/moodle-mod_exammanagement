@@ -129,7 +129,7 @@ $string['fraud_attempt'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
-$string['confirm_matrnr'] = 'Zur Bestätigung der Matrikelnummer bitte Enter/Return drücken.';
+$string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch über Drücken der Enter- bzw. Return-Taste möglich.';
 $string['input_other_matrnr'] = 'Neue Matrikelnummer eintragen';
 
 //showResultsForm.php

@@ -71,8 +71,6 @@ class inputResultsForm extends moodleform {
         if($this->_customdata['matrnr']){
             $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-xs-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit hidden-md-up" aria-hidden="true"></i></a></span></div>');
 
-        } else {
-            $mform->addElement('html', '<hr /><strong><p>'.get_string('confirm_matrnr', 'mod_exammanagement').'</p></strong>');
         }
 
         //create list of tasks
@@ -135,7 +133,13 @@ class inputResultsForm extends moodleform {
         $mform->hideIf('state[ill]', 'matrval', 'eq', 1);
 
         if($this->_customdata['matrnr']){
-            $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
+            $mform->addElement('html', '<hr />');
+        }
+
+        $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
+
+        if($this->_customdata['matrnr']){
+            $mform->addElement('html', '<hr /><strong><p>'.get_string('confirm_matrnr', 'mod_exammanagement').'</p></strong>');
         }
 
         $mform->disable_form_change_checker();
