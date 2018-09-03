@@ -1180,11 +1180,6 @@ public function saveResults($fromform){
 
 			$this->moduleinstance->results = $results;
 
-			var_dump('Speichere folgende Ergebnisse in Modulinstanz:');
-			var_dump($results);
-			var_dump('Modulinstanz:');
-			var_dump($this->moduleinstance);
-
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
 			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ergebnis gespeichert', null, notification::NOTIFY_SUCCESS);
