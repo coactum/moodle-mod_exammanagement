@@ -76,7 +76,10 @@ class inputResultsForm extends moodleform {
         }
 
         //create list of tasks
-        $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
+
+        if($this->_customdata['matrnr']){
+            $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
+        }
 
         $tasks = $ExammanagementInstanceObj->getTasks();
         $totalpoints = 0;
@@ -114,17 +117,26 @@ class inputResultsForm extends moodleform {
         $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
         $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
 
-
-        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+        if($this->_customdata['matrnr']){
+            $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+        }
 
         //create checkboxes for exams state
-        $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_state', 'mod_exammanagement').'</p></strong>');
+        if($this->_customdata['matrnr']){
+            $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_state', 'mod_exammanagement').'</p></strong>');
+        }
 
         $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null, array('group' => 1));
         $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
         $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
 
-        $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
+        $mform->hideIf('state[nt]', 'matrval', 'eq', 1);
+        $mform->hideIf('state[fa]', 'matrval', 'eq', 1);
+        $mform->hideIf('state[ill]', 'matrval', 'eq', 1);
+
+        if($this->_customdata['matrnr']){
+            $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
+        }
 
         $mform->disable_form_change_checker();
 
