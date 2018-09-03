@@ -536,6 +536,7 @@ class exammanagementForms{
 				}
 			}
 
+			var_dump('instantiate new form');
 			//Instantiate Textfield_form
 			$mform = new inputResultsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'matrnr'=>$matrnr, 'firstname'=>$firstname, 'lastname'=>$lastname));
 
@@ -547,33 +548,60 @@ class exammanagementForms{
 			} else if ($fromform = $mform->get_data()) {
 			  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-				$ExammanagementInstanceObj->saveResults($fromform);
+				var_dump('Habe Formularergebnisse bekommen');
+				var_dump($fromform);
+
+				$matrval = $fromform->matrval;
+
+				var_dump('entscheide ob matrikelnummervadation und redirect nötig');
+				var_dump($matrval);
+
+				if ($matrval){
+						var_dump('Ja, führe redirect durch');
+
+						redirect ('inputResults.php?id='.$this->id.'&matrnr='.$fromform->matrnr, null, null, null);
+				} else {
+						var_dump('nein, speichere Ergebnisse');
+
+						//$ExammanagementInstanceObj->saveResults($fromform);
+				}
 
 			} else {
 			  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			  // or on the first display of the form.
 
+				var_dump('Inhalt nicht validiert oder erste Anzeige des Formulars');
+				var_dump($matrnr);
+
 				switch ($case) {
 				    case 'participantwithresults':
-								$mform->set_data(array('id'=>$this->id, 'matrnr'=>$matrnr, 'state[nt]'=>$resultObj->state->nt, 'state[fa]'=>$resultObj->state->fa, 'state[ill]'=>$resultObj->state->ill));
+								$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$resultObj->state->nt, 'state[fa]'=>$resultObj->state->fa, 'state[ill]'=>$resultObj->state->ill));
 
 								foreach ($resultObj->points as $key=>$points){
 									$mform->set_data(array('points['.$key.']'=>$points));
 								}
+								var_dump('Baue Form: Teilnehmer mit Ergebnissen');
+
 				        break;
 				    case 'participant':
-								$mform->set_data(array('id'=>$this->id, 'matrnr'=>$matrnr));
+								$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr));
+								var_dump('Baue Form: Teilnehmer ohe  ergebnisse');
+
 				        break;
 				    case 'noparticipant':
-								$mform->set_data(array('id'=>$this->id));
+								$mform->set_data(array('id'=>$this->id, 'matrval'=>1,));
 								\core\notification::add('Ungültige Matrikelnummer', 'error');
+								var_dump('Baue Form: kein Teilnehmer');
+
 				        break;
 						case 'novalidmatrnr':
-								$mform->set_data(array('id'=>$this->id));
+								$mform->set_data(array('id'=>$this->id, 'matrval'=>1,));
 								\core\notification::add('Keine gültige Matrikelnummer', 'error');
+								var_dump('Baue Form: keine gültige matrnr');
+
 				        break;
 						default:
-								$mform->set_data(array('id'=>$this->id));
+								$mform->set_data(array('id'=>$this->id, 'matrval'=>1,));
 								break;
 				}
 
