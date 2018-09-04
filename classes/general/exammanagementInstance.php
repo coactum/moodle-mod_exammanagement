@@ -1182,7 +1182,7 @@ public function saveResults($fromform){
 
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 
-			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ergebnis gespeichert', null, notification::NOTIFY_SUCCESS);
+			redirect ($this->getExammanagementUrl('inputResults', $this->id), null, null, null);
 
 		} else{
 			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);

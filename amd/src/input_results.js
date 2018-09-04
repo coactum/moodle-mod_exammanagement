@@ -169,6 +169,11 @@ define(['jquery', 'core/notification'], function($) {
 
       $("#totalpoints").text(getTotalpoints()); // change totalpoints
 
+      if($("#id_points_1")){
+          alert('setze Fokus');
+          $("#id_points_1").focus();
+      }
+
       $('#id_submitbutton').click(function() {  // if submittbutton is presses enable complete form (for moodle purposes)
         $("#id_matrnr").each(function() {
           $(this).prop( "disabled", false );
