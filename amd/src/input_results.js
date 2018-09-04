@@ -169,8 +169,9 @@ define(['jquery', 'core/notification'], function($) {
 
       $("#totalpoints").text(getTotalpoints()); // change totalpoints
 
-      if($("#id_points_1")){
-          alert('setze Fokus');
+      if($("#id_matrval").val() == 1){
+          $("#id_matrnr").focus();
+      } else {
           $("#id_points_1").focus();
       }
 
