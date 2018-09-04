@@ -73,9 +73,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetAuthor('PANDA');
-    $pdf->SetTitle($ExammanagementInstanceObj->getCourse()->fullname);
+    $pdf->SetTitle(get_string('examlabels', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
     $pdf->SetSubject(get_string('examlabels', 'mod_exammanagement'));
-    $pdf->SetKeywords(get_string('examlabels', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname);
+    $pdf->SetKeywords(get_string('examlabels', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
 
     // set default monospaced font
     $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -209,7 +209,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("examlabels", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname.'.pdf';
+    $filenameUmlaute = get_string("examlabels", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname. '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------
