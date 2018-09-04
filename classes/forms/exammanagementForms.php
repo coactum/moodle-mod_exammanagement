@@ -490,7 +490,7 @@ class exammanagementForms{
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
-			$case;
+			$pcase;
 			$result;
 			$firstname = '';
 			$lastname = '';
@@ -508,14 +508,14 @@ class exammanagementForms{
 						$participantsIds = json_decode($ExammanagementInstanceObj->moduleinstance->participants);
 
 						if(in_array($userid, $participantsIds)){
-							$case = 'participant';
+							$pcase = 'participant';
 
 							$results = json_decode($ExammanagementInstanceObj->moduleinstance->results);
 
 							if($results){
 								foreach($results as $key => $resultObj){
 									if ($resultObj->uid == $userid){
-											$case = 'participantwithresults';
+											$pcase = 'participantwithresults';
 
 											$result = $resultObj;
 											$moodleUser = $ExammanagementInstanceObj->getMoodleUser($userid);
@@ -527,11 +527,11 @@ class exammanagementForms{
 								}
 							}
 						} else {
-							$case = 'noparticipant';
+							$pcase = 'noparticipant';
 							$matrnr = false;
 						}
 				} else {
-					$case = 'novalidmatrnr';
+					$pcase = 'novalidmatrnr';
 					$matrnr = false;
 				}
 			}
@@ -559,7 +559,7 @@ class exammanagementForms{
 			  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			  // or on the first display of the form.
 
-				switch ($case) {
+				switch ($pcase) {
 				    case 'participantwithresults':
 								$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$resultObj->state->nt, 'state[fa]'=>$resultObj->state->fa, 'state[ill]'=>$resultObj->state->ill));
 

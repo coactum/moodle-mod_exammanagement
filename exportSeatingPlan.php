@@ -160,98 +160,98 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     		case "AudiMax":
     			$x = 30;
     			$y = 30;
-    			$width = 250;
+    			$width = '250';
     			break;
 
     		case "C1":
     			$x = 50;
     			$y = 30;
-    			$width = 180;
+    			$width = '180';
     			break;
 
     		case "C2":
     			$x = 70;
     			$y = 50;
-    			$width = 140;
+    			$width = '140';
     			break;
 
     		case "G":
     			$x = 35;
     			$y = 45;
-    			$width = 225;
+    			$width = '225';
     			break;
 
     		case "P52.01":
     			$x = 35;
     			$y = 50;
-    			$width = 225;
+    			$width = '225';
     			break;
 
     		case "P52.03":
     			$x = 55;
     			$y = 50;
-    			$width = 175;
+    			$width = '175';
     			break;
 
     		case "P62.01":
     			$x = 35;
     			$y = 55;
-    			$width = 225;
+    			$width = '225';
     			break;
 
     		case "P62.03":
     			$x = 70;
     			$y = 60;
-    			$width = 140;
+    			$width = '140';
     			break;
 
     		case "P72.01":
     			$x = 45;
     			$y = 45;
-    			$width = 200;
+    			$width = '200';
     			break;
 
     		case "P72.03":
     			$x = 60;
     			$y = 45;
-    			$width = 180;
+    			$width = '180';
     			break;
 
     		case "O0.207":
     			$x = 25;
     			$y = 55;
-    			$width = 240;
+    			$width = '240';
     			break;
 
     		case "O1.267":
     			$x = 85;
     			$y = 50;
-    			$width = 120;
+    			$width = '120';
     			break;
 
     		case "L1":
     		case "L2":
     			$x = 80;
     			$y = 30;
-    			$width = 140;
+    			$width = '140';
     			break;
 
     		case "L1.202":
     			$x = 80;
     			$y = 30;
-    			$width = 140;
+    			$width = '140';
     			break;
 
         case "L2.202":
           $x = 54;
           $y = 90;
-          $width = 503;
+          $width = '503';
           break;
 
     		case "Eggelandhalle":
     			$x = 100;
     			$y = 30;
-    			$width = 140;
+    			$width = '140';
     			break;
 
     		// any case where no plan is available
@@ -283,7 +283,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       //$pdf->ImageEps('../extensions/exam_organization/images/' . $roomObj->roomid . '.svg', $x, $y, $width);
       //$pdf->writeHTML($svgFile, true, false, false, false, '');
 
-      $pdf->ImageSVG('@'.$svgFile, $x, $y, $width, $border=1, $fitonpage=false);
+      $pdf->ImageSVG('@'.$svgFile, $x, $y, $w = '100', $h = "100", $link = '', $border=1, $fitonpage=false);
+
+      //$pdf->ImageSVG('@'.$svgFile, $x, $y, $w = "100", $h = "100", $border=1, $fitonpage=false)
     }
 
 
