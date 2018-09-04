@@ -212,7 +212,7 @@ ajaxtoogleInformation = function(command, value){
 											</div>
 											<div class="row row-eq-height">
 												<div class="col-xs-6">
-													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}{{#participants}}panel-warning{{/participants}}{{/textfield}}{{^textfield}}{{^participants}}panel-danger{{/participants}}{{/textfield}}">
+													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}{{#participants}}panel-info{{/participants}}{{/textfield}}{{^textfield}}{{^participants}}panel-danger{{/participants}}{{/textfield}}">
 														<div class="panel-heading">
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Freitextfeld</h3>
@@ -229,7 +229,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
 														</div>
 														<div class="panel-footer">
-															{{#participants}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-warning{{/textfield}} pull-right" href="textfield.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+															{{#participants}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="textfield.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/participants}}
 														</div>
 													</div>
 												</div>
@@ -512,6 +512,8 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Notenschlüßel</h3>
 																<span class="statebar col-xs-6">
+																	{{#gradingscale}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	{{^gradingscale}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
 																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>

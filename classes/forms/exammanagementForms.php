@@ -178,7 +178,7 @@ class exammanagementForms{
 				//saveParticipants in DB
 				$participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
 
-				$ExammanagementInstanceObj->saveParticipants($participants, '');
+				$ExammanagementInstanceObj->saveParticipants($participants, '', 'save');
 
 				$$ExammanagementInstanceObj->clearTempParticipants();
 
