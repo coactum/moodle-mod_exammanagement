@@ -310,6 +310,12 @@ EOF;
 				} else {
 						return false;
 				}
+			case "Exam":
+				if ($this->getExamtime() < time()){
+					return true;
+				} else {
+					return false;
+				}
 			case 3:
 				if ($this->getInputResultsCount()){
 					return true;
@@ -320,6 +326,30 @@ EOF;
 				return false;
  		}
 
+ 	}
+
+	public function determineCurrentPhase(){
+
+			$phaseOne = $this->checkPhaseCompletion(1);
+			$phaseTwo = $this->checkPhaseCompletion(2);
+			$phaseThree = $this->checkPhaseCompletion(3);
+			$phaseFour = $this->checkPhaseCompletion(4);
+
+			$examDate = $this->getExamtime();
+			$date = time();
+
+ 			if(!$phaseOne){
+					var_dump('Phase 1 Aktiv');
+					return '1';
+			} else if(!$phaseTwo){
+					return '2';
+			} else if($phaseTwo && $examDate > $date){
+					return 'exam';
+			} else if(!$phaseThree && $examDate < $date){
+					return '3';
+			} else if($phaseThree && $examDate < $date){
+					return '4';
+			}
  	}
 
 	#### participants view ####

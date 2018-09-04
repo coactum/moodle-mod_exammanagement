@@ -41,8 +41,14 @@ class exammanagement_overview implements renderable, templatable {
     protected $cmid;
     protected $firstphasecompleted;
     protected $secondphasecompleted;
+    protected $examphasecompleted;
     protected $thirdphasecompleted;
     protected $fourthphasecompleted;
+    protected $firstphaseactive;
+    protected $secondphaseactive;
+    protected $examphaseactive;
+    protected $thirdphaseactive;
+    protected $fourthphaseactive;
     protected $hrexamtime;
     protected $textfield;
     protected $taskcount;
@@ -62,12 +68,18 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
+        $this->examphasecompleted = $examphasecompleted;
         $this->thirdphasecompleted = $thirdphasecompleted;
         $this->fourthphasecompleted = $fourthphasecompleted;
+        $this->firstphaseactive = $firstphaseactive;
+        $this->secondphaseactive = $secondphaseactive;
+        $this->examphaseactive = $examphaseactive;
+        $this->thirdphaseactive = $thirdphaseactive;
+        $this->fourthphaseactive = $fourthphaseactive;
         $this->hrexamtime = $hrexamtime;
         $this->taskcount = $taskcount;
         $this->tasktotalpoints = $tasktotalpoints;
@@ -94,8 +106,14 @@ class exammanagement_overview implements renderable, templatable {
         $data->cmid = $this->cmid;
         $data->firstphasecompleted = $this->firstphasecompleted;
         $data->secondphasecompleted = $this->secondphasecompleted;
+        $data->examphasecompleted = $this->examphasecompleted;
         $data->thirdphasecompleted = $this->thirdphasecompleted;
         $data->fourthphasecompleted = $this->fourthphasecompleted;
+        $data->firstphaseactive = $this->firstphaseactive;
+        $data->secondphaseactive = $this->secondphaseactive;
+        $data->examphaseactive = $this->examphaseactive;
+        $data->thirdphaseactive = $this->thirdphaseactive;
+        $data->fourthphaseactive = $this->fourthphaseactive;
         $data->hrexamtime = $this->hrexamtime;
         $data->taskcount = $this->taskcount;
         $data->tasktotalpoints = $this->tasktotalpoints;

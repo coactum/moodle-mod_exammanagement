@@ -86,7 +86,57 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
-  $page = new exammanagement_overview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->checkPhaseCompletion(1), $ExammanagementInstanceObj->checkPhaseCompletion(2), $ExammanagementInstanceObj->checkPhaseCompletion(3), $ExammanagementInstanceObj->checkPhaseCompletion(4), $ExammanagementInstanceObj->getHrExamtimeTemplate(), $ExammanagementInstanceObj->getTaskCount(), $ExammanagementInstanceObj->getTaskTotalPoints(), $ExammanagementInstanceObj->getShortenedTextfield(), $ExammanagementInstanceObj->getParticipantsCount(), $ExammanagementInstanceObj->getRoomsCount(), $ExammanagementInstanceObj->getChoosenRoomNames(), $ExammanagementInstanceObj->isStateOfPlacesCorrect(), $ExammanagementInstanceObj->isStateOfPlacesError(), $ExammanagementInstanceObj->isDateTimeVisible(),$ExammanagementInstanceObj->isRoomVisible(),$ExammanagementInstanceObj->isPlaceVisible(), $ExammanagementInstanceObj->getGradingscale(), $ExammanagementInstanceObj->getInputResultsCount());
+
+  $cmid = $ExammanagementInstanceObj->getCm()->id;
+  $statePhaseOne = $ExammanagementInstanceObj->checkPhaseCompletion(1);
+  $statePhaseTwo = $ExammanagementInstanceObj->checkPhaseCompletion(2);
+  $statePhaseExam = $ExammanagementInstanceObj->checkPhaseCompletion("Exam");
+  $statePhaseThree = $ExammanagementInstanceObj->checkPhaseCompletion(3);
+  $statePhaseFour = $ExammanagementInstanceObj->checkPhaseCompletion(4);
+
+  $currentPhaseOne = false;
+  $currentPhaseTwo = false;
+  $currentPhaseExam = false;
+  $currentPhaseThree = false;
+  $currentPhaseFour = false;
+
+  $currentPhase = $ExammanagementInstanceObj->determineCurrentPhase();
+  switch ($currentPhase){
+    case '1':
+        $currentPhaseOne = true;
+        break;
+    case '2':
+        $currentPhaseTwo = true;
+        break;
+    case 'exam':
+        $currentPhaseExam = true;
+        break;
+    case '3':
+        $currentPhaseThree = true;
+        break;
+    case '4':
+        $currentPhaseFour = true;
+        break;
+    default:
+        break;
+  }
+
+  $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
+  $taskcount = $ExammanagementInstanceObj->getTaskCount();
+  $taskpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+  $textfieldcontent = $ExammanagementInstanceObj->getShortenedTextfield();
+  $participantscount = $ExammanagementInstanceObj->getParticipantsCount();
+  $roomscount = $ExammanagementInstanceObj->getRoomsCount();
+  $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
+  $stateofplaces = $ExammanagementInstanceObj->isStateOfPlacesCorrect();
+  $stateofplaceserror = $ExammanagementInstanceObj->isStateOfPlacesError();
+  $datetimevisible = $ExammanagementInstanceObj->isDateTimeVisible();
+  $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
+  $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
+  $gradingscale = $ExammanagementInstanceObj->getGradingscale();
+  $resultscount = $ExammanagementInstanceObj->getInputResultsCount();
+
+  $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount);
   echo $output->render($page);
 
   //$this->debugElementsOverview();

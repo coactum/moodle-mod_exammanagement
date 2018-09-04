@@ -154,8 +154,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $user->lastname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $user->firstname . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . utf8_encode($user->lastname) . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . utf8_encode($user->firstname) . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
