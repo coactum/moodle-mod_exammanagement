@@ -41,11 +41,9 @@ function exammanagement_supports($feature) {
             return true;
     	case FEATURE_SHOW_DESCRIPTION:
             return true;
-        case FEATURE_GRADE_HAS_GRADE:
+      case FEATURE_BACKUP_MOODLE2:
             return true;
-        case FEATURE_BACKUP_MOODLE2:
-            return true;
-        default:
+      default:
             return null;
     }
 }
@@ -98,119 +96,16 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
  * @return bool True if successful, false on failure.
  */
 function exammanagement_delete_instance($id) {
-    global $DB;
-
-    $exists = $DB->get_record('exammanagement', array('id' => $id));
-    if (!$exists) {
-        return false;
-    }
-
-    $DB->delete_records('exammanagement', array('id' => $id));
+    // global $DB;
+    //
+    // $exists = $DB->get_record('exammanagement', array('id' => $id));
+    // if (!$exists) {
+    //     return false;
+    // }
+    //
+    // $DB->delete_records('exammanagement', array('id' => $id));
 
     return true;
-}
-
-/**
- * Is a given scale used by the instance of mod_exammanagement?
- *
- * This function returns if a scale is being used by one mod_exammanagement
- * if it has support for grading and scales.
- *
- * @param int $moduleinstanceid ID of an instance of this module.
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by the given mod_exammanagement instance.
- */
-function exammanagement_scale_used($moduleinstanceid, $scaleid) {
-    global $DB;
-
-    if ($scaleid && $DB->record_exists('exammanagement', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Checks if scale is being used by any instance of mod_exammanagement.
- *
- * This is used to find out if scale used anywhere.
- *
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by any mod_exammanagement instance.
- */
-function exammanagement_scale_used_anywhere($scaleid) {
-    global $DB;
-
-    if ($scaleid and $DB->record_exists('exammanagement', array('grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Creates or updates grade item for the given mod_exammanagement instance.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param bool $reset Reset grades in the gradebook.
- * @return void.
- */
-function exammanagement_grade_item_update($moduleinstance, $reset=false) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    $item = array();
-    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
-    $item['gradetype'] = GRADE_TYPE_VALUE;
-
-    if ($moduleinstance->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $moduleinstance->grade;
-        $item['grademin']  = 0;
-    } else if ($moduleinstance->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$moduleinstance->grade;
-    } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
-    }
-    if ($reset) {
-        $item['reset'] = true;
-    }
-
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, null, $item);
-}
-
-/**
- * Delete grade item for given mod_exammanagement instance.
- *
- * @param stdClass $moduleinstance Instance object.
- * @return grade_item.
- */
-function exammanagement_grade_item_delete($moduleinstance) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    return grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement',
-                        $moduleinstance->id, 0, null, array('deleted' => 1));
-}
-
-/**
- * Update mod_exammanagement grades in the gradebook.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param int $userid Update grade of specific user only, 0 means all participants.
- */
-function exammanagement_update_grades($moduleinstance, $userid = 0) {
-    global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    // Populate array of grade objects indexed by userid.
-    $grades = array();
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, $grades);
 }
 
 /**

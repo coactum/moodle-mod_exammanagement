@@ -141,10 +141,10 @@ class showResultsForm extends moodleform {
             $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
             $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
             $mform->addElement('html', '<div class="col-sm-2">'.$points.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
-            if($result){
+            if($gradingscale){
                 $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.$result.'</span></div></div>');
             } else {
-              $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></span></div></div>');
+              $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');
             }
 
         }

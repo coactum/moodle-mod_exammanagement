@@ -73,7 +73,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
 
         // Add standard grading elements.
-        $this->standard_grading_coursemodule_elements();
+        //$this->standard_grading_coursemodule_elements();
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
