@@ -167,6 +167,9 @@ $string['numbered_seats_usable_seats'] = 'nummerierte Sitze = benutzbare Sitze';
 $string['examlabels'] = 'Prüfungsetiketten';
 $string['required_label_type'] = 'Benötigter Etikettentyp:Avery Zweckform L4744';
 
+// exortResultsPAULFile.php
+$string['results'] = 'Prüfungsergebnisse';
+
 //helptexts
 $string['help'] = 'Hilfe';
 

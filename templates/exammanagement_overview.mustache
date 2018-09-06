@@ -659,17 +659,14 @@ ajaxtoogleInformation = function(command, value){
 												</div>
                       </div>
                       <div class="col-xs-6">
-												<div class="panel panel-danger">
+												<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>
 															<span class="statebar col-xs-6">
-																<!-- {{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span> -->
-																		<span class="label label-danger pull-right" title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
-																</span>
+																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
 													</div>
@@ -677,7 +674,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
+														{{#stateofplacescorrect}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/stateofplacescorrect}}
 													</div>
 												</div>
                       </div>

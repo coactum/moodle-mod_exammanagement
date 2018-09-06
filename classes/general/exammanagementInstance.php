@@ -1155,7 +1155,7 @@ public function checkIfValidMatrNr($mnr) {
 			}
 	}
 
-######### feature: configure gradingscale ##########
+######### feature: input results ##########
 
 public function saveResults($fromform){
 
@@ -1229,6 +1229,76 @@ public function getResults(){
 			return false;
 		}
 }
+
+public function calculateTotalPoints($resultObj){
+		$points = 0;
+		foreach($resultObj->points as $key => $taskpoints){
+				$points += $taskpoints;
+		}
+		return $points;
+}
+
+public function getResultState($resultObj){
+		foreach($resultObj->state as $key => $value){
+				if($key == 'nt' && $value == 1){
+						return 'nt';
+				} else if ($key == 'fa' && $value == 1){
+						return 'fa';
+				} else if ($key == 'ill' && $value == 1){
+						return 'ill';
+				} else {
+					return 'normal';
+				}
+		}
+}
+
+public function calculateResultGrade($resultObj){
+
+	$gradingscale = $this->getGradingscale();
+
+	$result = false;
+
+	$state = $this->getResultState($resultObj);
+
+	if($state == "nt" || $state == "fa" || $state == "ill"){
+			$result = 5;
+	}
+
+	$totalpoints = $this->calculateTotalPoints($resultObj);
+	$lastpoints = 0;
+
+	if($totalpoints && $gradingscale){
+		foreach($gradingscale as $key => $step){
+
+			if($key == '1.0' && $totalpoints == $step){
+					$result = $key;
+			} else if($totalpoints < $lastpoints && $totalpoints >= $step){
+				$result = $key;
+			} else if($key == '4.0' && $totalpoints <= $step){
+				$result = 5;
+			}
+
+			$lastpoints = $step;
+
+		}
+	}
+
+	return $result;
+}
+
+######### feature: exportResults ##########
+
+public function getPAULFileHeaders(){
+
+		$PAULFileHeaders = json_decode($this->moduleinstance->importfileheaders);
+
+		if($PAULFileHeaders){
+				return $PAULFileHeaders;
+		} else{
+			return false;
+		}
+}
+
 	########### Export PDFS ####
 
 		public function getParticipantsListTableHeader() { // to bemoved to pdf object

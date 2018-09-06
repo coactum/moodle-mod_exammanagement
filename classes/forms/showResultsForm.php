@@ -58,94 +58,66 @@ class showResultsForm extends moodleform {
 
         $results = $ExammanagementInstanceObj->getResults();
 
-        foreach($results as $key => $resultObj){
+        if($results){
+            foreach($results as $key => $resultObj){
 
-            $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
+                $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
 
-            if($LdapManagerObj->is_LDAP_config()){
-        				$ldapConnection = $LdapManagerObj->connect_ldap();
-                $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $resultObj->uid);
-        		} else {
-        			  $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);
-        		}
+                if($LdapManagerObj->is_LDAP_config()){
+            				$ldapConnection = $LdapManagerObj->connect_ldap();
+                    $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $resultObj->uid);
+            		} else {
+            			  $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);
+            		}
 
-            $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
-            $room;
-            $place;
+                $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
+                $room;
+                $place;
 
-            foreach($assignedPlaces as $roomObj){
+                foreach($assignedPlaces as $roomObj){
 
-                foreach($roomObj->assignments as $assignment){
+                    foreach($roomObj->assignments as $assignment){
 
-                    if($assignment->userid == $resultObj->uid){
-                        $room = $roomObj->roomname;
-                        $place = $assignment->place;
+                        if($assignment->userid == $resultObj->uid){
+                            $room = $roomObj->roomname;
+                            $place = $assignment->place;
+                        }
                     }
                 }
-            }
 
-            $points = 0;
-            $state;
+                $totalpoints = false;
 
-            foreach($resultObj->state as $key => $value){
+                $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-                if($key == 'nt' && $value == 1){
-                    $points = get_string("nt", "mod_exammanagement");
-                    $state = 'nt';
-                } else if ($key == 'fa' && $value == 1){
-                    $points = get_string("fa", "mod_exammanagement");
-                    $state = 'fa';
-                } else if ($key == 'ill' && $value == 1){
-                    $points = get_string("ill", "mod_exammanagement");
-                    $state = 'ill';
+                $state = $ExammanagementInstanceObj->getResultState($resultObj);
+
+                if($state == 'nt'){
+                    $totalpoints = get_string("nt", "mod_exammanagement");
+                } else if ($state == 'fa'){
+                    $totalpoints = get_string("fa", "mod_exammanagement");
+                } else if ($state == 'ill'){
+                    $totalpoints = get_string("ill", "mod_exammanagement");
+                } else{
+                    $totalpoints = false;
+                }
+
+                if (!$totalpoints){
+                    $totalpoints = $ExammanagementInstanceObj->calculateTotalPoints($resultObj);
+                }
+
+                $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
+                $mform->addElement('html', '<div class="col-sm-2">'.$moodleUser->lastname.'</div>');
+                $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
+                $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
+                $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
+                $mform->addElement('html', '<div class="col-sm-2">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
+                if($gradingscale){
+                    $result = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
+                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.$result.'</span></div></div>');
+                } else {
+                  $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');
                 }
             }
-
-            if(!$points){
-                foreach($resultObj->points as $key => $taskpoints){
-                    $points += $taskpoints;
-                }
-            }
-
-            $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-
-            $result = false;
-
-            if($state == "nt" || $state == "fa" || $state == "ill"){
-                $result = 5;
-            }
-
-            $lastpoints = 0;
-
-            if($points && $gradingscale){
-
-                foreach($gradingscale as $key => $step){
-
-                  if($key == '1.0' && $points == $step){
-                      $result = $key;
-                  } else if($points < $lastpoints && $points >= $step){
-                    $result = $key;
-                  } else if($key == '4.0' && $points <= $step){
-                    $result = 5;
-                  }
-
-                  $lastpoints = $step;
-
-                }
-            }
-
-            $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
-            $mform->addElement('html', '<div class="col-sm-2">'.$moodleUser->lastname.'</div>');
-            $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
-            $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
-            $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
-            $mform->addElement('html', '<div class="col-sm-2">'.$points.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
-            if($gradingscale){
-                $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.$result.'</span></div></div>');
-            } else {
-              $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');
-            }
-
         }
 
         $mform->addElement('hidden', 'id', 'dummy');
