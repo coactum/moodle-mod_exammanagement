@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
+use mod_exammanagement\general\MoodleDB;
 
 use moodleform;
 
@@ -36,6 +37,7 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
+require_once(__DIR__.'/../general/MoodleDB.php');
 
 class chooseRoomsForm extends moodleform {
 
@@ -44,12 +46,12 @@ class chooseRoomsForm extends moodleform {
 
     global $PAGE, $CFG;
 
-    $PAGE->requires->js_call_amd('mod_exammanagement/disable_doubleselection', 'disable_doubleselection'); //call jquery for disabling double selection of same rooms
     //$PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
     $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+    $MoodleDBObj = MoodleDB::getInstance();
 
     $mform = $this->_form; // Don't forget the underscore!
 
@@ -59,8 +61,6 @@ class chooseRoomsForm extends moodleform {
     $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
     $mform->addElement('html', '<h3 class="choose">Räume auswählen</h3></div>');
     $mform->addElement('html', '<a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
-
-    //$mform->addElement('html', '<h3 class="import">Neue Räume hinzufügen</h3>');
 
     if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
       $mform->addElement('html', '<div class="col-xs-4"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary pull-right" title="'.get_string("import_default_rooms", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_default_rooms", "mod_exammanagement").'</span><i class="fa fa-building hidden-md-up" aria-hidden="true"></i></a></div>');
@@ -89,8 +89,19 @@ class chooseRoomsForm extends moodleform {
       foreach($allRoomIDs as $key => $value){
 
         $roomObj = $ExammanagementInstanceObj->getRoomObj($value);
+        $similiarRoomIDsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomObj->name));;
+        $disableName = explode('_', $roomObj->roomid);
+
         $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-        $mform->addElement('advcheckbox', 'rooms['.$value.']', $roomObj->name, null, array('group' => 1));
+        $mform->addElement('advcheckbox', 'rooms['.$roomObj->roomid.']', $roomObj->name, null, array('group' => 1));
+
+        foreach($similiarRoomIDsArr as $key => $similiarRoomObj){ // code for preventing selection of multiple versions of the same room
+
+            if (strpos($similiarRoomObj->roomid, $disableName[0])!==false){
+              $mform->disabledif('rooms['.$roomObj->roomid.']', 'rooms['.$similiarRoomObj->roomid.']', 'checked');
+            }
+        }
+
         $mform->addElement('html', '</div><div class="col-xs-3"> '.$roomObj->description.' </div>');
         $mform->addElement('html', '<div class="col-xs-3">');
         if ($roomObj->seatingplan){
@@ -113,8 +124,8 @@ class chooseRoomsForm extends moodleform {
 
         if($checkedRoomIDs){
           foreach($checkedRoomIDs as $key2 => $value2){
-            if($allRoomIDs[$key]==$value2){
-              $mform->setDefault('rooms['.$value.']', true);
+            if($roomObj->roomid==$value2){
+              $mform->setDefault('rooms['.$roomObj->roomid.']', true);
             }
           }
         }

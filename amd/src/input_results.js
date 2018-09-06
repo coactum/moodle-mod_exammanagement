@@ -176,9 +176,7 @@ define(['jquery', 'core/notification'], function($) {
       }
 
       $('#id_submitbutton').click(function() {  // if submittbutton is presses enable complete form (for moodle purposes)
-        $("#id_matrnr").each(function() {
-          $(this).prop( "disabled", false );
-        });
+        $("#id_matrnr").prop( "disabled", false );
       });
     },
   };

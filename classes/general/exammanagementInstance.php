@@ -339,7 +339,6 @@ EOF;
 			$date = time();
 
  			if(!$phaseOne){
-					var_dump('Phase 1 Aktiv');
 					return '1';
 			} else if(!$phaseTwo){
 					return '2';
@@ -536,7 +535,7 @@ EOF;
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('id' => $roomID));;
+		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));;
 
 		return $room;
 	}
@@ -582,7 +581,7 @@ EOF;
 
 			foreach ($allRooms as $key => $value){
 				$temp=get_object_vars($value);
-				$allRoomIDs[$key] = $temp['id'];
+				$allRoomIDs[$key] = $temp['roomid'];
 			}
 
 			array_multisort($allRoomNames, $allRoomIDs);
@@ -602,7 +601,7 @@ EOF;
 			$rooms=array();
 
 			foreach ($roomsArray as $key => $value){
-				if ($value==1){
+				if ($value==1 && is_string($value)){
 					array_push($rooms, $key);
 				}
 

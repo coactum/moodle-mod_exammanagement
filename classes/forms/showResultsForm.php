@@ -87,14 +87,15 @@ class showResultsForm extends moodleform {
             $points = 0;
             $state;
 
-            foreach($resultObj as $stateArr){
-                if($stateArr->nt == 1){
+            foreach($resultObj->state as $key => $value){
+
+                if($key == 'nt' && $value == 1){
                     $points = get_string("nt", "mod_exammanagement");
                     $state = 'nt';
-                } else if ($stateArr->fa == 1){
+                } else if ($key == 'fa' && $value == 1){
                     $points = get_string("fa", "mod_exammanagement");
                     $state = 'fa';
-                } else if ($stateArr->ill == 1){
+                } else if ($key == 'ill' && $value == 1){
                     $points = get_string("ill", "mod_exammanagement");
                     $state = 'ill';
                 }
@@ -114,9 +115,9 @@ class showResultsForm extends moodleform {
                 $result = 5;
             }
 
-            if($points && $gradingscale){
+            $lastpoints = 0;
 
-                $lastpoints;
+            if($points && $gradingscale){
 
                 foreach($gradingscale as $key => $step){
 
@@ -132,8 +133,6 @@ class showResultsForm extends moodleform {
 
                 }
             }
-
-
 
             $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
             $mform->addElement('html', '<div class="col-sm-2">'.$moodleUser->lastname.'</div>');

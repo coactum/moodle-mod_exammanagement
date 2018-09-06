@@ -134,11 +134,12 @@ class inputResultsForm extends moodleform {
 
         if($this->_customdata['matrnr']){
             $mform->addElement('html', '<hr />');
+            $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
+
         } else {
             $mform->addElement('html', '<strong><p>'.get_string('confirm_matrnr', 'mod_exammanagement').'</p></strong>');
+            $this->add_action_buttons(true, get_string("validate_matrnr", "mod_exammanagement"));
         }
-
-        $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
 
         $mform->disable_form_change_checker();
 
