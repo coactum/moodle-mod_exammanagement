@@ -763,6 +763,8 @@ public function checkIfValidMatrNr($mnr) {
 			$tempfileheader = json_decode($this->moduleinstance->tempimportfileheader);
 			$savedFileHeadersArr = json_decode($this->moduleinstance->importfileheaders);
 
+			$savedParticipantsArray = (array) $this->getSavedParticipants();
+
 			$fileHeadersArr = array();
 
 			if ($mode == 'tmp'){
@@ -787,25 +789,48 @@ public function checkIfValidMatrNr($mnr) {
 							if($tempfileheader){
 									if (!$savedFileHeadersArr){ // falls noch keine header gespeichert
 											// merken welcher Teilnehmer zu header gehört
-											//...
+											$fileheadersObj = new stdclass;
+											$fileheadersObj->header = $tempfileheader;
+											$fileheadersObj->participants = $participantsArr;
 
-											array_push($fileHeadersArr, $tempfileheader);
+											// und header speichern
+											array_push($fileHeadersArr, $fileheadersObj);
 									} else {
 
 											if(in_array($tempfileheader, $savedFileHeadersArr)) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:
 
 												// für vorhandenen Header zugeordnete Teilnehmer ändern
-												// ...
+												$newusersArr = array();
+
+												$newusersArr = array_diff($savedParticipantsArray, $participantsArr);
+
+												$fileheadersObj = new stdclass;
+												$fileheadersObj->header = $tempfileheader;
+												$fileheadersObj->participants = $newusersArr;
+
+												var_dump($fileheadersObj);
 
 												// und neuen header nicht speichern da schon vorhanden
+												$key = array_search($tempfileheader, $savedFileHeadersArr);
+
+												$savedFileHeadersArr[$key] = $fileheadersObj;
 												$fileHeadersArr = $savedFileHeadersArr;
 											} else { //falls schon header gespeichert und neuer Header noch nicht in diesen vorhanden
+
 												// merken welcher Teilnehmer zu header gehört
-												//...
+												$newusersArr = array();
+
+												$newusersArr = array_diff($savedParticipantsArray, $participantsArr);
+
+												$fileheadersObj = new stdclass;
+												$fileheadersObj->header = $tempfileheader;
+												$fileheadersObj->participants = $newusersArr;
+
+												var_dump($fileheadersObj);
 
 												// und neuen header an array mit gespeicherten headern anhängen
 												$fileHeadersArr = $savedFileHeadersArr;
-												array_push($fileHeadersArr, $tempfileheader);
+												array_push($fileHeadersArr, $fileheadersObj);
 											}
 									}
 							}

@@ -319,7 +319,7 @@ class exammanagementForms{
 
 			$participants = $ExammanagementInstanceObj->filterCheckedParticipants($fromform);
 
-			$ExammanagementInstanceObj->saveParticipants($participants, '');
+			$ExammanagementInstanceObj->saveParticipants($participants, '', 'save');
 
 		} else {
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
