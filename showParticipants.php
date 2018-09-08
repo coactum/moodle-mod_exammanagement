@@ -70,8 +70,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     if($participantsIDs){
         usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
 
-            global $id, $e;
-            $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+            global $ExammanagementInstanceObj;
 
             $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
             $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;

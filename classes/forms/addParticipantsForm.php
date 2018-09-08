@@ -50,137 +50,136 @@ class addParticipantsForm extends moodleform{
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
-        $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_participants', 'switch_mode_participants'); //call jquery for switching between course import and import from file
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
+        $tempParticipantsIDs = $ExammanagementInstanceObj->getTempParticipants();
 
         $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
-        $mform->addElement('html', '<h3 class="viewparticipants collapse.show">'.get_string("view_participants", "mod_exammanagement").'</h3>');
-        $mform->addElement('html', '<h3 class="importparticipants collapse">'.get_string("import_participants", "mod_exammanagement").'</h3>');
+
+        if($tempParticipantsIDs){
+            $mform->addElement('html', '<h3>'.get_string("import_participants", "mod_exammanagement").'</h3>');
+        } else {
+            $mform->addElement('html', '<h3>'.get_string("add_participants_from_file", "mod_exammanagement").'</h3>');
+        }
         $mform->addElement('html', '</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
 
-        $mform->addElement('html', '<div class="col-xs-4"><button type="button" id="switchmode_to_import" class="btn btn-primary pull-right viewparticipants collapse.show" title="'.get_string("import_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></button>');
-        $mform->addElement('html', '<button type="button" id="switchmode_to_view" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("view_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("view_participants", "mod_exammanagement").'</span><i class="fa fa-search hidden-md-up" aria-hidden="true"></i></button>');
-
+        if($tempParticipantsIDs){
+            $mform->addElement('html', '<a role="button" class="btn btn-primary pull-right" title="'.get_string("import_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></button>');
+        }
 
         if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
-            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right importparticipants collapse" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
-        $mform->addElement('html', '<p class="viewparticipants collapse.show">'.get_string("view_added_partipicants", "mod_exammanagement").'</p><p class="importparticipants collapse">'.get_string("add_participants_from_file", "mod_exammanagement").'</p>');
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
-        ###### view participants ... ######
-        $mform->addElement('html', '<div class="viewparticipants collapse.show"><div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
+        if(!$tempParticipantsIDs){
+          ###### add Participants from File ######
 
-        ###### ... that are added to exam ######
-        $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
+          $maxbytes=$CFG->maxbytes;
 
-        $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-        $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
-        $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
+          $mform->addElement('html', '<h4>'.get_string("paul_file", "mod_exammanagement").'</h4>');
+          $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
 
-        if($participantsIDs){
-            usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
-              $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+          $mform->addElement('html', '<div class="hidden"><h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
+          $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
+          $mform->addElement('html', '</div>');
 
-              $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
-              $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;
-              $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b)->firstname;
-              $bLastname = $ExammanagementInstanceObj->getMoodleUser($b)->lastname;
+          //for testing
+          $test = $this->_customdata['test'];
+          $mform->addElement('hidden', 'test', $test);
+          $mform->setType('test', PARAM_INT);
 
-              if ($aLastname == $bLastname) { //if names are even sort by first name
-                  return strcmp($aFirstname, $bFirstname);
-              } else{
-                  return strcmp($aLastname, $bLastname); // else sort by last name
-              }
-            });
+          $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
+
+        } else {
+
+          ###### view all temporary imported participants ######
+          $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
+          $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+          $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
+          $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
+
+          // $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
+          // if($participantsIDs){
+          //     usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
+          //       $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+          //       $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
+          //       $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;
+          //       $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b)->firstname;
+          //       $bLastname = $ExammanagementInstanceObj->getMoodleUser($b)->lastname;
+          //
+          //       if ($aLastname == $bLastname) { //if names are even sort by first name
+          //           return strcmp($aFirstname, $bFirstname);
+          //       } else{
+          //           return strcmp($aLastname, $bLastname); // else sort by last name
+          //       }
+          //     });
+          //
+          //     if($LdapManagerObj->is_LDAP_config()){
+          //         $LdapManagerObj->connect_ldap();
+          //     }
+          //
+          //     foreach ($participantsIDs as $key => $value) {
+          //
+          //       $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
+          //
+          //       $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+          //       $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
+          //       $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
+          //       $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
+          //       $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div></div>');
+          //
+          //       $mform->setDefault('participants['.$value.']', true);
+          //   }
+          // }
+
+          if($tempParticipantsIDs){
+            $badmatriculationnumbers = array_pop($tempParticipantsIDs);
 
             if($LdapManagerObj->is_LDAP_config()){
                 $LdapManagerObj->connect_ldap();
             }
 
-            foreach ($participantsIDs as $key => $value) {
+            foreach ($tempParticipantsIDs as $key => $value) {
+                $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
 
-              $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
-
-              $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-              $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
-              $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
-              $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
-              $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div></div>');
-
-              $mform->setDefault('participants['.$value.']', true);
-          }
-        }
-
-        ###### ... that are temporary imported ######
-        $tempParticipantsIDs = $ExammanagementInstanceObj->getTempParticipants();
-
-        if($tempParticipantsIDs){
-          $badmatriculationnumbers = array_pop($tempParticipantsIDs);
-
-          if($LdapManagerObj->is_LDAP_config()){
-              $LdapManagerObj->connect_ldap();
-          }
-
-          foreach ($tempParticipantsIDs as $key => $value) {
-              $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
-
-              $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-              $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
-              $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
-              $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
-              $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_temporary", "mod_exammanagement").'</div></div>');
-          }
-
-          if($badmatriculationnumbers){
-              $mform->addElement('html', '<hr />');
-              $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
-
-              foreach ((array) $badmatriculationnumbers as $key => $value) {
                 $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-                $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
-                $mform->addElement('html', '<div class="col-xs-3"></div>');
-                $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
-              }
+                $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value), null, array('group' => 1));
+                $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_temporary", "mod_exammanagement").'</div></div>');
+            }
+
+            if($badmatriculationnumbers){
+                $mform->addElement('html', '<hr />');
+                $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
+
+                foreach ((array) $badmatriculationnumbers as $key => $value) {
+                  $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+                  $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
+                  $mform->addElement('html', '<div class="col-xs-3"></div>');
+                  $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
+                }
+            }
           }
+
+
+          if ($tempParticipantsIDs){
+              $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
+          } else {
+              $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
+          }
+
+          $mform->addElement('html', '</div>');
+
         }
-
-
-        if ($participantsIDs || $tempParticipantsIDs){
-            $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
-        } else {
-            $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
-        }
-
-        $mform->addElement('html', '</div>');
-
-        ###### add Participants from File ######
-
-        $maxbytes=$CFG->maxbytes;
-
-        $mform->addElement('html', '<div class="importparticipants collapse"><h4>'.get_string("paul_file", "mod_exammanagement").'</h4>');
-        $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
-
-        $mform->addElement('html', '<div class="hidden"><h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
-        $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
-        $mform->addElement('html', '</div>');
-
-        //for testing
-        $test = $this->_customdata['test'];
-        $mform->addElement('hidden', 'test', $test);
-        $mform->setType('test', PARAM_INT);
-
-        $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
-
-        $mform->addElement('html', '</div>');
     }
 
     //Custom validation should be added here
