@@ -55,21 +55,23 @@ class addParticipantsForm extends moodleform{
 
         $tempParticipantsIDs = $ExammanagementInstanceObj->getTempParticipants();
 
+        if($tempParticipantsIDs){
+            $badmatriculationnumbers = array_pop($tempParticipantsIDs);
+        } else {
+            $badmatriculationnumbers = false;
+        }
+
         $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
 
-        if($tempParticipantsIDs){
+        if($tempParticipantsIDs || $badmatriculationnumbers){
             $mform->addElement('html', '<h3>'.get_string("import_participants", "mod_exammanagement").'</h3>');
         } else {
             $mform->addElement('html', '<h3>'.get_string("add_participants_from_file", "mod_exammanagement").'</h3>');
         }
-        $mform->addElement('html', '</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
+        $mform->addElement('html', '</div><div class="col-xs-2"><a type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
-        if($tempParticipantsIDs){
-            $mform->addElement('html', '<a role="button" class="btn btn-primary pull-right" title="'.get_string("import_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></button>');
-        }
-
-        if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
-            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $this->_customdata['id']).'" class="btn btn-primary pull-right" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
+        if($tempParticipantsIDs || $badmatriculationnumbers){
+            $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $this->_customdata['id']).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
@@ -79,7 +81,7 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
-        if(!$tempParticipantsIDs){
+        if(!$tempParticipantsIDs && !$badmatriculationnumbers){
           ###### add Participants from File ######
 
           $maxbytes=$CFG->maxbytes;
@@ -141,7 +143,6 @@ class addParticipantsForm extends moodleform{
           // }
 
           if($tempParticipantsIDs){
-            $badmatriculationnumbers = array_pop($tempParticipantsIDs);
 
             if($LdapManagerObj->is_LDAP_config()){
                 $LdapManagerObj->connect_ldap();
@@ -156,25 +157,24 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_temporary", "mod_exammanagement").'</div></div>');
             }
+        } else {
+            $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
+        }
 
-            if($badmatriculationnumbers){
-                $mform->addElement('html', '<hr />');
-                $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
+        if($badmatriculationnumbers){
+            $mform->addElement('html', '<hr />');
+            $mform->addElement('html', get_string("badmatrnr", "mod_exammanagement"));
 
-                foreach ((array) $badmatriculationnumbers as $key => $value) {
-                  $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
-                  $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
-                  $mform->addElement('html', '<div class="col-xs-3"></div>');
-                  $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
-                }
+            foreach ((array) $badmatriculationnumbers as $key => $value) {
+              $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+              $mform->addElement('html', '</div><div class="col-xs-3 badmatrnr">'.$value.'</div>');
+              $mform->addElement('html', '<div class="col-xs-3"></div>');
+              $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
             }
-          }
-
+        }
 
           if ($tempParticipantsIDs){
               $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
-          } else {
-              $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
           }
 
           $mform->addElement('html', '</div>');

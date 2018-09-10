@@ -736,7 +736,7 @@ public function checkIfValidMatrNr($mnr) {
 	}
 }
 
-	public function saveParticipants($participantsArr, $header, $mode, $badmatriculationnumbersArr = NULL, $test = false){
+	public function saveParticipants($newParticipantsArr, $header, $mode, $badmatriculationnumbersArr = NULL, $test = false){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
@@ -745,29 +745,28 @@ public function checkIfValidMatrNr($mnr) {
 				return;
 			}
 
-			if(!$participantsArr){
-				$participantsArr = array();
+			if(!$newParticipantsArr){
+				$newParticipantsArr = array();
 			}
 
 			if ($mode == 'tmp'){
 					if ($badmatriculationnumbersArr){
-							array_push($participantsArr, $badmatriculationnumbersArr);
+							array_push($newParticipantsArr, $badmatriculationnumbersArr);
 					} else {
-							array_push($participantsArr, NULL);
+							array_push($newParticipantsArr, NULL);
 					}
 			}
 
-			$participants = json_encode($participantsArr);
 			$newfileheader = json_encode($header);
 
 			$tempfileheader = json_decode($this->moduleinstance->tempimportfileheader);
 			$savedFileHeadersArr = json_decode($this->moduleinstance->importfileheaders);
 
-			$savedParticipantsArray = (array) $this->getSavedParticipants();
-
 			$fileHeadersArr = array();
 
 			if ($mode == 'tmp'){
+					$participants = json_encode($newParticipantsArr);
+
 						$this->moduleinstance->tmpparticipants = NULL;
 						$this->moduleinstance->tempimportfileheader = NULL;
 
@@ -783,7 +782,15 @@ public function checkIfValidMatrNr($mnr) {
 						redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
 
 			} else{
-					if ($participants!=NULL){
+					if ($newParticipantsArr!=NULL){
+							$savedParticipantsArray = $this->getSavedParticipants();
+
+							if($savedParticipantsArray){
+									$participants = json_encode(array_merge($savedParticipantsArray, $newParticipantsArr));
+							} else {
+									$participants = json_encode($newParticipantsArr);
+							}
+
 							$this->moduleinstance->participants = $participants;
 
 							if($tempfileheader){
@@ -791,46 +798,34 @@ public function checkIfValidMatrNr($mnr) {
 											// merken welcher Teilnehmer zu header gehört
 											$fileheadersObj = new stdclass;
 											$fileheadersObj->header = $tempfileheader;
-											$fileheadersObj->participants = $participantsArr;
+											$fileheadersObj->participants = $newParticipantsArr;
 
 											// und header speichern
 											array_push($fileHeadersArr, $fileheadersObj);
 									} else {
 
-											if(in_array($tempfileheader, $savedFileHeadersArr)) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:
+											$headerKey = false;
+											$oldParticipantsArr = false;
+											$fileheadersObj = new stdclass;
+											$fileheadersObj->header = $tempfileheader;
 
-												// für vorhandenen Header zugeordnete Teilnehmer ändern
-												$newusersArr = array();
+											foreach($savedFileHeadersArr as $key => $headerObj){
+													if ($headerObj->header == $tempfileheader){
+															$headerKey = $key;
+															$oldParticipantsArr = $headerObj->participants;
+													}
+											}
 
-												$newusersArr = array_diff($savedParticipantsArray, $participantsArr);
+											if($headerKey && $oldParticipantsArr) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:var_dump($tempfileheader);
+													$fileheadersObj->participants = array_merge($newParticipantsArr, $oldParticipantsArr);
 
-												$fileheadersObj = new stdclass;
-												$fileheadersObj->header = $tempfileheader;
-												$fileheadersObj->participants = $newusersArr;
-
-												var_dump($fileheadersObj);
-
-												// und neuen header nicht speichern da schon vorhanden
-												$key = array_search($tempfileheader, $savedFileHeadersArr);
-
-												$savedFileHeadersArr[$key] = $fileheadersObj;
-												$fileHeadersArr = $savedFileHeadersArr;
+													$savedFileHeadersArr[$headerKey] = $fileheadersObj;
+													$fileHeadersArr = $savedFileHeadersArr;
 											} else { //falls schon header gespeichert und neuer Header noch nicht in diesen vorhanden
+													$fileheadersObj->participants = $newParticipantsArr;
 
-												// merken welcher Teilnehmer zu header gehört
-												$newusersArr = array();
-
-												$newusersArr = array_diff($savedParticipantsArray, $participantsArr);
-
-												$fileheadersObj = new stdclass;
-												$fileheadersObj->header = $tempfileheader;
-												$fileheadersObj->participants = $newusersArr;
-
-												var_dump($fileheadersObj);
-
-												// und neuen header an array mit gespeicherten headern anhängen
-												$fileHeadersArr = $savedFileHeadersArr;
-												array_push($fileHeadersArr, $fileheadersObj);
+													$fileHeadersArr = $savedFileHeadersArr;
+													array_push($fileHeadersArr, $fileheadersObj);
 											}
 									}
 							}
@@ -839,7 +834,12 @@ public function checkIfValidMatrNr($mnr) {
 						$this->moduleinstance->participants = NULL;
 					}
 
-					$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
+					$this->moduleinstance->importfileheaders = NULL;
+
+					if(!empty($fileHeadersArr)){
+							$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
+					}
+
 					$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
 					$this->moduleinstance->tempimportfileheader = NULL; //clear tmp file headers
 
@@ -908,6 +908,17 @@ public function checkIfValidMatrNr($mnr) {
 		if ($tmpparticipants){
 				$tmpParticipantsArray = json_decode($tmpparticipants);
 				return $tmpParticipantsArray;
+			} else {
+				return false;
+		}
+	}
+
+	public function getPAULTextFileHeaders(){
+
+		$textfileheaders = 	$this->moduleinstance->importfileheaders;
+
+		if ($textfileheaders){
+				return json_decode($textfileheaders);
 			} else {
 				return false;
 		}

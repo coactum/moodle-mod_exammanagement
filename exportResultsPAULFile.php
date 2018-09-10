@@ -52,63 +52,119 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
     }
 
-    $header1 = $ExammanagementInstanceObj->getPaulTextfileHeader();
-    $PAULFileHeadersArr = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
-    $courseName = $course->get_attribute( "OBJ_DESC" );
+    $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
 
-    foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
+    $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
+    $results = $ExammanagementInstanceObj->getResults(); //to be changed
 
-        if ( empty( $header1 ) ){
-        	$id = $course->get_course_id();
-        	$day = $examObject->getDateDay( $examTerm );
-        	$month = $examObject->getDateMonth( $examTerm );
-        	$year = $examObject->getDateYear( $examTerm );
-        	$startHour = $examObject->getTimeStartHour( $examTerm );
-        	$startMinute = $examObject->getTimeStartMinute( $examTerm );
-        	$endHour = $examObject->getTimeEndHour( $examTerm );
-        	$endMinute = $examObject->getTimeEndMinute( $examTerm );
-        	$date = sprintf( "%02d.%02d.%04d %02d:%02d %02d:%02d", $day, $month, $year, $startHour, $startMinute, $endHour, $endMinute );
-        	$header1 = '"' . $id . '"' . SEPARATOR . '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $date . '"';
+    if ( !$PAULFileHeadersArr ){
+      $examdate = $ExammanagementInstanceObj->getHrExamtime();
+      $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
+      $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
+
+      $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
+
+      $savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
+
+      foreach($savedParticipantsArray as $participant){
+
+        $resultWithBonus = "";
+
+        foreach ($results as $resultObj){
+            if($resultObj->uid == $participant){
+                $resultState = $ExammanagementInstanceObj->getResultState($resultObj);
+
+                if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                    $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
+                } else {
+                    $resultWithBonus = '5.0';
+                }
+            }
         }
 
-        $textfile = $header1 . NEWLINE . $PAULFileHeader . NEWLINE;
+        $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
 
-        foreach ( $participants as $participant ){
-        	$resultWithBonus = $eoDatabase->getExamResultWithBonus( $examTerm, $participant["imtLogin"] );
-        	$resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+        $user = $ExammanagementInstanceObj->getMoodleUser($participant);
+        $examNumber = '""';
+        $matNr = '"' . $ExammanagementInstanceObj->getUserMatrNr($participant) .'"';
+        $foreName = '"' . $user->firstname . '"';
+        $middleName = '"' . $user->middlename . '"';
+        $name = '"' . $user->lastname . '"';
+        $resultWithBonus = '"' . $resultWithBonus . '"';
 
-        	if ( $participant["isNT"] == 1 ) $resultWithBonus = "";
-        	if ( $participant["isNT"] == "NT" ) $resultWithBonus = "";
-        	if ( $participant["isNT"] == "BV" ) $resultWithBonus = "";
-        	if ( $participant["isNT"] == "SICK" ) $resultWithBonus = "";
+        $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+      }
 
-        	$examNumber = '""';
-        	$matNr = '"' . $participant["matriculationNumber"] .'"';
-        	$foreName = '"' . $participant["forename"] . '"';
-        	$middleName = '""';
-        	$name = '"' . $participant["name"] . '"';
-        	$resultWithBonus = '"' . $resultWithBonus . '"';
+      //generate filename without umlaute
+      $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+      $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+      $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
+      $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-        	$textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+      //convert string to Latin1
+      //$textfile = mb_convert_encoding( $textfile, "ISO-8859-1");
+      $textfile = utf8_decode($textfile);
+
+      //return content as file
+      header( "Content-Type: application/force-download" );
+      header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
+      header( "Content-Length: ". strlen( $textfile ) );
+      echo $textfile;
+
+    } else {
+        $filecount = 0;
+
+        foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
+            $textfile = $PAULFileHeader->header;
+
+            foreach ( $PAULFileHeader->participants as $participant ){
+
+              $resultWithBonus = "";
+
+              foreach ($results as $resultObj){
+                  if($resultObj->uid == $participant){
+                      $resultState = $ExammanagementInstanceObj->getResultState($resultObj);
+
+                      if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                          $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
+                      }
+                  }
+              }
+
+            	//$resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+
+              $user = $ExammanagementInstanceObj->getMoodleUser($participant);
+            	$examNumber = '""';
+            	$matNr = '"' . $ExammanagementInstanceObj->getUserMatrNr($participant) .'"';
+            	$foreName = '"' . $user->firstname . '"';
+            	$middleName = '"' . $user->middlename . '"';
+            	$name = '"' . $user->lastname . '"';
+            	$resultWithBonus = '"' . $resultWithBonus . '"';
+
+            	$textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+            }
+
+            $filecount += 1;
+
+            //generate filename without umlaute
+            $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+            $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '_' . $filecount . '.txt';
+            $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
+
+            //convert string to Latin1
+            //$textfile = mb_convert_encoding( $textfile, "ISO-8859-1");
+            $textfile = utf8_decode($textfile);
+
+            //return content as file
+            header( "Content-Type: application/force-download" );
+            header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
+            header( "Content-Length: ". strlen( $textfile ) );
+
+            var_dump('now zip Files');
+            echo $textfile;
         }
-
-        //generate filename without umlaute
-        $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-        $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
-        $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-        //convert string to Latin1
-        //$textfile = mb_convert_encoding( $textfile, "ISO-8859-1");
-        $textfile = utf8_decode($textfile);
-
-        //return content as file
-        header( "Content-Type: application/force-download" );
-        header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
-        header( "Content-Length: ". strlen( $textfile ) );
-        echo $textfile;
     }
-
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

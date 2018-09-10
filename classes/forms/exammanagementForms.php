@@ -156,6 +156,7 @@ class exammanagementForms{
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
+
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
@@ -188,7 +189,7 @@ class exammanagementForms{
 
 				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
 
-				$fileheader = $filecontentarray[1];
+				$fileheader = $filecontentarray[0]."\r\n".$filecontentarray[1];
 
 				foreach($filecontentarray as $row){
 						$pmatriculationnumbersarray = explode("	", $row); // from 2nd line: get all potential numbers

@@ -76,6 +76,8 @@ $string['set_date_time'] = 'Set exam date and time';
 //addParticipantsForm.php
 $string['view_participants'] = 'View participants';
 $string['import_participants'] = 'Import participants';
+$string['import_new_participants'] = 'Import other participants';
+$string['import_participants_from_file'] = 'Import participants from file';
 $string['import_course_participants'] = 'Import participants from course';
 $string['add_participants_from_file'] = 'Add participants from file to the exam.';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
