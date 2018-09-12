@@ -33,7 +33,7 @@ define(['jquery', 'core/notification'], function($) {
     var totalpoints = 0;
 
     $(".form-group input.form-control").each(function() {
-      if(getInputId($(this)) != "matrnr"){
+      if(getInputId($(this)) != "matrnr" && $(this).val()){
           totalpoints += parseInt($(this).val());
       }
     });
@@ -169,7 +169,7 @@ define(['jquery', 'core/notification'], function($) {
 
       $("#totalpoints").text(getTotalpoints()); // change totalpoints
 
-      if($("#id_matrval").val() == 1){
+      if($("input[name='matrval']").val() == 1){
           $("#id_matrnr").focus();
       } else {
           $("#id_points_1").focus();

@@ -481,7 +481,7 @@ class exammanagementForms{
 		}
 	}
 
-		public function buildInputResultsForm($matrnr){
+		public function buildInputResultsForm($input){
 
 			//include form
 			require_once(__DIR__.'/inputResultsForm.php');
@@ -491,12 +491,33 @@ class exammanagementForms{
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
+			$matrnr = false;
 			$case='';
 			$result;
 			$firstname = '';
 			$lastname = '';
 
-			if ($matrnr){
+			if ($input){
+
+				//check if input is valid barcode and then convert barcoe to matrnr
+				$inputLength = strlen($input);
+
+				if ($inputLength == 8){ //input is barcode
+					$input = "00000" . $input;
+
+					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
+
+					if ($checksum == substr($input, -1)){ //if checksum is correct
+						$matrnr = substr($input, 5, -1); //extract matrnr from barcode
+					} else {
+						$matrnr = $input;
+					}
+
+				} else { //input is no barcode
+						$matrnr = $input;
+
+				}
+
 				if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
 
 						if($LdapManagerObj->is_LDAP_config()){

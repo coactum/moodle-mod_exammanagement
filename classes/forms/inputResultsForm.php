@@ -101,7 +101,7 @@ class inputResultsForm extends moodleform {
               //input field with exam result points
               array_push($points_array, $mform->createElement('text', 'points['.$key.']', '', $attributes));
               $mform->setType('points['.$key.']', PARAM_INT);
-              $mform->setDefault('points['.$key.']', 0);
+              $mform->setDefault('points['.$key.']', '');
 
           }
 
