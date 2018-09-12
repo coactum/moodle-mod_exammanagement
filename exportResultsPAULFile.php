@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\ldap\ldapManager;
+use zipArchive;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -52,7 +53,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
     }
 
-    $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
+//    $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
+    $PAULFileHeadersArr = false; //for testing
 
     $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
     $results = $ExammanagementInstanceObj->getResults(); //to be changed
@@ -112,6 +114,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       echo $textfile;
 
     } else {
+
+        //generate filename without umlaute
+        $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+        $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
+        $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
+
+        $ResultFilesZipArchive = new ZipArchive();
+
+        if ($ResultFilesZipArchive->open($filename.'.zip', ZipArchive::CREATE)!==TRUE) {
+            exit("cannot open <$filename>\n");
+        }
+
         $filecount = 0;
 
         foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
@@ -127,6 +142,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                       if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
                           $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
+                      } else {
+                          $resultWithBonus = '5.0';
                       }
                   }
               }
@@ -146,24 +163,38 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $filecount += 1;
 
-            //generate filename without umlaute
-            $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-            $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '_' . $filecount . '.txt';
-            $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
             //convert string to Latin1
             //$textfile = mb_convert_encoding( $textfile, "ISO-8859-1");
             $textfile = utf8_decode($textfile);
 
-            //return content as file
-            header( "Content-Type: application/force-download" );
-            header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
-            header( "Content-Length: ". strlen( $textfile ) );
+            if($textfile){
+              var_dump('Füge Datei zu zip-Archiv hinzu');
+              var_dump($filename . '_' . $filecount .'.txt');
+              var_dump($textfile);
 
-            var_dump('now zip Files');
-            echo $textfile;
+              $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
+            }
         }
+
+        var_dump($filename . 'zip');
+        var_dump($ResultFilesZipArchive);
+        var_dump($ResultFilesZipArchive->numFiles);
+
+
+        for( $i = 0; $i < $ResultFilesZipArchive->numFiles; $i++ ){
+            $stat = $ResultFilesZipArchive->statIndex( $i );
+            var_dump($stat);
+        }
+
+        $ResultFilesZipArchive->close();
+
+
+        //return content as file
+        header( "Content-Type: application/zip" );
+        header( "Content-Disposition: attachment; filename=\"" . $filename . '.zip' . "\"" );
+        header( "Content-Length: ". filesize( $filename  . '.zip') );
+
+        //echo $textfile;
     }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
