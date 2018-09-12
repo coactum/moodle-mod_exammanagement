@@ -44,7 +44,7 @@ class configureTasksForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
+        //$PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
@@ -89,7 +89,7 @@ class configureTasksForm extends moodleform {
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
-              $mform->setType('task['.$oldtaskcount.']', PARAM_INT);
+              $mform->setType('task['.$oldtaskcount.']', PARAM_FLOAT);
               $mform->setDefault('task['.$oldtaskcount.']', $points);
 
           }
@@ -150,6 +150,27 @@ class configureTasksForm extends moodleform {
 
     //Custom validation should be added here
     function validation($data, $files) {
-        return array();
+
+        $errors= array();
+        var_dump($data);
+
+        foreach($data['task'] as $taskval){
+            $floatval = floatval($taskval);
+            var_dump($floatval);
+
+            if($taskval && !$floatval){
+                var_dump('error no float');
+                var_dump($taskval);
+                var_dump($floatval);
+                $errors['nofloat']= get_string('err_nofloat', 'mod_exammanagement');
+                break;
+            } else if($floatval<0) {
+              var_dump("error under 0");
+              $errors['underzero']= get_string('shortnametaken', 'mod_exammanagement');
+              break;
+            }
+        }
+
+        return $errors;
     }
 }

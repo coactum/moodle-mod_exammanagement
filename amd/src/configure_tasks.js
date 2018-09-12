@@ -27,7 +27,7 @@ define(['jquery'], function($) {
     var totalpoints = 0;
 
     $(".form-group input.form-control").each(function() {
-      totalpoints += parseInt($(this).val());
+      totalpoints += parseFloat($(this).val());
     });
 
     return totalpoints;
@@ -45,22 +45,24 @@ define(['jquery'], function($) {
 
   return {
     init: function() {
+
+      $("input[type=text]").attr("type", "number");
+
+      var styles = {
+          "-webkit-appearance": "textfield",
+          "-moz-appearance":"textfield",
+          "margin": "0px",
+          "width": "60px"
+      };
+
+      $("input[type=number]").css(styles);
+      $("input[type=number]").attr("step", "0.01");
+      $("input[type=number]").attr("min", "0");
+
       $(".form-group").on("change", "input", function() {
 
-        var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
+        $("#totalpoints").text(getTotalpoints());
 
-        if (bad_input != -1){
-          $("#totalpoints").text(getTotalpoints());
-        } else {
-          $(this).val(0);
-
-          require(['core/notification'], function(notification) {
-           notification.addNotification({
-             message: "Ungültige Punktzahl",
-             type: "error"
-           });
-          });
-        }
       });
     },
     addtask: function() {
@@ -74,7 +76,8 @@ define(['jquery'], function($) {
         var temp = '<div class="form-group  fitem  ">';
         temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
         temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
-        temp += pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[';
+        temp += pointsofnewtask + '" size="1" type="number styles="-webkit-appearance: textfield, -moz-appearance:textfield,';
+        temp += 'margin: 0px, width: 60px"></span><div class="form-control-feedback" id="id_error_task[';
         temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
         $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
@@ -83,7 +86,7 @@ define(['jquery'], function($) {
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
 
-        $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val())+1);
+        $("input[name=newtaskcount]").val(parseFloat($("input[name=newtaskcount]").val())+1);
 
       });
     },
