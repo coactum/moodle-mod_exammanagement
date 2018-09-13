@@ -680,9 +680,9 @@ EOF;
 
 		if($tasks){
 				foreach($tasks as $key => $points){
-						$totalpoints += $points;
+						$totalpoints += floatval($points);
 					}
-				return $totalpoints;
+				return number_format($totalpoints, 2, ',', '');
 		} else {
 				return false;
 		}
@@ -1008,6 +1008,10 @@ public function checkIfValidMatrNr($mnr) {
 
 			if($fromform->newtaskcount < 0){
 				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount);
+			}
+
+			foreach($tasks as $tasknumber => $taskpoints){
+					$tasks[$tasknumber]= number_format($taskpoints, 2, '.', '');
 			}
 
 			$tasks = json_encode($tasks);

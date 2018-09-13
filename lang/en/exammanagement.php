@@ -191,6 +191,8 @@ $string['helptext_showResults']= 'Here goes the description of this feature site
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
+$string['err_underzero'] = 'Please enter a number greater zero.';
+$string['err_novalidinteger'] = 'Please enter a valid number.';
 
 //universal
 $string['modulename'] = 'Exam management';

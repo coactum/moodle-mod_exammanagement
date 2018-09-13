@@ -25,9 +25,13 @@ define(['jquery'], function($) {
 
   var getTotalpoints = function() {
     var totalpoints = 0;
+    var newval;
 
     $(".form-group input.form-control").each(function() {
-      totalpoints += parseFloat($(this).val());
+        newval = parseFloat($(this).val().replace(",","."));
+        if (newval){
+            totalpoints += newval;
+        }
     });
 
     return totalpoints;
@@ -46,6 +50,7 @@ define(['jquery'], function($) {
   return {
     init: function() {
 
+      // create input type number elements
       $("input[type=text]").attr("type", "number");
 
       var styles = {
@@ -59,13 +64,14 @@ define(['jquery'], function($) {
       $("input[type=number]").attr("step", "0.01");
       $("input[type=number]").attr("min", "0");
 
-      $(".form-group").on("change", "input", function() {
+      $(".form-group").on("change", "input", function() { // update totalpoints if some field changes
 
-        $("#totalpoints").text(getTotalpoints());
+        var totalpoints = getTotalpoints();
+        $("#totalpoints").text(totalpoints);
 
       });
     },
-    addtask: function() {
+    addtask: function() { //add new tasks
 
       $("#id_add_task").click(function() {
 
@@ -86,11 +92,11 @@ define(['jquery'], function($) {
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
 
-        $("input[name=newtaskcount]").val(parseFloat($("input[name=newtaskcount]").val())+1);
+        $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val())+1);
 
       });
     },
-    removetask: function() {
+    removetask: function() { //remove task
 
       $("#id_remove_task").click(function() {
 
@@ -103,7 +109,7 @@ define(['jquery'], function($) {
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
 
-          $("input[name=newtaskcount]").val($("input[name=newtaskcount]").val()-1);
+          $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()-1));
         }
       });
     }

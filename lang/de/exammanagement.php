@@ -223,6 +223,8 @@ $string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse gepr
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
+$string['err_underzero'] = 'Bitte geben Sie eine Zahl größer Null ein.';
+$string['err_novalidinteger'] = 'Bitte geben Sie eine gültige Zahl ein.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
