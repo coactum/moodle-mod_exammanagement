@@ -67,8 +67,7 @@ define(['jquery'], function($) {
       $(".form-group").on("change", "input", function() { // update totalpoints if some field changes
 
         var totalpoints = getTotalpoints();
-        $("#totalpoints").text(totalpoints);
-
+        $("#totalpoints").text(String(totalpoints.toFixed(2)).replace('.', ','));
       });
     },
     addtask: function() { //add new tasks
@@ -82,15 +81,15 @@ define(['jquery'], function($) {
         var temp = '<div class="form-group  fitem  ">';
         temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
         temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
-        temp += pointsofnewtask + '" size="1" type="number styles="-webkit-appearance: textfield, -moz-appearance:textfield,';
-        temp += 'margin: 0px, width: 60px"></span><div class="form-control-feedback" id="id_error_task[';
+        temp += pointsofnewtask + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
+        temp += 'margin: 0px; width: 60px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
         temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
         $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
         $(".form-group:nth-of-type(6) .col-md-9").append(temp);
 
         var totalpoints = getTotalpoints();
-        $("#totalpoints").text(totalpoints);
+        $("#totalpoints").text(String(totalpoints.toFixed(2)).replace('.', ','));
 
         $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val())+1);
 
@@ -107,7 +106,7 @@ define(['jquery'], function($) {
           $(".form-group:nth-of-type(6) .col-md-9 .form-group:last").remove();
 
           var totalpoints = getTotalpoints();
-          $("#totalpoints").text(totalpoints);
+          $("#totalpoints").text(String(totalpoints.toFixed(2)).replace('.', ','));
 
           $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()-1));
         }
