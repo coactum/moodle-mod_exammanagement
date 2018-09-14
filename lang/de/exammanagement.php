@@ -223,8 +223,10 @@ $string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse gepr
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
-$string['err_underzero'] = 'Bitte geben Sie eine Zahl größer Null ein.';
-$string['err_novalidinteger'] = 'Bitte geben Sie eine gültige Zahl ein.';
+$string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
+$string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
+$string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
+$string['err_gradingstepsnotcorrect'] = 'Mindestens einer der Notenschritte passt nicht zu den anderen.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

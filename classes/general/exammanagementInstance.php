@@ -680,9 +680,10 @@ EOF;
 
 		if($tasks){
 				foreach($tasks as $key => $points){
-						$totalpoints += floatval($points);
-					}
-				return number_format($totalpoints, 2, ',', '');
+						$totalpoints += intval($points);
+				}
+				return $totalpoints;
+
 		} else {
 				return false;
 		}
@@ -1010,10 +1011,6 @@ public function checkIfValidMatrNr($mnr) {
 				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount);
 			}
 
-			foreach($tasks as $tasknumber => $taskpoints){
-					$tasks[$tasknumber]= number_format($taskpoints, 2, '.', '');
-			}
-
 			$tasks = json_encode($tasks);
 
 			$this->moduleinstance->tasks=$tasks;
@@ -1316,6 +1313,8 @@ public function calculateResultGrade($resultObj){
 				$result = $key;
 			} else if($key == '4.0' && $totalpoints <= $step){
 				$result = 5;
+			} else {
+				$result = '-';
 			}
 
 			$lastpoints = $step;

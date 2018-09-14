@@ -44,7 +44,7 @@ class configureTasksForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events and creating input type number fields
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
@@ -89,7 +89,7 @@ class configureTasksForm extends moodleform {
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
-              $mform->setType('task['.$oldtaskcount.']', PARAM_FLOAT);
+              $mform->setType('task['.$oldtaskcount.']', PARAM_INT);
               $mform->setDefault('task['.$oldtaskcount.']', $points);
 
           }
@@ -146,6 +146,8 @@ class configureTasksForm extends moodleform {
         }
 
         $this->add_action_buttons();
+
+        $mform->disable_form_change_checker();
     }
 
     //Custom validation should be added here
@@ -153,16 +155,13 @@ class configureTasksForm extends moodleform {
 
         $errors= array();
 
-        foreach($data['task'] as $taskval){
-            $floatval = floatval($taskval);
+        foreach($data['task'] as $key => $taskval){
             $isnumeric = is_numeric($taskval);
 
-            if($taskval && !$floatval){
-                $errors['nofloat']= get_string('err_nofloat', 'mod_exammanagement');
-            } else if($floatval<0) {
-                $errors['novalidinteger']= get_string('err_novalidinteger', 'mod_exammanagement');
-            } else if(!$isnumeric){
-                $errors['novalidinteger']= get_string('err_novalidinteger', 'mod_exammanagement');
+            if(!$isnumeric){
+                $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+            } else if($taskval<0) {
+                $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
             }
         }
 

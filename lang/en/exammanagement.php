@@ -191,8 +191,10 @@ $string['helptext_showResults']= 'Here goes the description of this feature site
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
-$string['err_underzero'] = 'Please enter a number greater zero.';
-$string['err_novalidinteger'] = 'Please enter a valid number.';
+$string['err_underzero'] = 'Entered number ca not be lower than zero.';
+$string['err_novalidinteger'] = 'Entered number has to be a valid number.';
+$string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
+$string['err_gradingstepsnotcorrect'] = 'One or more gradingscale steps are invalid.';
 
 //universal
 $string['modulename'] = 'Exam management';
