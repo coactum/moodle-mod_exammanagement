@@ -227,6 +227,7 @@ $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sei
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
 $string['err_gradingstepsnotcorrect'] = 'Mindestens einer der Notenschritte passt nicht zu den anderen.';
+$string['err_taskmaxpoints'] = 'Die eingetragene Punktzahl überschreitet die Maximalpunktzahl der Aufgabe.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

@@ -195,6 +195,7 @@ $string['err_underzero'] = 'Entered number ca not be lower than zero.';
 $string['err_novalidinteger'] = 'Entered number has to be a valid number.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
 $string['err_gradingstepsnotcorrect'] = 'One or more gradingscale steps are invalid.';
+$string['err_taskmaxpoints'] = 'Entered number exceeds maximal points of task.';
 
 //universal
 $string['modulename'] = 'Exam management';

@@ -34,11 +34,11 @@ define(['jquery', 'core/notification'], function($) {
 
     $(".form-group input.form-control").each(function() {
       if(getInputId($(this)) != "matrnr" && $(this).val()){
-          totalpoints += parseInt($(this).val());
+          totalpoints += parseFloat($(this).val().replace(',', '.'));
       }
     });
 
-    return totalpoints;
+    return String(totalpoints.toFixed(2)).replace('.', ',');
   };
 
   var getUrlParameter = function getUrlParameter(sParam) {
@@ -65,6 +65,24 @@ define(['jquery', 'core/notification'], function($) {
         $('#id_matrnr').prop( "disabled", true );
       }
 
+      // create input type number elements
+      $("input[type=text]:not(#id_matrnr)").attr("type", "number");
+
+      var styles = {
+          "-webkit-appearance": "textfield",
+          "-moz-appearance":"textfield",
+          "margin": "0px",
+          "width": "70px"
+      };
+
+      $("input[type=number]:not(#id_matrnr)").css(styles);
+      $("input[type=number]:not(#id_matrnr)").attr("step", "0.01");
+      $("input[type=number]:not(#id_matrnr)").attr("min", "0");
+
+      $("input[type=number]:not(#id_matrnr)").each(function(){
+          $(this).attr("max", parseFloat($("#"+"max_points_" + getInputId($(this))).text()));
+      });
+
       $(".form-group input.checkboxgroup1").each(function() { // initial disabling point fields if some checkbox is already checked
           if ($(this).prop('checked')){
             $(".form-group input.form-control").each(function() {
@@ -74,6 +92,8 @@ define(['jquery', 'core/notification'], function($) {
             });
           }
       });
+
+      $("#totalpoints").text(getTotalpoints()); // initial set totalpoints
 
       $(":checkbox").change(function() { //if some checkbox is checked/unchecked
           var checked = false;
@@ -114,62 +134,28 @@ define(['jquery', 'core/notification'], function($) {
       });
 
       $(".form-group").on("change", "input", function() { // if some input field changes
-        if (getInputId($(this)) != "matrnr"){ // and it is not the field for matrnr
-
-          // check for bad input
-          var bad_input = $(this).val().search(/^[0-9]+(\.[0-9]){0,1}$/);
-
-          if (bad_input != -1){
-            $("#totalpoints").text(getTotalpoints());
-          } else {
-            $(this).val(0);
-
-            require(['core/notification'], function(notification) {
-             notification.addNotification({
-               message: "Ungültige Punktzahl",
-               type: "error"
-             });
-            });
-          }
-
-          // check if max points are exceeded
-          var current_points = parseInt($(this).val());
-          var max_points = parseInt($("#"+"max_points_" + getInputId($(this))).text());
-
-          if(current_points > max_points){
-            $(this).val(max_points);
-            require(['core/notification'], function(notification) {
-             notification.addNotification({
-               message: "Höchstpunktzahl überschritten",
-               type: "error"
-             });
-           });
-          }
-        }
-
-        $('#id_matrnr').blur(function() { // reload page if matrnr is entered
-
-           var matrnr = $(this).val();
-           var id = getUrlParameter('id');
-
-           if (matrnr.match(/^\d+$/)){
-              location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
-           } else {
-             $(this).val('');
-             require(['core/notification'], function(notification) {
-              notification.addNotification({
-                message: "Keine gültiges Matrikelnummernformat",
-                type: "error"
-              });
-            });
-           }
-
-        });
+          $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
 
-      $("#totalpoints").text(getTotalpoints()); // change totalpoints
+      $('#id_matrnr').blur(function() { // reload page if matrnr is entered
 
-      if($("input[name='matrval']").val() == 1){
+         var matrnr = $(this).val();
+         var id = getUrlParameter('id');
+
+         if (matrnr.match(/^\d+$/)){
+            location.href = "inputResults.php?id="+id+"&matrnr="+matrnr;
+         } else {
+           $(this).val('');
+           require(['core/notification'], function(notification) {
+            notification.addNotification({
+              message: "Keine gültiges Matrikelnummernformat",
+              type: "error"
+            });
+          });
+         }
+      });
+
+      if($("input[name='matrval']").val() == 1){ //set focus
           $("#id_matrnr").focus();
       } else {
           $("#id_points_1").focus();
