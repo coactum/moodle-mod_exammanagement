@@ -102,7 +102,7 @@ class showResultsForm extends moodleform {
                 }
 
                 if (!$totalpoints){
-                    $totalpoints = $ExammanagementInstanceObj->calculateTotalPoints($resultObj);
+                    $totalpoints = str_replace('.', ',', $ExammanagementInstanceObj->calculateTotalPoints($resultObj));
                 }
 
                 $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
@@ -113,7 +113,7 @@ class showResultsForm extends moodleform {
                 $mform->addElement('html', '<div class="col-sm-2">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
                 if($gradingscale){
                     $result = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
-                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.$result.'</span></div></div>');
+                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div></div>');
                 } else {
                   $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');
                 }

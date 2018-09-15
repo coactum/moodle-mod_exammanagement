@@ -1218,6 +1218,13 @@ public function saveResults($fromform){
 		if($uid){
 			$result->uid = $uid;
 			$result->state = $fromform->state;
+
+			if($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1'){
+					foreach ($fromform->points as $task => $points){
+							$fromform->points[$task] = 0;
+					}
+			}
+
 			$result->points = $fromform->points;
 
 			$newResultsArr = array();
@@ -1270,30 +1277,31 @@ public function getResults(){
 public function calculateTotalPoints($resultObj){
 		$points = 0;
 		foreach($resultObj->points as $key => $taskpoints){
-				$points += $taskpoints;
+				$points += floatval($taskpoints);
 		}
-		return $points;
+		return floatval($points);
 }
 
 public function getResultState($resultObj){
+
 		foreach($resultObj->state as $key => $value){
-				if($key == 'nt' && $value == 1){
+				if($key == 'nt' && $value == "1"){
 						return 'nt';
-				} else if ($key == 'fa' && $value == 1){
+				} else if ($key == 'fa' && $value == "1"){
 						return 'fa';
-				} else if ($key == 'ill' && $value == 1){
+				} else if ($key == 'ill' && $value == "1"){
 						return 'ill';
-				} else {
-					return 'normal';
 				}
 		}
+
+		return 'normal';
 }
 
 public function calculateResultGrade($resultObj){
 
 	$gradingscale = $this->getGradingscale();
 
-	$result = false;
+	$result = '-';
 
 	$state = $this->getResultState($resultObj);
 
@@ -1307,17 +1315,15 @@ public function calculateResultGrade($resultObj){
 	if($totalpoints && $gradingscale){
 		foreach($gradingscale as $key => $step){
 
-			if($key == '1.0' && $totalpoints == $step){
+			if($key == '1.0' && $totalpoints >= floatval($step)){
 					$result = $key;
-			} else if($totalpoints < $lastpoints && $totalpoints >= $step){
-				$result = $key;
-			} else if($key == '4.0' && $totalpoints <= $step){
-				$result = 5;
-			} else {
-				$result = '-';
+			} else if($totalpoints < $lastpoints && $totalpoints >= floatval($step)){
+					$result = $key;
+			} else if($key == '4.0' && $totalpoints < floatval($step)){
+					$result = 5;
 			}
 
-			$lastpoints = $step;
+			$lastpoints = floatval($step);
 
 		}
 	}

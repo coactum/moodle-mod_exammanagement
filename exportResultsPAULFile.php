@@ -74,13 +74,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         foreach ($results as $resultObj){
             if($resultObj->uid == $participant){
-                $resultState = $ExammanagementInstanceObj->getResultState($resultObj);
-
-                if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                    $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
-                } else {
-                    $resultWithBonus = '5.0';
-                }
+                $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
             }
         }
 
