@@ -1023,8 +1023,13 @@ public function checkIfValidMatrNr($mnr) {
 
 	public function getTasks(){
 
-			$tasks = json_decode($this->moduleinstance->tasks);
-			return $tasks;
+			$tasks = (array) json_decode($this->moduleinstance->tasks);
+
+			if($tasks){
+				return $tasks;
+			} else {
+				return false;
+			}
 	}
 
 	######### feature: textfield ##########

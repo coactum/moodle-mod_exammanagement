@@ -147,16 +147,10 @@ class inputResultsForm extends moodleform {
 
     //Custom validation should be added here
     function validation($data, $files) {
-        $errors= array();
+        $errors = array();
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $savedTasksArr = (array) $ExammanagementInstanceObj->getTasks();
-
-        // var_dump($savedTasksArr);
-        // var_dump (array_keys($savedTasksArr));
-        // var_dump($savedTasksArr['1']);
-        // var_dump($savedTasksArr[0]);
-        // var_dump('###########');
+        $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
 
         if($data['matrval']==0 && !$data['state']['nt'] && !$data['state']['ill'] && !$data['state']['fa']){
             foreach($data['points'] as $task => $points){
@@ -165,20 +159,12 @@ class inputResultsForm extends moodleform {
                 $isnumeric = is_numeric($points);
 
                 if(($points && !$floatval) || !$isnumeric){
-                    $errors['points['.$task.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+                    $errors['points['. $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
                 } else if($points<0) {
                     $errors['points['.$task.']'] = get_string('err_underzero', 'mod_exammanagement');
-                 } //else if($points > $savedTasksArr[strval($task)]){
-                //
-                //     var_dump('die folgende Punktzahl');
-                //     var_dump($points);
-                //     var_dump('der Aufgabe');
-                //     var_dump($task);
-                //     var_dump('sind größer als die maxpunktzahl der Aufgabe');
-                //     var_dump ($savedTasksArr[strval($task)]);
-                //
-                //     $errors['points['.$task.']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
-                // }
+                } else if($points > $savedTasksArr[$task-1]){
+                     $errors['points['. $task .']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
+                }
             }
         }
 
