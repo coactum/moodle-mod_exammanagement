@@ -196,6 +196,7 @@ $string['err_novalidinteger'] = 'Entered number has to be a valid number.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
 $string['err_gradingstepsnotcorrect'] = 'One or more gradingscale steps are invalid.';
 $string['err_taskmaxpoints'] = 'Entered number exceeds maximal points of task.';
+$string['err_roomsdoubleselected'] = 'Double selection of one room with different configurations';
 
 //universal
 $string['modulename'] = 'Exam management';

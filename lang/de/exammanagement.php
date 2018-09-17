@@ -228,6 +228,7 @@ $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
 $string['err_gradingstepsnotcorrect'] = 'Mindestens einer der Notenschritte passt nicht zu den anderen.';
 $string['err_taskmaxpoints'] = 'Die eingetragene Punktzahl überschreitet die Maximalpunktzahl der Aufgabe.';
+$string['err_roomsdoubleselected'] = 'Derselbe Raum wurde mehrfach in unterschiedlichen Belegungen als Prüfungsraum gewählt.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
