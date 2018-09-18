@@ -63,12 +63,7 @@ class showResultsForm extends moodleform {
 
                 $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
 
-                if($LdapManagerObj->is_LDAP_config()){
-            				$ldapConnection = $LdapManagerObj->connect_ldap();
-                    $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $resultObj->uid);
-            		} else {
-            			  $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($resultObj->uid);
-            		}
+                $matrnr = $ExammanagementInstanceObj->getUserMatrNr($resultObj->uid);
 
                 $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
                 $room;

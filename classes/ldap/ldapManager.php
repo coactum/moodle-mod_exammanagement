@@ -44,7 +44,6 @@ class ldapManager{
 
 	protected $id; // only for testing without real ldap!
 	protected $e; // only for testing without real ldap!
-	protected $test; //only for testing ldap
 
 	private static $instance = NULL;
 
@@ -52,17 +51,16 @@ class ldapManager{
 
 	private $preloadedValues = array();
 
-	private function __construct($id, $e, $test) {
+	private function __construct($id, $e) {
 		$this->id = $id; // only for testing without real ldap!
 		$this->e = $e;		 // only for testing without real ldap!
-		$this->test = $test;		 // only for testing without real ldap!
 	}
 
-	public static function getInstance($id, $e, $test = false){
+	public static function getInstance($id, $e){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new ldapManager($id, $e, $test);
+				$inst = new ldapManager($id, $e);
 			}
 			return $inst;
 
@@ -133,11 +131,9 @@ class ldapManager{
 	public function studentid2uid($ldapConnection, $pStudentId){
 		require_once(__DIR__.'/../general/MoodleDB.php');
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-
-			if (empty($pStudentId)) {
-					throw new Exception("No parameter given");
-			}
+		if (empty($pStudentId)) {
+				throw new Exception("No parameter given");
+		}
 
 		$dn	=	LDAP_OU	.	", "	.	LDAP_O	.	", "	.	LDAP_C;
 		$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_STUDID . "=" . $pStudentId . "))";
@@ -148,79 +144,23 @@ class ldapManager{
 		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
     ldap_free_result($search);
 
-		if($this->test){
-
-			if($ldapConnection){
-				var_dump("Verbindung zum LDAP wurde aufgebaut");
-				var_dump("Folgende Matrikelnummer wird ans LDAP gesendet:");
-				var_dump($pStudentId);
-			} else {
-				var_dump("Keine Verbindung zum LDAP möglich");
-			}
-		}
-
-		if(isset($result[ 0 ])){
-
-				if($this->test&&$ldapConnection){
-						var_dump("Für diese Matrikelnummer wurde folgender IMT-Benutzername gefunden:");
-						var_dump($result[ 0 ]);
-				}
-
-				$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $result[ 0 ]));
-
-				if($this->test&&$ldapConnection){
-						var_dump("Für diesen Benutzernamen wird in der PANDA-Datenbank ein Benutzer mit der folgenden ID gefunden:");
-						var_dump($moodleuserid);
-				}
-
-				return $moodleuserid;
-		} else{
-				if($this->test&&$ldapConnection){
-						var_dump("Für diese Matrikelnummer wurde kein IMT-Benutzername.");
-				}
-			 	return false;
-		}
+		return $result[ 0 ];
 	}
 
-	public function uid2studentid($ldapConnection, $moodleuserid){
-			require_once(__DIR__.'/../general/MoodleDB.php');
+	public function uid2studentid($ldapConnection, $uid){
 
-			$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-
-			if($this->test){
-					if($ldapConnection){
-						var_dump("Verbindung zum LDAP wurde aufgebaut");
-						var_dump("Folgende Moodleuserid wird verarbeitet:");
-						var_dump($moodleuserid);
-					} else {
-						var_dump("Keine Verbindung zum LDAP möglich");
-					}
-			}
-
-			$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $moodleuserid));
-
-			if($this->test&&$ldapConnection){
-					var_dump("Folgender Benutzername soll am LDAP überprüft werden:");
-					var_dump($pUId);
-			}
-
-			if (empty($pUId)) {
+			if (empty($uid)) {
 					throw new Exception("No parameter given");
 			}
 
 			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $pUId . "))";
+			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $uid . "))";
 
 			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
 			$entry = ldap_first_entry($ldapConnection, $search);
 
 			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
 			ldap_free_result($search);
-
-			if($this->test&&$ldapConnection){
-					var_dump("Für diesen Benutzernamen wurde folgende Matrikelnummer gefunden:");
-					var_dump($result[ 0 ]);
-			}
 
 			return $result[ 0 ];
 	}

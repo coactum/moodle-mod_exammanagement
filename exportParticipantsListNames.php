@@ -147,11 +147,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       foreach ($roomObj->assignments as $assignment){
         $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
 
-        if($LdapManagerObj->is_LDAP_config()){
-            $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $assignment->userid);
-        } else {
-            $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($assignment->userid);
-        }
+        $matrnr = $ExammanagementInstanceObj->getUserMatrNr($assignment->userid);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . utf8_encode($user->lastname) . "</td>";

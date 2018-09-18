@@ -737,117 +737,129 @@ public function checkIfValidMatrNr($mnr) {
 	}
 }
 
-	public function saveParticipants($newParticipantsArr, $header, $mode, $badmatriculationnumbersArr = NULL, $test = false){
+	public function saveTempParticipants($newParticipantsArr, $header, $badMatriculationnumbersArr = NULL, $oddMatriculationnumbersArr = NULL, $existingMatriculationnumbersArr = NULL, $deletedMatriculationnumbersArr = NULL){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			if($test){
-				return;
-			}
 
 			if(!$newParticipantsArr){
 				$newParticipantsArr = array();
 			}
 
-			if ($mode == 'tmp'){
-					if ($badmatriculationnumbersArr){
-							array_push($newParticipantsArr, $badmatriculationnumbersArr);
-					} else {
-							array_push($newParticipantsArr, NULL);
-					}
+			if ($badmatriculationnumbersArr){
+					array_push($newParticipantsArr, $badmatriculationnumbersArr);
+			} else {
+					array_push($newParticipantsArr, NULL);
+			}
+
+			if ($oddMatriculationnumbersArr){
+					array_push($newParticipantsArr, $oddMatriculationnumbersArr);
+			} else {
+					array_push($newParticipantsArr, NULL);
+			}
+
+			if ($existingMatriculationnumbersArr){
+					array_push($newParticipantsArr, $existingMatriculationnumbersArr);
+			} else {
+					array_push($newParticipantsArr, NULL);
+			}
+
+			if ($deletedMatriculationnumbersArr){
+					array_push($newParticipantsArr, $deletedMatriculationnumbersArr);
+			} else {
+					array_push($newParticipantsArr, NULL);
 			}
 
 			$newfileheader = json_encode($header);
 
-			$tempfileheader = json_decode($this->moduleinstance->tempimportfileheader);
-			$savedFileHeadersArr = json_decode($this->moduleinstance->importfileheaders);
+			$participants = json_encode($newParticipantsArr);
 
-			$fileHeadersArr = array();
+			$this->moduleinstance->tmpparticipants = NULL;
+			$this->moduleinstance->tempimportfileheader = NULL;
 
-			if ($mode == 'tmp'){
-					$participants = json_encode($newParticipantsArr);
+			if ($participants!=NULL){
+					$this->moduleinstance->tmpparticipants = $participants;
+			}
 
-						$this->moduleinstance->tmpparticipants = NULL;
-						$this->moduleinstance->tempimportfileheader = NULL;
+			if ($newfileheader!=NULL){
+					$this->moduleinstance->tempimportfileheader = $newfileheader;
+			}
 
-						if ($participants!=NULL){
-								$this->moduleinstance->tmpparticipants = $participants;
-						}
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
+	}
 
-						if ($newfileheader!=NULL){
-							$this->moduleinstance->tempimportfileheader = $newfileheader;
-						}
+	public function saveParticipants($newParticipantsArr, $header){
 
-						$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-						redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			} else{
-					if ($newParticipantsArr!=NULL){
-							$savedParticipantsArray = $this->getSavedParticipants();
+			if($newParticipantsArr){
 
-							if($savedParticipantsArray){
-									$participants = json_encode(array_merge($savedParticipantsArray, $newParticipantsArr));
+					//save participants
+					$savedParticipantsArray = $this->getSavedParticipants();
+
+					if($savedParticipantsArray){
+							$participants = json_encode(array_merge($savedParticipantsArray, $newParticipantsArr));
+					} else {
+							$participants = json_encode($newParticipantsArr);
+					}
+
+					$this->moduleinstance->participants = $participants;
+
+					// save participants for file headers
+					if($tempfileheader){
+							if (!$savedFileHeadersArr){ // falls noch keine header gespeichert
+									// merken welcher Teilnehmer zu header gehört
+									$fileheadersObj = new stdclass;
+									$fileheadersObj->header = $tempfileheader;
+									$fileheadersObj->participants = $newParticipantsArr;
+
+									// und header speichern
+									array_push($fileHeadersArr, $fileheadersObj);
 							} else {
-									$participants = json_encode($newParticipantsArr);
-							}
 
-							$this->moduleinstance->participants = $participants;
+									$headerKey = false;
+									$oldParticipantsArr = false;
+									$fileheadersObj = new stdclass;
+									$fileheadersObj->header = $tempfileheader;
 
-							if($tempfileheader){
-									if (!$savedFileHeadersArr){ // falls noch keine header gespeichert
-											// merken welcher Teilnehmer zu header gehört
-											$fileheadersObj = new stdclass;
-											$fileheadersObj->header = $tempfileheader;
-											$fileheadersObj->participants = $newParticipantsArr;
-
-											// und header speichern
-											array_push($fileHeadersArr, $fileheadersObj);
-									} else {
-
-											$headerKey = false;
-											$oldParticipantsArr = false;
-											$fileheadersObj = new stdclass;
-											$fileheadersObj->header = $tempfileheader;
-
-											foreach($savedFileHeadersArr as $key => $headerObj){
-													if ($headerObj->header == $tempfileheader){
-															$headerKey = $key;
-															$oldParticipantsArr = $headerObj->participants;
-													}
-											}
-
-											if($headerKey && $oldParticipantsArr) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:var_dump($tempfileheader);
-													$fileheadersObj->participants = array_merge($newParticipantsArr, $oldParticipantsArr);
-
-													$savedFileHeadersArr[$headerKey] = $fileheadersObj;
-													$fileHeadersArr = $savedFileHeadersArr;
-											} else { //falls schon header gespeichert und neuer Header noch nicht in diesen vorhanden
-													$fileheadersObj->participants = $newParticipantsArr;
-
-													$fileHeadersArr = $savedFileHeadersArr;
-													array_push($fileHeadersArr, $fileheadersObj);
+									foreach($savedFileHeadersArr as $key => $headerObj){
+											if ($headerObj->header == $tempfileheader){
+													$headerKey = $key;
+													$oldParticipantsArr = $headerObj->participants;
 											}
 									}
+
+									if($headerKey && $oldParticipantsArr) { //falls bereits header gespeichert und neuer Header schon in diesen vorhanden:var_dump($tempfileheader);
+											$fileheadersObj->participants = array_merge($newParticipantsArr, $oldParticipantsArr);
+
+											$savedFileHeadersArr[$headerKey] = $fileheadersObj;
+											$fileHeadersArr = $savedFileHeadersArr;
+									} else { //falls schon header gespeichert und neuer Header noch nicht in diesen vorhanden
+											$fileheadersObj->participants = $newParticipantsArr;
+
+											$fileHeadersArr = $savedFileHeadersArr;
+											array_push($fileHeadersArr, $fileheadersObj);
+									}
 							}
-
-					} else {
-						$this->moduleinstance->participants = NULL;
 					}
-
-					$this->moduleinstance->importfileheaders = NULL;
-
-					if(!empty($fileHeadersArr)){
-							$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
-					}
-
-					$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
-					$this->moduleinstance->tempimportfileheader = NULL; //clear tmp file headers
-
-					$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-					$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
+			} else {
+				$this->moduleinstance->participants = NULL;
 			}
+
+			$this->moduleinstance->importfileheaders = NULL;
+
+			if(!empty($fileHeadersArr)){
+					$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
+			}
+
+			$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
+			$this->moduleinstance->tempimportfileheader = NULL; //clear tmp file headers
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 	}
 
 	public function getCourseParticipantsIDs(){
@@ -960,10 +972,13 @@ public function checkIfValidMatrNr($mnr) {
 		require_once(__DIR__.'/../ldap/ldapManager.php');
 
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
 		$ldapConnection = $LdapManagerObj->connect_ldap();
 
 		if($LdapManagerObj->is_LDAP_config()){
-		 		$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $userid);
+				$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+				$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $pUId);
 		} else {
 				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
 		}
@@ -1215,7 +1230,14 @@ public function saveResults($fromform){
 
 		if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
-				$uid = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
+
+				$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+				$username = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
+
+				if($username){
+					$uid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+				}
 		} else {
 				$uid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 		}

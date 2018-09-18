@@ -147,11 +147,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $name = utf8_encode($user->lastname);
         $firstname = utf8_encode($user->firstname);
 
-        if($LdapManagerObj->is_LDAP_config()){
-            $matrnr = $LdapManagerObj->uid2studentid($ldapConnection, $assignment->userid);
-        } else {
-            $matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($assignment->userid);
-        }
+        $matrnr = $ExammanagementInstanceObj->getUserMatrNr($assignment->userid);
 
         $room = $roomObj->roomname;
         $place = $assignment->place;

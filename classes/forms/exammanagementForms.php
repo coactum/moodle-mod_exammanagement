@@ -165,11 +165,16 @@ class exammanagementForms{
 			// retrieve Files from form
 			$paul_file = $mform->get_file_content('participantslist_paul');
 			$excel_file = $mform->get_file_content('participantslist_excel');
-			$filecontentarray = array();
-			$pmatriculationnumbersarray = array();
-			$badmatriculationnumbersarray = array();
-			$moodleuseridsarray = array();
+
+			$fileContentArr = array();
+
+			$potentialMatriculationnumbersArr = array();
+
 			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
+
+			$MoodleUserIdsArr = array();
+			$badMatriculationnumbersArr = array();
+
 
 			if(!$savedParticipantsArray){
 					$savedParticipantsArray = array();
@@ -177,9 +182,9 @@ class exammanagementForms{
 
 			if (!$excel_file && !$paul_file){
 				//saveParticipants in DB
-				$participants=$ExammanagementInstanceObj->filterCheckedParticipants($fromform);
+				$participants = $ExammanagementInstanceObj->filterCheckedParticipants($fromform);
 
-				$ExammanagementInstanceObj->saveParticipants($participants, '', 'save');
+				$ExammanagementInstanceObj->saveParticipants($participants);
 
 				$$ExammanagementInstanceObj->clearTempParticipants();
 
@@ -187,103 +192,85 @@ class exammanagementForms{
 
 				// get matriculation numbers from paul file as an array
 
-				$filecontentarray = explode(PHP_EOL, $paul_file); // separate lines
+				$fileContentArr = explode(PHP_EOL, $paul_file); // separate lines
 
-				$fileheader = $filecontentarray[0]."\r\n".$filecontentarray[1];
+				$fileheader = $fileContentArr[0]."\r\n".$fileContentArr[1];
 
-				foreach($filecontentarray as $row){
-						$pmatriculationnumbersarray = explode("	", $row); // from 2nd line: get all potential numbers
+				foreach($fileContentArr as $row){
+						$potentialMatriculationnumbersArr = explode("	", $row); // from 2nd line: get all potential numbers
 
 						foreach ($pmatriculationnumbersarray as $key => $pmatrnr) { // Validate potential matrnr
 							if (!$ExammanagementInstanceObj->checkIfValidMatrNr(str_replace('"', '', $pmatrnr))){ //if not a valid matrnr
-										//array_push($badmatriculationnumbersarray, $matriculationnumbersarray[$key]);
-										unset($pmatriculationnumbersarray[$key]);
+										array_push($badMatriculationnumbersArr, $matriculationnumbersarray[$key]);
+										unset($potentialMatriculationnumbersArr[$key]);
 							}
 						}
 
 						// convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
 						$ldapConnection = $LdapManagerObj->connect_ldap();
-						foreach($pmatriculationnumbersarray as $key => $matrnr){
-
-							 if($this->test){
-									var_dump('Potenzielle Matrikelnummer gefunden: '.str_replace('"', '', $matrnr));
-							 }
+						foreach($potentialMatriculationnumbersArr as $key => $matrnr){
 
 							 if($LdapManagerObj->is_LDAP_config()){
 									 $ldapConnection = $LdapManagerObj->connect_ldap();
-									 $moodleuserid = $LdapManagerObj->studentid2uid($ldapConnection, str_replace('"', '', $matrnr));
 
-									 if($this->test){
-										 	var_dump('getestete Matrikelnummer ('.str_replace('"', '', $matrnr).') und dazugehörige Moodleuser id: '.$moodleuserid);
-									}
+									 $MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+	 								 $username = $LdapManagerObj->studentid2uid($ldapConnection, str_replace('"', '', $matrnr));
+
+	 								 if($username){
+	 									 $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+	 								 }
 
 							 } else {
 										$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest(str_replace('"', '', $matrnr));
-										if($this->test){
-		 									var_dump('Keine Verbindung zum LDAP möglich');
-		 							  }
 							 }
 
-							 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $moodleuseridsarray)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
+							 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $MoodleUserIdsArr)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
 
-									array_push($moodleuseridsarray, $moodleuserid);
-									unset($pmatriculationnumbersarray[$key]);
-
-									if($this->test){
-											var_dump('Folgende Moodleuser ID wird gespeichert: '.$moodleuserid);
-									}
+									array_push($MoodleUserIdsArr, $moodleuserid);
+									unset($potentialMatriculationnumbersArr[$key]);
 							 }
 						}
 
 						// push all remaining matriculation numbers that could not be resolved by ldap into the $matriculationnumbersarray
-						foreach($pmatriculationnumbersarray as $key => $matrnr){
-								array_push($badmatriculationnumbersarray, str_replace('"', '', $matrnr));
-								unset($pmatriculationnumbersarray[$key]);
+						foreach($potentialMatriculationnumbersArr as $key => $matrnr){
+								array_push($badMatriculationnumbersArr, str_replace('"', '', $matrnr));
+								unset($potentialMatriculationnumbersArr[$key]);
 						}
 				}
 
-				if($this->test){
-						var_dump('Array mit allen ungültigen Matrikelnummern: ');
-						var_dump($badmatriculationnumbersarray);
-						var_dump('Array mit allen bis zum Schluss unbehandelten Matrikelnummern: ');
-						var_dump($pmatriculationnumbersarray);
-				}
-
-			} else if($excel_file){
-				//$PHPExcelObj = PHPExcel_IOFactory::load($excel_file);
-				//var_dump($PHPExcelObj);
-
-				var_dump(file_get_submitted_draft_itemid('participantslist_excel'));
-
-				//$fs = get_file_storage('participantslist_excel');
-				$fs = get_file_storage();
-
-				var_dump($fs);
-				//$fs->get_area_files(...);
-				//moodle_url::make_pluginfile_url(...)
-
-
-				//$url = $CFG->wwwroot/pluginfile.php/$contextid/$component/$filearea/arbitrary/extra/infomation.ext;
- 				var_dump($url);
-				// get matriculation numbers from excel file
-
-				// convert matriculation numbers to moodle userdis using LDAP
-
-				//remember moodle ids
-
-			}
+			// } else if($excel_file){
+			// 	//$PHPExcelObj = PHPExcel_IOFactory::load($excel_file);
+			// 	//var_dump($PHPExcelObj);
+			//
+			// 	var_dump(file_get_submitted_draft_itemid('participantslist_excel'));
+			//
+			// 	//$fs = get_file_storage('participantslist_excel');
+			// 	$fs = get_file_storage();
+			//
+			// 	var_dump($fs);
+			// 	//$fs->get_area_files(...);
+			// 	//moodle_url::make_pluginfile_url(...)
+			//
+			//
+			// 	//$url = $CFG->wwwroot/pluginfile.php/$contextid/$component/$filearea/arbitrary/extra/infomation.ext;
+ 			// 	var_dump($url);
+			// 	// get matriculation numbers from excel file
+			//
+			// 	// convert matriculation numbers to moodle userdis using LDAP
+			//
+			// 	//remember moodle ids
+			//
+			// }
 
 			// reload page with participants for final user confirmation and saving
-			if(!$moodleuseridsarray){
-					$moodleuseridsarray = NULL;
+			if(!$MoodleUserIdsArr){
+					$MoodleUserIdsArr = NULL;
 			}
 
-			if($this->test){
-					var_dump('Array mit allen zu speichernden Matrikelnummern: ');
-					var_dump($moodleuseridsarray);
-			}
+			$ExammanagementInstanceObj->saveTempParticipants($MoodleUserIdsArr, $fileheader, $badMatriculationnumbersArr, $badmatriculationnumbersarray);
 
-			$ExammanagementInstanceObj->saveParticipants($moodleuseridsarray, $fileheader, 'tmp', $badmatriculationnumbersarray, $this->test);
+			}
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -522,7 +509,15 @@ class exammanagementForms{
 
 						if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
-								$userid = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+
+								$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+								$username = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+
+								if($username){
+									$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+								}
+
 						} else {
 								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 						}
