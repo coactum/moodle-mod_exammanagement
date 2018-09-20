@@ -28,8 +28,8 @@ define(['jquery'], function($) {
            $('div').removeClass('col-md-3');
            $('div').removeClass('col-md-9');
 
-           $('form > .form-group > div:first-child').addClass('col-md-3');
-           $('form > .form-group > div:last-child').addClass('col-md-9');
+           $('form > .form-group > div.remove_col:first-child').addClass('col-md-3');
+           $('form > .form-group > div.remove_col:last-child').addClass('col-md-9');
           }
     };
 

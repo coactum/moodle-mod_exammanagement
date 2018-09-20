@@ -118,14 +118,15 @@ class addCourseParticipantsForm extends moodleform{
           }
         }
 
+        $mform->addElement('html', '</div>');
 
         if ($participantsIDs || $courseParticipantsIDs){
+            $mform->addElement('html', '<p> <b>Hinweis:</b> Durch das Hinzufügen der Kursteilnehmer werden alle bisher gespeicherten Prüfungsteilnehmer überschrieben!</p>');
+
             $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
         }
-
-        $mform->addElement('html', '</div>');
     }
 
     //Custom validation should be added here

@@ -28,6 +28,7 @@ use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\ldap\ldapManager;
 use PHPExcel_IOFactory;
+use stdclass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,9 +37,9 @@ class exammanagementForms{
 	protected $id;
 	protected $e;
 	protected $newtaskcount;
-	public $test;
+	protected $dtp;
 
-	private function __construct($id, $e, $newtaskcount, $test) {
+	private function __construct($id, $e, $newtaskcount, $dtp) {
 		$this->id = $id;
 		$this->e = $e;
 
@@ -46,18 +47,18 @@ class exammanagementForms{
 				$this->newtaskcount = $newtaskcount;
 		}
 
-		if($test){
-			$this->test = $test;
+		if($dtp){
+			$this->dtp = $dtp;
 		}
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $newtaskcount = false, $test = false){
+	public static function getInstance($id, $e, $newtaskcount = false, $dtp = false){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new exammanagementForms($id, $e, $newtaskcount, $test);
+				$inst = new exammanagementForms($id, $e, $newtaskcount, $dtp);
 			}
 			return $inst;
 
@@ -148,10 +149,14 @@ class exammanagementForms{
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e, $this->test);
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+
+		if($this->dtp){
+				$ExammanagementInstanceObj->deleteTempParticipants();
+		}
 
 		//Instantiate form
-		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'test'=>$this->test));
+		$mform = new addParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -171,10 +176,15 @@ class exammanagementForms{
 			$potentialMatriculationnumbersArr = array();
 
 			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
+			$PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
 
 			$MoodleUserIdsArr = array();
 			$badMatriculationnumbersArr = array();
+			$oddMatriculationnumbersArr = array();
+			$existingMatriculationnumbersArr = array();
+			$deletedMatriculationnumbersArr = array();
 
+			$tempMoodleIDsArr = array();
 
 			if(!$savedParticipantsArray){
 					$savedParticipantsArray = array();
@@ -195,14 +205,23 @@ class exammanagementForms{
 				$fileContentArr = explode(PHP_EOL, $paul_file); // separate lines
 
 				$fileheader = $fileContentArr[0]."\r\n".$fileContentArr[1];
+				unset($fileContentArr[0]);
+				unset($fileContentArr[1]);
 
-				foreach($fileContentArr as $row){
+				foreach($fileContentArr as $key => $row){
 						$potentialMatriculationnumbersArr = explode("	", $row); // from 2nd line: get all potential numbers
 
-						foreach ($pmatriculationnumbersarray as $key => $pmatrnr) { // Validate potential matrnr
-							if (!$ExammanagementInstanceObj->checkIfValidMatrNr(str_replace('"', '', $pmatrnr))){ //if not a valid matrnr
-										array_push($badMatriculationnumbersArr, $matriculationnumbersarray[$key]);
-										unset($potentialMatriculationnumbersArr[$key]);
+						$pMatrNrObj = new stdclass;
+						$pMatrNrObj->row = $key+1;
+
+						foreach ($potentialMatriculationnumbersArr as $key => $pmatrnr) { // Validate potential matrnr
+							if (preg_match('/\\d/', $pmatrnr) == 0){ //if entry contains no number it cant be a matrnr
+									unset($potentialMatriculationnumbersArr[$key]);
+							} else if (!$ExammanagementInstanceObj->checkIfValidMatrNr(str_replace('"', '', $pmatrnr))){ //if it contains numbers but is not a valid matrnr
+									$pMatrNrObj->moodleid = false;
+									$pMatrNrObj->matrnr = str_replace('"', '', $pmatrnr);
+									array_push($badMatriculationnumbersArr, $pMatrNrObj);
+									unset($potentialMatriculationnumbersArr[$key]);
 							}
 						}
 
@@ -225,17 +244,67 @@ class exammanagementForms{
 										$moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest(str_replace('"', '', $matrnr));
 							 }
 
-							 if ($moodleuserid && !in_array($moodleuserid, $savedParticipantsArray) && !in_array($moodleuserid, $MoodleUserIdsArr)){ // dont save userid as temp_participant if userid is already saved as participant or temp_participant
+							 if ($moodleuserid){
+								 		$pMatrNrObj->moodleid = $moodleuserid;
+										$pMatrNrObj->matrnr = str_replace('"', '', $matrnr);
+										if(in_array($moodleuserid, $savedParticipantsArray)){ // if participant is already saved for instance
+												array_push($existingMatriculationnumbersArr, $pMatrNrObj);
+												unset($potentialMatriculationnumbersArr[$key]);
+										} else if(in_array($moodleuserid, $MoodleUserIdsArr)){ // if participant is already known as temp participant
+												array_push($badMatriculationnumbersArr, $pMatrNrObj);
+												unset($potentialMatriculationnumbersArr[$key]);
+										} else if (!in_array($moodleuserid, $ExammanagementInstanceObj->getCourseParticipantsIDs())){ // if participant is not in course
+												array_push($oddMatriculationnumbersArr, $pMatrNrObj);
+												unset($potentialMatriculationnumbersArr[$key]);
 
-									array_push($MoodleUserIdsArr, $moodleuserid);
+												array_push($tempMoodleIDsArr, $moodleuserid); //for finding deleted users
+										} else {	// if participant is valid participant
+												array_push($MoodleUserIdsArr, $pMatrNrObj);
+												unset($potentialMatriculationnumbersArr[$key]);
+
+												array_push($tempMoodleIDsArr, $moodleuserid); //for finding deleted users
+										}
+							 } else {	// if participant is no moodle user
+							 		$pMatrNrObj->moodleid = false;
+							 		$pMatrNrObj->matrnr = str_replace('"', '', $pmatrnr);
+
+									array_push($badMatriculationnumbersArr, $pMatrNrObj);
 									unset($potentialMatriculationnumbersArr[$key]);
 							 }
-						}
 
-						// push all remaining matriculation numbers that could not be resolved by ldap into the $matriculationnumbersarray
-						foreach($potentialMatriculationnumbersArr as $key => $matrnr){
-								array_push($badMatriculationnumbersArr, str_replace('"', '', $matrnr));
-								unset($potentialMatriculationnumbersArr[$key]);
+						}
+				}
+
+				// push all remaining matriculation numbers that could not be resolved by ldap into the $matriculationnumbersarray
+				foreach($potentialMatriculationnumbersArr as $key => $matrnr){
+						$pMatrNrObj->moodleid = false;
+						$pMatrNrObj->matrnr = str_replace('"', '', $pmatrnr);
+
+						array_push($badMatriculationnumbersArr, $pMatrNrObj);
+						unset($potentialMatriculationnumbersArr[$key]);
+				}
+
+				if($PAULFileHeadersArr){ //if participant is deleted
+
+						foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
+
+								if($PAULFileHeader->header == $fileheader){
+										foreach($PAULFileHeader->participants as $key => $savedParticipantId){
+
+												var_dump($savedParticipantId);
+												var_dump($tempMoodleIDsArr);
+
+												if(!in_array($savedParticipantId, $tempMoodleIDsArr)){
+														$pMatrNrObj->moodleid = $savedParticipantId;
+														$pMatrNrObj->matrnr = false;
+														$pMatrNrObj->row = '';
+
+														var_dump($pMatrNrObj);
+
+														array_push($deletedMatriculationnumbersArr, $pMatrNrObj);
+												}
+										}
+								}
 						}
 				}
 
@@ -268,7 +337,7 @@ class exammanagementForms{
 					$MoodleUserIdsArr = NULL;
 			}
 
-			$ExammanagementInstanceObj->saveTempParticipants($MoodleUserIdsArr, $fileheader, $badMatriculationnumbersArr, $badmatriculationnumbersarray);
+			$ExammanagementInstanceObj->saveTempParticipants($MoodleUserIdsArr, $fileheader, $badMatriculationnumbersArr, $oddMatriculationnumbersArr, $existingMatriculationnumbersArr, $deletedMatriculationnumbersArr);
 
 			}
 

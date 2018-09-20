@@ -86,7 +86,11 @@ $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
-$string['badmatrnr'] = 'The following numbers are invalid and will not be added to the exam.';
+$string['newmatrnr'] = 'Users will be added to exam.';
+$string['badmatrnr'] = 'Lines with invalid matriculation numbers (Users can not be added to exam).';
+$string['oddmatrnr'] = 'Users with warnings (can still be added as participants).';
+$string['existingmatrnr'] = 'Users are already exam participants (no changes)';
+$string['deletedmatrnr'] = 'Users will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
 $string['excel_file'] = 'Excel file';
 $string['import_from_excel_file'] = 'Import participants from excel file (matriculation number in any column) and add them to course.';
@@ -95,9 +99,12 @@ $string['import_from_paul_file'] = 'Import participants from paul file (entries 
 $string['no_participants_added'] = 'No participants added.';
 $string['read_file'] = 'Read file';
 $string['state_added_to_exam'] = 'Participants of exam';
-$string['state_temporary'] = 'Temporary';
 $string['state_courseparticipant'] = 'Participants of course';
+$string['state_newmatrnr'] = 'New';
 $string['state_badmatrnr'] = 'Bad matriculation number';
+$string['state_oddmatrnr_nocourseparticipant'] = 'Temporary, no course participant';
+$string['state_existingmatrnr'] = 'Already exam participant';
+$string['state_deletedmatrnr'] = 'Deleted';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';

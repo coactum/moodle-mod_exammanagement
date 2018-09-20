@@ -742,37 +742,41 @@ public function checkIfValidMatrNr($mnr) {
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-			if(!$newParticipantsArr){
-				$newParticipantsArr = array();
+			$tempParticipantsArr = array();
+
+			if($newParticipantsArr){
+					array_push($tempParticipantsArr, $newParticipantsArr);
+			} else {
+					array_push($tempParticipantsArr, NULL);
 			}
 
-			if ($badmatriculationnumbersArr){
-					array_push($newParticipantsArr, $badmatriculationnumbersArr);
+			if ($badMatriculationnumbersArr){
+					array_push($tempParticipantsArr, $badMatriculationnumbersArr);
 			} else {
-					array_push($newParticipantsArr, NULL);
+					array_push($tempParticipantsArr, NULL);
 			}
 
 			if ($oddMatriculationnumbersArr){
-					array_push($newParticipantsArr, $oddMatriculationnumbersArr);
+					array_push($tempParticipantsArr, $oddMatriculationnumbersArr);
 			} else {
-					array_push($newParticipantsArr, NULL);
+					array_push($tempParticipantsArr, NULL);
 			}
 
 			if ($existingMatriculationnumbersArr){
-					array_push($newParticipantsArr, $existingMatriculationnumbersArr);
+					array_push($tempParticipantsArr, $existingMatriculationnumbersArr);
 			} else {
-					array_push($newParticipantsArr, NULL);
+					array_push($tempParticipantsArr, NULL);
 			}
 
 			if ($deletedMatriculationnumbersArr){
-					array_push($newParticipantsArr, $deletedMatriculationnumbersArr);
+					array_push($tempParticipantsArr, $deletedMatriculationnumbersArr);
 			} else {
-					array_push($newParticipantsArr, NULL);
+					array_push($tempParticipantsArr, NULL);
 			}
 
 			$newfileheader = json_encode($header);
 
-			$participants = json_encode($newParticipantsArr);
+			$participants = json_encode($tempParticipantsArr);
 
 			$this->moduleinstance->tmpparticipants = NULL;
 			$this->moduleinstance->tempimportfileheader = NULL;
@@ -789,7 +793,7 @@ public function checkIfValidMatrNr($mnr) {
 			redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
 	}
 
-	public function saveParticipants($newParticipantsArr, $header){
+	public function saveParticipants($newParticipantsArr){
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
@@ -798,6 +802,9 @@ public function checkIfValidMatrNr($mnr) {
 
 					//save participants
 					$savedParticipantsArray = $this->getSavedParticipants();
+					$tempfileheader = json_decode($this->moduleinstance->tempimportfileheader);
+					$savedFileHeadersArr = json_decode($this->moduleinstance->importfileheaders);
+					$fileHeadersArr = array();
 
 					if($savedParticipantsArray){
 							$participants = json_encode(array_merge($savedParticipantsArray, $newParticipantsArr));
@@ -844,11 +851,7 @@ public function checkIfValidMatrNr($mnr) {
 									}
 							}
 					}
-			} else {
-				$this->moduleinstance->participants = NULL;
 			}
-
-			$this->moduleinstance->importfileheaders = NULL;
 
 			if(!empty($fileHeadersArr)){
 					$this->moduleinstance->importfileheaders = json_encode($fileHeadersArr);
@@ -871,8 +874,11 @@ public function checkIfValidMatrNr($mnr) {
 				$CourseParticipantsIDsArray[$key] = $temp['id'];
 			}
 
-			return $CourseParticipantsIDsArray;
-
+			if($CourseParticipantsIDsArray){
+					return $CourseParticipantsIDsArray;
+			} else {
+					return false;
+			}
 
 	}
 
@@ -924,6 +930,15 @@ public function checkIfValidMatrNr($mnr) {
 			} else {
 				return false;
 		}
+	}
+
+	public function deleteTempParticipants(){
+			$MoodleDBObj = MoodleDB::getInstance();
+
+			$this->moduleinstance->tmpparticipants = NULL;
+			$this->moduleinstance->tempimportfileheader = NULL;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	}
 
 	public function getPAULTextFileHeaders(){

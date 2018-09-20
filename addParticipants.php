@@ -36,8 +36,10 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$dtp  = optional_param('dtp', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e, '');
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e, '', $dtp);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
