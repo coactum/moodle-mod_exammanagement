@@ -150,7 +150,9 @@ class chooseRoomsForm extends moodleform {
           $similiarRoomIDsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomname[0]));
 
           foreach($similiarRoomIDsArr as $key => $similiarRoomObj){
-              if($data['rooms'][$similiarRoomObj->roomid]=="1" && $similiarRoomObj->roomid !== $roomid){
+
+              if(is_string($data['rooms'][$similiarRoomObj->roomid]) && $data['rooms'][$similiarRoomObj->roomid] !== "0" && is_string($data['rooms'][$roomid]) && $similiarRoomObj->roomid !== $roomid){
+
                   $errors['rooms['.$roomid.']'] = get_string('err_roomsdoubleselected', 'mod_exammanagement');
               }
           }
