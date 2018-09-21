@@ -250,6 +250,8 @@ class exammanagementForms{
 										if(in_array($moodleuserid, $savedParticipantsArray)){ // if participant is already saved for instance
 												array_push($existingMatriculationnumbersArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
+
+												array_push($tempMoodleIDsArr, $moodleuserid); //for finding deleted users
 										} else if(in_array($moodleuserid, $MoodleUserIdsArr)){ // if participant is already known as temp participant
 												array_push($badMatriculationnumbersArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
@@ -259,6 +261,7 @@ class exammanagementForms{
 
 												array_push($tempMoodleIDsArr, $moodleuserid); //for finding deleted users
 										} else {	// if participant is valid participant
+
 												array_push($MoodleUserIdsArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
 
@@ -291,17 +294,13 @@ class exammanagementForms{
 								if($PAULFileHeader->header == $fileheader){
 										foreach($PAULFileHeader->participants as $key => $savedParticipantId){
 
-												var_dump($savedParticipantId);
-												var_dump($tempMoodleIDsArr);
-
 												if(!in_array($savedParticipantId, $tempMoodleIDsArr)){
-														$pMatrNrObj->moodleid = $savedParticipantId;
-														$pMatrNrObj->matrnr = false;
-														$pMatrNrObj->row = '';
+														$deletedMatrNrObj = new stdclass;
+														$deletedMatrNrObj->moodleid = $savedParticipantId;
+														$deletedMatrNrObj->matrnr = false;
+														$deletedMatrNrObj->row = '';
 
-														var_dump($pMatrNrObj);
-
-														array_push($deletedMatriculationnumbersArr, $pMatrNrObj);
+														array_push($deletedMatriculationnumbersArr, $deletedMatrNrObj);
 												}
 										}
 								}

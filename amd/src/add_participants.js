@@ -14,9 +14,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Ticks or unticks all checkboxes when clicking the Select all or Deselect all elements when viewing the response overview.
+ * Ticks or unticks all checkboxes when clicking the Select all or Deselect all elements when viewing the response overview
+ * and remove unnecessary col-mds.
  *
- * @module      mod_exammanagement/select_all_choices
+ * @module      mod_exammanagement/add_participants
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,7 +29,13 @@ define(['jquery'], function($) {
            $("#checkboxgroup1").click(function () {
              $('input.checkboxgroup1').not(this).prop('checked', this.checked);
            });
+           $("#checkboxgroup2").click(function () {
+             $('input.checkboxgroup2').not(this).prop('checked', this.checked);
+           });
+        },
+        remove_form_classes_col: function() {
+           $('div.remove_col > div > div').removeClass('col-md-3');
+           $('div.remove_col > div > div').removeClass('col-md-9');
         }
     };
-
 });

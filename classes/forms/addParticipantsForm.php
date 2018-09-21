@@ -49,8 +49,8 @@ class addParticipantsForm extends moodleform{
         $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        //$PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
-        $PAGE->requires->js_call_amd('mod_exammanagement/select_all_choices', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
+        $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
+        $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -66,7 +66,7 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('html', '</div><div class="col-xs-2"><a type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
         if($tempParticipantsArr){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<div class="col-xs-4"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-plus hidden-md-up" aria-hidden="true"></i></a></div>');
         }
 
         $mform->addElement('html', '</div></div>');
@@ -116,7 +116,7 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3">');
+                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col">');
                 $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1',));
                 $mform->addElement('html', '</div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
@@ -168,12 +168,11 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3">');
+                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col">');
                 $mform->addElement('advcheckbox', 'checkall', 'Alle aus-/abwählen', null, array('group' => 2, 'id' => 'checkboxgroup2',));
                 $mform->addElement('html', '</div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
                 foreach ($newParticipantsArr as $key => $userObj) {
-
                     $moodleid = $userObj->moodleid;
                     $matrnr = $userObj->matrnr;
 

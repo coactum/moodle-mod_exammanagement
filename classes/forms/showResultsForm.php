@@ -54,7 +54,7 @@ class showResultsForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('showResults'));
 
-        $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="hidden-md-down">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="hidden-lg-up">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div></div>');
+        $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="d-none d-lg-block">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="d-lg-none">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div></div>');
 
         $results = $ExammanagementInstanceObj->getResults();
 
