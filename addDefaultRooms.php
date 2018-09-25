@@ -41,6 +41,8 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
+$MoodleObj->setPage('addDefaultRooms');
+
 if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
   	$defaultRoomsFile = file($MoodleObj->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));

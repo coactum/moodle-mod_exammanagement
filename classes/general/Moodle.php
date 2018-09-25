@@ -65,6 +65,8 @@ class Moodle{
 		$PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
 		$PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
 
+		require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
+
 		/*
 		 * Other things you may want to set - remove if not needed.
 		 * $PAGE->set_cacheable(false);

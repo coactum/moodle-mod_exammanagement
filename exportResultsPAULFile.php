@@ -49,6 +49,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
+    $MoodleObj->setPage('exportResultsPAULFile');
+
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
     }

@@ -129,9 +129,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Prüfungsräume</h3>
 																<span class="statebar col-xs-6">
-																		{{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																		{{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -140,7 +140,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>
+															<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -150,9 +150,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Prüfungsdatum</h3>
 																<span class="statebar col-xs-6">
-																		{{#hrexamtime}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		{{^hrexamtime}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																		{{#hrexamtime}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		{{^hrexamtime}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -161,7 +161,7 @@ ajaxtoogleInformation = function(command, value){
 															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="set_date_time.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>
+															<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="set_date_time.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -173,9 +173,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Prüfungsteilnehmer</h3>
 																<span class="statebar col-xs-6">
-																	{{#participants}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	{{^participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																	{{#participants}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	{{^participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -184,7 +184,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="showParticipants.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>
+															<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="showParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -194,9 +194,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Prüfungsaufgaben</h3>
 																<span class="statebar col-xs-6">
-																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -205,7 +205,7 @@ ajaxtoogleInformation = function(command, value){
 															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>
+															<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
 												</div>
@@ -217,10 +217,10 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Freitextfeld</h3>
 																<span class="statebar col-xs-6">
-																	{{#textfield}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
-																	{{^textfield}}{{#participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
-																	{{^textfield}}{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	{{#textfield}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	{{^textfield}}{{#participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
+																	{{^textfield}}{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/textfield}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -229,7 +229,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
 														</div>
 														<div class="panel-footer">
-															{{#participants}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="textfield.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+															{{#participants}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="textfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/participants}}
 														</div>
 													</div>
 												</div>
@@ -239,8 +239,8 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Nachricht an Teilnehmer</h3>
 																<span class="statebar col-xs-6">
-																	{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -248,7 +248,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer versendet werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#participants}}<a class="btn btn-primary pull-right" href="groupmessages.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+															{{#participants}}<a class="btn btn-primary pull-right" href="groupmessages.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}
 														</div>
 													</div>
 												</div>
@@ -279,12 +279,12 @@ ajaxtoogleInformation = function(command, value){
 																<div class="row">
 																	<h3 class="panel-title col-xs-6">Automatische Sitzplatzzuweisung</h3>
 																	<span class="statebar col-xs-6">
-																			{{#stateofplacescorrect}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																			{{^stateofplacescorrect}}{{#participants}}{{#rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
-																			{{^stateofplacescorrect}}{{^participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
-																			{{^stateofplacescorrect}}{{#participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
-																			{{^stateofplacescorrect}}{{^participants}}{{#rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
-																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																			{{#stateofplacescorrect}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{#participants}}{{#rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{^participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{#participants}}{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{^participants}}{{#rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</div>
 															</div>
@@ -294,7 +294,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
 															</div>
 															<div class="panel-footer">
-																{{#participants}}{{#rooms}}<a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  hidden-md-up" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
+																{{#participants}}{{#rooms}}<a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
 															</div>
 														</div>
                         </div>
@@ -304,8 +304,8 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Sitzplan</h3>
 																<span class="statebar col-xs-6">
-																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -313,7 +313,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}export_seatingplan, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_seatingplan, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+															{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_seatingplan, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 														</div>
 													</div>
 												</div>
@@ -327,7 +327,7 @@ ajaxtoogleInformation = function(command, value){
 															<span class="statebar col-xs-6">
 																{{#hrexamtime}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
 																<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-																{{^hrexamtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																{{^hrexamtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
 															</span>
 														</div>
 													</div>
@@ -349,8 +349,8 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Prüfungsetiketten</h3>
 															<span class="statebar col-xs-6">
-																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</span>
 														</div>
@@ -359,7 +359,7 @@ ajaxtoogleInformation = function(command, value){
 														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+														{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 													</div>
 												</div>
 											</div>
@@ -371,7 +371,7 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Sichtbarkeit der Prüfungsräume und Sitzplätze</h3>
 															<span class="statebar col-xs-6">
-																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
 															</span>
 														</div>
 													</div>
@@ -421,8 +421,8 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Teilnehmerlisten</h3>
 															<span class="statebar col-xs-6">
-																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
 													</div>
@@ -430,7 +430,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#stateofplacescorrect}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+														{{#stateofplacescorrect}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 													</div>
 												</div>
 											</div>
@@ -490,9 +490,9 @@ ajaxtoogleInformation = function(command, value){
 																<div class="row">
 																	<h3 class="panel-title col-xs-6">Bonuspunkte</h3>
 																	<span class="statebar col-xs-6">
-																		<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																		<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label label-danger pull-right" title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
 																		</span>
 																	</span>
 																</div>
@@ -501,7 +501,7 @@ ajaxtoogleInformation = function(command, value){
 																	<p>Es wurden noch keine Bonuspunkte importiert.</p>
 															</div>
 															<div class="panel-footer">
-																<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a> -->
+																<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a> -->
 															</div>
 														</div>
 											</div>
@@ -511,9 +511,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Notenschlüßel</h3>
 																<span class="statebar col-xs-6">
-																	{{#gradingscale}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	{{^gradingscale}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	{{#gradingscale}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	{{^gradingscale}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</div>
 														</div>
@@ -522,7 +522,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^gradingscale}}<p>Es wurde noch kein Notenschlüßel konfiguriert.</p>{{/gradingscale}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>
+															<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>
 														</div>
 													</div>
                         </div>
@@ -534,11 +534,11 @@ ajaxtoogleInformation = function(command, value){
 																<div class="row">
 																	<h3 class="panel-title col-xs-6">Prüfungsergebnisse</h3>
 																	<span class="statebar col-xs-6">
-																		{{#resultscount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																		{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="hidden-md-down"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
-																		{{^resultscount}}{{^stateofplacescorrect}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
-																		{{^resultscount}}{{#stateofplacescorrect}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																		{{#resultscount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																		{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		{{^resultscount}}{{^stateofplacescorrect}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		{{^resultscount}}{{#stateofplacescorrect}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</div>
 															</div>
@@ -547,7 +547,7 @@ ajaxtoogleInformation = function(command, value){
 																{{^resultscount}}<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
 															</div>
 															<div class="panel-footer">
-																{{#stateofplacescorrect}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/stateofplacescorrect}}
+																{{#stateofplacescorrect}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/stateofplacescorrect}}
 															</div>
 														</div>
 											</div>
@@ -557,9 +557,9 @@ ajaxtoogleInformation = function(command, value){
 															<div class="row">
 																<h3 class="panel-title col-xs-6">Ergebnisübersicht</h3>
 																<span class="statebar col-xs-6">
-																			{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																			{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																	 		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																			{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																			{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																	 		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</span>
 															</div>
@@ -568,7 +568,7 @@ ajaxtoogleInformation = function(command, value){
 																<p> Hier können bereits eingegebene Prüfungsergebnisse angesehen werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="showResults.php?id={{cmid}}"><span class="hidden-sm-down">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o hidden-md-up" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
+															{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="showResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
 														</div>
 													</div>
                         </div>
@@ -599,9 +599,9 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
 															<span class="statebar col-xs-6">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
 																</span>
 															</span>
 														</div>
@@ -610,7 +610,7 @@ ajaxtoogleInformation = function(command, value){
 														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
+														<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
 													</div>
 												</div>
                       </div>
@@ -620,9 +620,9 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Ergebnisse mit Prozentangaben</h3>
 															<span class="statebar col-xs-6">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
 																</span>
 															</span>
 														</div>
@@ -631,7 +631,7 @@ ajaxtoogleInformation = function(command, value){
 														<p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a class="btn btn-primary pull-right" href=""><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
+														<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
 													</div>
 												</div>
                       </div>
@@ -643,9 +643,9 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-8">Ergebnisse und Statistik</h3>
 															<span class="statebar col-xs-4">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
 																</span>
 															</span>
 														</div>
@@ -654,7 +654,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
+														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
 													</div>
 												</div>
                       </div>
@@ -664,9 +664,9 @@ ajaxtoogleInformation = function(command, value){
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>
 															<span class="statebar col-xs-6">
-																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="hidden-md-down"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
 													</div>
@@ -674,7 +674,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#stateofplacescorrect}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="hidden-sm-down">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o hidden-md-up" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/stateofplacescorrect}}
+														{{#stateofplacescorrect}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/stateofplacescorrect}}
 													</div>
 												</div>
                       </div>
@@ -683,9 +683,9 @@ ajaxtoogleInformation = function(command, value){
 													<div class="panel-heading">
 															<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
 															<span class="statebar">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="hidden-md-down"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
+																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
 																		<span class="label label-danger pull-right" style="position: relative;bottom: 15px;" title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="hidden-md-down"> Derzeit in Entwicklung</span>
+																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
 																</span>
 															</span>
 													</div>
@@ -693,7 +693,7 @@ ajaxtoogleInformation = function(command, value){
 															<p>Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
 													</div>
 													<div class="panel-footer text-xs-center">
-														<!-- <a href="" class="btn btn-primary"><span class="hidden-sm-down">{{#str}}delete_examdata, mod_exammanagement{{/str}}</span><i class="fa fa-trash hidden-md-up" aria-hidden="true" title="{{#str}}delete_examdata, mod_exammanagement{{/str}}"></i></a> -->
+														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}delete_examdata, mod_exammanagement{{/str}}</span><i class="fa fa-trash d-lg-none" aria-hidden="true" title="{{#str}}delete_examdata, mod_exammanagement{{/str}}"></i></a> -->
 													</div>
                       </div>
                 </div>

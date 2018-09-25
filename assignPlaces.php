@@ -42,6 +42,8 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
+    $MoodleObj->setPage('assignPlaces');
+
     $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
     $participantsIDsArray = $ExammanagementInstanceObj->getSavedParticipants();
     $assignmentArray = array();

@@ -69,7 +69,7 @@ class inputResultsForm extends moodleform {
         }
 
         if($this->_customdata['matrnr']){
-            $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-xs-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="hidden-sm-down">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit hidden-md-up" aria-hidden="true"></i></a></span></div>');
+            $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-xs-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
 
         }
 

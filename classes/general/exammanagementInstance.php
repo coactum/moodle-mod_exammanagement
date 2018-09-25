@@ -865,6 +865,19 @@ public function checkIfValidMatrNr($mnr) {
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 	}
 
+	public function saveCourseParticipants($participants){
+
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+			
+			$this->moduleinstance->participants = json_encode($participants);
+			$this->moduleinstance->importfileheaders = NULL;
+
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer zur Prüfung hinzugefügt', 'success');
+	}
+
 	public function getCourseParticipantsIDs(){
 			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
 			$CourseParticipantsIDsArray;

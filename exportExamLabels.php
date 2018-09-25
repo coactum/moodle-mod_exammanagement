@@ -46,6 +46,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
+    $MoodleObj->setPage('exportExamLabels');
+
     //include pdf
     require_once(__DIR__.'/classes/pdfs/examLabels.php');
 

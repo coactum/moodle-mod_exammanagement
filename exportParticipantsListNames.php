@@ -45,6 +45,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
+    $MoodleObj->setPage('exportParticipantsListNames');
+
     //include pdf
     require_once(__DIR__.'/classes/pdfs/participantsList.php');
 

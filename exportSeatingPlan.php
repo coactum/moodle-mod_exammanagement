@@ -47,6 +47,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
+    $MoodleObj->setPage('exportSeatingPlan');
+
     //include pdf
     require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
 
