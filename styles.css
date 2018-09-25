@@ -67,6 +67,11 @@
     margin-top: 0px !important;
 }
 
+/* .exmammanagement-summary :target::before {
+    height: 0px !important;
+    margin-top: 0px !important;
+} */
+
 .mainpanel::before {
     position: absolute;
     display: block;

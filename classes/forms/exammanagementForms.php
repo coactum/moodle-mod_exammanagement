@@ -26,6 +26,7 @@ namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
+use mod_exammanagement\general\MoodleDB;
 use mod_exammanagement\ldap\ldapManager;
 use PHPExcel_IOFactory;
 use stdclass;
@@ -38,8 +39,9 @@ class exammanagementForms{
 	protected $e;
 	protected $newtaskcount;
 	protected $dtp;
+	protected $test;
 
-	private function __construct($id, $e, $newtaskcount, $dtp) {
+	private function __construct($id, $e, $newtaskcount, $dtp, $test) {
 		$this->id = $id;
 		$this->e = $e;
 
@@ -50,15 +52,19 @@ class exammanagementForms{
 		if($dtp){
 			$this->dtp = $dtp;
 		}
+
+		if($test){
+			$this->test = $test;
+		}
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $newtaskcount = false, $dtp = false){
+	public static function getInstance($id, $e, $newtaskcount = false, $dtp = false, $test = false){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new exammanagementForms($id, $e, $newtaskcount, $dtp);
+				$inst = new exammanagementForms($id, $e, $newtaskcount, $dtp, $test);
 			}
 			return $inst;
 
@@ -75,7 +81,7 @@ class exammanagementForms{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate form
-		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'test'=>$this->test));
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {

@@ -131,9 +131,49 @@ class chooseRoomsForm extends moodleform {
 
     } else{
       $mform->addElement('html', 'Keine Räume gefunden');
+
     }
 
     $mform->addElement('html', '</div></div>');
+
+    if($this->_customdata['test']){ // for testing
+
+        $MoodleDBObj = MoodleDB::getInstance();
+
+        $allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
+
+        if($allRooms){
+            var_dump('In der Tabelle exammanagementRooms gespeicherter Inhalt:');
+            var_dump($allRooms);
+
+      			foreach ($allRooms as $keyone => $value){
+
+      				$tempname=get_object_vars($value);
+
+      				$allRoomNames[$keyone] = $tempname['name'];
+      			}
+
+      			foreach ($allRooms as $keytwo => $value){
+
+      				$tempid=get_object_vars($value);
+
+      				$allRoomIDs[$keytwo] = $tempid['roomid'];
+      			}
+
+            var_dump('Ids aller als Standardräume gespeicherter Räume:');
+            var_dump($allRoomIDs);
+
+            var_dump('Namen aller als Standardräume gespeicherter Räume:');
+            var_dump($allRoomNames);
+
+      			array_multisort($allRoomNames, $allRoomIDs);
+
+            var_dump('Nach Namen sortierte Ids aller als Standardräume gespeicherten Räume:');
+            var_dump($allRoomIDs);
+        } else {
+            var_dump('Kein in der Tabelle gespeicherter Inhalt oder Tabelle existiert nicht.');
+        }
+    }
 
   }
 
