@@ -22,12 +22,13 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general;
+ namespace mod_exammanagement\general;
 
-use stdClass;
+ use mod_exammanagement\forms\exammanagementForms;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -35,94 +36,19 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$test  = optional_param('test', 0, PARAM_INT);
-
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
-
-$MoodleObj->setPage('addDefaultRooms');
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
-  	$defaultRoomsFile = file($MoodleObj->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
+    $MoodleObj->setPage('addDefaultRooms');
+    $MoodleObj->outputPageHeader();
 
-  	foreach ($defaultRoomsFile as $key => $roomstr){
+    $ExammanagementFormsObj->buildAddDefaultRoomsForm();
 
-  			$roomParameters = explode('+', $roomstr);
-
-  			$roomObj = new stdClass();
-  			$roomObj->roomid = $roomParameters[0];
-  			$roomObj->name = $roomParameters[1];
-   			$roomObj->description = $roomParameters[2];
-
-  			$svgStr = base64_encode($roomParameters[4]);
-
-   			$roomObj->seatingplan = $svgStr;
-   			$roomObj->places = $roomParameters[3];
-  			$roomObj->type = 'defaultroom';
-   			$roomObj->misc = NULL;
-
-   			//array_push($records, $roomObj);
-
-  			$MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
-  		}
-
-  		$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
+    $MoodleObj->outputFooter();
 
 } else {
 
-    if(!$test){
-        $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
-    } else if($test){
-      $defaultRoomsFile = file($MoodleObj->getMoodleUrl('/mod/exammanagement/data/rooms.txt'));
-
-      if($defaultRoomsFile){
-          var_dump('Datei eingelesen');
-
-          foreach ($defaultRoomsFile as $key => $roomstr){
-
-              $roomParameters = explode('+', $roomstr);
-
-              $roomObj = new stdClass();
-              $roomObj->roomid = $roomParameters[0];
-              $roomObj->name = $roomParameters[1];
-              $roomObj->description = $roomParameters[2];
-
-              $svgStr = base64_encode($roomParameters[4]);
-
-              $roomObj->seatingplan = $svgStr;
-              $roomObj->places = $roomParameters[3];
-              $roomObj->type = 'defaultroom';
-              $roomObj->misc = NULL;
-
-              //array_push($records, $roomObj);
-
-              if($roomstr){
-                  var_dump('Aktuelle Zeile der Datei');
-                  var_dump($roomstr);
-              } else {
-                  var_dump('Keine neue Zeile');
-              }
-
-              if($roomParameters){
-                  var_dump('Raumparameter im Array');
-                  var_dump($roomParameters);
-              }  else {
-                  var_dump('Keine Raumparameter im Array');
-              }
-
-              if($roomObj){
-                  var_dump('Raumobject');
-                  var_dump($roomObj);
-              }  else {
-                  var_dump('Keine Raumobject');
-              }
-          }
-
-
-      } else {
-          var_dump('Datei nicht vorhanden');
-      }
-    }
+    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

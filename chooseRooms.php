@@ -36,10 +36,8 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$test  = optional_param('test', 0, PARAM_INT);
-
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e, '', '', $test);
+$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   $MoodleObj->setPage('chooseRooms');

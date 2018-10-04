@@ -36,8 +36,6 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$test  = optional_param('test', 0, PARAM_INT);
-
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $LdapManagerObj = ldapManager::getInstance($id, $e);
@@ -55,9 +53,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     echo('<div class="col-xs-5"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_participants_from_file", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
-    if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
-        echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
-    }
+    echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
     echo('</div></div>');
 

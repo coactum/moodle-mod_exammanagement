@@ -70,6 +70,11 @@ $string['delete_examdata'] = 'Prüfungsdaten löschen';
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
 
+// addDefaultRoomsForm.php
+$string['import_default_rooms_from_file'] = 'Standardräume aus Datei importieren';
+$string['import_default_rooms_str'] = 'Hier können die allen Dozenten als Standardprüfungsräume zur Auswahl stehenden Räume von Administratoren aus einer Text-Datei importiert werden.';
+$string['default_rooms_already_exists'] = 'Es wurden bereits Standardräume importiert. Diese werden durch den Import aus einer neuen Datei überschrieben.';
+
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
 
@@ -199,6 +204,7 @@ Informationen über die in einem Raum vorhandenen Sitzplätze gibt die Tabelle. 
 <ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation nutzen zu können muss hier mindestens ein Raum als Prüfungsraum ausgewählt werden. Zudem müssen die gewählten Räume mindestens so viele Sitzplätze bieten, wie TeilnehmerInnen an der Prüfung teilnehmen werden.</li>
 <li>Werden neue Räume zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li></ul>
 <strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung der Universität Paderborn buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
+$string['helptext_addDefaultRooms']= 'Hier können die Standardräume importiert werden ...';
 $string['helptext_setDateTime']= 'Hier können das <strong>Datum</strong> und die <strong>Uhrzeit</strong> der Prüfung ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. <br /> <br />
 Zudem wird er den PrüfungsteilnehmerInnen in deren Ansicht angezeigt, sobald Sie diese Informationen auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben. <br /> <br />

@@ -81,7 +81,7 @@ class exammanagementForms{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		//Instantiate form
-		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e, 'test'=>$this->test));
+		$mform = new chooseRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -94,6 +94,45 @@ class exammanagementForms{
 			$rooms=$ExammanagementInstanceObj->filterCheckedRooms($fromform);
 
 			$ExammanagementInstanceObj->saveRooms($rooms);
+
+		} else {
+			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+			// or on the first display of the form.
+
+			//Set default data (if any)
+			$mform->set_data(array('id'=>$this->id));
+
+			//displays the form
+			$mform->display();
+		}
+
+	}
+
+	public function buildAddDefaultRoomsForm(){
+
+		//include form
+		require_once(__DIR__.'/AddDefaultRoomsForm.php');
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		//Instantiate form
+		$mform = new addDefaultRoomsForm(null, array('id'=>$this->id, 'e'=>$this->e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+			// retrieve file from form
+			$rooms_file = $mform->get_file_content('defaultrooms_list');
+
+			if($rooms_file){
+					$ExammanagementInstanceObj->saveDefaultRooms($rooms_file);
+			}
 
 		} else {
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

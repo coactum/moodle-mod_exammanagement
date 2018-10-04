@@ -70,6 +70,11 @@ $string['delete_examdata'] = 'Delete exam data';
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
 
+// addDefaultRoomsForm.php
+$string['import_default_rooms_from_file'] = 'Import default rooms from text file';
+$string['import_default_rooms_str'] = 'Administrators can import default rooms for teachers to choose from here as text file.';
+$string['default_rooms_already_exists'] = 'Default rooms are already imported. New import will override old rooms.';
+
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
 
@@ -185,6 +190,7 @@ $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
+$string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';

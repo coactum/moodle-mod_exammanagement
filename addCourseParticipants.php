@@ -39,7 +39,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:importparticipantsfromcourse')){
+if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('addCourseParticipants');
     $MoodleObj->outputPageHeader();

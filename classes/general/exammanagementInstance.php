@@ -531,45 +531,98 @@ EOF;
 
 	}
 
-	public function getRoomObj($roomID){
+	public function saveDefaultRooms($defaultRoomsFile){
 
 		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));;
+		if($this->getDefaultRooms()){
+			$MoodleDBObj->DeleteRecordsFromDB("exammanagement_rooms", array());
+		}
 
-		return $room;
-	}
+		$fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
 
-	public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
+		foreach ($fileContentArr as $key => $roomstr){
+
+				$roomParameters = explode('+', $roomstr);
+
+				$roomObj = new stdClass();
+				$roomObj->roomid = $roomParameters[0];
+				$roomObj->name = $roomParameters[1];
+				$roomObj->description = $roomParameters[2];
+
+				$svgStr = base64_encode($roomParameters[4]);
+
+				$roomObj->seatingplan = $svgStr;
+				$roomObj->places = $roomParameters[3];
+				$roomObj->type = 'defaultroom';
+				$roomObj->misc = NULL;
+
+				$import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
+			}
+
+			if($import){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume konnten nicht importiert werden', 'error');
+
+			}
+  }
+
+	public function getDefaultRooms(){
 
 		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
-		$allRoomsIDs;
+		$defaultRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
 
-		if ($allRooms){
-			foreach ($allRooms as $key => $value){
-				$temp=get_object_vars($value);
-				$allRoomsIDs[$key] = $temp['id'];
-			}
-
-			if ($format=='String'){
-				$allsRoomsIDs = implode(',', $allRoomsIDs);
-			}
-
-			return $allRoomsIDs;
-
-		} else{
+		if($defaultRooms){
+			return $defaultRooms;
+		} else {
 			return false;
 		}
 
 	}
 
+	public function getRoomObj($roomID){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));
+
+		return $room;
+	}
+
+	// public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
+	//
+	// 	$MoodleDBObj = MoodleDB::getInstance();
+	//
+	// 	$allRooms = $this->getDefaultRooms();
+	// 	$allRoomsIDs;
+	//
+	// 	if ($allRooms){
+	// 		foreach ($allRooms as $key => $value){
+	// 			$temp=get_object_vars($value);
+	// 			$allRoomsIDs[$key] = $temp['id'];
+	// 		}
+	//
+	// 		if ($format=='String'){
+	// 			$allsRoomsIDs = implode(',', $allRoomsIDs);
+	// 		}
+	//
+	// 		return $allRoomsIDs;
+	//
+	// 	} else{
+	// 		return false;
+	// 	}
+	//
+	// }
+
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$allRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
+		$allRooms = $this->getDefaultRooms();
 		$allRoomNames;
 		$allRoomIDs;
 
@@ -869,7 +922,7 @@ public function checkIfValidMatrNr($mnr) {
 
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-			
+
 			$this->moduleinstance->participants = json_encode($participants);
 			$this->moduleinstance->importfileheaders = NULL;
 
@@ -1128,16 +1181,16 @@ public function checkIfValidMatrNr($mnr) {
 		$message->subject = $subject; // very short one-line subject
 		$message->fullmessage = $text; // raw text
 		$message->fullmessageformat = FORMAT_MARKDOWN; // text format
-		$message->fullmessagehtml = '<p>'.$text.'</p>'; // html rendered version
+		$message->fullmessagehtml = $text; // html rendered version
 		$message->smallmessage = $text; // useful for plugins like sms or twitter
 		$message->notification = '0';
-		$message->contexturl = 'http://GalaxyFarFarAway.com';
+		$message->contexturl = '';
 		$message->contexturlname = 'Context name';
-		$message->replyto = "noreply@imt.uni-paderborn.de";
+		$message->replyto = "";
 
 		$header = '';
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$footer = $this->course->fullname.' -> Prüfungsorganisation -> '.$this->moduleinstance->name.'<br><a href="'.$url.'">'.$url.'</a>';
+		$footer = '--------------------------------------------------------------------- \r\n Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen.\r\n' . $this->moduleinstance->category . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' \r\n ' . $url;
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);
