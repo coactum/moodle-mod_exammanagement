@@ -92,16 +92,18 @@ class inputResultsForm extends moodleform {
 
           foreach($tasks as $key => $points){
 
+              $tasknumber = $key + 1;
+
               //number of task
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$key.'</strong></span>'));
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$tasknumber.'</strong></span>'));
 
               //points of task
-              array_push($taskspoints_array, $mform->createElement('html', '<span id="max_points_'.$key.'" class="task_spacing_2">'.$points.'</span>'));
+              array_push($taskspoints_array, $mform->createElement('html', '<span id="max_points_'.$tasknumber.'" class="task_spacing_2">'.$points.'</span>'));
 
               //input field with exam result points
-              array_push($points_array, $mform->createElement('text', 'points['.$key.']', '', $attributes));
-              $mform->setType('points['.$key.']', PARAM_FLOAT);
-              $mform->setDefault('points['.$key.']', '');
+              array_push($points_array, $mform->createElement('text', 'points['.$tasknumber.']', '', $attributes));
+              $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
+              $mform->setDefault('points['.$tasknumber.']', '');
 
           }
 

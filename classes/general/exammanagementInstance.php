@@ -525,10 +525,12 @@ EOF;
 
 		$this->moduleinstance->rooms=$rooms;
 
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-		$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
-
+		$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+		if($update){
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
+		} else {
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume konnten nicht für die Prüfung ausgewählt werden', 'error');
+		}
 	}
 
 	public function saveDefaultRooms($defaultRoomsFile){
@@ -590,7 +592,11 @@ EOF;
 
 		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));
 
-		return $room;
+		if($room){
+			return $room;
+		} else {
+			return false;
+		}
 	}
 
 	// public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
@@ -619,8 +625,6 @@ EOF;
 	// }
 
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
-
-		$MoodleDBObj = MoodleDB::getInstance();
 
 		$allRooms = $this->getDefaultRooms();
 		$allRoomNames;
@@ -768,10 +772,12 @@ EOF;
 
 			$this->moduleinstance->examtime=$examtime;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
-
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+      if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
+      } else {
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit konnten nicht gesetzt werden', 'error');
+      }
 	}
 
 ######### feature: addParticipants ##########
@@ -842,8 +848,12 @@ public function checkIfValidMatrNr($mnr) {
 					$this->moduleinstance->tempimportfileheader = $newfileheader;
 			}
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-			redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
+			} else {
+				redirect ($this->getExammanagementUrl('addParticipants',$this->id), 'Datei konnte nicht eingelesen werden', null, notification::NOTIFY_ERROR);
+			}
 	}
 
 	public function saveParticipants($newParticipantsArr){
@@ -913,9 +923,13 @@ public function checkIfValidMatrNr($mnr) {
 			$this->moduleinstance->tmpparticipants = NULL; //clear tmp participants
 			$this->moduleinstance->tempimportfileheader = NULL; //clear tmp file headers
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+			}
 
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer zur Prüfung hinzugefügt', 'success');
 	}
 
 	public function saveCourseParticipants($participants){
@@ -926,9 +940,12 @@ public function checkIfValidMatrNr($mnr) {
 			$this->moduleinstance->participants = json_encode($participants);
 			$this->moduleinstance->importfileheaders = NULL;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer zur Prüfung hinzugefügt', 'success');
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer zur Prüfung hinzugefügt', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+			}
 	}
 
 	public function getCourseParticipantsIDs(){
@@ -1024,7 +1041,11 @@ public function checkIfValidMatrNr($mnr) {
 
 		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
 
-		return $user;
+		if($user){
+			return $user;
+		} else {
+			return false;
+		}
 
 	}
 
@@ -1059,7 +1080,10 @@ public function checkIfValidMatrNr($mnr) {
 
 		if($LdapManagerObj->is_LDAP_config()){
 				$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
-				$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $pUId);
+
+				if($pUId){
+					$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $pUId);
+				}
 		} else {
 				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
 		}
@@ -1111,9 +1135,13 @@ public function checkIfValidMatrNr($mnr) {
 
 			$this->moduleinstance->tasks=$tasks;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben angelegt', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben konnten nicht angelegt werden', 'error');
+			}
 
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
 
 	}
 
@@ -1137,11 +1165,14 @@ public function checkIfValidMatrNr($mnr) {
 
 			$textfield = json_encode($fromform->textfield);
 
-			$this->moduleinstance->textfield=$textfield;
+			$this->moduleinstance->textfield = $textfield;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes gespeichert', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes konnte nicht gespeichert werden', 'error');
+			}
 
 	}
 
@@ -1276,9 +1307,12 @@ public function checkIfValidMatrNr($mnr) {
 			$gradingscale = json_encode($fromform->gradingsteppoints);
 			$this->moduleinstance->gradingscale=$gradingscale;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt gespeichert', 'success');
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konfiguriert', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konnte nicht konfiguriert werden', 'error');
+			}
 
 	}
 
@@ -1361,9 +1395,13 @@ public function saveResults($fromform){
 
 			$this->moduleinstance->results = $results;
 
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			if($update){
+				redirect ($this->getExammanagementUrl('inputResults', $this->id), null, null, null);
+			} else {
+				redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Speichern fehlgeschlagen', null, notification::NOTIFY_ERROR);
+			}
 
-			redirect ($this->getExammanagementUrl('inputResults', $this->id), null, null, null);
 
 		} else{
 			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);

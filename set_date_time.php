@@ -49,9 +49,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $ExammanagementInstanceObj->moduleinstance->examtime = NULL;
 
-        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum zurückgesetzt', 'success');
+        if($update){
+          $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum zurückgesetzt', 'success');
+        } else {
+          $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum konnte nicht zurückgesetzt werden', 'error');
+        }
       }
 
   		$MoodleObj->setPage('set_date_time');

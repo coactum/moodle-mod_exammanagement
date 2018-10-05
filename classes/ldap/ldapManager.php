@@ -129,7 +129,6 @@ class ldapManager{
 	}
 
 	public function studentid2uid($ldapConnection, $pStudentId){
-		require_once(__DIR__.'/../general/MoodleDB.php');
 
 		if (empty($pStudentId)) {
 				throw new Exception("No parameter given");

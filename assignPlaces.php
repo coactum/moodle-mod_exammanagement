@@ -101,9 +101,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $ExammanagementInstanceObj->savePlacesAssignment($assignmentArray);
 
-    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+    $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-    $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
+    if($update){
+      $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
+    } else {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Plätze konnten nicht zugewiesen werden', 'error');
+    }
 
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
