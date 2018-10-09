@@ -83,31 +83,31 @@ ajaxtoogleInformation = function(command, value){
             }
         });
     }
-
-		ajaxsetcorrectioncompletion = function(command, value){
-
-				$('.loadable').toggle();
-
-				jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}}, 'correctioncompleted': Number(value)},
-            success: function(response) {
-							$('.loadable').toggle();
-						},
-            error: function(response) {
-							$('.loadable').toggle();
-              alert('Interner Fehler. Bitte erneut versuchen.')
-            }
-        });
-    }
 };
+
+ajaxsetcorrectioncompletion = function(value){
+
+		$('.loadable').toggle();
+
+		jQuery.ajax ({
+        url: './view.php',
+        data: {'id': {{cmid}}, 'correctioncompleted': Number(value)},
+        success: function(response) {
+					$('.loadable').toggle();
+				},
+        error: function(response) {
+					$('.loadable').toggle();
+          alert('Interner Fehler. Bitte erneut versuchen.')
+        }
+    });
+}
 
 {{/js}}
 
    <div class="container-fluid">
 			<div class="row">
 				<h4 class="m-y-1 col-xs-10">{{#str}}overview, mod_exammanagement{{/str}}</h4>
-				<span class="m-y-1 col-xs-2"><a type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<span class="m-y-1 col-xs-2"><a aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
 				<span class="helptextpanel helptextpanel-arrow collapse"></span>
 			</div>
 
@@ -130,7 +130,7 @@ ajaxtoogleInformation = function(command, value){
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="panel panel-primary mainpanel">
               <div class="panel-heading">
-								<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_one'); return true;">
+								<a aria-expanded="false" onclick="tooglePhase('.phase_one'); return true;">
 		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
 		                <span class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}}{{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -280,7 +280,7 @@ ajaxtoogleInformation = function(command, value){
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 								<div class="panel-heading">
-									<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_two'); return true;">
+									<a aria-expanded="false" onclick="tooglePhase('.phase_two'); return true;">
 											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
 											<span class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}}{{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 											<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -463,7 +463,7 @@ ajaxtoogleInformation = function(command, value){
             {{^examphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/examphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 							<div class="panel-heading">
-								<a type="button" aria-expanded="false" onclick="tooglePhase('.examappointment'); return true;">
+								<a aria-expanded="false" onclick="tooglePhase('.examappointment'); return true;">
 										<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
 										<span class="{{#examphaseactive}}collapse.show{{/examphaseactive}}{{^examphaseactive}}collapse{{/examphaseactive}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -491,7 +491,7 @@ ajaxtoogleInformation = function(command, value){
             {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 								<div class="panel-heading">
-									<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_three'); return true;">
+									<a aria-expanded="false" onclick="tooglePhase('.phase_three'); return true;">
 											<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
 											<span class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}}{{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
 											<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -616,7 +616,7 @@ ajaxtoogleInformation = function(command, value){
             {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 							<div class="panel-heading">
-								<a type="button" aria-expanded="false" onclick="tooglePhase('.phase_four'); return true;">
+								<a aria-expanded="false" onclick="tooglePhase('.phase_four'); return true;">
 										<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
 										<span class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}}{{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -726,7 +726,7 @@ ajaxtoogleInformation = function(command, value){
               </div>
             </div>
           </li>
-          <li class="item">
+          <li class="item" id="endpoint">
             <i class="fa fa-flag" aria-hidden="true"></i>
           </li>
       </ul>

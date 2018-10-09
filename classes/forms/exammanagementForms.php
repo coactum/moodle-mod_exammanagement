@@ -111,7 +111,7 @@ class exammanagementForms{
 	public function buildAddDefaultRoomsForm(){
 
 		//include form
-		require_once(__DIR__.'/AddDefaultRoomsForm.php');
+		require_once(__DIR__.'/addDefaultRoomsForm.php');
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);

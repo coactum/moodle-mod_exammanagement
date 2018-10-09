@@ -96,7 +96,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $pdf->AddPage();
     $pdf->Line(20, 15, 190, 15);
-    $pdf->ImageEps('data/upb_logo_full.ai', 30, 25, 13);
+    $pdf->ImageEps('data/upb_logo.ai', 30, 25, 13);
     $pdf->SetFont('helvetica', '', 16);
     $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 18);
     $pdf->SetFont('helvetica', 'B', 16);
