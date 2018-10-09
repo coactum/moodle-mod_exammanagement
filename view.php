@@ -37,13 +37,15 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 // relevant if called from itself and information is set visible for users
-$datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
-$roomvisible = optional_param('roomvisible', 0, PARAM_RAW);
-$placevisible = optional_param('placevisible', 0, PARAM_RAW);
+$datetimevisible = optional_param('datetimevisible', 0, PARAM_INT);
+$roomvisible = optional_param('roomvisible', 0, PARAM_INT);
+$placevisible = optional_param('placevisible', 0, PARAM_INT);
 
-$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
-$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
-$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
+$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_INT);
+$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_INT);
+$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_INT);
+
+$correctioncompleted = optional_param('$correctioncompleted', 0, PARAM_INT);
 
 global $PAGE, $CFG;
 
@@ -87,6 +89,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
        $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
      } else {
        $MoodleObj->redirectToOverviewPage('forexam', 'Informationen konnten nicht sichtbar geschaltet werden', 'error');
+     }
+  } elseif($correctioncompleted){ // save correction as completed
+
+     $ExammanagementInstanceObj->moduleinstance->correctioncompleted = $correctioncompleted;
+
+     $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+     if($update){
+       $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur abgeschlossen', 'success');
+     } else {
+       $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur konnte nicht abgeschlossen werden', 'error');
      }
   }
 

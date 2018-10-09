@@ -83,6 +83,23 @@ ajaxtoogleInformation = function(command, value){
             }
         });
     }
+
+		ajaxsetcorrectioncompletion = function(command, value){
+
+				$('.loadable').toggle();
+
+				jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}}, 'correctioncompleted': Number(value)},
+            success: function(response) {
+							$('.loadable').toggle();
+						},
+            error: function(response) {
+							$('.loadable').toggle();
+              alert('Interner Fehler. Bitte erneut versuchen.')
+            }
+        });
+    }
 };
 
 {{/js}}
@@ -574,6 +591,21 @@ ajaxtoogleInformation = function(command, value){
 													</div>
                         </div>
                     </div>
+										<div class="panel {{#deleteinstancedatadate}}panel-success{{/deleteinstancedatadate}}{{^deleteinstancedatadate}}{{#resultscount}}panel-warning{{/resultscount}}{{/deleteinstancedatadate}}{{^deleteinstancedatadate}}{{^resultscount}}panel-danger{{/resultscount}}{{/deleteinstancedatadate}}">
+											<div class="panel-heading">
+												<h3 class="panel-title text-xs-center">Korrektur abschließen</h3>
+												<span class="statebar">
+													{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#deleteinstancedatadate}}checked {{/deleteinstancedatadate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+													{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+												</span>
+											</div>
+											<div class="panel-body">
+												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deswegen aus Datenschutzgründen irgendwann gelöscht werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigen haben Sie drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren. Danach werden Sie automatisiert gelöscht.</p>
+											</div>
+											<div class="panel-footer text-xs-center">
+											</div>
+										</div>
                   </div>
               </div>
             </div>
@@ -595,23 +627,21 @@ ajaxtoogleInformation = function(command, value){
                 <div class="panel-body">
                   <div class="row row-eq-height">
                       <div class="col-xs-6">
-												<div class="panel panel-danger">
+												<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
 															<span class="statebar col-xs-6">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
-																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
-																</span>
-															</span>
+																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>															</span>
 														</div>
 													</div>
 													<div class="panel-body">
 														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
+														{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
 													</div>
 												</div>
                       </div>
@@ -629,7 +659,7 @@ ajaxtoogleInformation = function(command, value){
 														</div>
 													</div>
 													<div class="panel-body">
-														<p>Hier können die Ergenisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+														<p>Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
 														<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a> -->
@@ -652,7 +682,7 @@ ajaxtoogleInformation = function(command, value){
 														</div>
 													</div>
 													<div class="panel-body">
-															<p>Hier können die Ergenisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
+															<p>Hier können die Ergebnisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
 														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
@@ -680,23 +710,18 @@ ajaxtoogleInformation = function(command, value){
 												</div>
                       </div>
                   </div>
-												<div class="panel panel-danger">
-													<div class="panel-heading">
-															<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
-															<span class="statebar">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
-																		<span class="label label-danger pull-right" style="position: relative;bottom: 15px;" title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
-																</span>
-															</span>
-													</div>
-													<div class="panel-body">
-															<p>Hier können die Prüfungsdaten endgültig gelöscht werden.</p>
-													</div>
-													<div class="panel-footer text-xs-center">
-														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}delete_examdata, mod_exammanagement{{/str}}</span><i class="fa fa-trash d-lg-none" aria-hidden="true" title="{{#str}}delete_examdata, mod_exammanagement{{/str}}"></i></a> -->
-													</div>
-                      </div>
+									{{#deleteinstancedatadate}}<div class="panel panel-info">
+										<div class="panel-heading">
+											<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
+											<span class="statebar">
+											</span>
+										</div>
+										<div class="panel-body">
+											<p> Am {{deleteinstancedatadate}} werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.</p>
+										</div>
+										<div class="panel-footer text-xs-center">
+										</div>{{/deleteinstancedatadate}}
+									</div>
                 </div>
               </div>
             </div>
