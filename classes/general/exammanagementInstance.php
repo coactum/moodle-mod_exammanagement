@@ -317,7 +317,7 @@ EOF;
 					return false;
 				}
 			case 3:
-				if ($this->getInputResultsCount()){
+				if ($this->getDataDeletionDate()){
 					return true;
 				} else {
 						return false;
@@ -1488,6 +1488,20 @@ public function getPAULFileHeaders(){
 		} else{
 			return false;
 		}
+}
+
+// delete instance
+public function getDataDeletionDate(){
+
+		$correctionCompletionDate = $this->moduleinstance->correctioncompletiondate;
+
+		if($correctionCompletionDate){
+				$dataDeletionDate = date('d.m.Y', strtotime("+3 months", $correctionCompletionDate));
+		} else {
+			return false;
+		}
+
+		return $dataDeletionDate;
 }
 
 	########### Export PDFS ####

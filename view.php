@@ -36,16 +36,18 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-// relevant if called from itself and information is set visible for users
+// relevant if called from itself and information is set visible for users or correction is marked as completed
+$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
 $datetimevisible = optional_param('datetimevisible', 0, PARAM_RAW);
+
+$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
 $roomvisible = optional_param('roomvisible', 0, PARAM_RAW);
+
+$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
 $placevisible = optional_param('placevisible', 0, PARAM_RAW);
 
-$calledfromformdt = optional_param('calledfromformdt', 0, PARAM_RAW);
-$calledfromformroom = optional_param('calledfromformroom', 0, PARAM_RAW);
-$calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
-
-$correctioncompleted = optional_param('$correctioncompleted', 0, PARAM_RAW);
+$calledfromformcorrection = optional_param('calledfromformcorrection', 0, PARAM_RAW);
+$correctioncompleted = optional_param('correctioncompleted', 0, PARAM_RAW);
 
 global $PAGE, $CFG;
 
@@ -59,7 +61,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   if($calledfromformdt){ // saveDateTime
 
-  			$ExammanagementInstanceObj->moduleinstance->datetimevisible = $datetimevisible;
+        if($datetimevisible){
+          $ExammanagementInstanceObj->moduleinstance->datetimevisible = true;
+        } else {
+          $ExammanagementInstanceObj->moduleinstance->datetimevisible = false;
+        }
 
         $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
         if($update){
@@ -70,7 +76,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   } elseif($calledfromformroom){ // saveRoom
 
-     $ExammanagementInstanceObj->moduleinstance->roomvisible = $roomvisible;
+    if($roomvisible){
+      $ExammanagementInstanceObj->moduleinstance->roomvisible = true;
+    } else {
+      $ExammanagementInstanceObj->moduleinstance->roomvisible = false;
+    }
 
      $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
      if($update){
@@ -82,7 +92,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   elseif($calledfromformplace){ // savePlace
 
-     $ExammanagementInstanceObj->moduleinstance->placevisible = $placevisible;
+     if($placevisible){
+       $ExammanagementInstanceObj->moduleinstance->placevisible = true;
+     } else {
+       $ExammanagementInstanceObj->moduleinstance->placevisible = false;
+     }
 
      $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
      if($update){
@@ -90,9 +104,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
      } else {
        $MoodleObj->redirectToOverviewPage('forexam', 'Informationen konnten nicht sichtbar geschaltet werden', 'error');
      }
-  } elseif($correctioncompleted){ // save correction as completed
+  } elseif($calledfromformcorrection){ // save correction as completed
 
-     $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = $correctioncompleted;
+    if($correctioncompleted){
+      $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = time();
+    } else {
+      $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = NULL;
+    }
 
      $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
      if($update){
@@ -156,8 +174,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
   $gradingscale = $ExammanagementInstanceObj->getGradingscale();
   $resultscount = $ExammanagementInstanceObj->getInputResultsCount();
+  $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
 
-  $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount);
+  $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate);
   echo $output->render($page);
 
   //$this->debugElementsOverview();

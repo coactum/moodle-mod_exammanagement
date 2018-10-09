@@ -82,5 +82,20 @@ function xmldb_exammanagement_upgrade($oldversion) {
        upgrade_mod_savepoint(true, 2018083000, 'exammanagement');
     }
 
+    if ($oldversion < 2018101000) {
+
+       // Define field importfileheaders to be added to exammanagement.
+       $table = new xmldb_table('exammanagement');
+       $field = new xmldb_field('correctioncompletiondate', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+       // Conditionally launch add field for exammanagement.
+       if (!$dbman->field_exists($table, $field)) {
+          $dbman->add_field($table, $field);
+       }
+
+       // Exammanagement savepoint reached.
+       upgrade_mod_savepoint(true, 2018101000, 'exammanagement');
+    }
+
     return true;
 }

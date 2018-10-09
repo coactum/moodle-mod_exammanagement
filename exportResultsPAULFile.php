@@ -40,7 +40,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 
 define( "SEPARATOR", chr(9) ); //Tabulator
 define( "NEWLINE", "\r\n" );
@@ -53,6 +52,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+    } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+      $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur noch nicht abgeschloßen.', 'error');
     }
 
 //    $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();

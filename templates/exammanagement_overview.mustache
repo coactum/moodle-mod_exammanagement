@@ -91,7 +91,7 @@ ajaxsetcorrectioncompletion = function(value){
 
 		jQuery.ajax ({
         url: './view.php',
-        data: {'id': {{cmid}}, 'correctioncompleted': Number(value)},
+        data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value)},
         success: function(response) {
 					$('.loadable').toggle();
 				},
@@ -136,8 +136,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
-                {{#firstphaseactive}}<div class="collapse.show phase_one">{{/firstphaseactive}}
-                {{^firstphaseactive}}<div class="collapse phase_one">{{/firstphaseactive}}
+                <div class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}} {{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one">
                     <div class="panel-body">
                       <div class="row row-eq-height">
 												<div class="col-xs-6">
@@ -286,8 +285,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 									</a>
 								</div>
-                {{#secondphaseactive}}<div class="collapse.show phase_two">{{/secondphaseactive}}
-                {{^secondphaseactive}}<div class="collapse phase_two">{{/secondphaseactive}}
+                <div class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}} {{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two">
                     <div class="panel-body">
                     	<div class="row row-eq-height">
                         <div class="col-xs-6">
@@ -469,8 +467,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
-							{{#examphaseactive}}<div class="collapse.show examappointment">{{/examphaseactive}}
-							{{^examphaseactive}}<div class="collapse examappointment">{{/examphaseactive}}
+								<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
 		              <div class="panel-body row">
 											<div class="col-xs-6">
 													{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
@@ -497,8 +494,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 									</a>
 								</div>
-                {{#thirdphaseactive}}<div class="collapse.show phase_three">{{/thirdphaseactive}}
-                {{^thirdphaseactive}}<div class="collapse phase_three">{{/thirdphaseactive}}
+                <div class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}} {{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three">
                   <div class="panel-body">
                     <div class="row row-eq-height">
                         <div class="col-xs-6">
@@ -591,17 +587,17 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
                         </div>
                     </div>
-										<div class="panel {{#deleteinstancedatadate}}panel-success{{/deleteinstancedatadate}}{{^deleteinstancedatadate}}{{#resultscount}}panel-warning{{/resultscount}}{{/deleteinstancedatadate}}{{^deleteinstancedatadate}}{{^resultscount}}panel-danger{{/resultscount}}{{/deleteinstancedatadate}}">
+										<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 											<div class="panel-heading">
-												<h3 class="panel-title text-xs-center">Korrektur abschließen</h3>
-												<span class="statebar">
-													{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#deleteinstancedatadate}}checked {{/deleteinstancedatadate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+												<h3 class="panel-title col-xs-6">Korrektur abschließen</h3>
+												<span class="statebar col-xs-6">
+													{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
 													{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
 												</span>
 											</div>
 											<div class="panel-body">
-												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deswegen aus Datenschutzgründen irgendwann gelöscht werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigen haben Sie drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren. Danach werden Sie automatisiert gelöscht.</p>
+												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen aus Datenschutzgründen deshalb gelöscht werden, sobald sie nicht mehr benötigt werden. Sobald Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigen haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.</p>
 											</div>
 											<div class="panel-footer text-xs-center">
 											</div>
@@ -622,18 +618,17 @@ ajaxsetcorrectioncompletion = function(value){
 										<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 								</a>
 							</div>
-                {{#fourthphaseactive}}<div class="collapse.show phase_four">{{/fourthphaseactive}}
-                {{^fourthphaseactive}}<div class="collapse phase_four">{{/fourthphaseactive}}
+                <div class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}} {{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four">
                 <div class="panel-body">
                   <div class="row row-eq-height">
                       <div class="col-xs-6">
-												<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
+												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
 															<span class="statebar col-xs-6">
-																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																{{^datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
+																{{^datadeletiondate}}{{#resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
 																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>															</span>
 														</div>
 													</div>
@@ -641,7 +636,7 @@ ajaxsetcorrectioncompletion = function(value){
 														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
+														{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
 													</div>
 												</div>
                       </div>
@@ -690,13 +685,14 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
                       </div>
                       <div class="col-xs-6">
-												<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
+												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>
 															<span class="statebar col-xs-6">
-																{{^resultscount}}{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
-																{{^resultscount}}{{#stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}{{/resultscount}}
+																{{^datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
+																{{#datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
+																{{^datadeletiondate}}{{#resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
 																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
@@ -705,23 +701,23 @@ ajaxsetcorrectioncompletion = function(value){
 															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#stateofplacescorrect}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/stateofplacescorrect}}
+														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/datadeletiondate}}
 													</div>
 												</div>
                       </div>
                   </div>
-									{{#deleteinstancedatadate}}<div class="panel panel-info">
+									{{#datadeletiondate}}<div class="panel panel-info">
 										<div class="panel-heading">
 											<h3 class="panel-title text-xs-center">Prüfungsdaten löschen</h3>
 											<span class="statebar">
 											</span>
 										</div>
 										<div class="panel-body">
-											<p> Am {{deleteinstancedatadate}} werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.</p>
+											<p> Am {{datadeletiondate}} werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie bis dahin alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.</p>
 										</div>
 										<div class="panel-footer text-xs-center">
-										</div>{{/deleteinstancedatadate}}
-									</div>
+										</div>
+									</div>{{/datadeletiondate}}
                 </div>
               </div>
             </div>

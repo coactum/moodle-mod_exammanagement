@@ -63,12 +63,13 @@ class exammanagement_overview implements renderable, templatable {
   protected $placevisible;
   protected $gradingscale;
   protected $resultscount;
+  protected $datadeletiondate;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -93,6 +94,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->placevisible = $placevisible;
         $this->gradingscale = $gradingscale;
         $this->resultscount = $resultscount;
+        $this->datadeletiondate = $datadeletiondate;
     }
 
     /**
@@ -128,6 +130,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->placevisible = $this->placevisible;
         $data->gradingscale = $this->gradingscale;
         $data->resultscount = $this->resultscount;
+        $data->datadeletiondate = $this->datadeletiondate;
         return $data;
     }
 

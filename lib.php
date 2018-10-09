@@ -96,14 +96,14 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
  * @return bool True if successful, false on failure.
  */
 function exammanagement_delete_instance($id) {
-    // global $DB;
-    //
-    // $exists = $DB->get_record('exammanagement', array('id' => $id));
-    // if (!$exists) {
-    //     return false;
-    // }
-    //
-    // $DB->delete_records('exammanagement', array('id' => $id));
+    global $DB;
+
+    $exists = $DB->get_record('exammanagement', array('id' => $id));
+    if (!$exists) {
+        return false;
+    }
+
+    $DB->delete_records('exammanagement', array('id' => $id));
 
     return true;
 }

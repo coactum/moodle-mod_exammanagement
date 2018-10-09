@@ -56,6 +56,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+    } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+      $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur noch nicht abgeschloßen.', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).
