@@ -94,6 +94,7 @@ ajaxsetcorrectioncompletion = function(value){
         data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value)},
         success: function(response) {
 					$('.loadable').toggle();
+					location.href = 'view.php?id='+{{cmid}};
 				},
         error: function(response) {
 					$('.loadable').toggle();
@@ -107,7 +108,7 @@ ajaxsetcorrectioncompletion = function(value){
    <div class="container-fluid">
 			<div class="row">
 				<h4 class="m-y-1 col-xs-10">{{#str}}overview, mod_exammanagement{{/str}}</h4>
-				<span class="m-y-1 col-xs-2"><a aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<span class="m-y-1 col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
 				<span class="helptextpanel helptextpanel-arrow collapse"></span>
 			</div>
 
@@ -589,15 +590,17 @@ ajaxsetcorrectioncompletion = function(value){
                     </div>
 										<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 											<div class="panel-heading">
-												<h3 class="panel-title col-xs-6">Korrektur abschließen</h3>
-												<span class="statebar col-xs-6">
-													{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
-													<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-													{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-												</span>
+												<div class ="row">
+													<h3 class="panel-title col-xs-6">Korrektur abschließen</h3>
+													<span class="statebar col-xs-6">
+														{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+														<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+														{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+													</span>
+												</div>
 											</div>
 											<div class="panel-body">
-												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen aus Datenschutzgründen deshalb gelöscht werden, sobald sie nicht mehr benötigt werden. Sobald Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigen haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.</p>
+												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deshalb aus Datenschutzgründen gelöscht werden, sobald sie nicht mehr benötigt werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigt haben haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.</p>
 											</div>
 											<div class="panel-footer text-xs-center">
 											</div>
@@ -622,12 +625,13 @@ ajaxsetcorrectioncompletion = function(value){
                 <div class="panel-body">
                   <div class="row row-eq-height">
                       <div class="col-xs-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Punkte für Klausureinsicht</h3>
 															<span class="statebar col-xs-6">
 																{{^datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
+																{{#datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
 																{{^datadeletiondate}}{{#resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
 																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>															</span>
 														</div>
@@ -685,7 +689,7 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
                       </div>
                       <div class="col-xs-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-6">Ergebnisse für das Prüfungsamt</h3>

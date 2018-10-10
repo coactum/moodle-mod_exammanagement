@@ -49,7 +49,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     echo('<div class="row"><div class="col-xs-5">');
     echo('<h3>'.get_string("view_participants", "mod_exammanagement").'</h3>');
-    echo('</div><a class="col-xs-2" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
+    echo('</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
     echo('<div class="col-xs-5"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_participants_from_file", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
