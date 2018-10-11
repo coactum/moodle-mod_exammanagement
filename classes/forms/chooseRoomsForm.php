@@ -136,6 +136,8 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '</div></div>');
 
+    $mform->disable_form_change_checker();
+
   }
 
   //Custom validation should be added here

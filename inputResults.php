@@ -39,9 +39,16 @@ $e  = optional_param('e', 0, PARAM_INT);
 $matrnr  = optional_param('matrnr', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+
+		if(!$ExammanagementInstanceObj->getParticipantsCount()){
+			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
+		} else if(!$ExammanagementInstanceObj->getTaskCount()){
+			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Aufgaben zur Prüfung hinzugefügt werden.', 'error');
+		}
 
 		$MoodleObj->setPage('inputResults');
 		$MoodleObj-> outputPageHeader();

@@ -212,12 +212,6 @@ input:checked + .exammanagement-slider:before {
 
 */
 
-/* addParticipantsForms.php - invalid matriculation numbers */
-.badmatrnr{
-    color: red;
-    font-weight: bold;
-}
-
 /* chooseRooms.php - SVG Overlay */
 .exammanagement-rooms .svg{
 	position:fixed;
@@ -240,15 +234,15 @@ input:checked + .exammanagement-slider:before {
 /* configureTasksForm.php - spacing between task numbers */
 
 .task_spacing{
-  padding-left: 24.24px;
-  padding-right: 24.24px;
+  padding-left: 32px;
+  padding-right: 32px;
 }
 
 /* inputResultsForm.php - spacing between max points */
 
 .task_spacing_2{
-  padding-left: 19px;
-  padding-right: 19px;
+  padding-left: 29px;
+  padding-right: 29px;
 }
 
 /* copied from bootstrap */

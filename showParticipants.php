@@ -53,13 +53,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     echo('<div class="col-xs-5"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_participants_from_file", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
-    echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
+    echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-r-1" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
     echo('</div></div>');
 
     echo($ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
-
-    echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
     $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
 
@@ -79,6 +77,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 return strcmp($aLastname, $bLastname); // else sort by last name
             }
         });
+
+        echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
         if($LdapManagerObj->is_LDAP_config()){
             $LdapManagerObj->connect_ldap();

@@ -32,6 +32,9 @@ define(['jquery'], function($) {
            $("#checkboxgroup2").click(function () {
              $('input.checkboxgroup2').not(this).prop('checked', this.checked);
            });
+           $("#checkboxgroup3").click(function () {
+             $('input.checkboxgroup3').not(this).prop('checked', this.checked);
+           });
         },
         remove_form_classes_col: function() {
            $('div.remove_col > div > div').removeClass('col-md-3');

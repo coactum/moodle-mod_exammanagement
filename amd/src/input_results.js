@@ -137,7 +137,7 @@ define(['jquery', 'core/notification'], function($) {
           $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
 
-      $('#id_matrnr').blur(function() { // reload page if matrnr is entered
+      $('#id_matrnr').change(function() { // reload page if matrnr is entered
 
          var matrnr = $(this).val();
          var id = getUrlParameter('id');

@@ -127,6 +127,8 @@ class addCourseParticipantsForm extends moodleform{
         } else {
             $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
         }
+
+        $mform->disable_form_change_checker();
     }
 
     //Custom validation should be added here

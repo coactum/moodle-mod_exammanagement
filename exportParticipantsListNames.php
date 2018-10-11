@@ -57,7 +57,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     define("WIDTH_COLUMN_PLACE", 70);
 
     if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).

@@ -87,12 +87,14 @@ class inputResultsForm extends moodleform {
         $points_array = array();
         $attributes = array('size'=>'1'); // length of input field
 
+        $tasknumber = 0;
+
         //add tasks from DB
         if ($tasks){
 
           foreach($tasks as $key => $points){
 
-              $tasknumber = $key + 1;
+              $tasknumber += 1;
 
               //number of task
               array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$tasknumber.'</strong></span>'));

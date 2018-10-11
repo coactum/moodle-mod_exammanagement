@@ -70,6 +70,8 @@ class addDefaultRoomsForm extends moodleform {
 
     $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 
+    $mform->disable_form_change_checker();
+
   }
 
   //Custom validation should be added here

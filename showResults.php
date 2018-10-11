@@ -38,8 +38,13 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+
+    if(!$ExammanagementInstanceObj->getInputResultsCount()){
+      $MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
+    }
 
     $MoodleObj->setPage('showResults');
     $MoodleObj->outputPageHeader();
