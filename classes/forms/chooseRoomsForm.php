@@ -46,8 +46,6 @@ class chooseRoomsForm extends moodleform {
 
     global $PAGE, $CFG;
 
-    $PAGE->requires->js_call_amd('mod_exammanagement/switch_mode_rooms', 'switch_mode'); //call jquery for switching between course import and import from file
-
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleDBObj = MoodleDB::getInstance();

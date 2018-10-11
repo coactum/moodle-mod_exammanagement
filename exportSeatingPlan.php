@@ -277,13 +277,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $pdf->setTextColor(204, 0, 0);
       $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
       $pdf->setTextColor(0, 0, 0);
-      //$pdf->ImageEps('data/upb_logo_full.ai', $x, $y, $width);
-      //$pdf->ImageEps('../extensions/exam_organization/images/' . $roomObj->roomid . '.svg', $x, $y, $width);
-      //$pdf->writeHTML($svgFile, true, false, false, false, '');
 
       $pdf->ImageSVG('@'.$svgFile, $x, $y, $w = '100', $h = "100", $link = '', $border=1, $fitonpage=false);
 
-      //$pdf->ImageSVG('@'.$svgFile, $x, $y, $w = "100", $h = "100", $border=1, $fitonpage=false)
     }
 
 
