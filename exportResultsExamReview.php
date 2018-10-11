@@ -55,9 +55,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     define("WIDTH_COLUMN_POINTS", 80);
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
     } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).

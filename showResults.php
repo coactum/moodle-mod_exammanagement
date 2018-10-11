@@ -43,7 +43,7 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
-      $MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
+      $MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
     }
 
     $MoodleObj->setPage('showResults');

@@ -45,9 +45,9 @@ $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		if(!$ExammanagementInstanceObj->getParticipantsCount()){
-			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
 		} else if(!$ExammanagementInstanceObj->getTaskCount()){
-			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Aufgaben zur Prüfung hinzugefügt werden.', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Aufgaben zur Prüfung hinzugefügt werden.', 'error');
 		}
 
 		$MoodleObj->setPage('inputResults');

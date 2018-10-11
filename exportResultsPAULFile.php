@@ -51,9 +51,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $MoodleObj->setPage('exportResultsPAULFile');
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
     } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
     }
 
 //    $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
