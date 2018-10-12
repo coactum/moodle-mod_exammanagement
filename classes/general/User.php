@@ -95,6 +95,8 @@ class User{
 
 				$insert = $MoodleDBObj->InsertBulkRecordsInDB("exammanagement_participants", $userObjArr);
 
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+
 			} else {
 				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
 			}
