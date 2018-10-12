@@ -84,10 +84,10 @@ class MoodleDB{
 		return $DB->delete_records($table, $condition);
 	}
 
-	// public function InsertBulkRecordsInDB($table, $dataobjects){ // not used at the moment
-	// 	global $DB;
-	//
-	// 	$DB->insert_records($table, $dataobjects);
-	// }
+	public function InsertBulkRecordsInDB($table, $dataobjects){
+		global $DB;
+
+		$DB->insert_records($table, $dataobjects);
+	}
 
 }

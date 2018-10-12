@@ -27,6 +27,7 @@ namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\general\MoodleDB;
+use mod_exammanagement\general\User;
 use mod_exammanagement\ldap\ldapManager;
 use PHPExcel_IOFactory;
 use stdclass;
@@ -405,7 +406,7 @@ class exammanagementForms{
 		require_once(__DIR__.'/addCourseParticipantsForm.php');
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e);
 
 		//Instantiate form
 		$mform = new addCourseParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));
@@ -418,9 +419,9 @@ class exammanagementForms{
 		} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.
 
-			$participants = $ExammanagementInstanceObj->filterCheckedParticipants($fromform);
+			$participants = $UserObj->filterCheckedParticipants($fromform);
 
-			$ExammanagementInstanceObj->saveCourseParticipants($participants);
+			$UserObj->saveCourseParticipants($participants);
 
 		} else {
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

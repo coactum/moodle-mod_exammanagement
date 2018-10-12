@@ -36,6 +36,27 @@
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
         </INDEXES>
       </TABLE>
+      <TABLE NAME="exammanagement_participants" COMMENT="list of participants for all plugin-instances">
+        <FIELDS>
+          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+          <FIELD NAME="plugininstance" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+          <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="moodle user id"/>
+          <FIELD NAME="imtlogin" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="matrnr of user"/>
+          <FIELD NAME="firstname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="first name of user"/>
+          <FIELD NAME="lastname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="last name of user"/>
+          <FIELD NAME="headerid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="id of header from import file"/>
+          <FIELD NAME="roomid" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="roomid of assigned place"/>
+          <FIELD NAME="place" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="roomid of assigned place"/>
+          <FIELD NAME="results" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="results (points) as json array"/>
+          <FIELD NAME="bonus" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="bonus"/>
+    	</FIELDS>
+        <KEYS>
+          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        </KEYS>
+        <INDEXES>
+          <INDEX NAME="plugininstance" UNIQUE="false" FIELDS="plugininstance"/>
+        </INDEXES>
+      </TABLE>
       <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />

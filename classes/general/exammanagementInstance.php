@@ -932,22 +932,6 @@ public function checkIfValidMatrNr($mnr) {
 
 	}
 
-	public function saveCourseParticipants($participants){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			$this->moduleinstance->participants = json_encode($participants);
-			$this->moduleinstance->importfileheaders = NULL;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer zur Prüfung hinzugefügt', 'success');
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
-			}
-	}
-
 	public function getCourseParticipantsIDs(){
 			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
 			$CourseParticipantsIDsArray;
@@ -961,32 +945,6 @@ public function checkIfValidMatrNr($mnr) {
 					return $CourseParticipantsIDsArray;
 			} else {
 					return false;
-			}
-
-	}
-
-	public function filterCheckedParticipants($obj){
-
-			$obj= get_object_vars($obj);
-			$paricipantsArray=$obj["participants"];
-			$participants=array();
-
-			foreach ($paricipantsArray as $key => $value){
-				if ($value==1){
-					array_push($participants, $key);
-				}
-
-			}
-
-			if ($participants){
-
-				sort($participants); //sort checked participants ids for saving in DB
-
-				return $participants;
-
-			} else {
-				return Null;
-
 			}
 
 	}
