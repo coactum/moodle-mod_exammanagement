@@ -58,7 +58,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-		$allParticipantsIdsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstance' => $this->id));
+		$allParticipantsIdsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 
 		if($allParticipantsIdsArr){
 			return $allParticipantsIdsArr;
@@ -84,21 +84,17 @@ class User{
 
 					if($this->checkIfAlreadyParticipant($participantId) == false){
 						$user = new stdClass();
-						$user->plugininstance = $this->id;
+						$user->plugininstanceid = $this->id;
 						$user->moodleuserid = $participantId;
-						$user->headerid = 'course';
+						$user->headerid = 0;
 
 						array_push($userObjArr, $user);
+
 					}
 				}
 
-				$insert = $MoodleDBObj->InsertRecordInDB("exammanagement_participants", $userObjArr);
+				$insert = $MoodleDBObj->InsertBulkRecordsInDB("exammanagement_participants", $userObjArr);
 
-				if($insert){
-					$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer zur Prüfung hinzugefügt', 'success');
-				} else {
-					$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
-				}
 			} else {
 				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
 			}
@@ -129,7 +125,7 @@ class User{
 	public function checkIfAlreadyParticipant($potentialParticipantId){
 			$MoodleDBObj = MoodleDB::getInstance();
 
-			$user = $MoodleDBObj->getRecordFromDB("exammanagement_participants", array('moodleuserid' => $potentialParticipantId));
+			$user = $MoodleDBObj->getRecordFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 
 			if($user){
 				return true;

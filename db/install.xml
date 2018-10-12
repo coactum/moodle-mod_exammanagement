@@ -39,7 +39,7 @@
       <TABLE NAME="exammanagement_participants" COMMENT="list of participants for all plugin-instances">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-          <FIELD NAME="plugininstance" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+          <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
           <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="moodle user id"/>
           <FIELD NAME="imtlogin" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="matrnr of user"/>
           <FIELD NAME="firstname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="first name of user"/>
@@ -54,7 +54,7 @@
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
         <INDEXES>
-          <INDEX NAME="plugininstance" UNIQUE="false" FIELDS="plugininstance"/>
+          <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
         </INDEXES>
       </TABLE>
       <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
