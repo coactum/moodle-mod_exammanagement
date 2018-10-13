@@ -104,6 +104,7 @@ $string['import_from_paul_file'] = 'Import participants from paul file (entries 
 $string['no_participants_added'] = 'No participants added.';
 $string['read_file'] = 'Read file';
 $string['state_added_to_exam'] = 'Participants of exam';
+$string['state_added_to_exam_no_moodle'] = 'Participants of exam (without PANDA account)';
 $string['state_courseparticipant'] = 'Participants of course';
 $string['state_newmatrnr'] = 'New';
 $string['state_badmatrnr'] = 'Bad matriculation number';

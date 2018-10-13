@@ -53,6 +53,8 @@ global $PAGE, $CFG;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
+$UserObj = User::getInstance($id, $e);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 
 $MoodleDBObj = MoodleDB::getInstance();
@@ -164,7 +166,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $taskcount = $ExammanagementInstanceObj->getTaskCount();
   $taskpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
   $textfieldcontent = $ExammanagementInstanceObj->getShortenedTextfield();
-  $participantscount = $ExammanagementInstanceObj->getParticipantsCount();
+  $participantscount = $UserObj->getParticipantsCount();
   $roomscount = $ExammanagementInstanceObj->getRoomsCount();
   $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
   $stateofplaces = $ExammanagementInstanceObj->isStateOfPlacesCorrect();

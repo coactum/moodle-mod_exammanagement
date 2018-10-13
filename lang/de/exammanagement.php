@@ -104,6 +104,7 @@ $string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter
 $string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['read_file'] = 'Datei einlesen';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
+$string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne PANDA Benutzerkonto)';
 $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['state_newmatrnr'] = 'Neu eingelesen';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';

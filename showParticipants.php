@@ -24,11 +24,8 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\ldap\ldapManager;
-
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -38,7 +35,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -59,17 +56,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     echo($ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
-    $participantsIDs = $ExammanagementInstanceObj->getSavedParticipants();
+    echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-    if($participantsIDs){
-        usort($participantsIDs, function($a, $b){ //sort participants ids by name (custom function)
+    $moodleParticipants = $UserObj->getAllMoodleExamParticipants();
+    $noneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
 
-            global $ExammanagementInstanceObj;
+    // show participants with moodle account
+    if($moodleParticipants){
+        usort($moodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
 
-            $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a)->firstname;
-            $aLastname = $ExammanagementInstanceObj->getMoodleUser($a)->lastname;
-            $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b)->firstname;
-            $bLastname = $ExammanagementInstanceObj->getMoodleUser($b)->lastname;
+            global $UserObj;
+
+            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;
+            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
 
             if ($aLastname == $bLastname) { //if names are even sort by first name
                 return strcmp($aFirstname, $bFirstname);
@@ -78,23 +79,48 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
         });
 
-        echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-        if($LdapManagerObj->is_LDAP_config()){
-            $LdapManagerObj->connect_ldap();
-        }
+        foreach ($moodleParticipants as $key => $participantObj) {
 
-        foreach ($participantsIDs as $key => $value) {
-
-            $matrnr = $ExammanagementInstanceObj->getUserMatrNr($value);
+            $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
 
             echo('<div class="row"><div class="col-xs-3">');
-            echo($ExammanagementInstanceObj->getUserPicture($value).' '.$ExammanagementInstanceObj->getUserProfileLink($value));
+            echo($UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid));
             echo('</div><div class="col-xs-3">'.$matrnr.'</div>');
-            echo('<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($value).'</div>');
+            echo('<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</div>');
             echo('<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div></div>');
         }
-     } else {
+     }
+
+     echo('<hr />');
+     // show participants withouth moodle account
+
+     if($noneMoodleParticipants){
+         usort($noneMoodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
+
+             $aFirstname = $a->firstname;
+             $aLastname = $a->lastname;
+             $bFirstname = $b->firstname;
+             $bLastname = $b->lastname;
+
+             if ($aLastname == $bLastname) { //if names are even sort by first name
+                 return strcmp($aFirstname, $bFirstname);
+             } else{
+                 return strcmp($aLastname, $bLastname); // else sort by last name
+             }
+         });
+
+         foreach ($noneMoodleParticipants as $key => $participantObj) {
+
+             $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
+
+             echo('<div class="row"><div class="col-xs-3">');
+             echo($participantObj->firstname.' '.$participantObj->lastname);
+             echo('</div><div class="col-xs-3">'.$matrnr.'</div>');
+             echo('<div class="col-xs-3"> - </div>');
+             echo('<div class="col-xs-3">'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</div></div>');
+         }
+      } else {
             echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
      }
 

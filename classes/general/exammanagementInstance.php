@@ -217,17 +217,6 @@ EOF;
 			}
 	}
 
-	public function getParticipantsCount(){
-		$participants = $this->moduleinstance->participants;
-		if ($participants){
-				$temp = json_decode($participants);
-				$participantsCount = count($temp);
-				return $participantsCount;
-			} else {
-				return false;
-		}
-	}
-
 	public function getRoomsCount(){
 		$rooms = $this->moduleinstance->rooms;
 		if ($rooms){
@@ -932,23 +921,6 @@ public function checkIfValidMatrNr($mnr) {
 
 	}
 
-	public function getCourseParticipantsIDs(){
-			$CourseParticipants = get_enrolled_users($this->modulecontext, 'mod/exammanagement:takeexams');
-			$CourseParticipantsIDsArray;
-
-			foreach ($CourseParticipants as $key => $value){
-				$temp=get_object_vars($value);
-				$CourseParticipantsIDsArray[$key] = $temp['id'];
-			}
-
-			if($CourseParticipantsIDsArray){
-					return $CourseParticipantsIDsArray;
-			} else {
-					return false;
-			}
-
-	}
-
 	public function getSavedParticipants(){
 
 		$participants = $this->moduleinstance->participants;
@@ -991,89 +963,6 @@ public function checkIfValidMatrNr($mnr) {
 			} else {
 				return false;
 		}
-	}
-
-	public function getMoodleUser($userid){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
-
-		if($user){
-			return $user;
-		} else {
-			return false;
-		}
-
-	}
-
-	public function getUserPicture($userid){
-
-		global $OUTPUT;
-
-		$user = $this->getMoodleUser($userid);
-		return $OUTPUT->user_picture($user, array('courseid' => $this->course->id, 'link' => true));
-
-	}
-
-	public function getUserProfileLink($userid){
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		$user = $this->getMoodleUser($userid);
-		$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $user->id, 'course', $this->course->id).'">'.fullname($user).'</a></strong>';
-
-		return $profilelink;
-
-	}
-
-	public function getUserMatrNr($userid){
-
-		require_once(__DIR__.'/../ldap/ldapManager.php');
-
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-
-		$ldapConnection = $LdapManagerObj->connect_ldap();
-
-		if($LdapManagerObj->is_LDAP_config()){
-				$pUId = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
-
-				if($pUId){
-					$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $pUId);
-				}
-		} else {
-				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
-		}
-
-		if($userMatrNr){
-			return $userMatrNr;
-		} else {
-			return '-';
-		}
-	}
-
-	public function getParticipantsGroupNames($userid){
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		$userGroups = groups_get_user_groups($this->course->id, $userid);
-		$groupNameStr = false;
-
-		foreach ($userGroups as $key => $value){
-			if ($value){
-				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $this->course->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>, ';
-				}
-			}
-			else{
-				$groupNameStr='-';
-				break;
-			}
-		}
-
-		return $groupNameStr;
-
 	}
 
 	######### feature: configure tasks ##########

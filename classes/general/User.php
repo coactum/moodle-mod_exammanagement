@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\ldap\ldapManager;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -53,20 +54,72 @@ class User{
 
 	#### getting ids for multiple participants #####
 
-	public function getAllExamParticipantsIds(){
+	public function getAllExamParticipants(){
 		global $PAGE;
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-		$allParticipantsIdsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
+		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 
-		if($allParticipantsIdsArr){
-			return $allParticipantsIdsArr;
+		if($allParticipantsArr){
+			return $allParticipantsArr;
 
 		} else {
 			return false;
 
 		}
+	}
+
+	public function getAllMoodleExamParticipants(){
+		global $PAGE;
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
+
+		if($allMoodleParticipantsArr){
+			return $allMoodleParticipantsArr;
+
+		} else {
+			return false;
+
+		}
+	}
+
+	public function getAllNoneMoodleExamParticipants(){
+		global $PAGE;
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
+
+		if($allNoneMoodleParticipantsArr){
+			return $allNoneMoodleParticipantsArr;
+
+		} else {
+			return false;
+
+		}
+	}
+
+	public function getCourseParticipantsIDs(){
+
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+			$CourseParticipants = get_enrolled_users($ExammanagementInstanceObj->getModulecontext(), 'mod/exammanagement:takeexams');
+			$CourseParticipantsIDsArray;
+
+			foreach ($CourseParticipants as $key => $value){
+				$temp = get_object_vars($value);
+				$CourseParticipantsIDsArray[$key] = $temp['id'];
+			}
+
+			if($CourseParticipantsIDsArray){
+					return $CourseParticipantsIDsArray;
+			} else {
+					return false;
+			}
+
 	}
 
 	#### import participants ####
@@ -122,6 +175,102 @@ class User{
 
 	}
 
+	#### methods to get user props
+
+	public function getUserMatrNr($userid, $login = false){
+
+		require_once(__DIR__.'/../ldap/ldapManager.php');
+
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		if($LdapManagerObj->is_LDAP_config()){
+				$ldapConnection = $LdapManagerObj->connect_ldap();
+
+				if($userid !== false){
+					$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+				}
+
+				$userMatrNr = $LdapManagerObj->studentid2uid($ldapConnection, $login);
+
+		} else { // for local testing during development
+
+			if($userid !== false){
+				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
+
+			} else {
+				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $login);
+			}
+		}
+
+		if($userMatrNr){
+			return $userMatrNr;
+		} else {
+			return '-';
+		}
+	}
+
+	public function getMoodleUser($userid){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
+
+		if($user){
+			return $user;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function getUserPicture($userid){
+
+		global $OUTPUT;
+
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		$user = $this->getMoodleUser($userid);
+		return $OUTPUT->user_picture($user, array('courseid' => $ExammanagementInstanceObj->getCourse()->id, 'link' => true));
+
+	}
+
+	public function getUserProfileLink($userid){
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		$user = $this->getMoodleUser($userid);
+		$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $user->id, 'course', $ExammanagementInstanceObj->getCourse()->id).'">'.fullname($user).'</a></strong>';
+
+		return $profilelink;
+
+	}
+
+	public function getParticipantsGroupNames($userid){
+
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $userid);
+		$groupNameStr = false;
+
+		foreach ($userGroups as $key => $value){
+			if ($value){
+				foreach ($value as $key2 => $value2){
+					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>, ';
+				}
+			}
+			else{
+				$groupNameStr='-';
+				break;
+			}
+		}
+
+		return $groupNameStr;
+
+	}
+
 	#### other methods  ####
 
 	public function checkIfAlreadyParticipant($potentialParticipantId){
@@ -134,6 +283,17 @@ class User{
 			} else {
 				return false;
 			}
+	}
+
+	public function getParticipantsCount(){
+
+		$participantsCount = count($this->getAllExamParticipants());
+
+		if ($participantsCount){
+				return $participantsCount;
+			} else {
+				return false;
+		}
 	}
 
 }

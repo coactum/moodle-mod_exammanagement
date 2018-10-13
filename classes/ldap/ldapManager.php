@@ -25,7 +25,7 @@
 namespace mod_exammanagement\ldap;
 
 use mod_exammanagement\general\MoodleDB;
-use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
+use mod_exammanagement\general\User; // only for testing without real ldap!
 use Exception;
 
 defined('MOODLE_INTERNAL') || die();
@@ -106,26 +106,23 @@ class ldapManager{
 			return $moodleuserid;
 	}
 
-	public function getIMTLogin2MatriculationNumberTest($userid){ // only for testing without real ldap!
-			require_once(__DIR__.'/../general/exammanagementInstance.php');
+	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
+			require_once(__DIR__.'/../general/User.php');
 
-			$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+			$UserObj = User::getInstance($this->id, $this->e);
 
-			$user = $exammanagementInstanceObj->getMoodleUser($userid);
+			if($userid !== NULL){
+				$user = $UserObj->getMoodleUser($userid);
+				$matrNr = 700000 . $user->id;
+			} else if($login){
+				$matrNr = $login;
+			}
 
-			// constructing test MatrN., later needs to be readed from csv-File
-
-			$matrNr = 70 . $user->id;;
-
-			$array = str_split($user->firstname);
-
-			$matrNr .= ord($array[0]);
-			$matrNr .= ord($array[2]);
-
-			$matrNr = substr($matrNr, 0, 6);
-
-			return $matrNr;
-
+			if($matrNr){
+				return $matrNr;
+			} else {
+				return false;
+			}
 	}
 
 	public function studentid2uid($ldapConnection, $pStudentId){
