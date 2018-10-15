@@ -420,8 +420,9 @@ class exammanagementForms{
 			//In this case you process validated data. $mform->get_data() returns data posted in form.
 
 			$participants = $UserObj->filterCheckedParticipants($fromform);
+			$deletedParticipants = $UserObj->filterCheckedDeletedParticipants($fromform);
 
-			$UserObj->saveCourseParticipants($participants);
+			$UserObj->saveCourseParticipants($participants, $deletedParticipants);
 
 		} else {
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

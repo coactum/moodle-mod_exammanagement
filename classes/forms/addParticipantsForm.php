@@ -86,14 +86,13 @@ class addParticipantsForm extends moodleform{
 
             ###### view all temporary imported participants ######
 
-            if($badMatriculationnumbersArr){ // show all invalid matrnr
+            if($badMatriculationnumbersArr){
 
                 $mform->addElement('html', '<div class="panel panel-danger">');
                 $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($badMatriculationnumbersArr) . ' ' . get_string("badmatrnr", "mod_exammanagement"). '</h3></div>');
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"></div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
                 foreach ((array) $badMatriculationnumbersArr as $key => $userObj) {
                   $matrnr = $userObj->matrnr;
@@ -109,7 +108,7 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '</div></div>');
             }
 
-            if($oddMatriculationnumbersArr){ // show all invalid matrnr
+            if($oddMatriculationnumbersArr){
 
                 $mform->addElement('html', '<div class="panel panel-warning">');
                 $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($oddMatriculationnumbersArr) . ' ' . get_string("oddmatrnr", "mod_exammanagement"). '</h3></div>');
@@ -136,7 +135,7 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '</div></div>');
             }
 
-            if($deletedMatriculationnumbersArr){ // show deleted participants
+            if($deletedMatriculationnumbersArr){
 
                 $mform->addElement('html', '<div class="panel panel-success">');
                 $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . count($deletedMatriculationnumbersArr) . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
@@ -171,14 +170,13 @@ class addParticipantsForm extends moodleform{
 
             }
 
-            if($existingMatriculationnumbersArr){ // show all invalid matrnr
+            if($existingMatriculationnumbersArr){
 
                 $mform->addElement('html', '<div class="panel panel-info">');
                 $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($existingMatriculationnumbersArr) . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"></div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
                 foreach ((array) $existingMatriculationnumbersArr as $key => $userObj) {
 
@@ -196,7 +194,7 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('html', '</div></div>');
             }
 
-            if($newParticipantsArr){ // show valid new participants
+            if($newParticipantsArr){
 
                 $mform->addElement('html', '<div class="panel panel-success">');
                 $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($newParticipantsArr) . ' ' . get_string("newmatrnr", "mod_exammanagement"). '</h3></div>');

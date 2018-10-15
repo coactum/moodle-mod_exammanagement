@@ -107,7 +107,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('imtlogin', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('firstname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('lastname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);

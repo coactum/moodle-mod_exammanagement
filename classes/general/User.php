@@ -124,25 +124,40 @@ class User{
 
 	#### import participants ####
 
-	public function saveCourseParticipants($participantsIdsArr){
+	public function saveCourseParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
 
-			if($participantsIdsArr != false){
-				$MoodleDBObj = MoodleDB::getInstance();
-				$MoodleObj = Moodle::getInstance($this->id, $this->e);
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
 				$insert;
 				$userObjArr = array();
 
-				foreach($participantsIdsArr as $participantId){
+				if($participantsIdsArr){
+					foreach($participantsIdsArr as $participantId){
 
-					if($this->checkIfAlreadyParticipant($participantId) == false){
-						$user = new stdClass();
-						$user->plugininstanceid = $this->id;
-						$user->moodleuserid = $participantId;
-						$user->headerid = 0;
+						if($this->checkIfAlreadyParticipant($participantId) == false){
+							$user = new stdClass();
+							$user->plugininstanceid = $this->id;
+							$user->moodleuserid = $participantId;
+							$user->headerid = 0;
 
-						array_push($userObjArr, $user);
+							array_push($userObjArr, $user);
 
+						}
+					}
+				}
+
+				if($deletedParticipantsIdsArr){
+					foreach($deletedParticipantsIdsArr as $identifier){
+							$temp = explode('_', $identifier);
+
+							if($temp[0]== 'mid'){
+								$this->deleteParticipant($temp[1], false);
+							} else {
+								$this->deleteParticipant(false, $temp[1]);
+							}
 					}
 				}
 
@@ -173,6 +188,43 @@ class User{
 				return false;
 			}
 
+	}
+
+	public function filterCheckedDeletedParticipants($returnObj){
+
+			$returnObj = get_object_vars($returnObj);
+			$allParicipantsArray = $returnObj["deletedparticipants"];
+			$participantsArr = array();
+
+			foreach ($allParicipantsArray as $key => $value){
+				if ($value == 1){
+					array_push($participantsArr, $key);
+				}
+			}
+
+			if ($participantsArr){
+				return $participantsArr;
+			} else {
+				return false;
+			}
+
+	}
+
+	#### delete participants ####
+
+	public function deleteParticipant($userid, $login = false){
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$delete;
+
+		if($userid !== false){
+			$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+		} else {
+			$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'imtlogin' => $login));
+		}
+
+		return $delete;
 	}
 
 	#### methods to get user props

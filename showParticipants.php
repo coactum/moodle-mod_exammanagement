@@ -124,7 +124,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
      }
 
-     echo('<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+     echo('<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("showParticipants", $id).'" class="btn btn-danger">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
 
     $MoodleObj->outputFooter();
 } else {

@@ -47,6 +47,7 @@ class addCourseParticipantsForm extends moodleform{
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
+        $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
 
         $mform = $this->_form; // Don't forget the underscore!
@@ -64,12 +65,29 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string("view_added_and_course_partipicants", "mod_exammanagement").'</p>');
 
-        ###### display exam participants ######
+        ###### display all exam participants that are no course participants and will be deleted######
         $moodleParticipantsArr = array();
         $noneMoodleParticipantsArr = array();
 
         $moodleParticipantsArr = $UserObj->getAllMoodleExamParticipants();
         $noneMoodleParticipantsArr = $UserObj->getAllNoneMoodleExamParticipants();
+        $courseParticipantsIDsArr = $UserObj->getCourseParticipantsIDs();
+
+        $alreadyParticipantsArr = array();
+
+        if($moodleParticipantsArr && $courseParticipantsIDsArr){ // handle participants that are course participants and already exam participants
+
+          foreach ($moodleParticipantsArr as $key => $participant) {
+              if(in_array($participant->moodleuserid, $courseParticipantsIDsArr)){
+                  if(($removekey = array_search($participant->moodleuserid, $courseParticipantsIDsArr)) !== false){
+                    unset($courseParticipantsIDsArr[$removekey]);
+                    array_push($alreadyParticipantsArr, $participant->moodleuserid);
+                    unset($moodleParticipantsArr[$key]);
+                  }
+              }
+          }
+        }
+
 
         if($moodleParticipantsArr || $noneMoodleParticipantsArr){
 
@@ -77,10 +95,10 @@ class addCourseParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="panel panel-danger">');
             $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $deletedcount . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
-            $mform->addElement('html', '<div class="panel-body text">');
+            $mform->addElement('html', '<div class="panel-body">');
 
             $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-            $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col">');
+            $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
             $mform->addElement('advcheckbox', 'checkall_deleted', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1'));
             $mform->setDefault('checkall_deleted', true);
             $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
@@ -92,11 +110,11 @@ class addCourseParticipantsForm extends moodleform{
 
                   $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
 
-                  $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+                  $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
 
-                  $mform->addElement('advcheckbox', 'participants['.$participantObj->moodleuserid.']', ' '.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid), null, array('group' => 1));
+                  $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$participantObj->moodleuserid.']', ' '.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid), null, array('group' => 1));
 
-                  $mform->setDefault('participants['.$participantObj->moodleuserid.']', true);
+                  $mform->setDefault('deletedparticipants[mid_'.$participantObj->moodleuserid.']', true);
 
                   $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div><div class="col-xs-3">');
 
@@ -115,11 +133,11 @@ class addCourseParticipantsForm extends moodleform{
 
                   $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
 
-                  $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+                  $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
 
-                  $mform->addElement('advcheckbox', 'participants['.$participantObj->imtlogin.']', ' '. $participantObj->firstname .' '.$participantObj->lastname, null, array('group' => 1));
+                  $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$participantObj->imtlogin.']', ' '. $participantObj->firstname .' '.$participantObj->lastname, null, array('group' => 1));
 
-                  $mform->setDefault('participants['.$participantObj->imtlogin.']', true);
+                  $mform->setDefault('deletedparticipants[matrnr_'.$participantObj->imtlogin.']', true);
 
                   $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div><div class="col-xs-3">');
 
@@ -132,32 +150,52 @@ class addCourseParticipantsForm extends moodleform{
             $mform->addElement('html', '</div></div>');
         }
 
+        ###### display course participants already added as exam participants ######
+
+        if($alreadyParticipantsArr){
+
+          $mform->addElement('html', '<div class="panel panel-info">');
+          $mform->addElement('html', '<div class="panel-heading text-info"><h3 class="panel-title">' . count($alreadyParticipantsArr) . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
+          $mform->addElement('html', '<div class="panel-body">');
+
+          $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
+
+          foreach ($alreadyParticipantsArr as $key => $value) {
+                $matrnr = $UserObj->getUserMatrNr($value);
+
+                $mform->addElement('html', '<div class="row"><div class="col-xs-3"> ' . $UserObj->getUserPicture($value).' '.$UserObj->getUserProfileLink($value) . ' </div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.$matrnr.'</div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($value).'</div>');
+                $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_courseparticipant", "mod_exammanagement").'</div></div>');
+          }
+
+          $mform->addElement('html', '</div></div>');
+
+        }
+
         ###### display course participants not yet added as exam participants ######
-        $courseParticipantsIDsArr = $UserObj->getCourseParticipantsIDs();
 
         if($courseParticipantsIDsArr){
 
           $mform->addElement('html', '<div class="panel panel-success">');
           $mform->addElement('html', '<div class="panel-heading text-success"><h3 class="panel-title">' . count($courseParticipantsIDsArr) . ' ' . get_string("newmatrnr", "mod_exammanagement"). '</h3></div>');
-          $mform->addElement('html', '<div class="panel-body text">');
+          $mform->addElement('html', '<div class="panel-body">');
 
           $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-          $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col">');
-          $mform->addElement('advcheckbox', 'checkall_deleted', 'Alle aus-/abwählen', null, array('group' => 2, 'id' => 'checkboxgroup2'));
-          $mform->setDefault('checkall_deleted', true);
+          $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
+          $mform->addElement('advcheckbox', 'checkall_new', 'Alle aus-/abwählen', null, array('group' => 2, 'id' => 'checkboxgroup2'));
+          $mform->setDefault('checkall_new', true);
           $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
           foreach ($courseParticipantsIDsArr as $key => $value) {
-              if(!$UserObj->checkIfAlreadyParticipant($value)){
                 $matrnr = $UserObj->getUserMatrNr($value);
 
-                $mform->addElement('html', '<div class="row"><div class="col-xs-3">');
+                $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
                 $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$UserObj->getUserPicture($value).' '.$UserObj->getUserProfileLink($value), null, array('group' => 2));
                 $mform->setDefault('participants['.$value.']', true);
                 $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($value).'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_courseparticipant", "mod_exammanagement").'</div></div>');
-              }
           }
 
           $mform->addElement('html', '</div></div>');
