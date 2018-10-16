@@ -112,6 +112,9 @@ $string['state_oddmatrnr_nocourseparticipant'] = 'Temporär eingelesen, kein Kur
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Gelöscht';
 
+//showParticipants.php
+$string['delete_all_participants'] = 'Alle Teilnehmer löschen';
+
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Aufgaben konfigurieren';
 $string['configure_tasks_text'] = 'Hier kann die Maximalpunktzahl für jede Aufgabe der Prüfung eingestellt werden.';

@@ -193,14 +193,23 @@ class User{
 	public function filterCheckedDeletedParticipants($returnObj){
 
 			$returnObj = get_object_vars($returnObj);
-			$allParicipantsArray = $returnObj["deletedparticipants"];
+
+			$allParicipantsArray = array();
+
+			if(isset($returnObj["deletedparticipants"])){
+				$allParicipantsArray = $returnObj["deletedparticipants"];
+			}
+
 			$participantsArr = array();
 
-			foreach ($allParicipantsArray as $key => $value){
-				if ($value == 1){
-					array_push($participantsArr, $key);
+			if($allParicipantsArray){
+				foreach ($allParicipantsArray as $key => $value){
+					if ($value == 1){
+						array_push($participantsArr, $key);
+					}
 				}
 			}
+
 
 			if ($participantsArr){
 				return $participantsArr;
@@ -223,6 +232,17 @@ class User{
 		} else {
 			$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'imtlogin' => $login));
 		}
+
+		return $delete;
+	}
+
+	public function deleteAllParticipants(){
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$delete;
+
+		$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id));
 
 		return $delete;
 	}
@@ -339,7 +359,12 @@ class User{
 
 	public function getParticipantsCount(){
 
-		$participantsCount = count($this->getAllExamParticipants());
+		$participantsArr = $this->getAllExamParticipants();
+		$participantsCount = false;
+
+		if($participantsArr){
+			$participantsCount = count($participantsArr);
+		}
 
 		if ($participantsCount){
 				return $participantsCount;

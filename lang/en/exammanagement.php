@@ -112,6 +112,9 @@ $string['state_oddmatrnr_nocourseparticipant'] = 'Temporary, no course participa
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Deleted';
 
+//showParticipants.php
+$string['delete_all_participants'] = 'Delete all participants';
+
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';
 $string['configure_tasks_text'] = 'Configure tasks for the exam';
