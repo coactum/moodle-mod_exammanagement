@@ -98,19 +98,30 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 function exammanagement_delete_instance($id) {
     global $DB;
 
+    $moduleinstance = $DB->get_record('exammanagement', array('id'=>$id));
+
+     if (!$moduleinstance){
+         return false;
+     }
+     if (!$cm = get_coursemodule_from_instance('exammanagement', $moduleinstance->id)) {
+         return false;
+     }
+
+     // delete participants
+     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     if (!$exists) {
+         return false;
+     }
+
+    $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+
+    // delete plugin instance
     $exists = $DB->get_record('exammanagement', array('id' => $id));
     if (!$exists) {
         return false;
     }
 
     $DB->delete_records('exammanagement', array('id' => $id));
-
-    $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $id));
-    if (!$exists) {
-        return false;
-    }
-
-    $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $id));
 
     return true;
 }
