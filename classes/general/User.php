@@ -34,19 +34,20 @@ class User{
 	protected $id;
 	protected $e;
 
-	private function __construct($id, $e) {
+	private function __construct($id, $e, $categoryid) {
 		$this->id = $id;
 		$this->e = $e;
+		$this->categoryid = $categoryid;
 
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e){
+	public static function getInstance($id, $e, $categoryid){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new User($id, $e);
+				$inst = new User($id, $e, $categoryid);
 			}
 			return $inst;
 
@@ -59,7 +60,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
+		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 
 		if($allParticipantsArr){
 			return $allParticipantsArr;
@@ -75,7 +76,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
+		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
 
 		if($allMoodleParticipantsArr){
 			return $allMoodleParticipantsArr;
@@ -91,7 +92,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
+		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
 
 		if($allNoneMoodleParticipantsArr){
 			return $allNoneMoodleParticipantsArr;
@@ -161,7 +162,7 @@ class User{
 					}
 				}
 
-				$insert = $MoodleDBObj->InsertBulkRecordsInDB("exammanagement_participants", $userObjArr);
+				$insert = $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
 
 				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
 
@@ -228,9 +229,9 @@ class User{
 		$delete;
 
 		if($userid !== false){
-			$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+			$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
 		} else {
-			$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'imtlogin' => $login));
+			$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login));
 		}
 
 		return $delete;
@@ -242,7 +243,7 @@ class User{
 
 		$delete;
 
-		$delete = $MoodleDBObj->DeleteRecordsFromDB("exammanagement_participants", array('plugininstanceid' => $this->id));
+		$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 
 		return $delete;
 	}
@@ -348,7 +349,7 @@ class User{
 	public function checkIfAlreadyParticipant($potentialParticipantId){
 			$MoodleDBObj = MoodleDB::getInstance();
 
-			$user = $MoodleDBObj->getRecordFromDB("exammanagement_participants", array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+			$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 
 			if($user){
 				return true;

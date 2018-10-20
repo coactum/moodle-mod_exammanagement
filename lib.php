@@ -63,7 +63,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     global $DB, $PAGE;
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->categoryid = strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)); //set course category
+    $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 6); //set course category
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 
@@ -107,13 +107,17 @@ function exammanagement_delete_instance($id) {
          return false;
      }
 
+     //var_dump('exammanagement_part_'.$moduleinstance->categoryid);
+
      // delete participants
-     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     $exists = $DB->get_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
      if (!$exists) {
          return false;
      }
 
-    $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     //var_dump($DB->get_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id)));
+
+    $DB->delete_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
 
     // delete plugin instance
     $exists = $DB->get_record('exammanagement', array('id' => $id));

@@ -405,8 +405,9 @@ class exammanagementForms{
 		//include form
 		require_once(__DIR__.'/addCourseParticipantsForm.php');
 
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 		//Instantiate form
 		$mform = new addCourseParticipantsForm(null, array('id'=>$this->id, 'e'=>$this->e));

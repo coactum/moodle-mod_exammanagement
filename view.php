@@ -53,7 +53,7 @@ global $PAGE, $CFG;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 

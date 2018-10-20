@@ -30,5 +30,51 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_exammanagement_install() {
 
-    return true;
+
+  //create new tables for new terms (category ids)
+
+  $terms = $DB->get_fieldset_select('course_categories', 'name', '');
+
+  if($terms){
+    $year = false;
+
+    foreach($terms as $termname){
+
+      $cleanTermname = preg_replace("/[^0-9a-zA-Z]/", "",$termname);
+
+      $dbname = 'exammanagement_part_'.strtolower($cleanTermname);
+
+      if($dbname){
+
+        // Define table exammanagement_participants to be created.
+        $table = new xmldb_table($dbname);
+
+        // Adding fields to table exammanagement_participants.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+        $table->add_field('firstname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('lastname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('roomid', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('place', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('results', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('bonus', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        // Adding keys to table exammanagement_participants.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table exammanagement_participants.
+        $table->add_index('plugininstanceid', XMLDB_INDEX_NOTUNIQUE, array('plugininstanceid'));
+
+        // Conditionally launch create table for exammanagement_participants.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+      }
+    }
+  }
+
+  return true;
 }
