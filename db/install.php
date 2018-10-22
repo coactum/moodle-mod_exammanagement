@@ -30,6 +30,9 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_exammanagement_install() {
 
+  global $DB;
+
+  $dbman = $DB->get_manager();
 
   //create new tables for new terms (category ids)
 
@@ -41,6 +44,8 @@ function xmldb_exammanagement_install() {
     foreach($terms as $termname){
 
       $cleanTermname = preg_replace("/[^0-9a-zA-Z]/", "",$termname);
+
+      $cleanTermname = substr($cleanTermname, 0, 6);
 
       $dbname = 'exammanagement_part_'.strtolower($cleanTermname);
 
