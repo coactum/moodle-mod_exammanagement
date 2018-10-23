@@ -125,6 +125,30 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $MoodleObj->setPage('view');
   $MoodleObj-> outputPageHeader();
 
+  // update categoryid if neccesarry
+
+  $oldcategoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
+  $coursecategoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 6); //set course category
+
+  if($oldcategoryid !== $coursecategoryid){
+
+    $ExammanagementInstanceObj->moduleinstance->categoryid = $coursecategoryid;
+    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+    // tn aus Tabelle mit alter courseid löschen
+    $oldrecords = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
+
+    if($oldrecords){
+      $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$coursecategoryid, $oldrecords);
+      
+      $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
+      
+      $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning');
+      
+    }
+
+  }
+
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
 
