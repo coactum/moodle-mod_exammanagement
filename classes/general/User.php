@@ -347,12 +347,12 @@ class User{
 	public function deleteTempParticipants(){
 			$MoodleDBObj = MoodleDB::getInstance();
 
-			$exists = $DB->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+			$exists = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
 			if (!$exists) {
 				return false;
 			}
 
-			$DB->delete_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+			$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
 	}
 
 	#### methods to get user props
@@ -467,6 +467,22 @@ class User{
 			} else {
 				return false;
 			}
+	}
+
+	public function checkIfValidMatrNr($mnr) {
+		if (!preg_match("/^\d+$/", $mnr)) {
+			return false;
+		}
+		
+		$first = substr($mnr, 0, 1);
+		$prf   = substr($mnr, strlen($mnr)-1, 1);
+		$mod   = $mnr % 11;
+		
+		if ($first==7 && strlen($mnr)==7) {
+			return true;
+		} else {
+			return (($first==3 || $first==6) /*&& ($mod==0 ? TRUE : ($mod==1 && $prf==0))*/);
+		}
 	}
 
 	public function getParticipantsCount(){

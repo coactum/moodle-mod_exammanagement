@@ -241,12 +241,11 @@ class exammanagementForms{
 					foreach($fileContentArr as $key => $row){
 							$potentialMatriculationnumbersArr = explode("	", $row); // from 2nd line: get all potential numbers
 	
-							var_dump($potentialMatriculationnumbersArr);
 							if($potentialMatriculationnumbersArr){
 								foreach ($potentialMatriculationnumbersArr as $key2 => $pmatrnr) { // create temp user obj
 
 									$identifier = str_replace('"', '', $pmatrnr);
-									if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier)){ //if identifier contains numbers and only alpha numerical signs
+									if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
 										$tempUserObj = new stdclass;
 										$tempUserObj->plugininstanceid = $this->id;
 										$tempUserObj->identifier = $identifier;
@@ -254,15 +253,15 @@ class exammanagementForms{
 		
 										array_push($usersObjArr, $tempUserObj);
 
-										var_dump($tempUserObj);
-
 									}
 								}
 							}
 					}
 
-					var_dump($usersObjArr);
+					$UserObj->deleteTempParticipants();
 					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersObjArr);
+
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$this->id), null , null, null);
 	
 				}
 			}

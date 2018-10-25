@@ -771,19 +771,6 @@ EOF;
 
 ######### feature: addParticipants ##########
 
-public function checkIfValidMatrNr($mnr) {
-		if (!preg_match("/^\d+$/", $mnr)) {
-			return false;
-		}
-		$first = substr($mnr, 0, 1);
-		$prf   = substr($mnr, strlen($mnr)-1, 1);
-		$mod   = $mnr % 11;
-		if ($first==7 && strlen($mnr)==7) {
-			return true;
-		} else {
-		return (($first==3 || $first==6) /*&& ($mod==0 ? TRUE : ($mod==1 && $prf==0))*/);
-	}
-}
 	public function getSavedParticipants(){ // to be replaced where it es needed and then to be deleted here
 
 		$participants = $this->moduleinstance->participants;
@@ -791,18 +778,6 @@ public function checkIfValidMatrNr($mnr) {
 		if ($participants){
 				$participantsArray = json_decode($participants);
 				return $participantsArray;
-			} else {
-				return false;
-		}
-	}
-
-	public function getTempParticipants(){
-
-		$tmpparticipants = $this->moduleinstance->tmpparticipants;
-
-		if ($tmpparticipants){
-				$tmpParticipantsArray = json_decode($tmpparticipants);
-				return $tmpParticipantsArray;
 			} else {
 				return false;
 		}

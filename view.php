@@ -149,6 +149,14 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   }
 
+  // delete temp participants if exist
+
+  $tempparticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));
+
+    if($tempparticipants){
+      $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));      
+    }
+
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
 

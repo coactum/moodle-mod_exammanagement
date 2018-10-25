@@ -107,6 +107,7 @@ $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
 $string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne PANDA Benutzerkonto)';
 $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['state_newmatrnr'] = 'Neu eingelesen';
+$string['state_newmatrnr_no_moodle'] = 'Neu eingelesen (ohne PANDA Benutzerkonto)';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Temporär eingelesen, kein Kursteilnehmer';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
