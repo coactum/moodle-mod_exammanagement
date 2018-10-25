@@ -98,6 +98,7 @@ class ldapManager{
 		require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 		$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
 
 			$temp = explode('_', $matrNr);

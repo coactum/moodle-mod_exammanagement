@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\User;
 use mod_exammanagement\ldap\ldapManager;
 use mod_exammanagement\general\Moodle;
 use moodleform;
@@ -36,6 +37,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../ldap/ldapManager.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
@@ -47,6 +49,7 @@ class addParticipantsForm extends moodleform{
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->moduleinstance->categoryid);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
@@ -126,7 +129,7 @@ class addParticipantsForm extends moodleform{
                   $mform->addElement('html', '<div class="row text-warning">');
                   $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->row);
                   $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                  $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$ExammanagementInstanceObj->getUserPicture($moodleid).' '.$ExammanagementInstanceObj->getUserProfileLink($moodleid), null, array('group' => 1));
+                  $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 1));
                   $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
                   $mform->addElement('html', '<div class="col-xs-3"> - </div>');
                   $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_oddmatrnr_nocourseparticipant", "mod_exammanagement").'</div></div>');
@@ -159,10 +162,10 @@ class addParticipantsForm extends moodleform{
                       $mform->addElement('html', '<div class="col-xs-1">');
                     }
                     $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$ExammanagementInstanceObj->getUserPicture($moodleid).' '.$ExammanagementInstanceObj->getUserProfileLink($moodleid), null, array('group' => 3));
+                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 3));
                     $mform->setDefault('participants['.$moodleid.']', true);
                     $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
-                    $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($moodleid).'</div>');
+                    $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
                     $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
                 }
 
@@ -185,9 +188,9 @@ class addParticipantsForm extends moodleform{
 
                   $mform->addElement('html', '<div class="row text-info">');
                   $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->row);
-                  $mform->addElement('html', '</div><div class="col-xs-3"> ' . $ExammanagementInstanceObj->getUserPicture($moodleid).' '.$ExammanagementInstanceObj->getUserProfileLink($moodleid) . ' </div>');
+                  $mform->addElement('html', '</div><div class="col-xs-3"> ' . $UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid) . ' </div>');
                   $mform->addElement('html', '<div class="col-xs-2">'.$matrnr.'</div>');
-                  $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($moodleid).'</div>');
+                  $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
                   $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_existingmatrnr", "mod_exammanagement").'</div></div>');
                 }
 
@@ -213,10 +216,10 @@ class addParticipantsForm extends moodleform{
                     $mform->addElement('html', '<div class="row text-success">');
                     $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->row);
                     $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$ExammanagementInstanceObj->getUserPicture($moodleid).' '.$ExammanagementInstanceObj->getUserProfileLink($moodleid), null, array('group' => 2));
+                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 2));
                     $mform->setDefault('participants['.$moodleid.']', true);
                     $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
-                    $mform->addElement('html', '<div class="col-xs-3">'.$ExammanagementInstanceObj->getParticipantsGroupNames($moodleid).'</div>');
+                    $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
                     $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_newmatrnr", "mod_exammanagement").'</div></div>');
                 }
 

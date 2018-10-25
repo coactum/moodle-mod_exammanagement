@@ -35,6 +35,22 @@
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
         </INDEXES>
       </TABLE>
+      <TABLE NAME="exammanagement_temp_participants" COMMENT="list of all temp participants for all exammanagement plugin instances">
+          <FIELDS>
+              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+              <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+              <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="moodle user id"/>
+              <FIELD NAME="imtlogin" TYPE="char" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="matrnr of user"/>
+              <FIELD NAME="headerid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="id of header from import file"/>
+              <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="line number from import file"/>              
+    	    </FIELDS>
+          <KEYS>
+              <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+          </KEYS>
+          <INDEXES>
+              <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
+          </INDEXES>
+      </TABLE>
       <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
@@ -49,6 +65,9 @@
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
+        <INDEXES>
+          <INDEX NAME="roomid" UNIQUE="false" FIELDS="roomid"/>
+        </INDEXES>
       </TABLE>
     </TABLES>
   </XMLDB>

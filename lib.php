@@ -107,15 +107,11 @@ function exammanagement_delete_instance($id) {
          return false;
      }
 
-     //var_dump('exammanagement_part_'.$moduleinstance->categoryid);
-
      // delete participants
      $exists = $DB->get_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
      if (!$exists) {
          return false;
      }
-
-     //var_dump($DB->get_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id)));
 
     $DB->delete_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
 

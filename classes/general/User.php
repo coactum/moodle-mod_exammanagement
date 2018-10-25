@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\ldap\ldapManager;
 use stdClass;
+use core\output\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -122,6 +123,101 @@ class User{
 			}
 
 	}
+	public function saveParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
+
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+			$MoodleDBObj = MoodleDB::getInstance();
+			$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
+
+				$tempfileheader = json_decode($ExammanagementInstanceObjthis->moduleinstance->tempimportfileheader);
+				$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
+				$newheaderid;
+
+				// save new file header
+				if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
+					$savedFileHeadersArr = array();
+					$newheaderid = 1;
+					array_push($savedFileHeadersArr, $tempfileheader);
+				} else if($savedFileHeadersArr && $tempfileheader){
+					$saved = false;
+					
+					foreach($savedFileHeadersArr as $key => $header){ // if new header is already saved
+						if($tempfileheader == $header){
+							$newheaderid = $key+1;
+							$saved = true;
+						}
+					}
+					
+					if(!$saved){ // if new header is not saved yet
+						$newheaderid = count($savedFileHeadersArr);
+						array_push($savedFileHeadersArr, $tempfileheader);
+					}
+				}
+
+				$ExammanagementInstanceObj->moduleinstance->importfileheaders = json_encode($savedFileHeadersArr);
+
+				// add new participants
+				if($participantsIdsArr){ 
+					$userObjArr = array();
+
+					foreach($participantsIdsArr as $identifier){
+
+						$temp = explode('_', $identifier);
+
+						if($temp[0]== 'mid'){
+							$user = new stdClass();
+							$user->plugininstanceid = $this->id;
+							$user->moodleuserid = $temp[1];
+							$user->headerid = $newheaderid;
+
+							array_push($userObjArr, $user);
+						} else {
+							$user = new stdClass();
+							$user->plugininstanceid = $this->id;
+							$user->imtlogin = $temp[1];
+							$user->headerid = $newheaderid;
+
+							array_push($userObjArr, $user);
+						}
+					}
+
+					// insert records of new participants
+					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
+
+				}
+
+				// delete deleted participants
+				if($deletedParticipantsIdsArr){
+					foreach($deletedParticipantsIdsArr as $identifier){
+							$temp = explode('_', $identifier);
+
+							if($temp[0]== 'mid'){
+								$this->deleteParticipant($temp[1], false);
+							} else {
+								$this->deleteParticipant(false, $temp[1]);
+							}
+					}
+				}
+
+				// delete temp file header and update saved file headers
+				$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
+
+				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+
+				//delete temp participants
+				$this->deleteTempParticipants();
+
+				//redirect
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+			}
+
+	}
 
 	#### import participants ####
 
@@ -162,13 +258,74 @@ class User{
 					}
 				}
 
-				$insert = $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
+				$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
 
 				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
 
 			} else {
 				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
 			}
+	}
+
+	public function saveTempParticipants($newParticipantsArr, $header, $badMatriculationnumbersArr = NULL, $oddMatriculationnumbersArr = NULL, $existingMatriculationnumbersArr = NULL, $deletedMatriculationnumbersArr = NULL){
+
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+		$tempParticipantsArr = array();
+
+		if($newParticipantsArr){
+				array_push($tempParticipantsArr, $newParticipantsArr);
+		} else {
+				array_push($tempParticipantsArr, NULL);
+		}
+
+		if ($badMatriculationnumbersArr){
+				array_push($tempParticipantsArr, $badMatriculationnumbersArr);
+		} else {
+				array_push($tempParticipantsArr, NULL);
+		}
+
+		if ($oddMatriculationnumbersArr){
+				array_push($tempParticipantsArr, $oddMatriculationnumbersArr);
+		} else {
+				array_push($tempParticipantsArr, NULL);
+		}
+
+		if ($existingMatriculationnumbersArr){
+				array_push($tempParticipantsArr, $existingMatriculationnumbersArr);
+		} else {
+				array_push($tempParticipantsArr, NULL);
+		}
+
+		if ($deletedMatriculationnumbersArr){
+				array_push($tempParticipantsArr, $deletedMatriculationnumbersArr);
+		} else {
+				array_push($tempParticipantsArr, NULL);
+		}
+
+		$newfileheader = json_encode($header);
+
+		$participants = json_encode($tempParticipantsArr);
+
+		$ExammanagementInstanceObjthis->moduleinstance->tmpparticipants = NULL;
+		$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
+
+		if ($participants!=NULL){
+				$ExammanagementInstanceObj->moduleinstance->tmpparticipants = $participants;
+		}
+
+		if ($newfileheader!=NULL){
+				$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = $newfileheader;
+		}
+
+		$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+		if($update){
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$this->id), 'Datei eingelesen', null, notification::NOTIFY_SUCCESS);
+		} else {
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$this->id), 'Datei konnte nicht eingelesen werden', null, notification::NOTIFY_ERROR);
+		}
 	}
 
 	public function filterCheckedParticipants($returnObj){
@@ -246,6 +403,17 @@ class User{
 		$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 
 		return $delete;
+	}
+	
+	public function deleteTempParticipants(){
+			$MoodleDBObj = MoodleDB::getInstance();
+
+			$exists = $DB->getRecordsFromDB('exammanagement_temp_participants', array('plugininstanceid' => $cm->id));
+			if (!$exists) {
+				return false;
+			}
+
+			$DB->delete_records('exammanagement_temp_participants', array('plugininstanceid' => $cm->id));
 	}
 
 	#### methods to get user props
@@ -346,10 +514,14 @@ class User{
 
 	#### other methods  ####
 
-	public function checkIfAlreadyParticipant($potentialParticipantId){
+	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
 			$MoodleDBObj = MoodleDB::getInstance();
 
-			$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+			if($potentialParticipantId){
+				$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+			} else if($potentialParticipantLogin){
+				$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
+			}
 
 			if($user){
 				return true;

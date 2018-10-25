@@ -195,10 +195,11 @@ class exammanagementForms{
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 
 		if($this->dtp){
-				$ExammanagementInstanceObj->deleteTempParticipants();
+				$UserObj->deleteTempParticipants();
 		}
 
 		//Instantiate form
@@ -221,7 +222,9 @@ class exammanagementForms{
 
 			$potentialMatriculationnumbersArr = array();
 
-			$savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
+			$examParticipantsArray = $UserObj->getAllExamParticipants();			
+			$noneMoodleExamParticipantsArray = $UserObj->getAllNoneMoodleExamParticipants();
+			
 			$PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
 
 			$MoodleUserIdsArr = array();
@@ -232,17 +235,19 @@ class exammanagementForms{
 
 			$tempMoodleIDsArr = array();
 
-			if(!$savedParticipantsArray){
-					$savedParticipantsArray = array();
+			if(!$examParticipantsArray){
+					$examParticipantsArray = array();
 			}
 
 			if (!$excel_file && !$paul_file){
 				//saveParticipants in DB
-				$participants = $ExammanagementInstanceObj->filterCheckedParticipants($fromform);
+				
+				$participants = $UserObj->filterCheckedParticipants($fromform);
+				$deletedParticipants = $UserObj->filterCheckedDeletedParticipants($fromform);
+								
+				$UserObj->saveParticipants($participants, $deletedParticipants);
 
-				$ExammanagementInstanceObj->saveParticipants($participants);
-
-				$$ExammanagementInstanceObj->clearTempParticipants();
+				$UserObj->clearTempParticipants();
 
 			} else if($paul_file){
 
@@ -293,7 +298,7 @@ class exammanagementForms{
 							 if ($moodleuserid){
 								 		$pMatrNrObj->moodleid = $moodleuserid;
 										$pMatrNrObj->matrnr = str_replace('"', '', $matrnr);
-										if(in_array($moodleuserid, $savedParticipantsArray)){ // if participant is already saved for instance
+										if(in_array($moodleuserid, $examParticipantsArray)){ // if participant is already saved for instance
 												array_push($existingMatriculationnumbersArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
 
@@ -301,7 +306,7 @@ class exammanagementForms{
 										} else if(in_array($moodleuserid, $MoodleUserIdsArr)){ // if participant is already known as temp participant
 												array_push($badMatriculationnumbersArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
-										} else if (!in_array($moodleuserid, $ExammanagementInstanceObj->getCourseParticipantsIDs())){ // if participant is not in course
+										} else if (!in_array($moodleuserid, $UserObj->getCourseParticipantsIDs())){ // if participant is not in course
 												array_push($oddMatriculationnumbersArr, $pMatrNrObj);
 												unset($potentialMatriculationnumbersArr[$key]);
 
@@ -382,7 +387,7 @@ class exammanagementForms{
 					$MoodleUserIdsArr = NULL;
 			}
 
-			$ExammanagementInstanceObj->saveTempParticipants($MoodleUserIdsArr, $fileheader, $badMatriculationnumbersArr, $oddMatriculationnumbersArr, $existingMatriculationnumbersArr, $deletedMatriculationnumbersArr);
+			$UserObj->saveTempParticipants($MoodleUserIdsArr, $fileheader, $badMatriculationnumbersArr, $oddMatriculationnumbersArr, $existingMatriculationnumbersArr, $deletedMatriculationnumbersArr);
 
 			}
 
