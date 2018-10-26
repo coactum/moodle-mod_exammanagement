@@ -76,7 +76,7 @@ class addParticipantsForm extends moodleform{
             $mform->addElement('html', '<div class="col-xs-4"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
         }
 
-        $mform->addElement('html', '</div></div>');
+        $mform->addElement('html', '</div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
 
@@ -89,7 +89,9 @@ class addParticipantsForm extends moodleform{
             $newNoneMoodleParticipantsArr = array();
             $badMatriculationnumbersArr = array();
             $oddMatriculationnumbersArr = array();
+            $existingMoodleParticipantsArr = array();
             $existingMatriculationnumbersArr = array();
+            $deletedMoodleParticipantsArr = array();
             $deletedMatriculationnumbersArr = array();
 
             $tempIDsArray = array();
@@ -97,72 +99,74 @@ class addParticipantsForm extends moodleform{
             ###### classify temp participants
             
             foreach($tempParticipants as $key => $participant){
-                var_dump($participant);
 
                 // filter invalid/bad matrnr
                 if (!$UserObj->checkIfValidMatrNr($participant->identifier)){
                     $tempUserObj = new stdclass;
                     $tempUserObj->line = $participant->line;
                     $tempUserObj->matrnr = $participant->identifier;
-                    $tempUserObj->state = 'badmatrnr';
+                    $tempUserObj->state = 'state_badmatrnr';
                     
                     array_push($badMatriculationnumbersArr, $tempUserObj);
                     unset($tempParticipants[$key]);
-                }
-
-                // convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
-                
-                if($LdapManagerObj->is_LDAP_config()){
-                    $ldapConnection = $LdapManagerObj->connect_ldap();
-
-                    $username = $LdapManagerObj->studentid2uid($ldapConnection, $participant->identifier);
-
-                    if($username){
-                        $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
-                    }
-
                 } else {
-                        $moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
-                }
+                    // convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray
+                                    
+                    if($LdapManagerObj->is_LDAP_config()){
+                        $ldapConnection = $LdapManagerObj->connect_ldap();
 
-                if ($moodleuserid){
-                    $tempUserObj = new stdclass;
-                    $tempUserObj->line = $participant->line;
-                    $tempUserObj->moodleid = $moodleuserid;
-                    $tempUserObj->matrnr = $participant->identifier;
+                        $username = $LdapManagerObj->studentid2uid($ldapConnection, $participant->identifier);
 
-                    if($UserObj->checkIfAlreadyParticipant($moodleuserid)){ // if participant is already saved for instance
-                        array_push($existingMatriculationnumbersArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
-                    } else if(in_array($moodleuserid, $tempIDsArray)){ // if participant is already known as temp participant
-                        $tempUserObj->state = 'doubled';
-                        array_push($badMatriculationnumbersArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                    } else if (!in_array($moodleuserid, $UserObj->getCourseParticipantsIDs())){ // if participant is not in course
-                        $tempUserObj->state = 'nocourse';
-                        array_push($oddMatriculationnumbersArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
-                    } else {	// if participant is valid participant
-                        array_push($newMoodleParticipantsArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
-                    }
-                } else {	// if participant is no moodle user
-                    $tempUserObj = new stdclass;
-                    $tempUserObj->line = $participant->line;
-                    $tempUserObj->moodleid = false;
-                    $tempUserObj->matrnr = $participant->identifier;
+                        if($username){
+                            $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+                        }
 
-                    if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
-                        array_push($existingMatriculationnumbersArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                        array_push($tempIDsArray, $participant->identifier); //for finding already temp users
                     } else {
-                        array_push($newNoneMoodleParticipantsArr, $tempUserObj);
-                        unset($tempParticipants[$key]);
-                        array_push($tempIDsArray, $participant->identifier); //for finding already temp users
+                            $moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
+                    }
+
+                    if ($moodleuserid){
+                        $tempUserObj = new stdclass;
+                        $tempUserObj->line = $participant->line;
+                        $tempUserObj->moodleid = $moodleuserid;
+                        $tempUserObj->matrnr = $participant->identifier;
+
+                        if(in_array($moodleuserid, $tempIDsArray)){ // if participant is already known as temp participant
+                            $tempUserObj->state = 'state_doubled';
+                            array_push($badMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                        } else if($UserObj->checkIfAlreadyParticipant($moodleuserid)){ // if participant is already saved for instance
+                            array_push($existingMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        } else if (!in_array($moodleuserid, $UserObj->getCourseParticipantsIDs())){ // if participant is not in course
+                            array_push($oddMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        } else {	// if participant is valid participant
+                            array_push($newMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        }
+                    } else {	// if participant is no moodle user
+                        $tempUserObj = new stdclass;
+                        $tempUserObj->line = $participant->line;
+                        $tempUserObj->moodleid = false;
+                        $tempUserObj->matrnr = $participant->identifier;
+
+                        if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
+                            array_push($existingMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
+                        } else if(in_array($participant->identifier, $tempIDsArray)){
+                            $tempUserObj->state = 'state_doubled';
+                            array_push($badMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                        } else {
+                            array_push($newNoneMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
+                        }
                     }
                 }
             }
@@ -172,40 +176,61 @@ class addParticipantsForm extends moodleform{
                 $tempUserObj = new stdclass;
                 $tempUserObj->line = $participant->line;
                 $tempUserObj->matrnr = $participant->identifier;
-                $tempUserObj->state = 'badmatrnr';
+                $tempUserObj->state = 'state_badmatrnr';
 
                 array_push($badMatriculationnumbersArr, $tempUserObj);
                 unset($tempParticipants[$key]);
             }
 
-            $oldheaders;
-            if($PAULFileHeadersArr){ //if participant is deleted
+            // get header id
+            $tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
+		    $savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
+            $headerid;
 
-                foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
-    
-                        if($PAULFileHeader->header == $fileheader){
-                                foreach($PAULFileHeader->participants as $key => $savedParticipantId){
-    
-                                        if(!in_array($savedParticipantId, $tempMoodleIDsArr)){
-                                                $deletedMatrNrObj = new stdclass;
-                                                $deletedMatrNrObj->moodleid = $savedParticipantId;
-                                                $deletedMatrNrObj->matrnr = false;
-                                                $deletedMatrNrObj->row = '';
-    
-                                                array_push($deletedMatriculationnumbersArr, $deletedMatrNrObj);
-                                        }
-                                }
-                        }
-                }
+			if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
+				$headerid = 1;
+			} else if($savedFileHeadersArr && $tempfileheader){
+                $saved = false;
+				foreach($savedFileHeadersArr as $key => $header){ // if new header is already saved
+					if($tempfileheader == $header){
+						$headerid = $key+1;
+						$saved = true;
+					}
+				}
+					
+				if(!$saved){ // if new header is not saved yet
+					$headerid = count($savedFileHeadersArr)+1;
+				}
+            } else if(!$tempfileheader){ // if reading of tempfileheader fails
+				$headerid = 0;
             }
 
-            var_dump($badMatriculationnumbersArr);
-            var_dump($oddMatriculationnumbersArr);
-            var_dump($deletedMatriculationnumbersArr);
-            var_dump($existingMatriculationnumbersArr);
-            var_dump($newMoodleParticipantsArr);
-            var_dump($newNoneMoodleParticipantsArr);
-            var_dump($tempParticipants);
+            // get saved participants for headerid
+            $oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_part_' . $ExammanagementInstanceObj->moduleinstance->categoryid, array('plugininstanceid' => $this->_customdata['id'], 'headerid' => $headerid));
+            
+            if($oldParticipants){ //if participant is deleted
+
+                foreach($oldParticipants as $key => $participant){
+    
+                    if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($participant->imtlogin, $tempIDsArray)){
+
+                        if($participant->moodleuserid){
+                            $deletedMatrNrObj = new stdclass;
+                            $deletedMatrNrObj->moodleid = $participant->moodleuserid;
+                            $deletedMatrNrObj->line = '';
+        
+                            array_push($deletedMoodleParticipantsArr, $deletedMatrNrObj);
+                        } else if($participant->imtlogin){
+                            $deletedMatrNrObj = new stdclass;
+                            $deletedMatrNrObj->matrnr = $participant->imtlogin;
+                            $deletedMatrNrObj->line = '';
+        
+                            array_push($deletedMatriculationnumbersArr, $deletedMatrNrObj);
+                        }
+                        
+                    }
+                }
+            }
 
             ###### view all temporary imported participants ######
 
@@ -217,7 +242,7 @@ class addParticipantsForm extends moodleform{
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-                foreach ((array) $badMatriculationnumbersArr as $key => $tempUserObj) {
+                foreach ((array) $badMatriculationnumbersArr as $key => $tempUserObj) { // bad or double matrnr
                   $matrnr = $tempUserObj->matrnr;
 
                   $mform->addElement('html', '<div class="row text-danger">');
@@ -225,7 +250,7 @@ class addParticipantsForm extends moodleform{
                   $mform->addElement('html', '</div><div class="col-xs-3"> - </div>');
                   $mform->addElement('html', '<div class="col-xs-2">'.$matrnr.'</div>');
                   $mform->addElement('html', '<div class="col-xs-3"> - </div>');
-                  $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_badmatrnr", "mod_exammanagement").'</div></div>');
+                  $mform->addElement('html', '<div class="col-xs-3">'.get_string($tempUserObj->state, "mod_exammanagement").'</div></div>');
                 }
 
                 $mform->addElement('html', '</div></div>');
@@ -233,8 +258,10 @@ class addParticipantsForm extends moodleform{
 
             if($oddMatriculationnumbersArr || $newNoneMoodleParticipantsArr){
 
+                $count = count($oddMatriculationnumbersArr) + count($newNoneMoodleParticipantsArr);
+
                 $mform->addElement('html', '<div class="panel panel-warning">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($oddMatriculationnumbersArr) . ' ' . get_string("oddmatrnr", "mod_exammanagement"). '</h3></div>');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("oddmatrnr", "mod_exammanagement"). '</h3></div>');
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
@@ -242,7 +269,7 @@ class addParticipantsForm extends moodleform{
                 $mform->addElement('advcheckbox', 'checkall_odds', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1'));
                 $mform->addElement('html', '</div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
-                if($oddMatriculationnumbersArr){
+                if($oddMatriculationnumbersArr){ // no course participant
                     foreach ((array) $oddMatriculationnumbersArr as $key => $userObj) {
                         $moodleid = $userObj->moodleid;
                         $matrnr = $userObj->matrnr;
@@ -250,85 +277,132 @@ class addParticipantsForm extends moodleform{
                         $mform->addElement('html', '<div class="row text-warning">');
                         $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
                         $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                        $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 1));
+                        $mform->addElement('advcheckbox', 'participants[mid_'.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 1));
                         $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
                         $mform->addElement('html', '<div class="col-xs-3"> - </div>');
                         $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_oddmatrnr_nocourseparticipant", "mod_exammanagement").'</div></div>');
-                      }
-      
-                      $mform->addElement('html', '</div></div>');
-                } else if ($newNoneMoodleParticipantsArr){
+                      }      
+                }
+                
+                if ($newNoneMoodleParticipantsArr){ // no moodle participant
                     foreach ((array) $newNoneMoodleParticipantsArr as $key => $userObj) {
                         $matrnr = $userObj->matrnr;
       
                         $mform->addElement('html', '<div class="row text-warning">');
                         $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
                         $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                        $mform->addElement('advcheckbox', 'participants['.$matrnr.']', '', null, array('group' => 1));
+                        $mform->addElement('advcheckbox', 'participants[matrnr_'.$matrnr.']', '', null, array('group' => 1));
                         $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
                         $mform->addElement('html', '<div class="col-xs-3"> - </div>');
                         $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_newmatrnr_no_moodle", "mod_exammanagement").'</div></div>');
                       }
       
-                      $mform->addElement('html', '</div></div>');
                 }
+                $mform->addElement('html', '</div></div>');
                 
             }
 
-            if($deletedMatriculationnumbersArr){
+            if($deletedMoodleParticipantsArr || $deletedMatriculationnumbersArr){
+
+                $deletedcount = count($deletedMoodleParticipantsArr) + count($deletedMatriculationnumbersArr);
 
                 $mform->addElement('html', '<div class="panel panel-success">');
-                $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . count($deletedMatriculationnumbersArr) . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body text">');
+                $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $deletedcount . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
+                $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
-                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col">');
-                $mform->addElement('advcheckbox', 'checkall_deleted', 'Alle aus-/abwählen', null, array('group' => 3, 'id' => 'checkboxgroup3'));
+                $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3 remove_col pl-4">');
+                $mform->addElement('advcheckbox', 'checkall_deleted', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1'));
                 $mform->setDefault('checkall_deleted', true);
                 $mform->addElement('html', '</div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
-                foreach ($deletedMatriculationnumbersArr as $key => $userObj) {
+                #### deleted with moodle account ######
+                if($deletedMoodleParticipantsArr){
 
-                    $moodleid = $userObj->moodleid;
-                    $matrnr = $userObj->matrnr;
+                    foreach ($deletedMoodleParticipantsArr as $key => $participantObj) {
 
-                    $mform->addElement('html', '<div class="row text-danger">');
-                    if($userObj->row){
-                      $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
-                    } else {
-                      $mform->addElement('html', '<div class="col-xs-1">');
+                        $matrnr = $UserObj->getUserMatrNr($participantObj->moodleid);
+
+                        $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-1"></div><div class="col-xs-3 remove_col pl-4">');
+
+                        $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$participantObj->moodleid.']', ' '.$UserObj->getUserPicture($participantObj->moodleid).' '.$UserObj->getUserProfileLink($participantObj->moodleid), null, array('group' => 1));
+
+                        $mform->setDefault('deletedparticipants[mid_'.$participantObj->moodleid.']', true);
+
+                        $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div><div class="col-xs-3">');
+
+                        $mform->addElement('html', $UserObj->getParticipantsGroupNames($participantObj->moodleid));
+
+                        $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
+
                     }
-                    $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 3));
-                    $mform->setDefault('participants['.$moodleid.']', true);
-                    $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
-                    $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
-                    $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
+                }
+
+                ###### deleted without moodle account  ######
+
+                if($deletedMatriculationnumbersArr){
+
+                    foreach ($deletedMatriculationnumbersArr as $key => $participantObj) {
+
+                        $matrnr = $participantObj->matrnr;
+
+                        $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-1"></div><div class="col-xs-3 remove_col pl-4">');
+
+                        $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$matrnr.']', ' '. $participantObj->firstname .' '.$participantObj->lastname, null, array('group' => 1));
+
+                        $mform->setDefault('deletedparticipants[matrnr_'.$matrnr.']', true);
+
+                        $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div><div class="col-xs-3">');
+
+                        $mform->addElement('html', '-');
+
+                        $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
+                    }
                 }
 
                 $mform->addElement('html', '</div></div>');
 
             }
 
-            if($existingMatriculationnumbersArr){
+            if($existingMoodleParticipantsArr || $existingMatriculationnumbersArr){
+
+                $count = count($existingMoodleParticipantsArr) + count($existingMatriculationnumbersArr);
 
                 $mform->addElement('html', '<div class="panel panel-info">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($existingMatriculationnumbersArr) . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
                 $mform->addElement('html', '<div class="panel-body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-                foreach ((array) $existingMatriculationnumbersArr as $key => $userObj) {
+                if($existingMoodleParticipantsArr){ // existing with moodle
+    
+                    foreach ((array) $existingMoodleParticipantsArr as $key => $userObj) {
+    
+                      $moodleid = $userObj->moodleid;
+                      $matrnr = $userObj->matrnr;
+    
+                      $mform->addElement('html', '<div class="row text-info">');
+                      $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
+                      $mform->addElement('html', '</div><div class="col-xs-3"> ' . $UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid) . ' </div>');
+                      $mform->addElement('html', '<div class="col-xs-2">'.$matrnr.'</div>');
+                      $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
+                      $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_existingmatrnr", "mod_exammanagement").'</div></div>');
+                    }
+                }
 
-                  $moodleid = $userObj->moodleid;
-                  $matrnr = $userObj->matrnr;
-
-                  $mform->addElement('html', '<div class="row text-info">');
-                  $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
-                  $mform->addElement('html', '</div><div class="col-xs-3"> ' . $UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid) . ' </div>');
-                  $mform->addElement('html', '<div class="col-xs-2">'.$matrnr.'</div>');
-                  $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
-                  $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_existingmatrnr", "mod_exammanagement").'</div></div>');
+                if($existingMatriculationnumbersArr){
+    
+                    foreach ((array) $existingMatriculationnumbersArr as $key => $userObj) { // existing without moodle
+    
+                      $matrnr = $userObj->matrnr;
+    
+                      $mform->addElement('html', '<div class="row text-info">');
+                      $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
+                      $mform->addElement('html', '</div><div class="col-xs-3"></div>');
+                      $mform->addElement('html', '<div class="col-xs-2">'.$matrnr.'</div>');
+                      $mform->addElement('html', '<div class="col-xs-3"></div>');
+                      $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_existingmatrnr", "mod_exammanagement").'</div></div>');
+                    }
                 }
 
                 $mform->addElement('html', '</div></div>');
@@ -346,15 +420,15 @@ class addParticipantsForm extends moodleform{
                 $mform->setDefault('checkall_new', true);
                 $mform->addElement('html', '</div><div class="col-xs-2"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
-                foreach ($newMoodleParticipantsArr as $key => $userObj) {
+                foreach ($newMoodleParticipantsArr as $key => $userObj) { // new moodle
                     $moodleid = $userObj->moodleid;
                     $matrnr = $userObj->matrnr;
 
                     $mform->addElement('html', '<div class="row text-success">');
                     $mform->addElement('html', '<div class="col-xs-1"> # '.$userObj->line);
                     $mform->addElement('html', '</div><div class="col-xs-3 remove_col">');
-                    $mform->addElement('advcheckbox', 'participants['.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 2));
-                    $mform->setDefault('participants['.$moodleid.']', true);
+                    $mform->addElement('advcheckbox', 'participants[mid_'.$moodleid.']', ' '.$UserObj->getUserPicture($moodleid).' '.$UserObj->getUserProfileLink($moodleid), null, array('group' => 2));
+                    $mform->setDefault('participants[mid_'.$moodleid.']', true);
                     $mform->addElement('html', '</div><div class="col-xs-2">'.$matrnr.'</div>');
                     $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($moodleid).'</div>');
                     $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_newmatrnr", "mod_exammanagement").'</div></div>');
@@ -369,8 +443,6 @@ class addParticipantsForm extends moodleform{
             } else {
               $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
             }
-
-            $mform->addElement('html', '</div>');
 
         } else {
 

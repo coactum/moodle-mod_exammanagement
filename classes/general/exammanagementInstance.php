@@ -110,7 +110,7 @@ class exammanagementInstance{
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
- 		$url= $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
+ 		$url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
  		return $url;
  	}
@@ -285,10 +285,12 @@ EOF;
 
  	public function checkPhaseCompletion($phase){
 
- 	switch ($phase){
+		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
+
+ 		switch ($phase){
 
 			case 1:
-				if ($this->getRoomsCount() && $this->getExamtime() && $this->getParticipantsCount() && $this->getTaskTotalPoints()){
+				if ($this->getRoomsCount() && $this->getExamtime() && $UserObj->getParticipantsCount() && $this->getTaskTotalPoints()){
 					return true;
 				} else {
 						return false;

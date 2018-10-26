@@ -131,7 +131,7 @@ class User{
 
 			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
-				$tempfileheader = json_decode($ExammanagementInstanceObjthis->moduleinstance->tempimportfileheader);
+				$tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
 				$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
 				$newheaderid;
 
@@ -151,9 +151,11 @@ class User{
 					}
 					
 					if(!$saved){ // if new header is not saved yet
-						$newheaderid = count($savedFileHeadersArr);
+						$newheaderid = count($savedFileHeadersArr)+1;
 						array_push($savedFileHeadersArr, $tempfileheader);
 					}
+				}  else if(!$tempfileheader){ // if reading of tempfileheader fails
+					$headerid = 0;
 				}
 
 				$ExammanagementInstanceObj->moduleinstance->importfileheaders = json_encode($savedFileHeadersArr);
@@ -170,12 +172,14 @@ class User{
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
 							$user->moodleuserid = $temp[1];
+							$user->imtlogin = null;
 							$user->headerid = $newheaderid;
 
 							array_push($userObjArr, $user);
 						} else {
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
+							$user->moodleuserid = null;
 							$user->imtlogin = $temp[1];
 							$user->headerid = $newheaderid;
 

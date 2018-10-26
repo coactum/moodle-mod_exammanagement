@@ -258,6 +258,10 @@ class exammanagementForms{
 							}
 					}
 
+					$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = json_encode($fileheader);
+
+					$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
 					$UserObj->deleteTempParticipants();
 					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersObjArr);
 

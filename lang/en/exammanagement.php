@@ -109,7 +109,8 @@ $string['state_courseparticipant'] = 'Participants of course';
 $string['state_newmatrnr'] = 'New';
 $string['state_newmatrnr_no_moodle'] = 'New (without PANDA account)';
 $string['state_badmatrnr'] = 'Bad matriculation number';
-$string['state_oddmatrnr_nocourseparticipant'] = 'Temporary, no course participant';
+$string['state_doubled'] = 'Duplicated matriculation number';
+$string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Deleted';
 

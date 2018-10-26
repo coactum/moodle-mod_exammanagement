@@ -93,7 +93,7 @@ class addCourseParticipantsForm extends moodleform{
 
             $deletedcount = count($moodleParticipantsArr) + count($noneMoodleParticipantsArr);
 
-            $mform->addElement('html', '<div class="panel panel-danger">');
+            $mform->addElement('html', '<div class="panel panel-success">');
             $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $deletedcount . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
             $mform->addElement('html', '<div class="panel-body">');
 
@@ -110,7 +110,7 @@ class addCourseParticipantsForm extends moodleform{
 
                   $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
 
-                  $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
+                  $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-3 remove_col pl-4">');
 
                   $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$participantObj->moodleuserid.']', ' '.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid), null, array('group' => 1));
 
@@ -120,7 +120,7 @@ class addCourseParticipantsForm extends moodleform{
 
                   $mform->addElement('html', $UserObj->getParticipantsGroupNames($participantObj->moodleuserid));
 
-                  $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div></div>');
+                  $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
 
               }
             }
@@ -133,7 +133,7 @@ class addCourseParticipantsForm extends moodleform{
 
                   $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
 
-                  $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
+                  $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-3 remove_col pl-4">');
 
                   $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$participantObj->imtlogin.']', ' '. $participantObj->firstname .' '.$participantObj->lastname, null, array('group' => 1));
 
@@ -143,7 +143,7 @@ class addCourseParticipantsForm extends moodleform{
 
                   $mform->addElement('html', '-');
 
-                  $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</div></div>');
+                  $mform->addElement('html', '</div><div class="col-xs-3">'.get_string("state_deletedmatrnr", "mod_exammanagement").'</div></div>');
               }
             }
 

@@ -109,7 +109,8 @@ $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['state_newmatrnr'] = 'Neu eingelesen';
 $string['state_newmatrnr_no_moodle'] = 'Neu eingelesen (ohne PANDA Benutzerkonto)';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
-$string['state_oddmatrnr_nocourseparticipant'] = 'Temporär eingelesen, kein Kursteilnehmer';
+$string['state_doubled'] = 'Doppelte Matrikelnummer';
+$string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Gelöscht';
 
