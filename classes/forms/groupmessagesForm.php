@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
+use mod_exammanagement\general\User;
 
 use moodleform;
 
@@ -36,6 +37,7 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
+require_once(__DIR__.'/../general/User.php');
 
 class groupmessagesForm extends moodleform {
 
@@ -44,6 +46,7 @@ class groupmessagesForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->moduleinstance->categoryid);
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -53,21 +56,28 @@ class groupmessagesForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
 
-     	  $participantsCount = $ExammanagementInstanceObj->getParticipantsCount();
+           $MoodleParticipantsCount = count($UserObj->getAllMoodleExamParticipants());
+           $NoneMoodleParticipantsCount = count($UserObj->getAllNoneMoodleExamParticipants());
 
- 		if($participantsCount){
+ 		if($MoodleParticipantsCount){
 
-			$mform->addElement('html', '<p>'.get_string('groupmessages_text_1', 'mod_exammanagement').'<strong>'.$participantsCount.'</strong>'.get_string('groupmessages_text_2', 'mod_exammanagement').'</p>');
+			$mform->addElement('html', '<p>'.get_string('groupmessages_text_1', 'mod_exammanagement').'<strong>'.$MoodleParticipantsCount.'</strong>'.get_string('groupmessages_text_2', 'mod_exammanagement').'</p>');
+            
+            if($NoneMoodleParticipantsCount){
+                $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_text_3', 'mod_exammanagement').'</p>');
+            }
 
-      $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
-			$mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
+            $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
+            $mform->setType('groupmessages_subject', PARAM_TEXT);
+            $mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
+            $mform->setType('groupmessages_content', PARAM_TEXT);
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,'Mail abschicken');
 		    }
-		else{
-      $MoodleObj->redirectToOverviewPage('', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
-	   		}
+		else {
+            $MoodleObj->redirectToOverviewPage('', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+	   	}
     }
 
     //Custom validation should be added here

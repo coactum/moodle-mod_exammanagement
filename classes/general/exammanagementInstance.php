@@ -342,99 +342,6 @@ EOF;
 			}
  	}
 
-	#### participants view ####
-
-	public function isParticipant(){
-
-			global $USER;
-
-			$participantsList = json_decode($this->moduleinstance->participants);
-
-			if ($participantsList){
-					foreach ($participantsList as $key => $value){
-
-							if($USER->id == $value){
-
-									return true;
-							}
-					}
-
-					return false;
-			}
-	}
-
-	public function getDateForParticipants(){
-
-			$dateState = $this->moduleinstance->datetimevisible;
-			$examtime = $this->getExamtime();
-
-			if($dateState && $examtime){
-						return date('d.m.Y', $examtime);
-			} else{
-						return false;
-			}
-	}
-
-	public function getTimeForParticipants(){
-
-			$timeState = $this->isDateTimeVisible();
-			$examtime = $this->getExamtime();
-
-			if($timeState && $examtime){
-						return date('H:i', $examtime);
-			} else{
-						return false;
-			}
-	}
-
-	public function getRoomForParticipants(){
-
-			global $USER;
-
-			$roomState = $this->isRoomVisible();
-			$assignmentArray = $this->getAssignedPlaces();
-			$participantsRoom =  false;
-
-			if($roomState && $assignmentArray){
-						foreach ($assignmentArray as $key => $room){
-							foreach ($room->assignments as $key => $assignment){
-								if ($assignment->userid == $USER->id){
-										$participantsRoom = $room->roomname;
-								}
-							}
-						}
-
-						return $participantsRoom;
-
-			} else{
-						return false;
-			}
-	}
-
-	public function getPlaceForParticipants(){
-
-			global $USER;
-
-			$placesState = $this->isPlaceVisible();
-			$assignmentArray = $this->getAssignedPlaces();
-			$participantsPlace =  false;
-
-			if($placesState && $assignmentArray){
-						foreach ($assignmentArray as $key => $room){
-							foreach ($room->assignments as $key => $assignment){
-								if ($assignment->userid == $USER->id){
-										$participantsPlace = $assignment->place;
-								}
-							}
-						}
-
-						return $participantsPlace;
-
-			} else{
-						return false;
-			}
-	}
-
 	#### errors ####
 
 	public function throwError($errorMessage){
@@ -859,20 +766,25 @@ EOF;
 	public function sendGroupMessage($subject, $content){
 
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
 
-		$mailsubject="PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
-		$mailtext=$content;
-		$participants=$this->getSavedParticipants();
+		$mailsubject = "PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
+		$mailtext = $content;
+		$participants = $UserObj->getAllMoodleExamParticipants();
 
-		foreach ($participants as $key => $value){
+		if($subject && $mailtext && $participants){
+			foreach ($participants as $key => $participantObj){
 
-			$user=$this->getMoodleUser($value);
-
-			$this->sendSingleMessage($user, $mailsubject, $mailtext);
-
+				$user = $UserObj->getMoodleUser($participantObj->moodleuserid);
+	
+				$this->sendSingleMessage($user, $mailsubject, $mailtext);
+	
+			}
+	
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
+		} else {
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Fehler beim Nachrichtenversand.', 'error');			
 		}
-
-		$MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
 
 	}
 
@@ -899,7 +811,7 @@ EOF;
 
 		$header = '';
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$footer = '--------------------------------------------------------------------- \r\n Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen.\r\n' . $this->moduleinstance->category . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' \r\n ' . $url;
+		$footer = '--------------------------------------------------------------------- \r\n Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen.\r\n' . $this->moduleinstance->categoryid . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' \r\n ' . $url;
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);
@@ -930,26 +842,6 @@ EOF;
 
 	########### assign places #######
 
-	public function assignPlaceToUser($userid, $place){
-
-		$assignment = new stdClass();
-
-		$assignment->userid = $userid;
-		$assignment->place = $place;
-
-		 return $assignment;
-	}
-
-	public function savePlacesAssignment($assignmentArray){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$this->moduleinstance->assignedplaces=json_encode($assignmentArray);
-
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-
-	}
-
 	public function unsetStateofPlaces($type){
 
 		$MoodleDBObj = MoodleDB::getInstance();
@@ -964,14 +856,6 @@ EOF;
 		$StateOfPlaces = $this->moduleinstance->stateofplaces;
 
 		return $StateOfPlaces;
-
-	}
-
-	public function getAssignedPlaces(){
-
-		$getAssignedPlaces = json_decode($this->moduleinstance->assignedplaces);
-
-		return $getAssignedPlaces;
 
 	}
 

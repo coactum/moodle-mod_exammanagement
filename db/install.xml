@@ -18,7 +18,6 @@
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="content and format of textfield as jsonstring"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
-          <FIELD NAME="assignedplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="assigned places"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>

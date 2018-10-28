@@ -127,12 +127,13 @@ $string['total'] = 'Total';
 
 //textfield.php
 $string['add_text_str'] = 'Add textfield';
-$string['add_text_text'] = 'All text added below will be immediately displayed to the participants in their view.';
+$string['add_text_text'] = 'All text added below will be immediately displayed to the participants in their view of this activity.';
 
 //groupmessagesForm.php
 $string['groupmessages_str'] = 'Add Messagetext';
-$string['groupmessages_text_1'] = 'An email with the text added below will be send to all';
+$string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
 $string['groupmessages_text_2'] = ' participants of the exam.';
+$string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';

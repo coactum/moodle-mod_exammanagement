@@ -48,10 +48,10 @@ class textfieldForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setTextfield'));
 
- 		    $mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
+ 		$mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
 
- 		    $mform->addElement('editor', 'textfield', '');
-		    $mform->setType('textfield', PARAM_RAW);
+ 		$mform->addElement('editor', 'textfield', '');
+		$mform->setType('textfield', PARAM_RAW);
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

@@ -123,6 +123,23 @@ class User{
 			}
 
 	}
+
+	public function getParticipantObj(){
+
+		global $USER;
+
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$participantsObj = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));;
+
+		if($participantsObj){
+			return $participantsObj;
+		} else{
+			return false;
+		}
+	}
+	
 	public function saveParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
 
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);

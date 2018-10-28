@@ -127,12 +127,13 @@ $string['total'] = 'Summe';
 
 //textfield.php
 $string['add_text_str'] = 'Freitext hinzufügen';
-$string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht angezeigt.';
+$string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht der Aktivität Prüfungsorganisation angezeigt.';
 
 //groupmessagesForm.php
 $string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
-$string['groupmessages_text_1'] = 'Der unten eingegebene Text wird allen ';
+$string['groupmessages_text_1'] = 'Der unten eingegebene Text wird ';
 $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.';
+$string['groupmessages_text_3'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht erhalten.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';

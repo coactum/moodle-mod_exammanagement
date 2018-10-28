@@ -49,7 +49,7 @@ $placevisible = optional_param('placevisible', 0, PARAM_RAW);
 $calledfromformcorrection = optional_param('calledfromformcorrection', 0, PARAM_RAW);
 $correctioncompleted = optional_param('correctioncompleted', 0, PARAM_RAW);
 
-global $PAGE, $CFG;
+global $PAGE, $CFG, $USER;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
@@ -223,10 +223,42 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   $MoodleObj->setPage('view');
   $MoodleObj-> outputPageHeader();
+  
+  //examtime
+  $examtime = $ExammanagementInstanceObj->getExamtime();
+
+  if($ExammanagementInstanceObj->isDateTimeVisible() && $examtime){
+    $date = date('d.m.Y', $examtime);
+    $time = date('H:i', $examtime);
+  } else{
+    $date = false;
+    $time = false;
+  }
+
+  //room and place
+  $participantObj = $UserObj->getParticipantObj();
+
+  var_dump($participantObj);
+
+  if($ExammanagementInstanceObj->isRoomVisible() && $participantObj->roomname){
+    $room = $participantObj->roomname;
+  } else {
+    $room = false;
+  }
+
+  if($ExammanagementInstanceObj->isPlaceVisible() && $participantObj->place){
+    $place = $participantObj->place;
+  } else {
+    $place = false;
+  }
+
+  //textfield
+  $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
-  $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $ExammanagementInstanceObj->isParticipant(), $ExammanagementInstanceObj->getDateForParticipants(), $ExammanagementInstanceObj->getTimeForParticipants(), $ExammanagementInstanceObj->getRoomForParticipants(), $ExammanagementInstanceObj->getPlaceForParticipants(), $ExammanagementInstanceObj->getTextFromTextfield());
+
+  $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield);
   echo $output->render($page);
 
   $MoodleObj->outputFooter();

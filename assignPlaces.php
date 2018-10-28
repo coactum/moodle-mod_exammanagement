@@ -39,68 +39,69 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('assignPlaces');
 
     $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
-    $participantsIDsArray = $ExammanagementInstanceObj->getSavedParticipants();
+    $participantsArray = $UserObj->getAllExamParticipants();
     $assignmentArray = array();
     $newAssignmentObj = '';
+
+    var_dump($participantsArray);
+    var_dump(count($participantsArray));
 
     if(!$savedRoomsArray){
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
-    } elseif(!$participantsIDsArray){
+    } elseif(!$participantsArray){
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     }
 
+    $participantsCount = 0;
+
     foreach($savedRoomsArray as $key => $roomID){
 
       $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
 
-      $Places = json_decode($RoomObj->places);	//get Places of this Room
+      $places = json_decode($RoomObj->places);	//get Places of this Room
 
-      $assignmentRoomObj = new stdClass();
+      foreach($participantsArray as $key1 => $participantObj){
 
-      $assignmentRoomObj->roomid = $RoomObj->roomid;
-      $assignmentRoomObj->roomname = $RoomObj->name;
-      $assignmentRoomObj->assignments = array();
+        if($key1 >= $participantsCount){
+          
+          $participantObj->roomid = $RoomObj->roomid;
+          $participantObj->roomname = $RoomObj->name;
+          $participantObj->place = array_pop($places);
 
-      foreach($Places as $key => $placeID){
-        $currentParticipantID = array_pop($participantsIDsArray);
+          var_dump($participantObj);
+          var_dump($RoomObj->roomid);
 
-        $newAssignmentObj = $ExammanagementInstanceObj->assignPlaceToUser($currentParticipantID, $placeID);
-        array_push($assignmentRoomObj->assignments, $newAssignmentObj);
+          // set room and place
+          $MoodleDBObj->UpdateRecordInDB("exammanagement_part_".$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 
-        if(!$participantsIDsArray){						//if all users have a place: stop
-          array_push($assignmentArray, $assignmentRoomObj);
+          $participantsCount +=1;
+          var_dump($participantsCount);
+
+        } else if($participantsCount == count($participantsArray)){ //if all users have a place
           break 2;
         }
-
-      }
-
-      array_push($assignmentArray, $assignmentRoomObj);
-
-      if(!$participantsIDsArray){						//if all users have a place: stop
-        break;
       }
     }
 
-    if($participantsIDsArray){								//if users are left without a room
+    if($participantsCount < count($participantsArray)){	//if users are left without a room
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     }
 
+    // save state of places
     $ExammanagementInstanceObj->moduleinstance->stateofplaces='set';
-
-    $ExammanagementInstanceObj->savePlacesAssignment($assignmentArray);
-
     $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
     if($update){
