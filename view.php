@@ -238,8 +238,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   //room and place
   $participantObj = $UserObj->getParticipantObj();
 
-  var_dump($participantObj);
-
   if($ExammanagementInstanceObj->isRoomVisible() && $participantObj->roomname){
     $room = $participantObj->roomname;
   } else {

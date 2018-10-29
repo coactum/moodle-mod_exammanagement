@@ -50,9 +50,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $assignmentArray = array();
     $newAssignmentObj = '';
 
-    var_dump($participantsArray);
-    var_dump(count($participantsArray));
-
     if(!$savedRoomsArray){
       $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
@@ -79,14 +76,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $participantObj->roomname = $RoomObj->name;
           $participantObj->place = array_pop($places);
 
-          var_dump($participantObj);
-          var_dump($RoomObj->roomid);
-
           // set room and place
           $MoodleDBObj->UpdateRecordInDB("exammanagement_part_".$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 
           $participantsCount +=1;
-          var_dump($participantsCount);
+
+          if($places == NULL){  // if all places of room are assigned
+            break;
+          }
 
         } else if($participantsCount == count($participantsArray)){ //if all users have a place
           break 2;

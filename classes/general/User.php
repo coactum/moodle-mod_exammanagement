@@ -131,7 +131,7 @@ class User{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$participantsObj = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));;
+		$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
 
 		if($participantsObj){
 			return $participantsObj;
