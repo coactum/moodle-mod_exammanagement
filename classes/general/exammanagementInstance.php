@@ -126,7 +126,7 @@ class exammanagementInstance{
 		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement').'</p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '<div class="panel-footer">';
-		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').'<a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
+		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 
@@ -1034,6 +1034,10 @@ public function calculateResultGrade($resultObj){
 			$lastpoints = floatval($step);
 
 		}
+	}
+
+	if($totalpoints <= 0){
+		$result = 5;
 	}
 
 	return $result;

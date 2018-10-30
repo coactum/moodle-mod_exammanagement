@@ -117,7 +117,7 @@ class ldapManager{
 			$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
 
-			if($userid !== NULL){
+			if($userid !== NULL && $userid !== false){
 				$user = $UserObj->getMoodleUser($userid);
 				$matrNr = 700000 . $user->id;
 			} else if($login){

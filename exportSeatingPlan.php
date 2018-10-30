@@ -38,6 +38,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
@@ -98,13 +99,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $pdf->AddPage();
 
     // get users and construct content for document
-    $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
+    $roomsArray = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
+    
     $fill = false;
     $previousRoom;
     $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
 
-    foreach ($assignedPlaces as $roomObj){
-      $currentRoom = $roomObj;
+    foreach ($roomsArray as $roomID){
+      $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
+
+      $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
       if (!empty($previousRoom) && $currentRoom != $previousRoom) {
           //new room -> finish and print current table and begin new page
@@ -115,7 +119,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
         }
 
-        usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
+        usort($participantsArray, function($a, $b){ //sort array by custom user function
 
           return strcmp($a->place, $b->place); // sort by place
 
@@ -125,15 +129,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $ldapConnection = $LdapManagerObj->connect_ldap();
         }
 
-      foreach ($roomObj->assignments as $assignment){
-        $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
+      foreach ($participantsArray as $participant){
 
-        $matrnr = $ExammanagementInstanceObj->getUserMatrNr($assignment->userid);
+        $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->name . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
         $tbl .= "</tr>";
 
         $fill = !$fill;
@@ -149,10 +152,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // Print text using writeHTMLCell()
     $pdf->writeHTML($tbl, true, false, false, false, '');
 
-
-    foreach ($assignedPlaces as $roomObj){
-
-      $roomName = $roomObj->roomname;
+    foreach ($roomsArray as $i => $roomID){
+      $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
+      $roomName = $roomObj->name;
 
     	switch ($roomName) {
     		case "AudiMax":
@@ -252,8 +254,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     			$width = '140';
     			break;
 
-    		// any case where no plan is available
-    		default:return;
+    		// default case not neccessary
 
       }
 

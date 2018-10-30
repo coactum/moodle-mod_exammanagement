@@ -57,7 +57,6 @@ class User{
 	#### getting ids for multiple participants #####
 
 	public function getAllExamParticipants(){
-		global $PAGE;
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
@@ -73,7 +72,6 @@ class User{
 	}
 
 	public function getAllMoodleExamParticipants(){
-		global $PAGE;
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
@@ -89,7 +87,6 @@ class User{
 	}
 
 	public function getAllNoneMoodleExamParticipants(){
-		global $PAGE;
 
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
@@ -97,6 +94,21 @@ class User{
 
 		if($allNoneMoodleParticipantsArr){
 			return $allNoneMoodleParticipantsArr;
+
+		} else {
+			return false;
+
+		}
+	}
+
+	public function getAllExamParticipantsByRoom($roomid){
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'roomid' => $roomid));
+
+		if($participantsArr){
+			return $participantsArr;
 
 		} else {
 			return false;
@@ -388,7 +400,7 @@ class User{
 		if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
 
-				if($userid !== false){
+				if($userid !== false && $userid !== NULL){
 					$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
 				}
 
@@ -396,7 +408,7 @@ class User{
 
 		} else { // for local testing during development
 
-			if($userid !== false){
+			if($userid !== false && $userid !== NULL){
 				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
 
 			} else {
