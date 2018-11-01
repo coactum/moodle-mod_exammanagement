@@ -423,6 +423,11 @@ EOF;
 
 		$this->moduleinstance->rooms=$rooms;
 
+		// reset state of places assignment if already set
+		if($this->isStateOfPlacesCorrect()){
+			$this->moduleinstance->stateofplaces = 'error';
+		}
+
 		$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 		if($update){
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
@@ -846,7 +851,7 @@ EOF;
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$this->moduleinstance->stateofplaces=$type;
+		$this->moduleinstance->stateofplaces = $type;
 
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
 	}

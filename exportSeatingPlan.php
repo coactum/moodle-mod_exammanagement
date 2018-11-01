@@ -53,7 +53,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //include pdf
     require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
 
-    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError() || !$ExammanagementInstanceObj->getAllRoomIDsSortedByName()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
     }
 
@@ -98,11 +98,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $pdf->AddPage();
 
-    // get users and construct content for document
+    // get users and construct user tables for document
     $roomsArray = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
     
     $fill = false;
     $previousRoom;
+    $participantsCounter = 0;
+    $roomsCount = 1;
     $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
 
     foreach ($roomsArray as $roomID){
@@ -110,13 +112,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
-      if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+      if (!empty($previousRoom) && $currentRoom != $previousRoom && $participantsCounter < count($participantsArray)) {
           //new room -> finish and print current table and begin new page
           $tbl .= "</table>";
           $pdf->writeHTML($tbl, true, false, false, false, '');
           $pdf->AddPage();
           $fill = false;
           $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
+
+          $roomsCount += 1;
         }
 
         usort($participantsArray, function($a, $b){ //sort array by custom user function
@@ -129,7 +133,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $ldapConnection = $LdapManagerObj->connect_ldap();
         }
 
-      foreach ($participantsArray as $participant){
+      foreach ($participantsArray as $key => $participant){
 
         $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
@@ -140,6 +144,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $tbl .= "</tr>";
 
         $fill = !$fill;
+
+        $participantsCounter += 1;
 
       }
 
@@ -152,137 +158,142 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // Print text using writeHTMLCell()
     $pdf->writeHTML($tbl, true, false, false, false, '');
 
-    foreach ($roomsArray as $i => $roomID){
-      $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
-      $roomName = $roomObj->name;
+    // construct svg-files pages
+      foreach ($roomsArray as $key => $roomID){
+        $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
+        $roomName = $roomObj->name;
+  
+        switch ($roomName) {
+          case "AudiMax":
+            $x = 30;
+            $y = 30;
+            $width = '250';
+            break;
+  
+          case "C1":
+            $x = 50;
+            $y = 30;
+            $width = '180';
+            break;
+  
+          case "C2":
+            $x = 70;
+            $y = 50;
+            $width = '140';
+            break;
+  
+          case "G":
+            $x = 35;
+            $y = 45;
+            $width = '225';
+            break;
+  
+          case "P52.01":
+            $x = 35;
+            $y = 50;
+            $width = '225';
+            break;
+  
+          case "P52.03":
+            $x = 55;
+            $y = 50;
+            $width = '175';
+            break;
+  
+          case "P62.01":
+            $x = 35;
+            $y = 55;
+            $width = '225';
+            break;
+  
+          case "P62.03":
+            $x = 70;
+            $y = 60;
+            $width = '140';
+            break;
+  
+          case "P72.01":
+            $x = 45;
+            $y = 45;
+            $width = '200';
+            break;
+  
+          case "P72.03":
+            $x = 60;
+            $y = 45;
+            $width = '180';
+            break;
+  
+          case "O0.207":
+            $x = 25;
+            $y = 55;
+            $width = '240';
+            break;
+  
+          case "O1.267":
+            $x = 85;
+            $y = 50;
+            $width = '120';
+            break;
+  
+          case "L1":
+          case "L2":
+            $x = 80;
+            $y = 30;
+            $width = '140';
+            break;
+  
+          case "L1.202":
+            $x = 80;
+            $y = 30;
+            $width = '140';
+            break;
+  
+          case "L2.202":
+            $x = 54;
+            $y = 90;
+            $width = '503';
+            break;
+  
+          case "Eggelandhalle":
+            $x = 100;
+            $y = 30;
+            $width = '140';
+            break;
+  
+          // default case not neccessary
+  
+        }
+  
+        // ---------------------------------------------------------
+        if ($key < $roomsCount){
 
-    	switch ($roomName) {
-    		case "AudiMax":
-    			$x = 30;
-    			$y = 30;
-    			$width = '250';
-    			break;
+            $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
 
-    		case "C1":
-    			$x = 50;
-    			$y = 30;
-    			$width = '180';
-    			break;
+            if($svgFile){
 
-    		case "C2":
-    			$x = 70;
-    			$y = 50;
-    			$width = '140';
-    			break;
-
-    		case "G":
-    			$x = 35;
-    			$y = 45;
-    			$width = '225';
-    			break;
-
-    		case "P52.01":
-    			$x = 35;
-    			$y = 50;
-    			$width = '225';
-    			break;
-
-    		case "P52.03":
-    			$x = 55;
-    			$y = 50;
-    			$width = '175';
-    			break;
-
-    		case "P62.01":
-    			$x = 35;
-    			$y = 55;
-    			$width = '225';
-    			break;
-
-    		case "P62.03":
-    			$x = 70;
-    			$y = 60;
-    			$width = '140';
-    			break;
-
-    		case "P72.01":
-    			$x = 45;
-    			$y = 45;
-    			$width = '200';
-    			break;
-
-    		case "P72.03":
-    			$x = 60;
-    			$y = 45;
-    			$width = '180';
-    			break;
-
-    		case "O0.207":
-    			$x = 25;
-    			$y = 55;
-    			$width = '240';
-    			break;
-
-    		case "O1.267":
-    			$x = 85;
-    			$y = 50;
-    			$width = '120';
-    			break;
-
-    		case "L1":
-    		case "L2":
-    			$x = 80;
-    			$y = 30;
-    			$width = '140';
-    			break;
-
-    		case "L1.202":
-    			$x = 80;
-    			$y = 30;
-    			$width = '140';
-    			break;
-
-        case "L2.202":
-          $x = 54;
-          $y = 90;
-          $width = '503';
-          break;
-
-    		case "Eggelandhalle":
-    			$x = 100;
-    			$y = 30;
-    			$width = '140';
-    			break;
-
-    		// default case not neccessary
-
-      }
-
-      // ---------------------------------------------------------
-
-      $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
-      $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
-      $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
-
-      $pdf->setPrintHeader(false);
-      $pdf->addPage('L', 'A4');
-      $pdf->SetFont('freeserif', '', 20);
-      $pdf->Text(0, 15, get_string('seatingplan', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
-      $pdf->Text(15, 15, get_string('lecture_room', 'mod_exammanagement'));
-      $pdf->SetFont('freeserif', 'B', 25);
-      $pdf->Text(15, 25, $roomName);
-      $pdf->SetFont('freeserif', '', 10);
-      $pdf->Text(15, 180, get_string('places_differ', 'mod_exammanagement'));
-      $pdf->Text(15, 185, get_string('places_alternative', 'mod_exammanagement'));
-      $pdf->Text(15, 180, $maxSeats, false, false, true, 0, 0, 'R');
-      $pdf->setTextColor(204, 0, 0);
-      $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
-      $pdf->setTextColor(0, 0, 0);
-
-      $pdf->ImageSVG('@'.$svgFile, $x, $y, $w = '100', $h = "100", $link = '', $border=1, $fitonpage=false);
-
+                $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
+                $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
+          
+                $pdf->setPrintHeader(false);
+                $pdf->addPage('L', 'A4');
+                $pdf->SetFont('freeserif', '', 20);
+                $pdf->Text(0, 15, get_string('seatingplan', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+                $pdf->Text(15, 15, get_string('lecture_room', 'mod_exammanagement'));
+                $pdf->SetFont('freeserif', 'B', 25);
+                $pdf->Text(15, 25, $roomName);
+                $pdf->SetFont('freeserif', '', 10);
+                $pdf->Text(15, 180, get_string('places_differ', 'mod_exammanagement'));
+                $pdf->Text(15, 185, get_string('places_alternative', 'mod_exammanagement'));
+                $pdf->Text(15, 180, $maxSeats, false, false, true, 0, 0, 'R');
+                $pdf->setTextColor(204, 0, 0);
+                $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+                $pdf->setTextColor(0, 0, 0);
+          
+                $pdf->ImageSVG('@'.$svgFile, $x, $y, $w = '100', $h = "100", $link = '', $border=1, $fitonpage=false);
+            }
+        }
     }
-
 
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");

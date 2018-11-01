@@ -237,8 +237,12 @@ class User{
 				// delete temp file header and update saved file headers
 				$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 
-				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+				// reset state of places assignment if already set
+				if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+					$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+				}
 
+				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
 				//delete temp participants
 				$this->deleteTempParticipants();
@@ -256,6 +260,7 @@ class User{
 
 	public function saveCourseParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
 
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
@@ -289,6 +294,12 @@ class User{
 								$this->deleteParticipant(false, $temp[1]);
 							}
 					}
+				}
+
+				// reset state of places assignment if already set
+				if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+					$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+					$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 				}
 
 				$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);

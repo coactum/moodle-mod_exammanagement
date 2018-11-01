@@ -203,6 +203,9 @@ class addCourseParticipantsForm extends moodleform{
         }
 
         if ($courseParticipantsIDsArr){
+            if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
+                $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
+            }
             $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');

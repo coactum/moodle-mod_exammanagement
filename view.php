@@ -149,9 +149,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   }
 
-  // delete temp participants if exist
+  // delete temp participants and headers if exist
 
   $tempparticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));
+
+  $ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
+
+  $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
     if($tempparticipants){
       $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));      
