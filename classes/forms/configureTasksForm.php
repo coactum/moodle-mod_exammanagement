@@ -145,6 +145,10 @@ class configureTasksForm extends moodleform {
             $mform->setType('newtaskcount', PARAM_INT);
         }
 
+        if($ExammanagementInstanceObj->getGradingscale()){
+            $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
+        }
+
         $this->add_action_buttons();
 
         $mform->disable_form_change_checker();

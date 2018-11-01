@@ -125,17 +125,18 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $MoodleObj->setPage('view');
   $MoodleObj-> outputPageHeader();
 
-  // update categoryid if neccesarry
+  // if plugin instance was moved to new category:
 
   $oldcategoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
   $coursecategoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 6); //set course category
 
   if($oldcategoryid !== $coursecategoryid){
 
+    // update categoryid
     $ExammanagementInstanceObj->moduleinstance->categoryid = $coursecategoryid;
     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-    // tn aus Tabelle mit alter courseid löschen
+    // move participant records
     $oldrecords = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
 
     if($oldrecords){

@@ -89,6 +89,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->rooms = $rooms;
         $this->roomnames = $roomnames;
         $this->stateofplacescorrect = $stateofplacescorrect;
+        $this->stateofplaceserror = $stateofplaceserror;
         $this->datetimevisible = $datetimevisible;
         $this->roomvisible = $roomvisible;
         $this->placevisible = $placevisible;

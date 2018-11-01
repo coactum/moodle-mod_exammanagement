@@ -305,8 +305,8 @@ ajaxsetcorrectioncompletion = function(value){
 																</div>
 															</div>
 															<div class="panel-body">
-																{{#stateofplacescorrect}}<p>Die Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
-																{{#stateofplaceserror}}<p>Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
+																{{#stateofplacescorrect}}<p><strong>{{participants}}</strong> Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
+																{{#stateofplaceserror}}<p>Bei der letzten Sitzplatzzuweisung ist ein Fehler aufgetreten oder die Sitzplatzzuweisung ist möglicherweise veraltet. Bitte Vorgang wiederholen.</p>{{/stateofplaceserror}}
 																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
 															</div>
 															<div class="panel-footer">
