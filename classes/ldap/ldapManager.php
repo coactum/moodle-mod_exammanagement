@@ -119,7 +119,8 @@ class ldapManager{
 
 			if($userid !== NULL && $userid !== false){
 				$user = $UserObj->getMoodleUser($userid);
-				$matrNr = 700000 . $user->id;
+				$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
+				$matrNr = 7 . $matrNr;
 			} else if($login){
 				$matrNr = $login;
 			}

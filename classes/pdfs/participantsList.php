@@ -52,7 +52,7 @@ class participantsList extends TCPDF {
     $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
     $this->SetTextColor(0, 0, 0);
     $this->SetFont('freeserif', '', 14);
-    $this->MultiCell(130, 50, $ExammanagementInstanceObj->getModuleinstance()->categoryid . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
+    $this->MultiCell(130, 50, strtoupper($ExammanagementInstanceObj->getModuleinstance()->categoryid) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
     $this->MultiCell(26, 50, $ExammanagementInstanceObj->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
   }
 

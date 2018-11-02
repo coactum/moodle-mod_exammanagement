@@ -202,6 +202,8 @@ class User{
 							$user->plugininstanceid = $this->id;
 							$user->moodleuserid = $temp[1];
 							$user->imtlogin = null;
+							$user->firstname = null;
+							$user->lastname = null;
 							$user->headerid = $newheaderid;
 
 							array_push($userObjArr, $user);
@@ -210,6 +212,8 @@ class User{
 							$user->plugininstanceid = $this->id;
 							$user->moodleuserid = null;
 							$user->imtlogin = $temp[1];
+							$user->firstname = 'Testi';
+							$user->lastname = 'Testa';
 							$user->headerid = $newheaderid;
 
 							array_push($userObjArr, $user);

@@ -185,12 +185,12 @@ $string['numbered_seats_usable_seats'] = 'numbered seats = used seats';
 
 // examlabels
 $string['examlabels'] = 'exam labels';
-$string['required_label_type'] = 'required label type: Avery Zweckform L4744';
+$string['required_label_type'] = 'Required label type:';
 
-// exortResultsExamReview.php
+// exportResultsExamReview.php
 $string['pointslist_examreview'] = 'List of points exam review';
 
-// exortResultsPAULFile.php
+// exportResultsPAULFile.php
 $string['results'] = 'Results';
 
 //helptexts

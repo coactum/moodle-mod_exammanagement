@@ -154,14 +154,14 @@ class addParticipantsForm extends moodleform{
                         $tempUserObj->moodleid = false;
                         $tempUserObj->matrnr = $participant->identifier;
 
-                        if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
-                            array_push($existingMatriculationnumbersArr, $tempUserObj);
-                            unset($tempParticipants[$key]);
-                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
-                        } else if(in_array($participant->identifier, $tempIDsArray)){
+                        if(in_array($participant->identifier, $tempIDsArray)){
                             $tempUserObj->state = 'state_doubled';
                             array_push($badMatriculationnumbersArr, $tempUserObj);
                             unset($tempParticipants[$key]);
+                        } else if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
+                            array_push($existingMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
                         } else {
                             array_push($newNoneMoodleParticipantsArr, $tempUserObj);
                             unset($tempParticipants[$key]);
@@ -223,6 +223,8 @@ class addParticipantsForm extends moodleform{
                         } else if($participant->imtlogin){
                             $deletedMatrNrObj = new stdclass;
                             $deletedMatrNrObj->matrnr = $participant->imtlogin;
+                            $deletedMatrNrObj->firstname = $participant->firstname;
+                            $deletedMatrNrObj->lastname = $participant->lastname;
                             $deletedMatrNrObj->line = '';
         
                             array_push($deletedMatriculationnumbersArr, $deletedMatrNrObj);

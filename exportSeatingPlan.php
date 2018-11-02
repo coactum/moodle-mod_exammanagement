@@ -53,8 +53,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //include pdf
     require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
 
-    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError() || !$ExammanagementInstanceObj->getAllRoomIDsSortedByName()){
+    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
+    } else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Sitzplanexport noch nicht möglich', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).
@@ -99,7 +101,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $pdf->AddPage();
 
     // get users and construct user tables for document
-    $roomsArray = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
+    $roomsArray = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
     
     $fill = false;
     $previousRoom;
@@ -128,10 +130,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           return strcmp($a->place, $b->place); // sort by place
 
         });
-
-        if($LdapManagerObj->is_LDAP_config()){
-            $ldapConnection = $LdapManagerObj->connect_ldap();
-        }
 
       foreach ($participantsArray as $key => $participant){
 
@@ -298,7 +296,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("seatingplan", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+    $filenameUmlaute = get_string("seatingplan", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------

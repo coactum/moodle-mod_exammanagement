@@ -37,7 +37,7 @@ class examLabels extends TCPDF {
   public function Footer() {
     $this->SetFont('helvetica', 'BI', 10);
 		$this->SetXY(10, -15); // 1.5 cm from bottom
-		$this->Cell(0, 12, gettext("required label type: ") . "Avery Zweckform L4744", 0, 0, 'L');
+		$this->Cell(0, 12, get_string("required_label_type", "mod_exammanagement") . " Avery Zweckform L4744", 0, 0, 'L');
 		$this->SetX(100);
 		$this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
   }

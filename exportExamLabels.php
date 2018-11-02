@@ -38,6 +38,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
@@ -50,8 +51,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //include pdf
     require_once(__DIR__.'/classes/pdfs/examLabels.php');
 
-    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Prüfungsetikettenexport noch nicht möglich', 'error');
+    }  else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
     }
 
     // Include the main TCPDF library (search for installation path).
@@ -112,21 +115,31 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     );
 
     // get users and construct content for document
-    $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
+    $roomsArray = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
     $IDcounter = 0;
 
-    if($LdapManagerObj->is_LDAP_config()){
-        $ldapConnection = $LdapManagerObj->connect_ldap();
-    }
+    foreach ($roomsArray as $roomID){
 
-    foreach ($assignedPlaces as $roomObj){
+      $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
-        usort($roomObj->assignments, function($a, $b){ //sort array of assignments by name
-          global $ExammanagementInstanceObj;
-          $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->firstname;
-          $aLastname = $ExammanagementInstanceObj->getMoodleUser($a->userid)->lastname;
-          $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b->userid)->firstname;
-          $bLastname = $ExammanagementInstanceObj->getMoodleUser($b->userid)->lastname;
+        usort($participantsArray, function($a, $b){ //sort array of assignments by name
+          global $UserObj;
+
+          if($a->moodleuserid){
+            $aFirstname = $UserObj->getMoodleUser($a->userid)->firstname;
+            $aLastname = $UserObj->getMoodleUser($a->userid)->lastname;  
+          } else {
+            $aFirstname = $a->firstname;
+            $aLastname = $a->lastname;
+          }
+
+          if($a->moodleuserid){
+            $bFirstname = $UserObj->getMoodleUser($b->userid)->firstname;
+            $bLastname = $UserObj->getMoodleUser($b->userid)->lastname;
+          } else {
+            $bFirstname = $b->firstname;
+            $bLastname = $b->lastname;
+          }
 
           if ($aLastname == $bLastname) { //if names are even sort by first name
               return strcmp($aFirstname, $bFirstname);
@@ -136,22 +149,30 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         });
 
+        $counter = 0;
         $leftLabel = true;
-      	$counter = 0;
-      	$pdf->AddPage();
+                
+        if ($counter < count($participantsArray)) {
+            $pdf->AddPage();
+        }
       	$y = Y;
 
-      foreach ($roomObj->assignments as $assignment){ // construct label
+      foreach ($participantsArray as $participant){ // construct label
 
-        $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
+        $user = $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin);
 
-        $name = utf8_encode($user->lastname);
-        $firstname = utf8_encode($user->firstname);
+        if($user){
+          $name = utf8_encode($user->lastname);
+          $firstname = utf8_encode($user->firstname);
+        } else {
+          $name = utf8_encode($participant->lastname);
+          $firstname = utf8_encode($participant->firstname);
+        }
 
-        $matrnr = $ExammanagementInstanceObj->getUserMatrNr($assignment->userid);
+        $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
-        $room = $roomObj->roomname;
-        $place = $assignment->place;
+        $room = $participant->roomname;
+        $place = $participant->place;
 
         if ($leftLabel) { //print left label
           	$pdf->SetFont('helvetica', '', 12);
@@ -160,7 +181,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           	$pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
           	$pdf->SetFont('helvetica', '', 10);
           	$pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
-          	$pdf->MultiCell(21, 5, $semester, 0, 'C', 0, 0, X1, $y + 36, true);
+          	$pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 36, true);
           	$pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' . $room, 0, 'L', 0, 0, X1 + 61, $y + 25, true);
           	$pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X1 + 61, $y + 30, true);
           	$pdf->SetFont('helvetica', 'B', 14);
@@ -176,7 +197,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
             $pdf->SetFont('helvetica', '', 10);
             $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
-            $pdf->MultiCell(21, 5, $semester, 0, 'C', 0, 0, X2, $y + 36, true);
+            $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 36, true);
             $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$room, 0, 'L', 0, 0, X2 + 61, $y + 25, true);
             $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X2 + 61, $y + 30, true);
             $pdf->SetFont('helvetica', 'B', 14);
@@ -195,9 +216,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         if ($counter % 10 == 0) {
           $y = Y;
-          //if ($counter != count($participantLogins)) {
+          if ($counter < count($participantsArray)) {
             $pdf->AddPage();
-          //}
+          }
 
         }
       }
@@ -206,7 +227,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("examlabels", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname. '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+    $filenameUmlaute = get_string("examlabels", "mod_exammanagement"). '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname. '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------

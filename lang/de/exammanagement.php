@@ -186,12 +186,12 @@ $string['numbered_seats_usable_seats'] = 'nummerierte Sitze = benutzbare Sitze';
 
 // examlabels
 $string['examlabels'] = 'Prüfungsetiketten';
-$string['required_label_type'] = 'Benötigter Etikettentyp:Avery Zweckform L4744';
+$string['required_label_type'] = 'Benoetigter Etikettentyp:';
 
-// exortResultsExamReview.php
+// exoprtResultsExamReview.php
 $string['pointslist_examreview'] = 'Punkteliste Klausureinsicht';
 
-// exortResultsPAULFile.php
+// exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';
 
 //helptexts
