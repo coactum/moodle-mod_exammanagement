@@ -25,11 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\seatingPlan;
-use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -39,10 +37,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
-
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -50,22 +46,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('exportSeatingPlan');
 
-    //include pdf
-    require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
-
     if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Sitzplanexport noch nicht möglich', 'error');
     } else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Sitzplanexport noch nicht möglich', 'error');
+    } else if (!$UserObj->getParticipantsCount()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Sitzplanexport noch nicht möglich', 'error');
     }
 
-    // Include the main TCPDF library (search for installation path).
-    require_once(__DIR__.'/../../config.php');
-    require_once($CFG->libdir.'/pdflib.php');
+    //include pdf
+    require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
 
     define("WIDTH_COLUMN_MATNO", 60);
     define("WIDTH_COLUMN_ROOM", 90);
     define("WIDTH_COLUMN_PLACE", 70);
+
+    // Include the main TCPDF library (search for installation path).
+    require_once(__DIR__.'/../../config.php');
+    require_once($CFG->libdir.'/pdflib.php');
 
     // create new PDF document
     $pdf = new seatingPlan(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -105,7 +103,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
     $fill = false;
     $previousRoom;
-    $participantsCounter = 0;
     $roomsCount = 1;
     $tbl = $ExammanagementInstanceObj->getSeatingPlanTableHeader();
 
@@ -114,7 +111,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
-      if (!empty($previousRoom) && $currentRoom != $previousRoom && $participantsCounter < count($participantsArray)) {
+      if($participantsArray){
+        if (!empty($previousRoom) && $currentRoom != $previousRoom) {
           //new room -> finish and print current table and begin new page
           $tbl .= "</table>";
           $pdf->writeHTML($tbl, true, false, false, false, '');
@@ -142,12 +140,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $tbl .= "</tr>";
 
         $fill = !$fill;
-
-        $participantsCounter += 1;
-
       }
 
       $previousRoom = $currentRoom;
+      }
 
     }
 

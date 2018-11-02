@@ -25,11 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\examLabels;
-use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -39,7 +37,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -48,23 +45,25 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('exportExamLabels');
 
-    //include pdf
-    require_once(__DIR__.'/classes/pdfs/examLabels.php');
-
     if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Prüfungsetikettenexport noch nicht möglich', 'error');
     }  else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
+    }  else if (!$UserObj->getParticipantsCount()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
     }
 
-    // Include the main TCPDF library (search for installation path).
-    require_once(__DIR__.'/../../config.php');
-    require_once($CFG->libdir.'/pdflib.php');
+    //include pdf
+    require_once(__DIR__.'/classes/pdfs/examLabels.php');
 
     define('LABEL_HEIGHT', 51);
     define('X1', 7.7 + 2); //plus Offset within Label
     define('X2', 106.3 + 2); //plus Offset within Label
     define('Y', 21 + 2); //plus Offset within Label
+
+    // Include the main TCPDF library (search for installation path).
+    require_once(__DIR__.'/../../config.php');
+    require_once($CFG->libdir.'/pdflib.php');
 
     $exam_name = $ExammanagementInstanceObj->getCourse()->fullname . ' (' . $ExammanagementInstanceObj->getModuleinstance()->name .')';
     $semester = $ExammanagementInstanceObj->getModuleinstance()->categoryid;
@@ -122,6 +121,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
+      if($participantsArray){
+
         usort($participantsArray, function($a, $b){ //sort array of assignments by name
           global $UserObj;
 
@@ -157,69 +158,70 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
       	$y = Y;
 
-      foreach ($participantsArray as $participant){ // construct label
+        foreach ($participantsArray as $participant){ // construct label
 
-        $user = $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin);
+          $user = $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin);
 
-        if($user){
-          $name = utf8_encode($user->lastname);
-          $firstname = utf8_encode($user->firstname);
-        } else {
-          $name = utf8_encode($participant->lastname);
-          $firstname = utf8_encode($participant->firstname);
-        }
-
-        $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
-
-        $room = $participant->roomname;
-        $place = $participant->place;
-
-        if ($leftLabel) { //print left label
-          	$pdf->SetFont('helvetica', '', 12);
-          	$pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X1, $y, true);
-          	$pdf->SetFont('helvetica', 'B', 12);
-          	$pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
-          	$pdf->SetFont('helvetica', '', 10);
-          	$pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
-          	$pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 36, true);
-          	$pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' . $room, 0, 'L', 0, 0, X1 + 61, $y + 25, true);
-          	$pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X1 + 61, $y + 30, true);
-          	$pdf->SetFont('helvetica', 'B', 14);
-          	$pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 36, true);
-
-          	$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
-          	$pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X1 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
-
-        } else { //print right label
-            $pdf->SetFont('helvetica', '', 12);
-            $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X2, $y, true);
-            $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
-            $pdf->SetFont('helvetica', '', 10);
-            $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
-            $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 36, true);
-            $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$room, 0, 'L', 0, 0, X2 + 61, $y + 25, true);
-            $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X2 + 61, $y + 30, true);
-            $pdf->SetFont('helvetica', 'B', 14);
-            $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 36, true);
-
-            $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
-            $pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X2 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
-        }
-
-        $leftLabel = !$leftLabel;
-        $counter++;
-
-        if ($counter % 2 == 0) {
-          $y += LABEL_HEIGHT;
-        }
-
-        if ($counter % 10 == 0) {
-          $y = Y;
-          if ($counter < count($participantsArray)) {
-            $pdf->AddPage();
+          if($user){
+            $name = utf8_encode($user->lastname);
+            $firstname = utf8_encode($user->firstname);
+          } else {
+            $name = utf8_encode($participant->lastname);
+            $firstname = utf8_encode($participant->firstname);
           }
 
+          $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+
+          $room = $participant->roomname;
+          $place = $participant->place;
+
+          if ($leftLabel) { //print left label
+              $pdf->SetFont('helvetica', '', 12);
+              $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X1, $y, true);
+              $pdf->SetFont('helvetica', 'B', 12);
+              $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
+              $pdf->SetFont('helvetica', '', 10);
+              $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
+              $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 36, true);
+              $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' . $room, 0, 'L', 0, 0, X1 + 61, $y + 25, true);
+              $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X1 + 61, $y + 30, true);
+              $pdf->SetFont('helvetica', 'B', 14);
+              $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 36, true);
+
+              $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
+              $pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X1 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
+
+          } else { //print right label
+              $pdf->SetFont('helvetica', '', 12);
+              $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X2, $y, true);
+              $pdf->SetFont('helvetica', 'B', 12);
+              $pdf->MultiCell(90, 5, $name . ', ' . $firstname . ' (' . $matrnr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
+              $pdf->SetFont('helvetica', '', 10);
+              $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
+              $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 36, true);
+              $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$room, 0, 'L', 0, 0, X2 + 61, $y + 25, true);
+              $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X2 + 61, $y + 30, true);
+              $pdf->SetFont('helvetica', 'B', 14);
+              $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 36, true);
+
+              $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $matrnr);
+              $pdf->write1DBarcode('00000' . $matrnr . $checksum, 'EAN13', X2 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
+          }
+
+          $leftLabel = !$leftLabel;
+          $counter++;
+
+          if ($counter % 2 == 0) {
+            $y += LABEL_HEIGHT;
+          }
+
+          if ($counter % 10 == 0) {
+            $y = Y;
+            if ($counter < count($participantsArray)) {
+              $pdf->AddPage();
+            }
+
+          }
         }
       }
     }

@@ -25,11 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\participantsList;
-use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -38,13 +36,21 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     global $CFG;
 
     $MoodleObj->setPage('exportParticipantsListPlaces');
+
+    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
+    } else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Listenexport noch nicht möglich', 'error');
+    } else if (!$UserObj->getParticipantsCount()) {
+      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Listenexport noch nicht möglich', 'error');
+    }
 
     //include pdf
     require_once(__DIR__.'/classes/pdfs/participantsList.php');
@@ -54,10 +60,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     define("WIDTH_COLUMN_MATNO", 60);
     define("WIDTH_COLUMN_ROOM", 90);
     define("WIDTH_COLUMN_PLACE", 70);
-
-    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
-    }
 
     // Include the main TCPDF library (search for installation path).
     require_once(__DIR__.'/../../config.php');
@@ -109,19 +111,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $pdf->AddPage();
 
     // get users and construct content for document
-    $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
+    $roomsArr = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
     $fill = false;
     $previousRoom;
     $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
 
-    if($LdapManagerObj->is_LDAP_config()){
-        $ldapConnection = $LdapManagerObj->connect_ldap();
-    }
+    foreach ($roomsArr as $roomID){
+      $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
 
-    foreach ($assignedPlaces as $roomObj){
-      $currentRoom = $roomObj;
+      $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
-      if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+      if($participantsArray){
+        if (!empty($previousRoom) && $currentRoom != $previousRoom) {
           //new room -> finish and print current table and begin new page
           $tbl .= "</table>";
           $pdf->writeHTML($tbl, true, false, false, false, '');
@@ -130,30 +131,38 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
         }
 
-        usort($roomObj->assignments, function($a, $b){ //sort array by custom user function
+        usort($participantsArray, function($a, $b){ //sort array by custom user function
 
           return strcmp($a->place, $b->place); // sort by place
 
         });
 
-      foreach ($roomObj->assignments as $assignment){
-        $user = $ExammanagementInstanceObj->getMoodleUser($assignment->userid);
+      foreach ($participantsArray as $participant){
+        $user = $UserObj->getMoodleUser($participant->moodleuserid);
 
-        $matrnr = $ExammanagementInstanceObj->getUserMatrNr($assignment->userid);
+        if($user){
+            $name = utf8_encode($user->lastname);
+            $firstname = utf8_encode($user->firstname);
+        } else {
+            $name = utf8_encode($participant->lastname);
+            $firstname = utf8_encode($participant->firstname);
+        }
+
+        $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . utf8_encode($user->lastname) . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . utf8_encode($user->firstname) . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $firstname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->roomname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $assignment->place . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $currentRoom->name . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
         $tbl .= "</tr>";
 
         $fill = !$fill;
-
       }
 
       $previousRoom = $currentRoom;
+      }
 
     }
 
@@ -166,7 +175,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+    $filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------
