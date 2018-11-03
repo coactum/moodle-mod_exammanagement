@@ -105,9 +105,14 @@ class ldapManager{
 
 			$imtlogin = substr($temp[0], -3);
 
-			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
+			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','idnumber', array('username' => 'tool_generator_000'.$imtlogin));
 
-			return $moodleuserid;
+			if($moodleuserid){
+				return $moodleuserid;
+			} else {
+				return false;
+			}
+
 	}
 
 	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!

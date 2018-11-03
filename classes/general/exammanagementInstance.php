@@ -652,14 +652,12 @@ EOF;
 
 	public function getInputResultsCount(){
 
-		$results = $this->getResults();
-		$resultsCount = 0;
+		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
 
-		if($results){
-				foreach($results as $key => $points){
-						$resultsCount += 1;
-					}
-				return $resultsCount;
+		$users = $UserObj->getAllParticipantsWithResults();
+
+		if($users){
+			return count($users);
 		} else {
 				return false;
 		}
@@ -899,34 +897,34 @@ EOF;
 public function saveResults($fromform){
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
-
-		$results = $this->getResults();
-
-		if(!$results){
-			$results = array();
-		}
-
-		$result = new stdClass();
+		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
 
 		if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
 
-				$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+				$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
 
-				$username = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
-
-				if($username){
-					$uid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+				if($userlogin){
+					$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 				}
 		} else {
-				$uid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+				$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+
+				if(!$userid){
+					$userlogin = $fromform->matrnr;
+				}
 		}
 
-		if($uid){
-			$result->uid = $uid;
-			$result->state = $fromform->state;
+		// getParticipantObj
+		if($userid !== false && $userid !== null){
+			$participantObj = $UserObj->getExamParticipantObj($userid);
+		} else if($userlogin !== false && $userlogin !== null){
+			$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+		}
+
+		if($participantObj){
+			$participantObj->examstate = json_encode($fromform->state);
 
 			if($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1'){
 					foreach ($fromform->points as $task => $points){
@@ -934,35 +932,9 @@ public function saveResults($fromform){
 					}
 			}
 
-			$result->points = $fromform->points;
+			$participantObj->exampoints = json_encode($fromform->points);
 
-			$newResultsArr = array();
-			$i = 0;
-			$key_array = array($uid);
-			$newresult = true;
-
-			foreach($results as $val) { // construct new results array and if new result already exists replace its old version with it
-		    	if (!in_array($val->uid, $key_array)) {
-				  		$newResultsArr[$i] = $val;
-				  } else if (in_array($val->uid, $key_array)){
-						$newResultsArr[$i] = $result;
-						$newresult = false;
-					}
-
-					$i++;
-			}
-
-			if($newresult){	//if result is not already entered
-				array_push($newResultsArr, $result);
-			}
-
-			$results = $newResultsArr;
-
-			$results = json_encode($results);
-
-			$this->moduleinstance->results = $results;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
+			$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$this->moduleinstance->categoryid, $participantObj);
 			if($update){
 				redirect ($this->getExammanagementUrl('inputResults', $this->id), null, null, null);
 			} else {
@@ -973,17 +945,6 @@ public function saveResults($fromform){
 		} else{
 			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);
 
-		}
-}
-
-public function getResults(){
-
-		$results = json_decode($this->moduleinstance->results);
-
-		if($results){
-				return (array) $results;
-		} else{
-			return false;
 		}
 }
 

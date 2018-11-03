@@ -22,7 +22,6 @@
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="gradingscale for exam as json array"/>
-          <FIELD NAME="results" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="results of exam as json array"/>
           <FIELD NAME="correctioncompletiondate" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="date of correction completion"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>

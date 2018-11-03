@@ -136,14 +136,30 @@ class User{
 
 	}
 
-	public function getParticipantObj(){
+	public function getParticipantObj(){ // get current user obj
 
 		global $USER;
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
+
+		if($participantsObj){
+			return $participantsObj;
+		} else{
+			return false;
+		}
+	}
+
+	public function getExamParticipantObj($userid, $userlogin){ // get exam participants obj
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		if($userid !== false && $userid !== null){
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+		} else if($userlogin !== false && $userlogin !== null){
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $userlogin));
+		}
 
 		if($participantsObj){
 			return $participantsObj;
@@ -504,6 +520,33 @@ class User{
 
 		return $groupNameStr;
 
+	}
+
+	public function participantHasResults($participantObj){
+
+		if($participantObj->exampoints && $participantObj->examstate){
+			return true;
+		} else{
+			return false;
+		}
+	}
+
+	public function getAllParticipantsWithResults(){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+	
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+	
+		if($participantsArr){
+			foreach($participantsArr as $key => $participant){
+				if(!$participant->exampoints || !$participant->examstate){
+					unset($participantsArr[$key]);
+				}
+			}
+			return $participantsArr;
+		} else{
+			return false;
+		}
 	}
 
 	#### other methods  ####

@@ -478,6 +478,7 @@ class exammanagementForms{
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+			$UserObj = User::getInstance($this->id, $this->e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 			$matrnr = false;
 			$case='';
@@ -506,43 +507,58 @@ class exammanagementForms{
 
 				}
 
-				if($ExammanagementInstanceObj->checkIfValidMatrNr($matrnr)){
+				if($UserObj->checkIfValidMatrNr($matrnr)){
+
+					// convert matrnr to user
+					$userlogin;
+					$userid;
 
 						if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
 								$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
-								$username = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+								$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
 
-								if($username){
-									$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+								if($userlogin){
+									$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 								}
 
 						} else {
-								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+
+							if(!$userid){
+								$userlogin = $matrnr;
+							}
 						}
 
-						$participantsIds = json_decode($ExammanagementInstanceObj->moduleinstance->participants);
+						$participantObj = false;
 
-						if(in_array($userid, $participantsIds)){
+						// getParticipantObj
+						if($userid !== false && $userid !== null){
+							$participantObj = $UserObj->getExamParticipantObj($userid);
+						} else if($userlogin !== false && $userlogin !== null){
+							$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+						}
+
+						//var_dump($participantObj);
+						//var_dump($UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin));
+				
+						// if user is participant
+						if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
 							$case = 'participant';
 
-							$results = json_decode($ExammanagementInstanceObj->moduleinstance->results);
+							if($userid !== false && $userid !== null){
+								$MoodleUserObj = $UserObj->getMoodleUser($userid);
+								$firstname = $MoodleUserObj->firstname;
+								$lastname = $MoodleUserObj->lastname;
+							} else {
+								$firstname = $participantObj->firstname;
+								$lastname = $participantObj->lastname;
+							}
 
-							if($results){
-								foreach($results as $key => $resultObj){
-									if ($resultObj->uid == $userid){
-											$case = 'participantwithresults';
-
-											$result = $resultObj;
-											$moodleUser = $ExammanagementInstanceObj->getMoodleUser($userid);
-
-											$firstname = $moodleUser->firstname;
-											$lastname = $moodleUser->lastname;
-											break;
-									}
-								}
+							if($UserObj->participantHasResults($participantObj)){ // if participants has results
+								$case = 'participantwithresults';		
 							}
 						} else {
 							$case = 'noparticipant';
@@ -578,12 +594,16 @@ class exammanagementForms{
 			  // or on the first display of the form.
 
 				switch ($case) {
-				    case 'participantwithresults':
-								$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$resultObj->state->nt, 'state[fa]'=>$resultObj->state->fa, 'state[ill]'=>$resultObj->state->ill));
+					case 'participantwithresults':
 
-								foreach ($resultObj->points as $key=>$points){
-									$mform->set_data(array('points['.$key.']'=>$points));
-								}
+						$stateObj = json_decode($participantObj->examstate);
+						$pointsArr = json_decode($participantObj->exampoints);
+
+						$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$stateObj->nt, 'state[fa]'=>$stateObj->fa, 'state[ill]'=>$stateObj->ill));
+
+						foreach ($pointsArr as $key=>$points){
+							$mform->set_data(array('points['.$key.']'=>$points));
+						}
 				        break;
 				    case 'participant':
 								$mform->set_data(array('id'=>$this->id, 'matrval'=>0, 'matrnr'=>$matrnr));
