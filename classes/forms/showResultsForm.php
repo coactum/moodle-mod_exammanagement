@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\User;
 use mod_exammanagement\ldap\ldapManager;
 
 use moodleform;
@@ -34,6 +35,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../ldap/ldapManager.php');
 
 class showResultsForm extends moodleform {
@@ -46,7 +48,7 @@ class showResultsForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
+		$UserObj = User::getInstance($this->id, $this->e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
         $mform->addElement('html', '<div class="row"><h3 class="col-sm-10">'.get_string('show_results_str', 'mod_exammanagement').'</h3>');
         $mform->addElement('html', '<div class="col-sm-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
@@ -56,35 +58,30 @@ class showResultsForm extends moodleform {
 
         $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="d-none d-lg-block">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="d-lg-none">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div></div>');
 
-        $results = $ExammanagementInstanceObj->getResults();
+        $participantsWithResultArr = $UserObj->getAllParticipantsWithResults();
 
-        if($results){
-            foreach($results as $key => $resultObj){
+        if($participantsWithResultArr){
+            foreach($participantsWithResultArr as $key => $participant){
 
-                $moodleUser = $ExammanagementInstanceObj->getMoodleUser($resultObj->uid);
-
-                $matrnr = $ExammanagementInstanceObj->getUserMatrNr($resultObj->uid);
-
-                $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
-                $room;
-                $place;
-
-                foreach($assignedPlaces as $roomObj){
-
-                    foreach($roomObj->assignments as $assignment){
-
-                        if($assignment->userid == $resultObj->uid){
-                            $room = $roomObj->roomname;
-                            $place = $assignment->place;
-                        }
-                    }
+                if($participant->moodleuserid){
+                    $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
+                    $lastname = $moodleUserObj->lastname;
+                    $firstname = $moodleUserObj->firstname;
+                } else if($participant->imtlogin){
+                    $lastname = $participant->lastname;
+                    $firstname = $participant->firstname;
                 }
+
+                $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+
+                $room = $participant->roomname;
+                $place = $participant->place;
 
                 $totalpoints = false;
 
                 $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-                $state = $ExammanagementInstanceObj->getResultState($resultObj);
+                $state = $UserObj->getExamState($participant);
 
                 if($state == 'nt'){
                     $totalpoints = get_string("nt", "mod_exammanagement");
@@ -92,22 +89,20 @@ class showResultsForm extends moodleform {
                     $totalpoints = get_string("fa", "mod_exammanagement");
                 } else if ($state == 'ill'){
                     $totalpoints = get_string("ill", "mod_exammanagement");
-                } else{
-                    $totalpoints = false;
                 }
 
                 if (!$totalpoints){
-                    $totalpoints = str_replace('.', ',', $ExammanagementInstanceObj->calculateTotalPoints($resultObj));
+                    $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$moodleUser->firstname.'</div>');
-                $mform->addElement('html', '<div class="col-sm-2">'.$moodleUser->lastname.'</div>');
+                $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$firstname.'</div>');
+                $mform->addElement('html', '<div class="col-sm-2">'.$lastname.'</div>');
                 $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
                 $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
                 $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
                 $mform->addElement('html', '<div class="col-sm-2">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
                 if($gradingscale){
-                    $result = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
+                    $result = $UserObj->calculateResultGrade($participant);
                     $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div></div>');
                 } else {
                   $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');

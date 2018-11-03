@@ -531,6 +531,69 @@ class User{
 		}
 	}
 
+	public function getExamState($participantObj){
+
+		$stateArr = json_decode($participantObj->examstate);
+
+		foreach($stateArr as $key => $value){
+				if($key == 'nt' && $value == "1"){
+						return 'nt';
+				} else if ($key == 'fa' && $value == "1"){
+						return 'fa';
+				} else if ($key == 'ill' && $value == "1"){
+						return 'ill';
+				}
+		}
+
+		return 'normal';
+	}
+
+	public function calculateTotalPoints($participantObj){
+		$points = 0;
+		$pointsArr = json_decode($participantObj->exampoints);
+
+		foreach($pointsArr as $key => $taskpoints){
+			$points += floatval($taskpoints);
+		}
+		return floatval($points);
+	}
+
+	public function calculateResultGrade($participantObj){
+
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
+
+		$result = '-';
+
+		$state = $this->getExamState($participantObj);
+
+		$totalpoints = $this->calculateTotalPoints($participantObj);
+		$lastpoints = 0;
+
+		if($state == "nt" || $state == "fa" || $state == "ill"){
+			$result = get_string($state, "mod_exammanagement");
+		} else if($totalpoints <= 0){
+			$result = 5;
+		} else if($totalpoints && $gradingscale){
+			foreach($gradingscale as $key => $step){
+
+				if($key == '1.0' && $totalpoints >= floatval($step)){
+						$result = $key;
+				} else if($totalpoints < $lastpoints && $totalpoints >= floatval($step)){
+						$result = $key;
+				} else if($key == '4.0' && $totalpoints < floatval($step)){
+						$result = 5;
+				}
+
+				$lastpoints = floatval($step);
+
+			}
+		}
+
+		return $result;
+	}
+
 	public function getAllParticipantsWithResults(){
 
 		$MoodleDBObj = MoodleDB::getInstance();

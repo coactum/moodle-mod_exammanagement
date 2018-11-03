@@ -948,67 +948,6 @@ public function saveResults($fromform){
 		}
 }
 
-public function calculateTotalPoints($resultObj){
-		$points = 0;
-		foreach($resultObj->points as $key => $taskpoints){
-				$points += floatval($taskpoints);
-		}
-		return floatval($points);
-}
-
-public function getResultState($resultObj){
-
-		foreach($resultObj->state as $key => $value){
-				if($key == 'nt' && $value == "1"){
-						return 'nt';
-				} else if ($key == 'fa' && $value == "1"){
-						return 'fa';
-				} else if ($key == 'ill' && $value == "1"){
-						return 'ill';
-				}
-		}
-
-		return 'normal';
-}
-
-public function calculateResultGrade($resultObj){
-
-	$gradingscale = $this->getGradingscale();
-
-	$result = '-';
-
-	$state = $this->getResultState($resultObj);
-
-	if($state == "nt" || $state == "fa" || $state == "ill"){
-			$result = 5;
-	}
-
-	$totalpoints = $this->calculateTotalPoints($resultObj);
-	$lastpoints = 0;
-
-	if($totalpoints && $gradingscale){
-		foreach($gradingscale as $key => $step){
-
-			if($key == '1.0' && $totalpoints >= floatval($step)){
-					$result = $key;
-			} else if($totalpoints < $lastpoints && $totalpoints >= floatval($step)){
-					$result = $key;
-			} else if($key == '4.0' && $totalpoints < floatval($step)){
-					$result = 5;
-			}
-
-			$lastpoints = floatval($step);
-
-		}
-	}
-
-	if($totalpoints <= 0){
-		$result = 5;
-	}
-
-	return $result;
-}
-
 ######### feature: exportResults ##########
 
 public function getPAULFileHeaders(){
