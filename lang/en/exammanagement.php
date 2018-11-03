@@ -220,6 +220,8 @@ $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
 $string['err_gradingstepsnotcorrect'] = 'One or more gradingscale steps are invalid.';
 $string['err_taskmaxpoints'] = 'Entered number exceeds maximal points of task.';
 $string['err_roomsdoubleselected'] = 'Double selection of one room with different configurations';
+$string['err_invalidcheckboxid_rooms'] = 'Invalid room id.';
+$string['err_invalidcheckboxid_participants'] = 'Invalid participant id.';
 
 //universal
 $string['modulename'] = 'Exam management';

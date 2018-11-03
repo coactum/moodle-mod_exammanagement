@@ -135,7 +135,7 @@ class chooseRoomsForm extends moodleform {
 
     }
 
-    $mform->addElement('html', '</div></div>');
+    $mform->addElement('html', '</div>');
 
     $mform->disable_form_change_checker();
 
@@ -143,7 +143,7 @@ class chooseRoomsForm extends moodleform {
 
   //Custom validation should be added here
   function validation($data, $files) {
-    $errors= array();
+    $errors = array();
 
     foreach($data['rooms'] as $roomid => $checked){
 
@@ -160,6 +160,10 @@ class chooseRoomsForm extends moodleform {
                   $errors['rooms['.$roomid.']'] = get_string('err_roomsdoubleselected', 'mod_exammanagement');
               }
           }
+      }
+
+      if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $roomid)){
+        $errors['rooms['.$roomid.']'] = get_string('err_invalidcheckboxid_rooms', 'mod_exammanagement');
       }
     }
 

@@ -248,6 +248,7 @@ class exammanagementForms{
 									if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
 										$tempUserObj = new stdclass;
 										$tempUserObj->plugininstanceid = $this->id;
+										$tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
 										$tempUserObj->identifier = $identifier;
 										$tempUserObj->line = $key+1;
 		
@@ -258,7 +259,7 @@ class exammanagementForms{
 							}
 					}
 
-					$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = json_encode($fileheader);
+					$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = json_encode(strip_tags($fileheader));
 
 					$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 

@@ -200,6 +200,7 @@ class User{
 						if($temp[0]== 'mid'){
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
+							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 							$user->moodleuserid = $temp[1];
 							$user->imtlogin = null;
 							$user->firstname = null;
@@ -210,6 +211,7 @@ class User{
 						} else {
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
+							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 							$user->moodleuserid = null;
 							$user->imtlogin = $temp[1];
 							$user->firstname = 'Testi';
@@ -279,6 +281,7 @@ class User{
 						if($this->checkIfAlreadyParticipant($participantId) == false){
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
+							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 							$user->moodleuserid = $participantId;
 							$user->headerid = 0;
 
@@ -383,9 +386,13 @@ class User{
 
 	public function deleteAllParticipants(){
 
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
 
 		$delete;
+
+		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
+		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
 		$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 

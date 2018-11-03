@@ -37,6 +37,7 @@
           <FIELDS>
               <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
               <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+              <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of course of plugin instance for diagnostics only"/>
               <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="identifier of participant"/>
               <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="line number from import file"/>              
     	    </FIELDS>
