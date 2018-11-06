@@ -116,6 +116,21 @@ class User{
 		}
 	}
 
+	public function getAllExamParticipantsByHeader($headerid){
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'headerid' => $headerid));
+
+		if($participantsArr){
+			return $participantsArr;
+
+		} else {
+			return false;
+
+		}
+	}
+
 	public function getCourseParticipantsIDs(){
 
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
@@ -550,12 +565,17 @@ class User{
 
 	public function calculateTotalPoints($participantObj){
 		$points = 0;
+
 		$pointsArr = json_decode($participantObj->exampoints);
 
-		foreach($pointsArr as $key => $taskpoints){
-			$points += floatval($taskpoints);
+		if($pointsArr != Null){
+			foreach($pointsArr as $key => $taskpoints){
+				$points += floatval($taskpoints);
+			}
+			return floatval($points);
+		} else {
+			return '-';
 		}
-		return floatval($points);
 	}
 
 	public function calculateResultGrade($participantObj){
@@ -564,14 +584,14 @@ class User{
 
 		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-		$result = '-';
-
 		$state = $this->getExamState($participantObj);
 
 		$totalpoints = $this->calculateTotalPoints($participantObj);
 		$lastpoints = 0;
 
-		if($state == "nt" || $state == "fa" || $state == "ill"){
+		if($totalpoints === '-'){
+		    $result = '-';
+		} else if($state == "nt" || $state == "fa" || $state == "ill"){
 			$result = get_string($state, "mod_exammanagement");
 		} else if($totalpoints <= 0){
 			$result = 5;

@@ -23,13 +23,10 @@
  */
 
 namespace mod_exammanagement\general;
-
-use mod_exammanagement\ldap\ldapManager;
 use zipArchive;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -38,7 +35,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 define( "SEPARATOR", chr(9) ); //Tabulator
@@ -60,7 +57,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $PAULFileHeadersArr = false; //for testing
 
     $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
-    $results = $ExammanagementInstanceObj->getResults(); //to be changed
 
     if ( !$PAULFileHeadersArr ){
       $examdate = $ExammanagementInstanceObj->getHrExamtime();
@@ -69,26 +65,34 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
-      $savedParticipantsArray = $ExammanagementInstanceObj->getSavedParticipants();
+      $ParticipantsArray = $UserObj->getAllExamParticipants();
 
-      foreach($savedParticipantsArray as $participant){
+      foreach($ParticipantsArray as $participant){
 
         $resultWithBonus = "";
+        $resultState = $UserObj->getExamState($participant);
 
-        foreach ($results as $resultObj){
-            if($resultObj->uid == $participant){
-                $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
-            }
+        if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+            $resultWithBonus = $UserObj->calculateResultGrade($participant);
+        } else {
+            $resultWithBonus = get_string($resultState, "mod_exammanagement");
         }
 
         $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
 
-        $user = $ExammanagementInstanceObj->getMoodleUser($participant);
+        if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
+            $user = $UserObj->getMoodleUser($participant->moodleuserid);
+            $foreName = '"' . $user->firstname . '"';
+            $middleName = '"' . $user->middlename . '"';
+            $name = '"' . $user->lastname . '"';
+        } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
+            $foreName = '"' . $participant->firstname . '"';
+            $middleName = '';
+            $name = '"' . $participant->lastname . '"';
+        }
+
         $examNumber = '""';
-        $matNr = '"' . $ExammanagementInstanceObj->getUserMatrNr($participant) .'"';
-        $foreName = '"' . $user->firstname . '"';
-        $middleName = '"' . $user->middlename . '"';
-        $name = '"' . $user->lastname . '"';
+        $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
         $resultWithBonus = '"' . $resultWithBonus . '"';
 
         $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
@@ -97,7 +101,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       //generate filename without umlaute
       $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
       $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-      $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
+      $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
       $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
       //convert string to Latin1
@@ -115,7 +119,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         //generate filename without umlaute
         $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
         $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
+        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
         $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
         $ResultFilesZipArchive = new ZipArchive();
@@ -129,33 +133,37 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
             $textfile = $PAULFileHeader->header;
 
-            foreach ( $PAULFileHeader->participants as $participant ){
+            $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key);
 
-              $resultWithBonus = "";
+            foreach($ParticipantsArray as $participant){
 
-              foreach ($results as $resultObj){
-                  if($resultObj->uid == $participant){
-                      $resultState = $ExammanagementInstanceObj->getResultState($resultObj);
+                $resultWithBonus = "";
+                $resultState = $UserObj->getExamState($participant);
 
-                      if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                          $resultWithBonus = $ExammanagementInstanceObj->calculateResultGrade($resultObj);
-                      } else {
-                          $resultWithBonus = '5.0';
-                      }
-                  }
-              }
+                if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                    $resultWithBonus = $UserObj->calculateResultGrade($participant);
+                } else {
+                    $resultWithBonus = get_string($resultState, "mod_exammanagement");
+                }
 
-            	//$resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+                $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
 
-              $user = $ExammanagementInstanceObj->getMoodleUser($participant);
-            	$examNumber = '""';
-            	$matNr = '"' . $ExammanagementInstanceObj->getUserMatrNr($participant) .'"';
-            	$foreName = '"' . $user->firstname . '"';
-            	$middleName = '"' . $user->middlename . '"';
-            	$name = '"' . $user->lastname . '"';
-            	$resultWithBonus = '"' . $resultWithBonus . '"';
+                if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
+                    $user = $UserObj->getMoodleUser($participant->moodleuserid);
+                    $foreName = '"' . $user->firstname . '"';
+                    $middleName = '"' . $user->middlename . '"';
+                    $name = '"' . $user->lastname . '"';
+                } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
+                    $foreName = '"' . $participant->firstname . '"';
+                    $middleName = '';
+                    $name = '"' . $participant->lastname . '"';
+                }
 
-            	$textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                $examNumber = '""';
+                $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
+                $resultWithBonus = '"' . $resultWithBonus . '"';
+
+                $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
             }
 
             $filecount += 1;

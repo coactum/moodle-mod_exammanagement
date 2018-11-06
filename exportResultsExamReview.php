@@ -25,11 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\resultsExamReview;
-use mod_exammanagement\ldap\ldapManager;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/ldap/ldapManager.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -38,7 +36,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -107,18 +105,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $date = $ExammanagementInstanceObj->getHrExamtime();
 
-    $pdf->MultiCell(130, 3, $date . ', ' . $ExammanagementInstanceObj->moduleinstance->categoryid, 0, 'C', 0, 0, 50, 42);
+    $pdf->MultiCell(130, 3, $date . ', ' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid), 0, 'C', 0, 0, 50, 42);
     $pdf->SetFont('helvetica', '', 10);
     $pdf->Line(20, 55, 190, 55);
     $pdf->SetXY(20, 65);
 
     $maxPoints = $ExammanagementInstanceObj->getTaskTotalPoints();
-    $resultArr = $ExammanagementInstanceObj->getResults();
+    $participantsArray = $UserObj->getAllExamParticipants();
     $fill = false;
-
-    if($LdapManagerObj->is_LDAP_config()){
-        $ldapConnection = $LdapManagerObj->connect_ldap();
-    }
 
     $tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
     $tbl .= "<thead>";
@@ -130,12 +124,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $tbl .= "</tr>";
     $tbl .= "</thead>";
 
-    usort($resultArr, function($a, $b){ //sort array by custom user function
-      global $ExammanagementInstanceObj;
-      $aFirstname = $ExammanagementInstanceObj->getMoodleUser($a->uid)->firstname;
-      $aLastname = $ExammanagementInstanceObj->getMoodleUser($a->uid)->lastname;
-      $bFirstname = $ExammanagementInstanceObj->getMoodleUser($b->uid)->firstname;
-      $bLastname = $ExammanagementInstanceObj->getMoodleUser($b->uid)->lastname;
+    usort($participantsArray, function($a, $b){ //sort array by custom user function
+      global $UserObj;
+      $aFirstname = $UserObj->getMoodleUser($a->uid)->firstname;
+      $aLastname = $UserObj->getMoodleUser($a->uid)->lastname;
+      $bFirstname = $UserObj->getMoodleUser($b->uid)->firstname;
+      $bLastname = $UserObj->getMoodleUser($b->uid)->lastname;
 
       if ($aLastname == $bLastname) { //if names are even sort by first name
           return strcmp($aFirstname, $bFirstname);
@@ -145,27 +139,37 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     });
 
-    foreach ($resultArr as $result){
+    foreach ($participantsArray as $participant){
 
       $totalPoints = 0;
 
-    	if ($ExammanagementInstanceObj->getResultState($result) == "nt") {
+      $state = $UserObj->getExamState($participant);
+
+    	if ($state == "nt") {
     		$totalPoints = get_string('nt', 'mod_exammanagement');
-    	} else if ($ExammanagementInstanceObj->getResultState($result) == "fa") {
+    	} else if ($state == "fa") {
     		$totalPoints = get_string('fa', 'mod_exammanagement');
-    	} else if ($ExammanagementInstanceObj->getResultState($result) == "ill") {
+    	} else if ($state == "ill") {
     		$totalPoints = get_string('ill', 'mod_exammanagement');
     	} else {
-    		$totalPoints = $ExammanagementInstanceObj->calculateTotalPoints($result);
-    	}
+        $totalPoints = $UserObj->calculateTotalPoints($participant);
+      }
 
-      $user = $ExammanagementInstanceObj->getMoodleUser($result->uid);
+      $user = $UserObj->getMoodleUser($participant->moodleuserid);
+  
+      if($user){
+          $name = utf8_encode($user->lastname);
+          $firstname = utf8_encode($user->firstname);
+      } else {
+          $name = utf8_encode($participant->lastname);
+          $firstname = utf8_encode($participant->firstname);
+      }
 
-      $matrnr = $ExammanagementInstanceObj->getUserMatrNr($result->uid);
+      $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
     	$tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-    	$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . utf8_encode($user->lastname) . "</td>";
-    	$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . utf8_encode($user->firstname) . "</td>";
+    	$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
+    	$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $firstname . "</td>";
     	$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
     	$tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
     	$tbl .= "</tr>";
@@ -183,7 +187,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("pointslist_examreview", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->moduleinstance->categoryid . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+    $filenameUmlaute = get_string("pointslist_examreview", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------
