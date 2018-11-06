@@ -185,6 +185,9 @@ class User{
 	
 	public function saveParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
 
+			require_once(__DIR__.'/../ldap/ldapManager.php');
+
+			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);	
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$MoodleDBObj = MoodleDB::getInstance();
 			$MoodleObj = Moodle::getInstance($this->id, $this->e);
@@ -236,17 +239,38 @@ class User{
 							$user->imtlogin = null;
 							$user->firstname = null;
 							$user->lastname = null;
+							$user->email = null;
 							$user->headerid = $newheaderid;
 
 							array_push($userObjArr, $user);
 						} else {
+
 							$user = new stdClass();
 							$user->plugininstanceid = $this->id;
 							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 							$user->moodleuserid = null;
 							$user->imtlogin = $temp[1];
-							$user->firstname = 'Testi';
-							$user->lastname = 'Testa';
+
+							if($LdapManagerObj->is_LDAP_config()){
+								$ldapConnection = $LdapManagerObj->connect_ldap();
+
+								$ldapUser = $ldapManager->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $temp[1] );
+				
+								if($ldapUser){
+									$user->firstname = $ldapUser['sn'];
+									$user->lastname = $ldapUser['givenName'];
+									$user->email = $ldapUser['upbMailPreferredAddress'];
+								} else {
+									$user->firstname = NULL;
+									$user->lastname = NULL;
+									$user->email = NULL;
+								}				
+							} else { // for local testing during development
+									$user->firstname = 'Mister';
+									$user->lastname = 'Testerin';
+									$user->email = 'Test@Testi.test';
+							}
+
 							$user->headerid = $newheaderid;
 
 							array_push($userObjArr, $user);
@@ -535,6 +559,24 @@ class User{
 
 		return $groupNameStr;
 
+	}
+
+	public function getNoneMoodleParticipantsEmailadresses(){
+
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND moodleuserid IS NULL";
+
+		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_part_'.$this->categoryid, 'email', $select);
+
+		if($NoneMoodleParticipantsEmailadressesArr){
+			return $NoneMoodleParticipantsEmailadressesArr;
+
+		} else {
+			return false;
+
+		}
 	}
 
 	public function participantHasResults($participantObj){

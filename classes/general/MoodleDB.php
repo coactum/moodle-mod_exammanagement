@@ -66,10 +66,12 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function getFieldsetFromRecordsInDB($table, $field, $condition){
+	public function getFieldsetFromRecordsInDB($table, $field, $select){
 		global $DB;
 
-		$records = $DB->get_fieldset_select($table, $field, $condition);
+		$records = $DB->get_fieldset_select($table, $field, $select);
+
+		return $records;
 	}
 
 	public function UpdateRecordInDB($table, $obj){

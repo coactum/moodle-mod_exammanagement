@@ -133,7 +133,7 @@ $string['add_text_text'] = 'All text added below will be immediately displayed t
 $string['groupmessages_str'] = 'Add Messagetext';
 $string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
 $string['groupmessages_text_2'] = ' participants of the exam.';
-$string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message.';
+$string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them under their email adresses shown below:';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';
@@ -222,6 +222,7 @@ $string['err_taskmaxpoints'] = 'Entered number exceeds maximal points of task.';
 $string['err_roomsdoubleselected'] = 'Double selection of one room with different configurations';
 $string['err_invalidcheckboxid_rooms'] = 'Invalid room id.';
 $string['err_invalidcheckboxid_participants'] = 'Invalid participant id.';
+$string['err_nonvalidmatrnr'] = 'No valid matriculation number.';
 
 //universal
 $string['modulename'] = 'Exam management';

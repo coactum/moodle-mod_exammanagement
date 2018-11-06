@@ -62,7 +62,7 @@ class inputResultsForm extends moodleform {
 
         //create input field for matrnr
         $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
-        $mform->setType('matrnr', PARAM_INT);
+        $mform->setType('matrnr', PARAM_RAW);
 
         if ($this->_customdata['firstname'] && $this->_customdata['lastname']){
           $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname']);

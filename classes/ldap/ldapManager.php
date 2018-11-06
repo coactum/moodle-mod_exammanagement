@@ -172,4 +172,21 @@ class ldapManager{
 
 			return $result[ 0 ];
 	}
+
+	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
+			if ( ! is_array( $pAttributes ) ){
+					throw new Exception( "Argument is not an array", E_PARAMETER );
+			}
+
+			$search = ldap_search( $ldapConnection, LDAP_O . ", " . LDAP_C, "uid=" . $pUid, $pAttributes );
+			$entry  = ldap_first_entry( $ldapConnection, $search );
+
+			$result = array();
+			if ($entry) {    // FALSE is uid not found
+					foreach( $pAttributes as $attribute ){
+							$value = ldap_get_values( $ldapConnection, $entry, $attribute );
+							$result[ $attribute ] = $value[ 0 ];
+					}
+			}
+	}
 }

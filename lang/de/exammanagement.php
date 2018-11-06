@@ -133,7 +133,7 @@ $string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in d
 $string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
 $string['groupmessages_text_1'] = 'Der unten eingegebene Text wird ';
 $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.';
-$string['groupmessages_text_3'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht erhalten.';
+$string['groupmessages_text_3'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht automatisch erhalten. Kontaktieren Sie diese Teilnehmer deshalb unter deren unten angegebenen Universitäts-E-Mail-Adressen:';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
@@ -254,6 +254,7 @@ $string['err_taskmaxpoints'] = 'Die eingetragene Punktzahl überschreitet die Ma
 $string['err_roomsdoubleselected'] = 'Derselbe Raum wurde mehrfach in unterschiedlichen Belegungen als Prüfungsraum gewählt.';
 $string['err_invalidcheckboxid_rooms'] = 'Ungültige Raumid.';
 $string['err_invalidcheckboxid_participants'] = 'Ungültige Teilnehmerid.';
+$string['err_nonvalidmatrnr'] = 'Ungültige Matrikelnummer.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

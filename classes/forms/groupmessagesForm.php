@@ -64,7 +64,13 @@ class groupmessagesForm extends moodleform {
 			$mform->addElement('html', '<p>'.get_string('groupmessages_text_1', 'mod_exammanagement').'<strong>'.$MoodleParticipantsCount.'</strong>'.get_string('groupmessages_text_2', 'mod_exammanagement').'</p>');
             
             if($NoneMoodleParticipantsCount){
+                $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
+
                 $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_text_3', 'mod_exammanagement').'</p>');
+
+                foreach($mailAdressArr as $adress){
+                    $mform->addElement('html', '<a href="mailto:'.$adress.'?subject=""">'.$adress.'</a><br>');
+                }
             }
 
             $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');

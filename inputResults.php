@@ -36,7 +36,7 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$matrnr  = optional_param('matrnr', 0, PARAM_INT);
+$matrnr  = optional_param('matrnr', 0, PARAM_RAW);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);

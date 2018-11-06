@@ -126,6 +126,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '10', null, null, null, null);
         $table->add_field('firstname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('lastname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('email', XMLDB_TYPE_TEXT, '255', null, null, null, null);
         $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('roomid', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('roomname', XMLDB_TYPE_CHAR, '255', null, null, null, null);

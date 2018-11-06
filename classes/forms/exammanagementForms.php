@@ -488,86 +488,90 @@ class exammanagementForms{
 
 			if ($input){
 
-				//check if input is valid barcode and then convert barcoe to matrnr
-				$inputLength = strlen($input);
+				$filtered_input = preg_replace('/[^0-9]/', '', $input);
 
-				if ($inputLength == 8){ //input is barcode
-					$input = "00000" . $input;
-
-					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
-
-					if ($checksum == substr($input, -1)){ //if checksum is correct
-						$matrnr = substr($input, 5, -1); //extract matrnr from barcode
-					} else {
-						$matrnr = $input;
-					}
-
-				} else { //input is no barcode
-						$matrnr = $input;
-
-				}
-
-				if($UserObj->checkIfValidMatrNr($matrnr)){
-
-					// convert matrnr to user
-					$userlogin;
-					$userid;
-
-						if($LdapManagerObj->is_LDAP_config()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-
-								$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-
-								if($userlogin){
-									$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-								}
-
-						} else {
-							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-
-							if(!$userid){
-								$userlogin = $matrnr;
-							}
-						}
-
-						$participantObj = false;
-
-						// getParticipantObj
-						if($userid !== false && $userid !== null){
-							$participantObj = $UserObj->getExamParticipantObj($userid);
-						} else if($userlogin !== false && $userlogin !== null){
-							$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-						}
-
-						//var_dump($participantObj);
-						//var_dump($UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin));
-				
-						// if user is participant
-						if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
-							$case = 'participant';
-
-							if($userid !== false && $userid !== null){
-								$MoodleUserObj = $UserObj->getMoodleUser($userid);
-								$firstname = $MoodleUserObj->firstname;
-								$lastname = $MoodleUserObj->lastname;
-							} else {
-								$firstname = $participantObj->firstname;
-								$lastname = $participantObj->lastname;
-							}
-
-							if($UserObj->participantHasResults($participantObj)){ // if participants has results
-								$case = 'participantwithresults';		
-							}
-						} else {
-							$case = 'noparticipant';
-							$matrnr = false;
-						}
-				} else {
+				if($filtered_input !== $input){
 					$case = 'novalidmatrnr';
 					$matrnr = false;
+
+				} else {
+					//check if input is valid barcode and then convert barcoe to matrnr
+					$inputLength = strlen($filtered_input);
+
+					if ($inputLength == 13){ //input is barcode
+						$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
+
+						if ($checksum == substr($input, -1)){ //if checksum is correct
+							$matrnr = substr($input, 5, -1); //extract matrnr from barcode
+						}
+					} else if($inputLength){ //input is no barcode
+							$matrnr = $input;
+					}
+
+					if($UserObj->checkIfValidMatrNr($matrnr)){
+
+						// convert matrnr to user
+						$userlogin;
+						$userid;
+
+							if($LdapManagerObj->is_LDAP_config()){
+									$ldapConnection = $LdapManagerObj->connect_ldap();
+
+									$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+
+									$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+
+									if($userlogin){
+										$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+									}
+
+							} else {
+								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+
+								if(!$userid){
+									$userlogin = $matrnr;
+								}
+							}
+
+							$participantObj = false;
+
+							// getParticipantObj
+							if($userid !== false && $userid !== null){
+								$participantObj = $UserObj->getExamParticipantObj($userid);
+							} else if($userlogin !== false && $userlogin !== null){
+								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+							}
+
+							//var_dump($participantObj);
+							//var_dump($UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin));
+					
+							// if user is participant
+							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
+								$case = 'participant';
+
+								if($userid !== false && $userid !== null){
+									$MoodleUserObj = $UserObj->getMoodleUser($userid);
+									$firstname = $MoodleUserObj->firstname;
+									$lastname = $MoodleUserObj->lastname;
+								} else {
+									$firstname = $participantObj->firstname;
+									$lastname = $participantObj->lastname;
+								}
+
+								if($UserObj->participantHasResults($participantObj)){ // if participants has results
+									$case = 'participantwithresults';		
+								}
+							} else {
+								$case = 'noparticipant';
+								$matrnr = false;
+							}
+					} else {
+						$case = 'novalidmatrnr';
+						$matrnr = false;
+					}
 				}
+
+				
 			}
 
 			//Instantiate Textfield_form

@@ -683,18 +683,6 @@ EOF;
 
 ######### feature: addParticipants ##########
 
-	public function getSavedParticipants(){ // to be replaced where it es needed and then to be deleted here
-
-		$participants = $this->moduleinstance->participants;
-
-		if ($participants){
-				$participantsArray = json_decode($participants);
-				return $participantsArray;
-			} else {
-				return false;
-		}
-	}
-
 	public function getPAULTextFileHeaders(){
 
 		$textfileheaders = 	$this->moduleinstance->importfileheaders;
