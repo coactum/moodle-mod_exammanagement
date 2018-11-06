@@ -249,23 +249,26 @@ class User{
 							$user->plugininstanceid = $this->id;
 							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 							$user->moodleuserid = null;
-							$user->imtlogin = $temp[1];
 
 							if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
-								$ldapUser = $ldapManager->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $temp[1] );
+								$user->imtlogin = ''.$LdapManagerObj->uid2studentid($ldapConnection, $temp[1]);
+
+								$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $temp[1] );
 				
 								if($ldapUser){
 									$user->firstname = $ldapUser['sn'];
 									$user->lastname = $ldapUser['givenName'];
-									$user->email = $ldapUser['upbMailPreferredAddress'];
+									$user->email = ''.$ldapUser['upbMailPreferredAddress'];
 								} else {
 									$user->firstname = NULL;
 									$user->lastname = NULL;
 									$user->email = NULL;
 								}				
 							} else { // for local testing during development
+
+									$user->imtlogin = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
 									$user->firstname = 'Mister';
 									$user->lastname = 'Testerin';
 									$user->email = 'Test@Testi.test';
@@ -353,7 +356,13 @@ class User{
 							if($temp[0]== 'mid'){
 								$this->deleteParticipant($temp[1], false);
 							} else {
-								$this->deleteParticipant(false, $temp[1]);
+
+								if($temp[1] && $temp[2]){ //for testing
+
+									$this->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
+								} else {
+									$this->deleteParticipant(false, $temp[1]);
+								}
 							}
 					}
 				}

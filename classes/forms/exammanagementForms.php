@@ -529,8 +529,9 @@ class exammanagementForms{
 								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 
 								if(!$userid){
-									$userlogin = $matrnr;
+									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
 								}
+
 							}
 
 							$participantObj = false;
@@ -541,9 +542,6 @@ class exammanagementForms{
 							} else if($userlogin !== false && $userlogin !== null){
 								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
 							}
-
-							//var_dump($participantObj);
-							//var_dump($UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin));
 					
 							// if user is participant
 							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){

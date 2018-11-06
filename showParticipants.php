@@ -50,6 +50,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if($dap){
       $UserObj->deleteAllParticipants();
+      redirect ('showParticipants.php?id='.$id, null, null, null);
     }
 
     if($dpmid){

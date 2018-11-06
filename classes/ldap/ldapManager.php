@@ -106,9 +106,29 @@ class ldapManager{
 			$imtlogin = substr($temp[0], -3);
 
 			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','idnumber', array('username' => 'tool_generator_000'.$imtlogin));
-
+			
 			if($moodleuserid){
 				return $moodleuserid;
+			} else {
+				return false;
+			}
+
+	}
+
+	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
+		require_once(__DIR__.'/../general/User.php');
+		require_once(__DIR__.'/../general/exammanagementInstance.php');
+
+		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
+
+			$temp = explode('_', $matrNr);
+
+			$imtlogin = 'tool_generator_000'.substr($temp[0], -3);
+
+			if($imtlogin){
+				return $imtlogin;
 			} else {
 				return false;
 			}
@@ -127,7 +147,10 @@ class ldapManager{
 				$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
 				$matrNr = 7 . $matrNr;
 			} else if($login){
-				$matrNr = $login;
+				$login = explode('_', $login);
+				$imtlogin = substr($login[2], -3);
+				$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
+				$matrNr = 7 . $matrNr;
 			}
 
 			if($matrNr){
@@ -137,7 +160,7 @@ class ldapManager{
 			}
 	}
 
-	public function studentid2uid($ldapConnection, $pStudentId){
+	public function studentid2uid($ldapConnection, $pStudentId){ // imtlogin to matrnr
 
 		if (empty($pStudentId)) {
 				throw new Exception("No parameter given");
@@ -155,7 +178,7 @@ class ldapManager{
 		return $result[ 0 ];
 	}
 
-	public function uid2studentid($ldapConnection, $uid){
+	public function uid2studentid($ldapConnection, $uid){ // matrnr to imtlogin
 
 			if (empty($uid)) {
 					throw new Exception("No parameter given");
