@@ -45,13 +45,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('exportParticipantsListNames');
 
-    if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
-    }  else if (!$ExammanagementInstanceObj->getAllRoomIDsSortedByName()) {
+    if (!$ExammanagementInstanceObj->getRoomsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Listenexport noch nicht möglich', 'error');
     } else if (!$UserObj->getParticipantsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Listenexport noch nicht möglich', 'error');
-    }
+    } else if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+        $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
+    }  
 
     //include pdf
     require_once(__DIR__.'/classes/pdfs/participantsList.php');

@@ -900,7 +900,8 @@ public function saveResults($fromform){
 				$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 
 				if(!$userid){
-					$userlogin = $fromform->matrnr;
+					$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
+					var_dump($userlogin);
 				}
 		}
 

@@ -126,7 +126,8 @@ ajaxsetcorrectioncompletion = function(value){
 
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}
-          <li class="item" id="beforeexam">
+		  <span id="beforeexam"></span>
+          <li class="item">
             {{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="panel panel-primary mainpanel">
@@ -275,7 +276,8 @@ ajaxsetcorrectioncompletion = function(value){
             </div>
           </li>
           {{!for_exam}}
-          <li class="item" id="forexam">
+		  <span id="forexam"></span>
+          <li class="item">
             {{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
 						<div class="panel panel-primary mainpanel">
@@ -484,7 +486,8 @@ ajaxsetcorrectioncompletion = function(value){
             </div>
           </li>
           {{!after_grading}}
-          <li class="item" id="aftercorrection">
+		  <span id="aftercorrection"></span>
+          <li class="item">
             {{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
             {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
 						<div class="panel panel-primary mainpanel">
@@ -610,7 +613,8 @@ ajaxsetcorrectioncompletion = function(value){
             </div>
           </li>
           {{!after_exam}}
-          <li class="item" id="afterexam">
+		  <span id="afterexam"></span>
+          <li class="item">
             {{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
             {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
 						<div class="panel panel-primary mainpanel">

@@ -162,6 +162,19 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
       $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));      
     }
 
+  // reset phase information if participants are deleted
+  if(!$UserObj->getParticipantsCount()){
+    $ExammanagementInstanceObj->moduleinstance->importfileheader = NULL;
+    $ExammanagementInstanceObj->moduleinstance->stateofplaces = NULL;
+    $ExammanagementInstanceObj->moduleinstance->datetimevisible = NULL;
+    $ExammanagementInstanceObj->moduleinstance->roomvisible = NULL;
+    $ExammanagementInstanceObj->moduleinstance->placevisible = NULL;
+    $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = NULL;
+  
+    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+   
+  }
+
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
 
