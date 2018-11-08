@@ -18,13 +18,13 @@
  * Outputs pdf file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\pdfs\resultsExamReview;
+use mod_exammanagement\pdfs\resultsPercentages;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -42,15 +42,16 @@ $MoodleObj = Moodle::getInstance($id, $e);
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     global $CFG;
 
-    $MoodleObj->setPage('exportResultsExamReview');
+    $MoodleObj->setPage('exportResultsPercentages');
 
     //include pdf
-    require_once(__DIR__.'/classes/pdfs/resultsExamReview.php');
+    require_once(__DIR__.'/classes/pdfs/resultsPercentages.php');
 
-    define("WIDTH_COLUMN_NAME", 225);
-    define("WIDTH_COLUMN_FORENAME", 225);
+    define("WIDTH_COLUMN_NAME", 185);
+    define("WIDTH_COLUMN_FORENAME", 185);
     define("WIDTH_COLUMN_MATNO", 70);
     define("WIDTH_COLUMN_POINTS", 80);
+    define("WIDTH_COLUMN_PERCENT", 80);
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
       $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
@@ -63,15 +64,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     require_once($CFG->libdir.'/pdflib.php');
 
     // create new PDF document
-    $pdf = new resultsExamReview(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
+    $pdf = new resultsPercentages(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetAuthor('PANDA');
-    $pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
-    $pdf->SetSubject(get_string('pointslist_examreview', 'mod_exammanagement'));
-    $pdf->SetKeywords(get_string('pointslist_examreview', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
+    $pdf->SetTitle(get_string('pointslist_percentages', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
+    $pdf->SetSubject(get_string('pointslist_percentages', 'mod_exammanagement'));
+    $pdf->SetKeywords(get_string('pointslist_percentages', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
 
     // header/footer
     $pdf->setPrintHeader(false);
@@ -98,7 +98,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $pdf->Line(20, 15, 190, 15);
     $pdf->ImageEps('data/upb_logo.ai', 30, 25, 13);
     $pdf->SetFont('helvetica', '', 16);
-    $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 18);
+    $pdf->MultiCell(130, 3, get_string('pointslist_percentages', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 18);
     $pdf->SetFont('helvetica', 'B', 16);
     $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name, 0, 'C', 0, 0, 50, 25);
     $pdf->SetFont('helvetica', '', 16);
@@ -121,6 +121,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
     $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
     $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\"><b>" . get_string('points', 'mod_exammanagement') . "<br>(max. " . $maxPoints . ")" . "</b></td>";
+    $tbl .= "<td width=\"" . WIDTH_COLUMN_PERCENT . "\" align=\"center\"><b>" . get_string('percentages', 'mod_exammanagement') . "</b></td>";
     $tbl .= "</tr>";
     $tbl .= "</thead>";
 
@@ -142,6 +143,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     foreach ($participantsArray as $participant){
 
       $totalPoints = 0;
+      $percentages = '-';
 
       $state = $UserObj->getExamState($participant);
 
@@ -152,7 +154,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     	} else if ($state == "ill") {
     		$totalPoints = get_string('ill', 'mod_exammanagement');
     	} else {
-        $totalPoints = str_replace( '.', ',', $UserObj->calculateTotalPoints($participant));
+            $totalPoints = str_replace( '.', ',', $UserObj->calculateTotalPoints($participant));
+
+            if($totalPoints != "-"){
+                $percentages = number_format( ( $totalPoints / $maxPoints ) * 100, 2, "," , "." ).' %';
+            }
       }
 
       $user = $UserObj->getMoodleUser($participant->moodleuserid);
@@ -171,7 +177,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     	$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
     	$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $firstname . "</td>";
     	$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-    	$tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_PERCENT . "\" align=\"center\">" . $percentages . "</td>";
     	$tbl .= "</tr>";
 
     	$fill = !$fill;
@@ -187,7 +194,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     //generate filename without umlaute
     $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
     $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-    $filenameUmlaute = get_string("pointslist_examreview", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+    $filenameUmlaute = get_string("pointslist_percentages", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
     $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
     // ---------------------------------------------------------

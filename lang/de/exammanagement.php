@@ -191,6 +191,10 @@ $string['required_label_type'] = 'Benoetigter Etikettentyp:';
 // exoprtResultsExamReview.php
 $string['pointslist_examreview'] = 'Punkteliste Klausureinsicht';
 
+// exoprtResultsPercentages.php
+$string['percentages'] = 'Prozent';
+$string['pointslist_percentages'] = 'Punkteliste Prozente';
+
 // exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';
 

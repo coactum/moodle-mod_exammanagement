@@ -190,6 +190,10 @@ $string['required_label_type'] = 'Required label type:';
 // exportResultsExamReview.php
 $string['pointslist_examreview'] = 'List of points exam review';
 
+// exoprtResultsPercentages.php
+$string['percentages'] = 'Percent';
+$string['pointslist_percentages'] = 'List of points percentages';
+
 // exportResultsPAULFile.php
 $string['results'] = 'Results';
 

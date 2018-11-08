@@ -901,7 +901,6 @@ public function saveResults($fromform){
 
 				if(!$userid){
 					$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
-					var_dump($userlogin);
 				}
 		}
 

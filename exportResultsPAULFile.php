@@ -184,6 +184,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         if($textfile && count($PAULFileHeadersArr) == 1){
             $textfile = utf8_encode($textfile);
+            header( "Content-Type: application/force-download" );
+            header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );
+            header( "Content-Length: ". strlen( $textfile ) );
             echo($textfile);
         } else if($ResultFilesZipArchive){
            // Close and send to users
