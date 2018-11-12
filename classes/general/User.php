@@ -166,7 +166,7 @@ class User{
 		}
 	}
 
-	public function getExamParticipantObj($userid, $userlogin){ // get exam participants obj
+	public function getExamParticipantObj($userid, $userlogin = false){ // get exam participants obj
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -674,6 +674,26 @@ class User{
 		if($participantsArr){
 			foreach($participantsArr as $key => $participant){
 				if(!$participant->exampoints || !$participant->examstate){
+					unset($participantsArr[$key]);
+				}
+			}
+			return $participantsArr;
+		} else{
+			return false;
+		}
+	}
+
+	public function getAllParticipantsWithResultsAfterExamReview(){
+
+		$ExammanagementInstanceObj = ExammanagementInstance::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+	
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
+
+		if($participantsArr){
+			foreach($participantsArr as $key => $participant){
+				if(!$participant->exampoints || !$participant->examstate || !$participant->timeresultsentered || intval($participant->timeresultsentered) < $examReviewTime){
 					unset($participantsArr[$key]);
 				}
 			}

@@ -34,6 +34,8 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
+
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 $MoodleObj = Moodle::getInstance($id, $e);
@@ -65,7 +67,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
-      $ParticipantsArray = $UserObj->getAllExamParticipants();
+      if($afterexamreview == false){
+        $ParticipantsArray = $UserObj->getAllExamParticipants();
+      } else {
+        $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+      }
 
       foreach($ParticipantsArray as $participant){
 
@@ -133,7 +139,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
 
-            $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
+            if($afterexamreview == false){
+                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
+            } else {
+                $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+            }
 
             $textfile = false;
 
@@ -180,9 +190,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
              $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
 
             }
+
+            if($afterexamreview == true){
+                break;
+            }
         }
 
-        if($textfile && count($PAULFileHeadersArr) == 1){
+        if($textfile && (count($PAULFileHeadersArr) == 1 || $afterexamreview == true)){
             $textfile = utf8_encode($textfile);
             header( "Content-Type: application/force-download" );
             header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );

@@ -530,6 +530,8 @@ class exammanagementForms{
 
 								if(!$userid){
 									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
+								} else {
+									$userlogin = false;
 								}
 
 							}

@@ -34,6 +34,7 @@ $string['phase_one'] = 'Before exam';
 $string['phase_two'] = 'For exam';
 $string['phase_three'] = 'After correction';
 $string['phase_four'] = 'After exam';
+$string['phase_five'] = 'Exam review';
 $string['exam_appointment'] = 'Exam appointment';
 $string['minimize_phase'] = 'Minimize phase';
 $string['maximize_phase'] = 'Maximize phase';
@@ -66,6 +67,8 @@ $string['export_as_pdf'] = 'Export PDF';
 $string['export_as_excel'] = 'Export excel file';
 $string['export_as_paultext'] = 'Export text file';
 $string['delete_examdata'] = 'Delete exam data';
+$string['examreview_dateroom'] = 'Set date and room';
+$string['change_examresults'] = 'Change exam results';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
@@ -197,6 +200,11 @@ $string['pointslist_percentages'] = 'List of points percentages';
 // exportResultsPAULFile.php
 $string['results'] = 'Results';
 
+// examReviewDateRoomForm.php
+$string['examreview_dateroom'] = 'Date and rooms for exam review';
+$string['examreview_date'] = 'Date';
+$string['examreview_room'] = 'Rooms (enter free text)';
+
 //helptexts
 $string['help'] = 'Help';
 
@@ -214,6 +222,7 @@ $string['helptext_sendGroupmessages']= 'Here goes the description of this featur
 $string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
 $string['helptext_showResults']= 'Here goes the description of this feature site.';
+$string['helptext_examReviewDateRoom']= 'Here goes the description of this feature site.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';

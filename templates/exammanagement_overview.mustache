@@ -82,6 +82,20 @@ ajaxtoogleInformation = function(command, value){
               alert('Interner Fehler. Bitte erneut versuchen.')
             }
         });
+    } else if(command=='examreview'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformexamreview': true, 'examreviewvisible': Number(value)},
+            success: function(response) {
+							$('.examReviewVisible').toggle();
+							$('.examReviewNotVisible').toggle();
+							$('.loadable').toggle();
+						},
+            error: function(response) {
+							$('.loadable').toggle();
+              alert('Interner Fehler. Bitte erneut versuchen.')
+            }
+        });
     }
 };
 
@@ -421,11 +435,11 @@ ajaxsetcorrectioncompletion = function(value){
 																					</span>
 																		</div>
 																		{{#placevisible}}
-																				<p class="placeVisible collapse.show">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeVisible collapse.show">Die Informationen zu den Sitzplätzen wurden für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
 																		{{/placevisible}}
 																		{{^placevisible}}
-																				<p class="placeNotVisible collapse.show">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeNotVisible collapse.show">Die Informationen zu den Sitzplätzen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="placeVisible collapse">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
 																		{{/placevisible}}
 																</div>
@@ -727,6 +741,124 @@ ajaxsetcorrectioncompletion = function(value){
 										<div class="panel-footer text-xs-center">
 										</div>
 									</div>{{/datadeletiondate}}
+								</div>
+							</div>
+					</li>
+					{{!exam_review}}
+					<span id="examreview"></span>
+							<li class="item">
+								{{#fifthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fifthphasecompleted}}
+								{{^fifthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fifthphasecompleted}}
+								<div class="panel panel-primary mainpanel">
+									<div class="panel-heading">
+										<a aria-expanded="false" onclick="tooglePhase('.phase_five'); return true;">
+												<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
+												<span class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}}{{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+												<span class="{{#fifthphaseactive}}collapse{{/fifthphaseactive}}{{^fifthphaseactive}}collapse.show{{/fifthphaseactive}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+										</a>
+									</div>
+										<div class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}} {{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five">
+										<div class="panel-body">
+											<div class="row row-eq-height">
+												<div class="col-xs-6">
+													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Datum und Raum für die Klausureinsicht</h3>
+																<span class="statebar col-xs-6">
+																		{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#examreviewtime}}{{#examreviewroom}}<p> Die Klausureinsicht findet am <strong> {{examreviewtime}} </strong> in Raum <strong> {{examreviewroom}}</strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{^examreviewtime}}{{#examreviewroom}}<p> Die Klausureinsicht findet in Raum <strong> {{examreviewroom}} </strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{#examreviewtime}}{{^examreviewroom}}<p> Die Klausureinsicht findet am <strong> {{examreviewtime}} </strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{^examreviewtime}}{{^examreviewroom}}<p> Es wurden noch kein Datum und kein Raum für die Klausureinsicht festgelegt.</p>{{/examreviewroom}}{{/examreviewtime}}
+														</div>
+														<div class="panel-footer">
+															{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}btn-warning{{/examreviewtime}} {{^examreviewroom}}btn-warning{{/examreviewroom}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
+														<div class="panel-heading">
+															<div class ="row">
+																<h3 class="panel-title col-xs-6">Informationen Klausureinsicht sichtbar schalten</h3>
+																<span class="statebar col-xs-6">
+																	{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoogleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																	<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																	{{^examreviewtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}
+																	{{^examreviewroom}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#examreviewvisible}}
+																	<p class="examReviewVisible collapse.show">Die Informationen zur Klausureinsicht wurden für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="examReviewVisible collapse">Die Informationen zur Klausureinsicht wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+															{{/examreviewvisible}}
+															{{^examreviewvisible}}
+																	<p class="examReviewVisible collapse.show">Die Informationen zur Klausureinsicht wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="examReviewVisible collapse">Die Informationen zur Klausureinsicht wurden für die Teilnehmer sichtbar geschaltet.</p>
+															{{/examreviewvisible}}
+														</div>
+														<div class="panel-footer text-xs-center">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row row-eq-height">
+												<div class="col-xs-6">
+														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}panel-warning{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Prüfungsergebnisse ändern</h3>
+																<span class="statebar col-xs-6">
+																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{^datadeletiondate}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/datadeletiondate}}
+																	{{^datadeletiondate}}{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/datadeletiondate}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+															{{#resultsenteredafterexamreview}}<p>Es wurden bisher <strong>{{resultsenteredafterexamreview}} </strong> Prüfungsergebnisse nach der Klausureinsicht geändert.</p>{{/resultsenteredafterexamreview}}
+															{{^resultsenteredafterexamreview}}<p>Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.</p>{{/resultsenteredafterexamreview}}
+														</div>
+														<div class="panel-footer">
+															{{#datadeletiondate}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
+														<div class="panel-heading">
+															<div class="row">
+																<h3 class="panel-title col-xs-6">Export der geänderten Ergebnisse</h3>
+																<span class="statebar col-xs-6">
+																	{{^datadeletiondate}}{{^resultsenteredafterexamreview}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{^datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																</span>
+															</div>
+														</div>
+														<div class="panel-body">
+																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PDF oder als PAUL-Text-Dokument für das Prüfungsamt exportiert werden.</p>
+														</div>
+														<div class="panel-footer">
+															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+														</div>
+													</div>
+	                      </div>
+										  </div>
                 </div>
               </div>
             </div>

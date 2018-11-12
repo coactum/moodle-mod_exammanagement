@@ -53,8 +53,4 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_exammanagement/exammanagement_participantsview', $data);
     }
-    public function render_quick_test_page() {
-        return parent::render_from_template('mod_exammanagement/quick_test_page', array());
-    }
-
 }

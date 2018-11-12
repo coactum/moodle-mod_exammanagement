@@ -49,6 +49,9 @@ $placevisible = optional_param('placevisible', 0, PARAM_RAW);
 $calledfromformcorrection = optional_param('calledfromformcorrection', 0, PARAM_RAW);
 $correctioncompleted = optional_param('correctioncompleted', 0, PARAM_RAW);
 
+$calledfromformexamreview = optional_param('calledfromformexamreview', 0, PARAM_RAW);
+$examreviewvisible = optional_param('examreviewvisible', 0, PARAM_RAW);
+
 global $PAGE, $CFG, $USER;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
@@ -120,6 +123,20 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
      } else {
        $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur konnte nicht abgeschlossen werden', 'error');
      }
+  } elseif($calledfromformexamreview){ // save exam review
+
+    if($examreviewvisible){
+      $ExammanagementInstanceObj->moduleinstance->examreviewvisible = true;
+    } else {
+      $ExammanagementInstanceObj->moduleinstance->examreviewvisible = false;
+    }
+
+     $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+     if($update){
+       $MoodleObj->redirectToOverviewPage('forexam', 'Informationen zur Klausureinsicht freigeschaltet.', 'success');
+     } else {
+       $MoodleObj->redirectToOverviewPage('forexam', 'Informationen zur Klausureinsicht konnten nicht freigeschaltet werden', 'error');
+     }
   }
 
   $MoodleObj->setPage('view');
@@ -184,12 +201,14 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $statePhaseExam = $ExammanagementInstanceObj->checkPhaseCompletion("Exam");
   $statePhaseThree = $ExammanagementInstanceObj->checkPhaseCompletion(3);
   $statePhaseFour = $ExammanagementInstanceObj->checkPhaseCompletion(4);
+  $statePhaseFive = $ExammanagementInstanceObj->checkPhaseCompletion(5);
 
   $currentPhaseOne = false;
   $currentPhaseTwo = false;
   $currentPhaseExam = false;
   $currentPhaseThree = false;
   $currentPhaseFour = false;
+  $currentPhaseFive = false;
 
   $currentPhase = $ExammanagementInstanceObj->determineCurrentPhase();
   switch ($currentPhase){
@@ -207,6 +226,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
         break;
     case '4':
         $currentPhaseFour = true;
+        break;
+    case '5':
+        $currentPhaseFive = true;
         break;
     default:
         break;
@@ -227,8 +249,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $gradingscale = $ExammanagementInstanceObj->getGradingscale();
   $resultscount = $ExammanagementInstanceObj->getInputResultsCount();
   $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
+  $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
+  $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
+  $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
+  $resultsenteredafterexamreview = count($UserObj->getAllParticipantsWithResultsAfterExamReview());
 
-  $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate);
+  $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview);
   echo $output->render($page);
 
   //$this->debugElementsOverview();
@@ -268,13 +294,20 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
     $place = false;
   }
 
+  if($ExammanagementInstanceObj->isExamReviewVisible() && $ExammanagementInstanceObj->getHrExamReviewTime() && $ExammanagementInstanceObj->getExamReviewRoom()){
+    $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
+    $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
+
+  }
+
+
   //textfield
   $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
   //rendering and displaying content
   $output = $PAGE->get_renderer('mod_exammanagement');
 
-  $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield);
+  $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $examreviewtime, $examreviewroom);
   echo $output->render($page);
 
   $MoodleObj->outputFooter();

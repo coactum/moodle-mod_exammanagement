@@ -34,6 +34,7 @@ $string['phase_one'] = 'Vor der Prüfung';
 $string['phase_two'] = 'Für die Prüfung';
 $string['phase_three'] = 'Nach der Korrektur';
 $string['phase_four'] = 'Nach der Prüfung';
+$string['phase_five'] = 'Klausureinsicht';
 $string['exam_appointment'] = 'Prüfungstermin';
 $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
@@ -66,6 +67,8 @@ $string['export_as_pdf'] = 'PDF exportieren';
 $string['export_as_excel'] = 'Excel-Dokument exportieren';
 $string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
 $string['delete_examdata'] = 'Prüfungsdaten löschen';
+$string['examreview_dateroom'] = 'Datum und Räume festlegen';
+$string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
@@ -198,6 +201,11 @@ $string['pointslist_percentages'] = 'Punkteliste Prozente';
 // exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';
 
+// examReviewDateRoomForm.php
+$string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
+$string['examreview_date'] = 'Datum';
+$string['examreview_room'] = 'Räume (als Freitext eintragen)';
+
 //helptexts
 $string['help'] = 'Hilfe';
 
@@ -246,6 +254,7 @@ Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 $string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
+$string['helptext_examReviewDateRoom']= 'Hier können ein Datum und Räume für die Klausureinsicht eingetragen werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';

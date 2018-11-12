@@ -82,5 +82,15 @@
             {{^textfield}}Es ist kein Prüfungshinweis verfügbar.{{/textfield}}
           </div>
       </div>
+      {{#examreviewtime}}
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Klausureinsicht:</b>
+          </p>
+          <div class="col-xs-6">            
+              Die Klausurkorrektur ist nun abgeschloßen. Am {{examreviewtime}} findet die Klausureinsicht in Raum {{examreviewroom}} statt.
+          </div>
+      </div>
+      {{/examreviewtime}}
       {{/isparticipant}}
 </div>

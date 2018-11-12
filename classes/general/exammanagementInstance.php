@@ -311,10 +311,20 @@ EOF;
 				if ($this->getDataDeletionDate()){
 					return true;
 				} else {
-						return false;
+					return false;
 				}
 			case 4:
-				return false;
+				if ($this->getExamReviewTime() && $this->getExamReviewRoom() && $this->isExamReviewVisible()){
+					return true;
+				} else {
+					return false;
+				}
+			case 5:
+				if ($this->getExamReviewTime() && $this->getExamReviewTime() < time()){
+					return true;
+				} else {
+					return false;
+				}
  		}
 
  	}
@@ -325,8 +335,10 @@ EOF;
 			$phaseTwo = $this->checkPhaseCompletion(2);
 			$phaseThree = $this->checkPhaseCompletion(3);
 			$phaseFour = $this->checkPhaseCompletion(4);
+			$phaseFive = $this->checkPhaseCompletion(5);
 
 			$examDate = $this->getExamtime();
+			$examReviewDate = $this->moduleinstance->examreviewtime;
 			$date = time();
 
  			if(!$phaseOne){
@@ -339,7 +351,9 @@ EOF;
 					return '3';
 			} else if($phaseThree && $examDate < $date){
 					return '4';
-			}
+			} else if($phaseFour && $examReviewDate < $date){
+					return '5';
+		}
  	}
 
 	#### errors ####
@@ -620,6 +634,17 @@ EOF;
 
 	}
 
+	public function isExamReviewVisible(){
+
+		$isExamReviewVisible = $this->moduleinstance->examreviewvisible;
+
+		if($isExamReviewVisible){
+				return true;
+		} else {
+				return false;
+		}
+	}
+
 	public function getTaskCount(){
 
 		$tasks = $this->getTasks();
@@ -660,6 +685,40 @@ EOF;
 			return count($users);
 		} else {
 				return false;
+		}
+
+	}
+
+	public function getHRExamReviewTime(){
+
+		$examReviewTime = $this->moduleinstance->examreviewtime;
+		if($examReviewTime){
+			$hrexamReviewTime = date('d.m.Y', $examReviewTime).' um '.date('H:i', $examReviewTime);
+			return $hrexamReviewTime;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function getExamReviewTime(){
+
+		$examReviewTime = $this->moduleinstance->examreviewtime;
+		if($examReviewTime){
+			return $examReviewTime;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function getExamReviewRoom(){
+
+		$examReviewRoom = json_decode($this->moduleinstance->examreviewroom);
+		if($examReviewRoom){
+			return $examReviewRoom;
+		} else {
+			return '';
 		}
 
 	}
@@ -921,6 +980,7 @@ public function saveResults($fromform){
 			}
 
 			$participantObj->exampoints = json_encode($fromform->points);
+			$participantObj->timeresultsentered = time();
 
 			$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$this->moduleinstance->categoryid, $participantObj);
 			if($update){

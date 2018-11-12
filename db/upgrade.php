@@ -133,6 +133,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         $table->add_field('place', XMLDB_TYPE_CHAR, '25', null, null, null, null);
         $table->add_field('exampoints', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('examstate', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('timeresultsentered', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('bonus', XMLDB_TYPE_TEXT, null, null, null, null, null);
 
         // Adding keys to table exammanagement_participants.

@@ -44,11 +44,13 @@ class exammanagement_overview implements renderable, templatable {
     protected $examphasecompleted;
     protected $thirdphasecompleted;
     protected $fourthphasecompleted;
+    protected $fifthphasecompleted;
     protected $firstphaseactive;
     protected $secondphaseactive;
     protected $examphaseactive;
     protected $thirdphaseactive;
     protected $fourthphaseactive;
+    protected $fifthphaseactive;
     protected $hrexamtime;
     protected $textfield;
     protected $taskcount;
@@ -64,23 +66,29 @@ class exammanagement_overview implements renderable, templatable {
   protected $gradingscale;
   protected $resultscount;
   protected $datadeletiondate;
+  protected $examreviewtime;
+  protected $examreviewroom;
+  protected $examreviewvisible;
+  protected $resultsenteredafterexamreview;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
         $this->examphasecompleted = $examphasecompleted;
         $this->thirdphasecompleted = $thirdphasecompleted;
         $this->fourthphasecompleted = $fourthphasecompleted;
+        $this->fifthphasecompleted = $fifthphasecompleted;
         $this->firstphaseactive = $firstphaseactive;
         $this->secondphaseactive = $secondphaseactive;
         $this->examphaseactive = $examphaseactive;
         $this->thirdphaseactive = $thirdphaseactive;
         $this->fourthphaseactive = $fourthphaseactive;
+        $this->fifthphaseactive = $fifthphaseactive;
         $this->hrexamtime = $hrexamtime;
         $this->taskcount = $taskcount;
         $this->tasktotalpoints = $tasktotalpoints;
@@ -96,6 +104,10 @@ class exammanagement_overview implements renderable, templatable {
         $this->gradingscale = $gradingscale;
         $this->resultscount = $resultscount;
         $this->datadeletiondate = $datadeletiondate;
+        $this->examreviewtime = $examreviewtime;
+        $this->examreviewroom = $examreviewroom;
+        $this->examreviewvisible = $examreviewvisible;
+        $this->resultsenteredafterexamreview = $resultsenteredafterexamreview;
     }
 
     /**
@@ -112,11 +124,13 @@ class exammanagement_overview implements renderable, templatable {
         $data->examphasecompleted = $this->examphasecompleted;
         $data->thirdphasecompleted = $this->thirdphasecompleted;
         $data->fourthphasecompleted = $this->fourthphasecompleted;
+        $data->fifthphasecompleted = $this->fifthphasecompleted;
         $data->firstphaseactive = $this->firstphaseactive;
         $data->secondphaseactive = $this->secondphaseactive;
         $data->examphaseactive = $this->examphaseactive;
         $data->thirdphaseactive = $this->thirdphaseactive;
         $data->fourthphaseactive = $this->fourthphaseactive;
+        $data->fifthphaseactive = $this->fifthphaseactive;
         $data->hrexamtime = $this->hrexamtime;
         $data->taskcount = $this->taskcount;
         $data->tasktotalpoints = $this->tasktotalpoints;
@@ -132,6 +146,10 @@ class exammanagement_overview implements renderable, templatable {
         $data->gradingscale = $this->gradingscale;
         $data->resultscount = $this->resultscount;
         $data->datadeletiondate = $this->datadeletiondate;
+        $data->examreviewtime = $this->examreviewtime;
+        $data->examreviewroom = $this->examreviewroom;
+        $data->examreviewvisible = $this->examreviewvisible;
+        $data->resultsenteredafterexamreview = $this->resultsenteredafterexamreview;
         return $data;
     }
 
