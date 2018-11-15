@@ -72,11 +72,20 @@ $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
+$string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
 
 // addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Standardräume aus Datei importieren';
 $string['import_default_rooms_str'] = 'Hier können die allen Dozenten als Standardprüfungsräume zur Auswahl stehenden Räume von Administratoren aus einer Text-Datei importiert werden.';
 $string['default_rooms_already_exists'] = 'Es wurden bereits Standardräume importiert. Diese werden durch den Import aus einer neuen Datei überschrieben.';
+
+// addCustomRoomForm.php
+$string['add_room'] = 'Raum anlegen';
+$string['change_room'] = 'Raum ändern';
+$string['delete_room'] = 'Raum löschen';
+$string['customroom_name'] = 'Name des Raums';
+$string['customroom_placescount'] = 'Anzahl der Sitzplätze';
+$string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
@@ -255,6 +264,7 @@ $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfig
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 $string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
 $string['helptext_examReviewDateRoom']= 'Hier können ein Datum und Räume für die Klausureinsicht eingetragen werden ...';
+$string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
@@ -268,6 +278,9 @@ $string['err_roomsdoubleselected'] = 'Derselbe Raum wurde mehrfach in unterschie
 $string['err_invalidcheckboxid_rooms'] = 'Ungültige Raumid.';
 $string['err_invalidcheckboxid_participants'] = 'Ungültige Teilnehmerid.';
 $string['err_nonvalidmatrnr'] = 'Ungültige Matrikelnummer.';
+$string['err_customroomname_taken'] = 'Raumname bereits vergeben';
+$string['err_filloutfield'] = 'Bitte Feld ausfüllen';
+$string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

@@ -66,6 +66,14 @@ class MoodleDB{
 		return $records;
 	}
 
+	public function getRecordsSelectFromDB($table, $sql){
+		global $DB;
+
+		$records = $DB->get_records_select($table, $sql);
+
+		return $records;
+	}
+
 	public function getFieldsetFromRecordsInDB($table, $field, $select){
 		global $DB;
 
@@ -73,6 +81,13 @@ class MoodleDB{
 
 		return $records;
 	}
+
+	public function checkIfRecordExists($table, $conditions){
+		global $DB;
+
+		return $DB->record_exists($table, $conditions);
+	}
+	
 
 	public function UpdateRecordInDB($table, $obj){
 		global $DB;

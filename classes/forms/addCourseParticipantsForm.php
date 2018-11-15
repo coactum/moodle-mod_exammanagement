@@ -42,7 +42,7 @@ class addCourseParticipantsForm extends moodleform{
 
     //Add elements to form
     public function definition(){
-        global $PAGE, $CFG;
+        global $PAGE;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->moduleinstance->categoryid);

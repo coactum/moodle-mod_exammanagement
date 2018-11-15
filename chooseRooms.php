@@ -36,12 +36,30 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+global $USER;
+
+$deletecustomroomid  = optional_param('deletecustomroomid', 0, PARAM_TEXT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   $MoodleObj->setPage('chooseRooms');
   $MoodleObj-> outputPageHeader();
+
+  if($deletecustomroomid){
+
+		if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
+      if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
+        $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
+      } else {
+        redirect ('chooseRooms.php?id='.$id, 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.', null, 'error');
+      }
+    }
+  }
+
   $ExammanagementFormsObj->buildChooseRoomsForm();
 
   $MoodleObj->outputFooter();

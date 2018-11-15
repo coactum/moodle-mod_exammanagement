@@ -44,8 +44,6 @@ class addDefaultRoomsForm extends moodleform {
   //Add elements to form
   public function definition() {
 
-    global $PAGE, $CFG;
-
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
     $mform = $this->_form; // Don't forget the underscore!

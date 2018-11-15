@@ -475,6 +475,7 @@ EOF;
 				$roomObj->seatingplan = $svgStr;
 				$roomObj->places = $roomParameters[3];
 				$roomObj->type = 'defaultroom';
+				$roomObj->moodleuserid = NULL;
 				$roomObj->misc = NULL;
 
 				$import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
@@ -490,13 +491,32 @@ EOF;
 
 	public function getDefaultRooms(){
 
+		global $DB;
+
 		$MoodleDBObj = MoodleDB::getInstance();
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
-		$defaultRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array());
+		$defaultRooms = $MoodleDBObj->getRecordsSelectFromDB('exammanagement_rooms', "type = 'defaultroom'");
 
 		if($defaultRooms){
 			return $defaultRooms;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function getCustomRooms(){
+
+		global $DB, $USER;
+
+		$MoodleDBObj = MoodleDB::getInstance();
+		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+		$customRooms = $MoodleDBObj->getRecordsSelectFromDB('exammanagement_rooms', "type = 'customroom' AND moodleuserid = " .$USER->id);
+
+		if($customRooms){
+			return $customRooms;
 		} else {
 			return false;
 		}
@@ -543,7 +563,17 @@ EOF;
 
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
 
-		$allRooms = $this->getDefaultRooms();
+		$defaultRooms = $this->getDefaultRooms();
+		$customRooms = $this->getCustomRooms();
+
+		if($defaultRooms && $customRooms){
+			$allRooms = array_merge($defaultRooms, $customRooms);
+		} else if ($defaultRooms){
+			$allRooms = $defaultRooms;
+		} else if($customRooms){
+			$allRooms = $customRooms;
+		}
+
 		$allRoomNames;
 		$allRoomIDs;
 

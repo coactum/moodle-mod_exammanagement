@@ -72,11 +72,20 @@ $string['change_examresults'] = 'Change exam results';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
+$string['add_custom_room'] = 'Add custom exam room';
 
 // addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Import default rooms from text file';
 $string['import_default_rooms_str'] = 'Administrators can import default rooms for teachers to choose from here as text file.';
 $string['default_rooms_already_exists'] = 'Default rooms are already imported. New import will override old rooms.';
+
+// addCustomRoomForm.php
+$string['add_room'] = 'Add room';
+$string['change_room'] = 'Change room';
+$string['delete_room'] = 'Delete room';
+$string['customroom_name'] = 'Name of exam room';
+$string['customroom_placescount'] = 'Count of places';
+$string['customroom_description'] = 'Optional description shown when choosing rooms';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
@@ -223,6 +232,7 @@ $string['helptext_configureGradingscale']= 'Here goes the description of this fe
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
 $string['helptext_showResults']= 'Here goes the description of this feature site.';
 $string['helptext_examReviewDateRoom']= 'Here goes the description of this feature site.';
+$string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
@@ -236,6 +246,9 @@ $string['err_roomsdoubleselected'] = 'Double selection of one room with differen
 $string['err_invalidcheckboxid_rooms'] = 'Invalid room id.';
 $string['err_invalidcheckboxid_participants'] = 'Invalid participant id.';
 $string['err_nonvalidmatrnr'] = 'No valid matriculation number.';
+$string['err_customroomname_taken'] = 'Roomname already taken';
+$string['err_filloutfield'] = 'Please fill out field';
+$string['err_noalphanumeric'] = 'Contains invalid chars';
 
 //universal
 $string['modulename'] = 'Exam management';

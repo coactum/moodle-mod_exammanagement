@@ -58,7 +58,7 @@ class User{
 
 	public function getAllExamParticipants(){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 
@@ -73,7 +73,7 @@ class User{
 
 	public function getAllMoodleExamParticipants(){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
 
@@ -88,7 +88,7 @@ class User{
 
 	public function getAllNoneMoodleExamParticipants(){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
 
@@ -103,7 +103,7 @@ class User{
 
 	public function getAllExamParticipantsByRoom($roomid){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'roomid' => $roomid));
 
@@ -118,7 +118,7 @@ class User{
 
 	public function getAllExamParticipantsByHeader($headerid){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'headerid' => $headerid));
 
@@ -435,7 +435,7 @@ class User{
 
 	public function deleteParticipant($userid, $login = false){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$delete;
 
@@ -451,7 +451,7 @@ class User{
 	public function deleteAllParticipants(){
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$delete;
 
@@ -481,7 +481,7 @@ class User{
 		require_once(__DIR__.'/../ldap/ldapManager.php');
 
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
@@ -572,7 +572,7 @@ class User{
 
 	public function getNoneMoodleParticipantsEmailadresses(){
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "plugininstanceid =".$this->id;
 		$select .= " AND moodleuserid IS NULL";

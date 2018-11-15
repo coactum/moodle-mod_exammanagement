@@ -59,6 +59,7 @@
           <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>
           <FIELD NAME="places" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="places in each room"/>
           <FIELD NAME="type" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="room type (standard vs custom)"/>
+          <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="moodle user id for custom rooms"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
