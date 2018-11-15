@@ -68,7 +68,7 @@ class addParticipantsForm extends moodleform{
         if($tempParticipants){
             $mform->addElement('html', '<h3>'.get_string("import_participants", "mod_exammanagement").'</h3>');
         } else {
-            $mform->addElement('html', '<h3>'.get_string("add_participants_from_file", "mod_exammanagement").'</h3>');
+            $mform->addElement('html', '<h3>'.get_string("import_participants_from_file", "mod_exammanagement").'</h3>');
         }
         $mform->addElement('html', '</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
@@ -455,11 +455,12 @@ class addParticipantsForm extends moodleform{
 
             $maxbytes=$CFG->maxbytes;
 
-            $mform->addElement('html', '<h4>'.get_string("paul_file", "mod_exammanagement").'</h4>');
             $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+            $mform->addRule('participantslist_paul', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
-            $mform->addElement('html', '<div class="hidden"><h4>'.get_string("excel_file", "mod_exammanagement").'</h4>');
+            $mform->addElement('html', '<div class="hidden">');
             $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
+            $mform->addRule('participantslist_excel', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
             $mform->addElement('html', '</div>');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));

@@ -73,6 +73,8 @@ class groupmessagesForm extends moodleform {
                 }
             }
 
+            $mform->addElement('html', '<span class="m-t-1"><hr></span>');
+
             $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
             $mform->setType('groupmessages_subject', PARAM_TEXT);
             $mform->addRule('groupmessages_subject', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');

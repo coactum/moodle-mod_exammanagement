@@ -145,8 +145,12 @@ class configureTasksForm extends moodleform {
             $mform->setType('newtaskcount', PARAM_INT);
         }
 
+        if($ExammanagementInstanceObj->getInputResultsCount()){
+            $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.</p>');
+        }
+        
         if($ExammanagementInstanceObj->getGradingscale()){
-            $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
+            $mform->addElement('html', '<p><b>Achtung:</b> Es wurde bereits ein Notenschlüßel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.</p>');            
         }
 
         $this->add_action_buttons();

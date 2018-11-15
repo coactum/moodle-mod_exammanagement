@@ -96,7 +96,6 @@ $string['import_participants'] = 'Teilnehmer hinzufügen';
 $string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
 $string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
-$string['add_participants_from_file'] = 'Teilnehmer aus einer Datei einlesen und zur Prüfung hinzufügen';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
 $string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
 $string['participants'] = 'Teilnehmer';
@@ -109,7 +108,6 @@ $string['oddmatrnr'] = 'Benutzer mit Warnungen (können trotzdem hinzugefügt we
 $string['existingmatrnr'] = 'Benutzer sind bereits Prüfungsteilnehmer (keine Änderungen).';
 $string['deletedmatrnr'] = 'Benutzer werden gelöscht.';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
-$string['excel_file'] = 'Excel-Datei';
 $string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
 $string['paul_file'] = 'PAUL-Datei';
 $string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
@@ -280,6 +278,7 @@ $string['err_invalidcheckboxid_participants'] = 'Ungültige Teilnehmerid.';
 $string['err_nonvalidmatrnr'] = 'Ungültige Matrikelnummer.';
 $string['err_customroomname_taken'] = 'Raumname bereits vergeben';
 $string['err_filloutfield'] = 'Bitte Feld ausfüllen';
+$string['err_nofile'] = 'Bitte Datei auswählen';
 $string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
 
 //universal

@@ -67,6 +67,8 @@ class addCustomRoomForm extends moodleform {
     $mform->addElement('text', 'description', get_string('customroom_description', 'mod_exammanagement'), $attributes);
     $mform->setType('description', PARAM_TEXT);
 
+    $mform->addElement('html', '<p><b>Hinweis:</b> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.</p>');
+
     $this->add_action_buttons(true, get_string("add_room", "mod_exammanagement"));
 
     $mform->disable_form_change_checker();

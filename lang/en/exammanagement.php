@@ -96,7 +96,6 @@ $string['import_participants'] = 'Import participants';
 $string['import_new_participants'] = 'Import other participants';
 $string['import_participants_from_file'] = 'Import participants from file';
 $string['import_course_participants'] = 'Import participants from course';
-$string['add_participants_from_file'] = 'Add participants from file to the exam.';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['participants'] = 'Participants';
@@ -109,7 +108,6 @@ $string['oddmatrnr'] = 'Users with warnings (can still be added as participants)
 $string['existingmatrnr'] = 'Users are already exam participants (no changes)';
 $string['deletedmatrnr'] = 'Users will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
-$string['excel_file'] = 'Excel file';
 $string['import_from_excel_file'] = 'Import participants from excel file (matriculation number in any column) and add them to course.';
 $string['paul_file'] = 'PAUL file';
 $string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
@@ -248,6 +246,7 @@ $string['err_invalidcheckboxid_participants'] = 'Invalid participant id.';
 $string['err_nonvalidmatrnr'] = 'No valid matriculation number.';
 $string['err_customroomname_taken'] = 'Roomname already taken';
 $string['err_filloutfield'] = 'Please fill out field';
+$string['err_nofile'] = 'Please provide file';
 $string['err_noalphanumeric'] = 'Contains invalid chars';
 
 //universal
