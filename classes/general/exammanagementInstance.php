@@ -382,50 +382,6 @@ EOF;
 		}
 	}
 
-	#### wrapped Moodle DB functions #####
-
-	// protected function getFieldFromDB($table, $fieldname, $condition){
-	// 	global $DB;
-	//
-	// 	$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
-	//
-	// 	return $field;
-	// }
-
-	// protected function getRecordFromDB($table, $condition){
-	// 	global $DB;
-	//
-	// 	$record = $DB->get_record($table, $condition);
-	//
-	// 	return $record;
-	// }
-
-	// protected function getRecordsFromDB($table, $condition){
-	// 	global $DB;
-	//
-	// 	$records = $DB->get_records($table, $condition);
-	//
-	// 	return $records;
-	// }
-
-	// protected function UpdateRecordInDB($table, $obj){ // in DBobj and fully transfered
-	// 	global $DB;
-	//
-	// 	return $DB->update_record($table, $obj);
-	// }
-
-	// protected function InsertRecordInDB($table, $dataobject){
-	// 	global $DB;
-	//
-	// 	return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
-	// }
-
-	// protected function InsertBulkRecordsInDB($table, $dataobjects){
-	// 	global $DB;
-	//
-	// 	$DB->insert_records($table, $dataobjects);
-	// }
-
 	######### feature: chooseRooms ##########
 
 	public function saveRooms($roomsArr){

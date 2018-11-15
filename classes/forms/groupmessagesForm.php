@@ -75,8 +75,11 @@ class groupmessagesForm extends moodleform {
 
             $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
             $mform->setType('groupmessages_subject', PARAM_TEXT);
+            $mform->addRule('groupmessages_subject', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
             $mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
             $mform->setType('groupmessages_content', PARAM_TEXT);
+            $mform->addRule('groupmessages_content', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
+
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,'Mail abschicken');

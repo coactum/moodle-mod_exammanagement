@@ -63,6 +63,7 @@ class addCustomRoomForm extends moodleform {
     $mform->addElement('text', 'placescount', get_string('customroom_placescount', 'mod_exammanagement'), $attributes);
     $mform->setType('placescount', PARAM_INT);
     $mform->addRule('placescount', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
+    $mform->addRule('placescount', get_string('err_novalidinteger', 'mod_exammanagement'), 'nonzero', 'client');
     $mform->addElement('text', 'description', get_string('customroom_description', 'mod_exammanagement'), $attributes);
     $mform->setType('description', PARAM_TEXT);
 

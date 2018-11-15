@@ -437,15 +437,11 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$delete;
-
-		if($userid !== false){
-			$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
-		} else {
-			$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login));
+		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login));
 		}
-
-		return $delete;
 	}
 
 	public function deleteAllParticipants(){
@@ -453,25 +449,22 @@ class User{
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$delete;
-
 		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-		$delete = $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
-
-		return $delete;
+		if($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		}
 	}
 	
 	public function deleteTempParticipants(){
 			$MoodleDBObj = MoodleDB::getInstance();
 
-			$exists = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
-			if (!$exists) {
+			if($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $this->id))){
+				$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
+			} else {
 				return false;
 			}
-
-			$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
 	}
 
 	#### methods to get user props
@@ -709,15 +702,9 @@ class User{
 			$MoodleDBObj = MoodleDB::getInstance();
 
 			if($potentialParticipantId){
-				$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 			} else if($potentialParticipantLogin){
-				$user = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
-			}
-
-			if($user){
-				return true;
-			} else {
-				return false;
+				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
 			}
 	}
 

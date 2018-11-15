@@ -59,13 +59,13 @@ class addDefaultRoomsForm extends moodleform {
 
     $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addDefaultRooms'));
 
-    if($ExammanagementInstanceObj->getDefaultRooms()){
-        $mform->addElement('html', '<p>'.get_string("default_rooms_already_exists", "mod_exammanagement").'</p>');
-    }
-
     $mform->addElement('html', '<h4>'.get_string("import_default_rooms", "mod_exammanagement").'</h4>');
     $mform->addElement('filepicker', 'defaultrooms_list', get_string("import_default_rooms_str", "mod_exammanagement"), null, array('accepted_types' => '.txt'));
 
+    if($ExammanagementInstanceObj->getDefaultRooms()){
+      $mform->addElement('html', '<p>'.get_string("default_rooms_already_exists", "mod_exammanagement").'</p>');
+    }
+    
     $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 
     $mform->disable_form_change_checker();

@@ -54,8 +54,11 @@ class examReviewDateRoomForm extends moodleform {
 
         $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreview_date', 'mod_exammanagement'));
 
-        $mform->addElement('textarea', 'examreviewroom', get_string('examreview_room', 'mod_exammanagement'), 'wrap="virtual" rows="1" cols="50"');
+        $attributes = array('size'=>'20');
+
+        $mform->addElement('text', 'examreviewroom', get_string('examreview_room', 'mod_exammanagement'), $attributes);
         $mform->setType('examreviewroom', PARAM_TEXT);
+        $mform->addRule('examreviewroom', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

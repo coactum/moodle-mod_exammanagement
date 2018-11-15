@@ -157,11 +157,17 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
     $oldrecords = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
 
     if($oldrecords){
-      $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$coursecategoryid, $oldrecords);
+      $insert = $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$coursecategoryid, $oldrecords);
       
-      $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
+      if($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id))){
+        $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
+      }
       
-      $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning');
+      if($insert){
+        $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Alle Teilnehmerdaten wurden entsprechend angepasst.', 'success');
+      } else {
+        $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning'); 
+      }      
       
     }
 
@@ -175,7 +181,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
 
   $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-    if($tempparticipants){
+    if($tempparticipants && $MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $id))){
       $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));      
     }
 
