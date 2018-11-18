@@ -44,7 +44,15 @@ $string['state_optional'] = 'Optional';
 $string['state_required'] = 'Zwingend';
 $string['state_success'] = 'Erfolgreich';
 $string['state_notset'] = 'Nicht gesetzt';
-$string['state_notpossible'] = 'Noch nicht möglich';
+$string['state_notpossible_participants_missing'] = 'Teilnehmer fehlen';
+$string['state_notpossible_rooms_missing'] = 'Räume fehlen';
+$string['state_notpossible_examtime_missing'] = 'Datum fehlt';
+$string['state_notpossible_assignedplaces_missing'] = 'Sitzplatzzuweisung fehlt';
+$string['state_notpossible_tasks_missing'] = 'Aufgaben fehlen';
+$string['state_notpossible_results_missing'] = 'Ergebnisse fehlen';
+$string['state_notpossible_correctioncompleted_missing'] = 'Korrekturabschluss fehlt';
+$string['state_notpossible_examreviewtime_missing'] = 'Zeit der Klausureinsicht fehlt';
+$string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht fehlt';
 $string['state_loading'] = 'Lädt ...';
 
 //exammanagement_overview.mustache workstages buttons

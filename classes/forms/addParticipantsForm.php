@@ -451,6 +451,13 @@ class addParticipantsForm extends moodleform{
                 if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
                     $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
                 }
+
+                $maxbytes=$CFG->maxbytes;
+
+                $mform->addElement('html', '<div class="hidden">');
+                $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+                $mform->addElement('html', '</div>');
+
                 $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
             } else {
               $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');

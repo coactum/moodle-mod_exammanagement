@@ -44,7 +44,15 @@ $string['state_optional'] = 'Optional';
 $string['state_required'] = 'Required';
 $string['state_success'] = 'Success';
 $string['state_notset'] = 'Not set';
-$string['state_notpossible'] = 'Not possible yet';
+$string['state_notpossible_participants_missing'] = 'Participants missing';
+$string['state_notpossible_rooms_missing'] = 'Rooms missing';
+$string['state_notpossible_examtime_missing'] = 'Date missing';
+$string['state_notpossible_assignedplaces_missing'] = 'No places assigned';
+$string['state_notpossible_tasks_missing'] = 'Tasks missing';
+$string['state_notpossible_results_missing'] = 'Results missing';
+$string['state_notpossible_correctioncompleted_missing'] = 'Correction not completed';
+$string['state_notpossible_examreviewtime_missing'] = 'Time for exam review missing';
+$string['state_notpossible_examreviewroom_missing'] = 'Room for exam review missing';
 $string['state_loading'] = 'Loading ...';
 
 //exammanagement_overview.mustache work stages buttons

@@ -153,7 +153,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang beendet', 'success');
 
 		} else if ($fromform = $mform->get_data()) {
 		//In this case you process validated data. $mform->get_data() returns data posted in form.
