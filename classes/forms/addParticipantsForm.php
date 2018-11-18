@@ -485,18 +485,22 @@ class addParticipantsForm extends moodleform{
     public function validation($data, $files){
 
         $errors = array();
-    
-        foreach($data['participants'] as $participantid => $checked){
 
-            if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
-                $errors['participants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
+        if($data['participants']){
+            foreach($data['participants'] as $participantid => $checked){
+
+                if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
+                    $errors['participants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
+                }
             }
         }
 
-        foreach($data['deletedparticipants'] as $participantid => $checked){
+        if($data['deletedparticipants']){
+            foreach($data['deletedparticipants'] as $participantid => $checked){
 
-            if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
-                $errors['deletedparticipants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
+                if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
+                    $errors['deletedparticipants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
+                }
             }
         }
 

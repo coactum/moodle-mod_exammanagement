@@ -749,63 +749,6 @@ EOF;
 			}
 	}
 
-######### feature: input results ##########
-
-public function saveResults($fromform){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
-
-		if($LdapManagerObj->is_LDAP_config()){
-				$ldapConnection = $LdapManagerObj->connect_ldap();
-
-				$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
-
-				if($userlogin){
-					$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-				}
-		} else {
-				$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
-
-				if(!$userid){
-					$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
-				}
-		}
-
-		// getParticipantObj
-		if($userid !== false && $userid !== null){
-			$participantObj = $UserObj->getExamParticipantObj($userid);
-		} else if($userlogin !== false && $userlogin !== null){
-			$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-		}
-
-		if($participantObj){
-			$participantObj->examstate = json_encode($fromform->state);
-
-			if($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1'){
-					foreach ($fromform->points as $task => $points){
-							$fromform->points[$task] = 0;
-					}
-			}
-
-			$participantObj->exampoints = json_encode($fromform->points);
-			$participantObj->timeresultsentered = time();
-
-			$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$this->moduleinstance->categoryid, $participantObj);
-			if($update){
-				redirect ($this->getExammanagementUrl('inputResults', $this->id), null, null, null);
-			} else {
-				redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Speichern fehlgeschlagen', null, notification::NOTIFY_ERROR);
-			}
-
-
-		} else{
-			redirect ($this->getExammanagementUrl('inputResults', $this->id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);
-
-		}
-}
-
 ######### feature: exportResults ##########
 
 public function getPAULFileHeaders(){
