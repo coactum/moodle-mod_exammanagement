@@ -55,17 +55,22 @@ function xmldb_exammanagement_install() {
         $table = new xmldb_table($dbname);
 
         // Adding fields to table exammanagement_participants.
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '10', null, null, null, null);
-        $table->add_field('firstname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
-        $table->add_field('lastname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
-        $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('roomid', XMLDB_TYPE_CHAR, '255', null, null, null, null);
-        $table->add_field('place', XMLDB_TYPE_CHAR, '255', null, null, null, null);
-        $table->add_field('results', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('bonus', XMLDB_TYPE_TEXT, null, null, null, null, null);
+         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+         $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+         $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+         $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+         $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+         $table->add_field('firstname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+         $table->add_field('lastname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+         $table->add_field('email', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+         $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+         $table->add_field('roomid', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+         $table->add_field('roomname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+         $table->add_field('place', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+         $table->add_field('exampoints', XMLDB_TYPE_TEXT, null, null, null, null, null);
+         $table->add_field('examstate', XMLDB_TYPE_TEXT, null, null, null, null, null);
+         $table->add_field('timeresultsentered', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+         $table->add_field('bonuspoints', XMLDB_TYPE_CHAR, '25', null, null, null, null);
 
         // Adding keys to table exammanagement_participants.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));

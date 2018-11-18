@@ -11,7 +11,7 @@
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="categoryid" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
-          <FIELD NAME="password" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="password set for plugin instance"/>
+          <FIELD NAME="password" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="password set for plugin instance"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
           <FIELD NAME="importfileheaders" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="headers of imported paul files as jsonstring"/>
