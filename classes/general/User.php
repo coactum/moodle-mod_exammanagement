@@ -487,12 +487,13 @@ class User{
 		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
 		$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
 
-		if($participantsArr){
+		if($participantsArr && $examReviewTime){
 			foreach($participantsArr as $key => $participant){
-				if(!$participant->exampoints || !$participant->examstate || !$participant->timeresultsentered || intval($participant->timeresultsentered) < $examReviewTime){
+				if(!$participant->exampoints || !$participant->examstate || !$participant->timeresultsentered || $participant->timeresultsentered == null || intval($participant->timeresultsentered) < $examReviewTime){
 					unset($participantsArr[$key]);
 				}
 			}
+
 			return $participantsArr;
 		} else{
 			return false;

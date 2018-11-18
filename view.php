@@ -258,7 +258,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
   $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
   $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
   $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
-  $resultsenteredafterexamreview = count($UserObj->getAllParticipantsWithResultsAfterExamReview());
+
+  $resultsenteredafterexamreview = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+  if($resultsenteredafterexamreview){
+    $resultsenteredafterexamreview = count($resultsenteredafterexamreview);
+  }  
 
   $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview);
   echo $output->render($page);

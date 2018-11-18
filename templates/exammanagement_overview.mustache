@@ -777,7 +777,7 @@ ajaxsetcorrectioncompletion = function(value){
 															{{^examreviewtime}}{{^examreviewroom}}<p> Es wurden noch kein Datum und kein Raum für die Klausureinsicht festgelegt.</p>{{/examreviewroom}}{{/examreviewtime}}
 														</div>
 														<div class="panel-footer">
-															{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
+															{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
 														</div>
 													</div>
 												</div>

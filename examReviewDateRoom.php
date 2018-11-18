@@ -41,7 +41,12 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-  		$MoodleObj->setPage('examReviewDateRoom');
+      $MoodleObj->setPage('examReviewDateRoom');
+      
+      if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+        $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+      }
+
   		$MoodleObj-> outputPageHeader();
 
       //Instantiate form

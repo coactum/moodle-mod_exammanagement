@@ -41,9 +41,6 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
-		if(!$UserObj->getParticipantsCount()){
-			$MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
-		}
 
 		$MoodleObj->setPage('textfield');
 		$MoodleObj-> outputPageHeader();

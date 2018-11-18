@@ -140,7 +140,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
 
             if($afterexamreview == false){
-                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key);
+                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
             } else {
                 $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
             }

@@ -749,19 +749,6 @@ EOF;
 			}
 	}
 
-######### feature: exportResults ##########
-
-public function getPAULFileHeaders(){
-
-		$PAULFileHeaders = json_decode($this->moduleinstance->importfileheaders);
-
-		if($PAULFileHeaders){
-				return $PAULFileHeaders;
-		} else{
-			return false;
-		}
-}
-
 // delete instance
 public function getDataDeletionDate(){
 
