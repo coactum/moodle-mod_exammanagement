@@ -24,11 +24,10 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\exammanagementForms;
+use mod_exammanagement\forms\configureGradingscaleForm;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -37,13 +36,46 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		$MoodleObj->setPage('configureGradingscale');
 		$MoodleObj-> outputPageHeader();
-		$ExammanagementFormsObj->buildConfigureGradingscaleForm();
+
+		//Instantiate form
+		$mform = new configureGradingscaleForm(null, array('id'=>$id, 'e'=>$e));
+
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+		} else if ($fromform = $mform->get_data()) {
+		//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+			$gradingscale = json_encode($fromform->gradingsteppoints);
+			$ExammanagementInstanceObj->moduleinstance->gradingscale = $gradingscale;
+
+			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+			if($update){
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konfiguriert', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konnte nicht konfiguriert werden', 'error');
+			}
+
+		} else {
+		// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		// or on the first display of the form.
+
+		//Set default data (if any)
+		//$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		$mform->set_data(array('id'=>$id));
+
+		//displays the form
+		$mform->display();
+		}
 
 		$MoodleObj->outputFooter();
 } else {

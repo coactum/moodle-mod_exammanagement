@@ -182,205 +182,8 @@ class User{
 			return false;
 		}
 	}
-	
-	public function saveParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
-
-			require_once(__DIR__.'/../ldap/ldapManager.php');
-
-			$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);	
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
-
-				$tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
-				$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
-				$newheaderid;
-
-				// save new file header
-				if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
-					$savedFileHeadersArr = array();
-					$newheaderid = 1;
-					array_push($savedFileHeadersArr, $tempfileheader);
-				} else if($savedFileHeadersArr && $tempfileheader){
-					$saved = false;
-					
-					foreach($savedFileHeadersArr as $key => $header){ // if new header is already saved
-						if($tempfileheader == $header){
-							$newheaderid = $key+1;
-							$saved = true;
-						}
-					}
-					
-					if(!$saved){ // if new header is not saved yet
-						$newheaderid = count($savedFileHeadersArr)+1;
-						array_push($savedFileHeadersArr, $tempfileheader);
-					}
-				}  else if(!$tempfileheader){ // if reading of tempfileheader fails
-					$headerid = 0;
-				}
-
-				$ExammanagementInstanceObj->moduleinstance->importfileheaders = json_encode($savedFileHeadersArr);
-
-				// add new participants
-				if($participantsIdsArr){ 
-					$userObjArr = array();
-
-					foreach($participantsIdsArr as $identifier){
-
-						$temp = explode('_', $identifier);
-
-						if($temp[0]== 'mid'){
-							$user = new stdClass();
-							$user->plugininstanceid = $this->id;
-							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-							$user->moodleuserid = $temp[1];
-							$user->imtlogin = null;
-							$user->firstname = null;
-							$user->lastname = null;
-							$user->email = null;
-							$user->headerid = $newheaderid;
-
-							array_push($userObjArr, $user);
-						} else {
-
-							$user = new stdClass();
-							$user->plugininstanceid = $this->id;
-							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-							$user->moodleuserid = null;
-
-							if($LdapManagerObj->is_LDAP_config()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								$user->imtlogin = ''.$LdapManagerObj->uid2studentid($ldapConnection, $temp[1]);
-
-								$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $temp[1] );
-				
-								if($ldapUser){
-									$user->firstname = $ldapUser['sn'];
-									$user->lastname = $ldapUser['givenName'];
-									$user->email = ''.$ldapUser['upbMailPreferredAddress'];
-								} else {
-									$user->firstname = NULL;
-									$user->lastname = NULL;
-									$user->email = NULL;
-								}				
-							} else { // for local testing during development
-
-									$user->imtlogin = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
-									$user->firstname = 'Mister';
-									$user->lastname = 'Testerin';
-									$user->email = 'Test@Testi.test';
-							}
-
-							$user->headerid = $newheaderid;
-
-							array_push($userObjArr, $user);
-						}
-					}
-
-					// insert records of new participants
-					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
-
-				}
-
-				// delete deleted participants
-				if($deletedParticipantsIdsArr){
-					foreach($deletedParticipantsIdsArr as $identifier){
-							$temp = explode('_', $identifier);
-
-							if($temp[0]== 'mid'){
-								$this->deleteParticipant($temp[1], false);
-							} else {
-								$this->deleteParticipant(false, $temp[1]);
-							}
-					}
-				}
-
-				// delete temp file header and update saved file headers
-				$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
-
-				// reset state of places assignment if already set
-				if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-					$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-				}
-
-				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-
-				//delete temp participants
-				$this->deleteTempParticipants();
-
-				//redirect
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer wurden zur Prüfung hinzugefügt.', 'success');
-
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
-			}
-
-	}
 
 	#### import participants ####
-
-	public function saveCourseParticipants($participantsIdsArr, $deletedParticipantsIdsArr){
-
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
-
-				$insert;
-				$userObjArr = array();
-
-				if($participantsIdsArr){
-					foreach($participantsIdsArr as $participantId){
-
-						if($this->checkIfAlreadyParticipant($participantId) == false){
-							$user = new stdClass();
-							$user->plugininstanceid = $this->id;
-							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-							$user->moodleuserid = $participantId;
-							$user->headerid = 0;
-
-							array_push($userObjArr, $user);
-
-						}
-					}
-				}
-
-				if($deletedParticipantsIdsArr){
-					foreach($deletedParticipantsIdsArr as $identifier){
-							$temp = explode('_', $identifier);
-
-							if($temp[0]== 'mid'){
-								$this->deleteParticipant($temp[1], false);
-							} else {
-
-								if($temp[1] && $temp[2]){ //for testing
-
-									$this->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
-								} else {
-									$this->deleteParticipant(false, $temp[1]);
-								}
-							}
-					}
-				}
-
-				// reset state of places assignment if already set
-				if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-					$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-					$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-				}
-
-				$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$this->categoryid, $userObjArr);
-
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
-
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
-			}
-	}
 
 	public function filterCheckedParticipants($returnObj){
 
@@ -699,13 +502,26 @@ class User{
 	#### other methods  ####
 
 	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
-			$MoodleDBObj = MoodleDB::getInstance();
+			
+		require_once(__DIR__.'/../ldap/ldapManager.php');
 
-			if($potentialParticipantId){
-				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
-			} else if($potentialParticipantLogin){
-				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		if($potentialParticipantId){
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+		} else if($potentialParticipantLogin){
+			if($LdapManagerObj->is_LDAP_config()){
+				$ldapConnection = $LdapManagerObj->connect_ldap();
+				$imtlogin = $LdapManagerObj->uid2studentid($ldapConnection, $potentialParticipantLogin);
+			} else {
+				$imtlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($potentialParticipantLogin);				
 			}
+
+			if($imtlogin){
+				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $imtlogin));
+			}
+		}
 	}
 
 	public function checkIfValidMatrNr($mnr) {

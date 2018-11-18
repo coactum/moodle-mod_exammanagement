@@ -37,7 +37,7 @@ require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
 
-class dateTimeForm extends moodleform {
+class setDateTimeForm extends moodleform {
 
     //Add elements to form
     public function definition() {

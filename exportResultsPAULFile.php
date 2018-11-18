@@ -140,7 +140,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
 
             if($afterexamreview == false){
-                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
+                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key);
             } else {
                 $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
             }
@@ -149,8 +149,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             if($ParticipantsArray){
 
-                $textfile = $PAULFileHeader;
-
+                if($PAULFileHeader == true){
+                    $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
+                    $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';    
+                    $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
+                } else {
+                    $textfile = $PAULFileHeader;
+                }
+                
                 foreach($ParticipantsArray as $participant){
     
                     $resultWithBonus = "";

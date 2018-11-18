@@ -384,67 +384,6 @@ EOF;
 
 	######### feature: chooseRooms ##########
 
-	public function saveRooms($roomsArr){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		$rooms=json_encode($roomsArr);
-
-		$this->moduleinstance->rooms=$rooms;
-
-		// reset state of places assignment if already set
-		if($this->isStateOfPlacesCorrect()){
-			$this->moduleinstance->stateofplaces = 'error';
-		}
-
-		$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-		if($update){
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
-		} else {
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume konnten nicht für die Prüfung ausgewählt werden', 'error');
-		}
-	}
-
-	public function saveDefaultRooms($defaultRoomsFile){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-		if($this->getDefaultRooms()){
-			$MoodleDBObj->DeleteRecordsFromDB("exammanagement_rooms", array());
-		}
-
-		$fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
-
-		foreach ($fileContentArr as $key => $roomstr){
-
-				$roomParameters = explode('+', $roomstr);
-
-				$roomObj = new stdClass();
-				$roomObj->roomid = $roomParameters[0];
-				$roomObj->name = $roomParameters[1];
-				$roomObj->description = $roomParameters[2];
-
-				$svgStr = base64_encode($roomParameters[4]);
-
-				$roomObj->seatingplan = $svgStr;
-				$roomObj->places = $roomParameters[3];
-				$roomObj->type = 'defaultroom';
-				$roomObj->moodleuserid = NULL;
-				$roomObj->misc = NULL;
-
-				$import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
-			}
-
-			if($import){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume konnten nicht importiert werden', 'error');
-
-			}
-  }
-
 	public function getDefaultRooms(){
 
 		global $DB;
@@ -551,25 +490,6 @@ EOF;
 		} else{
 			return false;
 		}
-
-	}
-
-	public function filterCheckedRooms($obj){
-
-			$obj= get_object_vars($obj);
-			$roomsArray=$obj["rooms"];
-			$rooms=array();
-
-			foreach ($roomsArray as $key => $value){
-				if ($value==1 && is_string($value)){
-					array_push($rooms, $key);
-				}
-
-			}
-
-			sort($rooms); //sort checked roomes ids for saving in DB
-
-			return $rooms;
 
 	}
 
@@ -709,62 +629,28 @@ EOF;
 
 	}
 
-	############## feature: setDateTime #########
-
-	public function saveDateTime($examtime){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			$this->moduleinstance->examtime=$examtime;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-      if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
-      } else {
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit konnten nicht gesetzt werden', 'error');
-      }
-	}
-
 ######### feature: addParticipants ##########
 
 	public function getPAULTextFileHeaders(){
 
-		$textfileheaders = 	$this->moduleinstance->importfileheaders;
+		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
+
+		$textfileheaders = 	json_decode($this->moduleinstance->importfileheaders);
+
+		if($textfileheaders && $UserObj->getAllExamParticipantsByHeader(0)){
+			array_unshift($textfileheaders, true);
+		}
+
+		$textfileheaders = array_values($textfileheaders);
 
 		if ($textfileheaders){
-				return json_decode($textfileheaders);
+				return $textfileheaders;
 			} else {
 				return false;
 		}
 	}
 
 	######### feature: configure tasks ##########
-
-	public function saveTasks($fromform){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			$tasks = $fromform->task;
-
-			if($fromform->newtaskcount < 0){
-				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount);
-			}
-
-			$tasks = json_encode($tasks);
-
-			$this->moduleinstance->tasks=$tasks;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben angelegt', 'success');
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben konnten nicht angelegt werden', 'error');
-			}
-
-
-	}
 
 	public function getTasks(){
 
@@ -777,54 +663,9 @@ EOF;
 			}
 	}
 
-	######### feature: textfield ##########
-
-	public function saveTextfield($fromform){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			$textfield = json_encode($fromform->textfield);
-
-			$this->moduleinstance->textfield = $textfield;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes gespeichert', 'success');
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes konnte nicht gespeichert werden', 'error');
-			}
-
-	}
-
 	########### Send Groupmessage to all Participants ####
 
-	public function sendGroupMessage($subject, $content){
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
-
-		$mailsubject = "PANDA - Prüfungsorganisation: Kurs ".$this->course->fullname.' Betreff: '.$subject;
-		$mailtext = $content;
-		$participants = $UserObj->getAllMoodleExamParticipants();
-
-		if($subject && $mailtext && $participants){
-			foreach ($participants as $key => $participantObj){
-
-				$user = $UserObj->getMoodleUser($participantObj->moodleuserid);
-	
-				$this->sendSingleMessage($user, $mailsubject, $mailtext);
-	
-			}
-	
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
-		} else {
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Fehler beim Nachrichtenversand.', 'error');			
-		}
-
-	}
-
-	protected function sendSingleMessage($user, $subject, $text){
+	public function sendSingleMessage($user, $subject, $text){
 
 		global $USER;
 
@@ -895,24 +736,7 @@ EOF;
 
 	}
 
-	######### feature: configure gradingscale ##########
-
-	public function saveGradingscale($fromform){
-
-			$MoodleDBObj = MoodleDB::getInstance();
-			$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-			$gradingscale = json_encode($fromform->gradingsteppoints);
-			$this->moduleinstance->gradingscale=$gradingscale;
-
-			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konfiguriert', 'success');
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konnte nicht konfiguriert werden', 'error');
-			}
-
-	}
+	######### feature: configure gradingscale #########
 
 	public function getGradingscale(){
 

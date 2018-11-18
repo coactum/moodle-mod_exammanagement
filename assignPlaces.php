@@ -62,8 +62,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $participantsCount = 0;
 
-    var_dump($participantsArray);
-
     foreach($savedRoomsArray as $key => $roomID){
 
       $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
@@ -71,7 +69,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $places = json_decode($RoomObj->places);	//get Places of this Room
 
       foreach($participantsArray as $key1 => $participantObj){
-        var_dump('key '.$key1);
 
         if($key1 >= $participantsCount){
           
@@ -79,14 +76,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $participantObj->roomname = $RoomObj->name;
           $participantObj->place = array_pop($places);
 
-          var_dump($participantObj);
-
           // set room and place
           $MoodleDBObj->UpdateRecordInDB("exammanagement_part_".$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 
           $participantsCount +=1;
-
-          var_dump('count '.$participantsCount);
 
           if($places == NULL){  // if all places of room are assigned
             break;

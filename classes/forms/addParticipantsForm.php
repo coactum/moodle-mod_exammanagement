@@ -211,8 +211,15 @@ class addParticipantsForm extends moodleform{
             if($oldParticipants){ //if participant is deleted
 
                 foreach($oldParticipants as $key => $participant){
+
+                    if($LdapManagerObj->is_LDAP_config()){
+                        $ldapConnection = $LdapManagerObj->connect_ldap();
+                        $pmatrnr = $LdapManagerObj->studentid2uid($ldapConnection, $participant->imtlogin);
+                    } else {
+                        $pmatrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(false, $participant->imtlogin);
+                    }
     
-                    if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($participant->imtlogin, $tempIDsArray)){
+                    if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($pmatrnr, $tempIDsArray)){
 
                         if($participant->moodleuserid){
                             $deletedMatrNrObj = new stdclass;
@@ -222,7 +229,7 @@ class addParticipantsForm extends moodleform{
                             array_push($deletedMoodleParticipantsArr, $deletedMatrNrObj);
                         } else if($participant->imtlogin){
                             $deletedMatrNrObj = new stdclass;
-                            $deletedMatrNrObj->matrnr = $participant->imtlogin;
+                            $deletedMatrNrObj->matrnr = $pmatrnr;
                             $deletedMatrNrObj->firstname = $participant->firstname;
                             $deletedMatrNrObj->lastname = $participant->lastname;
                             $deletedMatrNrObj->line = '';
@@ -460,7 +467,7 @@ class addParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="hidden">');
             $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
-            $mform->addRule('participantslist_excel', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
+            //$mform->addRule('participantslist_excel', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
             $mform->addElement('html', '</div>');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));

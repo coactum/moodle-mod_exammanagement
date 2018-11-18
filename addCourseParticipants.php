@@ -24,11 +24,11 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\exammanagementForms;
+use mod_exammanagement\forms\addCourseParticipantsForm;
+use stdclass;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -37,14 +37,93 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $MoodleObj->setPage('addCourseParticipants');
     $MoodleObj->outputPageHeader();
-    $ExammanagementFormsObj->buildAddCourseParticipantsForm();
+        
+    //Instantiate form
+    $mform = new addCourseParticipantsForm(null, array('id'=>$id, 'e'=>$e));
 
+    //Form processing and displaying is done here
+    if ($mform->is_cancelled()) {
+        //Handle form cancel operation, if cancel button is present on form
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+    } else if ($fromform = $mform->get_data()) {
+        //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+        $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
+        $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
+
+        if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
+
+            $insert;
+            $userObjArr = array();
+
+            if($participantsIdsArr){
+                foreach($participantsIdsArr as $participantId){
+
+                    if($UserObj->checkIfAlreadyParticipant($participantId) == false){
+                        $user = new stdClass();
+                        $user->plugininstanceid = $id;
+                        $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+                        $user->moodleuserid = $participantId;
+                        $user->headerid = 0;
+
+                        array_push($userObjArr, $user);
+
+                    }
+                }
+            }
+
+            if($deletedParticipantsIdsArr){
+                foreach($deletedParticipantsIdsArr as $identifier){
+                        $temp = explode('_', $identifier);
+
+                        if($temp[0]== 'mid'){
+                            $UserObj->deleteParticipant($temp[1], false);
+                        } else {
+
+                            if($temp[1] && $temp[2]){ //for testing
+
+                                $UserObj->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
+                            } else {
+                                $UserObj->deleteParticipant(false, $temp[1]);
+                            }
+                        }
+                }
+            }
+
+            // reset state of places assignment if already set
+            if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+                $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+                $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+            }
+
+            $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$UserObj->categoryid, $userObjArr);
+
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+
+        } else {
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+        }
+
+    } else {
+        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+        // or on the first display of the form.
+
+        //Set default data (if any)
+        //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+        $mform->set_data(array('id'=>$id));
+
+        //displays the form
+        $mform->display();
+    }
     $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
