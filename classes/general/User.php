@@ -515,8 +515,6 @@ class User{
 			return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
 			if($LdapManagerObj->is_LDAP_config()){
-				$ldapConnection = $LdapManagerObj->connect_ldap();
-				//$imtlogin = $LdapManagerObj->uid2studentid($ldapConnection, $potentialParticipantLogin);
 				$imtlogin = $potentialParticipantLogin;
 			} else {
 				$imtlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($potentialParticipantLogin);				
