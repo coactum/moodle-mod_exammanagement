@@ -127,16 +127,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           global $UserObj;
 
           if($a->moodleuserid){
-            $aFirstname = $UserObj->getMoodleUser($a->userid)->firstname;
-            $aLastname = $UserObj->getMoodleUser($a->userid)->lastname;  
+            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
           } else {
             $aFirstname = $a->firstname;
             $aLastname = $a->lastname;
           }
 
-          if($a->moodleuserid){
-            $bFirstname = $UserObj->getMoodleUser($b->userid)->firstname;
-            $bLastname = $UserObj->getMoodleUser($b->userid)->lastname;
+          if($b->moodleuserid){
+            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
           } else {
             $bFirstname = $b->firstname;
             $bLastname = $b->lastname;

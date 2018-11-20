@@ -117,7 +117,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						} else if($userlogin !== false && $userlogin !== null){
 							$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
 						}
-				
+
 						// if user is participant
 						if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
 							$case = 'participant';

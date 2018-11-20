@@ -125,7 +125,7 @@ class addParticipantsForm extends moodleform{
                             $moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
                     }
 
-                    if ($moodleuserid){
+                    if (isset($moodleuserid) && $moodleuserid){
                         $tempUserObj = new stdclass;
                         $tempUserObj->line = $participant->line;
                         $tempUserObj->moodleid = $moodleuserid;
@@ -486,7 +486,7 @@ class addParticipantsForm extends moodleform{
 
         $errors = array();
 
-        if($data['participants']){
+        if(isset($data['participants'])){
             foreach($data['participants'] as $participantid => $checked){
 
                 if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
@@ -495,7 +495,7 @@ class addParticipantsForm extends moodleform{
             }
         }
 
-        if($data['deletedparticipants']){
+        if(isset($data['deletedparticipants'])){
             foreach($data['deletedparticipants'] as $participantid => $checked){
 
                 if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){

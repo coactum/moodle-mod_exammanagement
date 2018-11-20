@@ -126,10 +126,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     usort($participantsArray, function($a, $b){ //sort array by custom user function
       global $UserObj;
-      $aFirstname = $UserObj->getMoodleUser($a->uid)->firstname;
-      $aLastname = $UserObj->getMoodleUser($a->uid)->lastname;
-      $bFirstname = $UserObj->getMoodleUser($b->uid)->firstname;
-      $bLastname = $UserObj->getMoodleUser($b->uid)->lastname;
+      if($a->moodleuserid){
+        $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+        $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+      } else {
+        $aFirstname = $a->firstname;
+        $aLastname = $a->lastname;
+      }
+
+      if($b->moodleuserid){
+        $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+        $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+      } else {
+        $bFirstname = $b->firstname;
+        $bLastname = $b->lastname;
+      }
 
       if ($aLastname == $bLastname) { //if names are even sort by first name
           return strcmp($aFirstname, $bFirstname);

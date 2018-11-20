@@ -140,13 +140,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
-								$user->imtlogin = ''.$LdapManagerObj->uid2studentid($ldapConnection, $temp[1]);
+								$user->imtlogin = ''.$LdapManagerObj->studentid2uid($ldapConnection, $temp[1]);
 
-								$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $temp[1] );
-				
+								$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $user->imtlogin );
 								if($ldapUser){
-									$user->firstname = $ldapUser['sn'];
-									$user->lastname = $ldapUser['givenName'];
+									$user->firstname = $ldapUser['givenName'];
+									$user->lastname = $ldapUser['sn'];
 									$user->email = ''.$ldapUser['upbMailPreferredAddress'];
 								} else {
 									$user->firstname = NULL;

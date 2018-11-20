@@ -286,7 +286,7 @@ class User{
 					$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
 				}
 
-				$userMatrNr = $LdapManagerObj->studentid2uid($ldapConnection, $login);
+				$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $login);
 
 		} else { // for local testing during development
 
@@ -397,7 +397,8 @@ class User{
 
 		$stateArr = json_decode($participantObj->examstate);
 
-		foreach($stateArr as $key => $value){
+		if($stateArr){
+			foreach($stateArr as $key => $value){
 				if($key == 'nt' && $value == "1"){
 						return 'nt';
 				} else if ($key == 'fa' && $value == "1"){
@@ -405,6 +406,7 @@ class User{
 				} else if ($key == 'ill' && $value == "1"){
 						return 'ill';
 				}
+			}
 		}
 
 		return 'normal';
@@ -514,7 +516,8 @@ class User{
 		} else if($potentialParticipantLogin){
 			if($LdapManagerObj->is_LDAP_config()){
 				$ldapConnection = $LdapManagerObj->connect_ldap();
-				$imtlogin = $LdapManagerObj->uid2studentid($ldapConnection, $potentialParticipantLogin);
+				//$imtlogin = $LdapManagerObj->uid2studentid($ldapConnection, $potentialParticipantLogin);
+				$imtlogin = $potentialParticipantLogin;
 			} else {
 				$imtlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($potentialParticipantLogin);				
 			}

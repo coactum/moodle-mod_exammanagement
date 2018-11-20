@@ -150,6 +150,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             if($ParticipantsArray){
 
                 if($PAULFileHeader == true){
+                    $examdate = $ExammanagementInstanceObj->getHrExamtime();
+
                     $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
                     $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';    
                     $textfile = $header1 . NEWLINE . $header2 . NEWLINE;

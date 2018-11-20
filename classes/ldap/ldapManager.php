@@ -161,7 +161,6 @@ class ldapManager{
 	}
 
 	public function studentid2uid($ldapConnection, $pStudentId){ // imtlogin to matrnr
-
 		if (empty($pStudentId)) {
 				throw new Exception("No parameter given");
 		}
@@ -200,8 +199,9 @@ class ldapManager{
 			if ( ! is_array( $pAttributes ) ){
 					throw new Exception( "Argument is not an array", E_PARAMETER );
 			}
-
-			$search = ldap_search( $ldapConnection, LDAP_O . ", " . LDAP_C, "uid=" . $pUid, $pAttributes );
+			
+			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
 			$entry  = ldap_first_entry( $ldapConnection, $search );
 
 			$result = array();
@@ -211,5 +211,6 @@ class ldapManager{
 							$result[ $attribute ] = $value[ 0 ];
 					}
 			}
+			return $result;
 	}
 }

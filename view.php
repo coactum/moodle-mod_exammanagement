@@ -304,6 +304,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){ // if teach
     $place = false;
   }
 
+  $examreviewtime = false;
+  $examreviewroom = false;
   if($ExammanagementInstanceObj->isExamReviewVisible() && $ExammanagementInstanceObj->getHrExamReviewTime() && $ExammanagementInstanceObj->getExamReviewRoom()){
     $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
     $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
