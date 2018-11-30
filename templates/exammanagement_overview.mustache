@@ -514,23 +514,22 @@ ajaxsetcorrectioncompletion = function(value){
                   <div class="panel-body">
                     <div class="row row-eq-height">
                         <div class="col-xs-6">
-														<div class="panel panel-danger">
+														<div class="panel {{^bonuscount}}{{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{/bonuscount}}{{^bonuscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
 															<div class="panel-heading">
 																<div class="row">
-																	<h3 class="panel-title col-xs-6">Bonuspunkte</h3>
+																	<h3 class="panel-title col-xs-6">Bonusnotenschritte</h3>
 																	<span class="statebar col-xs-6">
-																		<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
-																		<span class="label label-danger pull-right" title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
-																		</span>
+																		{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</div>
 															</div>
 															<div class="panel-body">
-																	<p>Es wurden noch keine Bonuspunkte importiert.</p>
+																	{{#bonuscount}}<p>Es wurden bisher Bonusnotenschritte für <strong>{{bonuscount}} / {{participants}}</strong> Teilnehmenden importiert.</p>{{/bonuscount}}
+																	{{^bonuscount}}<p>Es wurden noch keine Bonusnotenschritte eingetragen.</p>{{/bonuscount}}
 															</div>
 															<div class="panel-footer">
-																<!-- <a class="btn btn-primary pull-right" href=""><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a> -->
+																{{#stateofplacescorrect}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 															</div>
 														</div>
 											</div>
@@ -581,7 +580,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 											</div>
 											<div class="col-xs-6">
-													<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
+													<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{#resultscount}}{{^stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
 														<div class="panel-heading">
 															<div class="row">
 																<h3 class="panel-title col-xs-4">Ergebnisübersicht</h3>

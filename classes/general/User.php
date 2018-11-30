@@ -544,15 +544,30 @@ class User{
 
 	public function getParticipantsCount(){
 
-		$participantsArr = $this->getAllExamParticipants();
-		$participantsCount = false;
+		$MoodleDBObj = MoodleDB::getInstance();
 
-		if($participantsArr){
-			$participantsCount = count($participantsArr);
-		}
+		$select = "plugininstanceid =".$this->id;
+		
+		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_part_'.$this->categoryid, $select);
 
 		if ($participantsCount){
 				return $participantsCount;
+			} else {
+				return false;
+		}
+	}
+
+	public function getEnteredBonusCount(){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND bonuspoints IS NOT NULL";
+		
+		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_part_'.$this->categoryid, $select);
+
+		if ($enteredBonusCount){
+				return $enteredBonusCount;
 			} else {
 				return false;
 		}

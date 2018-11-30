@@ -82,13 +82,26 @@
             {{^textfield}}Es ist kein Prüfungshinweis verfügbar.{{/textfield}}
           </div>
       </div>
+      <hr />
+      <div class = "row">
+          <p class = "col-xs-6">
+              <b>Bonusnotenschritte für die Klausur:</b>
+          </p>
+          <div class="col-xs-6">
+            {{#bonus}}
+                Für die Klausur haben Sie <strong>{{{bonus}}}</strong> Bonusnotenschritte.
+            {{/bonus}}
+            {{^bonus}}Es wurden bisher keine Bonusnotenschritte für Sie eingetragen.{{/bonus}}
+          </div>
+      </div>
       {{#examreviewtime}}
+      <hr />
       <div class = "row">
           <p class = "col-xs-6">
               <b>Klausureinsicht:</b>
           </p>
           <div class="col-xs-6">            
-              Die Klausurkorrektur ist nun abgeschloßen. Am {{examreviewtime}} findet die Klausureinsicht in Raum {{examreviewroom}} statt.
+              Die Klausurkorrektur ist nun abgeschloßen. Am <strong>{{examreviewtime}}</strong> findet die Klausureinsicht in Raum <strong>{{examreviewroom}}</strong> statt.
           </div>
       </div>
       {{/examreviewtime}}

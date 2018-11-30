@@ -42,6 +42,15 @@ class MoodleDB{
 
 	#### wrapped Moodle DB functions #####
 
+	public function countRecordsInDB($table, $select, $params=null, $countitem="COUNT('x')"){
+		global $DB;
+
+		$count = $DB->count_records_select($table, $select, $params, $countitem); 
+		
+		return $count;
+	}
+	
+
 	 public function getFieldFromDB($table, $fieldname, $condition){
 	 	global $DB;
 

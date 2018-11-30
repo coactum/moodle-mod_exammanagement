@@ -63,6 +63,7 @@ class exammanagement_overview implements renderable, templatable {
 	protected $datetimevisible;
 	protected $roomvisible;
   protected $placevisible;
+  protected $bonuscount;
   protected $gradingscale;
   protected $resultscount;
   protected $datadeletiondate;
@@ -75,7 +76,7 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $stateofplacescorrect, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -101,6 +102,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->datetimevisible = $datetimevisible;
         $this->roomvisible = $roomvisible;
         $this->placevisible = $placevisible;
+        $this->bonuscount = $bonuscount;
         $this->gradingscale = $gradingscale;
         $this->resultscount = $resultscount;
         $this->datadeletiondate = $datadeletiondate;
@@ -143,6 +145,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->datetimevisible = $this->datetimevisible;
         $data->roomvisible = $this->roomvisible;
         $data->placevisible = $this->placevisible;
+        $data->bonuscount = $this->bonuscount;
         $data->gradingscale = $this->gradingscale;
         $data->resultscount = $this->resultscount;
         $data->datadeletiondate = $this->datadeletiondate;
