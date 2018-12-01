@@ -14,33 +14,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * functions for tracking changes of input fields, adding and removing tasks and and creating input type number fields
+ * functions for tracking changes of input fields, adding and removing tasks and creating input type number fields
  *
  * @module      mod_exammanagement/configure_tasks
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function($) {
+define(['jquery'], function ($) {
 
-  var getTotalpoints = function() {
+  var getTotalpoints = function () {
     var totalpoints = 0;
     var newval;
 
-    $(".form-group input.form-control").each(function() {
-        newval = parseInt($(this).val());
-        if (newval){
-            totalpoints += newval;
-        }
+    $(".form-group input.form-control").each(function () {
+      newval = parseInt($(this).val());
+      if (newval) {
+        totalpoints += newval;
+      }
     });
 
     return totalpoints;
   };
 
-  var getTaskCount = function() {
+  var getTaskCount = function () {
     var taskcount = 0;
 
-    $(".form-group input.form-control").each(function() {
+    $(".form-group input.form-control").each(function () {
       taskcount += 1;
     });
 
@@ -48,30 +48,30 @@ define(['jquery'], function($) {
   };
 
   return {
-    init: function() {
+    init: function () {
 
       // create input type number elements
       $("input[type=text]").attr("type", "number");
 
       var styles = {
-          "-webkit-appearance": "textfield",
-          "-moz-appearance":"textfield",
-          "margin": "0px",
-          "width": "70px"
+        "-webkit-appearance": "textfield",
+        "-moz-appearance": "textfield",
+        "margin": "0px",
+        "width": "70px"
       };
 
       $("input[type=number]").css(styles);
       $("input[type=number]").attr("min", "0");
 
-      $(".form-group").on("change", "input", function() { // update totalpoints if some field changes
+      $(".form-group").on("change", "input", function () { // update totalpoints if some field changes
 
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
       });
     },
-    addtask: function() { //add new tasks
+    addtask: function () { //add new tasks
 
-      $("#id_add_task").click(function() {
+      $("#id_add_task").click(function () {
 
         var taskcount = getTaskCount();
         var newtaskcount = taskcount + 1;
@@ -90,13 +90,13 @@ define(['jquery'], function($) {
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
 
-        $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val())+1);
+        $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()) + 1);
 
       });
     },
-    removetask: function() { //remove task
+    removetask: function () { //remove task
 
-      $("#id_remove_task").click(function() {
+      $("#id_remove_task").click(function () {
 
         var taskcount = getTaskCount();
 
@@ -107,7 +107,7 @@ define(['jquery'], function($) {
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
 
-          $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()-1));
+          $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val() - 1));
         }
       });
     }

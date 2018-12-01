@@ -153,6 +153,14 @@ $string['groupmessages_text_1'] = 'An email with the text added below will be se
 $string['groupmessages_text_2'] = ' participants of the exam.';
 $string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them under their email adresses shown below:';
 
+//importBonusForm.php
+$string['import_bonus_str'] = 'Import bonus steps';
+$string['import_bonus_text'] = 'Bonus points achieved by the participants can be imported and converted to bonus steps for the exam.';
+$string['import_bonus_from_file'] = 'Import bonus points from excel file (id number (grade export) or IMT login in third column; column containing the bonus points must contain "Course total" in column heading).';
+$string['add_remove_bonusstep'] = 'Add or remove bonus step:';
+$string['bonusstep'] = 'Bonus step';
+$string['required_points'] = 'Requried points for bonus step';
+
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';
 $string['configure_gradingscale_totalpoints'] = 'Number of total points';
@@ -234,6 +242,7 @@ $string['helptext_addCourseParticipants']= 'Here goes the description of this fe
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
+$string['helptext_importBonus']= 'Here goes the description of this feature site.';
 $string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
 $string['helptext_showResults']= 'Here goes the description of this feature site.';
@@ -246,6 +255,7 @@ $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 $string['err_underzero'] = 'Entered number ca not be lower than zero.';
 $string['err_novalidinteger'] = 'Entered number has to be a valid number.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
+$string['err_bonusstepsnotcorrect'] = 'One or more bonus steps are invalid.';
 $string['err_gradingstepsnotcorrect'] = 'One or more gradingscale steps are invalid.';
 $string['err_taskmaxpoints'] = 'Entered number exceeds maximal points of task.';
 $string['err_roomsdoubleselected'] = 'Double selection of one room with different configurations';

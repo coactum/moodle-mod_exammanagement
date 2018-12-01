@@ -39,6 +39,8 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$bonusstepcount  = optional_param('bonusstepcount', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 //$LdapManagerObj = ldapManager::getInstance($id, $e);	
@@ -58,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $MoodleObj->outputPageHeader();
 
     //Instantiate form
-    $mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e));
+    $mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e, 'bonusstepcount'=>$bonusstepcount));
 
     //Form processing and displaying is done here
     if ($mform->is_cancelled()) {
@@ -67,13 +69,73 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
     } else if ($fromform = $mform->get_data()) {
-    //In this case you process validated data. $mform->get_data() returns data posted in form.
+    //In this case you process validated data. $mform->get_data() returns data posted in form.	
 
-        // retrieve Files from form
-    	$excel_file = $mform->get_file_content('bonuspoints_list');
+		var_dump($fromform);
 
-        if ($excel_file){
-            /* //saveParticipants in DB
+        if ($fromform->bonuspoints_list){
+		   
+			// retrieve Files from form
+			$file = $mform->get_file_content('bonuspoints_list');
+			$filename = $mform->get_new_filename('bonuspoints_list');
+			
+			var_dump($file);
+			var_dump($filename);
+
+			$tempfile = tempnam(sys_get_temp_dir(), 'bonuslist_');
+			rename($tempfile, $tempfile .= $filename);
+
+			$handle = fopen($tempfile, "w");
+			fwrite($handle, $file);
+
+			var_dump($tempfile);
+
+			$ExcelReaderObj = PHPExcel_IOFactory::createReaderForFile($tempfile);
+			$ExcelReaderObj->setReadDataOnly(true);
+
+			// class MyReadFilter implements PHPExcel_Reader_IReadFilter {
+
+			// 	public function readCell($column, $row, $worksheetName = '') {
+			// 		// Read title row and rows 20 - 30
+			// 		if ($row == 1 || ($row >= 20 && $row <= 30)) {
+			// 			return true;
+			// 		}
+			// 		return false;
+			// 	}
+			// }
+
+			//$ExcelReaderObj->setReadFilter( new MyReadFilter() );
+			$ExcelReaderObj->load($tempfile);
+
+			var_dump($ExcelReaderObj);
+			
+			$objWorksheet = $ExcelReaderObj->getActiveSheet();
+			//$objWorksheet = $ExcelReaderObj->getSheet(0);
+
+			// Get the highest row number and column letter referenced in the worksheet
+			$highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+			$highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+			// Increment the highest column letter
+			$highestColumn++;
+
+			echo '<table>' . "\n";
+			for ($row = 1; $row <= $highestRow; ++$row) {
+				echo '<tr>' . PHP_EOL;
+				for ($col = 'A'; $col != $highestColumn; ++$col) {
+					echo '<td>' . 
+						$objWorksheet->getCell($col . $row)
+							->getValue() . 
+						'</td>' . PHP_EOL;
+				}
+				echo '</tr>' . PHP_EOL;
+			}
+			echo '</table>' . PHP_EOL;
+
+
+			fclose($handle);
+			unlink($tempfile);	
+			
+			/* //saveParticipants in DB
             
             $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
             $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);

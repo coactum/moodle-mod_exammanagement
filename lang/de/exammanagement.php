@@ -153,6 +153,14 @@ $string['groupmessages_text_1'] = 'Der unten eingegebene Text wird ';
 $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als Email zugeschickt.';
 $string['groupmessages_text_3'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht automatisch erhalten. Kontaktieren Sie diese Teilnehmer deshalb unter deren unten angegebenen Universitäts-E-Mail-Adressen:';
 
+//importBonusForm.php
+$string['import_bonus_str'] = 'Bonusnotenschritte importieren';
+$string['import_bonus_text'] = 'Hier können von den Teilnehmenden errungene Bonuspunkte importiert und in Bonusnotenschritte für die Prüfung umgerechnet werden.';
+$string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren (ID-Nummer (Standardbewertungsexport) oder aber IMT-Login des Benutzers in der dritten Spalte; Punktespalte muss die Wörter "Punkte" oder "Prozentsatz" in der Spaltenüberschrift enthalten).';
+$string['add_remove_bonusstep'] = 'Bonusschritt hinzufügen oder entfernen:';
+$string['bonusstep'] = 'Bonusnotenschritt';
+$string['required_points'] = 'Für Notenschritt erforderliche Punkte';
+
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
 $string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten ist';
@@ -266,6 +274,7 @@ $string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und de
 Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren universitären E-Mail-Account geschickt und können so z. B. einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
+$string['helptext_importBonus']= 'Hier können Bonuspunkte importiert und in Bonusnotenschritte für dier Prüfung umgewandelt werden ...';
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 $string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
@@ -278,6 +287,7 @@ $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
 $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
+$string['err_bonusstepsnotcorrect'] = 'Mindestens einer der Bonusnotenschritte passt nicht zu den anderen.';
 $string['err_gradingstepsnotcorrect'] = 'Mindestens einer der Notenschritte passt nicht zu den anderen.';
 $string['err_taskmaxpoints'] = 'Die eingetragene Punktzahl überschreitet die Maximalpunktzahl der Aufgabe.';
 $string['err_roomsdoubleselected'] = 'Derselbe Raum wurde mehrfach in unterschiedlichen Belegungen als Prüfungsraum gewählt.';
