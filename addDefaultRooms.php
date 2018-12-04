@@ -62,7 +62,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
         if($defaultRoomsFile){
 
             if($ExammanagementInstanceObj->getDefaultRooms()){
-                $MoodleDBObj->DeleteRecordsFromDB("exammanagement_rooms", array());
+                $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
             }
 
             $fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
