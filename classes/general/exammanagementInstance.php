@@ -641,7 +641,9 @@ EOF;
 			array_unshift($textfileheaders, true);
 		}
 
-		$textfileheaders = array_values($textfileheaders);
+		if($textfileheaders != NULL){
+			$textfileheaders = array_values($textfileheaders);
+		}
 
 		if ($textfileheaders){
 				return $textfileheaders;

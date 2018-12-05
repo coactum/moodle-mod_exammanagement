@@ -25,8 +25,8 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\importBonusForm;
-use mod_exammanagement\ldap\ldapManager;
 use PHPExcel_IOFactory;
+use PHPExcel_Reader_IReadFilter;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
@@ -43,8 +43,7 @@ $bonusstepcount  = optional_param('bonusstepcount', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-//$LdapManagerObj = ldapManager::getInstance($id, $e);	
-//$MoodleDBObj = MoodleDB::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -79,7 +78,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$file = $mform->get_file_content('bonuspoints_list');
 			$filename = $mform->get_new_filename('bonuspoints_list');
 			
-			var_dump($file);
 			var_dump($filename);
 
 			$tempfile = tempnam(sys_get_temp_dir(), 'bonuslist_');
@@ -90,180 +88,77 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			var_dump($tempfile);
 
-			$ExcelReaderObj = PHPExcel_IOFactory::createReaderForFile($tempfile);
-			$ExcelReaderObj->setReadDataOnly(true);
+			$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
+			$ExcelReaderWrapper->setReadDataOnly(true);
 
-			// class MyReadFilter implements PHPExcel_Reader_IReadFilter {
-
-			// 	public function readCell($column, $row, $worksheetName = '') {
-			// 		// Read title row and rows 20 - 30
-			// 		if ($row == 1 || ($row >= 20 && $row <= 30)) {
-			// 			return true;
-			// 		}
-			// 		return false;
-			// 	}
-			// }
-
-			//$ExcelReaderObj->setReadFilter( new MyReadFilter() );
-			$ExcelReaderObj->load($tempfile);
-
-			var_dump($ExcelReaderObj);
+			class MyReadFilter implements PHPExcel_Reader_IReadFilter {
 			
-			$objWorksheet = $ExcelReaderObj->getActiveSheet();
-			//$objWorksheet = $ExcelReaderObj->getSheet(0);
+				// public function readCell($column, $row, $worksheetName = '') {
+				// 	  // Read columns from 'A' to 'AF'
+				// 	  if (in_array($column, range('C', 'C'))) {
+				// 		  return true;
+				// 	  }
+				// 	  return false;
+				  
+				// }
 
-			// Get the highest row number and column letter referenced in the worksheet
-			$highestRow = $objWorksheet->getHighestRow(); // e.g. 10
-			$highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
-			// Increment the highest column letter
-			$highestColumn++;
+				// public function readCell($column, $row, $worksheetName = '') {
+				// 	if ($column == 'C'){
+				// 		return true;
+				// 	}
+				// 	return false;
+				// }
 
-			echo '<table>' . "\n";
-			for ($row = 1; $row <= $highestRow; ++$row) {
-				echo '<tr>' . PHP_EOL;
-				for ($col = 'A'; $col != $highestColumn; ++$col) {
-					echo '<td>' . 
-						$objWorksheet->getCell($col . $row)
-							->getValue() . 
-						'</td>' . PHP_EOL;
+				public function __construct($columnID, $columnPoints) {
+					$this->columnID = $columnID;
+					$this->columnPoints = $columnPoints;
 				}
-				echo '</tr>' . PHP_EOL;
+			
+				public function readCell($column, $row, $worksheetName = '') { 
+					if ($column == $this->columnID || $column == $this->columnPoints) { 
+						return true; 
+					} 
+					return false; 
+				}
 			}
-			echo '</table>' . PHP_EOL;
 
+			//$ExcelReaderWrapper->setReadFilter( new MyReadFilter('A') );
+			$readerObj = $ExcelReaderWrapper->load($tempfile);
+
+			$worksheetObj = $readerObj->getActiveSheet();
+			$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
+
+			$userIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
+			$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
+
+			var_dump($userIDsArr);
+			var_dump($pointsArr);
+
+
+			foreach($userIDsArr as $key => $uid){
+
+				$uid = $uid[0];
+				var_dump($uid);
+
+				if($UserObj->checkIfAlreadyParticipant($uid)){
+					$participantObj = $UserObj->getExamParticipantObj($uid);
+
+				} else {
+					$participantObj = $UserObj->getExamParticipantObj(NULL, $uid);
+
+				}
+
+				$participantObj->bonuspoints = $pointsArr[$key][0];
+
+				var_dump($participantObj);
+				//$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
+				
+			}
 
 			fclose($handle);
 			unlink($tempfile);	
 			
-			/* //saveParticipants in DB
-            
-            $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
-            $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
-                            
-			if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
-
-				$tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
-				$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
-				$newheaderid;
-
-				// save new file header
-				if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
-					$savedFileHeadersArr = array();
-					$newheaderid = 1;
-					array_push($savedFileHeadersArr, $tempfileheader);
-				} else if($savedFileHeadersArr && $tempfileheader){
-					$saved = false;
-					
-					foreach($savedFileHeadersArr as $key => $header){ // if new header is already saved
-						if($tempfileheader == $header){
-							$newheaderid = $key+1;
-							$saved = true;
-						}
-					}
-					
-					if(!$saved){ // if new header is not saved yet
-						$newheaderid = count($savedFileHeadersArr)+1;
-						array_push($savedFileHeadersArr, $tempfileheader);
-					}
-				}  else if(!$tempfileheader){ // if reading of tempfileheader fails
-					$headerid = 0;
-				}
-
-				$ExammanagementInstanceObj->moduleinstance->importfileheaders = json_encode($savedFileHeadersArr);
-
-				// add new participants
-				if($participantsIdsArr){ 
-					$userObjArr = array();
-
-					foreach($participantsIdsArr as $identifier){
-
-						$temp = explode('_', $identifier);
-
-						if($temp[0]== 'mid'){
-							$user = new stdClass();
-							$user->plugininstanceid = $id;
-							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-							$user->moodleuserid = $temp[1];
-							$user->imtlogin = null;
-							$user->firstname = null;
-							$user->lastname = null;
-							$user->email = null;
-							$user->headerid = $newheaderid;
-
-							array_push($userObjArr, $user);
-						} else {
-
-							$user = new stdClass();
-							$user->plugininstanceid = $id;
-							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-							$user->moodleuserid = null;
-
-							if($LdapManagerObj->is_LDAP_config()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								$user->imtlogin = ''.$LdapManagerObj->studentid2uid($ldapConnection, $temp[1]);
-
-								$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $user->imtlogin );
-								if($ldapUser){
-									$user->firstname = $ldapUser['givenName'];
-									$user->lastname = $ldapUser['sn'];
-									$user->email = ''.$ldapUser['upbMailPreferredAddress'];
-								} else {
-									$user->firstname = NULL;
-									$user->lastname = NULL;
-									$user->email = NULL;
-								}				
-							} else { // for local testing during development
-
-									$user->imtlogin = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
-									$user->firstname = 'Mister';
-									$user->lastname = 'Testerin';
-									$user->email = 'Test@Testi.test';
-							}
-
-							$user->headerid = $newheaderid;
-
-							array_push($userObjArr, $user);
-						}
-					}
-
-					// insert records of new participants
-					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$UserObj->categoryid, $userObjArr);
-
-				}
-
-				// delete deleted participants
-				if($deletedParticipantsIdsArr){
-					foreach($deletedParticipantsIdsArr as $identifier){
-							$temp = explode('_', $identifier);
-
-							if($temp[0]== 'mid'){
-								$UserObj->deleteParticipant($temp[1], false);
-							} else {
-								$UserObj->deleteParticipant(false, $temp[1]);
-							}
-					}
-				}
-
-				// delete temp file header and update saved file headers
-				$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
-
-				// reset state of places assignment if already set
-				if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-					$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-				}
-
-				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-
-				//delete temp participants
-				$UserObj->deleteTempParticipants();
-
-				//redirect
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer wurden zur Prüfung hinzugefügt.', 'success');
-
-			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error'); */
-			}
+		}
 
     } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

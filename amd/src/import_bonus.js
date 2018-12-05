@@ -26,7 +26,7 @@ define(['jquery'], function ($) {
   var getBonusstepCount = function () {
     var bonusstepcount = 0;
 
-    $(".form-group input.form-control").each(function () {
+    $(".form-group input.form-control").not('#id_idfield, #id_pointsfield').each(function () {
       bonusstepcount += 1;
     });
 
@@ -37,7 +37,7 @@ define(['jquery'], function ($) {
     init: function () {
 
       // create input type number elements
-      $("input[type=text]").attr("type", "number");
+      $("input[type=text]").not('#id_idfield, #id_pointsfield').attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",

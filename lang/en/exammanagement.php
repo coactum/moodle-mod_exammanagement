@@ -154,12 +154,19 @@ $string['groupmessages_text_2'] = ' participants of the exam.';
 $string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them under their email adresses shown below:';
 
 //importBonusForm.php
-$string['import_bonus_str'] = 'Import bonus steps';
+$string['import_bonus_str'] = 'Import bonus points';
 $string['import_bonus_text'] = 'Bonus points achieved by the participants can be imported and converted to bonus steps for the exam.';
-$string['import_bonus_from_file'] = 'Import bonus points from excel file (id number (grade export) or IMT login in third column; column containing the bonus points must contain "Course total" in column heading).';
+$string['set_bonussteps'] = 'Set bonus steps';
 $string['add_remove_bonusstep'] = 'Add or remove bonus step:';
 $string['bonusstep'] = 'Bonus step';
 $string['required_points'] = 'Requried points for bonus step';
+$string['configure_fileimport'] = 'Configure file import';
+$string['import_mode'] = 'Import mode';
+$string['moodle_export'] = 'Exported grades from PANDA';
+$string['individual'] = 'Other';
+$string['idfield'] = 'Column containing user id (e.g. 1, 2, 3; preselected for exported grades from PANDA)';
+$string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C)';
+$string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA user id or IMT login) and bonus points must fit the choosen column).';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';

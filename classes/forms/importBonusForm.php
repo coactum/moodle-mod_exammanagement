@@ -71,6 +71,9 @@ class importBonusForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
 
+        ###### set bonus steps #####
+        $mform->addElement('html', '<h3>'.get_string('set_bonussteps', 'mod_exammanagement').'</h3>');
+
         //group for add and remove bonusstep buttons
         $bonusstep_buttonarray = array();
         array_push($bonusstep_buttonarray, $mform->createElement('button', 'add_bonusstep', '<i class="fa fa-plus" aria-hidden="true"></i>'));
@@ -126,9 +129,23 @@ class importBonusForm extends moodleform{
 
         ###### add bonuspoints from file ######
 
+        $mform->addElement('html', '<h3>'.get_string('configure_fileimport', 'mod_exammanagement').'</h3>');
+
+        $select = $mform->addElement('select', 'importmode', get_string('import_mode', 'mod_exammanagement'), array('me' => get_string('moodle_export', 'mod_exammanagement'), 'i' => get_string('individual', 'mod_exammanagement'))); 
+        $select->setSelected('me');
+
+        $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement'), $attributes);
+        $mform->setType('idfield', PARAM_TEXT);
+        $mform->setDefault('idfield', 'C');
+        $mform->disabledIf('idfield', 'importmode', 'eq', 'me');
+
+        $mform->addElement('text', 'pointsfield', get_string('pointsfield', 'mod_exammanagement'), $attributes);
+        $mform->setType('pointsfield', PARAM_TEXT);
+        $mform->addRule('pointsfield', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
+        
         $maxbytes=$CFG->maxbytes;
 
-        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
+        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.xls, .xlsx, .ods'));
         $mform->addRule('bonuspoints_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
         if($UserObj->getEnteredBonusCount()){

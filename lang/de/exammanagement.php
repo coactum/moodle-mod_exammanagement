@@ -154,12 +154,19 @@ $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als 
 $string['groupmessages_text_3'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht automatisch erhalten. Kontaktieren Sie diese Teilnehmer deshalb unter deren unten angegebenen Universitäts-E-Mail-Adressen:';
 
 //importBonusForm.php
-$string['import_bonus_str'] = 'Bonusnotenschritte importieren';
+$string['import_bonus_str'] = 'Bonuspunkte importieren';
 $string['import_bonus_text'] = 'Hier können von den Teilnehmenden errungene Bonuspunkte importiert und in Bonusnotenschritte für die Prüfung umgerechnet werden.';
-$string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren (ID-Nummer (Standardbewertungsexport) oder aber IMT-Login des Benutzers in der dritten Spalte; Punktespalte muss die Wörter "Punkte" oder "Prozentsatz" in der Spaltenüberschrift enthalten).';
+$string['set_bonussteps'] = 'Bonusnotenschritte festlegen';
 $string['add_remove_bonusstep'] = 'Bonusschritt hinzufügen oder entfernen:';
 $string['bonusstep'] = 'Bonusnotenschritt';
 $string['required_points'] = 'Für Notenschritt erforderliche Punkte';
+$string['configure_fileimport'] = 'Dateiimport konfigurieren';
+$string['import_mode'] = 'Art des Dateiimports';
+$string['moodle_export'] = 'Bewertungsexport aus Moodle';
+$string['individual'] = 'Individuell';
+$string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. 1,2,3 ... ; Beim Import von aus Moodle exportierten Bewertungen automatisch gesetzt)';
+$string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
+$string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (PANDA-Benutzerid oder IMTZ-Login) und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
