@@ -99,24 +99,24 @@ class importBonusForm extends moodleform{
 
               //input field with points needed for bonus step
               array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints['.$count.']', '', $attributes));
-              $mform->setType('bonussteppoints['.$count.']', PARAM_INT);
+              $mform->setType('bonussteppoints['.$count.']', PARAM_FLOAT);
               $mform->setDefault('bonussteppoints['.$count.']', '');
 
           }
 
           $mform->addElement('hidden', 'bonusstepcount', $bonusstepcount);
-          $mform->setType('bonusstepcount', PARAM_INT);
+          $mform->setType('bonusstepcount', PARAM_FLOAT);
 
         } else {
 
           array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
           
           array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints[1]', '', $attributes));
-          $mform->setType('bonussteppoints[1]', PARAM_INT);
+          $mform->setType('bonussteppoints[1]', PARAM_FLOAT);
           $mform->setDefault('bonussteppoints[1]', '');
 
           $mform->addElement('hidden', 'bonusstepcount', 1);
-          $mform->setType('bonusstepcount', PARAM_INT);
+          $mform->setType('bonusstepcount', PARAM_FLOAT);
         }
 
         $mform->addGroup($bonussstepnumbers_array, 'bonussstepnumbers_array', get_string('bonusstep', 'mod_exammanagement'), '', false);
@@ -165,16 +165,16 @@ class importBonusForm extends moodleform{
             $floatval = floatval($bonussteppoints);
             $isnumeric = is_numeric($bonussteppoints);
 
-            var_dump($key);
-            var_dump($lastbonusstepkey);
+            // var_dump($key);
+            // var_dump($lastbonusstepkey);
   
             if(($bonussteppoints && !$floatval) || !$isnumeric){
                 $errors['bonussteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
             } else if($bonussteppoints<0) {
                 $errors['bonussteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
             } else if($key!=='1' && !array_key_exists('bonussteppoints['.$lastbonusstepkey.']', $errors) && ($lastbonussteppoints >= $bonussteppoints)){
-                var_dump($key);
-                var_dump($lastbonusstepkey);
+                // var_dump($key);
+                // var_dump($lastbonusstepkey);
                 $errors['bonussteppoints['.$key.']'] = get_string('err_bonusstepsnotcorrect', 'mod_exammanagement');
                 $errors['bonussteppoints['.$lastbonusstepkey.']'] = get_string('err_bonusstepsnotcorrect', 'mod_exammanagement');
             }

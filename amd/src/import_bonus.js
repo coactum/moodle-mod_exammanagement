@@ -47,7 +47,7 @@ define(['jquery'], function ($) {
       };
 
       $("input[type=number]").css(styles);
-      $("input[type=number]:not(#id_matrnr)").attr("step", "0.01");
+      $("input[type=number]").attr("step", "0.01");
       $("input[type=number]").attr("min", "0");
     },
     addbonusstep: function () { //add new tasks
@@ -62,7 +62,7 @@ define(['jquery'], function ($) {
         temp += '<label class="col-form-label sr-only" for="id_bonussteppoints_' + newbonusstepcount + '"></label><span data-fieldtype="text">';
         temp += '<input class="form-control" name="bonussteppoints[' + newbonusstepcount + ']" id="id_bonussteppoints_' + newbonusstepcount + '" value="';
         temp += pointsofnewbonusstep + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
-        temp += 'margin: 0px; width: 70px;" min="0"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
+        temp += 'margin: 0px; width: 70px;" min="0" step="0.01"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
         temp += newbonusstepcount + ']" style="display: none;"></div></div> ';
 
         $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
