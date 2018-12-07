@@ -88,37 +88,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$ExcelReaderWrapper->setReadDataOnly(true);
 
 			class MyReadFilter implements PHPExcel_Reader_IReadFilter {
-			
-				// public function readCell($column, $row, $worksheetName = '') {
-				// 	  // Read columns from 'A' to 'AF'
-				// 	  if (in_array($column, range('C', 'C'))) {
-				// 		  return true;
-				// 	  }
-				// 	  return false;
-				  
-				// }
 
-				// public function readCell($column, $row, $worksheetName = '') {
-				// 	if ($column == 'C'){
-				// 		return true;
-				// 	}
-				// 	return false;
-				// }
-
-				public function __construct($columnID, $columnPoints) {
+				public function __construct($columnID, $columnPoints) { // zur not
 					$this->columnID = $columnID;
 					$this->columnPoints = $columnPoints;
 				}
 			
 				public function readCell($column, $row, $worksheetName = '') { 
-					if ($column == $this->columnID || $column == $this->columnPoints) { 
+					if ($column >= $this->columnID && $column >= $this->columnPoints) { 
 						return true; 
 					} 
 					return false; 
 				}
 			}
 
-			//$ExcelReaderWrapper->setReadFilter( new MyReadFilter('A') );
+			$ExcelReaderWrapper->setReadFilter( new MyReadFilter('A') );
 			$readerObj = $ExcelReaderWrapper->load($tempfile);
 
 			$worksheetObj = $readerObj->getActiveSheet();
@@ -137,19 +121,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			foreach($userIDsArr as $key => $uid){
 
-				$uid = $uid[0];
-
 				var_dump('uid:');
 				var_dump($uid);
 
-				if($UserObj->checkIfAlreadyParticipant($uid)){
-					$participantObj = $UserObj->getExamParticipantObj($uid);
+				$participantObj = false;
+
+				if(is_int(intval($uid))){
+					$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('idnumber'=>$uid[0]));
+
+					if($UserObj->checkIfAlreadyParticipant($uid)){
+						$participantObj = $UserObj->getExamParticipantObj($uid);
+	
+					}
 
 				} else {
 					var_dump('i_should_check_if_imtlogin');
 					var_dump($uid);
 					$participantObj = $UserObj->getExamParticipantObj(null, $uid);
-
 				}
 
 				if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
@@ -166,23 +154,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						
 						if($pointsArr[$key][0] >= $points){
 							$participantObj->bonuspoints = $step; // change to detect bonus step
+
+							var_dump('final püarticipant');
+							var_dump($participantObj);
+
+							//$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 						} else {
 							break;
 						}
 					}
 
 				}
-				var_dump('final püarticipant');
-				var_dump($participantObj);
-
-				//$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
-				
 			}
 
 			fclose($handle);
 			unlink($tempfile);	
 			
 		}
+
+		// if($update){
+		// 	$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte importiert', 'success');
+		// } else {
+		// 	$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte konnten nicht importiert werden', 'error');
+		// }
 
     } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
