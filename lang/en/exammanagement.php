@@ -188,9 +188,12 @@ $string['confirm_matrnr'] = 'To confirm the matriculation number you can also pr
 $string['input_other_matrnr'] = 'Change matriculation number';
 
 //showResultsForm.php
-$string['show_results_str'] = 'Exam results';
+$string['show_results_str'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';
 $string['result'] = 'Result';
+$string['resultwithbonus'] = 'Result with bonus';
+$string['bonussteps'] = 'Bonus steps';
+$string['change_bonus'] = 'Change bonus';
 $string['cancel'] = 'Back to exam organisation';
 $string['gradingscale_not_set'] = 'If you want to calculate a grade as the result you have to configure the grading scale.';
 $string['nt'] = 'Not participated';

@@ -158,7 +158,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							var_dump('final püarticipant');
 							var_dump($participantObj);
 
-							//$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
+							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 						} else {
 							break;
 						}
@@ -172,11 +172,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			
 		}
 
-		// if($update){
-		// 	$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte importiert', 'success');
-		// } else {
-		// 	$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte konnten nicht importiert werden', 'error');
-		// }
+		if($update){
+			$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte importiert', 'success');
+		} else {
+			$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte konnten nicht importiert werden', 'error');
+		}
 
     } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

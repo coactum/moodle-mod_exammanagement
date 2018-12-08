@@ -54,7 +54,7 @@ class showResultsForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('showResults'));
 
-        $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="d-none d-lg-block">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="d-lg-none">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div></div>');
+        $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="d-none d-lg-block">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="d-lg-none">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("resultwithbonus", "mod_exammanagement").'</h4></div></div>');
 
         $participantsWithResultArr = $UserObj->getAllParticipantsWithResults();
 
@@ -98,13 +98,22 @@ class showResultsForm extends moodleform {
                 $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
                 $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
                 $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
-                $mform->addElement('html', '<div class="col-sm-2">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
+                $mform->addElement('html', '<div class="col-sm-1">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
                 if($gradingscale){
                     $result = $UserObj->calculateResultGrade($participant);
-                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div></div>');
+                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div>');
+                    if($UserObj->getEnteredBonusCount()){
+                        $mform->addElement('html', '<div class="col-sm-1">'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonuspoints)));
+                        if($participant->bonuspoints){
+                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonuspoints.')</span> <a href="inputBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
+                        }
+                        $mform->addElement('html', '</div>');
+                    }
                 } else {
-                  $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div></div>');
+                  $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div>');
                 }
+
+                $mform->addElement('html', '</div>');
             }
         }
 

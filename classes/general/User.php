@@ -463,6 +463,41 @@ class User{
 		return $result;
 	}
 
+	public function calculateResultGradeWithBonus($grade, $bonussteps){
+
+		switch ($bonussteps){
+			case '1':
+				$bonus = 0.3;
+				break;
+			case '2':
+				$bonus = 0.7;
+				break;
+			case '3':
+				$bonus = 1.0;
+				break;
+			default:
+				$bonus = 0;
+				break;
+		}
+
+		if($grade){
+			$resultWithBonus = $grade-$bonus;
+
+			$test = round($resultWithBonus-floor($resultWithBonus),1);
+
+			if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
+			if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
+
+			if($bonus == 0) return $grade;
+			if( $resultWithoutBonus == 5.0 ) return 5.0;
+			if( $resultWithBonus<=1.0) return 1.0;
+
+			return ($resultWithBonus);
+		} else {
+			return '-';
+		}
+	}
+
 	public function getAllParticipantsWithResults(){
 
 		$MoodleDBObj = MoodleDB::getInstance();

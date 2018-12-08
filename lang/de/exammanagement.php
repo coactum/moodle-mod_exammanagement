@@ -188,9 +188,12 @@ $string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch über 
 $string['input_other_matrnr'] = 'Matrikelnummer ändern';
 
 //showResultsForm.php
-$string['show_results_str'] = 'Übersicht Prüfungsergebnisse';
+$string['show_results_str'] = 'Teilnehmer- und Ergebnisübersicht';
 $string['matriculation_number_short'] = 'Matr. Nr.';
 $string['result'] = 'Ergebnis';
+$string['resultwithbonus'] = 'Ergebnis inkl. Bonus';
+$string['bonussteps'] = 'Bonusschritte';
+$string['change_bonus'] = 'Bonus ändern';
 $string['cancel'] = 'Zurück zur Prüfungsorganisation';
 $string['gradingscale_not_set'] = 'Um automatisch eine Note berechnen zu lassen muss zunächst der Notenschlüßel eingetragen werden.';
 $string['nt'] = 'NT';
