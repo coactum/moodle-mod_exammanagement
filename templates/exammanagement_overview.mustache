@@ -526,7 +526,7 @@ ajaxsetcorrectioncompletion = function(value){
 																</div>
 															</div>
 															<div class="panel-body">
-																	{{#bonuscount}}<p>Es wurden bisher Bonusnotenschritte für <strong>{{bonuscount}} / {{participants}}</strong> Teilnehmenden importiert.</p>{{/bonuscount}}
+																	{{#bonuscount}}<p>Es wurden bisher Bonusnotenschritte für <strong>{{bonuscount}} / {{participants}}</strong> Teilnehmende importiert.</p>{{/bonuscount}}
 																	{{^bonuscount}}<p>Es wurden noch keine Bonusnotenschritte eingetragen.</p>{{/bonuscount}}
 															</div>
 															<div class="panel-footer">
@@ -696,7 +696,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 													<div class="panel-body">
-															<p>Hier können die Ergebnisse und Statistiken als PDF- oder Excel-Dokument exportiert werden.</p>
+															<p>Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
 														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
@@ -716,10 +716,10 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 													<div class="panel-body">
-															<p>Hier können die Ergebnisse für das Prüfungsamt als Excel- oder PAUL-Text-Dokument exportiert werden.</p>
+															<p>Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/datadeletiondate}}
+														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/datadeletiondate}}
 													</div>
 												</div>
                       </div>
@@ -847,10 +847,10 @@ ajaxsetcorrectioncompletion = function(value){
 															</div>
 														</div>
 														<div class="panel-body">
-																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PDF oder als PAUL-Text-Dokument für das Prüfungsamt exportiert werden.</p>
+																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 														</div>
 													</div>
 	                      </div>

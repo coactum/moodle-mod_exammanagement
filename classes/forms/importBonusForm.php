@@ -172,15 +172,7 @@ class importBonusForm extends moodleform{
                 $errors['bonussteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
             } else if($bonussteppoints<0) {
                 $errors['bonussteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
-            } else if($key!=='1' && !array_key_exists('bonussteppoints['.$lastbonusstepkey.']', $errors) && ($lastbonussteppoints >= $bonussteppoints)){
-                // var_dump($key);
-                // var_dump($lastbonusstepkey);
-                $errors['bonussteppoints['.$key.']'] = get_string('err_bonusstepsnotcorrect', 'mod_exammanagement');
-                $errors['bonussteppoints['.$lastbonusstepkey.']'] = get_string('err_bonusstepsnotcorrect', 'mod_exammanagement');
             }
-  
-            $lastbonussteppoints = $bonussteppoints;
-            $lastbonusstepkey = $key;
         }
   
         return $errors;

@@ -78,7 +78,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 
     if($moodleParticipants || $noneMoodleParticipants){
-        echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div><div class="col-xs-1"></div></div>');
+        echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
+        
+        if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+            echo('<div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
+        }
+
+        echo('<div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div><div class="col-xs-1"></div></div>');
 
         // show participants with moodle account
         if($moodleParticipants){
@@ -106,7 +112,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 echo('<div class="row"><div class="col-xs-3">');
                 echo($UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid));
                 echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
-                echo('<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</div>');
+
+                if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                    echo('<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</div>');
+                }
                 echo('<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div>');
                 echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmid', $participantObj->moodleuserid).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
             }
@@ -139,7 +148,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                  echo('<div class="row"><div class="col-xs-3">');
                  echo($participantObj->firstname.' '.$participantObj->lastname);
                  echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
-                 echo('<div class="col-xs-3"> - </div>');
+                 if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                     echo('<div class="col-xs-3"> - </div>');
+                 }
                  echo('<div class="col-xs-3">'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</div>');
                  echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmatrnr', $participantObj->imtlogin).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
              }

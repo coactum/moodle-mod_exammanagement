@@ -58,17 +58,20 @@ define(['jquery'], function ($) {
         var newbonusstepcount = bonusstepcount + 1;
         var pointsofnewbonusstep = '';
 
-        var temp = '<div class="form-group  fitem  ">';
-        temp += '<label class="col-form-label sr-only" for="id_bonussteppoints_' + newbonusstepcount + '"></label><span data-fieldtype="text">';
-        temp += '<input class="form-control" name="bonussteppoints[' + newbonusstepcount + ']" id="id_bonussteppoints_' + newbonusstepcount + '" value="';
-        temp += pointsofnewbonusstep + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
-        temp += 'margin: 0px; width: 70px;" min="0" step="0.01"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
-        temp += newbonusstepcount + ']" style="display: none;"></div></div> ';
+        if (bonusstepcount < 3) {
 
-        $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
-        $(".form-group:nth-of-type(6) .col-md-9").append(temp);
+          var temp = '<div class="form-group  fitem  ">';
+          temp += '<label class="col-form-label sr-only" for="id_bonussteppoints_' + newbonusstepcount + '"></label><span data-fieldtype="text">';
+          temp += '<input class="form-control" name="bonussteppoints[' + newbonusstepcount + ']" id="id_bonussteppoints_' + newbonusstepcount + '" value="';
+          temp += pointsofnewbonusstep + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
+          temp += 'margin: 0px; width: 70px;" min="0" step="0.01"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
+          temp += newbonusstepcount + ']" style="display: none;"></div></div> ';
 
-        $("input[name=bonusstepcount]").val(parseInt($("input[name=bonusstepcount]").val()) + 1);
+          $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
+          $(".form-group:nth-of-type(6) .col-md-9").append(temp);
+
+          $("input[name=bonusstepcount]").val(parseInt($("input[name=bonusstepcount]").val()) + 1);
+        }
 
       });
     },

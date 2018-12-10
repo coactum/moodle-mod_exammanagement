@@ -28,6 +28,7 @@ use mod_exammanagement\forms\importBonusForm;
 use PHPExcel_IOFactory;
 use PHPExcel_Reader_IReadFilter;
 use stdclass;
+use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -65,7 +66,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     if ($mform->is_cancelled()) {
         //Handle form cancel operation, if cancel button is present on form
 
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+        $MoodleObj->redirectToOverviewPage('aftercorrection', 'Vorgang abgebrochen', 'warning');
 
     } else if ($fromform = $mform->get_data()) {
     //In this case you process validated data. $mform->get_data() returns data posted in form.	
@@ -73,6 +74,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		var_dump($fromform);
 
         if ($fromform->bonuspoints_list){
+
+			if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
+				redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), 'Punkte für Bonusschritte ungültig', null, notification::NOTIFY_ERROR);
+			}
 		   
 			// retrieve Files from form
 			$file = $mform->get_file_content('bonuspoints_list');
@@ -173,9 +178,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		}
 
 		if($update){
-			$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte importiert', 'success');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte importiert', 'success');
 		} else {
-			$MoodleObj->redirectToOverviewPage('forexam', 'Bonuspunkte konnten nicht importiert werden', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte konnten nicht importiert werden', 'error');
 		}
 
     } else {
