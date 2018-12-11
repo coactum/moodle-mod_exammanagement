@@ -105,7 +105,7 @@ class showResultsForm extends moodleform {
                     if($UserObj->getEnteredBonusCount()){
                         $mform->addElement('html', '<div class="col-sm-1">'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonuspoints)));
                         if($participant->bonuspoints){
-                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonuspoints.')</span> <a href="inputBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
+                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonuspoints.')</span> <a href="importBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
                         }
                         $mform->addElement('html', '</div>');
                     }

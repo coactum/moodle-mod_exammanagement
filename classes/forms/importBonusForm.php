@@ -172,6 +172,10 @@ class importBonusForm extends moodleform{
                 $errors['bonussteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
             } else if($bonussteppoints<0) {
                 $errors['bonussteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
+            } else if(!preg_match('/^[A-Z]+$/', $data['idfield'])){
+                $errors['idfield'] = get_string('err_noinvalifcolumn', 'mod_exammanagement');
+            }  else if(!preg_match('/^[A-Z]+$/', $data['pointsfield'])){
+                $errors['pointsfield'] = get_string('err_noinvalifcolumn', 'mod_exammanagement');
             }
         }
   

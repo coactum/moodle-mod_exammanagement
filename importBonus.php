@@ -94,7 +94,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			class MyReadFilter implements PHPExcel_Reader_IReadFilter {
 
-				public function __construct($columnID, $columnPoints) { // zur not
+				public function __construct($columnID, $columnPoints) {
 					$this->columnID = $columnID;
 					$this->columnPoints = $columnPoints;
 				}
@@ -107,7 +107,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				}
 			}
 
-			$ExcelReaderWrapper->setReadFilter( new MyReadFilter('A') );
+			$ExcelReaderWrapper->setReadFilter( new MyReadFilter() );
 			$readerObj = $ExcelReaderWrapper->load($tempfile);
 
 			$worksheetObj = $readerObj->getActiveSheet();
@@ -119,7 +119,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			var_dump('uidsarray:');
 			var_dump($userIDsArr);
-
 
 			var_dump('pointsarr:');
 			var_dump($pointsArr);
@@ -142,7 +141,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				} else {
 					var_dump('i_should_check_if_imtlogin');
 					var_dump($uid);
-					$participantObj = $UserObj->getExamParticipantObj(null, $uid);
+					$participantObj = $UserObj->getExamParticipantObj(null, $uid[0]);
 				}
 
 				if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
@@ -155,19 +154,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						var_dump($points);
 
 						var_dump('points of user from file');
-						var_dump($pointsArr[$key][0]);
+						var_dump(intval($pointsArr[$key][0]));
+
+						var_dump('intval($pointsArr[$key][0]) >= $points');
+						var_dump(intval($pointsArr[$key][0]) >= $points);
 						
-						if($pointsArr[$key][0] >= $points){
+						if(intval($pointsArr[$key][0]) >= $points){
 							$participantObj->bonuspoints = $step; // change to detect bonus step
-
-							var_dump('final püarticipant');
-							var_dump($participantObj);
-
-							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 						} else {
 							break;
 						}
 					}
+
+
+					var_dump('participant');
+					var_dump($participantObj);
+
+					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 
 				}
 			}

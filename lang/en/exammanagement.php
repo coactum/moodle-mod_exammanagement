@@ -164,8 +164,8 @@ $string['configure_fileimport'] = 'Configure file import';
 $string['import_mode'] = 'Import mode';
 $string['moodle_export'] = 'Exported grades from PANDA';
 $string['individual'] = 'Other';
-$string['idfield'] = 'Column containing user id (e.g. 1, 2, 3; preselected for exported grades from PANDA)';
-$string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C)';
+$string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from PANDA)';
+$string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA user id or IMT login) and bonus points must fit the choosen column).';
 
 //configureGradingscaleForm.php
