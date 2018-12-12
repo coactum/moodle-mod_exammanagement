@@ -633,17 +633,7 @@ EOF;
 
 	public function getPAULTextFileHeaders(){
 
-		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
-
 		$textfileheaders = 	json_decode($this->moduleinstance->importfileheaders);
-
-		if($textfileheaders && $UserObj->getAllExamParticipantsByHeader(0)){
-			array_unshift($textfileheaders, true);
-		}
-
-		if($textfileheaders != NULL){
-			$textfileheaders = array_values($textfileheaders);
-		}
 
 		if ($textfileheaders){
 				return $textfileheaders;

@@ -480,7 +480,7 @@ class User{
 				break;
 		}
 
-		if($grade){
+		if(isset($grade) && $grade !== "-"){
 			$resultWithBonus = $grade-$bonus;
 
 			$test = round($resultWithBonus-floor($resultWithBonus),1);
@@ -489,7 +489,10 @@ class User{
 			if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
 
 			if($bonus == 0) return $grade;
-			if( $resultWithoutBonus == 5.0 ) return 5.0;
+			if( $grade == 5.0 ) return 5.0;
+			if( $grade == 'NT' ) return 'NT';
+			if( $grade == 'FA' ) return 'FA';
+			if( $grade == 'ILL' ) return 'ILL';
 			if( $resultWithBonus<=1.0) return 1.0;
 
 			return ($resultWithBonus);

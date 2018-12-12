@@ -164,9 +164,6 @@ class importBonusForm extends moodleform{
   
             $floatval = floatval($bonussteppoints);
             $isnumeric = is_numeric($bonussteppoints);
-
-            // var_dump($key);
-            // var_dump($lastbonusstepkey);
   
             if(($bonussteppoints && !$floatval) || !$isnumeric){
                 $errors['bonussteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');

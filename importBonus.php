@@ -71,8 +71,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     } else if ($fromform = $mform->get_data()) {
     //In this case you process validated data. $mform->get_data() returns data posted in form.	
 
-		var_dump($fromform);
-
         if ($fromform->bonuspoints_list){
 
 			if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
@@ -116,59 +114,32 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$userIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
 			$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
 
-
-			var_dump('uidsarray:');
-			var_dump($userIDsArr);
-
-			var_dump('pointsarr:');
-			var_dump($pointsArr);
-
 			foreach($userIDsArr as $key => $uid){
-
-				var_dump('uid:');
-				var_dump($uid);
 
 				$participantObj = false;
 
-				if(is_int(intval($uid))){
+				if(is_numeric($uid[0])){
+
 					$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('idnumber'=>$uid[0]));
 
 					if($UserObj->checkIfAlreadyParticipant($uid)){
 						$participantObj = $UserObj->getExamParticipantObj($uid);
-	
 					}
 
 				} else {
-					var_dump('i_should_check_if_imtlogin');
-					var_dump($uid);
 					$participantObj = $UserObj->getExamParticipantObj(null, $uid[0]);
 				}
 
 				if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
 
 					foreach($fromform->bonussteppoints as $step => $points){
-
-						var_dump('step:');
-						var_dump($step);
-						var_dump('points:');
-						var_dump($points);
-
-						var_dump('points of user from file');
-						var_dump(intval($pointsArr[$key][0]));
-
-						var_dump('intval($pointsArr[$key][0]) >= $points');
-						var_dump(intval($pointsArr[$key][0]) >= $points);
 						
-						if(intval($pointsArr[$key][0]) >= $points){
+						if(floatval($pointsArr[$key][0]) >= $points){
 							$participantObj->bonuspoints = $step; // change to detect bonus step
 						} else {
 							break;
 						}
 					}
-
-
-					var_dump('participant');
-					var_dump($participantObj);
 
 					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
 
