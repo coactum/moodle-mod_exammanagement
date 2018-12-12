@@ -160,7 +160,7 @@ class ldapManager{
 			}
 	}
 
-	public function studentid2uid($ldapConnection, $pStudentId){ // imtlogin to matrnr
+	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
 		if (empty($pStudentId)) {
 				throw new Exception("No parameter given");
 		}
@@ -177,7 +177,7 @@ class ldapManager{
 		return $result[ 0 ];
 	}
 
-	public function uid2studentid($ldapConnection, $uid){ // matrnr to imtlogin
+	public function uid2studentid($ldapConnection, $uid){ // imtlogin to matrnr
 
 			if (empty($uid)) {
 					throw new Exception("No parameter given");

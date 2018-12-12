@@ -212,14 +212,11 @@ class addParticipantsForm extends moodleform{
 
                 foreach($oldParticipants as $key => $participant){
 
-                    if($LdapManagerObj->is_LDAP_config()){
-                        $ldapConnection = $LdapManagerObj->connect_ldap();
-                        $pmatrnr = $LdapManagerObj->studentid2uid($ldapConnection, $participant->imtlogin);
-                    } else {
-                        $pmatrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(false, $participant->imtlogin);
+                    if($participant->imtlogin !== NULL && $participant->imtlogin !== false){
+                        $matrnr = $UserObj->getUserMatrNr(false, $participant->imtlogin);
                     }
     
-                    if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($pmatrnr, $tempIDsArray)){
+                    if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($matrnr, $tempIDsArray)){
 
                         if($participant->moodleuserid){
                             $deletedMatrNrObj = new stdclass;
@@ -229,7 +226,7 @@ class addParticipantsForm extends moodleform{
                             array_push($deletedMoodleParticipantsArr, $deletedMatrNrObj);
                         } else if($participant->imtlogin){
                             $deletedMatrNrObj = new stdclass;
-                            $deletedMatrNrObj->matrnr = $pmatrnr;
+                            $deletedMatrNrObj->matrnr = $matrnr;
                             $deletedMatrNrObj->firstname = $participant->firstname;
                             $deletedMatrNrObj->lastname = $participant->lastname;
                             $deletedMatrNrObj->line = '';
