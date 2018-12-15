@@ -21,21 +21,21 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/notification'], function($) {
+define(['jquery', 'core/notification'], function ($) {
 
   return {
-    init: function() {
+    init: function () {
 
-      var max_points = parseInt($("#totalpoints strong").text());
+      var max_points = parseFloat($("#totalpoints strong").text().replace(/,/g, '.'));
 
       // create input type number elements
       $("input[type=text]").attr("type", "number");
 
       var styles = {
-          "-webkit-appearance": "textfield",
-          "-moz-appearance":"textfield",
-          "margin": "0px",
-          "width": "70px"
+        "-webkit-appearance": "textfield",
+        "-moz-appearance": "textfield",
+        "margin": "0px",
+        "width": "70px"
       };
 
       $("input[type=number]").css(styles);

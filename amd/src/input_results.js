@@ -80,7 +80,7 @@ define(['jquery', 'core/notification'], function ($) {
       $("input[type=number]:not(#id_matrnr)").attr("min", "0");
 
       $("input[type=number]:not(#id_matrnr)").each(function () {
-        $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text()));
+        $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text().replace(/,/g, '.')));
       });
 
       $(".form-group input.checkboxgroup1").each(function () { // initial disabling point fields if some checkbox is already checked

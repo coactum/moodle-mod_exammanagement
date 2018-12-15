@@ -89,7 +89,7 @@ class configureTasksForm extends moodleform {
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
-              $mform->setType('task['.$oldtaskcount.']', PARAM_INT);
+              $mform->setType('task['.$oldtaskcount.']', PARAM_FLOAT);
               $mform->setDefault('task['.$oldtaskcount.']', $points);
 
           }
@@ -111,7 +111,7 @@ class configureTasksForm extends moodleform {
 
             //input field with points
             array_push($tasks_array, $mform->createElement('text', 'task['.$newtaskcount.']', '', $attributes));
-            $mform->setType('task['.$newtaskcount.']', PARAM_INT);
+            $mform->setType('task['.$newtaskcount.']', PARAM_FLOAT);
             $mform->setDefault('task['.$newtaskcount.']', $temptaskpoints);
 
             $totalpoints += $temptaskpoints;
@@ -122,7 +122,7 @@ class configureTasksForm extends moodleform {
           array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
           array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
 
-          $mform->setType('task[1]', PARAM_INT);
+          $mform->setType('task[1]', PARAM_FLOAT);
           $mform->setDefault('task[1]', 0);
 
           $oldtaskcount=1;
@@ -132,7 +132,7 @@ class configureTasksForm extends moodleform {
         $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
         $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
-        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.str_replace('.', ',', $totalpoints).'</span></strong></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

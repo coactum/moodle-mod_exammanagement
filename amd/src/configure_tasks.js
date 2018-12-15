@@ -28,11 +28,13 @@ define(['jquery'], function ($) {
     var newval;
 
     $(".form-group input.form-control").each(function () {
-      newval = parseInt($(this).val());
+      newval = parseFloat($(this).val());
       if (newval) {
         totalpoints += newval;
       }
     });
+
+    totalpoints = String(totalpoints).replace('.', ',');
 
     return totalpoints;
   };
@@ -61,6 +63,7 @@ define(['jquery'], function ($) {
       };
 
       $("input[type=number]").css(styles);
+      $("input[type=number]").attr("step", "0.01");
       $("input[type=number]").attr("min", "0");
 
       $(".form-group").on("change", "input", function () { // update totalpoints if some field changes

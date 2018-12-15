@@ -110,7 +110,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $pdf->Line(20, 55, 190, 55);
     $pdf->SetXY(20, 65);
 
-    $maxPoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+    $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
     $participantsArray = $UserObj->getAllExamParticipants();
     $fill = false;
 
@@ -169,11 +169,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $user = $UserObj->getMoodleUser($participant->moodleuserid);
   
       if($user){
-          $name = utf8_encode($user->lastname);
-          $firstname = utf8_encode($user->firstname);
+          $name = $user->lastname;
+          $firstname = $user->firstname;
       } else {
-          $name = utf8_encode($participant->lastname);
-          $firstname = utf8_encode($participant->firstname);
+          $name = $participant->lastname;
+          $firstname = $participant->firstname;
       }
 
       $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);

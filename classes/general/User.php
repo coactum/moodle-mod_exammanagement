@@ -552,12 +552,8 @@ class User{
 		if($potentialParticipantId){
 			return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
-			if($LdapManagerObj->is_LDAP_config()){
-				$imtlogin = $potentialParticipantLogin;
-			} else {
-				$imtlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($potentialParticipantLogin);				
-			}
-
+			$imtlogin = $potentialParticipantLogin;
+			
 			if($imtlogin){
 				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $imtlogin));
 			}

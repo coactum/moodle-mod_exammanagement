@@ -34,7 +34,7 @@ $string['phase_one'] = 'Vor der Prüfung';
 $string['phase_two'] = 'Für die Prüfung';
 $string['phase_three'] = 'Nach der Korrektur';
 $string['phase_four'] = 'Nach der Prüfung';
-$string['phase_five'] = 'Klausureinsicht';
+$string['phase_five'] = 'Klausureinsicht (optional)';
 $string['exam_appointment'] = 'Prüfungstermin';
 $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
@@ -164,9 +164,9 @@ $string['configure_fileimport'] = 'Dateiimport konfigurieren';
 $string['import_mode'] = 'Art des Dateiimports';
 $string['moodle_export'] = 'Bewertungsexport aus Moodle';
 $string['individual'] = 'Individuell';
-$string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A, B, C ... ; Beim Import von aus Moodle exportierten Bewertungen automatisch gesetzt)';
+$string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A, B, C ... ; Beim Import von aus PANDA exportierten Bewertungen automatisch gesetzt)';
 $string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
-$string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (PANDA-Benutzerid oder IMTZ-Login) und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
+$string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (PANDA-Benutzerid oder IMT-Login) und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';

@@ -236,7 +236,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
     $taskcount = $ExammanagementInstanceObj->getTaskCount();
-    $taskpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+    $taskpoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
     $textfieldcontent = $ExammanagementInstanceObj->getShortenedTextfield();
     $participantscount = $UserObj->getParticipantsCount();
     $roomscount = $ExammanagementInstanceObj->getRoomsCount();

@@ -62,7 +62,7 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureGradingscale'));
 
-        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.$totalpoints.'</strong></span></div>');
+        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.str_replace( '.', ',', $totalpoints).'</strong></span></div>');
 
         if (!$gradingscale){
           $gradingscale = array(
