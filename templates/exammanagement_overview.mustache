@@ -102,19 +102,24 @@ ajaxtoogleInformation = function(command, value){
 ajaxsetcorrectioncompletion = function(value){
 
 		$('.loadable').toggle();
-
-		jQuery.ajax ({
-        url: './view.php',
-        data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value)},
-        success: function(response) {
-					$('.loadable').toggle();
-					location.href = 'view.php?id='+{{cmid}};
-				},
-        error: function(response) {
-					$('.loadable').toggle();
-          alert('Interner Fehler. Bitte erneut versuchen.')
-        }
-    });
+		var confirmed = confirm("Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiderbringlich gelöscht werden.");
+		if(confirmed){
+			jQuery.ajax ({
+					url: './view.php',
+					data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value)},
+					success: function(response) {
+								$('.loadable').toggle();
+								location.href = 'view.php?id='+{{cmid}};
+							},
+					error: function(response) {
+								$('.loadable').toggle();
+								alert('Interner Fehler. Bitte erneut versuchen.')
+					}
+		    });
+		} else {
+			$('.loadable').toggle();
+			location.href = 'view.php?id='+{{cmid}};
+		}
 }
 
 {{/js}}

@@ -136,7 +136,7 @@ class importBonusForm extends moodleform{
 
         $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement'), $attributes);
         $mform->setType('idfield', PARAM_TEXT);
-        $mform->setDefault('idfield', 'C');
+        $mform->setDefault('idfield', 'F');
         $mform->disabledIf('idfield', 'importmode', 'eq', 'me');
 
         $mform->addElement('text', 'pointsfield', get_string('pointsfield', 'mod_exammanagement'), $attributes);

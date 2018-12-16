@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\importBonusForm;
+use mod_exammanagement\ldap\ldapManager;
 use PHPExcel_IOFactory;
 use PHPExcel_Reader_IReadFilter;
 use stdclass;
@@ -46,6 +47,7 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$LdapManagerObj = LdapManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -90,22 +92,27 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
 			$ExcelReaderWrapper->setReadDataOnly(true);
 
-			class MyReadFilter implements PHPExcel_Reader_IReadFilter {
+			// class MyReadFilter implements PHPExcel_Reader_IReadFilter { not working in the way intended (read only cells with relevant data)
 
-				public function __construct($columnID, $columnPoints) {
-					$this->columnID = $columnID;
-					$this->columnPoints = $columnPoints;
-				}
+			// 	public function __construct($fromColumn, $toColumn) {
+			// 		$this->columns = array();
+			// 		$toColumn++;
+
+			// 		while ($fromColumn !== $toColumn+1) {
+			// 			$this->columns[] = $fromColumn++;
+			// 		}
+			// 	}
 			
-				public function readCell($column, $row, $worksheetName = '') { 
-					if ($column >= $this->columnID && $column >= $this->columnPoints) { 
-						return true; 
-					} 
-					return false; 
-				}
-			}
+			// 	public function readCell($column, $row, $worksheetName = '') {
+			// 		  // Read columns from 'A' to 'AF'
+			// 		  if (in_array($column, $this->columns)) {
+			// 			  return true;
+			// 		  }
+			// 		  return false;
+			// 	  }
+			// }
 
-			$ExcelReaderWrapper->setReadFilter( new MyReadFilter() );
+			//$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->idfield,$fromform->pointsfield) );
 			$readerObj = $ExcelReaderWrapper->load($tempfile);
 
 			$worksheetObj = $readerObj->getActiveSheet();
@@ -118,16 +125,25 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				$participantObj = false;
 
-				if(is_numeric($uid[0])){
+				if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual imoport (matriculation number)
 
-					$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('idnumber'=>$uid[0]));
+					if($LdapManagerObj->is_LDAP_config()){
+                        $ldapConnection = $LdapManagerObj->connect_ldap();
 
-					if($UserObj->checkIfAlreadyParticipant($uid)){
-						$participantObj = $UserObj->getExamParticipantObj($uid);
-					}
+                        $userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $uid[0]);
 
-				} else {
-					$participantObj = $UserObj->getExamParticipantObj(null, $uid[0]);
+                    } else {
+                            $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($uid[0]);
+                    }
+
+				} else { // import of moodle grades export (moodle mail adress)
+					$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$uid[0]));
+				}
+
+				if($UserObj->checkIfAlreadyParticipant($uid)){
+					$participantObj = $UserObj->getExamParticipantObj($uid);
+				} else if($UserObj->checkIfAlreadyParticipant(false, $userlogin)){
+					$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
 				}
 
 				if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
