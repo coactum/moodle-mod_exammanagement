@@ -142,23 +142,18 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     // if plugin instance was moved to new category:
 
     $oldcategoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
-    $coursecategoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 6); //set course category
+    $coursecategoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
 
     if ($oldcategoryid !== $coursecategoryid) {
 
     // update categoryid
         $ExammanagementInstanceObj->moduleinstance->categoryid = $coursecategoryid;
-        $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
         // update participants categoryids
-        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id, 'cartegoryid' => $oldcategoryid));
-        $MoodleDBObj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id, 'cartegoryid' => $oldcategoryid));        
+        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id));
+        $MoodleDBObj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id));        
 
-        if ($update) {
-            $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Alle Teilnehmerdaten wurden entsprechend angepasst.', 'success');
-        } else {
-            $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning');
-        }
     }
 
     // delete temp participants and headers if exist

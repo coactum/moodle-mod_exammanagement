@@ -61,7 +61,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     global $DB, $PAGE;
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 6); //set course category
+    $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 

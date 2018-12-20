@@ -34,7 +34,7 @@ define(['jquery'], function ($) {
       }
     });
 
-    totalpoints = String(totalpoints).replace('.', ',');
+    totalpoints = String(totalpoints.toFixed(2)).replace('.', ',');
 
     return totalpoints;
   };
@@ -84,7 +84,7 @@ define(['jquery'], function ($) {
         temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
         temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
         temp += pointsofnewtask + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
-        temp += 'margin: 0px; width: 70px;" min="0"></span><div class="form-control-feedback" id="id_error_task[';
+        temp += 'margin: 0px; width: 70px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
         temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
         $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');

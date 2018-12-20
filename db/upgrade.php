@@ -98,7 +98,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
        upgrade_mod_savepoint(true, 2018101000, 'exammanagement');
     }
 
-    if ($oldversion < 2018123100) { // remove termbased participants table and replacve it with 
+    if ($oldversion < 2018121500) { // remove termbased participants table and replacve it with 
 
         // Define field importfileheaders to be added to exammanagement.
         $table = new xmldb_table('exammanagement_temp_part');
@@ -143,7 +143,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
           }
  
         // Exammanagement savepoint reached.
-        upgrade_mod_savepoint(true, 2018123100, 'exammanagement');
+        upgrade_mod_savepoint(true, 2018121500, 'exammanagement');
      }
 
     return true;

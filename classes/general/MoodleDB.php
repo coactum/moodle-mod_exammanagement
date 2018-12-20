@@ -60,6 +60,7 @@ class MoodleDB{
 	 }
 
 	 public function setFieldInDB($table, $newfield, $newvalue, $conditions=null){
+		global $DB;
 
 		$DB->set_field($table, $newfield, $newvalue, $conditions);
 	}
