@@ -122,6 +122,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$user = new stdClass();
 							$user->plugininstanceid = $id;
 							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+							$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 							$user->moodleuserid = $temp[1];
 							$user->imtlogin = null;
 							$user->firstname = null;
@@ -135,6 +136,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$user = new stdClass();
 							$user->plugininstanceid = $id;
 							$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+							$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 							$user->moodleuserid = null;
 
 							if($LdapManagerObj->is_LDAP_config()){
@@ -167,7 +169,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					}
 
 					// insert records of new participants
-					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$UserObj->categoryid, $userObjArr);
+					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
 
 				}
 
@@ -226,9 +228,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
                                     $tempUserObj = new stdclass;
                                     $tempUserObj->plugininstanceid = $id;
-                                    $tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
+									$tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
+									$tempUserObj->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                     $tempUserObj->identifier = $identifier;
-                                    $tempUserObj->line = $key+1;
+									$tempUserObj->line = $key+1;
 
                                     array_push($usersObjArr, $tempUserObj);
 

@@ -206,7 +206,7 @@ class addParticipantsForm extends moodleform{
             }
 
             // get saved participants for headerid
-            $oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_part_' . $ExammanagementInstanceObj->moduleinstance->categoryid, array('plugininstanceid' => $this->_customdata['id'], 'headerid' => $headerid));
+            $oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->_customdata['id'], 'headerid' => $headerid));
             
             if($oldParticipants){ //if participant is deleted
 

@@ -98,60 +98,53 @@ function xmldb_exammanagement_upgrade($oldversion) {
        upgrade_mod_savepoint(true, 2018101000, 'exammanagement');
     }
 
-    //create new tables for new terms (category ids)
+    if ($oldversion < 2018123100) { // remove termbased participants table and replacve it with 
 
-    $terms = $DB->get_fieldset_select('course_categories', 'name', '');
-
-    if($terms){
-      $year = false;
-
-      foreach($terms as $termname){
-
-        $cleanTermname = preg_replace("/[^0-9a-zA-Z]/", "",$termname);
-
-        $cleanTermname = substr($cleanTermname, 0, 6);
-
-        $dbname = 'exammanagement_part_'.strtolower($cleanTermname);
-
-        if($dbname){
+        // Define field importfileheaders to be added to exammanagement.
+        $table = new xmldb_table('exammanagement_temp_part');
+        $field = new xmldb_field('categoryid', XMLDB_TYPE_TEXT, null, null, null, null, null);
+ 
+        // Conditionally launch add field for exammanagement.
+        if (!$dbman->field_exists($table, $field)) {
+           $dbman->add_field($table, $field);
+        }
 
           // Define table exammanagement_participants to be created.
-        $table = new xmldb_table($dbname);
+          $table = new xmldb_table('exammanagement_participants');
 
-        // Adding fields to table exammanagement_participants.
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '25', null, null, null, null);
-        $table->add_field('firstname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
-        $table->add_field('lastname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
-        $table->add_field('email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-        $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('roomid', XMLDB_TYPE_CHAR, '25', null, null, null, null);
-        $table->add_field('roomname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-        $table->add_field('place', XMLDB_TYPE_CHAR, '25', null, null, null, null);
-        $table->add_field('exampoints', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('examstate', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('timeresultsentered', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('bonuspoints', XMLDB_TYPE_CHAR, '25', null, null, null, null);
-
-        // Adding keys to table exammanagement_participants.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Adding indexes to table exammanagement_participants.
-        $table->add_index('plugininstanceid', XMLDB_INDEX_NOTUNIQUE, array('plugininstanceid'));
-
-        // Conditionally launch create table for exammanagement_participants.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
+          // Adding fields to table exammanagement_participants.
+          $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+          $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+          $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+          $table->add_field('categoryid', XMLDB_TYPE_TEXT, null, XMLDB_NOTNULL, null, null, null);
+          $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+          $table->add_field('firstname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+          $table->add_field('lastname', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+          $table->add_field('email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+          $table->add_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('roomid', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+          $table->add_field('roomname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+          $table->add_field('place', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+          $table->add_field('exampoints', XMLDB_TYPE_TEXT, null, null, null, null, null);
+          $table->add_field('examstate', XMLDB_TYPE_TEXT, null, null, null, null, null);
+          $table->add_field('timeresultsentered', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('bonus', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+  
+          // Adding keys to table exammanagement_participants.
+          $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+  
+          // Adding indexes to table exammanagement_participants.
+          $table->add_index('plugininstanceid', XMLDB_INDEX_NOTUNIQUE, array('plugininstanceid'));
+  
+          // Conditionally launch create table for exammanagement_participants.
+          if (!$dbman->table_exists($table)) {
+              $dbman->create_table($table);
+          }
+ 
         // Exammanagement savepoint reached.
-        //upgrade_mod_savepoint(true, XXXXXXXXXX, 'exammanagement');
-        }
-      }
-    }
+        upgrade_mod_savepoint(true, 2018123100, 'exammanagement');
+     }
 
     return true;
 }

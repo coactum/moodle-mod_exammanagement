@@ -59,6 +59,11 @@ class MoodleDB{
 	 	return $field;
 	 }
 
+	 public function setFieldInDB($table, $newfield, $newvalue, $conditions=null){
+
+		$DB->set_field($table, $newfield, $newvalue, $conditions);
+	}
+
 	public function getRecordFromDB($table, $condition){
 		global $DB;
 

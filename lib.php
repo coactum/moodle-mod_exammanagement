@@ -106,9 +106,9 @@ function exammanagement_delete_instance($id) {
      }
 
      // delete participants
-     $exists = $DB->get_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
+     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
      if($exists) {
-        $DB->delete_records('exammanagement_part_'.$moduleinstance->categoryid, array('plugininstanceid' => $cm->id));
+        $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
      }
 
 

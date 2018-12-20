@@ -151,13 +151,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					foreach($fromform->bonussteppoints as $step => $points){
 						
 						if(floatval($pointsArr[$key][0]) >= $points){
-							$participantObj->bonuspoints = $step; // change to detect bonus step
+							$participantObj->bonus = $step; // change to detect bonus step
 						} else {
 							break;
 						}
 					}
 
-					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
+					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 
 				}
 			}

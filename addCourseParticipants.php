@@ -72,6 +72,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $user = new stdClass();
                         $user->plugininstanceid = $id;
                         $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+                        $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                         $user->moodleuserid = $participantId;
                         $user->headerid = 0;
 
@@ -105,7 +106,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             }
 
-            $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$UserObj->categoryid, $userObjArr);
+            $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
 
             $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
 

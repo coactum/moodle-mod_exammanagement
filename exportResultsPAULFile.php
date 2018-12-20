@@ -79,7 +79,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $resultState = $UserObj->getExamState($participant);
 
         if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonuspoints);
+            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonus);
         } else {
             $resultWithBonus = get_string($resultState, "mod_exammanagement");
         }
@@ -153,7 +153,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $resultState = $UserObj->getExamState($participant);
     
                     if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonuspoints);
+                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonus);
                     } else {
                         $resultWithBonus = get_string($resultState, "mod_exammanagement");
                     }
@@ -209,7 +209,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $resultState = $UserObj->getExamState($participant);
     
                     if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonuspoints);
+                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $participant->bonus);
                     } else {
                         $resultWithBonus = get_string($resultState, "mod_exammanagement");
                     }

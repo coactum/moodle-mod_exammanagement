@@ -148,23 +148,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     // update categoryid
         $ExammanagementInstanceObj->moduleinstance->categoryid = $coursecategoryid;
-        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-        // move participant records
-        $oldrecords = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
+        // update participants categoryids
+        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id, 'cartegoryid' => $oldcategoryid));
+        $MoodleDBObj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('plugininstanceid' => $id, 'cartegoryid' => $oldcategoryid));        
 
-        if ($oldrecords) {
-            $insert = $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_part_'.$coursecategoryid, $oldrecords);
-      
-            if ($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id))) {
-                $MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$oldcategoryid, array('plugininstanceid' => $id));
-            }
-      
-            if ($insert) {
-                $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Alle Teilnehmerdaten wurden entsprechend angepasst.', 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning');
-            }
+        if ($update) {
+            $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Alle Teilnehmerdaten wurden entsprechend angepasst.', 'success');
+        } else {
+            $MoodleObj->redirectToOverviewPage('', 'Kurs wurde manuell in ein anderes Semester verschoben. Sollten bereits eingetragene Teilnehmer nicht mehr angezeigt werden müssen diese ggf. erneut eingetragen werden.', 'warning');
         }
     }
 
@@ -302,7 +295,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
     //bonus
-    $bonus = $participantObj->bonuspoints;
+    $bonus = $participantObj->bonus;
 
     //examreview date and room
     $examreviewtime = false;

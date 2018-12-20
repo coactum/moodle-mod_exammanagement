@@ -199,7 +199,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$participantObj->exampoints = json_encode($fromform->points);
 					$participantObj->timeresultsentered = time();
 
-					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_part_'.$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
+					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 					if($update){
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), null, null, null);
 					} else {

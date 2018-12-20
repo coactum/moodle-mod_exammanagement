@@ -60,7 +60,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 
 		if($allParticipantsArr){
 			return $allParticipantsArr;
@@ -75,7 +75,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
+		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
 
 		if($allMoodleParticipantsArr){
 			return $allMoodleParticipantsArr;
@@ -90,7 +90,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
+		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
 
 		if($allNoneMoodleParticipantsArr){
 			return $allNoneMoodleParticipantsArr;
@@ -105,7 +105,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'roomid' => $roomid));
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $roomid));
 
 		if($participantsArr){
 			return $participantsArr;
@@ -120,7 +120,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'headerid' => $headerid));
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'headerid' => $headerid));
 
 		if($participantsArr){
 			return $participantsArr;
@@ -157,7 +157,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
+		$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
 
 		if($participantsObj){
 			return $participantsObj;
@@ -171,9 +171,9 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($userid !== false && $userid !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
 		} else if($userlogin !== false && $userlogin !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $userlogin));
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $userlogin));
 		}
 
 		if($participantsObj){
@@ -240,10 +240,10 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
-		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $login));
+		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $login))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $login));
 		}
 	}
 
@@ -255,8 +255,8 @@ class User{
 		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-		if($MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 		}
 	}
 	
@@ -373,7 +373,7 @@ class User{
 		$select = "plugininstanceid =".$this->id;
 		$select .= " AND moodleuserid IS NULL";
 
-		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_part_'.$this->categoryid, 'email', $select);
+		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
 
 		if($NoneMoodleParticipantsEmailadressesArr){
 			return $NoneMoodleParticipantsEmailadressesArr;
@@ -505,7 +505,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 	
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 	
 		if($participantsArr){
 			foreach($participantsArr as $key => $participant){
@@ -524,7 +524,7 @@ class User{
 		$ExammanagementInstanceObj = ExammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 	
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id));
+		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
 		$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
 
 		if($participantsArr && $examReviewTime){
@@ -550,12 +550,12 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($potentialParticipantId){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
 			$imtlogin = $potentialParticipantLogin;
 			
 			if($imtlogin){
-				return $MoodleDBObj->checkIfRecordExists('exammanagement_part_'.$this->categoryid, array('plugininstanceid' => $this->id, 'imtlogin' => $imtlogin));
+				return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $imtlogin));
 			}
 		}
 	}
@@ -582,7 +582,7 @@ class User{
 
 		$select = "plugininstanceid =".$this->id;
 		
-		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_part_'.$this->categoryid, $select);
+		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if ($participantsCount){
 				return $participantsCount;
@@ -596,9 +596,9 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "plugininstanceid =".$this->id;
-		$select .= " AND bonuspoints IS NOT NULL";
+		$select .= " AND bonus IS NOT NULL";
 		
-		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_part_'.$this->categoryid, $select);
+		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if ($enteredBonusCount){
 				return $enteredBonusCount;

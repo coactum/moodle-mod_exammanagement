@@ -77,7 +77,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $participantObj->place = array_pop($places);
 
           // set room and place
-          $MoodleDBObj->UpdateRecordInDB("exammanagement_part_".$ExammanagementInstanceObj->moduleinstance->categoryid, $participantObj);
+          $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 
           $participantsCount +=1;
 

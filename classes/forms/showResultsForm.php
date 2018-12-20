@@ -103,9 +103,9 @@ class showResultsForm extends moodleform {
                     $result = $UserObj->calculateResultGrade($participant);
                     $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div>');
                     if($UserObj->getEnteredBonusCount()){
-                        $mform->addElement('html', '<div class="col-sm-1">'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonuspoints)));
-                        if($participant->bonuspoints){
-                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonuspoints.')</span> <a href="importBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
+                        $mform->addElement('html', '<div class="col-sm-1">'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)));
+                        if($participant->bonus){
+                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonus.')</span> <a href="importBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
                         }
                         $mform->addElement('html', '</div>');
                     }
