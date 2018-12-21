@@ -688,15 +688,14 @@ ajaxsetcorrectioncompletion = function(value){
                   </div>
                   <div class="row row-eq-height">
                       <div class="col-xs-6">
-												<div class="panel panel-danger">
+												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 														<div class="row">
 															<h3 class="panel-title col-xs-4">Ergebnisse und Statistik</h3>
 															<span class="statebar col-xs-8">
-																<!-- <span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>-->
-																		<span class="label label-danger pull-right"  title="Derzeit in Entwicklung">
-																				<i class="fa fa-times"></i><span class="d-none d-md-inline"> Derzeit in Entwicklung</span>
-																</span>
+																{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
 														</div>
 													</div>
@@ -704,7 +703,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<p>Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														<!-- <a href="" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a><a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a> -->
+														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
 													</div>
 												</div>
                       </div>

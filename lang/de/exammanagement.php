@@ -200,7 +200,6 @@ $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 
-
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
 $string['participantslist_names'] = 'Teilnehmerliste_Namen';
@@ -227,9 +226,29 @@ $string['required_label_type'] = 'Benoetigter Etikettentyp:';
 // exoprtResultsExamReview.php
 $string['pointslist_examreview'] = 'Punkteliste Klausureinsicht';
 
-// exoprtResultsPercentages.php
+// exportResultsPercentages.php
 $string['percentages'] = 'Prozent';
 $string['pointslist_percentages'] = 'Punkteliste Prozente';
+
+// exportResultsStatistics.php
+$string['examresults_statistics'] = 'Statistik der Prüfungsergebnisse';
+$string['examresults_statistics_description'] = 'Statistik der Prüfungsergebnisse als MS Excel Datei';
+$string['examresults_statistics_category'] = 'Statistik der Prüfungsergebnisse';
+$string['overview'] = 'Überblick';
+$string['examname'] = 'Name der Prüfung';
+$string['examterm'] = 'Semester';
+$string['examdate'] = 'Prüfungsdatum';
+$string['examtime'] = 'Prüfungsbeginn';
+$string['examrooms'] = 'Prüfungsräume';
+$string['grade'] = 'Note';
+$string['nobonus'] = 'Ohne Bonus';
+$string['withbonus'] = 'Mit Bonus';
+$string['number'] = 'Nummer';
+$string['inpercent'] = 'in %';
+$string['registered'] = 'Angemeldet';
+$string['passed'] = 'Bestanden';
+$string['notpassed'] = 'Nicht bestanden';
+$string['notrated'] = 'Nicht bewerted';
 
 // exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';

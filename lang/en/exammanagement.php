@@ -226,9 +226,29 @@ $string['required_label_type'] = 'Required label type:';
 // exportResultsExamReview.php
 $string['pointslist_examreview'] = 'List of points exam review';
 
-// exoprtResultsPercentages.php
+// exportResultsPercentages.php
 $string['percentages'] = 'Percent';
 $string['pointslist_percentages'] = 'List of points percentages';
+
+// exportResultsStatistics.php
+$string['examresults_statistics'] = 'Exam results statistics';
+$string['examresults_statistics_description'] = 'Exam results statistics as ms excel file';
+$string['examresults_statistics_category'] = 'Exam results statistics';
+$string['overview'] = 'Overview';
+$string['examname'] = 'Name of exam';
+$string['examterm'] = 'Term of exam';
+$string['examdate'] = 'Date of exam';
+$string['examtime'] = 'Time of exam';
+$string['examrooms'] = 'Rooms of exam';
+$string['grade'] = 'Grade';
+$string['nobonus'] = 'No bonus';
+$string['withbonus'] = 'With bonus';
+$string['number'] = 'Number';
+$string['inpercent'] = 'in %';
+$string['registered'] = 'Registered';
+$string['passed'] = 'Passed';
+$string['notpassed'] = 'Not passed';
+$string['notrated'] = 'Not rated';
 
 // exportResultsPAULFile.php
 $string['results'] = 'Results';
