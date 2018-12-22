@@ -249,6 +249,8 @@ $string['registered'] = 'Angemeldet';
 $string['passed'] = 'Bestanden';
 $string['notpassed'] = 'Nicht bestanden';
 $string['notrated'] = 'Nicht bewerted';
+$string['tasks'] = 'Aufgaben';
+$string['details'] = 'Details';
 
 // exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';

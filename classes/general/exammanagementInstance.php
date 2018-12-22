@@ -800,6 +800,19 @@ public function getDataDeletionDate(){
 				return (10 - ($check % 10)) % 10;
 		}
 
+		public function calculateCellAddress($n){
+			if ($n <= 26) return chr(64 + $n);
+			else if ($n <= 52) return "A" . $this.calculateCellAddress($n - 26);
+			else if ($n <= 78) return "B" . $this.calculateCellAddress($n - 52);
+			else if ($n <= 104) return "C" . $this.calculateCellAddress($n - 78);
+			else if ($n <= 130) return "D" . $this.calculateCellAddress($n - 104);
+			else if ($n <= 156) return "E" . $this.calculateCellAddress($n - 130);
+			else if ($n <= 192) return "F" . $this.calculateCellAddress($n - 156);
+			else if ($n <= 218) return "G" . $this.calculateCellAddress($n - 192);
+			else if ($n <= 244) return "H" . $this.calculateCellAddress($n - 218);
+			else if ($n <= 270) return "I" . $this.calculateCellAddress($n - 244);
+		}
+
 	########### debugging ########
 
 	public function debugElementsOverview(){
