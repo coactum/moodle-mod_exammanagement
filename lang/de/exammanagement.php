@@ -249,7 +249,8 @@ $string['registered'] = 'Angemeldet';
 $string['passed'] = 'Bestanden';
 $string['notpassed'] = 'Nicht bestanden';
 $string['notrated'] = 'Nicht bewerted';
-$string['tasks'] = 'Aufgaben';
+$string['tasks_and_boni'] = 'Aufgaben und Bonuspunkte';
+$string['count'] = 'Anzahl';
 $string['details'] = 'Details';
 
 // exportResultsPAULFile.php

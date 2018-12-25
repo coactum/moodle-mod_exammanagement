@@ -249,7 +249,8 @@ $string['registered'] = 'Registered';
 $string['passed'] = 'Passed';
 $string['notpassed'] = 'Not passed';
 $string['notrated'] = 'Not rated';
-$string['tasks'] = 'Tasks';
+$string['tasks_and_boni'] = 'Tasks and boni';
+$string['count'] = 'Count';
 $string['details'] = 'Details';
 
 // exportResultsPAULFile.php
