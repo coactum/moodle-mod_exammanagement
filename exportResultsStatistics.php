@@ -205,13 +205,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 
                 if ($result == '5,0'){
                     $notPassed++;
+                    $summaryTable[strval($resultWithBonus)]["countBonus"]++;
+                } else {
+                    $summaryTable[str_pad (strval($resultWithBonus), 3, '.0')]["countBonus"]++;
                 }
-
-                $summaryTable[str_pad (strval($resultWithBonus), 3, '.0')]["countBonus"]++;
             }
         }
 
         switch ($participant->bonus) { // for table 2 sheet 2
+            case null:
+                $bonusstepzero++;
+                break;
             case '1':
                 $bonusstepone++;
                 break;
@@ -221,10 +225,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             case '3':
                 $bonusstepthree++;
                 break;
+            default:
+                break;
         }
                 
     }
-    
+
     // output table 1
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A9', get_string('grade', 'mod_exammanagement'));
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B9', get_string('points', 'mod_exammanagement'));
@@ -232,12 +238,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('D9', get_string('withbonus', 'mod_exammanagement'));
 
     foreach($summaryTable as $gradestep => $options){
-        $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A' . $rowCounter, $gradestep);
+        $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A' . $rowCounter, str_replace('.', ',', strval($gradestep)));
         $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B' . $rowCounter, $options["from"] . " - " . $options["to"]);
         $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('C' . $rowCounter, $options["countNoBonus"]);
         $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('D' . $rowCounter, $options["countBonus"]);
         $rowCounter++;
     }
+
 
     // output table 2
     $registered = $UserObj->getParticipantsCount();
@@ -247,7 +254,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $FApercent = number_format($countFA / $registered * 100, 2);
     $SICKpercent = number_format($countSICK / $registered * 100, 2);
 
-    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B23', get_string('number', 'mod_exammanagement'));
+    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B23', get_string('count', 'mod_exammanagement'));
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('C23', get_string('inpercent', 'mod_exammanagement'));
 
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A24', get_string('registered', 'mod_exammanagement'));
@@ -274,7 +281,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $notPassedPercent = number_format($notPassed / $numberParticipants * 100 ,2);
     $notRatedPercent = number_format($notRated / $numberParticipants * 100 , 2);
 
-    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B31', get_string('number', 'mod_exammanagement'));
+    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B31', get_string('count', 'mod_exammanagement'));
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('C31', get_string('inpercent', 'mod_exammanagement'));
 
     $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A32', get_string('participants', 'mod_exammanagement'));
@@ -325,11 +332,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     // Table 2
     $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H1')->applyFromArray($headerStyle);
-    $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
     $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('G')->setWidth(13);
 
-    $PHPExcelObj->setActiveSheetIndex(1)->getStyle("G1:G4")->applyFromArray($borderStyleArray);
+    $PHPExcelObj->setActiveSheetIndex(1)->getStyle("G1:G5")->applyFromArray($borderStyleArray);
         
     // outpout table 1 
     $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('A1', get_string('task', 'mod_exammanagement'));
@@ -345,12 +352,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('G1', get_string('bonussteps', 'mod_exammanagement'));
     $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('H1', get_string('count', 'mod_exammanagement'));
 
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 2, 1);
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 2, $bonusstepone);
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 3, 2);
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 3, $bonussteptwo);
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 4, 3);
-    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 4, $bonusstepthree);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 2, 0);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 2, $bonusstepzero);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 3, 1);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 3, $bonusstepone);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 4, 2);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 4, $bonussteptwo);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 5, 3);
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 5, $bonusstepthree);
 
     ////////////////////////////////////////
     ////////// SHEET 3 - details ///////////

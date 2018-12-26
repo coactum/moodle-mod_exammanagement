@@ -243,7 +243,6 @@ $string['examrooms'] = 'Rooms of exam';
 $string['grade'] = 'Grade';
 $string['nobonus'] = 'No bonus';
 $string['withbonus'] = 'With bonus';
-$string['number'] = 'Number';
 $string['inpercent'] = 'in %';
 $string['registered'] = 'Registered';
 $string['passed'] = 'Passed';

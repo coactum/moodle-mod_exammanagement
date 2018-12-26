@@ -493,9 +493,9 @@ class User{
 			if( $grade == 'NT' ) return 'NT';
 			if( $grade == 'FA' ) return 'FA';
 			if( $grade == 'ILL' ) return 'ILL';
-			if( $resultWithBonus<=1.0) return 1.0;
+			if( $resultWithBonus<=1.0) return '1.0';
 
-			return ($resultWithBonus);
+			return (str_pad (strval($resultWithBonus), 3, '.0'));
 		} else {
 			return '-';
 		}
