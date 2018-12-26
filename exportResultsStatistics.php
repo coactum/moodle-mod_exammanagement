@@ -29,6 +29,8 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Color;
+use PHPExcel_Style_NumberFormat;
+use PHPExcel_Cell;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -311,12 +313,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // fortmatting for sheet 2
 
     //table 1
-    $PHPExcelObj->setActiveSheetIndex(1)->getStyle('A1:B1')->applyFromArray($headerStyle);
-    $range = "A2:B" . ($taskcount + 1);
+    $PHPExcelObj->setActiveSheetIndex(1)->getStyle('A1:C1')->applyFromArray($headerStyle);
+    $range = "A2:C" . ($taskcount + 1);
     $PHPExcelObj->setActiveSheetIndex(1)->getStyle($range)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
     $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('A')->setWidth(13);
     $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('B')->setWidth(20);
+    $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('C')->setWidth(20);
     
     $PHPExcelObj->setActiveSheetIndex(1)->getStyle("A1:A".($taskcount + 1))->applyFromArray($borderStyleArray);
 
@@ -331,6 +334,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     // outpout table 1 
     $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('A1', get_string('task', 'mod_exammanagement'));
     $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('B1', get_string('max_points', 'mod_exammanagement'));
+    $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('C1', get_string('mean', 'mod_exammanagement'));
 
     foreach ($tasks as $tasknumber => $points){        
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(0 , $tasknumber + 1, $tasknumber);
@@ -465,6 +469,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, $rowCounter, $bonus);
         $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(7 + $n, $rowCounter, $resultWithBonus);
         $rowCounter++;
+    }
+
+    // table 2 sheet 1 formular mean
+
+    $participantscount = count($ParticipantsArray)+1;
+
+    $PHPExcelObj->setActiveSheetIndex(1)->getStyle("C2:C".$n)->getNumberFormat()->setFormatCode('0.00');
+
+    for ($n = 1 ; $n <= $taskcount; $n++){
+
+        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(
+            '2',
+            1+$n,
+            '=MITTELWERT('.get_string("details", "mod_exammanagement").'!'.PHPExcel_Cell::stringFromColumnIndex(4+$n).'2:'.PHPExcel_Cell::stringFromColumnIndex(4+$n).$participantscount.')'
+        );
     }
 
     $PHPExcelObj->setActiveSheetIndex(0);

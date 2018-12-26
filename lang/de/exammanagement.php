@@ -250,6 +250,7 @@ $string['passed'] = 'Bestanden';
 $string['notpassed'] = 'Nicht bestanden';
 $string['notrated'] = 'Nicht bewerted';
 $string['tasks_and_boni'] = 'Aufgaben und Bonuspunkte';
+$string['mean'] = 'Mittelwert';
 $string['count'] = 'Anzahl';
 $string['details'] = 'Details';
 

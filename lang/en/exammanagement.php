@@ -250,6 +250,7 @@ $string['passed'] = 'Passed';
 $string['notpassed'] = 'Not passed';
 $string['notrated'] = 'Not rated';
 $string['tasks_and_boni'] = 'Tasks and boni';
+$string['mean'] = 'Mean';
 $string['count'] = 'Count';
 $string['details'] = 'Details';
 
