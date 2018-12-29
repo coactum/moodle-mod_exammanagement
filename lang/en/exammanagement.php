@@ -56,6 +56,7 @@ $string['state_notpossible_examreviewroom_missing'] = 'Room for exam review miss
 $string['state_loading'] = 'Loading ...';
 
 //exammanagement_overview.mustache work stages buttons
+$string['configure_password'] = 'Configure password';
 $string['choose_rooms'] = 'Choose rooms';
 $string['set_date'] = 'Set date';
 $string['add_participants'] = 'Add participants';
@@ -77,6 +78,11 @@ $string['export_as_paultext'] = 'Export text file';
 $string['delete_examdata'] = 'Delete exam data';
 $string['examreview_dateroom'] = 'Set date and room';
 $string['change_examresults'] = 'Change exam results';
+
+//configurePassword
+$string['configure_password_str'] = 'Configure password';
+$string['configure_password'] = 'This page allows setting and modifying password for the plugin instance';
+$string['password'] = 'Password';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
@@ -267,6 +273,7 @@ $string['help'] = 'Help';
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';
+$string['helptext_configurePassword'] = 'Here goes the description of this feature site.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';

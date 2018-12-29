@@ -56,6 +56,7 @@ $string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht 
 $string['state_loading'] = 'Lädt ...';
 
 //exammanagement_overview.mustache workstages buttons
+$string['configure_password'] = 'Password konfigurieren';
 $string['choose_rooms'] = 'Räume auswählen';
 $string['set_date'] = 'Datum festlegen';
 $string['add_participants'] = 'Teilnehmer hinzufügen';
@@ -77,6 +78,11 @@ $string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
 $string['delete_examdata'] = 'Prüfungsdaten löschen';
 $string['examreview_dateroom'] = 'Datum und Räume festlegen';
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
+
+//configurePassword
+$string['configure_password_str'] = 'Password konfigurieren';
+$string['configure_password'] = 'Hier kann ein Passwort für die Plugininstanz der Prüfungsorganisation gesetzt und geändert werden.';
+$string['password'] = 'Passwort';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
@@ -272,6 +278,7 @@ Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese auto
 Jeder Arbeitsschritt kann durch einen Klick auf den entsprechenden Link geöffnet werden. Manche Arbeitsschritte können erst nach der Bearbeitung eines anderen Schrittes geöffnet werden. In diesem Fall erscheint nach dem Klick eine Fehlermeldung. <br /><br />
 Durch den Button "Bearbeitungsrechte entziehen" bzw. "Bearbeitungsrechte zuweisen“ können Sie Ihren studentischen MitarbeiterInnen die Zugriffserlaubnis auf die Inhalte der Prüfungsorganisation in PANDA entziehen bzw. erneut zuweisen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zum Prüfungstermin.';
+$string['helptext_configurePassword'] = 'Hier kann ein Passwort für die Plugininstanz konfiguriert werden ...';
 $string['helptext_addRooms']= 'Auf dieser Seite kann eine Liste aller im System verfügbaren möglichen <strong>Prüfungsräume</strong> angesehen und einer oder mehrere davon als Raum für die aktuelle Prüfung ausgewählt werden. <br /> <br />
 Zudem können nach einem Klick auf den Button „Neue Räume hinzufügen“ auch eigene potenzielle Prüfungsräume zur Liste hinzugefügt werden. <br /> <br />
 Um einen Raum als Prüfungsraum auszuwählen muss zunächst die Box links neben dessen Namen angeklickt werden. Es besteht auch die Möglichkeit, durch einen Klick auf die Box neben dem Schriftzug „Alle aus-/abwählen“ alle in der Liste stehenden Räume auszuwählen. Ein Klick auf den Button „Räume für Prüfung auswählen“ speichert die gewählten Räume als Prüfungsräume. Ist ein Raum bereits markiert wurde er bereits als Raum für die Prüfung gespeichert.<br /> <br />
