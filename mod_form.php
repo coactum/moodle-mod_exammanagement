@@ -30,7 +30,7 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * Module instance settings form.
  *
  * @package    mod_exammanagement
- * @copyright  coactum GmbH 2017
+ * @copyright  coactum GmbH 2018
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_mod_form extends moodleform_mod {
@@ -68,9 +68,12 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_exammanagement settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        // $mform->addElement('header', get_string('exammanagementfieldset', 'mod_exammanagement'), get_string('exammanagementfieldset', 'mod_exammanagement'));
-        // $mform->addElement('static', 'label2', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
+        $mform->addElement('header', get_string('security_password', 'mod_exammanagement'), get_string('security_password', 'mod_exammanagement'));
 
+        $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
+        $mform->setType('password', PARAM_TEXT);
+        $mform->addRule('password', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('password', 'security_password', 'mod_exammanagement');
 
         // Add standard grading elements.
         //$this->standard_grading_coursemodule_elements();

@@ -84,6 +84,11 @@ $string['configure_password_str'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying password for the plugin instance';
 $string['password'] = 'Password';
 
+
+//configurePassword
+$string['check_password_str'] = 'Enter password';
+$string['check_password'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
+
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
@@ -274,6 +279,7 @@ $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
 $string['helptext_overview']= 'Here goes the description of this feature site.';
 $string['helptext_configurePassword'] = 'Here goes the description of this feature site.';
+$string['helptext_checkPassword'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
@@ -312,12 +318,14 @@ $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
 
-//addnewinstance
+//add new module instance and mod_form.php
 $string['modulename_help'] = 'The PANDA exammanagement allows you easy organizing the exams for your course and makes it possible to manage even large exams with many participants.';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
+$string['security_password'] = 'Security Password';
+$string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organisation. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organisation.';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';

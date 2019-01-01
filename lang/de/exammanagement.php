@@ -84,6 +84,10 @@ $string['configure_password_str'] = 'Password konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Plugininstanz der Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 
+//configurePassword
+$string['check_password_str'] = 'Password eingeben';
+$string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
+
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
@@ -278,6 +282,7 @@ Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese auto
 Jeder Arbeitsschritt kann durch einen Klick auf den entsprechenden Link geöffnet werden. Manche Arbeitsschritte können erst nach der Bearbeitung eines anderen Schrittes geöffnet werden. In diesem Fall erscheint nach dem Klick eine Fehlermeldung. <br /><br />
 Durch den Button "Bearbeitungsrechte entziehen" bzw. "Bearbeitungsrechte zuweisen“ können Sie Ihren studentischen MitarbeiterInnen die Zugriffserlaubnis auf die Inhalte der Prüfungsorganisation in PANDA entziehen bzw. erneut zuweisen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zum Prüfungstermin.';
+$string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['helptext_configurePassword'] = 'Hier kann ein Passwort für die Plugininstanz konfiguriert werden ...';
 $string['helptext_addRooms']= 'Auf dieser Seite kann eine Liste aller im System verfügbaren möglichen <strong>Prüfungsräume</strong> angesehen und einer oder mehrere davon als Raum für die aktuelle Prüfung ausgewählt werden. <br /> <br />
 Zudem können nach einem Klick auf den Button „Neue Räume hinzufügen“ auch eigene potenzielle Prüfungsräume zur Liste hinzugefügt werden. <br /> <br />
@@ -343,12 +348,14 @@ $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
 $string['pluginname'] = 'Prüfungsorganisation';
 
-//addnewinstance
+//add new module instance and mod_form.php
 $string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
 $string['pluginadministration'] = 'Administration der Prüfungsverwaltung';
+$string['security_password'] = 'Passwortschutz';
+$string['security_password_help'] = 'Durch das Festlegen eines Sicherheitspasswortes können Sie den Zugang zu dieser Prüfungsorganisation gegenüber anderen PANDA-Benutzern (z. B. Ihren studentischen Tutoren) begrenzen. Diese müssen dann zunächst das Passwort eingeben, bevor sie Zugang zu den Inhalten der Prüfungsorganisation erhalten.';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';
