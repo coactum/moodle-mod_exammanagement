@@ -43,131 +43,136 @@ $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    $MoodleObj->setPage('showParticipants');
-    $MoodleObj->outputPageHeader();
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-    #### delete participants if neccassary ####
+        $MoodleObj->setPage('showParticipants');
+        $MoodleObj->outputPageHeader();
 
-    if($dap){
-      $UserObj->deleteAllParticipants();
-      redirect ('showParticipants.php?id='.$id, null, null, null);
-    }
+        #### delete participants if neccassary ####
 
-    if($dpmid){
-      $UserObj->deleteParticipant($dpmid, false);
-    } else{
-      $UserObj->deleteParticipant(false, $dpmatrnr);
-    }
-
-    ###### list of participants ... ######
-
-    echo('<div class="row"><div class="col-xs-5">');
-    echo('<h3>'.get_string("view_participants", "mod_exammanagement").'</h3>');
-    echo('</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-
-    echo('<div class="col-xs-5"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right m-b-1" title="'.get_string("import_participants_from_file", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
-
-    echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-r-1" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
-
-    echo('</div></div>');
-
-    echo($ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
-
-    $moodleParticipants = $UserObj->getAllMoodleExamParticipants();
-    $noneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
-
-
-    if($moodleParticipants || $noneMoodleParticipants){
-        echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
-        
-        if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
-            echo('<div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
+        if($dap){
+        $UserObj->deleteAllParticipants();
+        redirect ('showParticipants.php?id='.$id, null, null, null);
         }
 
-        echo('<div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div><div class="col-xs-1"></div></div>');
+        if($dpmid){
+        $UserObj->deleteParticipant($dpmid, false);
+        } else{
+        $UserObj->deleteParticipant(false, $dpmatrnr);
+        }
 
-        // show participants with moodle account
-        if($moodleParticipants){
-            usort($moodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
+        ###### list of participants ... ######
 
-                global $UserObj;
+        echo('<div class="row"><div class="col-xs-5">');
+        echo('<h3>'.get_string("view_participants", "mod_exammanagement").'</h3>');
+        echo('</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
-                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;
-                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+        echo('<div class="col-xs-5"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right m-b-1" title="'.get_string("import_participants_from_file", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
 
-                if ($aLastname == $bLastname) { //if names are even sort by first name
-                    return strcmp($aFirstname, $bFirstname);
-                } else{
-                    return strcmp($aLastname, $bLastname); // else sort by last name
-                }
-            });
+        echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-r-1" role="button" title="'.get_string("import_course_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
+
+        echo('</div></div>');
+
+        echo($ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
+
+        $moodleParticipants = $UserObj->getAllMoodleExamParticipants();
+        $noneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
 
 
-            foreach ($moodleParticipants as $key => $participantObj) {
-
-                $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
-
-                echo('<div class="row"><div class="col-xs-3">');
-                echo($UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid));
-                echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
-
-                if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
-                    echo('<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</div>');
-                }
-                echo('<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div>');
-                echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmid', $participantObj->moodleuserid).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
+        if($moodleParticipants || $noneMoodleParticipants){
+            echo ('<div class="row m-b-1 m-t-1"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-2"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
+            
+            if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                echo('<div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
             }
 
-            echo('<hr />');
+            echo('<div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div><div class="col-xs-1"></div></div>');
 
-         }
+            // show participants with moodle account
+            if($moodleParticipants){
+                usort($moodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
 
-         // show participants withouth moodle account
+                    global $UserObj;
 
-         if($noneMoodleParticipants){
-             usort($noneMoodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
+                    $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                    $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;
+                    $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                    $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
 
-                 $aFirstname = $a->firstname;
-                 $aLastname = $a->lastname;
-                 $bFirstname = $b->firstname;
-                 $bLastname = $b->lastname;
+                    if ($aLastname == $bLastname) { //if names are even sort by first name
+                        return strcmp($aFirstname, $bFirstname);
+                    } else{
+                        return strcmp($aLastname, $bLastname); // else sort by last name
+                    }
+                });
 
-                 if ($aLastname == $bLastname) { //if names are even sort by first name
-                     return strcmp($aFirstname, $bFirstname);
-                 } else{
-                     return strcmp($aLastname, $bLastname); // else sort by last name
-                 }
-             });
 
-             foreach ($noneMoodleParticipants as $key => $participantObj) {
+                foreach ($moodleParticipants as $key => $participantObj) {
 
-                 $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
+                    $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
 
-                 echo('<div class="row"><div class="col-xs-3">');
-                 echo($participantObj->firstname.' '.$participantObj->lastname);
-                 echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
-                 if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
-                     echo('<div class="col-xs-3"> - </div>');
-                 }
-                 echo('<div class="col-xs-3">'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</div>');
-                 echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmatrnr', $participantObj->imtlogin).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
-             }
-             echo('<hr />');
+                    echo('<div class="row"><div class="col-xs-3">');
+                    echo($UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid));
+                    echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
 
-          }
-      } else {
-            echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
-     }
+                    if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                        echo('<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</div>');
+                    }
+                    echo('<div class="col-xs-3">'.get_string("state_added_to_exam", "mod_exammanagement").'</div>');
+                    echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmid', $participantObj->moodleuserid).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
+                }
 
-     echo('<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+                echo('<hr />');
 
-     if($moodleParticipants || $noneMoodleParticipants){
-      echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dap', true).'" class="btn btn-danger" onClick="javascript:return confirm(\'Durch diese Aktion werden sämtliche Prüfungsteilnehmer sowie alle für diese eingetragenen Ergebnisse gelöscht.\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
-     }
+            }
 
-    $MoodleObj->outputFooter();
+            // show participants withouth moodle account
+
+            if($noneMoodleParticipants){
+                usort($noneMoodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
+
+                    $aFirstname = $a->firstname;
+                    $aLastname = $a->lastname;
+                    $bFirstname = $b->firstname;
+                    $bLastname = $b->lastname;
+
+                    if ($aLastname == $bLastname) { //if names are even sort by first name
+                        return strcmp($aFirstname, $bFirstname);
+                    } else{
+                        return strcmp($aLastname, $bLastname); // else sort by last name
+                    }
+                });
+
+                foreach ($noneMoodleParticipants as $key => $participantObj) {
+
+                    $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
+
+                    echo('<div class="row"><div class="col-xs-3">');
+                    echo($participantObj->firstname.' '.$participantObj->lastname);
+                    echo('</div><div class="col-xs-2">'.$matrnr.'</div>');
+                    if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                        echo('<div class="col-xs-3"> - </div>');
+                    }
+                    echo('<div class="col-xs-3">'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</div>');
+                    echo('<div class="col-xs-1"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmatrnr', $participantObj->imtlogin).'" onClick="javascript:return confirm(\'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.\');"><i class="fa fa-trash" aria-hidden="true"></i></a></div></div>');
+                }
+                echo('<hr />');
+
+            }
+        } else {
+                echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
+        }
+
+        echo('<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+
+        if($moodleParticipants || $noneMoodleParticipants){
+        echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dap', true).'" class="btn btn-danger" onClick="javascript:return confirm(\'Durch diese Aktion werden sämtliche Prüfungsteilnehmer sowie alle für diese eingetragenen Ergebnisse gelöscht.\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+        }
+
+        $MoodleObj->outputFooter();
+    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+    }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

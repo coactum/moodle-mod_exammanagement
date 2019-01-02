@@ -43,18 +43,7 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-      if ($resetdatetime){
-
-        $ExammanagementInstanceObj->moduleinstance->examtime = NULL;
-
-        $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-
-        if($update){
-          $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum zurückgesetzt', 'success');
-        } else {
-          $MoodleObj->redirectToOverviewPage('beforeexam', 'Prüfungsdatum konnte nicht zurückgesetzt werden', 'error');
-        }
-      }
+  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
   		$MoodleObj->setPage('set_date_time');
       $MoodleObj-> outputPageHeader();
@@ -70,19 +59,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       } else if ($fromform = $mform->get_data()) {
         //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-        if (!empty($fromform->resetdatetime)) { // not working
-          $ExammanagementInstanceObj->resetDateTime();
-        } else {
-          $ExammanagementInstanceObj->moduleinstance->examtime = $fromform->examtime;
+        $ExammanagementInstanceObj->moduleinstance->examtime = $fromform->examtime;
     
-          $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-          if($update){
+        $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        if($update){
             $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
-          } else {
+        } else {
             $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit konnten nicht gesetzt werden', 'error');
-          }
         }
-
       } else {
         // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
         // or on the first display of the form.
@@ -94,7 +78,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $mform->display();
       }
 
-  		$MoodleObj->outputFooter();
+      $MoodleObj->outputFooter();
+  } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+    redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+  }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

@@ -51,141 +51,147 @@ $LdapManagerObj = LdapManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-	$MoodleObj->setPage('importBonus');
-	
-	if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
-		$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Sitzplätze zugewiesen. Bonuspunkteimport noch nicht möglich', 'error');
-	} else if (!$UserObj->getParticipantsCount()) {
-		$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Teilnehmer ausgewählt. Bonuspunkteimport noch nicht möglich', 'error');
-	  }
+	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-    $MoodleObj->outputPageHeader();
+		$MoodleObj->setPage('importBonus');
+		
+		if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Sitzplätze zugewiesen. Bonuspunkteimport noch nicht möglich', 'error');
+		} else if (!$UserObj->getParticipantsCount()) {
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Teilnehmer ausgewählt. Bonuspunkteimport noch nicht möglich', 'error');
+		}
 
-    //Instantiate form
-    $mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e, 'bonusstepcount'=>$bonusstepcount));
+		$MoodleObj->outputPageHeader();
 
-    //Form processing and displaying is done here
-    if ($mform->is_cancelled()) {
-        //Handle form cancel operation, if cancel button is present on form
+		//Instantiate form
+		$mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e, 'bonusstepcount'=>$bonusstepcount));
 
-        $MoodleObj->redirectToOverviewPage('aftercorrection', 'Vorgang abgebrochen', 'warning');
+		//Form processing and displaying is done here
+		if ($mform->is_cancelled()) {
+			//Handle form cancel operation, if cancel button is present on form
 
-    } else if ($fromform = $mform->get_data()) {
-    //In this case you process validated data. $mform->get_data() returns data posted in form.	
+			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Vorgang abgebrochen', 'warning');
 
-        if ($fromform->bonuspoints_list){
+		} else if ($fromform = $mform->get_data()) {
+		//In this case you process validated data. $mform->get_data() returns data posted in form.	
 
-			if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
-				redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), 'Punkte für Bonusschritte ungültig', null, notification::NOTIFY_ERROR);
-			}
-		   
-			// retrieve Files from form
-			$file = $mform->get_file_content('bonuspoints_list');
-			$filename = $mform->get_new_filename('bonuspoints_list');
-			
-			$tempfile = tempnam(sys_get_temp_dir(), 'bonuslist_');
-			rename($tempfile, $tempfile .= $filename);
+			if ($fromform->bonuspoints_list){
 
-			$handle = fopen($tempfile, "w");
-			fwrite($handle, $file);
-
-			$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
-			$ExcelReaderWrapper->setReadDataOnly(true);
-
-			// class MyReadFilter implements PHPExcel_Reader_IReadFilter { not working in the way intended (read only cells with relevant data)
-
-			// 	public function __construct($fromColumn, $toColumn) {
-			// 		$this->columns = array();
-			// 		$toColumn++;
-
-			// 		while ($fromColumn !== $toColumn+1) {
-			// 			$this->columns[] = $fromColumn++;
-			// 		}
-			// 	}
-			
-			// 	public function readCell($column, $row, $worksheetName = '') {
-			// 		  // Read columns from 'A' to 'AF'
-			// 		  if (in_array($column, $this->columns)) {
-			// 			  return true;
-			// 		  }
-			// 		  return false;
-			// 	  }
-			// }
-
-			//$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->idfield,$fromform->pointsfield) );
-			$readerObj = $ExcelReaderWrapper->load($tempfile);
-
-			$worksheetObj = $readerObj->getActiveSheet();
-			$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
-
-			$userIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
-			$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
-
-			foreach($userIDsArr as $key => $uid){
-
-				$participantObj = false;
-
-				if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual imoport (matriculation number)
-
-					if($LdapManagerObj->is_LDAP_config()){
-                        $ldapConnection = $LdapManagerObj->connect_ldap();
-
-                        $userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $uid[0]);
-
-                    } else {
-                            $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($uid[0]);
-                    }
-
-				} else { // import of moodle grades export (moodle mail adress)
-					$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$uid[0]));
+				if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
+					redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), 'Punkte für Bonusschritte ungültig', null, notification::NOTIFY_ERROR);
 				}
+			
+				// retrieve Files from form
+				$file = $mform->get_file_content('bonuspoints_list');
+				$filename = $mform->get_new_filename('bonuspoints_list');
+				
+				$tempfile = tempnam(sys_get_temp_dir(), 'bonuslist_');
+				rename($tempfile, $tempfile .= $filename);
 
-				if($UserObj->checkIfAlreadyParticipant($uid)){
-					$participantObj = $UserObj->getExamParticipantObj($uid);
-				} else if($UserObj->checkIfAlreadyParticipant(false, $userlogin)){
-					$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-				}
+				$handle = fopen($tempfile, "w");
+				fwrite($handle, $file);
 
-				if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
+				$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
+				$ExcelReaderWrapper->setReadDataOnly(true);
 
-					foreach($fromform->bonussteppoints as $step => $points){
-						
-						if(floatval($pointsArr[$key][0]) >= $points){
-							$participantObj->bonus = $step; // change to detect bonus step
+				// class MyReadFilter implements PHPExcel_Reader_IReadFilter { not working in the way intended (read only cells with relevant data)
+
+				// 	public function __construct($fromColumn, $toColumn) {
+				// 		$this->columns = array();
+				// 		$toColumn++;
+
+				// 		while ($fromColumn !== $toColumn+1) {
+				// 			$this->columns[] = $fromColumn++;
+				// 		}
+				// 	}
+				
+				// 	public function readCell($column, $row, $worksheetName = '') {
+				// 		  // Read columns from 'A' to 'AF'
+				// 		  if (in_array($column, $this->columns)) {
+				// 			  return true;
+				// 		  }
+				// 		  return false;
+				// 	  }
+				// }
+
+				//$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->idfield,$fromform->pointsfield) );
+				$readerObj = $ExcelReaderWrapper->load($tempfile);
+
+				$worksheetObj = $readerObj->getActiveSheet();
+				$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
+
+				$userIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
+				$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
+
+				foreach($userIDsArr as $key => $uid){
+
+					$participantObj = false;
+
+					if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual imoport (matriculation number)
+
+						if($LdapManagerObj->is_LDAP_config()){
+							$ldapConnection = $LdapManagerObj->connect_ldap();
+
+							$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $uid[0]);
+
 						} else {
-							break;
+								$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($uid[0]);
 						}
+
+					} else { // import of moodle grades export (moodle mail adress)
+						$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$uid[0]));
 					}
 
-					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+					if($UserObj->checkIfAlreadyParticipant($uid)){
+						$participantObj = $UserObj->getExamParticipantObj($uid);
+					} else if($UserObj->checkIfAlreadyParticipant(false, $userlogin)){
+						$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+					}
 
+					if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
+
+						foreach($fromform->bonussteppoints as $step => $points){
+							
+							if(floatval($pointsArr[$key][0]) >= $points){
+								$participantObj->bonus = $step; // change to detect bonus step
+							} else {
+								break;
+							}
+						}
+
+						$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+
+					}
 				}
+
+				fclose($handle);
+				unlink($tempfile);	
+				
 			}
 
-			fclose($handle);
-			unlink($tempfile);	
-			
-		}
+			if($update){
+				$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte importiert', 'success');
+			} else {
+				$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte konnten nicht importiert werden', 'error');
+			}
 
-		if($update){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte importiert', 'success');
 		} else {
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte konnten nicht importiert werden', 'error');
+		// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+		// or on the first display of the form.
+
+		//Set default data (if any)
+		//$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+		$mform->set_data(array('id'=>$id));
+
+		//displays the form
+		$mform->display();
 		}
 
-    } else {
-    // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-    // or on the first display of the form.
+		$MoodleObj->outputFooter();
 
-    //Set default data (if any)
-    //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-    $mform->set_data(array('id'=>$id));
-
-    //displays the form
-    $mform->display();
+	} else { // if user hasnt entered correct password for this session: show enterPasswordPage
+        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
-
-    $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

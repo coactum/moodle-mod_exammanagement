@@ -62,10 +62,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timecreated = time();
     $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
-    
-    if(isset($mform->password)){
-        $moduleinstance->password = $mform->password;
-    }
+    // $moduleinstance->password = $mform->password; not neccessary because passsword already exists in object $moduleinstance and is saved automatically
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 

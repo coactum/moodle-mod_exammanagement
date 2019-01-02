@@ -60,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		  $password = $fromform->password;
 
 		  if($ExammanagementInstanceObj->moduleinstance->password == $password){
-			$SESSION->loggedInExamOrganization = true;
+			$SESSION->loggedInExamOrganizationId = $id;
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Anmeldung erfolgreich.', 'success');
 		  } else {
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort falsch. Bitte erneut versuchen.', 'error');

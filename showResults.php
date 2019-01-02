@@ -40,35 +40,40 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    if(!$ExammanagementInstanceObj->getInputResultsCount()){
-      $MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
+        if(!$ExammanagementInstanceObj->getInputResultsCount()){
+        $MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
+        }
+
+        $MoodleObj->setPage('showResults');
+        $MoodleObj->outputPageHeader();
+
+        //Instantiate Form
+        $mform = new showResultsForm(null, array('id'=>$id, 'e'=>$e));
+
+        //Form processing and displaying is done here
+        if ($mform->is_cancelled()) {
+            //Handle form cancel operation, if cancel button is present on form
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+        } else if ($fromform = $mform->get_data()) {
+            //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+        } else {
+            // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+            // or on the first display of the form.
+
+            $mform->set_data(array('id'=>$id));
+
+            //displays the form
+            $mform->display();
+        }
+
+        $MoodleObj->outputFooter();
+    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
-
-    $MoodleObj->setPage('showResults');
-    $MoodleObj->outputPageHeader();
-
-    //Instantiate Form
-    $mform = new showResultsForm(null, array('id'=>$id, 'e'=>$e));
-
-    //Form processing and displaying is done here
-    if ($mform->is_cancelled()) {
-        //Handle form cancel operation, if cancel button is present on form
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-    } else if ($fromform = $mform->get_data()) {
-        //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-    } else {
-        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-        // or on the first display of the form.
-
-        $mform->set_data(array('id'=>$id));
-
-        //displays the form
-        $mform->display();
-    }
-
-    $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }
