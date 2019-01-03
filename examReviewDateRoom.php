@@ -41,6 +41,8 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
+  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
       $MoodleObj->setPage('examReviewDateRoom');
       
       if (!$ExammanagementInstanceObj->getDataDeletionDate()){
@@ -86,7 +88,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $mform->display();
       }
 
-  		$MoodleObj->outputFooter();
+      $MoodleObj->outputFooter();
+  } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+    redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+  }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

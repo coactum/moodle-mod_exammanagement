@@ -44,71 +44,77 @@ $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
-  $MoodleObj->setPage('chooseRooms');
-  $MoodleObj-> outputPageHeader();
 
-  if($deletecustomroomid){
+  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-		if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
-      if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
-        $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
-      } else {
-        redirect ('chooseRooms.php?id='.$id, 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.', null, 'error');
+    $MoodleObj->setPage('chooseRooms');
+    $MoodleObj-> outputPageHeader();
+
+    if($deletecustomroomid){
+
+      if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
+        if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
+          $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
+        } else {
+          redirect ('chooseRooms.php?id='.$id, 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.', null, 'error');
+        }
       }
     }
+
+    //Instantiate form
+    $mform = new chooseRoomsForm(null, array('id'=>$id, 'e'=>$e));
+
+    //Form processing and displaying is done here
+    if ($mform->is_cancelled()) {
+      //Handle form cancel operation, if cancel button is present on form
+      $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+
+    } else if ($fromform = $mform->get_data()) {
+      //In this case you process validated data. $mform->get_data() returns data posted in form.
+
+      $allRooms = get_object_vars($fromform);
+
+      $roomsArray = $allRooms["rooms"];
+      $checkedRooms = array();
+
+        foreach ($roomsArray as $key => $value){
+          if ($value==1 && is_string($value)){
+            array_push($checkedRooms, $key);
+          }
+
+        }
+
+        sort($checkedRooms); //sort checked roomes ids for saving in DB
+
+        $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
+
+      // reset state of places assignment if already set
+      if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+        $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+      }
+
+      $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+      if($update){
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
+      } else {
+        $MoodleObj->redirectToOverviewPage('beforeexam', 'Räume konnten nicht für die Prüfung ausgewählt werden', 'error');
+      }
+
+    } else {
+      // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+      // or on the first display of the form.
+
+      //Set default data (if any)
+      $mform->set_data(array('id'=>$id));
+
+      //displays the form
+      $mform->display();
+    }
+
+    $MoodleObj->outputFooter();
+  } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+    redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
   }
-
-  //Instantiate form
-  $mform = new chooseRoomsForm(null, array('id'=>$id, 'e'=>$e));
-
-  //Form processing and displaying is done here
-  if ($mform->is_cancelled()) {
-    //Handle form cancel operation, if cancel button is present on form
-    $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
-
-  } else if ($fromform = $mform->get_data()) {
-    //In this case you process validated data. $mform->get_data() returns data posted in form.
-
-    $allRooms = get_object_vars($fromform);
-
-    $roomsArray = $allRooms["rooms"];
-    $checkedRooms = array();
-
-			foreach ($roomsArray as $key => $value){
-				if ($value==1 && is_string($value)){
-					array_push($checkedRooms, $key);
-				}
-
-			}
-
-			sort($checkedRooms); //sort checked roomes ids for saving in DB
-
-		  $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
-
-		// reset state of places assignment if already set
-		if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-			$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-		}
-
-		$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-		if($update){
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
-		} else {
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Räume konnten nicht für die Prüfung ausgewählt werden', 'error');
-		}
-
-  } else {
-    // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-    // or on the first display of the form.
-
-    //Set default data (if any)
-    $mform->set_data(array('id'=>$id));
-
-    //displays the form
-    $mform->display();
-  }
-
-  $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

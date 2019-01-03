@@ -43,89 +43,95 @@ $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    $MoodleObj->setPage('addCourseParticipants');
-    $MoodleObj->outputPageHeader();
-        
-    //Instantiate form
-    $mform = new addCourseParticipantsForm(null, array('id'=>$id, 'e'=>$e));
+	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-    //Form processing and displaying is done here
-    if ($mform->is_cancelled()) {
-        //Handle form cancel operation, if cancel button is present on form
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+        $MoodleObj->setPage('addCourseParticipants');
+        $MoodleObj->outputPageHeader();
+            
+        //Instantiate form
+        $mform = new addCourseParticipantsForm(null, array('id'=>$id, 'e'=>$e));
 
-    } else if ($fromform = $mform->get_data()) {
-        //In this case you process validated data. $mform->get_data() returns data posted in form.
+        //Form processing and displaying is done here
+        if ($mform->is_cancelled()) {
+            //Handle form cancel operation, if cancel button is present on form
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
 
-        $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
-        $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
+        } else if ($fromform = $mform->get_data()) {
+            //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-        if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
+            $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
+            $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
 
-            $insert;
-            $userObjArr = array();
+            if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
-            if($participantsIdsArr){
-                foreach($participantsIdsArr as $participantId){
+                $insert;
+                $userObjArr = array();
 
-                    if($UserObj->checkIfAlreadyParticipant($participantId) == false){
-                        $user = new stdClass();
-                        $user->plugininstanceid = $id;
-                        $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-                        $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
-                        $user->moodleuserid = $participantId;
-                        $user->headerid = 0;
+                if($participantsIdsArr){
+                    foreach($participantsIdsArr as $participantId){
 
-                        array_push($userObjArr, $user);
+                        if($UserObj->checkIfAlreadyParticipant($participantId) == false){
+                            $user = new stdClass();
+                            $user->plugininstanceid = $id;
+                            $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+                            $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
+                            $user->moodleuserid = $participantId;
+                            $user->headerid = 0;
 
+                            array_push($userObjArr, $user);
+
+                        }
                     }
                 }
-            }
 
-            if($deletedParticipantsIdsArr){
-                foreach($deletedParticipantsIdsArr as $identifier){
-                        $temp = explode('_', $identifier);
+                if($deletedParticipantsIdsArr){
+                    foreach($deletedParticipantsIdsArr as $identifier){
+                            $temp = explode('_', $identifier);
 
-                        if($temp[0]== 'mid'){
-                            $UserObj->deleteParticipant($temp[1], false);
-                        } else {
-
-                            if($temp[1] && $temp[2]){ //for testing
-
-                                $UserObj->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
+                            if($temp[0]== 'mid'){
+                                $UserObj->deleteParticipant($temp[1], false);
                             } else {
-                                $UserObj->deleteParticipant(false, $temp[1]);
+
+                                if($temp[1] && $temp[2]){ //for testing
+
+                                    $UserObj->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
+                                } else {
+                                    $UserObj->deleteParticipant(false, $temp[1]);
+                                }
                             }
-                        }
+                    }
                 }
+
+                // reset state of places assignment if already set
+                if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+                    $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                }
+
+                $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
+
+                $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+
+            } else {
+                $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
             }
-
-            // reset state of places assignment if already set
-            if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-                $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-                $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            }
-
-            $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
-
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
 
         } else {
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+            // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+            // or on the first display of the form.
+
+            //Set default data (if any)
+            //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
+            $mform->set_data(array('id'=>$id));
+
+            //displays the form
+            $mform->display();
         }
+        $MoodleObj->outputFooter();
 
-    } else {
-        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-        // or on the first display of the form.
-
-        //Set default data (if any)
-        //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-        $mform->set_data(array('id'=>$id));
-
-        //displays the form
-        $mform->display();
+    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
-    $MoodleObj->outputFooter();
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }
