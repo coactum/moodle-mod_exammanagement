@@ -58,14 +58,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 		  
 		  $password = $fromform->password;
+		  
+		  $password_hash = password_hash($passwort, PASSWORD_DEFAULT);
 
-		  $ExammanagementInstanceObj->moduleinstance->password = $password;
+		  var_dump($password_hash);
+		  var_dump(password_get_info($password_hash));
+		  
+		  $ExammanagementInstanceObj->moduleinstance->password = $password_hash;
 
 		  $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 		  if($update){
-			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben angelegt', 'success');
+			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort festgelegt', 'success');
 		  } else {
-			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Aufgaben konnten nicht angelegt werden', 'error');
+			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort konnte nicht festgelegt werden', 'error');
 		  }
 
 		} else {

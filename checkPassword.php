@@ -57,14 +57,54 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
 		  
-		  $password = $fromform->password;
 
-		  if($ExammanagementInstanceObj->moduleinstance->password == $password){
+			// testing if Password_verify works in general
+		  $hashed = password_hash('test', PASSWORD_DEFAULT);
+		  $password = 'test';
+
+		  if (password_verify($password, $hashed)) {
+			echo 'success';
+		  } else {
+			echo 'fail';
+		  }
+
+
+		  $password = $fromform->password;
+		  $password_hash = $ExammanagementInstanceObj->moduleinstance->password;
+
+
+
+		  // debugging
+		  var_dump(password_get_info($password_hash));
+		  var_dump($password);
+		  var_dump(password_hash($password, PASSWORD_DEFAULT));
+		  var_dump($password_hash);
+		  //$password_hash = '$2y$10$dQJVJ0JQZreesPZiCwAxhuFP1FbK4MVX7Obraex0rsRl0QxGIgXQW';
+
+		  
+		  // actual code
+		  if( password_verify($password, $password_hash) ){ // check if password is correct
+
+			if( password_needs_rehash($password_hash, PASSWORD_DEFAULT) ){ // check if passwords needs rehash because of newer hash algorithm
+
+				// if so update saved password_hash
+
+				$hash = password_hash($password, PASSWORD_DEFAULT);
+				$ExammanagementInstanceObj->moduleinstance->password = $hash;
+				
+				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+			
+			}
+
+			// remember login and redirect
 			$SESSION->loggedInExamOrganizationId = $id;
 			$MoodleObj->redirectToOverviewPage('beforeexam', 'Anmeldung erfolgreich.', 'success');
-		  } else {
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort falsch. Bitte erneut versuchen.', 'error');
-		  }
+			
+			}
+			else{ // if password is not correct
+				$MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort falsch. Bitte erneut versuchen.', 'error');
+				
+			}
 
 		} else {
 		  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
