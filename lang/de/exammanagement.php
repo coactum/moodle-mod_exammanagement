@@ -364,3 +364,6 @@ $string['exammanagement:viewparticipantspage'] = 'Teilnehmeransicht ansehen';
 $string['exammanagement:takeexams'] = 'Prüfung ablegen';
 $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
 $string['exammanagement:addDefaultRooms'] = 'Standardräume importieren';
+
+//delete_old_exam_data.php
+$string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';

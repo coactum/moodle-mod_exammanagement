@@ -110,9 +110,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         } elseif ($calledfromformcorrection) { // save correction as completed
     
             if ($correctioncompleted) {
-                $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = time();
+                $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
             } else {
-                $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = null;
+                $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
             }
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);

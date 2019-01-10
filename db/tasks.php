@@ -15,17 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
+ * @category    tasks
  * @copyright   coactum GmbH 2018
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_exammanagement'; // Full name of the plugin (used for diagnostics)
-$plugin->release = '1.2.8';
-$plugin->version = 2019010200;	// The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2017051500; // Requires this Moodle version
-$plugin->maturity = MATURITY_ALPHA;
+$tasks = [
+    [
+        'classname' => 'mod_exammanagement\task\delete_old_exam_data',
+        'blocking' => 0,
+        'minute' => '00',
+        'hour' => '23',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+];

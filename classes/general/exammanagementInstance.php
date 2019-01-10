@@ -744,10 +744,10 @@ EOF;
 // delete instance
 public function getDataDeletionDate(){
 
-		$correctionCompletionDate = $this->moduleinstance->correctioncompletiondate;
+		$dataDeletionDate = $this->moduleinstance->datadeletion;
 
-		if($correctionCompletionDate){
-				$dataDeletionDate = date('d.m.Y', strtotime("+3 months", $correctionCompletionDate));
+		if($dataDeletionDate){
+				$dataDeletionDate = date('d.m.Y', $dataDeletionDate);
 		} else {
 			return false;
 		}

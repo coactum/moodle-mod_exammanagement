@@ -81,10 +81,10 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function getRecordsSelectFromDB($table, $sql){
+	public function getRecordsSelectFromDB($table, $select){
 		global $DB;
 
-		$records = $DB->get_records_select($table, $sql);
+		$records = $DB->get_records_select($table, $select);
 
 		return $records;
 	}
