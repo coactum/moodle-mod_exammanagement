@@ -25,6 +25,7 @@
           <FIELD NAME="bonusscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="scale for bonus for exam as json array"/>
           <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="gradingscale for exam as json array"/>
           <FIELD NAME="datadeletion" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="date of correction completion"/>
+          <FIELD NAME="deletionwarningmailids" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="ids of mails with deletion warnings"/>
           <FIELD NAME="examreviewtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam review"/>
           <FIELD NAME="examreviewroom" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="examreviewvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is exam review time visible"/>
