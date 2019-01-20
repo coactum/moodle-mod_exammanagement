@@ -82,35 +82,45 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                 $deletionwarningmailidsArray = array();
             }
 
-            $case = false;
+            $warningstep = false;
 
             // check if some warningmails were already send and determine if 
             if($warningperiodOne <= $now && $warningmailscount = 0){
-                $case = 1;  // no warning mails yet, first to send
+                $warningstep = 1;  // no warning mails yet, first to send
             } else if($warningperiodTwo <= $now && $warningmailscount = 1){
-                $case = 2; // 1 warning mail yet, second to send
+                $warningstep = 2; // 1 warning mail yet, second to send
             } else if($warningperiodThree <= $now && $warningmailscount = 2){
-                $case = 3; // 2 warning mails yet, last to send
+                $warningstep = 3; // 2 warning mails yet, last to send
             } else {
                 break; // stop for this record
             }
 
-            if(isset($case)){
+            if(isset($warningstep)){
                 // get user to whom warning mail should be send (teachers of course)
                 $role = $MoodleDBObj->getRecordFromDB('role', array('shortname' => 'editingteacher'));
                 $courseid = $record->course;
                 $coursecontext = context_course::instance($courseid);
                 $teachers = get_role_users($role->id, $coursecontext);
 
-                mtrace('Preparing to send '.$case.'warning mail to '.$teachers.'teachers ...'); // debug
+                mtrace('Preparing to send '.$warningstep.'warning mail to '.$teachers.'teachers ...'); // debug
 
                 // set mail properties and contents
                 $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id; // get coursemodule from module record id (in doku aufschreiben!!!)
 
                 $ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
 
-                $warningmailsubject = get_string('');
-                $warningmailcontent = get_string('');
+                switch ($warningstep){
+
+                    case 1:
+                        $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
+                    case 2:
+                        $warningmailsubject = get_string("warningmailsubjecttwo", "mod_exammanagement");
+                    case 3:
+                        $warningmailsubject = get_string("warningmailsubjectthree", "mod_exammanagement");
+
+                }
+
+                $warningmailcontent = get_string("warningmailcontentpartone", "mod_exammanagement"). $ExammanagementInstanceObj->moduleinstance->name .get_string("warningmailcontentparttwo", "mod_exammanagement"). $ExammanagementInstanceObj->getCourse()->fullname .get_string("warningmailcontentpartthree", "mod_exammanagement"). $ExammanagementInstanceObj->getDataDeletionDate() .get_string("warningmailcontentpartfour", "mod_exammanagement");
 
                 $warningmailids = array();
 

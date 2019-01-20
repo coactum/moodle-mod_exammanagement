@@ -38,6 +38,10 @@ $string['phase_five'] = 'Exam review (optional)';
 $string['exam_appointment'] = 'Exam appointment';
 $string['minimize_phase'] = 'Minimize phase';
 $string['maximize_phase'] = 'Maximize phase';
+$string['exam_rooms'] = 'Exam rooms';
+$string['exam_date'] = 'Exam date';
+$string['exam_participants'] = 'Exam partricipants';
+$string['exam_tasks'] = 'Exam tasks';
 
 //exammanagement_overview.mustache states
 $string['state_optional'] = 'Optional';
@@ -277,7 +281,11 @@ $string['help'] = 'Help';
 
 $string['helptext_str'] = 'Help text';
 $string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
-$string['helptext_overview']= 'Here goes the description of this feature site.';
+$string['helptext_overview']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
+These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing status is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
+Each work step can be opened by clicking on the corresponding button. This will appear as soon as all other required steps have been completed.<br><br>
+The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your PANDA courses from accessing the sensitive contents of the exam organization. <br><br>
+Note: Students do not have access to this view. Instead, they will see all information of the exam which has been enabled for them in a separate view.';
 $string['helptext_configurePassword'] = 'Here goes the description of this feature site.';
 $string['helptext_checkPassword'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
@@ -337,3 +345,10 @@ $string['exammanagement:addDefaultRooms'] = 'Import default rooms';
 
 //delete_old_exam_data.php
 $string['delete_old_exam_data'] = 'Delete old exam data';
+$string['warningmailsubjectone'] = 'Reminder: Future deletion of exam data';
+$string['warningmailsubjecttwo'] = 'Warning: Soon deletion of old exam data';
+$string['warningmailsubjectthree'] = 'Last warning: Exam data will be deleted tomorrow';
+$string['warningmailcontentpartone'] = 'All exam data from the exam ';
+$string['warningmailcontentparttwo'] = 'in the course ';
+$string['warningmailcontentpartthree'] = 'will be deleted at ';
+$string['warningmailcontentpartfour'] = '. Please make sure you have exported all relevant data for further use via the export functions. After the data all exam data will be finally deleted and there is no possibility to access them again.';

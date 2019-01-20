@@ -38,6 +38,10 @@ $string['phase_five'] = 'Klausureinsicht (optional)';
 $string['exam_appointment'] = 'Prüfungstermin';
 $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
+$string['exam_rooms'] = 'Prüfungsräume';
+$string['exam_date'] = 'Prüfungsdatum';
+$string['exam_participants'] = 'Prüfungsteilnehmer';
+$string['exam_tasks'] = 'Prüfungsaufgaben';
 
 //exammanagement_overview.mustache states
 $string['state_optional'] = 'Optional';
@@ -276,11 +280,11 @@ $string['help'] = 'Hilfe';
 
 $string['helptext_str'] = 'Hilfetext';
 $string['helptext_link'] = 'Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
-$string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. DozentInnen und/oder deren MitarbeiterInnen sehen hier alle für das Durchführen einer Prüfung nötigen und hilfreichen Arbeitsschritte. <br /><br />
-Diese sind übersichtlich in vier verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und optionale, welche zwar hilfreich sind, aber auch weggelassen werden können.
+$string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. DozentInnen und/oder deren MitarbeiterInnen können hier alle für das Durchführen einer Prüfung nötigen und hilfreichen Arbeitsschritte ansehen. <br /><br />
+Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können.
 Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />
-Jeder Arbeitsschritt kann durch einen Klick auf den entsprechenden Link geöffnet werden. Manche Arbeitsschritte können erst nach der Bearbeitung eines anderen Schrittes geöffnet werden. In diesem Fall erscheint nach dem Klick eine Fehlermeldung. <br /><br />
-Durch den Button "Bearbeitungsrechte entziehen" bzw. "Bearbeitungsrechte zuweisen“ können Sie Ihren studentischen MitarbeiterInnen die Zugriffserlaubnis auf die Inhalte der Prüfungsorganisation in PANDA entziehen bzw. erneut zuweisen. <br /><br />
+Jeder Arbeitsschritt kann durch einen Klick auf den entsprechenden Button geöffnet werden. Dieser erscheint, sobald alle für einen Arbeitsschritte vorrausgesetzten anderen Schritte erfüllt sind. <br /><br />
+Durch den Button "Password konfigurieren“ können Sie zudem ein Password (neu) festlegen, welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre PANDA Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zum Prüfungstermin.';
 $string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['helptext_configurePassword'] = 'Hier kann ein Passwort für die Plugininstanz konfiguriert werden ...';
@@ -367,3 +371,10 @@ $string['exammanagement:addDefaultRooms'] = 'Standardräume importieren';
 
 //delete_old_exam_data.php
 $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';
+$string['warningmailsubjectone'] = 'Erinnerung: Zukünftige Löschung der Prüfungsdaten';
+$string['warningmailsubjecttwo'] = 'Warnung: Baldige Löschung der Prüfungsdaten';
+$string['warningmailsubjectthree'] = 'Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
+$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung ';
+$string['warningmailcontentparttwo'] = 'im Kurs ';
+$string['warningmailcontentpartthree'] = 'werden am ';
+$string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';

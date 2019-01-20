@@ -219,6 +219,7 @@ EOF;
 
 	public function getRoomsCount(){
 		$rooms = $this->moduleinstance->rooms;
+
 		if ($rooms){
 				$roomsArr = json_decode($rooms);
 				$roomsCount = count($roomsArr);
