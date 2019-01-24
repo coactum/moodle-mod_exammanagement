@@ -63,7 +63,8 @@ $string['results_for_exam_office'] = 'Ergebnisse für das Prüfungsamt';
 $string['delete_exam_data'] = 'Prüfungsdaten löschen';
 $string['date_and_room_exam_review'] = 'Datum und Raum für die Klausureinsicht';
 $string['set_visibility_of_exam_review_information'] = 'Informationen zur Klausureinsicht sichtbar schalten';
-$string['changing_of_exam_results'] = 'Änderung der Prüfungsergebnisse';
+$string['altering_exam_results'] = 'Änderung der Prüfungsergebnisse';
+$string['export_altered_exam_results'] = 'Export der geänderten Ergebnisse';
 
 //exammanagement_overview.mustache states
 $string['state_optional'] = 'Optional';
@@ -368,6 +369,7 @@ $string['err_customroomname_taken'] = 'Raumname bereits vergeben';
 $string['err_filloutfield'] = 'Bitte Feld ausfüllen';
 $string['err_nofile'] = 'Bitte Datei auswählen';
 $string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
+$string['err_js_internal_error'] = 'Interner Fehler. Bitte erneut versuchen.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

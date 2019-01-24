@@ -51,7 +51,7 @@ ajaxtoogleInformation = function(command, value){
             },
             error: function(response) {
 							$('.loadable').toggle();
-							alert('Interner Fehler. Bitte erneut versuchen.')
+							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
     } else if(command=='place'){
@@ -65,7 +65,7 @@ ajaxtoogleInformation = function(command, value){
             },
             error: function(response) {
 							$('.loadable').toggle();
-							alert('Interner Fehler. Bitte erneut versuchen.')
+							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
     } else if(command=='datetime'){
@@ -79,7 +79,7 @@ ajaxtoogleInformation = function(command, value){
 						},
             error: function(response) {
 							$('.loadable').toggle();
-              alert('Interner Fehler. Bitte erneut versuchen.')
+              alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
     } else if(command=='examreview'){
@@ -93,7 +93,7 @@ ajaxtoogleInformation = function(command, value){
 						},
             error: function(response) {
 							$('.loadable').toggle();
-              alert('Interner Fehler. Bitte erneut versuchen.')
+              alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
     }
@@ -113,7 +113,7 @@ ajaxsetcorrectioncompletion = function(value){
 							},
 					error: function(response) {
 								$('.loadable').toggle();
-								alert('Interner Fehler. Bitte erneut versuchen.')
+								alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
 					}
 		    });
 		} else {
@@ -820,7 +820,7 @@ ajaxsetcorrectioncompletion = function(value){
 														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}panel-warning{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}changing_of_exam_results, mod_exammanagement{{/str}}</h3>
+																<h3 class="panel-title col-xs-4">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
 																<span class="statebar col-xs-8">
 																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
@@ -843,7 +843,7 @@ ajaxsetcorrectioncompletion = function(value){
 													<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 															<div class="row">
-																<h3 class="panel-title col-xs-4">Export der geänderten Ergebnisse</h3>
+																<h3 class="panel-title col-xs-4">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
 																<span class="statebar col-xs-8">
 																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
 																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}

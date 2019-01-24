@@ -63,7 +63,8 @@ $string['results_for_exam_office'] = 'Results for exam office';
 $string['delete_exam_data'] = 'Delete exam data';
 $string['date_and_room_exam_review'] = 'Date and room for exam review';
 $string['set_visibility_of_exam_review_information'] = 'Set visibility of exam review information';
-$string['changing_of_exam_results'] = 'Changing of exam results';
+$string['altering_exam_results'] = 'Altering exam results';
+$string['export_altered_exam_results'] = 'Export of altered exam results';
 
 //exammanagement_overview.mustache states
 $string['state_optional'] = 'Optional';
@@ -342,6 +343,7 @@ $string['err_customroomname_taken'] = 'Roomname already taken';
 $string['err_filloutfield'] = 'Please fill out field';
 $string['err_nofile'] = 'Please provide file';
 $string['err_noalphanumeric'] = 'Contains invalid chars';
+$string['err_js_internal_error'] = 'Internal error. Please retry.';
 
 //universal
 $string['modulename'] = 'Exam management';
