@@ -38,6 +38,7 @@ $string['phase_five'] = 'Klausureinsicht (optional)';
 $string['exam_appointment'] = 'Prüfungstermin';
 $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
+$string['partricipants_and_results_overview'] = 'Teilnehmer & Ergebnisübersicht';
 $string['exam_rooms'] = 'Prüfungsräume';
 $string['exam_date'] = 'Prüfungsdatum';
 $string['exam_participants'] = 'Prüfungsteilnehmer';
@@ -224,15 +225,19 @@ $string['validate_matrnr'] = 'Matrikelnummer validieren';
 $string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch über Drücken der Enter- bzw. Return-Taste möglich.';
 $string['input_other_matrnr'] = 'Matrikelnummer ändern';
 
-//showResultsForm.php
+//participantsOverviewForm.php
+$string['edititing_possibilities'] = 'Bearbeitungsoptionen';
+$string['edititing_possibilities_examples'] = '(Kompletten Benutzer | Punkte im Detail | Notenschlüßel)';
+$string['options'] = 'Optionen';
 $string['show_results_str'] = 'Teilnehmer- und Ergebnisübersicht';
 $string['matriculation_number_short'] = 'Matr. Nr.';
 $string['result'] = 'Ergebnis';
-$string['resultwithbonus'] = 'Ergebnis inkl. Bonus';
 $string['bonussteps'] = 'Bonusschritte';
-$string['change_bonus'] = 'Bonus ändern';
+$string['resultwithbonus'] = 'Ergebnis inklusive Bonus';
+$string['edit_user'] = 'Gesamten Benutzer bearbeiten';
+$string['edit_exampoints'] = 'Klausurpunkte im Detail bearbeiten';
+$string['edit_gradingscale'] = 'Notenschlüßel bearbeiten.';
 $string['cancel'] = 'Zurück zur Prüfungsorganisation';
-$string['gradingscale_not_set'] = 'Um automatisch eine Note berechnen zu lassen muss zunächst der Notenschlüßel eingetragen werden.';
 $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
@@ -348,7 +353,7 @@ Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an
 $string['helptext_importBonus']= 'Hier können Bonuspunkte importiert und in Bonusnotenschritte für dier Prüfung umgewandelt werden ...';
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
-$string['helptext_showResults']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
+$string['helptext_participantsOverview']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
 $string['helptext_examReviewDateRoom']= 'Hier können ein Datum und Räume für die Klausureinsicht eingetragen werden ...';
 $string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
 

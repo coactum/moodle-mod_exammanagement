@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints showResults form for mod_exammanagement.
+ * Prints participantsOverview form for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2017
@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\showResultsForm;
+use mod_exammanagement\forms\participantsOverviewForm;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -46,11 +46,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
         }
 
-        $MoodleObj->setPage('showResults');
+        $MoodleObj->setPage('participantsOverview');
         $MoodleObj->outputPageHeader();
 
         //Instantiate Form
-        $mform = new showResultsForm(null, array('id'=>$id, 'e'=>$e));
+        $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
 
         //Form processing and displaying is done here
         if ($mform->is_cancelled()) {

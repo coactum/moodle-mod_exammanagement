@@ -38,6 +38,7 @@ $string['phase_five'] = 'Exam review (optional)';
 $string['exam_appointment'] = 'Exam appointment';
 $string['minimize_phase'] = 'Minimize phase';
 $string['maximize_phase'] = 'Maximize phase';
+$string['partricipants_and_results_overview'] = 'Participants & results overview';
 $string['exam_rooms'] = 'Exam rooms';
 $string['exam_date'] = 'Exam date';
 $string['exam_participants'] = 'Exam partricipants';
@@ -225,15 +226,18 @@ $string['validate_matrnr'] = 'Validate matriculation number';
 $string['confirm_matrnr'] = 'To confirm the matriculation number you can also press enter/return.';
 $string['input_other_matrnr'] = 'Change matriculation number';
 
-//showResultsForm.php
+//participantsOverviewForm.php
+$string['edititing_possibilities'] = 'Editing optiuons';
+$string['edititing_possibilities_examples'] = '(User | exam points in detail | gradingscale)';
 $string['show_results_str'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';
 $string['result'] = 'Result';
-$string['resultwithbonus'] = 'Result with bonus';
 $string['bonussteps'] = 'Bonus steps';
-$string['change_bonus'] = 'Change bonus';
+$string['resultwithbonus'] = 'Result with bonus';
+$string['edit_user'] = 'Edit user';
+$string['edit_exampoints'] = 'Edit exam points in detail';
+$string['edit_gradingscale'] = 'Edit grading scale.';
 $string['cancel'] = 'Back to exam organisation';
-$string['gradingscale_not_set'] = 'If you want to calculate a grade as the result you have to configure the grading scale.';
 $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
@@ -322,7 +326,7 @@ $string['helptext_sendGroupmessages']= 'Here goes the description of this featur
 $string['helptext_importBonus']= 'Here goes the description of this feature site.';
 $string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
-$string['helptext_showResults']= 'Here goes the description of this feature site.';
+$string['helptext_participantsOverview']= 'Here goes the description of this feature site.';
 $string['helptext_examReviewDateRoom']= 'Here goes the description of this feature site.';
 $string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
 

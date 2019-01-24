@@ -245,6 +245,14 @@ input:checked + .exammanagement-slider:before {
   padding-right: 29px;
 }
 
+/* participantsOverviewForm.php - color of table borders */
+.exammanagement_tableheader_bordercolor{
+  border-left: 1px solid white;
+}
+
+.exammanagement_tablecell_bordercolor{
+  border-left: 1px solid black;
+}
 /* copied from bootstrap */
 
 /* panel */

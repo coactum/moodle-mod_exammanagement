@@ -126,9 +126,9 @@ ajaxsetcorrectioncompletion = function(value){
 
    <div class="container-fluid">
 			<div class="row">
-				<h4 class="m-y-1 col-xs-8">{{#str}}overview, mod_exammanagement{{/str}}</h4>
-				<span class="m-y-1 col-xs-3"><a class="btn btn-primary pull-right" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_password_str, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_password_str, mod_exammanagement{{/str}}"></i></a></span>
-				<span class="m-y-1 col-xs-1"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<h4 class="m-y-1 col-xs-4">{{#str}}overview, mod_exammanagement{{/str}}</h4>
+				<span class="m-y-1 col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<span class="m-y-1 col-xs-6"><a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}partricipants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}partricipants_and_results_overview, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_password_str, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_password_str, mod_exammanagement{{/str}}"></i></a></span>
 				<span class="helptextpanel helptextpanel-arrow collapse"></span>
 			</div>
 
@@ -603,7 +603,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<p> Hier können bereits eingegebene Prüfungsergebnisse angesehen werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="showResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
+															{{#stateofplacescorrect}}{{#resultscount}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/stateofplacescorrect}}
 														</div>
 													</div>
                         </div>

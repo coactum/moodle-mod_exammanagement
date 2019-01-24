@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing showResultsForm for exammanagement
+ * class containing participantsOverviewForm for exammanagement
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2018
@@ -38,7 +38,7 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../ldap/ldapManager.php');
 
-class showResultsForm extends moodleform {
+class participantsOverviewForm extends moodleform {
 
     //Add elements to form
     public function definition() {
@@ -52,14 +52,20 @@ class showResultsForm extends moodleform {
         $mform->addElement('html', '<div class="col-sm-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
         $mform->addElement('html', '</div>');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('showResults'));
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('participantsOverview'));
 
-        $mform->addElement('html', '<div class="row"><div class="col-sm-2"><h4>'.get_string("firstname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("lastname", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4 class="d-none d-lg-block">'.get_string("matriculation_number", "mod_exammanagement").'</h4><h4 class="d-lg-none">'.get_string("matriculation_number_short", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("room", "mod_exammanagement").'</h4></div><div class="col-sm-2"><h4>'.get_string("place", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("points", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("result", "mod_exammanagement").'</h4></div><div class="col-sm-1"><h4>'.get_string("resultwithbonus", "mod_exammanagement").'</h4></div></div>');
+        $mform->addElement('html', '<div class="table-responsive table-striped table-hover">');
+        $mform->addElement('html', '<table class="table">');
+        $mform->addElement('html', '<thead class="thead-dark"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col">'.get_string("room", "mod_exammanagement").'</th><th scope="col">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_tableheader_bordercolor">'.get_string("edititing_possibilities", "mod_exammanagement").'<br>'.get_string("edititing_possibilities_examples", "mod_exammanagement").'</th></thead>');
+        $mform->addElement('html', '<div class="tbody">');
 
-        $participantsWithResultArr = $UserObj->getAllParticipantsWithResults();
+        $participantsArr = $UserObj->getAllExamParticipants();
 
-        if($participantsWithResultArr){
-            foreach($participantsWithResultArr as $key => $participant){
+        if($participantsArr){
+
+            $i = 1;
+
+            foreach($participantsArr as $key => $participant){
 
                 if($participant->moodleuserid){
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
@@ -93,29 +99,41 @@ class showResultsForm extends moodleform {
                     $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                $mform->addElement('html', '<div class="row m-b-1"><div class="col-md-2">'.$firstname.'</div>');
-                $mform->addElement('html', '<div class="col-sm-2">'.$lastname.'</div>');
-                $mform->addElement('html', '<div class="col-sm-2">'.$matrnr.'</div>');
-                $mform->addElement('html', '<div class="col-sm-1">'.$room.'</div>');
-                $mform->addElement('html', '<div class="col-sm-2">'.$place.'</div>');
-                $mform->addElement('html', '<div class="col-sm-1">'.$totalpoints.'<a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a></div>');
+                $mform->addElement('html', '<tr>');
+                $mform->addElement('html', '<th scope="row">'.$i.'</th>');
+                $mform->addElement('html', '<td>'.$firstname.'</td>');
+                $mform->addElement('html', '<td>'.$lastname.'</td>');
+                $mform->addElement('html', '<td>'.$matrnr.'</td>');
+                $mform->addElement('html', '<td>'.$room.'</td>');
+                $mform->addElement('html', '<td>'.$place.'</td>');
+                $mform->addElement('html', '<td>'.$totalpoints.'</td>');
                 if($gradingscale){
                     $result = $UserObj->calculateResultGrade($participant);
-                    $mform->addElement('html', '<div class="col-sm-1"><span class="pull-right">'.str_replace('.', ',', $result).'</span></div>');
+                    $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
                     if($UserObj->getEnteredBonusCount()){
-                        $mform->addElement('html', '<div class="col-sm-1">'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)));
                         if($participant->bonus){
-                            $mform->addElement('html', '<span title="'.get_string("bonussteps", "mod_exammanagement").'"> ('.$participant->bonus.')</span> <a href="importBonus.php?id='.$this->_customdata['id'].'" title="'.get_string("change_bonus", "mod_exammanagement").'"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true"></i></a>');
+                            $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
+                        } else {
+                            $mform->addElement('html', '<td>-</td>');                            
                         }
-                        $mform->addElement('html', '</div>');
+                        $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)).'</td>');                    
                     }
                 } else {
-                  $mform->addElement('html', '<div class="col-sm-1">-<span class="pull-right"><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("gradingscale_not_set", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></span></div>');
+                  $mform->addElement('html', '<td>-</td>');
                 }
 
-                $mform->addElement('html', '</div>');
+                $mform->addElement('html', '<td class="exammanagement_tablecell_bordercolor"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'" title="'.get_string("edit_exampoints", "mod_exammanagement").'" class="m-b-1 m-l-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("edit_gradingscale", "mod_exammanagement").'" class="m-l-1"><i class="fa fa-lg fa-edit"></i></a></td>');
+                
+                $mform->addElement('html', '</tr>');
+                
+                $i++;
+
             }
+        } else {
+            $mform->addElement('html', get_string("no_participants_added", "mod_exammanagement"));
         }
+
+        $mform->addElement('html', '</tbody></table></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
