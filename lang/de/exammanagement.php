@@ -237,6 +237,7 @@ $string['resultwithbonus'] = 'Ergebnis inklusive Bonus';
 $string['edit_user'] = 'Gesamten Benutzer bearbeiten';
 $string['edit_exampoints'] = 'Klausurpunkte im Detail bearbeiten';
 $string['edit_gradingscale'] = 'Notenschlüßel bearbeiten.';
+$string['save_changes'] = 'Änderungen speichern';
 $string['cancel'] = 'Zurück zur Prüfungsorganisation';
 $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';

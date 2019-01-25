@@ -99,32 +99,41 @@ class participantsOverviewForm extends moodleform {
                     $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                $mform->addElement('html', '<tr>');
-                $mform->addElement('html', '<th scope="row">'.$i.'</th>');
-                $mform->addElement('html', '<td>'.$firstname.'</td>');
-                $mform->addElement('html', '<td>'.$lastname.'</td>');
-                $mform->addElement('html', '<td>'.$matrnr.'</td>');
-                $mform->addElement('html', '<td>'.$room.'</td>');
-                $mform->addElement('html', '<td>'.$place.'</td>');
-                $mform->addElement('html', '<td>'.$totalpoints.'</td>');
-                if($gradingscale){
-                    $result = $UserObj->calculateResultGrade($participant);
-                    $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
-                    if($UserObj->getEnteredBonusCount()){
-                        if($participant->bonus){
-                            $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
-                        } else {
-                            $mform->addElement('html', '<td>-</td>');                            
-                        }
-                        $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)).'</td>');                    
-                    }
-                } else {
-                  $mform->addElement('html', '<td>-</td>');
-                }
+                if(isset($this->_customdata['edit']) && $this->_customdata['edit']==$matrnr){
+                    $mform->addElement('html', '<tr class="table-info">');
+                    $mform->addElement('html', '<th scope="row">'.$i.'</th>');
+                    $mform->addElement('html', '<td>'.$firstname.'</td>');
+                    $mform->addElement('html', '<td>'.$lastname.'</td>');
+                    $mform->addElement('html', '<td>'.$matrnr.'</td>');
 
-                $mform->addElement('html', '<td class="exammanagement_tablecell_bordercolor"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'" title="'.get_string("edit_exampoints", "mod_exammanagement").'" class="m-b-1 m-l-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("edit_gradingscale", "mod_exammanagement").'" class="m-l-1"><i class="fa fa-lg fa-edit"></i></a></td>');
-                
-                $mform->addElement('html', '</tr>');
+                } else {
+                    $mform->addElement('html', '<tr>');
+                    $mform->addElement('html', '<th scope="row">'.$i.'</th>');
+                    $mform->addElement('html', '<td>'.$firstname.'</td>');
+                    $mform->addElement('html', '<td>'.$lastname.'</td>');
+                    $mform->addElement('html', '<td>'.$matrnr.'</td>');
+                    $mform->addElement('html', '<td>'.$room.'</td>');
+                    $mform->addElement('html', '<td>'.$place.'</td>');
+                    $mform->addElement('html', '<td>'.$totalpoints.'</td>');
+                    if($gradingscale){
+                        $result = $UserObj->calculateResultGrade($participant);
+                        $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
+                        if($UserObj->getEnteredBonusCount()){
+                            if($participant->bonus){
+                                $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
+                            } else {
+                                $mform->addElement('html', '<td>-</td>');                            
+                            }
+                            $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)).'</td>');                    
+                        }
+                    } else {
+                      $mform->addElement('html', '<td>-</td>');
+                    }
+    
+                    $mform->addElement('html', '<td class="exammanagement_tablecell_bordercolor"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="inputResults.php?id='.$this->_customdata['id'].'&matrnr='.$matrnr.'" title="'.get_string("edit_exampoints", "mod_exammanagement").'" class="m-b-1 m-l-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("edit_gradingscale", "mod_exammanagement").'" class="m-l-1"><i class="fa fa-lg fa-edit"></i></a></td>');
+                    
+                }
+                $mform->addElement('html', '</tr>');                
                 
                 $i++;
 
@@ -138,8 +147,11 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
-        //$this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
-        $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+        if(isset($this->_customdata['edit'])){
+            $this->add_action_buttons(true, get_string("save_changes", "mod_exammanagement"));
+        } else {
+            $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+        }
 
     }
 

@@ -35,6 +35,8 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$edit  = optional_param('edit', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
@@ -50,12 +52,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->outputPageHeader();
 
         //Instantiate Form
-        $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
+        $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'edit'=>$edit));
 
         //Form processing and displaying is done here
         if ($mform->is_cancelled()) {
             //Handle form cancel operation, if cancel button is present on form
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), 'Vorgang abgebrochen', null, 'warning');
 
         } else if ($fromform = $mform->get_data()) {
             //In this case you process validated data. $mform->get_data() returns data posted in form.

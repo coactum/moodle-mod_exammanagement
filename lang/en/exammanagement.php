@@ -236,6 +236,7 @@ $string['bonussteps'] = 'Bonus steps';
 $string['resultwithbonus'] = 'Result with bonus';
 $string['edit_user'] = 'Edit user';
 $string['edit_exampoints'] = 'Edit exam points in detail';
+$string['save_changes'] = 'Save changes';
 $string['edit_gradingscale'] = 'Edit grading scale.';
 $string['cancel'] = 'Back to exam organisation';
 $string['nt'] = 'Not participated';
