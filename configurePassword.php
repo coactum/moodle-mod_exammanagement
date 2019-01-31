@@ -59,10 +59,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		  
 		  $password = $fromform->password;
 		  
-		  $password_hash = password_hash($passwort, PASSWORD_DEFAULT);
-
-		  var_dump($password_hash);
-		  var_dump(password_get_info($password_hash));
+		  $password_hash = base64_encode(password_hash($password, PASSWORD_DEFAULT));
 		  
 		  $ExammanagementInstanceObj->moduleinstance->password = $password_hash;
 
