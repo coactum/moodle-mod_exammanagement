@@ -227,18 +227,17 @@ $string['confirm_matrnr'] = 'To confirm the matriculation number you can also pr
 $string['input_other_matrnr'] = 'Change matriculation number';
 
 //participantsOverviewForm.php
-$string['edititing_possibilities'] = 'Editing optiuons';
-$string['edititing_possibilities_examples'] = '(User | exam points in detail | gradingscale)';
+$string['edit'] = 'Edit';
 $string['show_results_str'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';
+$string['totalpoints'] = 'Total points';
 $string['result'] = 'Result';
 $string['bonussteps'] = 'Bonus steps';
 $string['resultwithbonus'] = 'Result with bonus';
 $string['edit_user'] = 'Edit user';
-$string['edit_exampoints'] = 'Edit exam points in detail';
 $string['save_changes'] = 'Save changes';
-$string['edit_gradingscale'] = 'Edit grading scale.';
 $string['cancel'] = 'Back to exam organisation';
+$string['normal'] = 'Normal';
 $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';

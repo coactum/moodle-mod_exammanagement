@@ -12,26 +12,28 @@
 }*/
 
 /* exammanagement_overview.mustache - timeline */
-*::before{
+.exammanagement_overview *::before{
     box-sizing: border-box;
 
 }
-.exmammanagement-summary{
+
+.exammanagement_overview .exmammanagement-summary{
     position:relative;
     margin-bottom: 30px;
     padding-bottom: 10px;
     overflow-wrap: break-word;
 }
-.exmammanagement-summary > li{
+
+.exammanagement_overview .exmammanagement-summary > li{
       position: relative;
       margin-bottom: 15px;
 }
 
-.exmammanagement-summary > li::after{
+.exammanagement_overview .exmammanagement-summary > li::after{
 	clear:both;
 }
 
-.exmammanagement-summary > li > .fa{
+.exammanagement_overview .exmammanagement-summary > li > .fa{
       width: 30px;
       height: 30px;
       font-size: 15px;
@@ -46,11 +48,11 @@
       top: 0;
 }
 
-.exmammanagement-summary > li > .panel{
+.exammanagement_overview .exmammanagement-summary > li > .panel{
       margin-left: 60px;
 }
 
-.exmammanagement-summary::before{
+.exammanagement_overview .exmammanagement-summary::before{
     content: '';
     position: absolute;
     top: 0;
@@ -62,25 +64,25 @@
     border-radius: 2px;
 }
 
-.exmammanagement-summary li:target{
+.exammanagement_overview .exmammanagement-summary li:target{
     padding-top: 0px !important;
     margin-top: 0px !important;
 }
 
-.exmammanagement-summary a{
+.exammanagement_overview .exmammanagement-summary a{
     cursor: pointer;
 }
 
-.helptext-button{
+.exammanagement_overview .helptext-button{
     cursor: pointer;
 }
 
-.exmammanagement-summary :target::before {
+.exammanagement_overview .exmammanagement-summary :target::before {
     height: 0px !important;
     margin-top: 0px !important;
 }
 
-.mainpanel::before {
+.exammanagement_overview .mainpanel::before {
     position: absolute;
     display: block;
     top: 8px;
@@ -95,7 +97,7 @@
     border-left-color: transparent;
 }
 
-.mainpanel > .panel-heading span { /* minimize/maximize buttons */
+.exammanagement_overview .mainpanel > .panel-heading span { /* minimize/maximize buttons */
     background: rgba(0, 0, 0, 0.15);
     display: inline;
     margin-top: -30px;
@@ -103,12 +105,12 @@
     border-radius: 4px
 }
 
-.mainpanel > .panel-heading span.collapse {
+.exammanagement_overview .mainpanel > .panel-heading span.collapse {
   display: none;
 }
 
 /* row-equal-height */
-.row-eq-height, .row-eq-height > div[class*='col-'] {
+.exammanagement_overview .row-eq-height, .row-eq-height > div[class*='col-'] {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -117,14 +119,14 @@
   flex:1 0 auto;
 }
 
-.row-eq-height .panel {
+.exammanagement_overview .row-eq-height .panel {
   display: flex;
   flex-direction: column;
   align-content: stretch;
   width: 100%;
 }
 
-.row-eq-height .panel-body {
+.exammanagement_overview .row-eq-height .panel-body {
   display: flex;
   flex-grow:1;
 }
@@ -132,7 +134,7 @@
 /* show information switches*/
 
  /* The switch - the box around the slider */
-.exammanagement-switch {
+ .exammanagement_overview .exammanagement-switch {
   position: relative;
   display: inline-block;
   width: 30px;
@@ -140,13 +142,13 @@
 }
 
 /* Hide default HTML checkbox */
-.exammanagement-switch input {
+.exammanagement_overview .exammanagement-switch input {
   display: none;
 }
 
 
 /* The slider */
-.exammanagement-slider {
+.exammanagement_overview .exammanagement-slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -158,7 +160,7 @@
   transition: .4s;
 }
 
-.exammanagement-slider:before {
+.exammanagement_overview .exammanagement-slider:before {
   position: absolute;
   content: "";
   height: 13px;
@@ -170,26 +172,26 @@
   transition: .4s;
 }
 
-input:checked + .exammanagement-slider {
-  background-color: #2196F3;
+.exammanagement_overview input:checked + .exammanagement-slider {
+  background-color: #00205b;
 }
 
-input:focus + .exammanagement-slider {
-  box-shadow: 0 0 1px #2196F3;
+.exammanagement_overview input:focus + .exammanagement-slider {
+  box-shadow: 0 0 1px #00205b;
 }
 
-input:checked + .exammanagement-slider:before {
+.exammanagement_overview input:checked + .exammanagement-slider:before {
   -webkit-transform: translateX(13px);
   -ms-transform: translateX(13px);
   transform: translateX(13px);
 }
 
 /* Rounded sliders */
-.exammanagement-slider.round {
+.exammanagement_overview .exammanagement-slider.round {
   border-radius: 17px;
 }
 
-.exammanagement-slider.round:before {
+.exammanagement_overview .exammanagement-slider.round:before {
   border-radius: 50%;
 }
 
@@ -246,14 +248,37 @@ input:checked + .exammanagement-slider:before {
 }
 
 /* participantsOverviewForm.php - color of table borders */
-.exammanagement_tableheader_bordercolor{
+
+.exammanagement_table{
+  border: 1px solid #00205b;
+}
+
+.exammanagement_tableheader{
+  color: white;
+}
+
+.exammanagement_table_whiteborder_left{
   border-left: 1px solid white;
 }
 
-.exammanagement_tablecell_bordercolor{
-  border-left: 1px solid black;
+.exammanagement_brand_bordercolor_left{
+  border-left: 1px solid #00205b;
+
 }
-/* copied from bootstrap */
+
+.exammanagement_brand_backgroundcolor{
+  background-color: #00205b;
+}
+
+.exammanagement_brand_bordercolor{
+  border-color: #00205b;
+}
+
+.exammanagement_table_with{
+  width: 50px !important;
+}
+
+/* exammanagement_overview.mustache - panels (copied from bootstrap) */
 
 /* panel */
 
@@ -511,22 +536,22 @@ input:checked + .exammanagement-slider:before {
   border-bottom-color: #ddd;
 }
 .panel-primary {
-  border-color: #337ab7;
+  border-color: #00205b;
 }
 .panel-primary > .panel-heading {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #00205b;
+  border-color: #00205b;
 }
 .panel-primary > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #337ab7;
+  border-top-color: #00205b;
 }
 .panel-primary > .panel-heading .badge {
-  color: #337ab7;
+  color: #00205b;
   background-color: #fff;
 }
 .panel-primary > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #337ab7;
+  border-bottom-color: #00205b;
 }
 .panel-success {
   border-color: #d6e9c6;

@@ -56,33 +56,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
-		  
-
-			// testing if Password_verify works in general
-		  $hashed = password_hash('test', PASSWORD_DEFAULT);
-		  $password = 'test';
-
-		  if (password_verify($password, $hashed)) {
-			echo 'success';
-		  } else {
-			echo 'fail';
-		  }
-
 
 		  $password = $fromform->password;
-		  $password_hash = $ExammanagementInstanceObj->moduleinstance->password;
+		  $password_hash = base64_decode($ExammanagementInstanceObj->moduleinstance->password);
 
-
-
-		  // debugging
-		  var_dump(password_get_info($password_hash));
-		  var_dump($password);
-		  var_dump(password_hash($password, PASSWORD_DEFAULT));
-		  var_dump($password_hash);
-		  //$password_hash = '$2y$10$dQJVJ0JQZreesPZiCwAxhuFP1FbK4MVX7Obraex0rsRl0QxGIgXQW';
-
-		  
-		  // actual code
 		  if( password_verify($password, $password_hash) ){ // check if password is correct
 
 			if( password_needs_rehash($password_hash, PASSWORD_DEFAULT) ){ // check if passwords needs rehash because of newer hash algorithm

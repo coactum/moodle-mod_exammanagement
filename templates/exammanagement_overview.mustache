@@ -124,7 +124,7 @@ ajaxsetcorrectioncompletion = function(value){
 
 {{/js}}
 
-   <div class="container-fluid">
+   <div class="container-fluid exammanagement_overview">
 			<div class="row">
 				<h4 class="m-y-1 col-xs-4">{{#str}}overview, mod_exammanagement{{/str}}</h4>
 				<span class="m-y-1 col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
@@ -554,7 +554,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 														<div class="panel-body">
 																{{#gradingscale}}<p>Es wurde bereits ein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
-																{{^gradingscale}}<p>Es wurde noch kein Notenschlüßel konfiguriert.</p>{{/gradingscale}}
+																{{^gradingscale}}<p>Es wurde noch kein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>

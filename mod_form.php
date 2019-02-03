@@ -47,7 +47,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off", 'autocorrect' => "off", "spellcheck" => "false"));
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -70,7 +70,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('header', get_string('security_password', 'mod_exammanagement'), get_string('security_password', 'mod_exammanagement'));
 
-        $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
+        $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('password', 'security_password', 'mod_exammanagement');
