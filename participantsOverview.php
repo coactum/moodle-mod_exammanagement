@@ -25,6 +25,8 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\participantsOverviewForm;
+use mod_exammanagement\ldap\ldapManager;
+use stdClass;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -39,6 +41,8 @@ $edit  = optional_param('edit', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$LdapManagerObj = ldapManager::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -63,6 +67,74 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             //In this case you process validated data. $mform->get_data() returns data posted in form.
 
             var_dump($fromform);
+
+            if(isset($fromform->editmoodleuserid) && $fromform->editmoodleuserid !== 0){
+                $moodleuserid = $fromform->editmoodleuserid;
+                $userlogin = NULL;
+            } else {
+                $moodleuserid = NULL;
+                $userlogin = NULL;
+
+				if($LdapManagerObj->is_LDAP_config()){
+					$ldapConnection = $LdapManagerObj->connect_ldap();
+
+					$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->edit);
+
+				} else {
+					$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($fromform->edit);
+
+				}
+            }
+
+            $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
+           
+            var_dump($participantObj);
+
+            $participantObj->exampoints = json_encode($fromform->points);
+
+            switch ($fromform->state){
+
+                case 'normal':
+                    $examstate = new stdClass;
+                    $examstate->nt = "0";
+                    $examstate->fa = "0";
+                    $examstate->ill = "0";
+                    break;
+                case 'nt':
+                    $examstate = new stdClass;
+                    $examstate->nt = "1";
+                    $examstate->fa = "0";
+                    $examstate->ill = "0";
+                    break;
+                case 'fa':
+                    $examstate = new stdClass;
+                    $examstate->nt = "0";
+                    $examstate->fa = "1";
+                    $examstate->ill = "0";
+                    break;
+                case 'ill':
+                    $examstate = new stdClass;
+                    $examstate->nt = "0";
+                    $examstate->fa = "0";
+                    $examstate->ill = "1";
+                    break;
+                default:
+                    $examstate = new stdClass;
+                    $examstate->nt = "0";
+                    $examstate->fa = "0";
+                    $examstate->ill = "0";
+                    break;
+            }
+
+
+            $participantObj->examstate = json_encode($examstate);
+
+            $participantObj->timeresultsentered = time();
+
+            $participantObj->bonus = $fromform->bonus;
+           
+            var_dump($participantObj);
+
 
         } else {
             // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

@@ -61,7 +61,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', '<div class="table-responsive">');
         $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
         $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col">'.get_string("room", "mod_exammanagement").'</th><th scope="col">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("edit", "mod_exammanagement").'</th></thead>');
-        $mform->addElement('html', '<div class="tbody">');
+        $mform->addElement('html', '<tbody>');
 
         $participantsArr = $UserObj->getAllExamParticipants();
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
@@ -92,7 +92,6 @@ class participantsOverviewForm extends moodleform {
                 $state = $UserObj->getExamState($participant);
                 $exampoints = array_values((array) json_decode($participant->exampoints));
                 $tasks = $ExammanagementInstanceObj->getTasks();
-
 
                 if($state == 'nt'){
                     $totalpoints = get_string("nt", "mod_exammanagement");
@@ -162,7 +161,7 @@ class participantsOverviewForm extends moodleform {
                     $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
                    
                     $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
-                    $select->setSelected('normal');
+                    $select->setSelected($state);
                     
                     $mform->addElement('html', '</td></tr></table>');
 
@@ -172,7 +171,7 @@ class participantsOverviewForm extends moodleform {
                             if($participant->bonus){
                                 $mform->addElement('html', '<td>');
                                 $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                                $select->setSelected('0');
+                                $select->setSelected($participant->bonus);
                                 $mform->addElement('html', '</td>');
                             } else {
                                 $mform->addElement('html', '<td>');
@@ -263,6 +262,35 @@ class participantsOverviewForm extends moodleform {
 
     //Custom validation should be added here
     function validation($data, $files) {
-        return array();
+        $errors = array();
+
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
+
+        if(!isset($data['room']) || $data['room']==''){
+            $errors['room'] = get_string('err_filloutfield', 'mod_exammanagement');
+        }
+
+        if(!isset($data['place']) || $data['place']==''){
+            $errors['place'] = get_string('err_filloutfield', 'mod_exammanagement');
+        }
+
+        if($data['state'] != 'nt' && $data['state'] != 'fa' && $data['state'] != 'ill'){
+            foreach($data['points'] as $task => $points){
+
+                $floatval = floatval($points);
+                $isnumeric = is_numeric($points);
+
+                if(($points && !$floatval) || !$isnumeric){
+                    $errors['points['. $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+                } else if($points<0) {
+                    $errors['points['.$task.']'] = get_string('err_underzero', 'mod_exammanagement');
+                } else if($points > $savedTasksArr[$task-1]){
+                     $errors['points['. $task .']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
+                }
+            }
+        }
+
+        return $errors;
     }
 }
