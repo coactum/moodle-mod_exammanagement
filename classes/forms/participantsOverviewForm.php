@@ -64,6 +64,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', '<div class="tbody">');
 
         $participantsArr = $UserObj->getAllExamParticipants();
+        $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
         if($participantsArr){
 
@@ -87,9 +88,11 @@ class participantsOverviewForm extends moodleform {
 
                 $totalpoints = false;
 
-                $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
                 $state = $UserObj->getExamState($participant);
+                $exampoints = array_values((array) json_decode($participant->exampoints));
+                $tasks = $ExammanagementInstanceObj->getTasks();
+
 
                 if($state == 'nt'){
                     $totalpoints = get_string("nt", "mod_exammanagement");
@@ -104,13 +107,20 @@ class participantsOverviewForm extends moodleform {
                 }
 
                 if(isset($this->_customdata['edit']) && $this->_customdata['edit']==$matrnr){ // if user is editable
+
+                    $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
+                    $mform->setType('edit', PARAM_INT);
+                    
+                    $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
+                    $mform->setType('editmoodleuserid', PARAM_INT);
+
                     $mform->addElement('html', '<tr class="table-info">');
                     $mform->addElement('html', '<th scope="row">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$firstname.'</td>');
                     $mform->addElement('html', '<td>'.$lastname.'</td>');
                     $mform->addElement('html', '<td>'.$matrnr.'</td>');
                     
-                    $attributes = array('size'=>'5');
+                    $attributes = array('size'=>'3');
 
                     $mform->addElement('html', '<td>');
                     $mform->addElement('text', 'room', '', $attributes);
@@ -125,43 +135,31 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '</td><td>');
 
-                    if (isset($participant->exampoints)){
+                    $mform->addElement('html', '<table class="table-sm"><tr>');
 
-                        $mform->addElement('html', '<table class="table-sm"><tr>');
-
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
-                            $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
-                        }
-
-                        $mform->addElement('html', '</tr><tr>');
-
-                        foreach(json_decode($participant->exampoints) as $tasknumber => $points){
-                            $mform->addElement('html', '<td>'.str_replace('.', ',',$points).'</td>');
-                        }
-
-                        $mform->addElement('html', '</tr></table>');
-
-                    } else {
-
-                        $mform->addElement('html', '<table class="table-sm"><tr>');
-
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
-                            $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
-                        }
-
-                        $mform->addElement('html', '</tr><tr>');
-
-
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
-                            $mform->addElement('html', '<td> - </td>');
-                        }
-
-                        $mform->addElement('html', '</tr></table>');
+                    foreach( $tasks as $tasknumber => $taskmaxpoints){
+                        $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
                     }
+
+                    $mform->addElement('html', '</tr><tr>');
+
+                    foreach($tasks as $tasknumber => $taskmaxpoints){
+                            
+                        $mform->addElement('html', '<td>');
+                        $mform->addElement('text', 'points['.$tasknumber.']', '', $attributes);
+                        $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
+
+                        if(isset($exampoints[$tasknumber-1])){
+                            $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
+                        }
+                        $mform->addElement('html', '</td>');
+                    }
+
+                    $mform->addElement('html', '</tr></table>');
 
                     $mform->addElement('html', '</td>');
                     
-                    $mform->addElement('html', '<td><table class="table-sm"><tr><td>'. $totalpoints . '</td></tr><tr><td>');
+                    $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
                    
                     $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
                     $select->setSelected('normal');
@@ -201,39 +199,23 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '<td>');
 
-                    if (isset($participant->exampoints)){
+                    $mform->addElement('html', '<table class="table-sm"><tr>');
 
-                        $mform->addElement('html', '<table class="table-sm"><tr>');
+                    foreach($tasks as $tasknumber => $taskmaxpoints){
+                        $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
+                    }
+                    
+                    $mform->addElement('html', '</tr><tr>');
 
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
-                            $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
-                        }
-
-                        $mform->addElement('html', '</tr><tr>');
-
-                        foreach(json_decode($participant->exampoints) as $tasknumber => $points){
-                            $mform->addElement('html', '<td>'.str_replace('.', ',',$points).'</td>');
-                        }
-
-                        $mform->addElement('html', '</tr></table>');
-
-                    } else {
-
-                        $mform->addElement('html', '<table class="table-sm"><tr>');
-
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
-                            $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
-                        }
-
-                        $mform->addElement('html', '</tr><tr>');
-
-
-                        foreach($ExammanagementInstanceObj->getTasks() as $tasknumber => $taskmaxpoints){
+                    foreach($tasks as $tasknumber => $taskmaxpoints){
+                        if(isset($exampoints[$tasknumber-1])){
+                            $mform->addElement('html', '<td>'.str_replace('.', ',',$exampoints[$tasknumber-1]).'</td>');
+                        } else {
                             $mform->addElement('html', '<td> - </td>');
                         }
-
-                        $mform->addElement('html', '</tr></table>');
                     }
+
+                    $mform->addElement('html', '</tr></table>');
 
                     $mform->addElement('html', '</td>');
 

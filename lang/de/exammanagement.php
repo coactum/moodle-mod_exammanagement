@@ -107,14 +107,15 @@ $string['delete_examdata'] = 'Prüfungsdaten löschen';
 $string['examreview_dateroom'] = 'Datum und Räume festlegen';
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
-//configurePassword
+//configurePasswordForm.php
 $string['configure_password_str'] = 'Password konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Plugininstanz der Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 
-//configurePassword
+//checkPasswordForm.php
 $string['check_password_str'] = 'Password eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
+$string['confirm_password'] = 'Password bestätigen';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';

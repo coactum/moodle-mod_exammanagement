@@ -58,7 +58,7 @@ class checkPasswordForm extends moodleform {
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
-        $this->add_action_buttons();
+        $this->add_action_buttons(true, get_string("confirm_password", "mod_exammanagement"));
     
     }
 

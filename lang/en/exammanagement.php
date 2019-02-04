@@ -107,15 +107,16 @@ $string['delete_examdata'] = 'Delete exam data';
 $string['examreview_dateroom'] = 'Set date and room';
 $string['change_examresults'] = 'Change exam results';
 
-//configurePassword
+//configurePasswordForm.php
 $string['configure_password_str'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying password for the plugin instance';
 $string['password'] = 'Password';
 
 
-//configurePassword
+//checkPasswordForm.php
 $string['check_password_str'] = 'Enter password';
 $string['check_password'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
+$string['confirm_password'] = 'Confirm password';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';

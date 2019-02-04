@@ -32,8 +32,8 @@ define(['jquery'], function ($) {
       var styles = {
         "-webkit-appearance": "textfield",
         "-moz-appearance": "textfield",
-        "margin": "0px",
-        "width": "20px"
+        "margin-left": "5px",
+        "width": "45px"
       };
 
       $("input[type=number]").css(styles);
