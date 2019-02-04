@@ -64,6 +64,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', '<tbody>');
 
         $participantsArr = $UserObj->getAllExamParticipants();
+        $examrooms = json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms);
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
         if($participantsArr){
@@ -122,9 +123,15 @@ class participantsOverviewForm extends moodleform {
                     $attributes = array('size'=>'3');
 
                     $mform->addElement('html', '<td>');
-                    $mform->addElement('text', 'room', '', $attributes);
-                    $mform->setType('room', PARAM_TEXT);
-                    $mform->setDefault('room', $room);
+
+                    $roomOptionsArr = array();
+
+                    foreach($examrooms as $id => $roomid){
+                        $roomOptionsArr[$roomid] = $ExammanagementInstanceObj->getRoomObj($roomid)->name;
+                    }                
+
+                    $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
+                    $select->setSelected($participant->roomid);
 
                     $mform->addElement('html', '</td><td>');
 
@@ -166,7 +173,7 @@ class participantsOverviewForm extends moodleform {
                     $mform->addElement('html', '</td></tr></table>');
 
                     if($gradingscale){
-                        $mform->addElement('html', '<td> <strong>...</strong> </td>');
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
                         if($UserObj->getEnteredBonusCount()){
                             if($participant->bonus){
                                 $mform->addElement('html', '<td>');
@@ -179,7 +186,7 @@ class participantsOverviewForm extends moodleform {
                                 $select->setSelected('0');
                                 $mform->addElement('html', '</td>');                            
                             }
-                            $mform->addElement('html', '<td> <strong>...</strong> </td>');                    
+                            $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
                         }
                     } else {
                       $mform->addElement('html', '<td>-</td>');
@@ -266,10 +273,6 @@ class participantsOverviewForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
-
-        if(!isset($data['room']) || $data['room']==''){
-            $errors['room'] = get_string('err_filloutfield', 'mod_exammanagement');
-        }
 
         if(!isset($data['place']) || $data['place']==''){
             $errors['place'] = get_string('err_filloutfield', 'mod_exammanagement');

@@ -39,6 +39,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $edit  = optional_param('edit', 0, PARAM_INT);
 
+$MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
@@ -66,8 +67,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         } else if ($fromform = $mform->get_data()) {
             //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-            var_dump($fromform);
-
             if(isset($fromform->editmoodleuserid) && $fromform->editmoodleuserid !== 0){
                 $moodleuserid = $fromform->editmoodleuserid;
                 $userlogin = NULL;
@@ -88,7 +87,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
            
-            var_dump($participantObj);
+            $participantObj->roomid = $fromform->room;
+
+            $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
+
+            $participantObj->place = $fromform->place;
 
             $participantObj->exampoints = json_encode($fromform->points);
 
@@ -133,7 +136,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participantObj->bonus = $fromform->bonus;
            
-            var_dump($participantObj);
+            $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+            
+            if($update){
+				redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), null, null, null);
+			} else {
+				redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), 'Speichern fehlgeschlagen', null, notification::NOTIFY_ERROR);
+			}
 
 
         } else {

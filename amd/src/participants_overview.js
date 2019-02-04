@@ -23,6 +23,18 @@
 
 define(['jquery'], function ($) {
 
+  var getTotalpoints = function () {
+    var totalpoints = 0;
+
+    $(".form-group input.form-control").not("#id_place").each(function () {
+      if ($(this).val() != '-') {
+        totalpoints += parseFloat($(this).val().replace(',', '.'));
+      }
+    });
+
+    return String(totalpoints.toFixed(2)).replace('.', ',');
+  };
+
   return {
     init: function () {
 
@@ -32,16 +44,53 @@ define(['jquery'], function ($) {
       var styles = {
         "-webkit-appearance": "textfield",
         "-moz-appearance": "textfield",
-        "margin-left": "5px",
-        "width": "45px"
+        "margin-left": "10px",
+        "width": "65px"
       };
 
       $("input[type=number]").css(styles);
       $("input[type=number]").attr("step", "0.01");
       $("input[type=number]").attr("min", "0");
 
+      // initial disabling point fields if examstate is not normal
+      if ($("#id_state").val() !== 'normal') {
+        $(".form-group input.form-control").not("#id_place").each(function () {
+          $(this).prop("disabled", true);
+        });
+      }
+
+      // if examstate changes
+      $("#id_state").change(function () {
+
+        if ($("#id_state").val() !== 'normal') { // if examstate is now not normal: disable all point-fields and set their value to 0
+
+          $(".form-group input.form-control").not("#id_place").each(function () {
+            $(this).prop("disabled", true);
+            $(this).val(0);
+            $("#totalpoints").text($("#id_state option:selected").text()); // change totalpoints
+
+          });
+        } else {  // if examstate is now normal
+          $(".form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
+            $(this).prop("disabled", false);
+          });
+          $("#totalpoints").text(getTotalpoints()); // change totalpoints
+        }
+      })
+
+      $(".form-group").not("#id_place").on("change", "input", function () { // if some input field changes
+        $("#totalpoints").text(getTotalpoints()); // change totalpoints
+      });
+
+      // remove cols from form layout
       $('div').removeClass('col-md-3');
       $('div').removeClass('col-md-9');
-    },
+
+      $('#id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
+        $(".form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
+          $(this).prop("disabled", false);
+        });
+      });
+    }
   };
 });
