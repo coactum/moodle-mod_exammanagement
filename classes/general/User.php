@@ -375,9 +375,8 @@ class User{
 
 		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
 
-		if($NoneMoodleParticipantsEmailadressesArr){
+		if(!empty($NoneMoodleParticipantsEmailadressesArr)){
 			return $NoneMoodleParticipantsEmailadressesArr;
-
 		} else {
 			return false;
 
