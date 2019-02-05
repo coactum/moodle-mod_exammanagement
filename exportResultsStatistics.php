@@ -198,7 +198,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $countSICK++;
             } else {
                 $result = $UserObj->calculateResultGrade($participant);
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $participant->bonus);
+                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus);
 
                 if ($result == '-'){
                     $notRated++;
@@ -462,7 +462,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $bonus = 0;
             }
         
-            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $bonus);    
+            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonus);    
 
             if($participant->exampoints){
                 foreach (json_decode($participant->exampoints) as $key => $points){

@@ -59,7 +59,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('participantsOverview'));
 
         $mform->addElement('html', '<div class="table-responsive">');
-        $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
+        $mform->addElement('html', '<table class="table table-striped exammanagement_table" id="0">');
         $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col">'.get_string("room", "mod_exammanagement").'</th><th scope="col">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("edit", "mod_exammanagement").'</th></thead>');
         $mform->addElement('html', '<tbody>');
 
@@ -115,7 +115,7 @@ class participantsOverviewForm extends moodleform {
                     $mform->setType('editmoodleuserid', PARAM_INT);
 
                     $mform->addElement('html', '<tr class="table-info">');
-                    $mform->addElement('html', '<th scope="row">'.$i.'</th>');
+                    $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$firstname.'</td>');
                     $mform->addElement('html', '<td>'.$lastname.'</td>');
                     $mform->addElement('html', '<td>'.$matrnr.'</td>');
@@ -196,7 +196,7 @@ class participantsOverviewForm extends moodleform {
 
                 } else { // if user is non editable
                     $mform->addElement('html', '<tr>');
-                    $mform->addElement('html', '<th scope="row">'.$i.'</th>');
+                    $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$firstname.'</td>');
                     $mform->addElement('html', '<td>'.$lastname.'</td>');
                     $mform->addElement('html', '<td>'.$matrnr.'</td>');
@@ -236,13 +236,15 @@ class participantsOverviewForm extends moodleform {
                             } else {
                                 $mform->addElement('html', '<td>-</td>');                            
                             }
-                            $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $participant->bonus)).'</td>');                    
+                            $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus)).'</td>');                    
                         }
                     } else {
                       $mform->addElement('html', '<td>-</td>');
                     }
+
+                    $anchorid = $i-1;
     
-                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
                     
                 }
                 $mform->addElement('html', '</tr>');                

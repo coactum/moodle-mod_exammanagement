@@ -463,9 +463,7 @@ class User{
 		return $result;
 	}
 
-	public function calculateResultGradeWithBonus($grade, $bonussteps){
-
-		var_dump($grade);
+	public function calculateResultGradeWithBonus($grade, $state, $bonussteps){
 
 		switch ($bonussteps){
 			case '1':
@@ -492,9 +490,7 @@ class User{
 
 			if($bonus == 0) return $grade;
 			if( $grade == 5.0 ) return 5.0;
-			if( $state == 'NT' ) return 'NT';
-			if( $state == 'FA' ) return 'FA';
-			if( $state == 'ILL' ) return 'ILL';
+			if( $state !== 'normal' ) return get_string($state, "mod_exammanagement");
 			if( $resultWithBonus<=1.0) return '1.0';
 
 			return (str_pad (strval($resultWithBonus), 3, '.0'));
