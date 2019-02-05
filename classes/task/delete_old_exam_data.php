@@ -45,112 +45,112 @@ class delete_old_exam_data extends \core\task\scheduled_task {
      */
     public function execute() {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        // $MoodleDBObj = MoodleDB::getInstance();
 
-        // send warning mails for soon to be deleted module instances
+        // // send warning mails for soon to be deleted module instances
 
-        $deletionDate = strtotime("+1 month");
+        // $deletionDate = strtotime("+1 month");
 
-        $now = time();
-        $case = NULL;
+        // $now = time();
+        // $case = NULL;
 
-        // ### variante 1: filter records in db via sql select and get only matching records (not working) #####
-        // $select = "datadeletion IS NOT NULL AND TIMESTAMP(DATE_SUB(datadeletion, INTERVAL 1 MONTH)) <= ".$now; // not working
-        // // SELECT * FROM `mdl_exammanagement` WHERE `datadeletion` IS NOT NULL AND TIMESTAMP(DATE_SUB(`datadeletion`, INTERVAL 1 MONTH)) > 1547146064 // in PHP-Myadmin getestet
-        // $records = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement', 'datadeletion', $select);
-        // var_dump($records);
-        // var_dump(date('d.m.y h:m', $records[0]));
+        // // ### variante 1: filter records in db via sql select and get only matching records (not working) #####
+        // // $select = "datadeletion IS NOT NULL AND TIMESTAMP(DATE_SUB(datadeletion, INTERVAL 1 MONTH)) <= ".$now; // not working
+        // // // SELECT * FROM `mdl_exammanagement` WHERE `datadeletion` IS NOT NULL AND TIMESTAMP(DATE_SUB(`datadeletion`, INTERVAL 1 MONTH)) > 1547146064 // in PHP-Myadmin getestet
+        // // $records = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement', 'datadeletion', $select);
+        // // var_dump($records);
+        // // var_dump(date('d.m.y h:m', $records[0]));
 
         
-        $select = "datadeletion IS NOT NULL AND datadeletion > ".$now; // get all records where datadeletion date is set and that are not to be deleted yet
+        // $select = "datadeletion IS NOT NULL AND datadeletion > ".$now; // get all records where datadeletion date is set and that are not to be deleted yet
 
-        $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
+        // $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
 
-        foreach($records as $id => $record){
+        // foreach($records as $id => $record){
 
-            // check if warning period is due
-            $warningperiodOne = strtotime("-1 month", $record->datadeletion);
-            $warningperiodTwo = strtotime("-7 days", $record->datadeletion);
-            $warningperiodThree = strtotime("-1 day", $record->datadeletion);
+        //     // check if warning period is due
+        //     $warningperiodOne = strtotime("-1 month", $record->datadeletion);
+        //     $warningperiodTwo = strtotime("-7 days", $record->datadeletion);
+        //     $warningperiodThree = strtotime("-1 day", $record->datadeletion);
 
-            $deletionwarningmailidsArray = json_decode($record->deletionwarningmailids);
+        //     $deletionwarningmailidsArray = json_decode($record->deletionwarningmailids);
 
-            if(isset($deletionwarningmailidsArray)){
-                $warningmailscount = count($deletionwarningmailidsArray);
-            } else {
-                $warningmailscount = 0;
-                $deletionwarningmailidsArray = array();
-            }
+        //     if(isset($deletionwarningmailidsArray)){
+        //         $warningmailscount = count($deletionwarningmailidsArray);
+        //     } else {
+        //         $warningmailscount = 0;
+        //         $deletionwarningmailidsArray = array();
+        //     }
 
-            $warningstep = false;
+        //     $warningstep = false;
 
-            // check if some warningmails were already send and determine if 
-            if($warningperiodOne <= $now && $warningmailscount = 0){
-                $warningstep = 1;  // no warning mails yet, first to send
-            } else if($warningperiodTwo <= $now && $warningmailscount = 1){
-                $warningstep = 2; // 1 warning mail yet, second to send
-            } else if($warningperiodThree <= $now && $warningmailscount = 2){
-                $warningstep = 3; // 2 warning mails yet, last to send
-            } else {
-                break; // stop for this record
-            }
+        //     // check if some warningmails were already send and determine if 
+        //     if($warningperiodOne <= $now && $warningmailscount = 0){
+        //         $warningstep = 1;  // no warning mails yet, first to send
+        //     } else if($warningperiodTwo <= $now && $warningmailscount = 1){
+        //         $warningstep = 2; // 1 warning mail yet, second to send
+        //     } else if($warningperiodThree <= $now && $warningmailscount = 2){
+        //         $warningstep = 3; // 2 warning mails yet, last to send
+        //     } else {
+        //         break; // stop for this record
+        //     }
 
-            if(isset($warningstep)){
-                // get user to whom warning mail should be send (teachers of course)
-                $role = $MoodleDBObj->getRecordFromDB('role', array('shortname' => 'editingteacher'));
-                $courseid = $record->course;
-                $coursecontext = context_course::instance($courseid);
-                $teachers = get_role_users($role->id, $coursecontext);
+        //     if(isset($warningstep)){
+        //         // get user to whom warning mail should be send (teachers of course)
+        //         $role = $MoodleDBObj->getRecordFromDB('role', array('shortname' => 'editingteacher'));
+        //         $courseid = $record->course;
+        //         $coursecontext = context_course::instance($courseid);
+        //         $teachers = get_role_users($role->id, $coursecontext);
 
-                mtrace('Preparing to send '.$warningstep.'warning mail to '.$teachers.'teachers ...'); // debug
+        //         mtrace('Preparing to send '.$warningstep.'warning mail to '.$teachers.'teachers ...'); // debug
 
-                // set mail properties and contents
-                $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id; // get coursemodule from module record id (in doku aufschreiben!!!)
+        //         // set mail properties and contents
+        //         $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id; // get coursemodule from module record id (in doku aufschreiben!!!)
 
-                $ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
+        //         $ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
 
-                switch ($warningstep){
+        //         switch ($warningstep){
 
-                    case 1:
-                        $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
-                    case 2:
-                        $warningmailsubject = get_string("warningmailsubjecttwo", "mod_exammanagement");
-                    case 3:
-                        $warningmailsubject = get_string("warningmailsubjectthree", "mod_exammanagement");
+        //             case 1:
+        //                 $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
+        //             case 2:
+        //                 $warningmailsubject = get_string("warningmailsubjecttwo", "mod_exammanagement");
+        //             case 3:
+        //                 $warningmailsubject = get_string("warningmailsubjectthree", "mod_exammanagement");
 
-                }
+        //         }
 
-                $warningmailcontent = get_string("warningmailcontentpartone", "mod_exammanagement"). $ExammanagementInstanceObj->moduleinstance->name .get_string("warningmailcontentparttwo", "mod_exammanagement"). $ExammanagementInstanceObj->getCourse()->fullname .get_string("warningmailcontentpartthree", "mod_exammanagement"). $ExammanagementInstanceObj->getDataDeletionDate() .get_string("warningmailcontentpartfour", "mod_exammanagement");
+        //         $warningmailcontent = get_string("warningmailcontentpartone", "mod_exammanagement"). $ExammanagementInstanceObj->moduleinstance->name .get_string("warningmailcontentparttwo", "mod_exammanagement"). $ExammanagementInstanceObj->getCourse()->fullname .get_string("warningmailcontentpartthree", "mod_exammanagement"). $ExammanagementInstanceObj->getDataDeletionDate() .get_string("warningmailcontentpartfour", "mod_exammanagement");
 
-                $warningmailids = array();
+        //         $warningmailids = array();
 
-                // send mail & save send warningmailid
-                foreach($teachers as $user){
-                    $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user, $warningmailsubject, $warningmailcontent);
+        //         // send mail & save send warningmailid
+        //         foreach($teachers as $user){
+        //             $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user, $warningmailsubject, $warningmailcontent);
                     
-                    mtrace('Mail with id '.$warningmailid.' send to user '.$user->id); // debug
+        //             mtrace('Mail with id '.$warningmailid.' send to user '.$user->id); // debug
                     
-                    array_push($warningmailids, $warningmailid);
-                }
+        //             array_push($warningmailids, $warningmailid);
+        //         }
 
-                array_push($deletionwarningmailidsArray, $warningmailids);
+        //         array_push($deletionwarningmailidsArray, $warningmailids);
 
-                // update module instance
+        //         // update module instance
 
-                mtrace('Almost done, updating module instance with warning mail id ...'); // debug
+        //         mtrace('Almost done, updating module instance with warning mail id ...'); // debug
 
-                $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailidsArray);
+        //         $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailidsArray);
 
-                $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        //         $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-            }
+        //     }
             
-        }
+        // }
 
-        // delete expired  exam data and instances
-        $select = "datadeletion IS NOT NULL AND datadeletion <= ".$now;
-        $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement", $select);
+        // // delete expired  exam data and instances
+        // $select = "datadeletion IS NOT NULL AND datadeletion <= ".$now;
+        // $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement", $select);
         
-        \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
+        // \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
     }
 }
