@@ -85,7 +85,7 @@ class configureTasksForm extends moodleform {
 
               //number of task
 
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$oldtaskcount.'</strong></span>'));
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$oldtaskcount.'</strong></span>'));
 
               //input field with points
               array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
@@ -107,7 +107,7 @@ class configureTasksForm extends moodleform {
             $newtaskcount = intval($oldtaskcount+1+$i);
 
             //number of task
-            array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$newtaskcount.'</strong></span>'));
+            array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$newtaskcount.'</strong></span>'));
 
             //input field with points
             array_push($tasks_array, $mform->createElement('text', 'task['.$newtaskcount.']', '', $attributes));
@@ -119,7 +119,7 @@ class configureTasksForm extends moodleform {
       }
 
       if(!$tasks && !$temptaskcount) {
-          array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
+          array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
           array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
 
           $mform->setType('task[1]', PARAM_FLOAT);

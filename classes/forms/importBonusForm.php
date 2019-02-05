@@ -95,7 +95,7 @@ class importBonusForm extends moodleform{
 
               //number of bonusstep
 
-              array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$count.'</strong></span>'));
+              array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$count.'</strong></span>'));
 
               //input field with points needed for bonus step
               array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints['.$count.']', '', $attributes));
@@ -109,7 +109,7 @@ class importBonusForm extends moodleform{
 
         } else {
 
-          array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
+          array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
           
           array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints[1]', '', $attributes));
           $mform->setType('bonussteppoints[1]', PARAM_FLOAT);

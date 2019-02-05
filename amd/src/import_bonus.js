@@ -67,7 +67,7 @@ define(['jquery'], function ($) {
           temp += 'margin: 0px; width: 70px;" min="0" step="0.01"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
           temp += newbonusstepcount + ']" style="display: none;"></div></div> ';
 
-          $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
+          $(".form-group:nth-of-type(5) .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
           $(".form-group:nth-of-type(6) .col-md-9").append(temp);
 
           $("input[name=bonusstepcount]").val(parseInt($("input[name=bonusstepcount]").val()) + 1);

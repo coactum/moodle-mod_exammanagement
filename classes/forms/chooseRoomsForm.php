@@ -72,7 +72,7 @@ class chooseRoomsForm extends moodleform {
     $mform->addElement('html', '<p>Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p>');
 
     ###### chooseRooms ######
-    $mform->addElement('html', '<div class="exammanagement-rooms"><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-2"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div><div class="col-xs-1"></div></div>');
+    $mform->addElement('html', '<div><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-2"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div><div class="col-xs-1"></div></div>');
 
     $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
     $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
@@ -103,7 +103,7 @@ class chooseRoomsForm extends moodleform {
 
           $svgStr = base64_decode($roomObj->seatingplan);
 
-          $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="svg collapse">'.$svgStr.'</div>');
+          $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_rooms_svg collapse">'.$svgStr.'</div>');
 
         } else {
           $mform->addElement('html', ' Nein ');

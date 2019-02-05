@@ -87,7 +87,7 @@ define(['jquery'], function ($) {
         temp += 'margin: 0px; width: 70px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
         temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
-        $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
+        $(".form-group:nth-of-type(5) .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
         $(".form-group:nth-of-type(6) .col-md-9").append(temp);
 
         var totalpoints = getTotalpoints();
