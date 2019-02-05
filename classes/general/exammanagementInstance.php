@@ -681,8 +681,8 @@ EOF;
 
 		$header = '';
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$footer = '--------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->moduleinstance->categoryid . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
-		$content = array('fullmessagehmtl' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
+		$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->moduleinstance->categoryid . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);
 		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162

@@ -62,7 +62,12 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timecreated = time();
     $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
-    $moduleinstance->password = base64_encode(password_hash($mform->get_data()->password, PASSWORD_DEFAULT));
+    
+    if(isset($mform->get_data()->password) && $mform->get_data()->password !== ''){
+        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->password, PASSWORD_DEFAULT));
+    } else {
+        $moduleinstance->password = NULL;
+    }
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 

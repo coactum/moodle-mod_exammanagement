@@ -90,10 +90,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
                 }
 
                 if($import){
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume angelegt', 'success');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), null, null, null);
                 } else {
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Standardräume konnten nicht importiert werden', 'error');
-
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Standardräume konnten nicht importiert werden', null, notification::NOTIFY_ERROR);
                 }
             }
 
