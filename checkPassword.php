@@ -35,11 +35,23 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$resetPW  = optional_param('resetPW', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+
+		if($MoodleObj->checkCapability('mod/exammanagement:resetpassword') && $resetPW == true){
+			$ExammanagementInstanceObj->moduleinstance->password = NULL;
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+			$MoodleObj->redirectToOverviewPage('beforeexam', 'Zurücksetzen des Passwortes erfolgreich.', 'success');
+		}
+
+		if(!isset($ExammanagementInstanceObj->moduleinstance->password)){
+			$MoodleObj->redirectToOverviewPage(NULL, NULL, NULL);
+		}
 
 		$MoodleObj->setPage('checkPassword');
 		$MoodleObj-> outputPageHeader();

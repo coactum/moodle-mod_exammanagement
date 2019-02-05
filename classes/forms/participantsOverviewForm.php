@@ -84,8 +84,17 @@ class participantsOverviewForm extends moodleform {
 
                 $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
 
-                $room = $participant->roomname;
-                $place = $participant->place;
+                if(isset($participant->roomname)){
+                    $room = $participant->roomname;
+                } else {
+                    $room = '-';
+                }
+
+                if(isset($participant->place)){
+                    $place = $participant->place;
+                } else {
+                    $place = '-';
+                }
 
                 $totalpoints = false;
 
@@ -141,28 +150,33 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '</td><td>');
 
-                    $mform->addElement('html', '<table class="table-sm"><tr>');
+                    if($ExammanagementInstanceObj->getTaskCount()){
 
-                    foreach( $tasks as $tasknumber => $taskmaxpoints){
-                        $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
+                            $mform->addElement('html', '<table class="table-sm"><tr>');
+
+                            foreach( $tasks as $tasknumber => $taskmaxpoints){
+                                $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
+                            }
+
+                            $mform->addElement('html', '</tr><tr>');
+
+                            foreach($tasks as $tasknumber => $taskmaxpoints){
+                                    
+                                $mform->addElement('html', '<td>');
+                                $mform->addElement('text', 'points['.$tasknumber.']', '', $attributes);
+                                $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
+
+                                if(isset($exampoints[$tasknumber-1])){
+                                    $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
+                                }
+                                $mform->addElement('html', '</td>');
+                            }
+
+                            $mform->addElement('html', '</tr></table>');
+                    } else {
+                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a>');
                     }
-
-                    $mform->addElement('html', '</tr><tr>');
-
-                    foreach($tasks as $tasknumber => $taskmaxpoints){
-                            
-                        $mform->addElement('html', '<td>');
-                        $mform->addElement('text', 'points['.$tasknumber.']', '', $attributes);
-                        $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
-
-                        if(isset($exampoints[$tasknumber-1])){
-                            $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
-                        }
-                        $mform->addElement('html', '</td>');
-                    }
-
-                    $mform->addElement('html', '</tr></table>');
-
+                    
                     $mform->addElement('html', '</td>');
                     
                     $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
@@ -174,22 +188,33 @@ class participantsOverviewForm extends moodleform {
 
                     if($gradingscale){
                         $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
-                        if($UserObj->getEnteredBonusCount()){
-                            if($participant->bonus){
-                                $mform->addElement('html', '<td>');
-                                $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                                $select->setSelected($participant->bonus);
-                                $mform->addElement('html', '</td>');
-                            } else {
-                                $mform->addElement('html', '<td>');
-                                $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                                $select->setSelected('0');
-                                $mform->addElement('html', '</td>');                            
-                            }
-                            $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
+                    } else {
+                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                    }
+
+                    if($UserObj->getEnteredBonusCount()){
+                        if($participant->bonus){
+                            $mform->addElement('html', '<td>');
+                            $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select->setSelected($participant->bonus);
+                            $mform->addElement('html', '</td>');
+                        } else {
+                            $mform->addElement('html', '<td>');
+                            $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select->setSelected('0');
+                            $mform->addElement('html', '</td>');                            
                         }
                     } else {
-                      $mform->addElement('html', '<td>-</td>');
+                        $mform->addElement('html', '<td>');
+                        $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                        $select->setSelected('0');
+                        $mform->addElement('html', '</td>');                            
+                    }
+
+                    if($gradingscale){
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
+                    } else {
+                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
                     }
                     
                     $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"></td>');
@@ -205,23 +230,27 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '<td>');
 
-                    $mform->addElement('html', '<table class="table-sm"><tr>');
+                    if($ExammanagementInstanceObj->getTaskCount()){
+                        $mform->addElement('html', '<table class="table-sm"><tr>');
 
-                    foreach($tasks as $tasknumber => $taskmaxpoints){
-                        $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
-                    }
-                    
-                    $mform->addElement('html', '</tr><tr>');
-
-                    foreach($tasks as $tasknumber => $taskmaxpoints){
-                        if(isset($exampoints[$tasknumber-1])){
-                            $mform->addElement('html', '<td>'.str_replace('.', ',',$exampoints[$tasknumber-1]).'</td>');
-                        } else {
-                            $mform->addElement('html', '<td> - </td>');
+                        foreach($tasks as $tasknumber => $taskmaxpoints){
+                            $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
                         }
+                        
+                        $mform->addElement('html', '</tr><tr>');
+    
+                        foreach($tasks as $tasknumber => $taskmaxpoints){
+                            if(isset($exampoints[$tasknumber-1])){
+                                $mform->addElement('html', '<td>'.str_replace('.', ',',$exampoints[$tasknumber-1]).'</td>');
+                            } else {
+                                $mform->addElement('html', '<td> - </td>');
+                            }
+                        }
+    
+                        $mform->addElement('html', '</tr></table>');
+                    } else {
+                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a>');
                     }
-
-                    $mform->addElement('html', '</tr></table>');
 
                     $mform->addElement('html', '</td>');
 
@@ -230,16 +259,24 @@ class participantsOverviewForm extends moodleform {
                     if($gradingscale){
                         $result = $UserObj->calculateResultGrade($participant);
                         $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
-                        if($UserObj->getEnteredBonusCount()){
-                            if($participant->bonus){
-                                $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
-                            } else {
-                                $mform->addElement('html', '<td>-</td>');                            
-                            }
-                            $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus)).'</td>');                    
+                    } else {
+                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                    }
+
+                    if($UserObj->getEnteredBonusCount()){
+                        if($participant->bonus){
+                            $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
+                        } else {
+                            $mform->addElement('html', '<td>-</td>');                            
                         }
                     } else {
-                      $mform->addElement('html', '<td>-</td>');
+                        $mform->addElement('html', '<td>-</td>');                            
+                    }
+
+                    if($gradingscale){
+                        $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus)).'</td>');                    
+                    } else {
+                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
                     }
 
                     $anchorid = $i-1;

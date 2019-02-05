@@ -109,14 +109,14 @@ $string['change_examresults'] = 'Change exam results';
 
 //configurePasswordForm.php
 $string['configure_password_str'] = 'Configure password';
-$string['configure_password'] = 'This page allows setting and modifying password for the plugin instance';
+$string['configure_password'] = 'This page allows setting and modifying password for the exam management';
 $string['password'] = 'Password';
-
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Enter password';
-$string['check_password'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
+$string['check_password'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['confirm_password'] = 'Confirm password';
+$string['reset_password'] = 'Reset password (only for administrators)';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
@@ -315,7 +315,7 @@ Each work step can be opened by clicking on the corresponding button. This will 
 The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your PANDA courses from accessing the sensitive contents of the exam organization. <br><br>
 Note: Students do not have access to this view. Instead, they will see all information of the exam which has been enabled for them in a separate view.';
 $string['helptext_configurePassword'] = 'Here goes the description of this feature site.';
-$string['helptext_checkPassword'] = 'A password for this exam management instance was set by the teacher. You have to enter it below to gain access to the content of this module.';
+$string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';

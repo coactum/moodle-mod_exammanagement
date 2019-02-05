@@ -130,4 +130,17 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
+        'mod/exammanagement:resetpassword'=> [
+        'riskbitmask' => RISK_PERSONAL, RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
 ];

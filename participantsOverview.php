@@ -49,8 +49,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-        if(!$ExammanagementInstanceObj->getInputResultsCount()){
-        $MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Prüfungsergebnisse eingetragen werden.', 'error');
+        if(!$UserObj->getParticipantsCount()){
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Es müssen erst Prüfungsteilnehmer importiert werden.', 'error');
+        } else if(!$ExammanagementInstanceObj->getRoomsCount()){
+            $MoodleObj->redirectToOverviewPage('beforeexam', 'Es müssen erst Prüfungsräume ausgewählt werden.', 'error');
         }
 
         $MoodleObj->setPage('participantsOverview');
