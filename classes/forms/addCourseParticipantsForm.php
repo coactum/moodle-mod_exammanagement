@@ -88,6 +88,7 @@ class addCourseParticipantsForm extends moodleform{
           }
         }
 
+        $mform->addElement('html', '<div class="exammanagement_overview">');
 
         if($moodleParticipantsArr || $noneMoodleParticipantsArr){
 
@@ -211,6 +212,8 @@ class addCourseParticipantsForm extends moodleform{
             $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
             $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
         }
+
+        $mform->addElement('html', '</div>');
 
         $mform->disable_form_change_checker();
     }

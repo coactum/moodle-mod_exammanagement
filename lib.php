@@ -63,8 +63,8 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     $moduleinstance->timecreated = time();
     $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
     
-    if(isset($mform->get_data()->password) && $mform->get_data()->password !== ''){
-        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->password, PASSWORD_DEFAULT));
+    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
     } else {
         $moduleinstance->password = NULL;
     }
@@ -89,6 +89,13 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+    $moduleinstance->categoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
+
+    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
+    } else {
+        $moduleinstance->password = NULL;
+    }
 
     return $DB->update_record('exammanagement', $moduleinstance);
 }

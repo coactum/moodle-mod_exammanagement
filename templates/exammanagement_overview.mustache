@@ -102,7 +102,7 @@ ajaxtoogleInformation = function(command, value){
 ajaxsetcorrectioncompletion = function(value){
 
 		$('.loadable').toggle();
-		var confirmed = confirm("Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiderbringlich gelöscht werden.");
+		var confirmed = confirm("Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.");
 		if(confirmed){
 			jQuery.ajax ({
 					url: './view.php',

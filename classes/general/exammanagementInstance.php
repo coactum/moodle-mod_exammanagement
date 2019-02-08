@@ -117,7 +117,7 @@ class exammanagementInstance{
 
 	public function ConcatHelptextStr($langstr){
 
-		$helptextstr= '';
+		$helptextstr= '<div class="exammanagement_overview">';
 		$helptextstr.= '<div class="panel panel-info helptextpanel collapse">';
 		$helptextstr.= '<div class="panel-heading">';
 		$helptextstr.= '<h4>'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
@@ -127,6 +127,7 @@ class exammanagementInstance{
 		$helptextstr.= '</div>';
 		$helptextstr.= '<div class="panel-footer">';
 		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
+		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 

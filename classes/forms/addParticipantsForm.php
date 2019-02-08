@@ -240,6 +240,8 @@ class addParticipantsForm extends moodleform{
 
             ###### view all temporary imported participants ######
 
+            $mform->addElement('html', '<div class="exammanagement_overview">');
+
             if($badMatriculationnumbersArr){
 
                 $mform->addElement('html', '<div class="panel panel-danger">');
@@ -459,6 +461,8 @@ class addParticipantsForm extends moodleform{
             } else {
               $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
             }
+
+            $mform->addElement('html', '</div>');
 
         } else {
 

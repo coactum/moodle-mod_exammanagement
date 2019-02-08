@@ -70,10 +70,10 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('header', get_string('security_password', 'mod_exammanagement'), get_string('security_password', 'mod_exammanagement'));
 
-        $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
-        $mform->setType('password', PARAM_TEXT);
-        $mform->addRule('password', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
-        $mform->addHelpButton('password', 'security_password', 'mod_exammanagement');
+        $mform->addElement('password', 'newpassword', get_string('password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->setType('newpassword', PARAM_TEXT);
+        $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('newpassword', 'security_password', 'mod_exammanagement');
 
         // Add standard grading elements.
         //$this->standard_grading_coursemodule_elements();
