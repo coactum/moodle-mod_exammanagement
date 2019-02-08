@@ -463,7 +463,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 													<div class="panel-body">
-															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.</p>
+															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden. <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!</p>
 													</div>
 													<div class="panel-footer">
 														{{#stateofplacescorrect}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
@@ -658,7 +658,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 													<div class="panel-body">
-														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.</p>
+														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
@@ -679,7 +679,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 													<div class="panel-body">
-														<p>Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.</p>
+														<p>Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}

@@ -198,7 +198,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $countSICK++;
             } else {
                 $result = $UserObj->calculateResultGrade($participant);
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus);
+                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $resultState, $participant->bonus);
 
                 if ($result == '-'){
                     $notRated++;
@@ -434,19 +434,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $room = $participant->roomname;
             $place = $participant->place;
 
+            $state = $UserObj->getExamState($participant);
+
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("A$rowCounter", $matrnr);
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("B$rowCounter", $lastname);
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("C$rowCounter", $firstname);
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("D$rowCounter", $room);
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("E$rowCounter", $place);
 
-            if($state == 'nt'){
-                $state = get_string("nt", "mod_exammanagement");
-            } else if ($state == 'fa'){
-                $state = get_string("fa", "mod_exammanagement");
-            } else if ($state == 'ill'){
-                $state = get_string("ill", "mod_exammanagement");
-            } else {
+            if($state == 'normal'){
                 $totalpoints = number_format($UserObj->calculateTotalPoints($participant), 2, ',', '');
 
                 if(!$totalpoints){

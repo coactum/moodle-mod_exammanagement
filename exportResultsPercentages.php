@@ -110,7 +110,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $pdf->MultiCell(130, 3, $date . ', ' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid), 0, 'C', 0, 0, 50, 42);
     $pdf->SetFont('helvetica', '', 10);
-    $pdf->Line(20, 55, 190, 55);
+
+    $pdf->SetTextColor(255, 0, 0);
+    $pdf->SetFont('helvetica', 'B', 10);
+    $pdf->MultiCell(130, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 50, 55);
+
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetFont('helvetica', '', 10);
+
+    $pdf->Line(20, 62, 190, 62);
     $pdf->SetXY(20, 65);
 
     $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
