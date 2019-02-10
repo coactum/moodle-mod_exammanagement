@@ -85,7 +85,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
  * @return bool True if successful, false otherwise.
  */
 function exammanagement_update_instance($moduleinstance, $mform = null) {
-    global $DB;
+    global $DB, $PAGE;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;

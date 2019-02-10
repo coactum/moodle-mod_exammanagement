@@ -264,7 +264,7 @@ class participantsOverviewForm extends moodleform {
                     }
 
                     if($UserObj->getEnteredBonusCount()){
-                        if($participant->bonus){
+                        if(isset($participant->bonus)){
                             $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
                         } else {
                             $mform->addElement('html', '<td>-</td>');                            
