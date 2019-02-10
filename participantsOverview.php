@@ -42,7 +42,7 @@ $edit  = optional_param('edit', 0, PARAM_INT);
 $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$UserObj = User::getInstance($id, $e);
 $LdapManagerObj = ldapManager::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){

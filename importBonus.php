@@ -46,7 +46,7 @@ $bonusstepcount  = optional_param('bonusstepcount', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$UserObj = User::getInstance($id, $e);
 $LdapManagerObj = LdapManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){

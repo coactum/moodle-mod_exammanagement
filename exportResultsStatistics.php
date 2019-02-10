@@ -43,7 +43,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -136,7 +136,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B32:C34')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         // set general exam information
-        $semester = strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid);
+        $semester = $ExammanagementInstanceObj->getCleanCourseCategoryName();
         $examdate = date('d.m.Y', $ExammanagementInstanceObj->getExamtime());
         $start_time = date('H:i', $ExammanagementInstanceObj->getExamtime());
         $end_time = '';
@@ -498,7 +498,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         //generate filename without umlaute
         $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
         $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("examresults_statistics", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.xlsx';
+        $filenameUmlaute = get_string("examresults_statistics", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.xlsx';
         $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
         header('Content-Disposition: attachment;filename="'.$filename.'"');

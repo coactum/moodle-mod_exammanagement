@@ -56,7 +56,7 @@ global $PAGE, $CFG, $USER, $SESSION;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$UserObj = User::getInstance($id, $e);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 
@@ -143,11 +143,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         // if plugin instance was moved to new category:
     
         $oldcategoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
-        $coursecategoryid = substr(strtolower(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20); //set course category
+        $coursecategoryid = $PAGE->category->id; //set course category
     
         if ($oldcategoryid !== $coursecategoryid) {
     
-        // update categoryid
+            // update categoryid
             $ExammanagementInstanceObj->moduleinstance->categoryid = $coursecategoryid;
             $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
     

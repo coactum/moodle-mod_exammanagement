@@ -35,20 +35,18 @@ class User{
 	protected $id;
 	protected $e;
 
-	private function __construct($id, $e, $categoryid) {
+	private function __construct($id, $e) {
 		$this->id = $id;
 		$this->e = $e;
-		$this->categoryid = $categoryid;
-
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $categoryid){
+	public static function getInstance($id, $e){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new User($id, $e, $categoryid);
+				$inst = new User($id, $e);
 			}
 			return $inst;
 

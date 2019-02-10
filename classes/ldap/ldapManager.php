@@ -97,9 +97,8 @@ class ldapManager{
 		require_once(__DIR__.'/../general/User.php');
 		require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
+		$UserObj = User::getInstance($this->id, $this->e);
 
 			$temp = explode('_', $matrNr);
 
@@ -121,9 +120,8 @@ class ldapManager{
 		require_once(__DIR__.'/../general/User.php');
 		require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-		$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
+		$UserObj = User::getInstance($this->id, $this->e);
 
 			$temp = explode('_', $matrNr);
 
@@ -141,8 +139,7 @@ class ldapManager{
 			require_once(__DIR__.'/../general/User.php');
 			require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-			$exammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-			$UserObj = User::getInstance($this->id, $this->e, $exammanagementInstanceObj->moduleinstance->categoryid);
+			$UserObj = User::getInstance($this->id, $this->e);
 
 			if($userid !== NULL && $userid !== false){
 				$user = $UserObj->getMoodleUser($userid);

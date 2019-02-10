@@ -37,7 +37,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->moduleinstance->categoryid);
+$UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 define( "SEPARATOR", chr(9) ); //Tabulator
@@ -109,7 +109,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         //generate filename without umlaute
         $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
         $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
+        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
         $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
         //convert string to Latin1
@@ -126,7 +126,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             //generate filename without umlaute
             $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
             $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . strtoupper($ExammanagementInstanceObj->moduleinstance->categoryid) . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
+            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
             $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
             if(count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))){

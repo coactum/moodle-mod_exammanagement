@@ -113,6 +113,19 @@ class exammanagementInstance{
  		$url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
  		return $url;
+	 }
+	 
+	 public function getCleanCourseCategoryName(){
+
+		global $PAGE;
+
+		$categoryname = substr(strtoupper(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20);
+
+ 		if ($categoryname) {
+			return $categoryname;
+		} else {
+			return get_string('coursecategory_name_no_semester', 'mod_exammanagement');
+		}
  	}
 
 	public function ConcatHelptextStr($langstr){
@@ -287,7 +300,7 @@ EOF;
 
  	public function checkPhaseCompletion($phase){
 
-		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
+		$UserObj = User::getInstance($this->id, $this->e);
 
  		switch ($phase){
 
@@ -585,7 +598,7 @@ EOF;
 
 	public function getInputResultsCount(){
 
-		$UserObj = User::getInstance($this->id, $this->e, $this->moduleinstance->categoryid);
+		$UserObj = User::getInstance($this->id, $this->e);
 
 		$users = $UserObj->getAllParticipantsWithResults();
 
@@ -682,7 +695,7 @@ EOF;
 
 		$header = '';
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->moduleinstance->categoryid . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+		$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->getCleanCourseCategoryName() . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);

@@ -102,7 +102,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
 
         // Define field importfileheaders to be added to exammanagement.
         $table = new xmldb_table('exammanagement_temp_part');
-        $field = new xmldb_field('categoryid', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $field = new xmldb_field('categoryid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
  
         // Conditionally launch add field for exammanagement.
         if (!$dbman->field_exists($table, $field)) {
@@ -116,7 +116,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
           $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
           $table->add_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
           $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-          $table->add_field('categoryid', XMLDB_TYPE_TEXT, null, XMLDB_NOTNULL, null, null, null);
+          $table->add_field('categoryid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
           $table->add_field('moodleuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
           $table->add_field('imtlogin', XMLDB_TYPE_CHAR, '25', null, null, null, null);
           $table->add_field('firstname', XMLDB_TYPE_CHAR, '50', null, null, null, null);

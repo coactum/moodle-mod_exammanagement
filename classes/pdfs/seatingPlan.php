@@ -48,7 +48,7 @@ class seatingPlan extends TCPDF {
     $this->SetFont('helvetica', 'B', 22);
     $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
     $this->SetFont('helvetica', 'B', 14);
-    $this->MultiCell(130, 5, strtoupper($ExammanagementInstanceObj->getModuleinstance()->categoryid) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
+    $this->MultiCell(130, 5, strtoupper($ExammanagementInstanceObj->getCleanCourseCategoryName()) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
     $this->MultiCell(26, 5, $ExammanagementInstanceObj->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
   }
 

@@ -354,6 +354,7 @@ $string['err_js_internal_error'] = 'Internal error. Please retry.';
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
+$string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
 
 //add new module instance and mod_form.php
 $string['modulename_help'] = 'The PANDA exammanagement allows you easy organizing the exams for your course and makes it possible to manage even large exams with many participants.';

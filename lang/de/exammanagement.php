@@ -381,6 +381,7 @@ $string['err_js_internal_error'] = 'Interner Fehler. Bitte erneut versuchen.';
 $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
 $string['pluginname'] = 'Prüfungsorganisation';
+$string['coursecategory_name_no_semester'] = 'SEMESTERLOS';
 
 //add new module instance and mod_form.php
 $string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
