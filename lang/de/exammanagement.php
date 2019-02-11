@@ -111,12 +111,13 @@ $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 $string['configure_password_str'] = 'Passwort konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
+$string['reset_password'] = 'Passwort zurücksetzen';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Passwort eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['confirm_password'] = 'Passwort bestätigen';
-$string['reset_password'] = 'Passwort zurücksetzen (nur für Administratoren)';
+$string['reset_password_admin'] = 'Passwort zurücksetzen (nur für Administratoren)';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
@@ -384,13 +385,17 @@ $string['pluginname'] = 'Prüfungsorganisation';
 $string['coursecategory_name_no_semester'] = 'SEMESTERLOS';
 
 //add new module instance and mod_form.php
-$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmern bequem verwalten.';
+$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmerinnen und Teilnehmern bequem verwalten.';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
 $string['pluginadministration'] = 'Administration der Prüfungsverwaltung';
 $string['security_password'] = 'Passwortschutz';
+$string['new_password'] = 'Neues Passwort';
 $string['security_password_help'] = 'Durch das Festlegen eines Sicherheitspasswortes können Sie den Zugang zu dieser Prüfungsorganisation gegenüber anderen PANDA-Benutzern (z. B. Ihren studentischen Tutoren) begrenzen. Diese müssen dann zunächst das Passwort eingeben, bevor sie Zugang zu den Inhalten der Prüfungsorganisation erhalten.';
+$string['old_password'] = 'Altes Passwort (nur benötigt falls ein bereits gesetztes Passwort geändert werden soll)';
+$string['old_password_help'] = 'Falls ein bereits gesetztes Passwort geändert werden soll muss dieses hier eintragen werden.';
+$string['incorrect_password_change'] = 'Das alte Passwort ist falsch. Passwortänderung abgebrochen';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';

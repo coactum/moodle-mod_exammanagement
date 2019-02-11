@@ -111,12 +111,13 @@ $string['change_examresults'] = 'Change exam results';
 $string['configure_password_str'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying password for the exam management';
 $string['password'] = 'Password';
+$string['reset_password'] = 'Reset password';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Enter password';
 $string['check_password'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['confirm_password'] = 'Confirm password';
-$string['reset_password'] = 'Reset password (only for administrators)';
+$string['reset_password_admin'] = 'Reset password (only for administrators)';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
@@ -357,13 +358,17 @@ $string['pluginname'] = 'Exam management';
 $string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
 
 //add new module instance and mod_form.php
-$string['modulename_help'] = 'The PANDA exammanagement allows you easy organizing the exams for your course and makes it possible to manage even large exams with many participants.';
+$string['modulename_help'] = 'The PANDA exammanagement allows you the easy organization of exams for your course and makes it possible to manage even large exams with many participants.';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'exam management administration';
 $string['security_password'] = 'Security Password';
+$string['new_password'] = 'New password';
 $string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organisation. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organisation.';
+$string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
+$string['old_password_help'] = 'If some already existing password should be changed you need to enter it here.';
+$string['incorrect_password_change'] = 'Incorrect password. Terminated password change';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';

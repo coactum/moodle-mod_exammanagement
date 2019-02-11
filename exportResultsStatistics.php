@@ -215,7 +215,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             switch ($participant->bonus) { // for table 2 sheet 2
-                case null:
+                case '0':
                     $bonusstepzero++;
                     break;
                 case '1':

@@ -92,12 +92,19 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->categoryid = $PAGE->category->id; //set course category
 
     if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
-        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
-    } else {
-        $moduleinstance->password = NULL;
+
+        $existingPW = base64_decode($DB->get_record('exammanagement', array('id'=>$moduleinstance->instance))->password);
+
+        if (!isset($existingPW) || $existingPW =='' || (isset($existingPW) && password_verify($mform->get_data()->oldpassword, $existingPW))){
+            $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT)); 
+           
+        } else {
+            throw new Exception(get_string('incorrect_password_change', 'mod_exammanagement'));
+        }
     }
 
     return $DB->update_record('exammanagement', $moduleinstance);
+
 }
 
 /**

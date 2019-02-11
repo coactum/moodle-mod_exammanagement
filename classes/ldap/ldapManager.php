@@ -26,7 +26,6 @@ namespace mod_exammanagement\ldap;
 
 use mod_exammanagement\general\MoodleDB;
 use mod_exammanagement\general\User; // only for testing without real ldap!
-use mod_exammanagement\general\exammanagementInstance; // only for testing without real ldap!
 use Exception;
 
 defined('MOODLE_INTERNAL') || die();
@@ -94,11 +93,8 @@ class ldapManager{
 	}
 
 	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
-		require_once(__DIR__.'/../general/User.php');
-		require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -117,11 +113,8 @@ class ldapManager{
 	}
 
 	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
-		require_once(__DIR__.'/../general/User.php');
-		require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-		$MoodleDBObj = MoodleDB::getInstance($this->id, $this->e);
-		$UserObj = User::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -137,7 +130,6 @@ class ldapManager{
 
 	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
 			require_once(__DIR__.'/../general/User.php');
-			require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 			$UserObj = User::getInstance($this->id, $this->e);
 

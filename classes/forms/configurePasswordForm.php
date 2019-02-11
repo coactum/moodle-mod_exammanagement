@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\Moodle;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,6 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG, $SESSION;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/Moodle.php');
 
 class configurePasswordForm extends moodleform {
 
@@ -41,9 +43,16 @@ class configurePasswordForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configure_password_str', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-5">'.get_string('configure_password_str', 'mod_exammanagement').'</h3>');
         $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '<div class="col-xs-5">');
+        if($ExammanagementInstanceObj->getModuleinstance()->password){
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/configurePassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
+        }
+        
+        $mform->addElement('html', '</div>');
         $mform->addElement('html', '</div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configurePassword'));

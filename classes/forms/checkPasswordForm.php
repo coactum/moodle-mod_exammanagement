@@ -50,7 +50,7 @@ class checkPasswordForm extends moodleform {
         $mform->addElement('html', '<div class="col-xs-5">');
 
         if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password_admin", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password_admin", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div>');
