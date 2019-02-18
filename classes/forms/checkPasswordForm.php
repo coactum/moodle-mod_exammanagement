@@ -46,17 +46,21 @@ class checkPasswordForm extends moodleform {
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $mform->addElement('html', '<div class="row"><h3 class="col-xs-5">'.get_string('check_password_str', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
         $mform->addElement('html', '<div class="col-xs-5">');
 
         if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password_admin", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password_admin", "mod_exammanagement").'</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password_admin", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password_admin", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '</div>');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('checkPassword'));
+        if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
+            $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('checkPasswordAdmin'));
+        } else {
+            $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('checkPassword'));
+        }
 
          $mform->addElement('html', '<p>'.get_string('check_password', 'mod_exammanagement').'</p>');
          

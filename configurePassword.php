@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		if($resetPW == true){
 			$ExammanagementInstanceObj->moduleinstance->password = NULL;
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Zurücksetzen des Passwortes erfolgreich.', 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_successful', 'mod_exammanagement'), 'success');
 		}
 
 		$MoodleObj->setPage('configurePassword');
@@ -60,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('cancel_form', 'mod_exammanagement'), 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -73,9 +73,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		  $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 		  if($update){
-			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort festgelegt', 'success');
+			  $MoodleObj->redirectToOverviewPage('beforeexam', '', '');
 		  } else {
-			  $MoodleObj->redirectToOverviewPage('beforeexam', 'Passwort konnte nicht festgelegt werden', 'error');
+			  $MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_could_not_be_set', 'mod_exammanagement'), 'error');
 		  }
 
 		} else {

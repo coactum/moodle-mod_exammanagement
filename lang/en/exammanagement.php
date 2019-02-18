@@ -112,12 +112,15 @@ $string['configure_password_str'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying password for the exam management';
 $string['password'] = 'Password';
 $string['reset_password'] = 'Reset password';
+$string['password_could_not_be_set'] = 'Password could not be set';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Enter password';
-$string['check_password'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
+$string['check_password'] = 'A password for this exam organization was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['confirm_password'] = 'Confirm password';
 $string['reset_password_admin'] = 'Reset password (only for administrators)';
+$string['wrong_password'] = 'Wrong password. Please retry.';
+$string['password_reset_successful'] = 'Password reset successful.';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
@@ -238,7 +241,7 @@ $string['bonussteps'] = 'Bonus steps';
 $string['resultwithbonus'] = 'Result with bonus';
 $string['edit_user'] = 'Edit user';
 $string['save_changes'] = 'Save changes';
-$string['cancel'] = 'Back to exam organisation';
+$string['cancel'] = 'Back to exam organization';
 $string['normal'] = 'Normal';
 $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
@@ -305,18 +308,25 @@ $string['examreview_dateroom'] = 'Date and rooms for exam review';
 $string['examreview_date'] = 'Date';
 $string['examreview_room'] = 'Rooms (enter free text)';
 
+// forms (common)
+$string['cancel_form'] = 'Operation canceled';
+
 //helptexts
 $string['help'] = 'Help';
-
 $string['helptext_str'] = 'Help text';
-$string['helptext_link'] = 'A detailed explanation of the mentioned elements and functions can be found at the "IMT HilfeWiki" under the following link:';
+$string['helptext_link'] = 'A detailed explanation of all elements and functions of the exam management can be found at the "IMT HilfeWiki" under the following link:';
+$string['helptext_open'] = 'Open/close helptext';
 $string['helptext_overview']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
 These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing status is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
 Each work step can be opened by clicking on the corresponding button. This will appear as soon as all other required steps have been completed.<br><br>
 The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your PANDA courses from accessing the sensitive contents of the exam organization. <br><br>
 Note: Students do not have access to this view. Instead, they will see all information of the exam which has been enabled for them in a separate view.';
-$string['helptext_configurePassword'] = 'Here goes the description of this feature site.';
+$string['helptext_configurePassword'] = 'On this page, you can set or change a password for the exam organization. This password has to be entered by every teacher of the PANDA course in order to access the contents of the exam organisation.<br><br>
+To set a password, it must initially be entered in the first and then confirmed in the second field.<br><br>
+Remember to choose your password with sufficient security and especially do not use a password that you already use elsewhere (especially not in the context of university!).<br><br>
+By clicking on the button "Reset password" you can revoke the password protection for the exam organisation.';
 $string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
+$string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br> Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
@@ -350,6 +360,8 @@ $string['err_filloutfield'] = 'Please fill out field';
 $string['err_nofile'] = 'Please provide file';
 $string['err_noalphanumeric'] = 'Contains invalid chars';
 $string['err_js_internal_error'] = 'Internal error. Please retry.';
+$string['err_password_incorrect'] = 'Password is not matching. Please enter again.';
+$string['err_novalidpassword'] = 'Not a valid password.';
 
 //universal
 $string['modulename'] = 'Exam management';
@@ -365,7 +377,7 @@ $string['messageprovider:exam management messages'] = 'exam management messages'
 $string['pluginadministration'] = 'exam management administration';
 $string['security_password'] = 'Security Password';
 $string['new_password'] = 'New password';
-$string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organisation. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organisation.';
+$string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organization. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organization.';
 $string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
 $string['old_password_help'] = 'If some already existing password should be changed you need to enter it here.';
 $string['incorrect_password_change'] = 'Incorrect password. Terminated password change';

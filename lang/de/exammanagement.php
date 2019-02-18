@@ -112,12 +112,15 @@ $string['configure_password_str'] = 'Passwort konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 $string['reset_password'] = 'Passwort zurücksetzen';
+$string['password_could_not_be_set'] = 'Passwort konnte nicht festgelegt werden';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Passwort eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['confirm_password'] = 'Passwort bestätigen';
 $string['reset_password_admin'] = 'Passwort zurücksetzen (nur für Administratoren)';
+$string['wrong_password'] = 'Passwort falsch. Bitte erneut versuchen.';
+$string['password_reset_successful'] = 'Zurücksetzen des Passwortes erfolgreich.';
 
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
@@ -305,19 +308,26 @@ $string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
 $string['examreview_date'] = 'Datum';
 $string['examreview_room'] = 'Räume (als Freitext eintragen)';
 
+// forms (common)
+$string['cancel_form'] = 'Vorgang abgebrochen';
+
 //helptexts
 $string['help'] = 'Hilfe';
-
 $string['helptext_str'] = 'Hilfetext';
-$string['helptext_link'] = 'Eine ausführliche Erläuterung der genannten Elemente und Funktionen findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
-$string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. DozentInnen und/oder deren MitarbeiterInnen können hier alle für das Durchführen einer Prüfung nötigen und hilfreichen Arbeitsschritte ansehen. <br /><br />
+$string['helptext_link'] = 'Eine ausführliche Erläuterung aller Elemente und Funktionen der Prüfungsorganisation findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
+$string['helptext_open'] = 'Hilfetext öffnen/schließen';
+$string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen & Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
 Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können.
 Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />
-Jeder Arbeitsschritt kann durch einen Klick auf den entsprechenden Button geöffnet werden. Dieser erscheint, sobald alle für einen Arbeitsschritte vorrausgesetzten anderen Schritte erfüllt sind. <br /><br />
-Durch den Button "Passwort konfigurieren“ können Sie zudem ein Passwort (neu) festlegen, welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre PANDA Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
+Jeder Arbeitsschritt kann nach einem Klick auf den entsprechenden Button durchgeführt werden. Dieser erscheint, sobald alle für einen Arbeitsschritte nötigen anderen Schritte erfüllt sind. <br /><br />
+Durch den Button "Passwort konfigurieren“ können Sie zudem ein Passwort festlegen (oder ändern), welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre PANDA Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zum Prüfungstermin.';
-$string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
-$string['helptext_configurePassword'] = 'Hier kann ein Passwort für die Prüfungsorganisation konfiguriert werden ...';
+$string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können.';
+$string['helptext_checkPasswordAdmin'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br> <br> Als Administrator können Sie hier auf Wunsch der oder des Lehrenden das Passwort der Prüfungsorganisation zurücksetzen. Alle Lehrenden des PANDA-Kurses werden darüber per PANDA-Nachricht benachrichtigt.';
+$string['helptext_configurePassword'] = 'Auf dieser Seite kann ein Passwort für die Prüfungsorganisation gesetzt oder geändert werden. Dieses muss ab dann von jeder oder jedem Lehrenden des PANDA-Kurses eingegeben werden, um auf die Inhalte der Prüfungsorganisation zugreifen zu können. <br><br>
+Um ein Passwort zu setzen muss dieses zunächst in das erste Feld eingegeben und dann im zweiten Feld bestätigt werden.<br><br>
+Denken Sie daran, ihr Passwort hinreichend sicher zu wählen und nehmen Sie vor allem kein Kennwort, dass Sie bereits anderswo als Passwort verwenden (vor allem nicht im Universitätskontext!).<br><br>
+Durch einen Klick auf den Button "Passwort zurücksetzen" können Sie den Passwortschutz für die Prüfungsorganisation wieder aufheben.';
 $string['helptext_addRooms']= 'Auf dieser Seite kann eine Liste aller im System verfügbaren möglichen <strong>Prüfungsräume</strong> angesehen und einer oder mehrere davon als Raum für die aktuelle Prüfung ausgewählt werden. <br /> <br />
 Zudem können nach einem Klick auf den Button „Neue Räume hinzufügen“ auch eigene potenzielle Prüfungsräume zur Liste hinzugefügt werden. <br /> <br />
 Um einen Raum als Prüfungsraum auszuwählen muss zunächst die Box links neben dessen Namen angeklickt werden. Es besteht auch die Möglichkeit, durch einen Klick auf die Box neben dem Schriftzug „Alle aus-/abwählen“ alle in der Liste stehenden Räume auszuwählen. Ein Klick auf den Button „Räume für Prüfung auswählen“ speichert die gewählten Räume als Prüfungsräume. Ist ein Raum bereits markiert wurde er bereits als Raum für die Prüfung gespeichert.<br /> <br />
@@ -377,6 +387,8 @@ $string['err_filloutfield'] = 'Bitte Feld ausfüllen';
 $string['err_nofile'] = 'Bitte Datei auswählen';
 $string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
 $string['err_js_internal_error'] = 'Interner Fehler. Bitte erneut versuchen.';
+$string['err_password_incorrect'] = 'Passwort nicht identisch. Bitte erneut eingeben.';
+$string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
