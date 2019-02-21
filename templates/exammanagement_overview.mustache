@@ -164,14 +164,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}exam_rooms, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																		{{#rooms}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		{{^rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																		{{#rooms}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		{{^rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}exam_rooms, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																{{#rooms}}<p> Es wurden bereits die folgenden <strong> {{rooms}} Räume </strong> ausgewählt: <strong>{{roomnames}}</strong></p>{{/rooms}}
@@ -185,14 +183,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																		{{#hrexamtime}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		{{^hrexamtime}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																		{{#hrexamtime}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		{{^hrexamtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															{{#hrexamtime}}<p> Die Prüfung findet am <strong> {{hrexamtime}} </strong> statt.</p>{{/hrexamtime}}
@@ -208,14 +204,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{#participants}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	{{^participants}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{#participants}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	{{^participants}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																{{#participants}}<p> Zur Prüfung sind <strong> {{participants}} Teilnehmerinnen und Teilnehmer </strong> angemeldet.</p>{{/participants}}
@@ -229,14 +223,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}exam_tasks, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{#taskcount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	{{^taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{#taskcount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	{{^taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}exam_tasks, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															{{#taskcount}}<p> Es wurden bereits <strong> {{taskcount}} Prüfungsaufgaben </strong> mit insgesamt <strong>{{tasktotalpoints}} Punkten </strong> angelegt.</p>{{/taskcount}}
@@ -252,14 +244,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-info{{/textfield}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}freetext_field, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{#textfield}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
-																	{{^textfield}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{#textfield}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	{{^textfield}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}freetext_field, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																{{#textfield}}<p> Im Textfeld steht folgender Inhalt: {{textfield}}</p>{{/textfield}}
@@ -273,13 +263,11 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{^participants}}<span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer versendet werden.</p>
@@ -313,16 +301,14 @@ ajaxsetcorrectioncompletion = function(value){
                         <div class="col-xs-6">
 														<div class="panel {{#stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}{{^stateofplacescorrect}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/stateofplacescorrect}}">
 															<div class="panel-heading">
-																<div class="row">
-																	<h3 class="panel-title col-xs-4">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
-																	<span class="statebar col-xs-8">
-																			{{#stateofplacescorrect}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																			{{^stateofplacescorrect}}{{#participants}}{{#rooms}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
-																			{{^participants}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																			{{^rooms}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																			<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																	<span class="statebar pull-right">
+																			{{#stateofplacescorrect}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			{{^stateofplacescorrect}}{{#participants}}{{#rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/stateofplacescorrect}}
+																			{{^participants}}<span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span>{{/participants}}
+																			{{^rooms}}<span class="label label-danger"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+																			<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
-																</div>
+																	<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
 																{{#stateofplacescorrect}}<p><strong>{{participants}}</strong> Sitzplätze wurden erfolgreich zugewiesen.</p>{{/stateofplacescorrect}}
@@ -337,13 +323,11 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
@@ -358,14 +342,12 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-6">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-6">
-																{{#hrexamtime}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
-																<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-																{{^hrexamtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+															<span class="statebar pull-right">
+																{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+																<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																{{^hrexamtime}}<span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 														{{#datetimevisible}}
@@ -382,14 +364,12 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
@@ -404,23 +384,19 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}set_visibility_of_examrooms_and_places, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
+															<span class="statebar pull-right">
 																{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}set_visibility_of_examrooms_and_places, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 														<div class="row">
 																<div class="col-xs-6">
-																		<div class="row">
-																				<strong class="col-xs-6">{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
-																				<span class="col-xs-6">
-																					{{#stateofplacescorrect}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
-																					<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-																				</span>
-																		</div>
+																		<span class="pull-right">
+																				{{#stateofplacescorrect}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
+																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																		</span>
+																		<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
 																		{{#roomvisible}}
 																				<p class="roomVisible collapse.show">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="roomNotVisible collapse">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
@@ -431,13 +407,11 @@ ajaxsetcorrectioncompletion = function(value){
 																		{{/roomvisible}}
 																</div>
 																<div class="col-xs-6">
-																		<div class="row">
-																					<strong class="col-xs-8">{{#str}}places, mod_exammanagement{{/str}}</strong>
-																					<span class="col-xs-4">
-																						{{#stateofplacescorrect}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
-																						<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-																					</span>
-																		</div>
+																		<span class="pull-right">
+																				{{#stateofplacescorrect}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/stateofplacescorrect}}
+																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																		</span>
+																		<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
 																		{{#placevisible}}
 																				<p class="placeVisible collapse.show">Die Informationen zu den Sitzplätzen wurden für die Teilnehmer sichtbar geschaltet.</p>
 																				<p class="placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
@@ -454,13 +428,11 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 												<div class="panel {{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																	{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																	{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden. <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!</p>
@@ -489,16 +461,14 @@ ajaxsetcorrectioncompletion = function(value){
 								</a>
 							</div>
 								<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
-		              <div class="panel-body row">
-											<div class="col-xs-6">
+		              <div class="panel-body">
+											<span>
 													{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
-											</div>
-											<div class="col-xs-6">
-													<span class="pull-right">
+											</span>
+											<span class="pull-right">
 														{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
-													</span>
-											</div>
-											{{^hrexamtime}}{{^roomnames}}<p class="col-xs-12 text-xs-center">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
+											</span>
+											{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
 		              </div>
 							</div>
             </div>
@@ -522,14 +492,12 @@ ajaxsetcorrectioncompletion = function(value){
                         <div class="col-xs-6">
 														<div class="panel {{^bonuscount}}{{#stateofplacescorrect}}panel-info{{/stateofplacescorrect}}{{/bonuscount}}{{^bonuscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
 															<div class="panel-heading">
-																<div class="row">
-																	<h3 class="panel-title col-xs-6">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
-																	<span class="statebar col-xs-6">
-																		{{#bonuscount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuscount}}
-																		{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																	<span class="statebar pull-right">
+																		{{#bonuscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuscount}}
+																		{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																	</span>
-																</div>
+																	<h3 class="panel-title">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
 																	{{#bonuscount}}<p>Es wurden bisher Bonusnotenschritte für <strong>{{bonuscount}} / {{participants}}</strong> Teilnehmende importiert.</p>{{/bonuscount}}
@@ -543,14 +511,12 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 													<div class="panel {{^gradingscale}}panel-info{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-6">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-6">
-																	{{#gradingscale}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	{{^gradingscale}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	{{^gradingscale}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																{{#gradingscale}}<p>Es wurde bereits ein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
@@ -566,16 +532,14 @@ ajaxsetcorrectioncompletion = function(value){
                         <div class="col-xs-6">
 														<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}panel-warning{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}{{^taskcount}}panel-danger{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{#stateofplacescorrect}}{{^taskcount}}panel-danger{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}{{#taskcount}}panel-danger{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}">
 															<div class="panel-heading">
-																<div class="row">
-																	<h3 class="panel-title col-xs-4">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
-																	<span class="statebar col-xs-8">
-																		{{#resultscount}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																		{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
-																		{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																		{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																		<span class="label label-info pull-right" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+																	<span class="statebar pull-right">
+																		{{#resultscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																		{{^resultscount}}{{#stateofplacescorrect}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/stateofplacescorrect}}{{/resultscount}}
+																		{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																		{{^taskcount}}<span class="label label-danger"  title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 																	</span>
-																</div>
+																	<h3 class="panel-title">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
 																{{#resultscount}}<p>Es wurden bisher <strong>{{resultscount}} / {{participants}}</strong> Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
@@ -589,15 +553,13 @@ ajaxsetcorrectioncompletion = function(value){
 											<div class="col-xs-6">
 													<div class="panel {{#stateofplacescorrect}}{{#resultscount}}panel-info{{/resultscount}}{{/stateofplacescorrect}}{{^resultscount}}{{#stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}{{#resultscount}}{{^stateofplacescorrect}}panel-success{{/stateofplacescorrect}}{{/resultscount}}{{^resultscount}}{{^stateofplacescorrect}}panel-danger{{/stateofplacescorrect}}{{/resultscount}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																			{{^stateofplacescorrect}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
-																			{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																	 		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																			{{^stateofplacescorrect}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/stateofplacescorrect}}
+																			{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																	 		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																	</span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																<p> Hier können bereits eingegebene Prüfungsergebnisse angesehen werden.</p>
@@ -610,14 +572,12 @@ ajaxsetcorrectioncompletion = function(value){
                     </div>
 										<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 											<div class="panel-heading">
-												<div class ="row">
-													<h3 class="panel-title col-xs-6">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
-													<span class="statebar col-xs-6">
-														{{#resultscount}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
-														<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-														{{^datadeletiondate}}{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
+													<span class="statebar pull-right">
+														{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+														{{^datadeletiondate}}{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}{{/datadeletiondate}}
 													</span>
-												</div>
+													<h3 class="panel-title">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
 											</div>
 											<div class="panel-body">
 												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deshalb aus Datenschutzgründen gelöscht werden, sobald sie nicht mehr benötigt werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigt haben haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.</p>
@@ -648,14 +608,12 @@ ajaxsetcorrectioncompletion = function(value){
                       <div class="col-xs-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
@@ -668,15 +626,13 @@ ajaxsetcorrectioncompletion = function(value){
                       <div class="col-xs-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																	{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																	{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																	{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 														<p>Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
@@ -691,14 +647,12 @@ ajaxsetcorrectioncompletion = function(value){
                       <div class="col-xs-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 															<p>Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.</p>
@@ -711,14 +665,12 @@ ajaxsetcorrectioncompletion = function(value){
                       <div class="col-xs-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
-														<div class="row">
-															<h3 class="panel-title col-xs-4">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
-															<span class="statebar col-xs-8">
-																{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																{{^resultscount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+															<span class="statebar pull-right">
+																{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																{{^resultscount}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
-														</div>
+															<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
 															<p>Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.</p>
@@ -763,17 +715,15 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}date_and_room_exam_review, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																		{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																		<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																		{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																		{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}date_and_room_exam_review, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															{{#examreviewtime}}{{#examreviewroom}}<p> Die Klausureinsicht findet am <strong> {{examreviewtime}} </strong> in Raum <strong> {{examreviewroom}}</strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
@@ -789,16 +739,14 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 														<div class="panel-heading">
-															<div class ="row">
-																<h3 class="panel-title col-xs-4">{{#str}}set_visibility_of_exam_review_information, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch pull-right loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoogleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																	<i class="fa fa-spinner fa-pulse fa-fw pull-right loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^examreviewtime}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^examreviewroom}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/datadeletiondate}}
+																<span class="statebar pull-right">
+																	{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoogleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																	<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+																	{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^examreviewtime}}<span class="label label-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^examreviewroom}}<span class="label label-danger"  title="{{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/datadeletiondate}}
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}set_visibility_of_exam_review_information, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															{{#examreviewvisible}}
@@ -819,16 +767,14 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}panel-warning{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success pull-right" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}<span class="label label-warning pull-right" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																	{{^taskcount}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{^datadeletiondate}}<span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																	{{^taskcount}}<span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 															{{#resultsenteredafterexamreview}}<p>Es wurden bisher <strong>{{resultsenteredafterexamreview}} </strong> Prüfungsergebnisse nach der Klausureinsicht geändert.</p>{{/resultsenteredafterexamreview}}
@@ -842,14 +788,12 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="col-xs-6">
 													<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
 														<div class="panel-heading">
-															<div class="row">
-																<h3 class="panel-title col-xs-4">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
-																<span class="statebar col-xs-8">
-																	{{^datadeletiondate}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<span class="label label-danger pull-right"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	<span class="label label-info pull-right" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+																<span class="statebar pull-right">
+																	{{^datadeletiondate}}<span class="label label-danger"  title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
-															</div>
+																<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
 																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden.</p>
