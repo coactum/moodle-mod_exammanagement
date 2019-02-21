@@ -112,7 +112,6 @@ $string['configure_password_str'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying password for the exam management';
 $string['password'] = 'Password';
 $string['reset_password'] = 'Reset password';
-$string['password_could_not_be_set'] = 'Password could not be set';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Enter password';
@@ -306,10 +305,12 @@ $string['results'] = 'Results';
 // examReviewDateRoomForm.php
 $string['examreview_dateroom'] = 'Date and rooms for exam review';
 $string['examreview_date'] = 'Date';
-$string['examreview_room'] = 'Rooms (enter free text)';
+$string['examreview_room'] = 'Rooms (enter as free text)';
 
 // forms (common)
-$string['cancel_form'] = 'Operation canceled';
+$string['operation_canceled'] = 'Operation canceled';
+$string['alteration_failed'] = 'Alteration failed';
+$string['correction_not_completed'] = 'Marking not completed';
 
 //helptexts
 $string['help'] = 'Help';
@@ -329,6 +330,7 @@ $string['helptext_checkPassword'] = 'A password for this exam management was set
 $string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br> Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
 $string['helptext_addRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
+$string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
@@ -339,8 +341,10 @@ $string['helptext_importBonus']= 'Here goes the description of this feature site
 $string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
 $string['helptext_participantsOverview']= 'Here goes the description of this feature site.';
-$string['helptext_examReviewDateRoom']= 'Here goes the description of this feature site.';
-$string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
+$string['helptext_examReviewDateRoom']=  'If you are planning an exam review, you can select the date and the room for it here. <br><br>
+The name of the room can be freely entered as normal text in the lower form field. In this way, you can select rooms that are not stored in the system as exam rooms, such as your office, as room for the exam review. <br><br>
+If you change the exam results for the participants after the time of the exam review, you can simply export them separately for the examination office on the overview page. <br><br>
+The information on the date and room of the exam review can later be made visible to the students on the overview page.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';

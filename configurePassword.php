@@ -60,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('cancel_form', 'mod_exammanagement'), 'warning');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		  //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -75,7 +75,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		  if($update){
 			  $MoodleObj->redirectToOverviewPage('beforeexam', '', '');
 		  } else {
-			  $MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_could_not_be_set', 'mod_exammanagement'), 'error');
+			  $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
 		  }
 
 		} else {

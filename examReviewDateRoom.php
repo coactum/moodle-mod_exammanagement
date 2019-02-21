@@ -46,7 +46,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $MoodleObj->setPage('examReviewDateRoom');
       
       if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-        $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+        $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
       }
 
   		$MoodleObj-> outputPageHeader();
@@ -57,7 +57,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       //Form processing and displaying is done here
       if ($mform->is_cancelled()) {
         //Handle form cancel operation, if cancel button is present on form
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang abgebrochen', 'warning');
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
       } else if ($fromform = $mform->get_data()) {
         //In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -72,9 +72,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   
           $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
           if($update){
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Raum erfolgreich gesetzt', 'success');
+            $MoodleObj->redirectToOverviewPage('beforeexam', '', '');
           } else {
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Raum konnten nicht gesetzt werden', 'error');
+            $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
           }
 
       } else {

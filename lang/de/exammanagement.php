@@ -112,7 +112,6 @@ $string['configure_password_str'] = 'Passwort konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 $string['reset_password'] = 'Passwort zurücksetzen';
-$string['password_could_not_be_set'] = 'Passwort konnte nicht festgelegt werden';
 
 //checkPasswordForm.php
 $string['check_password_str'] = 'Passwort eingeben';
@@ -307,9 +306,12 @@ $string['results'] = 'Prüfungsergebnisse';
 $string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
 $string['examreview_date'] = 'Datum';
 $string['examreview_room'] = 'Räume (als Freitext eintragen)';
+$string['examreview_data_couldnt_be_set'] = 'Datum und Raum konnten nicht gesetzt werden';
 
 // forms (common)
-$string['cancel_form'] = 'Vorgang abgebrochen';
+$string['operation_canceled'] = 'Vorgang abgebrochen';
+$string['alteration_failed'] = 'Änderung fehlgeschlagen';
+$string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen.';
 
 //helptexts
 $string['help'] = 'Hilfe';
@@ -337,6 +339,7 @@ Informationen über die in einem Raum vorhandenen Sitzplätze gibt die Tabelle. 
 <ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation nutzen zu können muss hier mindestens ein Raum als Prüfungsraum ausgewählt werden. Zudem müssen die gewählten Räume mindestens so viele Sitzplätze bieten, wie TeilnehmerInnen an der Prüfung teilnehmen werden.</li>
 <li>Werden neue Räume zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li></ul>
 <strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung der Universität Paderborn buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
+$string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
 $string['helptext_addDefaultRooms']= 'Hier können die Standardräume importiert werden ...';
 $string['helptext_setDateTime']= 'Hier können das <strong>Datum</strong> und die <strong>Uhrzeit</strong> der Prüfung ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. <br /> <br />
@@ -366,8 +369,10 @@ $string['helptext_importBonus']= 'Hier können Bonuspunkte importiert und in Bon
 $string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 $string['helptext_participantsOverview']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
-$string['helptext_examReviewDateRoom']= 'Hier können ein Datum und Räume für die Klausureinsicht eingetragen werden ...';
-$string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
+$string['helptext_examReviewDateRoom']= 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier das Datum und der Raum dafür ausgewählt werden. <br><br>
+Die Bezeichnung des Raumes kann dabei frei als normaler Text in das untere Formularfeld eingegeben werden. Auf diese Weise können Sie auch nicht im System als Prüfungsraum hinterlegte Räume wie etwa ihr Büro als Klausureinsichtsraum auswählen. <br><br>
+Wenn Sie nach dem Zeitpunkt der Klausureinsicht Prüfungsergebnisse für die Teilnehmenden ändern können Sie diese danach einfach auf der Übersichtsseite gesondert für das Prüfungsamt exportieren. <br><br>
+Die hier festgelegten Informationen zum Datum und Raum der Klausureinsicht können später auf der Übersichtsseite wieder für die Studierenden sichtbar geschaltet werden.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
