@@ -338,7 +338,11 @@ $string['helptext_configureTasks']= 'Here goes the description of this feature s
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 $string['helptext_importBonus']= 'Here goes the description of this feature site.';
-$string['helptext_configureGradingscale']= 'Here goes the description of this feature site.';
+$string['helptext_configureGradingscale']= 'Here a <strong>gradingscale</strong> can be configured for the exam.<br><br>
+As soon as the exam results have been entered, the gradingscale is used to automatically calculate the exam grades for all participants. If no gradingscale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
+The minimum number of points required to reach a step must be specified individually for each single grade. A 70 in the field below 1.0 would therefore mean that a participant has to reach at least 70 points in order to get the grade 1.0.<br><br>
+The number of points to be achieved for a grade step can be between 0 and the stated total number of points for all exam tasks, but it must be higher than the number of points required for the previous grade step. For example, more points must be required for achieving the grade 1.0 than for achieving a 1.3. In addition, it is also possible to use comma numbers as points. If a participant achieves fewer points than which are necessary for 4.0, he or she will receive the grade 5 instead.<br><br>
+The gradingscale can be changed at any time (even after the exam results have been entered), in that case the participants grades are automatically adapted to the new gradingscale.';
 $string['helptext_inputResults']= 'Here goes the description of this feature site.';
 $string['helptext_participantsOverview']= 'Here goes the description of this feature site.';
 $string['helptext_examReviewDateRoom']=  'If you are planning an exam review, you can select the date and the room for it here. <br><br>

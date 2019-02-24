@@ -366,7 +366,11 @@ Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren univ
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
 $string['helptext_importBonus']= 'Hier können Bonuspunkte importiert und in Bonusnotenschritte für dier Prüfung umgewandelt werden ...';
-$string['helptext_configureGradingscale']= 'Hier kann der Notenschlüssel konfiguriert werden ...';
+$string['helptext_configureGradingscale']= 'Hier kann ein <strong>Notenschlüssel</strong> für die Prüfung konfiguriert werden. <br><br>
+Sobald die Prüfungsergebnisse eingetragen wurden wird dieser dazu benutzt, automatisch die Prüfungsnoten aller Teilnehmenden zu errechnen. Wurde kein Notenschlüssel konfiguriert ist die automatische Berechnung einer Note hingegen nicht möglich.<br><br>
+Es muss für jeden Notenschritt einzeln angegeben werden, wie viele Punkte für dessen Erreichen mindestens notwendig sind. Eine 70 im Feld unter 1,0 würden demnach bedeuten, dass eine Teilnehmerin mindestens 70 Punkte erreichen muss, um die Note 1,0 zu bekommen).<br><br>
+Die zu erreichende Punktzahl für einen Notenschritt kann zwischen 0 und der angegebenen Gesamtpunktezahl aller Prüfungsaufgaben liegen, sie muss allerdings höher sein als die für den Notenschritt davor benötigte Punktzahl. So müssen für das Erreichen einer 1,0 etwa mehr Punkte gefordert sein als für das Erreichen einer 1,3. Dazu ist auch die Nutzung von Kommazahlen als Punkte möglich. Erreicht ein Teilnehmender weniger Punkte als für die 4,0 notwendig sind bekommt er stattdessen die Note 5.<br><br>
+Der Notenschlüssel kann jederzeit (auch nach dem Eintragen der Prüfungsergebnisse) geändert werden, die Noten der Prüfungsteilnehmer werden in diesem Fall sofort automatisch an den neuen Notenschlüssel angepasst.';
 $string['helptext_inputResults']= 'Hier können die Prüfungsergebnisse eingetragen werden ...';
 $string['helptext_participantsOverview']= 'Hier können die eingetragenen Ergebnisse geprüft werden ...';
 $string['helptext_examReviewDateRoom']= 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier das Datum und der Raum dafür ausgewählt werden. <br><br>

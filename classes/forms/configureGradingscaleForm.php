@@ -83,7 +83,7 @@ class configureGradingscaleForm extends moodleform {
         $mform->addElement('html', '<div class="row"><p class="col-xs-1"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<strong class="col-xs-1">'.$key.'</strong>');
+            $mform->addElement('html', '<strong class="col-xs-1">'.str_replace('.', ',',$key).'</strong>');
         }
 
         $mform->addElement('html', '</div>');

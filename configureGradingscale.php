@@ -62,9 +62,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konfiguriert', 'success');
+				$MoodleObj->redirectToOverviewPage('beforeexam', '', 'success');
 			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Notenschlüßel konnte nicht konfiguriert werden', 'error');
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
 			}
 
 		} else {
