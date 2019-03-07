@@ -35,6 +35,8 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$sortmode  = optional_param('sortmode', 0, PARAM_TEXT);
+
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
@@ -125,11 +127,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $roomsCount += 1;
         }
 
-        usort($participantsArray, function($a, $b){ //sort array by custom user function
+        if($sortmode == 'place'){
+          usort($participantsArray, function($a, $b){ //sort array by custom user function
 
-          return strcmp($a->place, $b->place); // sort by place
+            return strcmp($a->place, $b->place); // sort by place
+  
+          });
+        } else if($sortmode == 'matrnr'){
+          usort($participantsArray, function($a, $b){ //sort array by custom user function
 
-        });
+            global $UserObj;
+
+            return strcmp($UserObj->getUserMatrNr($a->moodleuserid, $a->imtlogin), $UserObj->getUserMatrNr($b->moodleuserid, $b->imtlogin)); // sort by matrnr
+  
+          });
+        }        
 
       foreach ($participantsArray as $key => $participant){
 

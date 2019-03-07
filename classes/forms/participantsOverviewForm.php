@@ -67,6 +67,33 @@ class participantsOverviewForm extends moodleform {
         $examrooms = json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms);
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
+        usort($participantsArr, function($a, $b){ //sort array by custom user function
+            global $UserObj;
+
+            if($a->moodleuserid){
+            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+            } else {
+            $aFirstname = $a->firstname;
+            $aLastname = $a->lastname;
+            }
+
+            if($b->moodleuserid){
+            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+            } else {
+            $bFirstname = $b->firstname;
+            $bLastname = $b->lastname;
+            }
+
+            if ($aLastname == $bLastname) { //if names are even sort by first name
+                return strcmp($aFirstname, $bFirstname);
+            } else{
+                return strcmp($aLastname, $bLastname); // else sort by last name
+            }
+
+        });
+
         if($participantsArr){
 
             $i = 1;
@@ -122,6 +149,9 @@ class participantsOverviewForm extends moodleform {
                     
                     $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
                     $mform->setType('editmoodleuserid', PARAM_INT);
+
+                    $mform->addElement('hidden', 'pne', true);
+                    $mform->setType('pne', PARAM_INT);
 
                     $mform->addElement('html', '<tr class="table-info">');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
@@ -193,21 +223,21 @@ class participantsOverviewForm extends moodleform {
                     }
 
                     if($UserObj->getEnteredBonusCount()){
-                        if($participant->bonus){
+                        if(isset($participant->bonus)){
                             $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
                             $select->setSelected($participant->bonus);
                             $mform->addElement('html', '</td>');
                         } else {
                             $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                            $select->setSelected('0');
+                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select->setSelected('-');
                             $mform->addElement('html', '</td>');                            
                         }
                     } else {
                         $mform->addElement('html', '<td>');
-                        $select = $mform->addElement('select', 'bonus', '', array('0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                        $select->setSelected('0');
+                        $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                        $select->setSelected('-');
                         $mform->addElement('html', '</td>');                            
                     }
 

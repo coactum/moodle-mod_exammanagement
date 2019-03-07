@@ -39,6 +39,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $edit  = optional_param('edit', 0, PARAM_INT);
 
+$pne  = optional_param('pne', 1, PARAM_INT);
+
 $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
@@ -95,7 +97,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participantObj->place = $fromform->place;
 
-            $participantObj->exampoints = json_encode($fromform->points);
+            if($pne == false){ // if participants points were not empty
+                $participantObj->exampoints = json_encode($fromform->points);
+            }
 
             switch ($fromform->state){
 
@@ -136,7 +140,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participantObj->timeresultsentered = time();
 
-            $participantObj->bonus = $fromform->bonus;
+            if($fromform->bonus !== '-'){
+                $participantObj->bonus = $fromform->bonus;
+            } else {
+                $participantObj->bonus = NULL;
+            }
            
             $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
             

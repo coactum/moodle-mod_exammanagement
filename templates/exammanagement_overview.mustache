@@ -316,7 +316,7 @@ ajaxsetcorrectioncompletion = function(value){
 																{{^stateofplacescorrect}}{{^stateofplaceserror}}<p>Es wurden noch keine Sitzplätze zugewiesen.</p>{{/stateofplaceserror}}{{/stateofplacescorrect}}
 															</div>
 															<div class="panel-footer">
-																{{#participants}}{{#rooms}}<a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
+																{{#participants}}{{#rooms}}<a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}}" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a><a class="btn {{#stateofplacescorrect}}btn-success{{/stateofplacescorrect}}{{^stateofplacescorrect}}btn-warning{{/stateofplacescorrect}} pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places_manually, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places_manually, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
 															</div>
 														</div>
                         </div>
@@ -330,10 +330,10 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															<p>Hier kann der Sitzplan als PDF-Dokument exportiert werden.</p>
+															<p>Hier kann der Sitzplan nach Nachnamen oder nach Matrikelnummern sortiert als PDF-Dokument exportiert werden.</p>
 														</div>
 														<div class="panel-footer">
-															{{#stateofplacescorrect}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_seatingplan, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
+															{{#stateofplacescorrect}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}
 														</div>
 													</div>
 												</div>
@@ -435,7 +435,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-															<p>Hier können Teilnehmerlisten nach Name oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden. <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!</p>
+															<p>Hier können Teilnehmerlisten nach Nachname oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden. <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!</p>
 													</div>
 													<div class="panel-footer">
 														{{#stateofplacescorrect}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/stateofplacescorrect}}

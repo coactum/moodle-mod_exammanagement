@@ -76,7 +76,7 @@ define(['jquery'], function ($) {
           });
           $("#totalpoints").text(getTotalpoints()); // change totalpoints
         }
-      })
+      });
 
       $(".form-group").not("#id_place").on("change", "input", function () { // if some input field changes
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
@@ -90,6 +90,13 @@ define(['jquery'], function ($) {
         $(".form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
           $(this).prop("disabled", false);
         });
+
+        $(".form-group input.form-control").not("#id_place").each(function () { // if some input point field has values
+          if ($(this).val()) {
+            $("input[name='pne']").val(false); // set points not entered param to false
+          }
+        });
+
       });
     }
   };
