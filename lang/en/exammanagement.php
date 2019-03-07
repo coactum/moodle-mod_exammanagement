@@ -124,11 +124,13 @@ $string['password_reset_successful'] = 'Password reset successful.';
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
+$string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space can be used. "2 places free" means that every 3rd place can be used.';
+$string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats have already been assigned. This assignment will be deleted by changing the exam rooms and must then be carried out again.';
 
 // addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Import default rooms from text file';
 $string['import_default_rooms_str'] = 'Administrators can import default rooms for teachers to choose from here as text file.';
-$string['default_rooms_already_exists'] = 'Default rooms are already imported. New import will override old rooms.';
+$string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms are already imported. New import will override old rooms.';
 
 // addCustomRoomForm.php
 $string['add_room'] = 'Add room';
@@ -137,6 +139,7 @@ $string['delete_room'] = 'Delete room';
 $string['customroom_name'] = 'Name of exam room';
 $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
+$string['change_custom_room_name'] = '<strong>Please note:</strong> If you change the name of an existing room, a new room is created instead. In this case, the old room must still be deleted manually.';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
@@ -174,6 +177,7 @@ $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Deleted';
+$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned. This assignment will be deleted by changing the exam participants and must then be carried out again.';
 
 //showParticipants.php
 $string['delete_all_participants'] = 'Delete all participants';
@@ -185,6 +189,8 @@ $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
 $string['total'] = 'Total';
+$string['results_already_entered'] = '<strong>Warning:</strong> Some exam results have already been entered. After changing the tasks, you should check whether they may need to be updated.';
+$string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check whether it may need to be updated.';
 
 //textfield.php
 $string['add_text_str'] = 'Add textfield';
@@ -209,7 +215,8 @@ $string['moodle_export'] = 'Exported grades from PANDA';
 $string['individual'] = 'Other';
 $string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from PANDA)';
 $string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
-$string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA email adress or matriculation number and bonus points must fit the choosen column).';
+$string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA email adress or matriculation number) and bonus points must fit the choosen column.';
+$string['bonus_already_entered'] = '<strong>Warning:</strong> Some bonus points are already entered and will be replaced through the new imported ones.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';
@@ -337,7 +344,13 @@ $string['helptext_addCourseParticipants']= 'Here goes the description of this fe
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';
 $string['helptext_setTextfield']= 'Here goes the description of this feature site.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
-$string['helptext_importBonus']= 'Here goes the description of this feature site.';
+$string['helptext_importBonus']= 'Here you can import the participants bonus points and convert them into bonus grade steps for the exam. In this way, for example, bonus points earned by students while completing exercises can be directly converted into bonus grade steps for the exam. <br><br>
+To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
+In the lower section you can next specify the type of file import. There are two possibilities: <br><br>
+1. Exported grades from PANDA: If your students have submitted their exercise sheets via the PANDA assignment activity and these have been corrected and graded there, the exported grades from PANDA should be selected here, since in this way all bonus points for the complete PANDA course can be easily read in. <br>
+To do this, the gradings from the PANDA course must first be exported (see <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+2. Individual: If you have not managed your bonus points via the PANDA assignment activity, you can alternatively select the mode of individual import. For this you need an Excel file, in which for each participant affected either the email address stored in PANDA or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
+Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points.';
 $string['helptext_configureGradingscale']= 'Here a <strong>gradingscale</strong> can be configured for the exam.<br><br>
 As soon as the exam results have been entered, the gradingscale is used to automatically calculate the exam grades for all participants. If no gradingscale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
 The minimum number of points required to reach a step must be specified individually for each single grade. A 70 in the field below 1.0 would therefore mean that a participant has to reach at least 70 points in order to get the grade 1.0.<br><br>

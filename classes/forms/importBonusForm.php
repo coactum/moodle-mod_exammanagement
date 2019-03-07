@@ -67,6 +67,10 @@ class importBonusForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
 
+        if($UserObj->getEnteredBonusCount()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("bonus_already_entered", "mod_exammanagement").'</div>');
+        }
+
         ###### set bonus steps #####
         $mform->addElement('html', '<h3>'.get_string('set_bonussteps', 'mod_exammanagement').'</h3>');
 
@@ -141,12 +145,8 @@ class importBonusForm extends moodleform{
         
         $maxbytes=$CFG->maxbytes;
 
-        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.xls, .xlsx, .ods'));
+        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xls', '.xlsx', '.ods')));
         $mform->addRule('bonuspoints_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
-
-        if($UserObj->getEnteredBonusCount()){
-            $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Bonusnotenschritte für Teilnehmende importiert. Diese werden durch den erneuten Import gelöscht und ersetzt.</p>');
-        }
         
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
         $mform->disable_form_change_checker();

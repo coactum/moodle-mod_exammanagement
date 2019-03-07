@@ -71,6 +71,12 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<p>Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p>');
 
+    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
+
+    if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
+        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div>');
+    }
+
     ###### chooseRooms ######
     $mform->addElement('html', '<div><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-2"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div><div class="col-xs-1"></div></div>');
 
@@ -128,11 +134,6 @@ class chooseRoomsForm extends moodleform {
         }
       }
 
-      $mform->addElement('html', '<p><b>Hinweis:</b> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen des selben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz benutzt werden kann. "2 Plätze frei" bedeutet, dass jeder 3. Platz benutzt werden kann.</p>');
-
-      if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
-        $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsräume gelöscht und muss dann neu durchgeführt werden.</p>');
-      }
       $this->add_action_buttons(true,'Räume für Prüfung auswählen');
 
     } else{

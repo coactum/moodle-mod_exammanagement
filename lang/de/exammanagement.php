@@ -124,11 +124,13 @@ $string['password_reset_successful'] = 'Zurücksetzen des Passwortes erfolgreich
 //chooseRoomsForm.php
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
+$string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen des selben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz benutzt werden kann. "2 Plätze frei" bedeutet, dass jeder 3. Platz benutzt werden kann.';
+$string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsräume gelöscht und muss dann neu durchgeführt werden.';
 
 // addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Standardräume aus Datei importieren';
 $string['import_default_rooms_str'] = 'Hier können die allen Dozenten als Standardprüfungsräume zur Auswahl stehenden Räume von Administratoren aus einer Text-Datei importiert werden.';
-$string['default_rooms_already_exists'] = 'Es wurden bereits Standardräume importiert. Diese werden durch den Import aus einer neuen Datei überschrieben.';
+$string['default_rooms_already_exists'] = '<strong>Achtung:</strong> Es wurden bereits Standardräume importiert. Diese werden durch den Import aus einer neuen Datei überschrieben.';
 
 // addCustomRoomForm.php
 $string['add_room'] = 'Raum anlegen';
@@ -137,6 +139,7 @@ $string['delete_room'] = 'Raum löschen';
 $string['customroom_name'] = 'Name des Raums';
 $string['customroom_placescount'] = 'Anzahl der Sitzplätze';
 $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
+$string['change_custom_room_name'] = '<strong>Hinweis:</strong> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
@@ -174,6 +177,7 @@ $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Gelöscht';
+$string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsteilnehmer gelöscht und muss dann neu durchgeführt werden.';
 
 //showParticipants.php
 $string['delete_all_participants'] = 'Alle Teilnehmer löschen';
@@ -185,6 +189,8 @@ $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
 $string['points'] = 'Punkte';
 $string['total'] = 'Summe';
+$string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.';
+$string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 
 //textfield.php
 $string['add_text_str'] = 'Freitext hinzufügen';
@@ -205,11 +211,12 @@ $string['bonusstep'] = 'Bonusnotenschritt (maximal 3)';
 $string['required_points'] = 'Für Notenschritt erforderliche Punkte';
 $string['configure_fileimport'] = 'Dateiimport konfigurieren';
 $string['import_mode'] = 'Art des Dateiimports';
-$string['moodle_export'] = 'Bewertungsexport aus Moodle';
+$string['moodle_export'] = 'Bewertungsexport aus PANDA';
 $string['individual'] = 'Individuell';
 $string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A, B, C ... ; Beim Import von aus PANDA exportierten Bewertungen automatisch gesetzt)';
 $string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (in PANDA hinterlegte E-Mailadresse beim Bewertungsimport oder Matrikelnummer beim individuellen Import und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
+$string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für Teilnehmende importiert. Diese werden durch den erneuten Import gelöscht und ersetzt.';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
@@ -365,7 +372,13 @@ $string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und de
 Diese bekommen die Nachricht direkt nach dem Abschicken als E-Mail an ihren universitären E-Mail-Account geschickt und können so z. B. einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Diese Funktion ist rein optional, Sie müssen auf diesem Wege keine Nachricht an die PrüfungsteilnehmerInnen senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmittel zu geben kann auch die Funktion „Freitextfeld bearbeiten“ auf der Übersichtsseite genutzt werden.';
-$string['helptext_importBonus']= 'Hier können Bonuspunkte importiert und in Bonusnotenschritte für dier Prüfung umgewandelt werden ...';
+$string['helptext_importBonus']= 'Hier können Bonuspunkte der Prüfungsteilnehmer importiert und in Bonusnotenschritte für die Prüfung umgewandelt werden. Auf diese Weise können zum Beispiel durch die Studierenden bei der Bearbeitung von Übungsaufgaben errungene Bonuspunkte direkt in Bonusnotenschritte für die Klausur umgewandelt werden. <br><br>
+Dazu muss zunächst im oberen Abschnitt die Zahl der für die Klausur möglichen Bonusnotenschritte festgelegt werden. Es sind maximal drei Bonusnotenschritte (ein Notenschritt wäre etwa die Verbesserung von 1,7 auf 1,3) möglich, insgesamt können Prüfungsteilnehmer sich also um maximal eine Note verbessern. Für jeden Bonusnotenschritt muss danach zudem angegeben werden, wie viele Punkte die Studierenden zum Erhalten dieses Schrittes mindestens erreicht haben müssen. <br><br>
+Im unteren Abschnitt kann als Nächstes die Art des Dateiimportes festgelegt werden. Dazu gibt es zwei Möglichkeiten:<br><br>
+1. Bewertungsexport aus PANDA: Haben Ihre Studierenden ihre Übungszettel über die PANDA Aufgabenabgabe abgegeben und wurden diese dort korrigiert und bewertet sollte hier der Bewertungsexport aus PANDA ausgewählt werden, da auf diese Weise sämtliche Bonuspunkte für den kompletten PANDA Kurs unkompliziert eingelesen werden können.<br>
+Dazu müssen die Bewertungen aus dem PANDA Kurs zunächst wie <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">hier</a> beschrieben exportiert werden. Danach müssen Sie die exportierte Datei einmal öffnen und nachsehen, in welcher Spalte die Punkte eingetragen sind. Die Bezeichnung der Spalte muss dann im dafür vorgesehenen Feld im unteren Abschnitt eingetragen werden.<br><br>
+2. Individuell: Falls Sie ihre Bonuspunkte nicht über die PANDA Aufgabenabgabe verwaltet haben können Sie alternativ den Modus des individuellen Importes auswählen. Für diesen brauchen Sie eine Excel-Datei, bei der für jeden betroffenen Teilnehmenden in einer eigenen Zeile entweder die in PANDA hinterlegte Email-Adresse oder aber die Matrikelnummer in einer und die erreichte Punktzahl in einer anderen Spalte steht. Die Bezeichnung sowohl der Spalte, in der die Benutzerindentfikatoren aller Studierenden steht als auch die der Spalte, die alle Bonuspunktzahlen enthält müssen dann in den entsprechenden Feldern im unteren Abschnitt angegeben werden. <br><br>
+Zum Abschluss muss nun noch die einzulesende Datei mit den Bonuspunkten ausgewählt und dann durch einen Klick auf den Button "Datei einlesen" eingelesen werden, um den Bonuspunkteimport durchzuführen.';
 $string['helptext_configureGradingscale']= 'Hier kann ein <strong>Notenschlüssel</strong> für die Prüfung konfiguriert werden. <br><br>
 Sobald die Prüfungsergebnisse eingetragen wurden wird dieser dazu benutzt, automatisch die Prüfungsnoten aller Teilnehmenden zu errechnen. Wurde kein Notenschlüssel konfiguriert ist die automatische Berechnung einer Note hingegen nicht möglich.<br><br>
 Es muss für jeden Notenschritt einzeln angegeben werden, wie viele Punkte für dessen Erreichen mindestens notwendig sind. Eine 70 im Feld unter 1,0 würden demnach bedeuten, dass eine Teilnehmerin mindestens 70 Punkte erreichen muss, um die Note 1,0 zu bekommen).<br><br>

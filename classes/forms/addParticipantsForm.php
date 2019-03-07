@@ -85,6 +85,10 @@ class addParticipantsForm extends moodleform{
 
         if($tempParticipants){
 
+            if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
+                $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
+            }
+
             $newMoodleParticipantsArr = array();
             $newNoneMoodleParticipantsArr = array();
             $badMatriculationnumbersArr = array();
@@ -447,9 +451,6 @@ class addParticipantsForm extends moodleform{
             }
 
             if ($newMoodleParticipantsArr || $newNoneMoodleParticipantsArr || $oddMatriculationnumbersArr || $deletedMatriculationnumbersArr){
-                if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
-                    $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
-                }
 
                 $maxbytes=$CFG->maxbytes;
 

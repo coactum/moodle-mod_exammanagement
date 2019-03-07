@@ -56,6 +56,14 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
+        if($ExammanagementInstanceObj->getInputResultsCount()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
+        }
+        
+        if($ExammanagementInstanceObj->getGradingscale()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("gradingscale_already_entered", "mod_exammanagement").'</div>');
+        }
+
         //group for add and remove tasks buttons
         $tasks_buttonarray = array();
         array_push($tasks_buttonarray, $mform->createElement('button', 'add_task', '<i class="fa fa-plus" aria-hidden="true"></i>'));
@@ -143,14 +151,6 @@ class configureTasksForm extends moodleform {
         } else{
             $mform->addElement('hidden', 'newtaskcount', 0);
             $mform->setType('newtaskcount', PARAM_INT);
-        }
-
-        if($ExammanagementInstanceObj->getInputResultsCount()){
-            $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.</p>');
-        }
-        
-        if($ExammanagementInstanceObj->getGradingscale()){
-            $mform->addElement('html', '<p><b>Achtung:</b> Es wurde bereits ein Notenschlüßel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.</p>');            
         }
 
         $this->add_action_buttons();

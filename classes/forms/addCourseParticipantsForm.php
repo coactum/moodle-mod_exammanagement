@@ -65,6 +65,10 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string("view_added_and_course_partipicants", "mod_exammanagement").'</p>');
 
+        if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
+        }
+
         ###### display all exam participants that are no course participants and will be deleted######
         $moodleParticipantsArr = array();
         $noneMoodleParticipantsArr = array();
@@ -204,9 +208,6 @@ class addCourseParticipantsForm extends moodleform{
         }
 
         if ($courseParticipantsIDsArr){
-            if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
-                $mform->addElement('html', '<p><b>Achtung:</b> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Hinzufügen der Teilnehmer gelöscht und muss dann neu durchgeführt werden.</p>');
-            }
             $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added", "mod_exammanagement").'</p></div>');
