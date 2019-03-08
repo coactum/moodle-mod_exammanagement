@@ -319,6 +319,7 @@ $string['examreview_data_couldnt_be_set'] = 'Datum und Raum konnten nicht gesetz
 
 // forms (common)
 $string['operation_canceled'] = 'Vorgang abgebrochen';
+$string['operation_successfull'] = 'Vorgang erfolgreich';
 $string['alteration_failed'] = 'Änderung fehlgeschlagen';
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen.';
 

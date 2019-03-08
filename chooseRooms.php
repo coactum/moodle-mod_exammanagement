@@ -89,8 +89,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
 
       // reset state of places assignment if already set
-      if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-        $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
+      if($ExammanagementInstanceObj->allPlacesAssigned()){
       }
 
       $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);

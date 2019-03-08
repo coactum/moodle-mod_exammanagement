@@ -55,7 +55,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		$MoodleObj->setPage('importBonus');
 		
-		if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+		if(!$ExammanagementInstanceObj->allPlacesAssigned()){
 			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Sitzplätze zugewiesen. Bonuspunkteimport noch nicht möglich', 'error');
 		} else if (!$UserObj->getParticipantsCount()) {
 			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Teilnehmer ausgewählt. Bonuspunkteimport noch nicht möglich', 'error');

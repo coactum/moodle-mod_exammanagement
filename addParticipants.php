@@ -192,7 +192,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 
 					// reset state of places assignment if already set
-					if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
+					if($ExammanagementInstanceObj->allPlacesAssigned()){
 						$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
 					}
 

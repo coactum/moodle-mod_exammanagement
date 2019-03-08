@@ -270,25 +270,32 @@ EOF;
 		}
 	}
 
-	public function isStateOfPlacesCorrect(){
+	public function getAssignedPlacesCount(){
 
-		$StateOfPlaces = $this->getStateOfPlaces();
+		$MoodleDBObj = MoodleDB::getInstance();
 
-		if ($StateOfPlaces == 'set'){
-			return true;
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND place IS NOT NULL";
+		
+		$assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+
+		if (isset($assignedPlacesCount)){
+			return $assignedPlacesCount;
 
 		} else {
-			return false;
+			return 0;
 
 		}
 
 	}
 
-	public function isStateOfPlacesError(){
+	public function allPlacesAssigned(){
 
-		$StateOfPlaces = $this->getStateOfPlaces();
+		$UserObj = User::getInstance($this->id, $this->e);
 
-		if ($StateOfPlaces == 'error'){
+		$assignedPlacesCount = $this->getAssignedPlacesCount();
+
+		if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getParticipantsCount()){
 			return true;
 
 		} else {
@@ -311,7 +318,7 @@ EOF;
 						return false;
 				}
 			case 2:
-				if ($this->isStateOfPlacesCorrect()){
+				if ($this->allPlacesAssigned()){
 					return true;
 				} else {
 						return false;
@@ -721,25 +728,6 @@ EOF;
 		$messageid = message_send($message);
 
 		return $messageid;
-
-	}
-
-	########### assign places #######
-
-	public function unsetStateofPlaces($type){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$this->moduleinstance->stateofplaces = $type;
-
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $this->moduleinstance);
-	}
-
-	public function getStateOfPlaces(){
-
-		$StateOfPlaces = $this->moduleinstance->stateofplaces;
-
-		return $StateOfPlaces;
 
 	}
 

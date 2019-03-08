@@ -318,6 +318,7 @@ $string['examreview_room'] = 'Rooms (enter as free text)';
 
 // forms (common)
 $string['operation_canceled'] = 'Operation canceled';
+$string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
 $string['correction_not_completed'] = 'Marking not completed';
 

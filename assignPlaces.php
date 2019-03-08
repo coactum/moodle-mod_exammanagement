@@ -53,11 +53,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $newAssignmentObj = '';
 
     if(!$savedRoomsArray){
-      $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     } elseif(!$participantsArray){
-      $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
 
     }
@@ -94,20 +92,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     }
 
     if($participantsCount < count($participantsArray)){	//if users are left without a room
-      $ExammanagementInstanceObj->unsetStateOfPlaces('error');
       $MoodleObj->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
-
     }
 
-    // save state of places
-    $ExammanagementInstanceObj->moduleinstance->stateofplaces='set';
-    $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-
-    if($update){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
-    } else {
-      $MoodleObj->redirectToOverviewPage('forexam', 'Plätze konnten nicht zugewiesen werden', 'error');
-    }
+    $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
+    
   } else { // if user hasnt entered correct password for this session: show enterPasswordPage
     redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
   }

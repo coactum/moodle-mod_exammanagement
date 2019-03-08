@@ -102,12 +102,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
                 }
 
-                // reset state of places assignment if already set
-                if($ExammanagementInstanceObj->isStateOfPlacesCorrect()){
-                    $ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-                }
-
                 $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
 
                 $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');

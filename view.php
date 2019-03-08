@@ -172,7 +172,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         // reset phase information if participants are deleted
         if (!$UserObj->getParticipantsCount()) {
             $ExammanagementInstanceObj->moduleinstance->importfileheader = null;
-            $ExammanagementInstanceObj->moduleinstance->stateofplaces = null;
             $ExammanagementInstanceObj->moduleinstance->datetimevisible = null;
             $ExammanagementInstanceObj->moduleinstance->roomvisible = null;
             $ExammanagementInstanceObj->moduleinstance->placevisible = null;
@@ -230,8 +229,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $participantscount = $UserObj->getParticipantsCount();
         $roomscount = $ExammanagementInstanceObj->getRoomsCount();
         $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
-        $stateofplaces = $ExammanagementInstanceObj->isStateOfPlacesCorrect();
-        $stateofplaceserror = $ExammanagementInstanceObj->isStateOfPlacesError();
+        $allplacesassigned = $ExammanagementInstanceObj->allPlacesAssigned();
+        $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
         $datetimevisible = $ExammanagementInstanceObj->isDateTimeVisible();
         $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
         $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
@@ -244,11 +243,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
     
         $resultsenteredafterexamreview = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+
         if ($resultsenteredafterexamreview) {
             $resultsenteredafterexamreview = count($resultsenteredafterexamreview);
         }
     
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $stateofplaces, $stateofplaceserror, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview);
+        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview);
         echo $output->render($page);
     
         //$this->debugElementsOverview();

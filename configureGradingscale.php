@@ -62,7 +62,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', '', 'success');
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 			} else {
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
 			}

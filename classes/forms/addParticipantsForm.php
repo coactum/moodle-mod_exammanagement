@@ -85,7 +85,7 @@ class addParticipantsForm extends moodleform{
 
         if($tempParticipants){
 
-            if($ExammanagementInstanceObj->isStateofPlacesCorrect()){
+            if($ExammanagementInstanceObj->allPlacesAssigned()){
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
             }
 

@@ -149,7 +149,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
             
             if($update){
-				redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), null, null, null);
+				redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 			} else {
 				redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), 'Speichern fehlgeschlagen', null, notification::NOTIFY_ERROR);
 			}

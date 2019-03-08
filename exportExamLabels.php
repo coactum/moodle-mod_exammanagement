@@ -51,7 +51,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
     }  else if (!$UserObj->getParticipantsCount()) {
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
-    } else if(!$ExammanagementInstanceObj->isStateOfPlacesCorrect() || $ExammanagementInstanceObj->isStateOfPlacesError()){
+    } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
       $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Prüfungsetikettenexport noch nicht möglich', 'error');
     }
 
