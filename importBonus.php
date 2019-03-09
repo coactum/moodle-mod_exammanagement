@@ -56,9 +56,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		$MoodleObj->setPage('importBonus');
 		
 		if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Sitzplätze zugewiesen. Bonuspunkteimport noch nicht möglich', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 		} else if (!$UserObj->getParticipantsCount()) {
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Noch keine Teilnehmer ausgewählt. Bonuspunkteimport noch nicht möglich', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
 		}
 
 		$MoodleObj->outputPageHeader();
@@ -78,7 +78,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			if ($fromform->bonuspoints_list){
 
 				if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
-					redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), 'Punkte für Bonusschritte ungültig', null, notification::NOTIFY_ERROR);
+					redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 				}
 			
 				// retrieve Files from form
@@ -170,9 +170,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			}
 
 			if($update){
-				$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte importiert', 'success');
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 			} else {
-				$MoodleObj->redirectToOverviewPage('aftercorrection', 'Bonuspunkte konnten nicht importiert werden', 'error');
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
 			}
 
 		} else {

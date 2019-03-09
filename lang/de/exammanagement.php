@@ -120,14 +120,29 @@ $string['check_password_str'] = 'Passwort eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['confirm_password'] = 'Passwort bestätigen';
 $string['reset_password_admin'] = 'Passwort zurücksetzen (nur für Administratoren)';
+
+//checkPassword.php
 $string['wrong_password'] = 'Passwort falsch. Bitte erneut versuchen.';
 $string['password_reset_successful'] = 'Zurücksetzen des Passwortes erfolgreich.';
 
 //chooseRoomsForm.php
+$string['choose_exam_rooms'] = 'Prüfungsräume auswählen';
+$string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
-$string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen des selben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz benutzt werden kann. "2 Plätze frei" bedeutet, dass jeder 3. Platz benutzt werden kann.';
+$string['room'] = 'Raum';
+$string['description'] = 'Beschreibung';
+$string['room_type'] = 'Raumart';
+$string['no_seatingplan_available'] = 'Kein Sitzplan verfügbar';
+$string['default_room'] = 'Standardraum';
+$string['custom_room'] = 'Eigener Raum';
+$string['delete_room_confirm'] = 'Durch diese Aktion wird dieser selbst erstellte Raum gelöscht. Stellen Sie sicher, dass der Raum aktuell nicht als Prüfungsraum ausgewählt ist.';
+$string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.';
 $string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsräume gelöscht und muss dann neu durchgeführt werden.';
+$string['no_rooms_found'] = 'Keine Räume gefunden';
+
+//chooseRooms.php
+$string['room_deselected_as_examroom'] = 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.';
 
 // addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Standardräume aus Datei importieren';
@@ -194,7 +209,7 @@ $string['total'] = 'Summe';
 $string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.';
 $string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 
-//textfield.php
+//textfieldForm.php
 $string['add_text_str'] = 'Freitext hinzufügen';
 $string['add_text_text'] = 'Der unten eingegebene Text wird den Teilnehmern in der Teilnehmeransicht der Aktivität Prüfungsorganisation angezeigt.';
 
@@ -219,6 +234,9 @@ $string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A,
 $string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (in PANDA hinterlegte E-Mailadresse beim Bewertungsimport oder Matrikelnummer beim individuellen Import und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
 $string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für Teilnehmende importiert. Diese werden durch den erneuten Import gelöscht und ersetzt.';
+
+//importBonus.php
+$string['points_bonussteps_invalid'] = 'Punkte für Bonusschritte ungültig';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
@@ -263,7 +281,6 @@ $string['internal_use'] = 'Nur fuer den internen Gebrauch durch die Lehrenden!';
 $string['lastname'] = 'Name';
 $string['firstname'] = 'Vorname';
 $string['matrno'] = 'Matr.-Nr.';
-$string['room'] = 'Raum';
 $string['place'] = 'Platz';
 
 // seatingplan
@@ -315,12 +332,13 @@ $string['results'] = 'Prüfungsergebnisse';
 $string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
 $string['examreview_date'] = 'Datum';
 $string['examreview_room'] = 'Räume (als Freitext eintragen)';
-$string['examreview_data_couldnt_be_set'] = 'Datum und Raum konnten nicht gesetzt werden';
 
 // forms (common)
 $string['operation_canceled'] = 'Vorgang abgebrochen';
 $string['operation_successfull'] = 'Vorgang erfolgreich';
 $string['alteration_failed'] = 'Änderung fehlgeschlagen';
+$string['no_participants_added'] = 'Noch keine Prüfungsteilnehmer hinzugefügt. Arbeitsschritt nicht möglich';
+$string['not_all_places_assigned'] = 'Noch nicht alle Sitzplätze zugewiesen. Arbeitsschritt nicht möglich';
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen.';
 
 //helptexts
@@ -340,14 +358,15 @@ $string['helptext_configurePassword'] = 'Auf dieser Seite kann ein Passwort für
 Um ein Passwort zu setzen muss dieses zunächst in das erste Feld eingegeben und dann im zweiten Feld bestätigt werden.<br><br>
 Denken Sie daran, ihr Passwort hinreichend sicher zu wählen und nehmen Sie vor allem kein Kennwort, dass Sie bereits anderswo als Passwort verwenden (vor allem nicht im Universitätskontext!).<br><br>
 Durch einen Klick auf den Button "Passwort zurücksetzen" können Sie den Passwortschutz für die Prüfungsorganisation wieder aufheben.';
-$string['helptext_addRooms']= 'Auf dieser Seite kann eine Liste aller im System verfügbaren möglichen <strong>Prüfungsräume</strong> angesehen und einer oder mehrere davon als Raum für die aktuelle Prüfung ausgewählt werden. <br /> <br />
-Zudem können nach einem Klick auf den Button „Neue Räume hinzufügen“ auch eigene potenzielle Prüfungsräume zur Liste hinzugefügt werden. <br /> <br />
-Um einen Raum als Prüfungsraum auszuwählen muss zunächst die Box links neben dessen Namen angeklickt werden. Es besteht auch die Möglichkeit, durch einen Klick auf die Box neben dem Schriftzug „Alle aus-/abwählen“ alle in der Liste stehenden Räume auszuwählen. Ein Klick auf den Button „Räume für Prüfung auswählen“ speichert die gewählten Räume als Prüfungsräume. Ist ein Raum bereits markiert wurde er bereits als Raum für die Prüfung gespeichert.<br /> <br />
-Die gewählten Prüfungsräume werden später verwendet, um den zur Prüfung hinzugefügten TeilnehmerInnen Sitzplätze zuzuweisen. Ihre Sitzplätze werden den PrüfungsteilnehmerInnen später (sobald Sie diese Information auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben) in ihrer Ansicht angezeigt. Außerdem wird die Sitzplatzzuweisung in Dokumenten wie der Teilnehmerliste oder den Prüfungsetiketten benötigt. <br /> <br />
-Informationen über die in einem Raum vorhandenen Sitzplätze gibt die Tabelle. Ist für einen Raum ein Sitzplan vorhanden kann dieser durch das Bewegen des Mauszeigers auf das "Ja" in der Spalte "Sitzplan“ angesehen werden. <br /> <br />
-<strong>Wichtig:</strong>
-<ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation nutzen zu können muss hier mindestens ein Raum als Prüfungsraum ausgewählt werden. Zudem müssen die gewählten Räume mindestens so viele Sitzplätze bieten, wie TeilnehmerInnen an der Prüfung teilnehmen werden.</li>
-<li>Werden neue Räume zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li></ul>
+$string['helptext_chooseRooms']= 'Auf dieser Seite kann die Liste aller im System verfügbaren möglichen <strong>Prüfungsräume</strong> angesehen und einer oder mehrere davon als Raum für die aktuelle Prüfung ausgewählt werden. <br /> <br />
+Zudem können nach einem Klick auf den Button "Eigenen Prüfungsraum anlegen" auch eigene Prüfungsräume zur Liste hinzugefügt (und anschließend als Prüfungsraum ausgewählt) werden. <br /> <br />
+Um einen Raum als Prüfungsraum auszuwählen muss zunächst das Kästchen links neben dessen Namen angeklickt werden. Ein Klick auf den Button „Räume auswählen“ speichert die gewählten Räume als Prüfungsräume. Ist ein Raum nach dem Öffnen der Seite bereits markiert wurde er schon als Raum für die Prüfung gespeichert.<br /> <br />
+Die gewählten Prüfungsräume werden später verwendet, um den zur Prüfung hinzugefügten TeilnehmerInnen Sitzplätze zuzuweisen. Ihre Sitzplätze werden den PrüfungsteilnehmerInnen später (sobald Sie diese Information auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben) in deren Ansicht angezeigt. Außerdem wird die Sitzplatzzuweisung in Dokumenten wie der Teilnehmerliste oder dem Sitzplan benötigt. <br /> <br />
+Eine Beschreibung des Raumes (und damit meistens auch die Zahl der in Diesem vorhandenen Sitzplätze) steht in der Tabelle. Ist für einen Raum ein Sitzplan im System hinterlegt kann dieser durch das Drücken der linken Maustaste über dem Info-Symbol in der Spalte "Sitzplan“ angesehen werden. <br /> <br />
+<strong>Wichtige Hinweise:</strong>
+<ul><li>Um die weiteren Funktionen der PANDA Prüfungsorganisation nutzen zu können muss hier mindestens ein Raum als Prüfungsraum ausgewählt werden. Zudem müssen die gewählten Räume mindestens so viele Sitzplätze bieten, wie TeilnehmerInnen an der Prüfung teilnehmen sollen.</li>
+<li>Werden neue Räume zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li>
+<li>Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.</li></ul>
 <strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung der Universität Paderborn buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
 $string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
 $string['helptext_addDefaultRooms']= 'Hier können die Standardräume importiert werden ...';

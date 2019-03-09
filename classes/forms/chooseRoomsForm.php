@@ -54,7 +54,7 @@ class chooseRoomsForm extends moodleform {
     $mform->setType('id', PARAM_INT);
 
     $mform->addElement('html', '<div class="row"><div class="col-xs-4">');
-    $mform->addElement('html', '<h3>Räume auswählen</h3></div>');
+    $mform->addElement('html', '<h3>'.get_string('choose_exam_rooms', 'mod_exammanagement').'</h3></div>');
     $mform->addElement('html', '<div class="col-xs-2"><a class=" helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
     $mform->addElement('html', '<div class="col-xs-6">');
@@ -67,9 +67,9 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '</div>');
 
-    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addRooms'));
+    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('chooseRooms'));
 
-    $mform->addElement('html', '<p>Die unten stehenden Räume können als Prüfungsräume gewählt werden.</p>');
+    $mform->addElement('html', '<p>'.get_string('choose_rooms_str', 'mod_exammanagement').'</p>');
 
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
 
@@ -78,7 +78,7 @@ class chooseRoomsForm extends moodleform {
     }
 
     ###### chooseRooms ######
-    $mform->addElement('html', '<div><div class="row"><div class="col-xs-3"><h4>Raum</h4></div><div class="col-xs-3"><h4>Beschreibung</h4></div><div class="col-xs-2"><h4>Sitzplan</h4></div><div class="col-xs-3"><h4>Raumart</h4></div><div class="col-xs-1"></div></div>');
+    $mform->addElement('html', '<div><div class="row"><div class="col-xs-3"><h4>'.get_string('room', 'mod_exammanagement').'</h4></div><div class="col-xs-3"><h4>'.get_string('description', 'mod_exammanagement').'</h4></div><div class="col-xs-2"><h4>'.get_string('seatingplan', 'mod_exammanagement').'</h4></div><div class="col-xs-3"><h4>'.get_string('room_type', 'mod_exammanagement').'</h4></div><div class="col-xs-1"></div></div>');
 
     $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
     $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
@@ -112,15 +112,15 @@ class chooseRoomsForm extends moodleform {
           $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_rooms_svg collapse">'.$svgStr.'</div>');
 
         } else {
-          $mform->addElement('html', ' Nein ');
+          $mform->addElement('html', get_string('no_seatingplan_available', 'mod_exammanagement'));
         }
 
         if ($roomObj->type=='defaultroom'){
-          $mform->addElement('html', '</div><div class="col-xs-3"> Standardraum </div>');
+          $mform->addElement('html', '</div><div class="col-xs-3">'.get_string('default_room', 'mod_exammanagement').'</div>');
         } else {
-          $mform->addElement('html', '</div><div class="col-xs-3"> Eigener Raum </div>');
+          $mform->addElement('html', '</div><div class="col-xs-3">'.get_string('custom_room', 'mod_exammanagement').'</div>');
           $mform->addElement('html', '<div class="col-sm-1"><a class="m-r-1" href="addCustomRoom.php?id='.$this->_customdata['id'].'&roomid='.$roomObj->roomid.'" title="'.get_string("change_room", "mod_exammanagement").'"><i class="fa fa-edit"></i></a>');
-          $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletecustomroomid', $roomObj->roomid).'" onClick="javascript:return confirm(\'Durch diese Aktion wird dieser selbst erstellte Raum gelöscht. Stellen Sie sicher, dass der Raum nicht zur Prüfung ausgewählt wurde.\');" title="'.get_string("delete_room", "mod_exammanagement").'"><i class="fa fa-trash"></i></a></div>');
+          $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletecustomroomid', $roomObj->roomid).'" onClick="javascript:return confirm(\''.get_string("delete_room_confirm", "mod_exammanagement").'\');" title="'.get_string("delete_room", "mod_exammanagement").'"><i class="fa fa-trash"></i></a></div>');
         }
 
         $mform->addElement('html', '</div>');
@@ -134,10 +134,10 @@ class chooseRoomsForm extends moodleform {
         }
       }
 
-      $this->add_action_buttons(true,'Räume für Prüfung auswählen');
+      $this->add_action_buttons(true,get_string('choose_rooms', 'mod_exammanagement'));
 
     } else{
-      $mform->addElement('html', 'Keine Räume gefunden');
+      $mform->addElement('html', get_string('no_rooms_found', 'mod_exammanagement'));
 
     }
 

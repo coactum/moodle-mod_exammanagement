@@ -191,11 +191,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					// delete temp file header and update saved file headers
 					$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 
-					// reset state of places assignment if already set
-					if($ExammanagementInstanceObj->allPlacesAssigned()){
-						$ExammanagementInstanceObj->moduleinstance->stateofplaces = 'error';
-					}
-
 					$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
 					//delete temp participants

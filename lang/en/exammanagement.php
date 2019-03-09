@@ -120,21 +120,36 @@ $string['check_password_str'] = 'Enter password';
 $string['check_password'] = 'A password for this exam organization was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['confirm_password'] = 'Confirm password';
 $string['reset_password_admin'] = 'Reset password (only for administrators)';
+
+//checkPassword.php
 $string['wrong_password'] = 'Wrong password. Please retry.';
 $string['password_reset_successful'] = 'Password reset successful.';
 
 //chooseRoomsForm.php
+$string['choose_exam_rooms'] = 'Choose exam rooms';
+$string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
-$string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space can be used. "2 places free" means that every 3rd place can be used.';
+$string['room'] = 'Room';
+$string['description'] = 'Description';
+$string['room_type'] = 'Room type';
+$string['no_seatingplan_available'] = 'No seating plan available';
+$string['default_room'] = 'Default room';
+$string['custom_room'] = 'Custom room';
+$string['delete_room_confirm'] = 'This action deletes this self created room. Make sure that the room is not currently selected as an exam room.';
+$string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.';
 $string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats have already been assigned. This assignment will be deleted by changing the exam rooms and must then be carried out again.';
+$string['no_rooms_found'] = 'No rooms found';
 
-// addDefaultRoomsForm.php
+//chooseRooms.php
+$string['room_deselected_as_examroom'] = 'The room must first be deselected as an exam room.';
+
+//addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Import default rooms from text file';
 $string['import_default_rooms_str'] = 'Administrators can import default rooms for teachers to choose from here as text file.';
 $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms are already imported. New import will override old rooms.';
 
-// addCustomRoomForm.php
+//addCustomRoomForm.php
 $string['add_room'] = 'Add room';
 $string['change_room'] = 'Change room';
 $string['delete_room'] = 'Delete room';
@@ -194,7 +209,7 @@ $string['total'] = 'Total';
 $string['results_already_entered'] = '<strong>Warning:</strong> Some exam results have already been entered. After changing the tasks, you should check whether they may need to be updated.';
 $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check whether it may need to be updated.';
 
-//textfield.php
+//textfieldForm.php
 $string['add_text_str'] = 'Add textfield';
 $string['add_text_text'] = 'All text added below will be immediately displayed to the participants in their view of this activity.';
 
@@ -219,6 +234,9 @@ $string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected 
 $string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA email adress or matriculation number) and bonus points must fit the choosen column.';
 $string['bonus_already_entered'] = '<strong>Warning:</strong> Some bonus points are already entered and will be replaced through the new imported ones.';
+
+//importBonus.php
+$string['points_bonussteps_invalid'] = 'Points for bonus steps invalid';
 
 //configureGradingscaleForm.php
 $string['configure_gradingscale_str'] = 'Configure grading scale';
@@ -263,7 +281,6 @@ $string['internal_use'] = 'FOR INTERNAL USE ONLY!';
 $string['lastname'] = 'Name';
 $string['firstname'] = 'Firstname';
 $string['matrno'] = 'Matr.-no.';
-$string['room'] = 'Room';
 $string['place'] = 'Place';
 
 //seatingplan
@@ -320,6 +337,8 @@ $string['examreview_room'] = 'Rooms (enter as free text)';
 $string['operation_canceled'] = 'Operation canceled';
 $string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
+$string['no_participants_added'] = 'No exam participants added yet. Work step not possible';
+$string['not_all_places_assigned'] = 'Not all seats assigned yet. Work step not possible';
 $string['correction_not_completed'] = 'Marking not completed';
 
 //helptexts
@@ -338,7 +357,16 @@ Remember to choose your password with sufficient security and especially do not 
 By clicking on the button "Reset password" you can revoke the password protection for the exam organisation.';
 $string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br> Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
-$string['helptext_addRooms']= 'Here goes the description of this feature site.';
+$string['helptext_chooseRooms']= 'On this page you can view the list of all possible <strong>exam rooms</strong> available in the system and select one or more of them as the room for the current exam. <br /> <br />
+After clicking on the button "Add custom exam room", you can also add your own exam rooms to the list (and later select them as exam rooms). <br /> <br />
+To select a room as an exam room, first click on the box to the left of its name. A click on the button "Choose rooms" saves the selected rooms as exam rooms. If a room is already marked after opening the page, it has already been saved as a room for the exam. <br /> <br />
+The chosen exam rooms will be used later to assign seats to the participants added to the exam. Their seats will later be displayed to them in their view (as soon as you have made this information visible to the students on the overview page). The seat allocation is also used in documents such as the list of participants or the seating plan. <br /> <br />
+A description of the room (and thus usually the number of seats available in the room) is given in the table. If a seating plan is stored in the system for a room, it can be viewed by pressing the left mouse button over the info icon in the "Seating plan" column. <br /> <br />
+<strong>Important notes:</strong>
+<ul><li>In order to be able to use the other functions of the PANDA exam organization, at least one room must be selected here as exam room. In addition, the selected rooms must offer at least as many seats as participants are to take part in the exam.</li>
+<li>If new rooms are added to the exam or are existing ones removed after the seats have already been allocated to the participants, this allocation must be repeated.</li>
+<li>Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.</li></ul>
+<strong>Attention:</strong> The system does not take the availability of the selected rooms into account. As a lecturer, you must book the rooms in which the exam is to take place with the central room administration of the University of Paderborn and clarify that the corresponding rooms are actually available at the time of the examination.';
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';

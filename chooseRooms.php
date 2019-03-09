@@ -56,7 +56,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
           $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
         } else {
-          redirect ('chooseRooms.php?id='.$id, 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.', null, 'error');
+          redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
         }
       }
     }
@@ -94,9 +94,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
       if($update){
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Räume für die Prüfung wurden ausgewählt', 'success');
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
       } else {
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Räume konnten nicht für die Prüfung ausgewählt werden', 'error');
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('wrong_password', 'mod_exammanagement'), 'error');
       }
 
     } else {
