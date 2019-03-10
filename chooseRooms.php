@@ -87,23 +87,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
 
         // reset places assignment if an exam room where participants are seated is deselected
-        if($ExammanagementInstanceObj->allPlacesAssigned()){
 
-          $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam room is deselected
+        $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam rooms are deselected
                     
-          if(isset($deselectedRoomsArr)){
+        if(isset($deselectedRoomsArr)){
 
-            foreach($deselectedRoomsArr as $roomid){
+          foreach($deselectedRoomsArr as $roomid){
 
-              if($UserObj->getAllExamParticipantsByRoom($roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+            if($UserObj->getAllExamParticipantsByRoom($roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
 
-                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
-                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
-                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
-                break;
-              }
-              
-            }
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
+              break;
+            }      
           }
         }
 

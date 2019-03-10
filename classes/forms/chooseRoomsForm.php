@@ -132,7 +132,7 @@ class chooseRoomsForm extends moodleform {
           }
         }
 
-        if($ExammanagementInstanceObj->allPlacesAssigned() && $UserObj->getAllExamParticipantsByRoom($value)){
+        if($UserObj->getAllExamParticipantsByRoom($value)){
           $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div>');
         }
       }

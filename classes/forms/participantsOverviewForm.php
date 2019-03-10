@@ -161,25 +161,32 @@ class participantsOverviewForm extends moodleform {
                     
                     $attributes = array('size'=>'3');
 
-                    $mform->addElement('html', '<td>');
+                    if($examrooms){
 
-                    $roomOptionsArr = array();
+                        $mform->addElement('html', '<td>');
 
-                    foreach($examrooms as $id => $roomid){
-                        $roomOptionsArr[$roomid] = $ExammanagementInstanceObj->getRoomObj($roomid)->name;
-                    }                
+                        $roomOptionsArr = array();
 
-                    $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
-                    $select->setSelected($participant->roomid);
+                        foreach($examrooms as $id => $roomid){
+                            $roomOptionsArr[$roomid] = $ExammanagementInstanceObj->getRoomObj($roomid)->name;
+                        }                
+    
+                        $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
+                        $select->setSelected($participant->roomid);
+    
+                        $mform->addElement('html', '</td><td>');
+    
+                        $mform->addElement('text', 'place', '', $attributes);
+                        $mform->setType('place', PARAM_TEXT);
+                        $mform->setDefault('place', $place);
+    
+                        $mform->addElement('html', '</td><td>');
+                    } else {
+                        $mform->addElement('html', '<td>-</td>');
+                        $mform->addElement('html', '<td>-</td><td>');
+                    }
 
-                    $mform->addElement('html', '</td><td>');
-
-                    $mform->addElement('text', 'place', '', $attributes);
-                    $mform->setType('place', PARAM_TEXT);
-                    $mform->setDefault('place', $place);
-
-                    $mform->addElement('html', '</td><td>');
-
+                
                     if($ExammanagementInstanceObj->getTaskCount()){
 
                             $mform->addElement('html', '<table class="table-sm"><tr>');

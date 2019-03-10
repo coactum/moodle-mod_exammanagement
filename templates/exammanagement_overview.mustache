@@ -361,20 +361,21 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
 											</div>
 											<div class="col-xs-6">
-												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
+												<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
-																{{^allplacesassigned}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/allplacesassigned}}
+																{{^participants}}<span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span>{{/participants}}
 																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 															</span>
 															<h3 class="panel-title">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.</p>
+														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.<br /><br />
+														<strong>Hinweis:</strong> Erst wenn allen Teilnehmenden Sitzplätze zugewiesen wurden erscheinen diese auf den Prüfungsetiketten.</p>
 													</div>
 													<div class="panel-footer">
-														{{#allplacesassigned}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}
+														{{#participants}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}
 													</div>
 												</div>
 											</div>

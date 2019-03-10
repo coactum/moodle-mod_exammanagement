@@ -53,8 +53,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         if(!$UserObj->getParticipantsCount()){
             $MoodleObj->redirectToOverviewPage('beforeexam', 'Es müssen erst Prüfungsteilnehmer importiert werden.', 'error');
-        } else if(!$ExammanagementInstanceObj->getRoomsCount()){
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Es müssen erst Prüfungsräume ausgewählt werden.', 'error');
         }
 
         $MoodleObj->setPage('participantsOverview');
