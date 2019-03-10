@@ -45,7 +45,7 @@ $string['exam_participants'] = 'Exam partricipants';
 $string['exam_tasks'] = 'Exam tasks';
 $string['freetext_field'] = 'Textfield for free text';
 $string['message_to_participants'] = 'Message to participants';
-$string['assigning_places'] = 'Automaticaly assignment of places';
+$string['assigning_places'] = 'Assignment of places';
 $string['seatingplan'] = 'Seatingplan';
 $string['set_visibility_of_examdate'] = 'Set visibility of exam date';
 $string['exam_labels'] = 'Exam labels';
@@ -91,7 +91,7 @@ $string['add_participants'] = 'Add participants';
 $string['configure_tasks'] = 'Configure tasks';
 $string['edit_textfield'] = 'Edit textfield';
 $string['send_groupmessage'] = 'Write message';
-$string['assign_places'] = 'Assign places';
+$string['assign_places'] = 'Assign places automatically';
 $string['assign_places_manually'] = 'Assign places manually';
 $string['export_seatingplan_place'] = 'Sorted by place';
 $string['export_seatingplan_matrnr'] = 'Sorted by matriculation number';
@@ -138,7 +138,7 @@ $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
 $string['delete_room_confirm'] = 'This action deletes this self created room. Make sure that the room is not currently selected as an exam room.';
 $string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.';
-$string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats have already been assigned. This assignment will be deleted by changing the exam rooms and must then be carried out again.';
+$string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats in this room have already been assigned to some participants. If this room is now deselected as an exam room, the entire assignment of places is deleted and must then be carried out again.';
 $string['no_rooms_found'] = 'No rooms found';
 
 //chooseRooms.php
@@ -194,7 +194,7 @@ $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Deleted';
-$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned. This assignment will be deleted by changing the exam participants and must then be carried out again.';
+$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
 
 //showParticipants.php
 $string['delete_all_participants'] = 'Delete all participants';

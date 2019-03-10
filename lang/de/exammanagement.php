@@ -45,7 +45,7 @@ $string['exam_participants'] = 'Prüfungsteilnehmer';
 $string['exam_tasks'] = 'Prüfungsaufgaben';
 $string['freetext_field'] = 'Freitextfeld';
 $string['message_to_participants'] = 'Nachricht an Teilnehmer';
-$string['assigning_places'] = 'Automatische Sitzplatzzuweisung';
+$string['assigning_places'] = 'Sitzplatzzuweisung';
 $string['seatingplan'] = 'Sitzplan';
 $string['set_visibility_of_examdate'] = 'Prüfungsdatum sichtbar schalten';
 $string['exam_labels'] = 'Prüfungsetiketten';
@@ -91,7 +91,7 @@ $string['add_participants'] = 'Teilnehmer hinzufügen';
 $string['configure_tasks'] = 'Aufgaben konfigurieren';
 $string['edit_textfield'] = 'Freitextfeld bearbeiten';
 $string['send_groupmessage'] = 'Nachricht schreiben';
-$string['assign_places'] = 'Sitzplätze zuweisen';
+$string['assign_places'] = 'Sitzplätze automatisch zuweisen';
 $string['assign_places_manually'] = 'Sitzplätze manuell zuweisen';
 $string['export_seatingplan_place'] = 'Nach Sitzplatz sortiert';
 $string['export_seatingplan_matrnr'] = 'Nach Matrikelnummer sortiert';
@@ -138,7 +138,7 @@ $string['default_room'] = 'Standardraum';
 $string['custom_room'] = 'Eigener Raum';
 $string['delete_room_confirm'] = 'Durch diese Aktion wird dieser selbst erstellte Raum gelöscht. Stellen Sie sicher, dass der Raum aktuell nicht als Prüfungsraum ausgewählt ist.';
 $string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.';
-$string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsräume gelöscht und muss dann neu durchgeführt werden.';
+$string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits einigen Teilnehmenden Sitzplätze in diesem Raum zugewiesen. Falls dieser Raum jetzt als Prüfungsraum abgewählt wird wird die gesamte Sitzplatzzuweisung gelöscht und muss dann neu durchgeführt werden.';
 $string['no_rooms_found'] = 'Keine Räume gefunden';
 
 //chooseRooms.php
@@ -194,7 +194,7 @@ $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Gelöscht';
-$string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Diese Zuweisung wird durch das Ändern der Prüfungsteilnehmer gelöscht und muss dann neu durchgeführt werden.';
+$string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Falls nun neue Prüfungsteilnehmende hinzugefügt werden müssen diesen noch Sitzplätze zugewiesen werden.';
 
 //showParticipants.php
 $string['delete_all_participants'] = 'Alle Teilnehmer löschen';

@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\User;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\general\MoodleDB;
 
@@ -36,6 +37,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../general/Moodle.php');
 require_once(__DIR__.'/../general/MoodleDB.php');
 
@@ -45,6 +47,7 @@ class chooseRoomsForm extends moodleform {
   public function definition() {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+    $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleDBObj = MoodleDB::getInstance();
 
@@ -72,10 +75,6 @@ class chooseRoomsForm extends moodleform {
     $mform->addElement('html', '<p>'.get_string('choose_rooms_str', 'mod_exammanagement').'</p>');
 
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
-
-    if($ExammanagementInstanceObj->allPlacesAssigned()){
-        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div>');
-    }
 
     ###### chooseRooms ######
     $mform->addElement('html', '<div><div class="row"><div class="col-xs-3"><h4>'.get_string('room', 'mod_exammanagement').'</h4></div><div class="col-xs-3"><h4>'.get_string('description', 'mod_exammanagement').'</h4></div><div class="col-xs-2"><h4>'.get_string('seatingplan', 'mod_exammanagement').'</h4></div><div class="col-xs-3"><h4>'.get_string('room_type', 'mod_exammanagement').'</h4></div><div class="col-xs-1"></div></div>');
@@ -131,6 +130,10 @@ class chooseRoomsForm extends moodleform {
               $mform->setDefault('rooms['.$roomObj->roomid.']', true);
             }
           }
+        }
+
+        if($ExammanagementInstanceObj->allPlacesAssigned() && $UserObj->getAllExamParticipantsByRoom($value)){
+          $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div>');
         }
       }
 

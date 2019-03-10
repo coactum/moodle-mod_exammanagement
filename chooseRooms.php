@@ -41,6 +41,7 @@ $deletecustomroomid  = optional_param('deletecustomroomid', 0, PARAM_TEXT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
+$UserObj = User::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -76,6 +77,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $roomsArray = $allRooms["rooms"];
       $checkedRooms = array();
+      $oldRooms = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
 
         foreach ($roomsArray as $key => $value){
           if ($value==1 && is_string($value)){
@@ -84,13 +86,30 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         }
 
+        // reset places assignment if an exam room where participants are seated is deselected
+        if($ExammanagementInstanceObj->allPlacesAssigned()){
+
+          $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam room is deselected
+                    
+          if(isset($deselectedRoomsArr)){
+
+            foreach($deselectedRoomsArr as $roomid){
+
+              if($UserObj->getAllExamParticipantsByRoom($roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+
+                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
+                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
+                $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
+                break;
+              }
+              
+            }
+          }
+        }
+
         sort($checkedRooms); //sort checked roomes ids for saving in DB
 
         $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
-
-      // reset state of places assignment if already set
-      if($ExammanagementInstanceObj->allPlacesAssigned()){
-      }
 
       $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
       if($update){
