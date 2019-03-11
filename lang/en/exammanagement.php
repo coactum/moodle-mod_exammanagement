@@ -157,36 +157,38 @@ $string['customroom_name'] = 'Name of exam room';
 $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
 $string['change_custom_room_name'] = '<strong>Please note:</strong> If you change the name of an existing room, a new room is created instead. In this case, the old room must still be deleted manually.';
+$string['custom_room_places'] = '<strong>Please note:</strong> The exam room you have created here gets as many seats as you specify below, with the numbering starting at 1 (regardless of the actual number of seats or their numbering in the room). This means that you must ensure that the number of seats you enter corresponds to the actual number of seats available, and you must also adjust any deviations in the numbering of seats yourself.';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
 
-//addParticipantsForm.php
+//showParticipants.php
 $string['view_participants'] = 'View participants';
-$string['import_participants'] = 'Import participants';
-$string['import_new_participants'] = 'Import other participants';
-$string['import_participants_from_file'] = 'Import participants from file';
-$string['import_course_participants'] = 'Import participants from course';
+$string['import_participants_from_file_recommended'] = 'Import participants from file (recommended)';
+$string['import_course_participants_optional'] = 'Import participants from course (optional)';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
-$string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
+$string['state_added_to_exam'] = 'Participant of exam';
+$string['state_added_to_exam_no_moodle'] = 'Participant of exam (without PANDA account)';
+$string['delete_all_participants'] = 'Delete all participants';
+
+//addParticipantsForm.php
+$string['import_participants_from_file'] = 'Import participants from file';
+$string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
+$string['read_file'] = 'Read file';
+$string['import_participants'] = 'Import participants';
+$string['import_new_participants'] = 'Import other participants';
+$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
 $string['newmatrnr'] = 'Users will be added to exam.';
 $string['badmatrnr'] = 'Lines with invalid matriculation numbers (Users can not be added to exam).';
 $string['oddmatrnr'] = 'Users with warnings (can still be added as participants).';
 $string['existingmatrnr'] = 'Users are already exam participants (no changes)';
 $string['deletedmatrnr'] = 'Users will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
-$string['import_from_excel_file'] = 'Import participants from excel file (matriculation number in any column) and add them to course.';
-$string['paul_file'] = 'PAUL file';
-$string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
 $string['no_participants_added'] = 'No participants added.';
-$string['read_file'] = 'Read file';
-$string['state_added_to_exam'] = 'Participants of exam';
-$string['state_added_to_exam_no_moodle'] = 'Participants of exam (without PANDA account)';
-$string['state_courseparticipant'] = 'Participants of course';
 $string['state_newmatrnr'] = 'New';
 $string['state_newmatrnr_no_moodle'] = 'New (without PANDA account)';
 $string['state_badmatrnr'] = 'Bad matriculation number';
@@ -194,10 +196,13 @@ $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Deleted';
-$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
 
-//showParticipants.php
-$string['delete_all_participants'] = 'Delete all participants';
+//addCourseParticipantsForm.php
+$string['import_course_participants'] = 'Import participants from course';
+$string['state_courseparticipant'] = 'Participant of course';
+$string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
+$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> 
+It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office (and can therefore maybe not be entered correctly in PAUL). If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';

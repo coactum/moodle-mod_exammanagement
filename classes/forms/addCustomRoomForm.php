@@ -56,7 +56,8 @@ class addCustomRoomForm extends moodleform {
     $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addCustomRoom'));
     
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("change_custom_room_name", "mod_exammanagement").'</div>');
-
+    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("custom_room_places", "mod_exammanagement").'</div>');
+    
     $attributes = array('size'=>'20');
 
     $mform->addElement('text', 'roomname', get_string('customroom_name', 'mod_exammanagement'), $attributes);

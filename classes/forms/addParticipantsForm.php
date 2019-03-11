@@ -474,10 +474,10 @@ class addParticipantsForm extends moodleform{
             $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
             $mform->addRule('participantslist_paul', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
-            $mform->addElement('html', '<div class="hidden">');
-            $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
-            //$mform->addRule('participantslist_excel', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
-            $mform->addElement('html', '</div>');
+            // $mform->addElement('html', '<div class="hidden">');
+            // $mform->addElement('filepicker', 'participantslist_excel', get_string("import_from_excel_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.csv, .xlsx, .ods, .xls'));
+            // $mform->addRule('participantslist_excel', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
+            // $mform->addElement('html', '</div>');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
           }

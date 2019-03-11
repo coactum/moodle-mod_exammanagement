@@ -157,36 +157,38 @@ $string['customroom_name'] = 'Name des Raums';
 $string['customroom_placescount'] = 'Anzahl der Sitzplätze';
 $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
 $string['change_custom_room_name'] = '<strong>Hinweis:</strong> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.';
+$string['custom_room_places'] = '<strong>Hinweis:</strong> Der von Ihnen hier erstellte eigene Prüfungsraum erhält im System so viele Plätze wie von Ihnen unten angegeben werden, wobei die Nummerierung (unabhängig von der im Raum tatsächlich vorhandenen Sitzplatzanzahl oder deren Nummerieung) bei 1 startet. Sie müssen also selbst sicherstellen, dass die von Ihnen angegebene Platzzahl mit den tatsächlich vorhandenen Sitzplätzen übereinstimmt und müssen zudem mögliche Abweichungen bei der Sitzplatznummerierung selbst anpassen.';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
 
-//addParticipantsForm.php
+//showParticipants.php
 $string['view_participants'] = 'Teilnehmer ansehen';
-$string['import_participants'] = 'Teilnehmer hinzufügen';
-$string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
-$string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
-$string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
+$string['import_participants_from_file_recommended'] = 'Teilnehmer aus Datei hinzufügen (empfohlen)';
+$string['import_course_participants_optional'] = 'Kursteilnehmer importieren (optional)';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
-$string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
 $string['participants'] = 'Teilnehmer';
 $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
 $string['import_state'] = 'Status';
+$string['state_added_to_exam'] = 'Prüfungsteilnehmer';
+$string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne PANDA Benutzerkonto)';
+$string['delete_all_participants'] = 'Alle Teilnehmer löschen';
+
+//addParticipantsForm.php
+$string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
+$string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
+$string['read_file'] = 'Datei einlesen';
+$string['import_participants'] = 'Teilnehmer hinzufügen';
+$string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
+$string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Falls nun neue Prüfungsteilnehmende hinzugefügt werden müssen diesen noch Sitzplätze zugewiesen werden.';
 $string['newmatrnr'] = 'Benutzer werden zur Prüfung hinzugefügt.';
 $string['badmatrnr'] = 'Zeilen mit ungültigen Matrikelnummern (Benutzer können nicht zur Prüfung hinzugefügt werden).';
 $string['oddmatrnr'] = 'Benutzer mit Warnungen (können trotzdem hinzugefügt werden).';
 $string['existingmatrnr'] = 'Benutzer sind bereits Prüfungsteilnehmer (keine Änderungen).';
 $string['deletedmatrnr'] = 'Benutzer werden gelöscht.';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
-$string['import_from_excel_file'] = 'Externe Teilnehmer aus Excel-Datei importieren (Matrikelnummern in beliebiger Spalte) und zur Prüfung hinzufügen.';
-$string['paul_file'] = 'PAUL-Datei';
-$string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
 $string['no_participants_added'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
-$string['read_file'] = 'Datei einlesen';
-$string['state_added_to_exam'] = 'Prüfungsteilnehmer';
-$string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne PANDA Benutzerkonto)';
-$string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['state_newmatrnr'] = 'Neu eingelesen';
 $string['state_newmatrnr_no_moodle'] = 'Neu eingelesen (ohne PANDA Benutzerkonto)';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
@@ -194,10 +196,12 @@ $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Gelöscht';
-$string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Falls nun neue Prüfungsteilnehmende hinzugefügt werden müssen diesen noch Sitzplätze zugewiesen werden.';
 
-//showParticipants.php
-$string['delete_all_participants'] = 'Alle Teilnehmer löschen';
+//addCourseParticipantsForm.php
+$string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
+$string['state_courseparticipant'] = 'Kursteilnehmer';
+$string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
+$string['course_participant_import_preventing_paul_export'] = '<strong>Achtung:</strong> Der Import der Kursteilnehmer als Prüfungsteilnehmer ist zwar möglich, allerdings werden diese Teilnehmer später beim Ergebnis-Export für das Prüfungsamt in einer eigenen Liste exportiert (und können somit gegebenenfalls nicht vernünftig in PAUL eingetragen werden. Wenn Sie vorhaben die Prüfungsergebnisse in PAUL eintragen zu lassen müssen Sie die Teilnehmer mithilfe der entsprechenden PAUL-Teilnehmerlisten der Prüfung importieren.';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Aufgaben konfigurieren';

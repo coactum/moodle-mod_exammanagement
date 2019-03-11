@@ -676,7 +676,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<p>Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.</p>
 													</div>
 													<div class="panel-footer">
-														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultscount}}{{/datadeletiondate}}
+														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
 													</div>
 												</div>
                       </div>
@@ -777,8 +777,11 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															{{#resultsenteredafterexamreview}}<p>Es wurden bisher <strong>{{resultsenteredafterexamreview}} </strong> Prüfungsergebnisse nach der Klausureinsicht geändert.</p>{{/resultsenteredafterexamreview}}
-															{{^resultsenteredafterexamreview}}<p>Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.</p>{{/resultsenteredafterexamreview}}
+															<p>
+																{{#resultsenteredafterexamreview}}Es wurden bisher <strong>{{resultsenteredafterexamreview}} </strong> Prüfungsergebnisse nach der Klausureinsicht geändert.{{/resultsenteredafterexamreview}}
+																{{^resultsenteredafterexamreview}}Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.{{/resultsenteredafterexamreview}}
+																<br /><br /><strong>Hinweis:</strong> Hier erscheint nur die Zahl der Prüfungsergebnisse, die ab dem für die Klausureinsicht eingetragenen Zeitpunkt geändert wurden. Das Ändern eines Prüfungsergebnisses nach dem Klick auf die unten stehende Schaltfläche überschreibt dabei sämtliche vorher gespeicherten Ergebnisse für den oder die Teilnehmende. Stellen Sie deshalb sicher, dass Sie vor dem Ändern der Ergebnisse die alten Prüfungsergebnisse zu Sicherungszwecken einmal über die Dokumentenexport-Funktionen in der Phase "Nach der Klausur" exportiert haben.
+															</p>
 														</div>
 														<div class="panel-footer">
 															{{#datadeletiondate}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
@@ -796,10 +799,10 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden.</p>
+																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden. <br /><br /><strong>Hinweis:</strong> Diese Schaltfläche ermöglicht den einfachen Export aller seit dem Datum der Klausureinsicht geänderter Prüfungsergebnisse in einer Datei für das PAUL-Prüfungsamt. Möchten Sie stattdessen einen nach den eingelesenen PAUL-Listen getrennten Export der geänderten Ergebnisse stehen Ihnen dafür wieder die Möglichkeiten des Ergebnis-Exportes aus der Phase "Nach der Klausur" zur Verfügung.</p>
 														</div>
 														<div class="panel-footer">
-															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a><!--<a href="" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>-->{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 														</div>
 													</div>
 	                      </div>
