@@ -133,6 +133,7 @@ $string['add_custom_room'] = 'Add custom exam room';
 $string['room'] = 'Room';
 $string['description'] = 'Description';
 $string['room_type'] = 'Room type';
+$string['options'] = 'Options';
 $string['no_seatingplan_available'] = 'No seating plan available';
 $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
@@ -172,8 +173,12 @@ $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
 $string['state_added_to_exam'] = 'Participant of exam';
+$string['participants_without_panda_account'] = 'Participants of exam without PANDA account';
 $string['state_added_to_exam_no_moodle'] = 'Participant of exam (without PANDA account)';
+$string['delete_participant'] = 'Delete participant';
+$string['participant_deletion_warning'] = 'This action deletes the selected exam participant and all results entered for him.';
 $string['delete_all_participants'] = 'Delete all participants';
+$string['all_participants_deletion_warning'] = 'This action deletes all exam participants and all results entered for them.';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';

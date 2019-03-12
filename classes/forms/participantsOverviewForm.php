@@ -211,7 +211,7 @@ class participantsOverviewForm extends moodleform {
 
                             $mform->addElement('html', '</tr></table>');
                     } else {
-                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a>');
+                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
                     }
                     
                     $mform->addElement('html', '</td>');
@@ -224,9 +224,9 @@ class participantsOverviewForm extends moodleform {
                     $mform->addElement('html', '</td></tr></table>');
 
                     if($gradingscale){
-                        $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
                     } else {
-                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
 
                     if($UserObj->getEnteredBonusCount()){
@@ -249,9 +249,9 @@ class participantsOverviewForm extends moodleform {
                     }
 
                     if($gradingscale){
-                        $mform->addElement('html', '<td> <strong><i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
                     } else {
-                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
                     
                     $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"></td>');
@@ -286,7 +286,7 @@ class participantsOverviewForm extends moodleform {
     
                         $mform->addElement('html', '</tr></table>');
                     } else {
-                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a>');
+                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
                     }
 
                     $mform->addElement('html', '</td>');
@@ -297,7 +297,7 @@ class participantsOverviewForm extends moodleform {
                         $result = $UserObj->calculateResultGrade($participant);
                         $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
                     } else {
-                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
 
                     if($UserObj->getEnteredBonusCount()){
@@ -313,12 +313,12 @@ class participantsOverviewForm extends moodleform {
                     if($gradingscale){
                         $mform->addElement('html', '<td>'.str_replace('.', ',', $UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonus)).'</td>');                    
                     } else {
-                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-info-circle text-warning"></i></a></td>');
+                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
 
                     $anchorid = $i-1;
     
-                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
                     
                 }
                 $mform->addElement('html', '</tr>');                

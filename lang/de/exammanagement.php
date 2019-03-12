@@ -133,6 +133,7 @@ $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
 $string['room'] = 'Raum';
 $string['description'] = 'Beschreibung';
 $string['room_type'] = 'Raumart';
+$string['options'] = 'Optionen';
 $string['no_seatingplan_available'] = 'Kein Sitzplan verfügbar';
 $string['default_room'] = 'Standardraum';
 $string['custom_room'] = 'Eigener Raum';
@@ -172,8 +173,12 @@ $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
 $string['import_state'] = 'Status';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
+$string['participants_without_panda_account'] = 'Prüfungsteilnehmer ohne PANDA Benutzerkonto';
 $string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne PANDA Benutzerkonto)';
+$string['delete_participant'] = 'Teilnehmer löschen';
+$string['participant_deletion_warning'] = 'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.';
 $string['delete_all_participants'] = 'Alle Teilnehmer löschen';
+$string['all_participants_deletion_warning'] = 'Durch diese Aktion werden sämtliche Prüfungsteilnehmenden sowie alle für diese eingetragenen Ergebnisse gelöscht.';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
