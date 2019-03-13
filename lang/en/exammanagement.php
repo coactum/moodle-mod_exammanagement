@@ -380,6 +380,7 @@ A description of the room (and thus usually the number of seats available in the
 $string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
 $string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
 $string['helptext_setDateTime']= 'Here goes the description of this feature site.';
+$string['helptext_showParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';

@@ -73,7 +73,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         echo('</div></div>');
 
-        echo($ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
+        echo($ExammanagementInstanceObj->ConcatHelptextStr('showParticipants'));
 
         echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 

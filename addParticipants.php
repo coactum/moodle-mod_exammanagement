@@ -244,7 +244,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$UserObj->deleteTempParticipants();
 					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersObjArr);
 
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$id), null , null, null);
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$id), 'Datei einlesen erfolgreich' , null, 'success');
 
 				}
 			}
