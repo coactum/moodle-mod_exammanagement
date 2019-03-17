@@ -25,6 +25,29 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//exammanagement_participantsview.mustache
+$string['examinformation'] = 'Informationen zur Prüfung';
+$string['state'] = 'Status';
+$string['no_participant'] = 'Sie sind nicht zur Prüfung angemeldet.';
+$string['added_to_exam'] = 'Sie sind zur Prüfung angemeldet.';
+$string['date'] = 'Datum';
+$string['no_date_entered'] = 'Es wurde noch kein Datum für die Prüfung festgelegt.';
+$string['time'] = 'Uhrzeit';
+$string['no_time_entered'] = 'Es wurde noch keine Uhrzeit für die Prüfung festgelegt.';
+$string['room'] = 'Raum';
+$string['no_room_assigned'] = 'Es wurde noch kein Prüfungsraum zugewiesen.';
+$string['seat'] = 'Platz';
+$string['no_seat_assigned'] = 'Es wurde noch kein Sitzplatz zugewiesen.';
+$string['hint'] = 'Hinweis';
+$string['no_exam_hint'] = 'Es ist kein Prüfungshinweis verfügbar.';
+$string['bonus_for_exam'] = 'Bonusnotenschritte für die Klausur';
+$string['bonus_for_exam_added_one'] = 'Für die Klausur haben Sie ';
+$string['bonus_for_exam_added_two'] = 'Bonusnotenschritte erreicht.';
+$string['bonus_for_exam_not_added'] = 'Es wurden bisher keine Bonusnotenschritte für Sie eingetragen.';
+$string['exam_review'] = 'Klausureinsicht';
+$string['exam_review_one'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am ';
+$string['exam_review_two'] = 'findet die Klausureinsicht statt in Raum ';
+
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['overview'] = 'Überblick';
@@ -130,7 +153,7 @@ $string['choose_exam_rooms'] = 'Prüfungsräume auswählen';
 $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
-$string['room'] = 'Raum';
+$string['exam_room'] = 'Raum';
 $string['description'] = 'Beschreibung';
 $string['room_type'] = 'Raumart';
 $string['options'] = 'Optionen';
@@ -191,7 +214,7 @@ $string['newmatrnr'] = 'Benutzer werden zur Prüfung hinzugefügt.';
 $string['badmatrnr'] = 'Zeilen mit ungültigen Matrikelnummern (Benutzer können nicht zur Prüfung hinzugefügt werden).';
 $string['oddmatrnr'] = 'Benutzer mit Warnungen (können trotzdem hinzugefügt werden).';
 $string['existingmatrnr'] = 'Benutzer sind bereits Prüfungsteilnehmer (keine Änderungen).';
-$string['deletedmatrnr'] = 'Benutzer werden gelöscht.';
+$string['deletedmatrnr'] = 'Prüfungsteilnehmer werden entfernt.';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['no_participants_added_page'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['state_newmatrnr'] = 'Neu eingelesen';
@@ -200,12 +223,14 @@ $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
-$string['state_deletedmatrnr'] = 'Gelöscht';
+$string['state_deletedmatrnr'] = 'Werden gelöscht';
 
 //addCourseParticipantsForm.php
 $string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
 $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
+$string['deletedmatrnr_no_course'] = 'Prüfungsteilnehmer werden entfernt (da sie keine Kursteilnehmer sind).';
+$string['existingmatrnr_course'] = 'Kursteilnehmer sind bereits Prüfungsteilnehmer (keine Änderungen).';
 $string['course_participant_import_preventing_paul_export'] = '<strong>Achtung:</strong> Der Import der Kursteilnehmer als Prüfungsteilnehmer ist zwar möglich, allerdings werden diese Teilnehmer später beim Ergebnis-Export für das Prüfungsamt in einer eigenen Liste exportiert (und können somit gegebenenfalls nicht vernünftig in PAUL eingetragen werden). Wenn Sie vorhaben die Prüfungsergebnisse in PAUL eintragen zu lassen müssen Sie die Teilnehmer mithilfe der entsprechenden PAUL-Teilnehmerlisten der Prüfung importieren.';
 
 //configureTasksForm.php
@@ -405,7 +430,7 @@ Im Folgenden werden die verschiedenen Stati kurz erklärt:<br>
 Alle Teilnehmer, die zur Prüfung hinzugefügt (oder von dieser wieder entfernt) werden sollen können nun ausgewählt werden, indem entweder der Haken in die Box neben dem Namen oder aber im Feld "Alle aus-/abwählen" des jeweiligen Bereiches gesetzt wird. Ein anschließendes Drücken des Buttons "Zur Prüfung hinzufügen" fügt die ausgewählten Teilnehmer dann zur Prüfung hinzu.<br><br>
 Für den Import von Teilnehmern aus mehreren Listen können Sie diesen Vorgang nun einfach mehrfach durchführen.';
 $string['helptext_addCourseParticipants']= 'Hier können alle im PANDA Kurs eingeschriebenen Kursteilnehmer als Prüfungsteilnehmer importiert werden. <br><br>
-Dazu müssen im unteren Abschnitt all jene Teilnehmerinnen ausgewählt werden, die zur Prüfung hinzugefügt werden sollen. Einzelne Teilnehmer können dabei durch einen Klick in das Kästchen neben ihrem Namen ausgewählt werden, zum Aus- (oder ab)wählen aller Kursteilnehmer genügt hingegen ein Klick in das entsprechende Kästchen "Alle aus-/abwählen". Es können zudem im entsprechenden Abschnitt gegebenenfalls bereits vorhandene Prüfungsteilnehmer ohne PANDA-Account ausgewählt werden. Diese werden dann bei einem Klick auf den ganz unten befindlichen Button "Zur Prüfung hinzufügen" von der Prüfung entfernt, während die ausgewählten Kursteilnehmer zur Prüfung hinzugefügt werden. Für alle Teilnehmer mit dem Status "Bereits Prüfungsteilnehmer" ändert sich hingegen nichts. <br><br>
+Dazu müssen im unteren Abschnitt all jene Teilnehmerinnen ausgewählt werden, die zur Prüfung hinzugefügt werden sollen. Einzelne Teilnehmer können dabei durch einen Klick in das Kästchen neben ihrem Namen ausgewählt werden, zum Aus- (oder ab)wählen aller Kursteilnehmer genügt hingegen ein Klick in das entsprechende Kästchen "Alle aus-/abwählen". Es können zudem im entsprechenden Abschnitt gegebenenfalls bereits vorhandene Prüfungsteilnehmer die keine Kursteilnehmer sind ausgewählt werden. Diese werden dann bei einem Klick auf den ganz unten befindlichen Button "Zur Prüfung hinzufügen" von der Prüfung entfernt, während die ausgewählten Kursteilnehmer zur Prüfung hinzugefügt werden. Für alle Teilnehmer mit dem Status "Bereits Prüfungsteilnehmer" ändert sich hingegen nichts. <br><br>
 Werden Teilnehmer hinzugefügt, nachdem bereits Sitzplätze zugewiesen wurden, müssen diesen noch Plätze zugewiesen werden.<br><br>
 <strong>Achtung:</strong> Wird diese Variante des Teilnehmerimportes gewählt werden die Ergebnisse aller so hinzugefügten Teilnehmer später in einer einzelnen separaten Liste für das Prüfungsamt exportiert, wodurch das Eintragen in PAUL gegebenenfalls schwierig wird. Wenn Sie vorhaben, die Prüfungsergebnisse in PAUL eintragen zu lassen, sollten Sie die Teilnehmer lieber mithilfe der entsprechenden PAUL-Teilnehmerlisten zur Prüfung hinzufügen.';
 $string['helptext_configureTasks']= 'Hier können Aufgaben gesetzt werden ...';

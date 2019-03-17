@@ -25,6 +25,29 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//exammanagement_participantsview.mustache
+$string['examinformation'] = 'Information on the exam';
+$string['state'] = 'State';
+$string['no_participant'] = 'You are not registered for the exam.';
+$string['added_to_exam'] = 'You are registered for the exam.';
+$string['date'] = 'Date';
+$string['no_date_entered'] = 'No date has yet been set for the exam.';
+$string['time'] = 'Time';
+$string['no_time_entered'] = 'No time has yet been set for the exam.';
+$string['room'] = 'Room';
+$string['no_room_assigned'] = 'No exam room has been assigned yet.';
+$string['seat'] = 'Seat';
+$string['no_seat_assigned'] = 'No seat has been assigned yet.';
+$string['hint'] = 'Notice';
+$string['no_exam_hint'] = 'No exam notice is available.';
+$string['bonus_for_exam'] = 'Bonus grade steps for the exam';
+$string['bonus_for_exam_added_one'] = 'For the exam you have gained';
+$string['bonus_for_exam_added_two'] = 'bonus grade steps.';
+$string['bonus_for_exam_not_added'] = 'No bonus grade steps have been entered for you so far.';
+$string['exam_review'] = 'Exam review';
+$string['exam_review_one'] = 'The correction of the exam has now been completed. On ';
+$string['exam_review_two'] = 'there will be the exam review in room ';
+
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
 $string['overview'] = 'Overview';
@@ -130,7 +153,7 @@ $string['choose_exam_rooms'] = 'Choose exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
-$string['room'] = 'Room';
+$string['exam_room'] = 'Room';
 $string['description'] = 'Description';
 $string['room_type'] = 'Room type';
 $string['options'] = 'Options';
@@ -191,7 +214,7 @@ $string['newmatrnr'] = 'Users will be added to exam.';
 $string['badmatrnr'] = 'Lines with invalid matriculation numbers (Users can not be added to exam).';
 $string['oddmatrnr'] = 'Users with warnings (can still be added as participants).';
 $string['existingmatrnr'] = 'Users are already exam participants (no changes)';
-$string['deletedmatrnr'] = 'Users will be deleted.';
+$string['deletedmatrnr'] = 'Participants will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
 $string['no_participants_added_page'] = 'No participants added.';
 $string['state_newmatrnr'] = 'New';
@@ -200,14 +223,15 @@ $string['state_badmatrnr'] = 'Bad matriculation number';
 $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
 $string['state_existingmatrnr'] = 'Already exam participant';
-$string['state_deletedmatrnr'] = 'Deleted';
+$string['state_deletedmatrnr'] = 'Will be deleted';
 
 //addCourseParticipantsForm.php
 $string['import_course_participants'] = 'Import participants from course';
 $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
-$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> 
-It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office (and can therefore maybe not be entered correctly in PAUL). If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
+$string['deletedmatrnr_no_course'] = 'Participants will be deleted because they are no course participants.';
+$string['existingmatrnr_course'] = 'Course participants are already exam participants (no changes)';
+$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office (and can therefore maybe not be entered correctly in PAUL). If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';

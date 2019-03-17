@@ -98,10 +98,18 @@ class addCourseParticipantsForm extends moodleform{
 
         if($moodleParticipantsArr || $noneMoodleParticipantsArr){
 
-            $deletedcount = count($moodleParticipantsArr) + count($noneMoodleParticipantsArr);
+            $deletedcount = 0;
+
+            if($moodleParticipantsArr){
+                $deletedcount += count($moodleParticipantsArr);
+            }
+
+            if($noneMoodleParticipantsArr){
+                $deletedcount += count($noneMoodleParticipantsArr);
+            }
 
             $mform->addElement('html', '<div class="panel panel-success">');
-            $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $deletedcount . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
+            $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $deletedcount . ' ' . get_string("deletedmatrnr_no_course", "mod_exammanagement"). '</h3></div>');
             $mform->addElement('html', '<div class="panel-body">');
 
             $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
@@ -120,7 +128,7 @@ class addCourseParticipantsForm extends moodleform{
 
                   $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$participantObj->moodleuserid.']', ' '.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid), null, array('group' => 1));
 
-                  $mform->setDefault('deletedparticipants[mid_'.$participantObj->moodleuserid.']', true);
+                  $mform->setDefault('deletedparticipants[mid_'.$participantObj->moodleuserid.']', false);
 
                   $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div><div class="col-xs-3">');
 
@@ -161,7 +169,7 @@ class addCourseParticipantsForm extends moodleform{
         if($alreadyParticipantsArr){
 
           $mform->addElement('html', '<div class="panel panel-info">');
-          $mform->addElement('html', '<div class="panel-heading text-info"><h3 class="panel-title">' . count($alreadyParticipantsArr) . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
+          $mform->addElement('html', '<div class="panel-heading text-info"><h3 class="panel-title">' . count($alreadyParticipantsArr) . ' ' . get_string("existingmatrnr_course", "mod_exammanagement"). '</h3></div>');
           $mform->addElement('html', '<div class="panel-body">');
 
           $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');

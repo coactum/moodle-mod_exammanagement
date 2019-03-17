@@ -87,7 +87,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			// remember login and redirect
 			$SESSION->loggedInExamOrganizationId = $id;
-			$MoodleObj->redirectToOverviewPage('beforeexam',get_string('operation_successfull', 'mod_exammanagement'), 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 			
 			} else{ // if password is not correct
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('wrong_password', 'mod_exammanagement'), 'error');
