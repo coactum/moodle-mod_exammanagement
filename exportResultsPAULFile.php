@@ -75,6 +75,33 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
         }
 
+        usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+            global $UserObj;
+
+            if($a->moodleuserid){
+            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+            } else {
+            $aFirstname = $a->firstname;
+            $aLastname = $a->lastname;
+            }
+
+            if($b->moodleuserid){
+            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+            } else {
+            $bFirstname = $b->firstname;
+            $bLastname = $b->lastname;
+            }
+
+            if ($aLastname == $bLastname) { //if names are even sort by first name
+                return strcmp($aFirstname, $bFirstname);
+            } else{
+                return strcmp($aLastname, $bLastname); // else sort by last name
+            }
+
+        });
+
         foreach($ParticipantsArray as $participant){
 
             $resultWithBonus = "";
@@ -141,6 +168,33 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader(0);
 
+            usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+                global $UserObj;
+    
+                if($a->moodleuserid){
+                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+                } else {
+                $aFirstname = $a->firstname;
+                $aLastname = $a->lastname;
+                }
+    
+                if($b->moodleuserid){
+                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                } else {
+                $bFirstname = $b->firstname;
+                $bLastname = $b->lastname;
+                }
+    
+                if ($aLastname == $bLastname) { //if names are even sort by first name
+                    return strcmp($aFirstname, $bFirstname);
+                } else{
+                    return strcmp($aLastname, $bLastname); // else sort by last name
+                }
+    
+            });
+
             if($ParticipantsArray && $afterexamreview == false){
 
                 $examdate = $ExammanagementInstanceObj->getHrExamtime();
@@ -198,6 +252,33 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 } else {
                     $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
                 }
+
+                usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+                    global $UserObj;
+        
+                    if($a->moodleuserid){
+                    $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                    $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+                    } else {
+                    $aFirstname = $a->firstname;
+                    $aLastname = $a->lastname;
+                    }
+        
+                    if($b->moodleuserid){
+                    $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                    $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                    } else {
+                    $bFirstname = $b->firstname;
+                    $bLastname = $b->lastname;
+                    }
+        
+                    if ($aLastname == $bLastname) { //if names are even sort by first name
+                        return strcmp($aFirstname, $bFirstname);
+                    } else{
+                        return strcmp($aLastname, $bLastname); // else sort by last name
+                    }
+        
+                });
 
                 $textfile = false;
 

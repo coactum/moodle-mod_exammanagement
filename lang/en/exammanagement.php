@@ -170,8 +170,9 @@ $string['room_deselected_as_examroom'] = 'The room must first be deselected as a
 
 //addDefaultRoomsForm.php
 $string['import_default_rooms_from_file'] = 'Import default rooms from text file';
-$string['import_default_rooms_str'] = 'Administrators can import default rooms for teachers to choose from here as text file.';
-$string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms are already imported. New import will override old rooms.';
+$string['import_default_rooms_str'] = 'Here, administrators can import the standard rooms available to all lecturers as possible exam rooms from a text file.';
+$string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms have already been imported. These are overwritten by this new import.';
+$string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty)';
 
 //addCustomRoomForm.php
 $string['add_room'] = 'Add room';
@@ -231,11 +232,11 @@ $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['deletedmatrnr_no_course'] = 'Participants will be deleted because they are no course participants.';
 $string['existingmatrnr_course'] = 'Course participants are already exam participants (no changes)';
-$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office (and can therefore maybe not be entered correctly in PAUL). If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
+$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office. Their results can therefore maybe not be entered correctly in PAUL. If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
 
 //configureTasksForm.php
 $string['configure_tasks_str'] = 'Configure Tasks';
-$string['configure_tasks_text'] = 'Configure tasks for the exam';
+$string['configure_tasks_text'] = 'Here you can define the number and the maximum points of all exam tasks.';
 $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
@@ -245,13 +246,15 @@ $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The grading
 
 //textfieldForm.php
 $string['add_text_str'] = 'Add textfield';
-$string['add_text_text'] = 'All text added below will be immediately displayed to the participants in their view of this activity.';
+$string['add_text_text'] = 'All content entered below will immediately be displayed to the exam participants in their participants view.';
 
 //groupmessagesForm.php
 $string['groupmessages_str'] = 'Add Messagetext';
 $string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
 $string['groupmessages_text_2'] = ' participants of the exam.';
-$string['groupmessages_text_3'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them under their email adresses shown below:';
+$string['groupmessages_warning_1'] = 'Warning: ';
+$string['groupmessages_warning_2'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them manually via email using the following button:';
+$string['groupmessages_send_manual_mail'] = 'Write email';
 
 //importBonusForm.php
 $string['import_bonus_str'] = 'Import bonus points';
@@ -390,7 +393,8 @@ To set a password, it must initially be entered in the first and then confirmed 
 Remember to choose your password with sufficient security and especially do not use a password that you already use elsewhere (especially not in the context of university!).<br><br>
 By clicking on the button "Reset password" you can revoke the password protection for the exam organisation.';
 $string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module.';
-$string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br> Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
+$string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br>
+Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
 $string['helptext_chooseRooms']= 'On this page you can view the list of all possible <strong>exam rooms</strong> available in the system and select one or more of them as the room for the current exam. <br /> <br />
 After clicking on the button "Add custom exam room", you can also add your own exam rooms to the list (and later select them as exam rooms). <br /> <br />
 To select a room as an exam room, first click on the box to the left of its name. A click on the button "Choose rooms" saves the selected rooms as exam rooms. If a room is already marked after opening the page, it has already been saved as a room for the exam. <br /> <br />

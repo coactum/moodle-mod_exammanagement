@@ -74,12 +74,20 @@ class groupmessagesForm extends moodleform {
             if($NoneMoodleParticipantsCount){
                 $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
 
-                $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_text_3', 'mod_exammanagement').'</p>');
+                $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>');
+
+                $mform->addElement('html', '<p><strong>'.get_string('groupmessages_warning_1', 'mod_exammanagement').$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
+
+                $mform->addElement('html', '<a href="mailto:?bcc=');
 
                 foreach($mailAdressArr as $adress){
-                    $mform->addElement('html', '<a href="mailto:'.$adress.'?subject=""">'.$adress.'</a><br>');
+                    $mform->addElement('html', $adress.';');
                 }
+
+                $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('groupmessages_send_manual_mail', 'mod_exammanagement').'">'.get_string('groupmessages_send_manual_mail', 'mod_exammanagement').'</a>');
             }
+
+            $mform->addElement('html', '</div>');
 
             $mform->addElement('html', '<span class="m-t-1"><hr></span>');
 
