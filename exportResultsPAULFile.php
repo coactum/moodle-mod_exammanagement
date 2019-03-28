@@ -122,7 +122,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $name = '"' . $user->lastname . '"';
             } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                 $foreName = '"' . $participant->firstname . '"';
-                $middleName = '';
+                $middleName = '""';
                 $name = '"' . $participant->lastname . '"';
             }
 
@@ -223,7 +223,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             $name = '"' . $user->lastname . '"';
                         } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                             $foreName = '"' . $participant->firstname . '"';
-                            $middleName = '';
+                            $middleName = '""';
                             $name = '"' . $participant->lastname . '"';
                         }
         
@@ -306,7 +306,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             $name = '"' . $user->lastname . '"';
                         } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                             $foreName = '"' . $participant->firstname . '"';
-                            $middleName = '';
+                            $middleName = '""';
                             $name = '"' . $participant->lastname . '"';
                         }
         
