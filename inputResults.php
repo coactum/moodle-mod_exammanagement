@@ -67,83 +67,99 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$filtered_input = preg_replace('/[^0-9]/', '', $input);
 
-			if($filtered_input !== $input){
+			if($filtered_input !== $input){ // input containes invalid chars
 				$case = 'novalidmatrnr';
-				$matrnr = false;
 
-			} else {
-				//check if input is valid barcode and then convert barcoe to matrnr
+			} else {				//check if input is valid barcode and then convert barcoe to matrnr
 				$inputLength = strlen($filtered_input);
 
-				if ($inputLength == 13){ //input is barcode
+				if ($inputLength == 13){ //input is correctly formatted barcode
 					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
 
 					if ($checksum == substr($input, -1)){ //if checksum is correct
 						$matrnr = substr($input, 5, -1); //extract matrnr from barcode
+					} else {
+						$case = 'novalidbarcode';
 					}
-				} else if($inputLength){ //input is no barcode
-						$matrnr = $input;
+				} else if ($inputLength <= 7){ // input is probably a matrnr
+					$matrnr = $input;
+
+				} else if ($inputLength){ //input is probably a barcode but not correctly formatted (e. g. missing leading zeros)
+
+					$padded_input = str_pad($input, 13, "0", STR_PAD_LEFT);
+
+					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($padded_input, 0, 12));
+
+					if ($checksum == substr($padded_input, -1)){ //if checksum is correct
+						$matrnr = substr($padded_input, 5, -1); //extract matrnr from barcode
+					} else {
+						$case = 'novalidbarcode';
+					}
+					
 				}
 
-				if($UserObj->checkIfValidMatrNr($matrnr)){
+				if($matrnr){
 
-					// convert matrnr to user
-					$userlogin;
-					$userid;
+					if($UserObj->checkIfValidMatrNr($matrnr)){
 
-						if($LdapManagerObj->is_LDAP_config()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-
-								if($userlogin){
-									$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+						// convert matrnr to user
+						$userlogin;
+						$userid;
+	
+							if($LdapManagerObj->is_LDAP_config()){
+									$ldapConnection = $LdapManagerObj->connect_ldap();
+	
+									$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+	
+									if($userlogin){
+										$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+									}
+	
+							} else {
+								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+	
+								if(!$userid){
+									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
+								} else {
+									$userlogin = false;
 								}
-
-						} else {
-							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-
-							if(!$userid){
-								$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
-							} else {
-								$userlogin = false;
+	
 							}
-
-						}
-
-						$participantObj = false;
-
-						// getParticipantObj
-						if($userid !== false && $userid !== null){
-							$participantObj = $UserObj->getExamParticipantObj($userid);
-						} else if($userlogin !== false && $userlogin !== null){
-							$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-						}
-
-						// if user is participant
-						if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
-							$case = 'participant';
-
+	
+							$participantObj = false;
+	
+							// getParticipantObj
 							if($userid !== false && $userid !== null){
-								$MoodleUserObj = $UserObj->getMoodleUser($userid);
-								$firstname = $MoodleUserObj->firstname;
-								$lastname = $MoodleUserObj->lastname;
+								$participantObj = $UserObj->getExamParticipantObj($userid);
+							} else if($userlogin !== false && $userlogin !== null){
+								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+							}
+	
+							// if user is participant
+							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
+								$case = 'participant';
+	
+								if($userid !== false && $userid !== null){
+									$MoodleUserObj = $UserObj->getMoodleUser($userid);
+									$firstname = $MoodleUserObj->firstname;
+									$lastname = $MoodleUserObj->lastname;
+								} else {
+									$firstname = $participantObj->firstname;
+									$lastname = $participantObj->lastname;
+								}
+	
+								if($UserObj->participantHasResults($participantObj)){ // if participants has results
+									$case = 'participantwithresults';		
+								}
 							} else {
-								$firstname = $participantObj->firstname;
-								$lastname = $participantObj->lastname;
+								$case = 'noparticipant';
+								$matrnr = false;
 							}
-
-							if($UserObj->participantHasResults($participantObj)){ // if participants has results
-								$case = 'participantwithresults';		
-							}
-						} else {
-							$case = 'noparticipant';
-							$matrnr = false;
-						}
-				} else {
-					$case = 'novalidmatrnr';
-					$matrnr = false;
+					} else {
+						$case = 'novalidmatrnr';
+					}
 				}
+
 			}
 
 			
@@ -242,6 +258,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					case 'novalidmatrnr':
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
 							\core\notification::add('Keine gültige Matrikelnummer', 'error');
+					break;
+					case 'novalidbarcode':
+							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+							\core\notification::add('Ungültiger Barcode', 'error');
 					break;
 					default:
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));

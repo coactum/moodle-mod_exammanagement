@@ -197,10 +197,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$UserObj->deleteTempParticipants();
 
 					//redirect
-					$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
 				} else {
-					$MoodleObj->redirectToOverviewPage('beforeexam', 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', null, 'error');
 				}
 
 			} else if($paul_file){

@@ -104,10 +104,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
 
-                $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer wurden zur Prüfung hinzugefügt.', 'success');
+                redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
             } else {
-                $MoodleObj->redirectToOverviewPage('beforeexam', 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', 'error');
+
+                redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', null, 'error');
             }
 
         } else {

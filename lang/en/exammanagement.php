@@ -160,6 +160,8 @@ $string['options'] = 'Options';
 $string['no_seatingplan_available'] = 'No seating plan available';
 $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
+$string['change_room'] = 'Change room';
+$string['delete_room'] = 'Delete room';
 $string['delete_room_confirm'] = 'This action deletes this self created room. Make sure that the room is not currently selected as an exam room.';
 $string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.';
 $string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats in this room have already been assigned to some participants. If this room is now deselected as an exam room, the entire assignment of places is deleted and must then be carried out again.';
@@ -175,14 +177,13 @@ $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default roo
 $string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty)';
 
 //addCustomRoomForm.php
-$string['add_room'] = 'Add room';
-$string['change_room'] = 'Change room';
-$string['delete_room'] = 'Delete room';
+$string['change_or_add_custom_room'] = 'Change or add custom room';
+$string['change_custom_room_name'] = '<strong>Please note:</strong> If you change the name of an existing room, a new room is created instead. In this case, the old room must still be deleted manually.';
+$string['custom_room_places'] = '<strong>Please note:</strong> The exam room you have created here gets as many seats as you specify below, with the numbering starting at 1 and then incrementing (regardless of the actual number of seats or their numbering in the room). This means that you must ensure that the number of seats you enter corresponds to the actual number of seats available, and you must also adjust any deviations in the numbering of seats yourself.';
 $string['customroom_name'] = 'Name of exam room';
 $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
-$string['change_custom_room_name'] = '<strong>Please note:</strong> If you change the name of an existing room, a new room is created instead. In this case, the old room must still be deleted manually.';
-$string['custom_room_places'] = '<strong>Please note:</strong> The exam room you have created here gets as many seats as you specify below, with the numbering starting at 1 (regardless of the actual number of seats or their numbering in the room). This means that you must ensure that the number of seats you enter corresponds to the actual number of seats available, and you must also adjust any deviations in the numbering of seats yourself.';
+$string['add_room'] = 'Save room';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';

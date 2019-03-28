@@ -87,9 +87,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_rooms', $roomObj);
                 
                 if($update){
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Raum geändert', 'success');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Raum konnte nicht geändert werden', 'error');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Raum konnte nicht geändert werden', null, 'error');
                 }
             } else {
 
@@ -119,9 +119,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj);
 
                 if($import){
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Raum angelegt', 'success');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    $MoodleObj->redirectToOverviewPage('beforeexam', 'Raum konnte nicht angelegt werden', 'error');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Raum konnte nicht geändert werden', null, 'error');
                 }
             }
             

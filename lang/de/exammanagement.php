@@ -160,6 +160,8 @@ $string['options'] = 'Optionen';
 $string['no_seatingplan_available'] = 'Kein Sitzplan verfügbar';
 $string['default_room'] = 'Standardraum';
 $string['custom_room'] = 'Eigener Raum';
+$string['change_room'] = 'Raum ändern';
+$string['delete_room'] = 'Raum löschen';
 $string['delete_room_confirm'] = 'Durch diese Aktion wird dieser selbst erstellte Raum gelöscht. Stellen Sie sicher, dass der Raum aktuell nicht als Prüfungsraum ausgewählt ist.';
 $string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.';
 $string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits einigen Teilnehmenden Sitzplätze in diesem Raum zugewiesen. Falls dieser Raum jetzt als Prüfungsraum abgewählt wird wird die gesamte Sitzplatzzuweisung gelöscht und muss dann neu durchgeführt werden.';
@@ -175,14 +177,13 @@ $string['default_rooms_already_exists'] = '<strong>Achtung:</strong> Es wurden b
 $string['default_rooms_file_structure'] = 'Import der Standardräume aus Text-Datei (.txt). <br><strong>Aufbau</strong>: Pro Zeile ein Prüfungsraum. Erste Spalte systeminterne Raumid (Raumname_Variante; also z. B. Audimax_2), zweite Spalte benutzersichtbarer Raumname (z. B. Audimax), dritte Spalte benutzersichtbare Beschreibung inklusive Anzahl freigelassener sowie gesamter Plätze (z. B. 2 Plätze frei, 56 Plätze insgesamt), vierte Spalte zur Berechnung der Sitzplatzzahl benötigtes Array mit der Bezeichnung jedes einzelnen Platzes in json-Syntax (z. B. ["R/R01/P07","R/R01/P04","R/R01/P01"] ), fünfte Spalte Quellcode einer SVG-Datei mit dem Raumplan um diesen den Benutzern anzuzeigen (falls vorhanden, ansonsten leer lassen)';
 
 // addCustomRoomForm.php
-$string['add_room'] = 'Raum anlegen';
-$string['change_room'] = 'Raum ändern';
-$string['delete_room'] = 'Raum löschen';
+$string['change_or_add_custom_room'] = 'Eigenen Prüfungsraum anlegen oder bearbeiten';
+$string['change_custom_room_name'] = '<strong>Hinweis:</strong> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.';
+$string['custom_room_places'] = '<strong>Hinweis:</strong> Der von Ihnen hier erstellte eigene Prüfungsraum erhält im System so viele Plätze wie von Ihnen unten angegeben werden, wobei die Nummerierung (unabhängig von der im Raum tatsächlich vorhandenen Sitzplatzanzahl oder deren Nummerieung) bei 1 startet und dann hoch zählt. Sie müssen also selbst sicherstellen, dass die von Ihnen angegebene Platzzahl mit den tatsächlich vorhandenen Sitzplätzen übereinstimmt und müssen zudem mögliche Abweichungen bei der Sitzplatznummerierung selbst anpassen.';
 $string['customroom_name'] = 'Name des Raums';
 $string['customroom_placescount'] = 'Anzahl der Sitzplätze';
 $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
-$string['change_custom_room_name'] = '<strong>Hinweis:</strong> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.';
-$string['custom_room_places'] = '<strong>Hinweis:</strong> Der von Ihnen hier erstellte eigene Prüfungsraum erhält im System so viele Plätze wie von Ihnen unten angegeben werden, wobei die Nummerierung (unabhängig von der im Raum tatsächlich vorhandenen Sitzplatzanzahl oder deren Nummerieung) bei 1 startet. Sie müssen also selbst sicherstellen, dass die von Ihnen angegebene Platzzahl mit den tatsächlich vorhandenen Sitzplätzen übereinstimmt und müssen zudem mögliche Abweichungen bei der Sitzplatznummerierung selbst anpassen.';
+$string['add_room'] = 'Raum speichern';
 
 //dateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
@@ -406,10 +407,13 @@ Eine Beschreibung des Raumes (und damit meistens auch die Zahl der in Diesem vor
 <li>Werden neue Räume zur Prüfung hinzugefügt oder Bestehende entfernt, nachdem den TeilnehmerInnen bereits Sitzplätze zugewiesen wurden, muss diese Zuordnung wiederholt werden.</li>
 <li>Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.</li></ul>
 <strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung der Universität Paderborn buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
-$string['helptext_addCustomRoom'] = 'Hier kann ein eigener Prüfungsraum angelegt werden ...';
-$string['helptext_addDefaultRooms']= 'Hier können Sie als PANDA-Administrator eine Reihe an Standardräumen importieren, die nach dem Einlesen allen Dozenten bei der Auswahl der Prüfungsräume als mögliche Räume zur Verfügung stehen. <br><br>
-Um die Standardräume zu importieren muss zunächst eine entsprechend aufgebaute Textdatei im unteren Bereich ausgewählt und dann durch einen Klick auf den entsprechenden Button eingelesen werden. <br><br>
-Die einzulesende Textdatei muss dabei korrekt aufgebaut sein und in jeder Zeile die folgenden Informationen zu einem Prüfungsraum enthalten: 
+$string['helptext_addCustomRoom'] = 'Auf dieser Seite können Sie als Dozentin oder Dozent einen <strong>eigenen Prüfungsraum</strong> erstellen, falls der Raum, in welchem Sie Ihre Prüfung halten wollen, nicht als Prüfungsraum im System aufgeführt ist. Alternativ können Sie hier auch einen bereits vorhandenen selbst erstellten Prüfungsraum bearbeiten. <br><br>
+Um einen neuen Raum zu erstellen muss zunächst dessen Name angegeben werden. Als Nächstes müssen Sie die Zahl der Sitzplätze angeben, die der Raum haben soll. Beachten Sie dabei, dass Sie selbst nachsehen müssen, wie viele Plätze tatsächlich im Raum vorhanden sind und dass die Nummerierung der Sitzplätze des hier erstellten Raums im System unabhängig von der tatsächlich im Raum vorhandenen Nummerierung immer bei 1 beginnt. Das bedeutet, dass Sie möglicherweise auftretende Unstimmigkeiten mit der tatsächlichen Sitzplatznummerierung manuell anpassen müssen. Abschließend kann noch eine optionale Beschreibung des Raumes angegeben werden. Diese sollte alle für Sie wichtigen Informationen über den Raum wie etwa die Sitzplatzanzahl enthalten, damit Sie den Raum später zum Beispiel im nächsten Semester bei Bedarf einfach erneut benutzen können. Wird hier keine Beschreibung eingetragen wird übrigens automatisch die Sitzplatzanzahl als Beschreibung angezeigt. Ein Klick auf den Button "Raum speichern" legt schließlich den neuen Prüfungsraum an.<br><br>
+Ein auf diese Weise angelegter Raum kann anschließend aus der Liste der verfügbaren Prüfungsräume als Raum ausgewählt und danach wie jeder andere Prüfungsraum regulär genutzt werden.<br><br>
+Falls auf der Seite der Raumauswahl hingegen ein bestehender eigener Prüfungsraum zur Bearbeitung ausgewählt wurde kann dieser nun verändert werden. In diesem Fall können hier die Sitzplatzanzahl und die Beschreibung des gewählten Raums geändert und diese Änderung anschließend durch einen Klick auf "Raum speichern" gesichert werden. Wenn dabei die Sitzplatzanzahl verringert wird behalten alle an der Prüfung Teilnehmenden trotzdem zunächst ihre bisher zugewiesenen Sitzplätze, bis Sie die automatische Sitzplatzzuweisung erneut durchführen.';
+$string['helptext_addDefaultRooms']= 'Hier können Sie als PANDA-Administrator eine Reihe an <strong>Standardräumen</strong> importieren, die nach dem Einlesen allen Dozenten bei der Auswahl der Prüfungsräume als mögliche Räume zur Verfügung stehen. <br><br>
+Um die Standardräume zu importieren muss zunächst eine korrekt aufgebaute Textdatei im unteren Bereich ausgewählt und dann durch einen Klick auf den entsprechenden Button eingelesen werden. <br><br>
+Die einzulesende Textdatei muss dabei die folgenden Informationen zu jedem Prüfungsraum enthalten, wobei jede Zeile für einen Prüfungsraum steht: 
 <ul><li>Erste Spalte: Die systeminterne Raumid nach dem Muster <i>Raumname_Variante</i>, also zum Beispiel <i>Audimax_2</i></li>
 <li>Zweite Spalte: Der benutzersichtbare Raumname, also zum Beispiel <i>Audimax</i></li>
 <li>Dritte Spalte: Die benutzersichtbare Raumbeschreibung inklusive der Anzahl der freigelassenen sowie der gesamten Plätze, also zum Beispiel <i>2 Plätze frei, 56 Plätze insgesamt</i></li>
