@@ -157,6 +157,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							}
 					} else {
 						$case = 'novalidmatrnr';
+						$matrnr = false;
 					}
 				}
 
