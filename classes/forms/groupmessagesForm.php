@@ -76,7 +76,7 @@ class groupmessagesForm extends moodleform {
 
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>');
 
-                $mform->addElement('html', '<p><strong>'.get_string('groupmessages_warning_1', 'mod_exammanagement').$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
+                $mform->addElement('html', '<p><strong>'.get_string('groupmessages_warning_1', 'mod_exammanagement').'<br>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
 
                 $mform->addElement('html', '<a href="mailto:?bcc=');
 
