@@ -270,6 +270,25 @@ EOF;
 		}
 	}
 
+	public function getTotalNumberOfSeats(){
+
+		$savedRoomsArray = $this->getSavedRooms();
+
+		$totalSeats = 0;
+
+		foreach($savedRoomsArray as $key => $roomID){
+
+			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
+	  
+			$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
+
+			$totalSeats += $placesCount;
+		}
+
+		return $totalSeats;
+
+	}
+
 	public function getAssignedPlacesCount(){
 
 		$MoodleDBObj = MoodleDB::getInstance();

@@ -74,7 +74,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           
           $participantObj->roomid = $RoomObj->roomid;
           $participantObj->roomname = $RoomObj->name;
-          $participantObj->place = array_pop($places);
+          $participantObj->place = array_shift($places);
 
           // set room and place
           $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
@@ -96,7 +96,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     }
 
     $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
-    
+
   } else { // if user hasnt entered correct password for this session: show enterPasswordPage
     redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
   }

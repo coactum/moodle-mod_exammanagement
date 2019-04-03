@@ -86,6 +86,9 @@ define(['jquery'], function ($) {
       $('div').removeClass('col-md-3');
       $('div').removeClass('col-md-9');
 
+      $('form > .form-group > div:first-child').addClass('col-md-3');
+      $('form > .form-group > div:last-child').addClass('col-md-9');
+
       $('#id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
         $(".form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
           $(this).prop("disabled", false);
