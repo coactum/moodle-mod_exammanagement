@@ -218,8 +218,10 @@ class participantsOverviewForm extends moodleform {
                     
                     $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
                    
-                    $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
-                    $select->setSelected($state);
+                    if($ExammanagementInstanceObj->getTaskCount()){
+                        $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
+                        $select->setSelected($state);
+                    }
                     
                     $mform->addElement('html', '</td></tr></table>');
 
