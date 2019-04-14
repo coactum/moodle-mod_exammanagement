@@ -282,7 +282,10 @@ $string['configure_gradingscale_totalpoints'] = 'Number of total points';
 
 //inputResultsForm.php
 $string['input_results_str'] = 'Input exam results';
-$string['matrnr_barcode'] = 'Barcode / matriculation number';
+$string['input_results_text'] = 'After entering the matriculation number of a participant, the points achieved by this participant in the exam can be entered here.';
+$string['confirm_matrnr'] = 'To confirm the matriculation number you can also press enter/return or tabulator.';
+$string['exam_participant'] = 'Exam participant';
+$string['matrnr_barcode'] = 'Matriculation number or barcode';
 $string['participant'] = 'Participant';
 $string['exam_state'] = 'Exam state';
 $string['exam_points'] = 'Exam points';
@@ -292,10 +295,10 @@ $string['ill'] = 'Ill';
 $string['max_points'] = 'Maximum points';
 $string['save_and_next'] = 'Save and next';
 $string['validate_matrnr'] = 'Validate matriculation number';
-$string['confirm_matrnr'] = 'To confirm the matriculation number you can also press enter/return.';
 $string['input_other_matrnr'] = 'Change matriculation number';
 
 //participantsOverviewForm.php
+$string['participants_overview_text'] = 'All participants already added to the exam can be viewed and edited in this list.';
 $string['edit'] = 'Edit';
 $string['show_results_str'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';

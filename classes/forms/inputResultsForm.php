@@ -52,6 +52,12 @@ class inputResultsForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('inputResults'));
 
+        $mform->addElement('html', '<p>'.get_string("input_results_text", "mod_exammanagement").'</p>');
+
+        if(!$this->_customdata['matrnr']){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("confirm_matrnr", "mod_exammanagement").'</div>');
+        }
+
         //create hidden id field
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
@@ -59,6 +65,10 @@ class inputResultsForm extends moodleform {
         //create hidden field that indicates matr validation submit
         $mform->addElement('hidden', 'matrval', 1);
         $mform->setType('matrval', PARAM_INT);
+
+        if($this->_customdata['matrnr']){
+            $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_participant', 'mod_exammanagement').'</p></strong>');
+        }
 
         //create input field for matrnr
         $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
@@ -141,7 +151,6 @@ class inputResultsForm extends moodleform {
             $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
 
         } else {
-            $mform->addElement('html', '<strong><p>'.get_string('confirm_matrnr', 'mod_exammanagement').'</p></strong>');
             $this->add_action_buttons(true, get_string("validate_matrnr", "mod_exammanagement"));
         }
 
