@@ -90,9 +90,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
                 }
 
                 if($import){
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), null, null, null);
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, notification::NOTIFY_SUCCESS);
                 } else {
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Standardräume konnten nicht importiert werden', null, notification::NOTIFY_ERROR);
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
                 }
             }
 

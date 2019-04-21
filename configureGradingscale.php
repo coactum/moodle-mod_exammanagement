@@ -44,6 +44,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 		$MoodleObj->setPage('configureGradingscale');
+
+		if(!$ExammanagementInstanceObj->getTaskCount()){
+			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
+		}
+
 		$MoodleObj-> outputPageHeader();
 
 		//Instantiate form

@@ -63,9 +63,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
         $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
         if($update){
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit erfolgreich gesetzt', 'success');
+            $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
         } else {
-            $MoodleObj->redirectToOverviewPage('beforeexam', 'Datum und Uhrzeit konnten nicht gesetzt werden', 'error');
+            $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
         }
       } else {
         // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

@@ -510,11 +510,12 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 											</div>
 											<div class="col-xs-6">
-													<div class="panel {{^gradingscale}}panel-info{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
+													<div class="panel {{^gradingscale}}{{#taskcount}}panel-info{{/taskcount}}{{/gradingscale}}{{^gradingscale}}{{^taskcount}}panel-danger{{/taskcount}}{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
 																	{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	{{^gradingscale}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+																	{{^gradingscale}}{{^taskcount}}<span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/gradingscale}}
+																	{{^gradingscale}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/gradingscale}}
 																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 																<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
@@ -524,7 +525,7 @@ ajaxsetcorrectioncompletion = function(value){
 																{{^gradingscale}}<p>Es wurde noch kein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
 														</div>
 														<div class="panel-footer">
-															<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>
+															{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}
 														</div>
 													</div>
                         </div>

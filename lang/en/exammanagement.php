@@ -185,8 +185,9 @@ $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
 $string['add_room'] = 'Save room';
 
-//dateTimeForm.php
+//setDateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
+$string['set_date_time_str'] = 'The date and time of the exam can be selected here.';
 
 //showParticipants.php
 $string['view_participants'] = 'View participants';
@@ -380,6 +381,7 @@ $string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
 $string['no_participants_added'] = 'No exam participants added yet. Work step not possible';
 $string['not_all_places_assigned'] = 'Not all seats assigned yet. Work step not possible';
+$string['no_tasks_configured'] = 'No tasks configured yet. Work step not possible';
 $string['correction_not_completed'] = 'Marking not completed';
 
 //helptexts
@@ -409,10 +411,29 @@ A description of the room (and thus usually the number of seats available in the
 <li>If new rooms are added to the exam or are existing ones removed after the seats have already been allocated to the participants, this allocation must be repeated.</li>
 <li>Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.</li></ul>
 <strong>Attention:</strong> The system does not take the availability of the selected rooms into account. As a lecturer, you must book the rooms in which the exam is to take place with the central room administration of the University of Paderborn and clarify that the corresponding rooms are actually available at the time of the examination.';
-$string['helptext_addDefaultRooms']= 'Here goes the description of this feature site.';
-$string['helptext_addCustomRoom'] = 'Here goes the description of this feature site.';
-$string['helptext_setDateTime']= 'Here goes the description of this feature site.';
-$string['helptext_showParticipants']= 'Here goes the description of this feature site.';
+$string['helptext_addDefaultRooms']= 'As a PANDA administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
+In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
+The text file to be imported must contain the following information for each exam room, where each line stands for one exam room: 
+<ul><li>First column: The system-internal room id according to the pattern <i>room_name_variant</i>, for example <i>Audimax_2</i></li>
+<li>Second column: The user-visible room name, e.g. <i>Audimax</i></li>
+<li>Third column: The user-visible room description including the number of free and total seats, for example <i>2 free seats, 56 total seats</i></li>
+<li>Fourth column: An array needed to calculate the number of seats in a room, which contains the name of each individual seat in the room. The array must be written in json syntax, e.g. look like this: <i>["R/R01/P07", "R/R01/P04", "R/R01/P01", ...] </i></li>
+<li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
+If default rooms have already been imported, they are overwritten by the new import. The information on any deleted rooms is retained in all exam organization instances in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats.';
+$string['helptext_addCustomRoom'] = 'On this page, you as a lecturer can create a <strong>custom exam room</strong> if the room in which you want to hold your exam is not listed as an exam room within the system. Alternatively, you can also edit an existing exam room you have created yourself here.<br><br>
+To create a new room, first enter its name. Next, you must specify the number of seats you want the room to have. Note that you must check for yourself how many seats are actually available in the room and that the numbering of the seats in the room created here in the system always starts with 1, regardless of the numbering actually available in the room. This means that you must manually adjust any discrepancies that may occur with the actual seat numbering. Finally, you can enter an optional description of the room. This should contain all important information about the room, such as the number of seats, so that you can use the room again later, for example in the next semester, if necessary. If no description is entered here, the number of seats is automatically displayed as the description. Finally, a click on the "Save room" button creates the new exam room.<br><br>
+A room created in this way can then be selected from the list of available exam rooms as a room and can then be used regularly like any other exam room.<br><br>
+If, on the other hand, an existing exam room has been selected for editing on the room selection page, it can now be modified here. In this case, the number of seats and the description of the selected room can now be altered and then saved by clicking on "Save room". If the number of seats is reduced, all exam participants still retain their previously assigned seats until you perform the automatic seat assignment again.';
+$string['helptext_setDateTime']= 'The <strong>date and time of the exam</strong> can be selected here.<br><br>
+The exam date selected here is displayed on the overview page of the exam organization and is used later in the documents generated, such as the list of participants or the exam labels. In addition, it will be displayed to the exam participants in their view as soon as you have made this information visible to the students on the overview page. <br /> <br />
+The date and time of the exam should therefore be set here so that the exam organization can be used effectively in PANDA.';
+$string['helptext_showParticipants']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in PANDA. <br /> <br />
+New participants can also be added to the exam here. There are two ways to do this: <br /> <br />
+1. After clicking on the button "Add participants from file", participants can be imported from one or more exam lists exported from PAUL. This is the recommended way of importing participants, as only in this way is it possible to export the exam results later according to the number and structure of these imported PAUL lists. You should therefore choose this variant if you want to enter the exam results directly in PAUL later.<br>
+2. It is also possible to import participants of the PANDA course as exam participants by clicking on the button "Import course participants". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple subsequent entry of the exam results in PAUL is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a PAUL list. To do this, the participant must first be completely deleted.<br><br>
+Adding participants is one of the most important steps in the exam organisation. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the PANDA course) also do not have access to the participant view with the exam information and do not receive any notification about the messaging function on the overview page of the exam organisation.<br /> <br />
+If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in PANDA. Although these can also be imported from a PAUL file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
+It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_configureTasks']= 'Here goes the description of this feature site.';

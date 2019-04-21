@@ -52,6 +52,8 @@ class setDateTimeForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setDateTime'));
 
+        $mform->addElement('html', '<p>'.get_string('set_date_time_str', 'mod_exammanagement').'</p>');
+
         $mform->addElement('date_time_selector', 'examtime', '');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

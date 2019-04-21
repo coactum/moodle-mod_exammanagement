@@ -112,7 +112,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       if($update){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
       } else {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('wrong_password', 'mod_exammanagement'), 'error');
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
       }
 
     } else {
