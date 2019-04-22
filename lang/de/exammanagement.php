@@ -246,9 +246,10 @@ $string['total'] = 'Summe';
 $string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.';
 $string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 
-//textfieldForm.php
+//setTextfieldForm.php
 $string['add_text_str'] = 'Freitext hinzufügen';
-$string['add_text_text'] = 'Der unten eingegebene Inhalt wird den PrüfungsteilnehmerInnen sofort in ihrer Teilnehmeransicht angezeigt.';
+$string['content_of_textfield'] = 'Inhalt des Textfeldes';
+$string['add_text_text'] = 'Hier kann ein beliebiger prüfungsbezogener Inhalt eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird. ';
 
 //groupmessagesForm.php
 $string['groupmessages_str'] = 'Nachrichtentext hinzufügen';

@@ -33,7 +33,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-class textfieldForm extends moodleform {
+class setTextfieldForm extends moodleform {
 
     //Add elements to form
     public function definition() {
@@ -50,7 +50,7 @@ class textfieldForm extends moodleform {
 
  		$mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
 
- 		$mform->addElement('editor', 'textfield', 'Inhalt des Textfeldes:');
+ 		$mform->addElement('editor', 'textfield', get_string('content_of_textfield', 'mod_exammanagement'));
         $mform->setType('textfield', PARAM_RAW);
         $mform->addRule('textfield', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 

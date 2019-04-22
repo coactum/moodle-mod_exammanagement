@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\textfieldForm;
+use mod_exammanagement\forms\setTextfieldForm;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -43,11 +43,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-		$MoodleObj->setPage('textfield');
+		$MoodleObj->setPage('setTextfield');
 		$MoodleObj-> outputPageHeader();
 
 		//Instantiate form
-		$mform = new textfieldForm();
+		$mform = new setTextfieldForm();
 
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
@@ -63,9 +63,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 			if($update){
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes gespeichert', 'success');
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', 'Inhalt des Textfeldes konnte nicht gespeichert werden', 'error');
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
 			}
 
 		} else {

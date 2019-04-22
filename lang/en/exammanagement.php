@@ -246,9 +246,10 @@ $string['total'] = 'Total';
 $string['results_already_entered'] = '<strong>Warning:</strong> Some exam results have already been entered. After changing the tasks, you should check whether they may need to be updated.';
 $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check whether it may need to be updated.';
 
-//textfieldForm.php
+//setTextfieldForm.php
 $string['add_text_str'] = 'Add textfield';
-$string['add_text_text'] = 'All content entered below will immediately be displayed to the exam participants in their participants view.';
+$string['content_of_textfield'] = 'Content of textfield';
+$string['add_text_text'] = 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.';
 
 //groupmessagesForm.php
 $string['groupmessages_str'] = 'Add Messagetext';
@@ -436,8 +437,14 @@ If you see a lower part of the table separated by a subheading, you have importe
 It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
 $string['helptext_addParticipants']= 'Here goes the description of this feature site.';
 $string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
-$string['helptext_configureTasks']= 'Here goes the description of this feature site.';
-$string['helptext_setTextfield']= 'Here goes the description of this feature site.';
+$string['helptext_configureTasks']= 'Here you can define the number and maximum points of all <strong>exam tasks</strong>. <br><br>
+By clicking the "+" button new tasks can be added to the exam. In the field below the respective task number, you must enter the maximum number of points that can be achieved in the respective task later. This number of points must be positive, but can be a decimal. By clicking on the "-" button, exam tasks can be removed again, but at least one task always remains. <br><br>
+The tasks are a central element of the exam organisation. They correspond to the tasks which are later available in the actual exam and are required in order to be able to enter the exam results for the participants in the future. For each task, the points obtained by the participants can then be entered separately, up to a maximum of the maximum number of points specified here for the respective task. The tasks specified here and their maximum number of points are also required for setting the gradingscale and for exporting the exam results.
+If the tasks are changed after the exam results have already been entered or after the gradingscale has been set, these must be adapted to the new number or the new maximum of points of the tasks.';
+$string['helptext_setTextfield']= 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.  <br /> <br />
+In this way, the exam participants can e. g. be easily informed about the equipment permitted in the exam. In addition to simple texts, more complex elements such as pictures or even formulas can be used. <br /> <br />
+This function is purely optional. If, for example, you do not have any information for the exam participants, you can simply leave the field below empty and click on the "Cancel" button. <br /> <br />
+<Strong>Note:</strong> This function is mainly intended for messages that are not time-critical. If, however, you would like to inform the examinees e. g. about a short-term change of exam rooms on the day before the exam, it is advisable to use the function "Write message to participants" on the overview page instead. In this way, the exam participants will immediately receive an e-mail and will thus be able to see the information entered even if they do not actively look in PANDA.';
 $string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
 $string['helptext_importBonus']= 'Here you can import the participants bonus points and convert them into bonus grade steps for the exam. In this way, for example, bonus points earned by students while completing exercises can be directly converted into bonus grade steps for the exam. <br><br>
 To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>

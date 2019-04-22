@@ -89,7 +89,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($update){
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Raum konnte nicht geändert werden', null, 'error');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                 }
             } else {
 
@@ -121,7 +121,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($import){
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), 'Raum konnte nicht geändert werden', null, 'error');
+                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                 }
             }
             
