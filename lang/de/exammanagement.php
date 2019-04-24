@@ -251,13 +251,16 @@ $string['add_text_str'] = 'Freitext hinzufügen';
 $string['content_of_textfield'] = 'Inhalt des Textfeldes';
 $string['add_text_text'] = 'Hier kann ein beliebiger prüfungsbezogener Inhalt eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird. ';
 
-//groupmessagesForm.php
+//sendGroupmessageForm.php
 $string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
 $string['groupmessages_text_1'] = 'Der unten eingegebene Text wird ';
 $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als PANDA-Benachrichtigung sowie als Email zugeschickt.';
 $string['groupmessages_warning_1'] = 'Achtung: ';
 $string['groupmessages_warning_2'] = ' Prüfungsteilnehmer besitzen kein PANDA-Benutzerkonto und werden diese Nachricht deshalb nicht automatisch erhalten. Kontaktieren Sie diese Teilnehmerinnen deshalb am besten manuell per E-Mail durch einen Klick auf den folgenden Button:';
-$string['groupmessages_send_manual_mail'] = 'E-Mail schreiben';
+$string['send_manual_message'] = 'E-Mail schreiben';
+$string['subject'] = 'Betreff';
+$string['content'] = 'Inhalt';
+$string['send_message'] = 'Nachricht abschicken';
 
 //importBonusForm.php
 $string['import_bonus_str'] = 'Bonuspunkte importieren';
@@ -463,7 +466,7 @@ $string['helptext_setTextfield']= 'Hier kann ein beliebiger Inhalt als <strong>F
 Auf diese Weise können den PrüfungsteilnehmerInnen etwa unkompliziert Hinweise zu den in der Prüfung erlaubten Hilfsmitteln mitgeteilt werden. Neben einfachen Texten können dabei auch komplexere Elemente wie etwa Bilder oder gegebenenfalls sogar Formeln verwendet werden. <br /> <br />
 Diese Funktion ist rein optional. Wenn Sie also z.B. keine Hinweise für die PrüfungsteilnehmerInnen haben können Sie das unten stehende Feld auch einfach leer lassen und auf den Button „Abbrechen“ klicken. <br /> <br />
 <strong>Hinweis:</strong>  Diese Funktion ist vorwiegend für Mitteilungen gedacht, die nicht zeitkritisch sind. Möchten Sie die PrüfungsteilnehmerInnen jedoch etwa am Tag vor der Prüfung über einen kurzfristigen Wechsel der Prüfungsräume informieren, empfiehlt sich dafür stattdessen die Nutzung der Funktion „Nachricht an Teilnehmer schreiben“ auf der Übersichtsseite. Dadurch erhalten die PrüfungsteilnehmerInnen sofort eine E-Mail und können so die eingetragenen Informationen selbst dann mitbekommen, wenn sie nicht aktiv in PANDA nachsehen.';
-$string['helptext_sendGroupmessages']= 'Auf dieser Seite kann der Betreff und der Inhalt einer <strong>Nachricht</strong> eingegeben werden, die nach einem Klick auf den Button „Mail abschicken“ <strong>an alle</strong> zur Prüfung als <strong>Teilnehmerinnen</strong> hinzugefügte Studierende gesendet wird. <br /> <br />
+$string['helptext_sendGroupmessage']= 'Auf dieser Seite kann der Betreff und der Inhalt einer <strong>Nachricht</strong> eingegeben werden, die nach einem Klick auf den Button „Mail abschicken“ <strong>an alle</strong> zur Prüfung als <strong>Teilnehmerinnen</strong> hinzugefügte Studierende gesendet wird. <br /> <br />
 Diese bekommen die Nachricht direkt nach dem Abschicken sowohl als PANDA-Benachrichtigung als auch als E-Mail an ihren universitären E-Mail-Account weitergeleitet und können so zum Beispiel einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Falls Sie Teilnehmerinnen zur Prüfung hinzugefügt haben, die noch kein PANDA-Benutzerkonto haben, wird dies im Folgenden angezeigt. Da diese Teilnehmerinnen die hier geschriebene Nachricht nicht automatisch erhalten werden müssen Sie sie stattdessen manuell per E-Mail anschreiben. Dies können Sie zum Beispiel nach einem Klick auf den Button "Email schreiben", der ihren E-Mail-Client öffnet und die Mailadressen der entsprechenden Teilnehmer einträgt, tun. <br /> <br />
 Die gesamte Benachrichtigungsfunktion ist rein optional, Sie müssen sie nicht nutzen, um eine Nachricht an die PrüfungsteilnehmerInnen zu senden. <br /> <br />

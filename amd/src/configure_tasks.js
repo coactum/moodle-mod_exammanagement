@@ -80,7 +80,7 @@ define(['jquery'], function ($) {
         var newtaskcount = taskcount + 1;
         var pointsofnewtask = 10;
 
-        if (taskcount <= 20) {
+        if (taskcount <= 19) {
 
           var temp = '<div class="form-group  fitem  ">';
           temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';

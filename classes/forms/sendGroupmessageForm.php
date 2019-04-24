@@ -39,7 +39,7 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
 require_once(__DIR__.'/../general/User.php');
 
-class groupmessagesForm extends moodleform {
+class sendGroupmessageForm extends moodleform {
 
     //Add elements to form
     public function definition() {
@@ -54,7 +54,7 @@ class groupmessagesForm extends moodleform {
         $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
         $mform->addElement('html', '</div>');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessages'));
+        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessage'));
 
         $MoodleParticipants = $UserObj->getAllMoodleExamParticipants();
         $NoneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
@@ -84,26 +84,26 @@ class groupmessagesForm extends moodleform {
                     $mform->addElement('html', $adress.';');
                 }
 
-                $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('groupmessages_send_manual_mail', 'mod_exammanagement').'">'.get_string('groupmessages_send_manual_mail', 'mod_exammanagement').'</a>');
+                $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
             }
 
             $mform->addElement('html', '</div>');
 
             $mform->addElement('html', '<span class="m-t-1"><hr></span>');
 
-            $mform->addElement('textarea', 'groupmessages_subject', '<strong>Betreff</strong>', 'wrap="virtual" rows="1" cols="50"');
+            $mform->addElement('textarea', 'groupmessages_subject', '<strong>'.get_string('subject', 'mod_exammanagement').'</strong>', 'wrap="virtual" rows="1" cols="50"');
             $mform->setType('groupmessages_subject', PARAM_TEXT);
             $mform->addRule('groupmessages_subject', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
-            $mform->addElement('textarea', 'groupmessages_content', '<strong>Inhalt</strong>', 'wrap="virtual" rows="10" cols="50"');
+            $mform->addElement('textarea', 'groupmessages_content', '<strong>'.get_string('content', 'mod_exammanagement').'</strong>', 'wrap="virtual" rows="10" cols="50"');
             $mform->setType('groupmessages_content', PARAM_TEXT);
             $mform->addRule('groupmessages_content', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
-			$this->add_action_buttons(true,'Mail abschicken');
+			$this->add_action_buttons(true,get_string('send_message', 'mod_exammanagement'));
 		    }
 		else {
-            $MoodleObj->redirectToOverviewPage('', 'Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt', 'error');
+            $MoodleObj->redirectToOverviewPage('', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 	   	}
     }
 

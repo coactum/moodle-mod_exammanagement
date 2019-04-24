@@ -62,7 +62,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$tasks = $fromform->task;
 
 			if($fromform->newtaskcount < 0){
-				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount);
+				$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount, true);
 			}
 
 			$tasks = json_encode($tasks);

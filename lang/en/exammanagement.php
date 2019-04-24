@@ -251,13 +251,16 @@ $string['add_text_str'] = 'Add textfield';
 $string['content_of_textfield'] = 'Content of textfield';
 $string['add_text_text'] = 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.';
 
-//groupmessagesForm.php
+//sendGroupmessageForm.php
 $string['groupmessages_str'] = 'Add Messagetext';
 $string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
 $string['groupmessages_text_2'] = ' participants of the exam.';
 $string['groupmessages_warning_1'] = 'Warning: ';
 $string['groupmessages_warning_2'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them manually via email using the following button:';
-$string['groupmessages_send_manual_mail'] = 'Write email';
+$string['send_manual_message'] = 'Write email';
+$string['subject'] = 'Subject';
+$string['content'] = 'Content';
+$string['send_message'] = 'Send message';
 
 //importBonusForm.php
 $string['import_bonus_str'] = 'Import bonus points';
@@ -445,7 +448,11 @@ $string['helptext_setTextfield']= 'Any content can be entered here as <strong>fr
 In this way, the exam participants can e. g. be easily informed about the equipment permitted in the exam. In addition to simple texts, more complex elements such as pictures or even formulas can be used. <br /> <br />
 This function is purely optional. If, for example, you do not have any information for the exam participants, you can simply leave the field below empty and click on the "Cancel" button. <br /> <br />
 <Strong>Note:</strong> This function is mainly intended for messages that are not time-critical. If, however, you would like to inform the examinees e. g. about a short-term change of exam rooms on the day before the exam, it is advisable to use the function "Write message to participants" on the overview page instead. In this way, the exam participants will immediately receive an e-mail and will thus be able to see the information entered even if they do not actively look in PANDA.';
-$string['helptext_sendGroupmessages']= 'Here goes the description of this feature site.';
+$string['helptext_sendGroupmessage']= '
+On this page the subject and content of a <strong>message</strong> can be entered, which will be sent to all </strong> students added as <strong>exam participants</strong> after clicking the button "Send message". <br /> <br />
+They receive the message immediately after sending it both as a PANDA notification and as an e-mail to their university e-mail account and can thus, for example, simply be made aware of short-term changes (such as changes of the exam times or rooms). <br /> <br />
+If you have added participants to the exam who do not yet have a PANDA user account, this will be displayed below. Since these participants will not automatically receive the message written here, you will have to write to them manually by e-mail instead. You can do this, for example, by clicking on the "Write Email" button, which opens your email client and enters the email addresses of the corresponding participants. <br /> <br />
+The whole notification function is purely optional, you do not have to use it to send a message to the participants. ';
 $string['helptext_importBonus']= 'Here you can import the participants bonus points and convert them into bonus grade steps for the exam. In this way, for example, bonus points earned by students while completing exercises can be directly converted into bonus grade steps for the exam. <br><br>
 To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>

@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\groupmessagesForm;
+use mod_exammanagement\forms\sendGroupmessageForm;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -43,14 +43,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
     if(!$UserObj->getParticipantsCount()){
-      $MoodleObj->redirectToOverviewPage('beforexam', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden, bevor an diese eine Nachricht gesendet werden kann.', 'error');
+      $MoodleObj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
     }
 
     $MoodleObj->setPage('groupmessage');
     $MoodleObj-> outputPageHeader();
 
     //Instantiate form
-    $mform = new groupmessagesForm(null, array('id'=>$id, 'e'=>$e));
+    $mform = new sendGroupmessageForm(null, array('id'=>$id, 'e'=>$e));
 
     //Form processing and displaying is done here
     if ($mform->is_cancelled()) {
@@ -73,9 +73,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
         }
     
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Nachricht erfolgreich versendet.', 'success');
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
       } else {
-        $MoodleObj->redirectToOverviewPage('beforeexam', 'Fehler beim Nachrichtenversand.', 'error');			
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');			
       }
 
     } else {
