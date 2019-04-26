@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $MoodleObj->setPage('exportExamLabels');
 
     if (!$UserObj->getParticipantsCount()) {
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Prüfungsetikettenexport noch nicht möglich', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
     }
 
     //include pdf

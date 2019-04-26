@@ -767,13 +767,14 @@ ajaxsetcorrectioncompletion = function(value){
 											</div>
 											<div class="row row-eq-height">
 												<div class="col-xs-6">
-														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}panel-warning{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
+														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}{{#examreviewtime}}panel-warning{{/examreviewtime}}{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}{{#examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
 																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}{{#examreviewtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 																	{{^datadeletiondate}}<span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span>{{/datadeletiondate}}
 																	{{^taskcount}}<span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+																	{{^examreviewtime}}<span class="label label-danger" title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}
 																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 																</span>
 																<h3 class="panel-title">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
@@ -786,7 +787,7 @@ ajaxsetcorrectioncompletion = function(value){
 															</p>
 														</div>
 														<div class="panel-footer">
-															{{#datadeletiondate}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
+															{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}
 														</div>
 													</div>
 												</div>

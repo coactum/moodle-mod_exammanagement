@@ -114,7 +114,7 @@ class addCourseParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
             $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
-            $mform->addElement('advcheckbox', 'checkall_deleted', 'Alle aus-/abwählen', null, array('group' => 1, 'id' => 'checkboxgroup1'));
+            $mform->addElement('advcheckbox', 'checkall_deleted', get_string("select_deselect_all", "mod_exammanagement"), null, array('group' => 1, 'id' => 'checkboxgroup1'));
             $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
             #### with moodle account ######
@@ -197,7 +197,7 @@ class addCourseParticipantsForm extends moodleform{
 
           $mform->addElement('html', '<div class="row"><div class="col-xs-3"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div><div class="col-xs-3"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
           $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
-          $mform->addElement('advcheckbox', 'checkall_new', 'Alle aus-/abwählen', null, array('group' => 2, 'id' => 'checkboxgroup2'));
+          $mform->addElement('advcheckbox', 'checkall_new', get_string("select_deselect_all", "mod_exammanagement"), null, array('group' => 2, 'id' => 'checkboxgroup2'));
           $mform->addElement('html', '</div><div class="col-xs-3"></div><div class="col-xs-3"></div><div class="col-xs-3"></div></div>');
 
           foreach ($courseParticipantsIDsArr as $key => $value) {

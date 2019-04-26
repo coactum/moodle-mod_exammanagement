@@ -57,9 +57,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     define("WIDTH_COLUMN_PERCENT", 80);
 
     if(!$ExammanagementInstanceObj->getInputResultsCount()){
-      $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
     } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-      $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+      $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
     }
 
     // Include the main TCPDF library (search for installation path).
@@ -108,7 +108,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     $date = $ExammanagementInstanceObj->getHrExamtime();
 
-    $pdf->MultiCell(130, 3, $date . ', ' . $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
+    if($date){
+      $pdf->MultiCell(130, 3, $date . ', ' . $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
+    } else {
+      $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
+    }
     $pdf->SetFont('helvetica', '', 10);
 
     $pdf->SetTextColor(255, 0, 0);

@@ -53,14 +53,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     $newAssignmentObj = '';
 
     if(!$savedRoomsArray){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Räume ausgewählt. Fügen Sie mindestens einen Raum zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
 
     } elseif(!$participantsArray){
-      $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Benutzer zur Prüfung hinzugefügt. Fügen Sie mindestens einen Benutzer zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 
     }
 
     $participantsCount = 0;
+
+    usort($savedRoomsArray, function($a, $b){ //sort array by custom user function (big rooms to smnall rooms)
+
+      global $ExammanagementInstanceObj;
+
+      $aPlaces = $ExammanagementInstanceObj->getRoomObj($a)->places;
+      $bPlaces = $ExammanagementInstanceObj->getRoomObj($b)->places;
+      
+      if ($aPlaces == $bPlaces) { //if names are even sort by first name
+          return strcmp($aPlaces, $bPlaces);
+      } else{
+          return strcmp($aPlaces, $bPlaces); // else sort by last name
+      }
+
+    });
 
     foreach($savedRoomsArray as $key => $roomID){
 
@@ -92,10 +107,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     }
 
     if($participantsCount < count($participantsArray)){	//if users are left without a room
-      $MoodleObj->redirectToOverviewPage('forexam', 'Einige Benutzer haben noch keinen Sitzplatz. Fügen Sie ausreichend Räume zur Prüfung hinzu und starten Sie die automatische Sitzplatzzuweisung erneut.', 'error');
+      $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
     }
 
-    $MoodleObj->redirectToOverviewPage('forexam', 'Plätze zugewiesen', 'success');
+    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 
   } else { // if user hasnt entered correct password for this session: show enterPasswordPage
     redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);

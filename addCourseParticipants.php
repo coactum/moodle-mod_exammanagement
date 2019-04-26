@@ -108,7 +108,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             } else {
 
-                redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), 'Kursteilnehmer konnten nicht zur Prüfung hinzugefügt werden', null, 'error');
+                redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
             }
 
         } else {

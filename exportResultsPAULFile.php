@@ -52,9 +52,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->setPage('exportResultsPAULFile');
 
         if(!$ExammanagementInstanceObj->getInputResultsCount()){
-        $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+            $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
         } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-        $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+            $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
         }
 
         $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
@@ -346,7 +346,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 readfile($tempfile);
                 unlink($tempfile);
             } else {
-                $MoodleObj->redirectToOverviewPage('', 'Fehler beim Erzeugen des zip-Archives', 'error');            
+                $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');            
             }
         }
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage

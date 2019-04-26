@@ -48,11 +48,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->setPage('exportParticipantsListNames');
 
         if (!$ExammanagementInstanceObj->getRoomsCount()) {
-            $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Prüfungsräume ausgewählt. Listenexport noch nicht möglich', 'error');
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
         } else if (!$UserObj->getParticipantsCount()) {
-            $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Teilnehmer ausgewählt. Listenexport noch nicht möglich', 'error');
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
         } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-            $MoodleObj->redirectToOverviewPage('forexam', 'Noch keine Sitzplätze zugewiesen. Listenexport noch nicht möglich', 'error');
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
         }  
 
         //include pdf

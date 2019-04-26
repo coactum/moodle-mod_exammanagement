@@ -219,6 +219,7 @@ $string['oddmatrnr'] = 'Users with warnings (can still be added as participants)
 $string['existingmatrnr'] = 'Users are already exam participants (no changes)';
 $string['deletedmatrnr'] = 'Participants will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
+$string['select_deselect_all'] = 'Select/deselect all';
 $string['no_participants_added_page'] = 'No participants added.';
 $string['state_newmatrnr'] = 'New';
 $string['state_newmatrnr_no_moodle'] = 'New (without PANDA account)';
@@ -262,6 +263,9 @@ $string['subject'] = 'Subject';
 $string['content'] = 'Content';
 $string['send_message'] = 'Send message';
 
+// assignPlaces.php
+$string['participants_missing_places'] = 'Some participants have not yet been assigned a place. Add enough rooms to the exam and repeat the assignment or assign the missing places manually.';
+
 //importBonusForm.php
 $string['import_bonus_str'] = 'Import bonus points';
 $string['import_bonus_text'] = 'Bonus points achieved by the participants can be imported and converted to bonus steps for the exam.';
@@ -291,6 +295,7 @@ $string['input_results_text'] = 'After entering the matriculation number of a pa
 $string['confirm_matrnr'] = 'To confirm the matriculation number you can also press enter/return or tabulator.';
 $string['exam_participant'] = 'Exam participant';
 $string['matrnr_barcode'] = 'Matriculation number or barcode';
+$string['matrnr'] = 'Matriculation number';
 $string['participant'] = 'Participant';
 $string['exam_state'] = 'Exam state';
 $string['exam_points'] = 'Exam points';
@@ -301,6 +306,9 @@ $string['max_points'] = 'Maximum points';
 $string['save_and_next'] = 'Save and next';
 $string['validate_matrnr'] = 'Validate matriculation number';
 $string['input_other_matrnr'] = 'Change matriculation number';
+$string['noparticipant'] = 'No valid participant';
+$string['invalid_matrnr'] = 'Invalid matriculation number';
+$string['invalid_barcode'] = 'Invalid barcode';
 
 //participantsOverviewForm.php
 $string['participants_overview_text'] = 'All participants already added to the exam can be viewed and edited in this list.';
@@ -373,8 +381,10 @@ $string['details'] = 'Details';
 
 // exportResultsPAULFile.php
 $string['results'] = 'Results';
+$string['cannot_create_zip_archive'] = 'Error creating zip archive';
 
 // examReviewDateRoomForm.php
+$string['examreview_dateroom_str'] = 'If you are planning an exam review, you can select the date and the room for it here.';
 $string['examreview_dateroom'] = 'Date and rooms for exam review';
 $string['examreview_date'] = 'Date';
 $string['examreview_room'] = 'Rooms (enter as free text)';
@@ -383,10 +393,12 @@ $string['examreview_room'] = 'Rooms (enter as free text)';
 $string['operation_canceled'] = 'Operation canceled';
 $string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
+$string['no_rooms_added'] = 'No exam rooms added yet. Work step not possible';
 $string['no_participants_added'] = 'No exam participants added yet. Work step not possible';
-$string['not_all_places_assigned'] = 'Not all seats assigned yet. Work step not possible';
+$string['not_all_places_assigned'] = 'Not all places assigned yet. Work step not possible';
 $string['no_tasks_configured'] = 'No tasks configured yet. Work step not possible';
-$string['correction_not_completed'] = 'Marking not completed';
+$string['no_results_entered'] = 'No exam results entered yet. Work step not possible';
+$string['correction_not_completed'] = 'Marking not completed. Work step not possible';
 
 //helptexts
 $string['help'] = 'Help';
@@ -438,8 +450,25 @@ New participants can also be added to the exam here. There are two ways to do th
 Adding participants is one of the most important steps in the exam organisation. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the PANDA course) also do not have access to the participant view with the exam information and do not receive any notification about the messaging function on the overview page of the exam organisation.<br /> <br />
 If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in PANDA. Although these can also be imported from a PAUL file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
 It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
-$string['helptext_addParticipants']= 'Here goes the description of this feature site.';
-$string['helptext_addCourseParticipants']= 'Here goes the description of this feature site.';
+$string['helptext_addParticipants']= 'On this page you can add <strong>participants</strong> from PAUL exam lists to the exam. In this way their results can be exported later again list by list and then simply entered in PAUL. <br /> <br />
+To do this, you first need the list of your exam participants exported from PAUL. You can then select this file in the selection area and import it by clicking on the corresponding button. <br><br>
+On the following page you will see all matriculation numbers read from the file. The status of a matriculation number and whether the corresponding student can be added to the exam are displayed in different sections. <br><br>
+In the following the different states are briefly explained:<br>
+<ul><li><strong>Bad matriculation number</strong>: The entered matriculation number is invalid because, for example, it contains illegal characters such as letters. It cannot therefore be read in as a participant.</li>
+<li><strong>Duplicated matriculation number</strong>: The matriculation number occurs several times in the file. However, it can only be read in once as a exam participant in the corresponding section.</li>
+<li><strong>New (no course participant)</strong>: The student belonging to this matriculation number is not part of the PANDA course. He can easily be imported as an exam participant. However, in order to avoid an error, you have to select it manually by ticking the box.</li>
+<li><strong>New (without PANDA account)</strong>: The student belonging to this matriculation number does not yet have an account in PANDA. This can happen, for example, if the student has never registered in PANDA before. Although the student can be imported as an exam participant, he or she cannot view the participant view of the exam organisation and you cannot reach him or her via the notification function of the exam organisation. Therefore you have to check this student here manually.</li>
+<li><strong>Will be deleted</strong>: This participant was already imported as an exam participant with an earlier version of the used PAUL list, but is no longer included in the current one (for example, because he has deregistered from the PAUL exam in the meantime). You can now select this participant to remove him from the current exam.</li>
+<li><strong>Already exam participant</strong>: This participant has already been imported as an exam participant and is not modified by the current import.</li>
+<li><strong>New</strong>: This is a valid participant that can be added to the exam without any problems. All participants in this section are preselected to be added to the exam.</li>
+</ul>
+All participants to be added to (or removed from) the exam can now be selected either by checking the box next to the name or by checking the "Select/deselect all" box of the respective area. Then press the "Add to exam" button to add the selected participants to the exam.<br><br>
+If you have read in the wrong file, you can immediately read in a new file by clicking on the button "Import other participants". The currently readed participants then will not be imported but discarded.<br><br>
+You can perform this procedure several times for the import of participants from several lists.';
+$string['helptext_addCourseParticipants']= 'Here you can import all <strong>course participants</strong> enrolled in PANDA  as exam participants. <br><br>
+In the lower section, all course participants who should be added to the exam must be selected. Individual participants can be selected by checking the box next to their name. To select (or deselect) all course participants it is sufficient to click in the corresponding box "Select/deselect all". In the corresponding section, you can also select existing participants who are not course participants. These are then removed from the exam by clicking on the "Add to exam" button at the bottom, while the selected course participants are then added to the exam. For all participants with the state " Already exam participants " nothing changes. <br><br>
+If participants are added after places have already been assigned, they must still be assigned places.<br><br>
+<strong>Please note:</strong> If this variant of participant import is selected, the results of all participants added in this way will be exported later in a single separate list for the exam office, which may make it difficult to enter them in PAUL. If you plan to have the exam results entered into PAUL, you may want to add participants to the exam using the appropriate PAUL participant lists in the corresponding import.';
 $string['helptext_configureTasks']= 'Here you can define the number and maximum points of all <strong>exam tasks</strong>. <br><br>
 By clicking the "+" button new tasks can be added to the exam. In the field below the respective task number, you must enter the maximum number of points that can be achieved in the respective task later. This number of points must be positive, but can be a decimal. By clicking on the "-" button, exam tasks can be removed again, but at least one task always remains. <br><br>
 The tasks are a central element of the exam organisation. They correspond to the tasks which are later available in the actual exam and are required in order to be able to enter the exam results for the participants in the future. For each task, the points obtained by the participants can then be entered separately, up to a maximum of the maximum number of points specified here for the respective task. The tasks specified here and their maximum number of points are also required for setting the gradingscale and for exporting the exam results.
@@ -465,8 +494,17 @@ As soon as the exam results have been entered, the gradingscale is used to autom
 The minimum number of points required to reach a step must be specified individually for each single grade. A 70 in the field below 1.0 would therefore mean that a participant has to reach at least 70 points in order to get the grade 1.0.<br><br>
 The number of points to be achieved for a grade step can be between 0 and the stated total number of points for all exam tasks, but it must be higher than the number of points required for the previous grade step. For example, more points must be required for achieving the grade 1.0 than for achieving a 1.3. In addition, it is also possible to use comma numbers as points. If a participant achieves fewer points than which are necessary for 4.0, he or she will receive the grade 5 instead.<br><br>
 The gradingscale can be changed at any time (even after the exam results have been entered), in that case the participants grades are automatically adapted to the new gradingscale.';
-$string['helptext_inputResults']= 'Here goes the description of this feature site.';
-$string['helptext_participantsOverview']= 'Here goes the description of this feature site.';
+$string['helptext_inputResults']= 'On this page you can enter the <strong>exam results</strong> of the participants.<br><br>
+For this purpose, the matriculation number of the participant whose results should be entered must first be validated. There are two ways to do this:<br>
+1. You can manually enter the matriculation number of the participant. To do this, click in the "Matriculation number or barcode" field, enter the matriculation number and confirm it by pressing the Enter (or Return) key, the Tab key or the "Validate matriculation number" button. <br> 
+2. Alternatively, if you have used exam labels in your exam, you can also use a barcode scanner to enter the exam results more quickly. For this you need a barcode scanner or alternatively a smartphone with a corresponding app. With this you then have to scan the barcode on the exam label of a participant, whereby his matriculation number is automatically entered into the field "Matriculation number or barcode" and confirmed immediately. If the automatic entry does not work immediately, you may have to click manually in the field "Matriculation number or barcode" once and then repeat the scan.<br><br>
+As soon as a matriculation number has been entered and confirmed, it is checked by the system. If it is the valid matriculation number of a participant added to the exam, the page for entering the exam points is opened, otherwise there is a corresponding error message and the previous page is opened again, where a new matriculation number can be entered or the entry of the incorrect matriculation number can be repeated.<br><br>
+In the case of a valid matriculation number, the exam results can now be entered on the page that opens. In the section "Exam participant" you will first see the matriculation number and the name of the selected participant. By clicking on the "Change matriculation number" button below, you can return to the previous page to enter a different matriculation number (e.g. in case of an error). In the "Exam points" section below, you can enter the points earned in each exam task by the selected participant. The corresponding points can be entered directly in the points field of the first task and then be continued in the field of the next task after pressing the tab key. A number between zero and the displayed maximum number of points of the respective task can be entered as the number of points, whereby decimals with up to two places are also permitted. If the participant is subject to a special exam status (e.g. if he has "not participated", committed a "fraud attempt" or was "sick"), this state can be selected in the last section "Exam state" by ticking the corresponding checkbox. This sets the task points to zero, disables the entry of points, and displays the selected state in all later documents (e.g. for PAUL export) instead of the result. Removing the check mark at the respective exam state reactivates the option to enter points. If results have already been entered for the participant in the past, both the section on the exam points and the exam state may already be filled in. In this case, the information can now be changed and the changes can then be saved.<br><br>
+After a click on the button "Save and next" or after pressing the Enter or Return key, the entered results are then saved and the page is automatically reloaded so that the matriculation number of the next exam participant can be read in (either manually or by barcode scanner).';
+$string['helptext_participantsOverview']= 'In this <strong>participants and results overview</strong> the information of all imported exam participants and their results can be viewed and edited. <br><br>
+The first name, surname and matriculation number of each exam participant will be displayed here in alphabetical order. If a place has already been assigned to a participant, this place and the corresponding room are also displayed in the correspondingly named columns. If exam tasks have already been created and exam results have already been entered for a participant, these are also displayed. In the "Points" column you can see how many points the participant has earned in each individual task, while in the "Total points" column the total number of points is displayed. If no exam tasks have been created yet, a click on the symbol displayed instead in the "Points" column allows you to do this directly. If no grading scale has been entered yet, this can be done by clicking on the corresponding symbol in the "Result" column, otherwise the exam grade calculated using the grading scale will be displayed in this column (if results have already been entered for the participant). If the participant has a special status (e.g. if he was ill during the exam or if he was trying to cheat) this will be displayed instead of the exam result. In addition, the "Bonus steps" column shows the bonus grade steps already achieved by the participant for the exam, while the "Result with bonus" column shows the final grade, taking the bonus grade steps into account. <br><br>
+In order to edit the information on a participant, simply click on the icon on the right in the line of the respective participant. Then you can edit all information for the participant. For example, the participant can be assigned one of the rooms already selected for the exam and any place in it. In the "Points" column, on the other hand, the points achieved by the participant can be entered for each task. Alternatively, if necessary, a special exam state such as "Ill", "Not participated" or "Fraud attempt" can be selected from a dropdown menu, whereby the points are automatically set to zero. It is also possible to manually select the bonus steps achieved by a participant. After saving the changes by clicking on the corresponding button, the result and the result taking into account all the bonus steps achieved are calculated (if a gradingscale has already been entered). <br><br>
+For a student, all these details can be entered or edited at the same time or individually. In this way, this page can not only be used to correct incorrectly entered information, but also to manually enter results for exam participants or to manually assign the desired places to them.';
 $string['helptext_examReviewDateRoom']=  'If you are planning an exam review, you can select the date and the room for it here. <br><br>
 The name of the room can be freely entered as normal text in the lower form field. In this way, you can select rooms that are not stored in the system as exam rooms, such as your office, as room for the exam review. <br><br>
 If you change the exam results for the participants after the time of the exam review, you can simply export them separately for the examination office on the overview page. <br><br>
@@ -508,6 +546,8 @@ $string['pluginadministration'] = 'exam management administration';
 $string['security_password'] = 'Security Password';
 $string['new_password'] = 'New password';
 $string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organization. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organization.';
+$string['confirm_new_password'] = 'Repeat new password';
+$string['confirm_new_password_help'] = 'For setting the new password it has to be repeated here.';
 $string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
 $string['old_password_help'] = 'If some already existing password should be changed you need to enter it here.';
 $string['incorrect_password_change'] = 'Incorrect password. Terminated password change';

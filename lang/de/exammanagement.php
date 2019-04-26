@@ -218,6 +218,7 @@ $string['badmatrnr'] = 'Zeilen mit ungültigen Matrikelnummern (Benutzer können
 $string['oddmatrnr'] = 'Benutzer mit Warnungen (können trotzdem hinzugefügt werden).';
 $string['existingmatrnr'] = 'Benutzer sind bereits Prüfungsteilnehmer (keine Änderungen).';
 $string['deletedmatrnr'] = 'Prüfungsteilnehmer werden entfernt.';
+$string['select_deselect_all'] = 'Alle aus-/abwählen';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['no_participants_added_page'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['state_newmatrnr'] = 'Neu eingelesen';
@@ -262,6 +263,9 @@ $string['subject'] = 'Betreff';
 $string['content'] = 'Inhalt';
 $string['send_message'] = 'Nachricht abschicken';
 
+// assignPlaces.php
+$string['participants_missing_places'] = 'Einigen Teilnehmerinnen und Teilnehmern konnte noch kein Sitzplatz zugewiesen werden. Fügen Sie ausreichend Räume zur Prüfung hinzu und wiederholen Sie die Zuweisung oder weisen Sie die noch fehlenden Sitzplätze manuell zu.';
+
 //importBonusForm.php
 $string['import_bonus_str'] = 'Bonuspunkte importieren';
 $string['import_bonus_text'] = 'Hier können von den Teilnehmenden errungene Bonuspunkte importiert und in Bonusnotenschritte für die Prüfung umgerechnet werden.';
@@ -291,6 +295,7 @@ $string['input_results_text'] = 'Hier können nach der Eingabe der Matrikelnumme
 $string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch durch das Drücken der Enter- bzw. der Return-Taste sowie der Tabulator-Taste möglich.';
 $string['exam_participant'] = 'Prüfungsteilnehmer/in';
 $string['matrnr_barcode'] = 'Matrikelnummer oder Barcode';
+$string['matrnr'] = 'Matrikelnummer';
 $string['participant'] = 'Teilnehmer/in';
 $string['exam_state'] = 'Prüfungsstatus';
 $string['exam_points'] = 'Prüfungspunkte';
@@ -301,6 +306,9 @@ $string['max_points'] = 'Maximale Punkte';
 $string['save_and_next'] = 'Speichern und zum Nächsten';
 $string['validate_matrnr'] = 'Matrikelnummer validieren';
 $string['input_other_matrnr'] = 'Matrikelnummer ändern';
+$string['noparticipant'] = 'Kein gültiger Teilnehmer';
+$string['invalid_matrnr'] = 'Ungültige Matrikelnummer';
+$string['invalid_barcode'] = 'Ungültiger Barcode';
 
 //participantsOverviewForm.php
 $string['participants_overview_text'] = 'Alle bereits zur Prüfung hinzugefügten Teilnehmerinnen können in dieser Liste angesehen und bearbeitet werden.';
@@ -373,8 +381,10 @@ $string['details'] = 'Details';
 
 // exportResultsPAULFile.php
 $string['results'] = 'Prüfungsergebnisse';
+$string['cannot_create_zip_archive'] = 'Fehler beim Erzeugen des zip-Archives';
 
 // examReviewDateRoomForm.php
+$string['examreview_dateroom_str'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier das Datum und der Raum dafür ausgewählt werden.';
 $string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
 $string['examreview_date'] = 'Datum';
 $string['examreview_room'] = 'Räume (als Freitext eintragen)';
@@ -383,10 +393,12 @@ $string['examreview_room'] = 'Räume (als Freitext eintragen)';
 $string['operation_canceled'] = 'Vorgang abgebrochen';
 $string['operation_successfull'] = 'Vorgang erfolgreich';
 $string['alteration_failed'] = 'Änderung fehlgeschlagen';
+$string['no_rooms_added'] = 'Noch keine Prüfungsräume ausgewählt. Arbeitsschritt nicht möglich';
 $string['no_participants_added'] = 'Noch keine Prüfungsteilnehmer hinzugefügt. Arbeitsschritt nicht möglich';
 $string['not_all_places_assigned'] = 'Noch nicht alle Sitzplätze zugewiesen. Arbeitsschritt nicht möglich';
 $string['no_tasks_configured'] = 'Noch keine Aufgaben konfiguriert. Arbeitsschritt nicht möglich';
-$string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen.';
+$string['no_results_entered'] = 'Noch keine Prüfungsergebnisse eingetragen. Arbeitsschritt nicht möglich';
+$string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbeitsschritt nicht möglich';
 
 //helptexts
 $string['help'] = 'Hilfe';
@@ -447,7 +459,7 @@ Im Folgenden werden die verschiedenen Stati kurz erklärt:<br>
 <li><strong>Doppelte Matrikelnummer</strong>: Die Matrikelnummer kommt in der Datei mehrfach vor. Als Prüfungsteilnehmer kann Sie jedoch im entsprechenden Abschnitt nur einmal eingelesen werden.</li>
 <li><strong>Neu eingelesen (kein Kursteilnehmer)</strong>: Der zu dieser Matrikelnummer gehörende Studierende ist nicht Teil des PANDA-Kurses. Er kann problemlos als Prüfungsteilnehmer importiert werden. Um jedoch zu vermeiden, dass hier ein Fehler vorliegt, müssen Sie ihn dazu durch Setzen des Hakens manuell auswählen.</li>
 <li><strong>Neu eingelesen (ohne PANDA Benutzerkonto)</strong>: Der zu dieser Matrikelnummer gehörende Studierende hat noch keinen Account in PANDA. Dies kann etwa geschehen, wenn er sich noch nie in PANDA angemeldet hat. Der oder die Studierende kann zwar als Prüfungsteilnehmer importiert werden, jedoch kann er dann nicht die Teilnehmeransicht der Prüfungsorganisation betrachten und Sie können ihn auch nicht über die Benachrichtigungssfunktion der Prüfungsorganisation erreichen. Deshalb müssen Sie diesen Studierenden hier manuell anhaken.</li>
-<li><strong>Gelöscht</strong>: Dieser Teilnehmer wurde in einer früheren Version der verwendeten PAUL-Liste bereits als Prüfungsteilnehmer importiert, ist in der aktuellen jedoch nicht mehr enthalten (weil er sich zum Beispiel in der Zwischenzeit von der Prüfung in PAUL abgemeldet hat). Durch Auswählen können Sie nun bestimmen, dass dieser Teilnehmer von der aktuellen Prüfung entfernt werden soll.</li>
+<li><strong>Werden gelöscht</strong>: Dieser Teilnehmer wurde in einer früheren Version der verwendeten PAUL-Liste bereits als Prüfungsteilnehmer importiert, ist in der aktuellen jedoch nicht mehr enthalten (weil er sich zum Beispiel in der Zwischenzeit von der Prüfung in PAUL abgemeldet hat). Durch Auswählen können Sie nun bestimmen, dass dieser Teilnehmer von der aktuellen Prüfung entfernt werden soll.</li>
 <li><strong>Bereits Prüfungsteilnehmer</strong>: Dieser Teilnehmer wurde bereits als Prüfungsteilnehmer importiert und wird durch den aktuellen Import nicht verändert.</li>
 <li><strong>Neu eingelesen</strong>: Dies ist ein gültiger Teilnehmer, der ohne Probleme zur Prüfung hinzugefügt werden kann. Alle Teilnehmer in diesem Abschnitt sind für das Hinzufügen zur Prüfung vorausgewählt.</li>
 </ul>
@@ -535,6 +547,8 @@ $string['pluginadministration'] = 'Administration der Prüfungsverwaltung';
 $string['security_password'] = 'Passwortschutz';
 $string['new_password'] = 'Neues Passwort';
 $string['security_password_help'] = 'Durch das Festlegen eines Sicherheitspasswortes können Sie den Zugang zu dieser Prüfungsorganisation gegenüber anderen PANDA-Benutzern (z. B. Ihren studentischen Tutoren) begrenzen. Diese müssen dann zunächst das Passwort eingeben, bevor sie Zugang zu den Inhalten der Prüfungsorganisation erhalten.';
+$string['confirm_new_password'] = 'Neues Passwort wiederholen';
+$string['confirm_new_password_help'] = 'Für das Setzen des neuen Passwortes muss dieses hier erneut eingegeben werden.';
 $string['old_password'] = 'Altes Passwort (nur benötigt falls ein bereits gesetztes Passwort geändert werden soll)';
 $string['old_password_help'] = 'Falls ein bereits gesetztes Passwort geändert werden soll muss dieses hier eintragen werden.';
 $string['incorrect_password_change'] = 'Das alte Passwort ist falsch. Passwortänderung abgebrochen';

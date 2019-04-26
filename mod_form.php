@@ -75,6 +75,11 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('newpassword', 'security_password', 'mod_exammanagement');
 
+        $mform->addElement('password', 'confirmnewpassword', get_string('confirm_new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->setType('newpassword', PARAM_TEXT);
+        $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('confirmnewpassword', 'confirm_new_password', 'mod_exammanagement');
+
         $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
         $mform->setType('oldpassword', PARAM_TEXT);
         $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
@@ -88,5 +93,21 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    //Custom validation should be added here
+    function validation($data, $files) {
+        $errors= array();
+  
+        if($data['newpassword']){
+            if ($data['confirmnewpassword'] == Null){
+                $errors['confirmnewpassword'] = get_string('err_filloutfield', 'mod_exammanagement');
+            } else if(strcmp($data['newpassword'], $data['confirmnewpassword']) !== 0){
+                $errors['newpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
+                $errors['confirmnewpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
+            }
+        }
+  
+        return $errors;   
     }
 }

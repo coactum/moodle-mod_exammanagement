@@ -200,7 +200,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
 				} else {
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), 'Teilnehmer konnten nicht zur Prüfung hinzugefügt werden', null, 'error');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 				}
 
 			} else if($paul_file){
@@ -244,7 +244,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$UserObj->deleteTempParticipants();
 					$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersObjArr);
 
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$id), 'Datei einlesen erfolgreich' , null, 'success');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$id), get_string('operation_successfull', 'mod_exammanagement') , null, 'success');
 
 				}
 			}

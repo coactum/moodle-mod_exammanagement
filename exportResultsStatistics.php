@@ -55,9 +55,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->setPage('exportResultsStatistics');
 
         if(!$ExammanagementInstanceObj->getInputResultsCount()){
-        $MoodleObj->redirectToOverviewPage('afterexam', 'Noch keine Prüfungsergebnisse eingegeben.', 'error');
+            $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
         } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-        $MoodleObj->redirectToOverviewPage('afterexam', 'Korrektur noch nicht abgeschloßen.', 'error');
+            $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
         }
 
         // Create new PHPExcel object

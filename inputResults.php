@@ -49,9 +49,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 		if(!$UserObj->getParticipantsCount()){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Teilnehmer zur Prüfung hinzugefügt werden.', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 		} else if(!$ExammanagementInstanceObj->getTaskCount()){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', 'Es müssen erst Aufgaben zur Prüfung hinzugefügt werden.', 'error');
+			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
 		}
 
 		$MoodleObj->setPage('inputResults');
@@ -172,7 +172,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		//Form processing and displaying is done here
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', 'Vorgang beendet', 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'success');
 
 		} else if ($fromform = $mform->get_data()) {
 		//In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -222,12 +222,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					if($update){
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), null, null, null);
 					} else {
-						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), 'Speichern fehlgeschlagen', null, notification::NOTIFY_ERROR);
+						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 					}
 
 
 				} else{
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), 'Ungültige Matrikelnummer', null, notification::NOTIFY_ERROR);
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('noparticipant', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 
 				}
 				
@@ -254,15 +254,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					break;
 				case 'noparticipant':
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add('Ungültige Matrikelnummer', 'error');
+							\core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
 					break;
 					case 'novalidmatrnr':
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add('Keine gültige Matrikelnummer', 'error');
+							\core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
 					break;
 					case 'novalidbarcode':
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add('Ungültiger Barcode', 'error');
+							\core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
 					break;
 					default:
 							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
