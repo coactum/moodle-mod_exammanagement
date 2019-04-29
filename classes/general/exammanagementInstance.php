@@ -170,7 +170,7 @@ EOF;
 	public function getHrExamtimeTemplate() {	//convert examtime to human readable format for template
 		$examtime = $this->getExamtime();
 		if($examtime){
-			$hrexamtimetemplate = date('d.m.Y', $examtime).' um '.date('H:i', $examtime);
+			$hrexamtimetemplate = date('d.m.Y', $examtime).' '.get_string('at', 'mod_exammanagement').' '.date('H:i', $examtime);
 			return $hrexamtimetemplate;
 		} else {
 			return false;
@@ -640,7 +640,7 @@ EOF;
 
 		$examReviewTime = $this->moduleinstance->examreviewtime;
 		if($examReviewTime){
-			$hrexamReviewTime = date('d.m.Y', $examReviewTime).' um '.date('H:i', $examReviewTime);
+			$hrexamReviewTime = date('d.m.Y', $examReviewTime).' '.get_string('at', 'mod_exammanagement').' '.date('H:i', $examReviewTime);
 			return $hrexamReviewTime;
 		} else {
 			return false;

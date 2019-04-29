@@ -144,7 +144,9 @@ class ldapManager{
 				$matrNr = 7 . $matrNr;
 			}
 
-			if($matrNr){
+			if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
+				return false;
+			}else if($matrNr){
 				return $matrNr;
 			} else {
 				return false;

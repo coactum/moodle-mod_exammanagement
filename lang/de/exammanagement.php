@@ -51,6 +51,7 @@ $string['exam_review_two'] = 'findet die Klausureinsicht statt in Raum ';
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['overview'] = 'Überblick';
+$string['js_confirm_correction_completion'] = 'Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.';
 
 //exammanagement_overview.mustache phases
 $string['phase_one'] = 'Vor der Prüfung';
@@ -106,7 +107,39 @@ $string['state_notpossible_examreviewtime_missing'] = 'Zeit der Klausureinsicht 
 $string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht fehlt';
 $string['state_loading'] = 'Lädt ...';
 
-//exammanagement_overview.mustache workstages buttons
+//exammanagement_overview.mustache work step texts
+$string['important_note'] = 'Wichtiger Hinweis:';
+$string['note'] = 'Hinweis:';
+$string['exam_rooms_set_one'] = 'Es wurden bereits die folgenden ';
+$string['exam_rooms_set_two'] = '<strong>Räume</strong> mit insgesamt';
+$string['exam_rooms_set_three'] = ' <strong>Sitzplätzen</strong> für die Prüfung ausgewählt';
+$string['exam_rooms_not_set'] = 'Es wurden noch keine Räume für die Prüfung ausgewählt.';
+$string['at'] = 'um';
+$string['exam_date_set_one'] = 'Die Prüfung findet am ';
+$string['exam_date_set_two'] = 'statt';
+$string['exam_date_not_set'] = 'Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.';
+$string['exam_participants_set_one'] = 'Teilnehmerinnen und Teilnehmer sind zur Prüfung angemeldet.';
+$string['exam_participants_not_set'] = 'Es wurden noch keine Teilnehmerinnen und Teilnehmer zur Prüfung hinzugefügt.';
+$string['exam_tasks_set_one'] = 'Es wurden bereits ';
+$string['exam_tasks_set_two'] = '<strong>Prüfungsaufgaben</strong> mit insgesamt ';
+$string['exam_tasks_set_three'] = '<strong>Punkten</strong> angelegt';
+$string['exam_tasks_not_set'] = 'Es wurden noch keine Aufgaben konfiguriert.';
+$string['textfield_set'] = 'Im Textfeld steht folgender Inhalt: ';
+$string['textfield_not_set'] = 'Es wurde noch kein Inhalt für das Textfeld eingetragen.';
+$string['message_to_participants_str'] = 'Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer versendet werden.';
+$string['places_assigned_one'] = 'Teilnehmenden wurden bereits Sitzplätze zugewiesen.';
+$string['places_assigned_two'] = 'Die Sitzplatzzuweisung ist damit erfolgreich abgeschlossen.';
+$string['places_assigned_three'] = 'Einigen Teilnehmenden müssen somit noch Sitzplätze zugewiesen werden, bevor mit den weiteren Arbeitsschritten fortgefahren werden kann.';
+$string['places_assigned_note'] = 'Bei einer (erneuten) Durchführung der automatischen Sitzplatzzuweisung werden alle bereits bestehenden Zuweisungen überschrieben.';
+$string['export_seatingplan_str'] = 'Hier kann der Sitzplan nach Nachnamen oder nach Matrikelnummern sortiert als PDF-Dokument exportiert werden.';
+$string['information_visible'] = 'Die Informationen wurden für die Teilnehmer sichtbar geschaltet.';
+$string['information_not_visible'] = 'Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.';
+$string['export_examlabels_str'] = 'Hier können Prüfungsetiketten als Barcodes exportiert werden.';
+$string['export_examlabels_note'] = 'Erst wenn allen Teilnehmenden Sitzplätze zugewiesen wurden erscheinen diese auf den Prüfungsetiketten.';
+$string['export_participantslists_str'] = 'Hier können Teilnehmerlisten nach Nachname oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.';
+$string['export_participantslists_note'] = 'Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!';
+
+//exammanagement_overview.mustache work steps buttons
 $string['configure_password'] = 'Passwort konfigurieren';
 $string['choose_rooms'] = 'Räume auswählen';
 $string['set_date'] = 'Datum festlegen';

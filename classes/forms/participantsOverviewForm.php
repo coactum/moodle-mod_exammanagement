@@ -144,10 +144,13 @@ class participantsOverviewForm extends moodleform {
                     $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                if(isset($this->_customdata['edit']) && $this->_customdata['edit']==$matrnr){ // if user is editable
+                if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']==$matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
 
                     $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
                     $mform->setType('edit', PARAM_INT);
+
+                    $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
+                    $mform->setType('editline', PARAM_INT);
                     
                     $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
                     $mform->setType('editmoodleuserid', PARAM_INT);
@@ -321,8 +324,12 @@ class participantsOverviewForm extends moodleform {
                     }
 
                     $anchorid = $i-1;
-    
-                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    
+                    if($matrnr !== '-'){
+                        $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    } else {
+                        $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&editline='.$i.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    }
                     
                 }
                 $mform->addElement('html', '</tr>');                
@@ -339,7 +346,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
-        if(isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0){
+        if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0)|| (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0)){
             $this->add_action_buttons(true, get_string("save_changes", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');

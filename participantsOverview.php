@@ -38,6 +38,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $edit  = optional_param('edit', 0, PARAM_INT);
+$editline  = optional_param('editline', 0, PARAM_INT);
 
 $pne  = optional_param('pne', 1, PARAM_INT);
 
@@ -59,7 +60,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->outputPageHeader();
 
         //Instantiate Form
-        $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'edit'=>$edit));
+        if($editline){
+            $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'editline'=>$editline));
+        } else {
+            $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'edit'=>$edit));
+        }
 
         //Form processing and displaying is done here
         if ($mform->is_cancelled()) {

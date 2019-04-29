@@ -51,6 +51,7 @@ $string['exam_review_two'] = 'there will be the exam review in room ';
 //exammanagement_overview.mustache
 $string['maintitle'] = 'Exam management';
 $string['overview'] = 'Overview';
+$string['js_confirm_correction_completion'] = 'This action completes the correction phase. You then have 3 months to export all exam results before they are irretrievably deleted for data protection reasons.';
 
 //exammanagement_overview.mustache phases
 $string['phase_one'] = 'Before exam';
@@ -106,7 +107,39 @@ $string['state_notpossible_examreviewtime_missing'] = 'Time for exam review miss
 $string['state_notpossible_examreviewroom_missing'] = 'Room for exam review missing';
 $string['state_loading'] = 'Loading ...';
 
-//exammanagement_overview.mustache work stages buttons
+//exammanagement_overview.mustache work step texts
+$string['important_note'] = 'Please note:';
+$string['note'] = 'Note:';
+$string['exam_rooms_set_one'] = '';
+$string['exam_rooms_set_two'] = '<strong>rooms</strong> with ';
+$string['exam_rooms_set_three'] = '<strong>places</strong> in total have been selected as exam rooms';
+$string['exam_rooms_not_set'] = 'No rooms have yet been selected for the exam.';
+$string['at'] = 'at';
+$string['exam_date_set_one'] = 'The exam takes place on ';
+$string['exam_date_set_two'] = '';
+$string['exam_date_not_set'] = 'No date and time have yet been set for the exam.';
+$string['exam_participants_set_one'] = 'participants have been added to the exam.';
+$string['exam_participants_not_set'] = 'No participants have yet been added to the exam.';
+$string['exam_tasks_set_one'] = '';
+$string['exam_tasks_set_two'] = '<strong>tasks</strong> with ';
+$string['exam_tasks_set_three'] = '<strong>points</strong> in total have already been added to the exam';
+$string['exam_tasks_not_set'] = 'No exam tasks have been set yet.';
+$string['textfield_set'] = 'The text field contains the following content: ';
+$string['textfield_not_set'] = 'No content has been entered for the text field yet.';
+$string['message_to_participants_str'] = 'Messages (PANDA notifications) can be sent here to all participants added to the exam.';
+$string['places_assigned_one'] = 'places have already been assigned to participants.';
+$string['places_assigned_two'] = 'The assignment of places is now successfully completed.';
+$string['places_assigned_three'] = 'Some participants still have to be assigned places before you can continue with the further work steps.';
+$string['places_assigned_note'] = 'When the automatic assignment of places is performed (again), all existing assignments are overwritten.';
+$string['export_seatingplan_str'] = 'Here the seating plan can be exported as a PDF document sorted by name or by matriculation number.';
+$string['information_visible'] = 'The information was made visible to the participants.';
+$string['information_not_visible'] = 'The information has not yet been made visible to the participants.';
+$string['export_examlabels_str'] = 'Here exam labels can be exported as barcodes.';
+$string['export_examlabels_note'] = 'Only when places have been allocated to all participants do these appear on the exam labels.';
+$string['export_participantslists_str'] = 'Here you can export participant lists sorted by last name or place as a PDF document.';
+$string['export_participantslists_note'] = 'These lists are only intended for internal use by the teachers and must not be published for data protection reasons!';
+
+//exammanagement_overview.mustache work steps buttons
 $string['configure_password'] = 'Configure password';
 $string['choose_rooms'] = 'Choose rooms';
 $string['set_date'] = 'Set date';

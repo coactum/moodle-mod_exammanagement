@@ -100,9 +100,15 @@ ajaxtoogleInformation = function(command, value){
 };
 
 ajaxsetcorrectioncompletion = function(value){
-
+	
 		$('.loadable').toggle();
-		var confirmed = confirm("Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.");
+		
+		var confirmed = false;
+		
+		if(value == true){
+			confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}");
+		}
+		
 		if(confirmed){
 			jQuery.ajax ({
 					url: './view.php',
@@ -172,8 +178,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}exam_rooms, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																{{#rooms}}<p> Es wurden bereits die folgenden <strong> {{rooms}} Räume </strong> mit insgesamt <strong>{{totalseats}} Sitzplätzen </strong> ausgewählt: <strong>{{roomnames}}</strong></p>{{/rooms}}
-																{{^rooms}}<p> Es wurden noch keine Räume für die Prüfung ausgewählt.</p>{{/rooms}}
+																{{#rooms}}<p> {{#str}}exam_rooms_set_one, mod_exammanagement{{/str}} <strong> {{rooms}} </strong> {{#str}}exam_rooms_set_two, mod_exammanagement{{/str}} <strong>{{totalseats}}</strong> {{#str}}exam_rooms_set_three, mod_exammanagement{{/str}}: <strong>{{roomnames}}</strong></p>{{/rooms}}
+																{{^rooms}}<p> {{#str}}exam_rooms_not_set, mod_exammanagement{{/str}}</p>{{/rooms}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>
@@ -191,8 +197,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															{{#hrexamtime}}<p> Die Prüfung findet am <strong> {{hrexamtime}} </strong> statt.</p>{{/hrexamtime}}
-															{{^hrexamtime}}<p> Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.</p>{{/hrexamtime}}
+															{{#hrexamtime}}<p> {{#str}}exam_date_set_one, mod_exammanagement{{/str}}<strong> {{hrexamtime}} </strong> {{#str}}exam_date_set_two, mod_exammanagement{{/str}}.</p>{{/hrexamtime}}
+															{{^hrexamtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/hrexamtime}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="setDateTime.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>
@@ -212,8 +218,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																{{#participants}}<p> Zur Prüfung sind <strong> {{participants}} Teilnehmerinnen und Teilnehmer </strong> angemeldet.</p>{{/participants}}
-																{{^participants}}<p> Es wurden noch keine Teilnehmer zur Prüfung hinzugefügt.</p>{{/participants}}
+																{{#participants}}<p> <strong>{{participants}}</strong> {{#str}}exam_participants_set_one, mod_exammanagement{{/str}} </p>{{/participants}}
+																{{^participants}}<p> {{#str}}exam_participants_not_set, mod_exammanagement{{/str}}</p>{{/participants}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="showParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>
@@ -231,8 +237,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}exam_tasks, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															{{#taskcount}}<p> Es wurden bereits <strong> {{taskcount}} Prüfungsaufgaben </strong> mit insgesamt <strong>{{tasktotalpoints}} Punkten </strong> angelegt.</p>{{/taskcount}}
-															{{^taskcount}}<p> Es wurden noch keine Aufgaben konfiguriert.</p>{{/taskcount}}
+															{{#taskcount}}<p> {{#str}}exam_tasks_set_one, mod_exammanagement{{/str}} <strong> {{taskcount}} </strong>{{#str}}exam_tasks_set_two, mod_exammanagement{{/str}}<strong>{{tasktotalpoints}} </strong> {{#str}}exam_tasks_set_three, mod_exammanagement{{/str}}.</p>{{/taskcount}}
+															{{^taskcount}}<p> {{#str}}exam_tasks_not_set, mod_exammanagement{{/str}}</p>{{/taskcount}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>
@@ -252,8 +258,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}freetext_field, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																{{#textfield}}<p> Im Textfeld steht folgender Inhalt: {{textfield}}</p>{{/textfield}}
-																{{^textfield}}<p> Es wurde noch kein Inhalt für das Textfeld eingetragen.</p>{{/textfield}}
+																{{#textfield}}<p> {{#str}}textfield_set, mod_exammanagement{{/str}} {{textfield}}</p>{{/textfield}}
+																{{^textfield}}<p> {{#str}}textfield_not_set, mod_exammanagement{{/str}}</p>{{/textfield}}
 														</div>
 														<div class="panel-footer">
 															<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="setTextfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>
@@ -270,7 +276,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															<p>Hier können Nachrichten (PANDA Mitteilungen) an alle zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer versendet werden.</p>
+															<p>{{#str}}message_to_participants_str, mod_exammanagement{{/str}}</p>
 														</div>
 														<div class="panel-footer">
 															{{#participants}}<a class="btn btn-primary pull-right" href="sendGroupmessage.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}
@@ -311,8 +317,8 @@ ajaxsetcorrectioncompletion = function(value){
 																	<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
-																<p><strong>{{assignedplacescount}}</strong> / <strong>{{participants}}</strong> Teilnehmenden wurden bereits Sitzplätze zugewiesen. {{#allplacesassigned}}Die Sitzplatzzuweisung ist damit erfolgreich abgeschlossen.{{/allplacesassigned}}{{^allplacesassigned}} Einigen Teilnehmenden müssen somit noch Sitzplätze zugewiesen werden, bevor mit den weiteren Arbeitsschritten fortgefahren werden kann.{{/allplacesassigned}} <br /><br />
-																<strong>Wichtiger Hinweis:</strong> Bei einer (erneuten) Durchführung der automatischen Sitzplatzzuweisung werden alle bereits bestehenden Zuweisungen überschrieben.</p>
+																<p><strong>{{assignedplacescount}}</strong> / <strong>{{participants}}</strong> {{#str}}places_assigned_one, mod_exammanagement{{/str}} {{#allplacesassigned}} {{#str}}places_assigned_two, mod_exammanagement{{/str}}{{/allplacesassigned}}{{^allplacesassigned}} {{#str}}places_assigned_three, mod_exammanagement{{/str}}{{/allplacesassigned}} <br /><br />
+																<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}places_assigned_note, mod_exammanagement{{/str}}</p>
 															</div>
 															<div class="panel-footer">
 																{{#participants}}{{#rooms}}<a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}}" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a><a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}} pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places_manually, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places_manually, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}
@@ -329,7 +335,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															<p>Hier kann der Sitzplan nach Nachnamen oder nach Matrikelnummern sortiert als PDF-Dokument exportiert werden.</p>
+															<p>{{#str}}export_seatingplan_str, mod_exammanagement{{/str}}</p>
 														</div>
 														<div class="panel-footer">
 															{{#allplacesassigned}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}
@@ -350,12 +356,12 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 													<div class="panel-body">
 														{{#datetimevisible}}
-																<p class="datetimeVisible collapse.show">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
-																<p class="datetimeNotVisible collapse">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																<p class="datetimeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
 														{{/datetimevisible}}
 														{{^datetimevisible}}
-																<p class="datetimeVisible collapse">Die Informationen wurden für die Teilnehmer sichtbar geschaltet.</p>
-																<p class="datetimeNotVisible collapse.show">Die Informationen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																<p class="datetimeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																<p class="datetimeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
 														{{/datetimevisible}}
 													</div>
 												</div>
@@ -371,8 +377,8 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-														<p>Hier können Prüfungsetiketten als Barcodes exportiert werden.<br /><br />
-														<strong>Hinweis:</strong> Erst wenn allen Teilnehmenden Sitzplätze zugewiesen wurden erscheinen diese auf den Prüfungsetiketten.</p>
+														<p>{{#str}}export_examlabels_str, mod_exammanagement{{/str}}<br /><br />
+														<strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_examlabels_note, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
 														{{#participants}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}
@@ -398,12 +404,12 @@ ajaxsetcorrectioncompletion = function(value){
 																		</span>
 																		<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
 																		{{#roomvisible}}
-																				<p class="roomVisible collapse.show">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
-																				<p class="roomNotVisible collapse">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="roomVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																				<p class="roomNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
 																		{{/roomvisible}}
 																		{{^roomvisible}}
-																				<p class="roomNotVisible collapse.show">Die Informationen zum Raum wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
-																				<p class="roomVisible collapse">Die Informationen zum Raum wurden für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="roomNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+																				<p class="roomVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
 																		{{/roomvisible}}
 																</div>
 																<div class="col-xs-6">
@@ -413,12 +419,12 @@ ajaxsetcorrectioncompletion = function(value){
 																		</span>
 																		<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
 																		{{#placevisible}}
-																				<p class="placeVisible collapse.show">Die Informationen zu den Sitzplätzen wurden für die Teilnehmer sichtbar geschaltet.</p>
-																				<p class="placeNotVisible collapse">Die Informationen zu Sitzplatz wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																				<p class="placeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
 																		{{/placevisible}}
 																		{{^placevisible}}
-																				<p class="placeNotVisible collapse.show">Die Informationen zu den Sitzplätzen wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
-																				<p class="placeVisible collapse">Die Informationen zu Sitzplatz wurden für die Teilnehmer sichtbar geschaltet.</p>
+																				<p class="placeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+																				<p class="placeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
 																		{{/placevisible}}
 																</div>
 														</div>
@@ -435,7 +441,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-															<p>Hier können Teilnehmerlisten nach Nachname oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden. <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!</p>
+															<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
 													</div>
 													<div class="panel-footer">
 														{{#allplacesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}
