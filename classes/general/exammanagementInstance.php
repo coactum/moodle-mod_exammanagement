@@ -255,7 +255,9 @@ EOF;
 
 					if ($temp){
 						array_push($roomNames, $temp->name);
-						}
+					} else {
+						array_push($roomNames, get_string('deleted_room', 'mod_exammanagement'));
+					}
 
 					}
 

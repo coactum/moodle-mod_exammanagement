@@ -115,6 +115,7 @@ $string['exam_rooms_set_two'] = '<strong>Räume</strong> mit insgesamt';
 $string['exam_rooms_set_three'] = ' <strong>Sitzplätzen</strong> für die Prüfung ausgewählt';
 $string['exam_rooms_not_set'] = 'Es wurden noch keine Räume für die Prüfung ausgewählt.';
 $string['at'] = 'um';
+$string['deleted_room'] = 'Gelöschter Raum';
 $string['exam_date_set_one'] = 'Die Prüfung findet am ';
 $string['exam_date_set_two'] = 'statt';
 $string['exam_date_not_set'] = 'Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.';

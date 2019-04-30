@@ -94,11 +94,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
            
-            $participantObj->roomid = $fromform->room;
+            if(isset($fromform->room)){
+                $participantObj->roomid = $fromform->room;
+                $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
+            }
 
-            $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
-
-            $participantObj->place = $fromform->place;
+            if(isset($fromform->place)){
+                $participantObj->place = $fromform->place;
+            }
 
             if($pne == false){ // if participants points were not empty
                 $participantObj->exampoints = json_encode($fromform->points);

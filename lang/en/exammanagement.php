@@ -115,6 +115,7 @@ $string['exam_rooms_set_two'] = '<strong>rooms</strong> with ';
 $string['exam_rooms_set_three'] = '<strong>places</strong> in total have been selected as exam rooms';
 $string['exam_rooms_not_set'] = 'No rooms have yet been selected for the exam.';
 $string['at'] = 'at';
+$string['deleted_room'] = 'Deleted room';
 $string['exam_date_set_one'] = 'The exam takes place on ';
 $string['exam_date_set_two'] = '';
 $string['exam_date_not_set'] = 'No date and time have yet been set for the exam.';

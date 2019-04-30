@@ -173,17 +173,31 @@ class participantsOverviewForm extends moodleform {
                         $roomOptionsArr = array();
 
                         foreach($examrooms as $id => $roomid){
-                            $roomOptionsArr[$roomid] = $ExammanagementInstanceObj->getRoomObj($roomid)->name;
+
+                            $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
+
+                            if($roomObj){
+                                $roomOptionsArr[$roomid] = $roomObj->name;
+                            }
                         }                
     
-                        $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
-                        $select->setSelected($participant->roomid);
-    
+                        if(!empty($roomOptionsArr)){
+                            $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
+                            $select->setSelected($participant->roomid);    
+                        } else {
+                            $mform->addElement('html', $participant->roomname.' ('.get_string('deleted_room', 'mod_exammanagement').')');
+                        }
+                         
                         $mform->addElement('html', '</td><td>');
     
-                        $mform->addElement('text', 'place', '', $attributes);
-                        $mform->setType('place', PARAM_TEXT);
-                        $mform->setDefault('place', $place);
+                        if(!empty($roomOptionsArr)){
+                            $mform->addElement('text', 'place', '', $attributes);
+                            $mform->setType('place', PARAM_TEXT);
+                            $mform->setDefault('place', $place);
+                        } else {
+                            $mform->addElement('html', $place);
+                        }
+
     
                         $mform->addElement('html', '</td><td>');
                     } else {
@@ -361,7 +375,7 @@ class participantsOverviewForm extends moodleform {
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
 
-        if(!isset($data['place']) || $data['place']==''){
+        if(isset($data['place']) && $data['place']==''){
             $errors['place'] = get_string('err_filloutfield', 'mod_exammanagement');
         }
 
