@@ -475,7 +475,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<span class="pull-right">
 														{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
 											</span>
-											{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">Noch kein Prüfungstermin gesetzt.</p>{{/roomnames}}{{/hrexamtime}}
+											{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/hrexamtime}}
 		              </div>
 							</div>
             </div>
@@ -507,8 +507,8 @@ ajaxsetcorrectioncompletion = function(value){
 																	<h3 class="panel-title">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
-																	{{#bonuscount}}<p>Es wurden bisher Bonusnotenschritte für <strong>{{bonuscount}} / {{participants}}</strong> Teilnehmende importiert.</p>{{/bonuscount}}
-																	{{^bonuscount}}<p>Es wurden noch keine Bonusnotenschritte eingetragen.</p>{{/bonuscount}}
+																	{{#bonuscount}}<p>{{#str}}bonussteps_set_one, mod_exammanagement{{/str}}<strong>{{bonuscount}} / {{participants}}</strong> {{#str}}bonussteps_set_two, mod_exammanagement{{/str}}</p>{{/bonuscount}}
+																	{{^bonuscount}}<p>{{#str}}bonussteps_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
 															</div>
 															<div class="panel-footer">
 																{{#allplacesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}
@@ -527,8 +527,8 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																{{#gradingscale}}<p>Es wurde bereits ein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
-																{{^gradingscale}}<p>Es wurde noch kein Notenschlüssel konfiguriert.</p>{{/gradingscale}}
+																{{#gradingscale}}<p>{{#str}}gradingscale_set_one, mod_exammanagement{{/str}}</p>{{/gradingscale}}
+																{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
 														</div>
 														<div class="panel-footer">
 															{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}
@@ -550,8 +550,8 @@ ajaxsetcorrectioncompletion = function(value){
 																	<h3 class="panel-title">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
 															</div>
 															<div class="panel-body">
-																{{#resultscount}}<p>Es wurden bisher <strong>{{resultscount}} / {{participants}}</strong> Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
-																{{^resultscount}}<p>Es wurden noch keine Prüfungsergebnisse eingetragen.</p>{{/resultscount}}
+																{{#resultscount}}<p>{{#str}}results_set_one, mod_exammanagement{{/str}}<strong>{{resultscount}} / {{participants}}</strong> {{#str}}results_set_two, mod_exammanagement{{/str}}</p>{{/resultscount}}
+																{{^resultscount}}<p>{{#str}}results_not_set, mod_exammanagement{{/str}}</p>{{/resultscount}}
 															</div>
 															<div class="panel-footer">
 																{{#allplacesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/allplacesassigned}}
@@ -570,7 +570,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																<p> Hier können bereits eingegebene Prüfungsergebnisse angesehen werden.</p>
+																<p> {{#str}}exam_results_overview_str, mod_exammanagement{{/str}}</p>
 														</div>
 														<div class="panel-footer">
 															{{#allplacesassigned}}{{#resultscount}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/allplacesassigned}}
@@ -588,7 +588,7 @@ ajaxsetcorrectioncompletion = function(value){
 													<h3 class="panel-title">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
 											</div>
 											<div class="panel-body">
-												<p>Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deshalb aus Datenschutzgründen gelöscht werden, sobald sie nicht mehr benötigt werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigt haben haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.</p>
+												<p>{{#str}}complete_correction_str, mod_exammanagement{{/str}}</p>
 											</div>
 											<div class="panel-footer text-xs-center">
 											</div>
@@ -624,7 +624,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-														<p>Hier können die erreichten Punkte als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
+														<p>{{#str}}export_points_examreview_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
@@ -643,7 +643,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-														<p>Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.  <br /><br /><strong>Wichtiger Hinweis:</strong> Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!</p>
+														<p>{{#str}}export_results_percentages_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
@@ -663,7 +663,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-															<p>Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.</p>
+															<p>{{#str}}export_results_statistics_str, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
@@ -681,7 +681,7 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-															<p>Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.</p>
+															<p>{{#str}}export_results_paul_str, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
 														{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}
@@ -696,7 +696,7 @@ ajaxsetcorrectioncompletion = function(value){
 											</span>
 										</div>
 										<div class="panel-body">
-											<p> Am {{datadeletiondate}} werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie bis dahin alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.</p>
+											<p> {{#str}}delete_data_one, mod_exammanagement{{/str}} <strong>{{datadeletiondate}} </strong>{{#str}}delete_data_two, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer text-xs-center">
 										</div>
@@ -734,10 +734,10 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}date_and_room_exam_review, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-															{{#examreviewtime}}{{#examreviewroom}}<p> Die Klausureinsicht findet am <strong> {{examreviewtime}} </strong> in Raum <strong> {{examreviewroom}}</strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{^examreviewtime}}{{#examreviewroom}}<p> Die Klausureinsicht findet in Raum <strong> {{examreviewroom}} </strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{#examreviewtime}}{{^examreviewroom}}<p> Die Klausureinsicht findet am <strong> {{examreviewtime}} </strong> statt.</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{^examreviewtime}}{{^examreviewroom}}<p> Es wurden noch kein Datum und kein Raum für die Klausureinsicht festgelegt.</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{#examreviewtime}}{{#examreviewroom}}<p> {{#str}}date_room_examreview_set_one, mod_exammanagement{{/str}}<strong> {{examreviewtime}} </strong> {{#str}}date_room_examreview_set_two, mod_exammanagement{{/str}} <strong> {{examreviewroom}}</strong> {{#str}}date_room_examreview_set_three, mod_exammanagement{{/str}} </p>{{/examreviewroom}}{{/examreviewtime}}
+															{{^examreviewtime}}{{#examreviewroom}}<p> {{#str}}date_room_examreview_set_four, mod_exammanagement{{/str}}<strong> {{examreviewroom}} </strong> {{#str}}date_room_examreview_set_three, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{#examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_room_examreview_set_five, mod_exammanagement{{/str}}<strong> {{examreviewtime}} </strong> {{#str}}date_room_examreview_set_three, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+															{{^examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_room_examreview_not_set, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
 														</div>
 														<div class="panel-footer">
 															{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}
@@ -758,12 +758,12 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 														<div class="panel-body">
 															{{#examreviewvisible}}
-																	<p class="examReviewVisible collapse.show">Die Informationen zur Klausureinsicht wurden für die Teilnehmer sichtbar geschaltet.</p>
-																	<p class="examReviewVisible collapse">Die Informationen zur Klausureinsicht wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="examReviewVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																	<p class="examReviewVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
 															{{/examreviewvisible}}
 															{{^examreviewvisible}}
-																	<p class="examReviewVisible collapse.show">Die Informationen zur Klausureinsicht wurden noch nicht für die Teilnehmer sichtbar geschaltet.</p>
-																	<p class="examReviewVisible collapse">Die Informationen zur Klausureinsicht wurden für die Teilnehmer sichtbar geschaltet.</p>
+																	<p class="examReviewVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+																	<p class="examReviewVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
 															{{/examreviewvisible}}
 														</div>
 														<div class="panel-footer text-xs-center">
@@ -787,9 +787,9 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 														<div class="panel-body">
 															<p>
-																{{#resultsenteredafterexamreview}}Es wurden bisher <strong>{{resultsenteredafterexamreview}} </strong> Prüfungsergebnisse nach der Klausureinsicht geändert.{{/resultsenteredafterexamreview}}
-																{{^resultsenteredafterexamreview}}Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.{{/resultsenteredafterexamreview}}
-																<br /><br /><strong>Hinweis:</strong> Hier erscheint nur die Zahl der Prüfungsergebnisse, die ab dem für die Klausureinsicht eingetragenen Zeitpunkt geändert wurden. Das Ändern eines Prüfungsergebnisses nach dem Klick auf die unten stehende Schaltfläche überschreibt dabei sämtliche vorher gespeicherten Ergebnisse für den oder die Teilnehmende. Stellen Sie deshalb sicher, dass Sie vor dem Ändern der Ergebnisse die alten Prüfungsergebnisse zu Sicherungszwecken einmal über die Dokumentenexport-Funktionen in der Phase "Nach der Klausur" exportiert haben.
+																{{#resultsenteredafterexamreview}}{{#str}}exam_results_altered_one, mod_exammanagement{{/str}}<strong>{{resultsenteredafterexamreview}} </strong> {{#str}}exam_results_altered_two, mod_exammanagement{{/str}}{{/resultsenteredafterexamreview}}
+																{{^resultsenteredafterexamreview}}{{#str}}no_examresults_altered, mod_exammanagement{{/str}}{{/resultsenteredafterexamreview}}
+																<br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}exam_results_altered_note, mod_exammanagement{{/str}}
 															</p>
 														</div>
 														<div class="panel-footer">
@@ -808,7 +808,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
 														</div>
 														<div class="panel-body">
-																<p>Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden. <br /><br /><strong>Hinweis:</strong> Diese Schaltfläche ermöglicht den einfachen Export aller seit dem Datum der Klausureinsicht geänderter Prüfungsergebnisse in einer Datei für das PAUL-Prüfungsamt. Möchten Sie stattdessen einen nach den eingelesenen PAUL-Listen getrennten Export der geänderten Ergebnisse stehen Ihnen dafür wieder die Möglichkeiten des Ergebnis-Exportes aus der Phase "Nach der Klausur" zur Verfügung.</p>
+																<p>{{#str}}export_altered_examresults_str, mod_exammanagement{{/str}} <br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_altered_examresults_note, mod_exammanagement{{/str}}</p>
 														</div>
 														<div class="panel-footer">
 															{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}

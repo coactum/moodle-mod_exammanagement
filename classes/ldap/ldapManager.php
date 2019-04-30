@@ -155,7 +155,7 @@ class ldapManager{
 
 	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
 		if (empty($pStudentId)) {
-				throw new Exception("No parameter given");
+				throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
 		}
 
 		$dn	=	LDAP_OU	.	", "	.	LDAP_O	.	", "	.	LDAP_C;
@@ -173,7 +173,7 @@ class ldapManager{
 	public function uid2studentid($ldapConnection, $uid){ // imtlogin to matrnr
 
 			if (empty($uid)) {
-					throw new Exception("No parameter given");
+					throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
 			}
 
 			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
@@ -190,7 +190,7 @@ class ldapManager{
 
 	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
 			if ( ! is_array( $pAttributes ) ){
-					throw new Exception( "Argument is not an array", E_PARAMETER );
+					throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
 			}
 			
 			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;

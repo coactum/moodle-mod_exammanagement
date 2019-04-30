@@ -138,6 +138,35 @@ $string['export_examlabels_str'] = 'Hier können Prüfungsetiketten als Barcodes
 $string['export_examlabels_note'] = 'Erst wenn allen Teilnehmenden Sitzplätze zugewiesen wurden erscheinen diese auf den Prüfungsetiketten.';
 $string['export_participantslists_str'] = 'Hier können Teilnehmerlisten nach Nachname oder nach Sitzplatz sortiert als PDF-Dokument exportiert werden.';
 $string['export_participantslists_note'] = 'Diese Listen sind nur für den internen Gebrauch durch die Lehrenden bestimmt und dürfen aus Datenschutzgründen nicht veröffentlicht werden!';
+$string['no_exam_date_set_str'] = 'Noch kein Prüfungstermin gesetzt.';
+$string['bonussteps_set_one'] = 'Es wurden bisher Bonusnotenschritte für ';
+$string['bonussteps_set_two'] = 'Teilnehmende importiert.';
+$string['bonussteps_not_set'] = 'Es wurden noch keine Bonusnotenschritte eingetragen.';
+$string['gradingscale_set_one'] = 'Es wurde bereits ein Notenschlüssel konfiguriert.';
+$string['gradingscale_not_set'] = 'Es wurde noch kein Notenschlüssel konfiguriert.';
+$string['results_set_one'] = 'Es wurden bisher ';
+$string['results_set_two'] = 'Prüfungsergebnisse eingetragen.';
+$string['results_not_set'] = 'Es wurden noch keine Prüfungsergebnisse eingetragen.';
+$string['exam_results_overview_str'] = 'Hier können alle bereits eingegebenen Prüfungsergebnisse angesehen werden.';
+$string['complete_correction_str'] = 'Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deshalb aus Datenschutzgründen gelöscht werden, sobald sie nicht mehr benötigt werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigt haben haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.';
+$string['export_points_examreview_str'] = 'Hier können die erreichten Punkte als PDF-Dokument exportiert werden.';
+$string['export_results_lists_note'] = 'Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!';
+$string['export_results_percentages_str'] = 'Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.';
+$string['export_results_statistics_str'] = 'Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.';
+$string['delete_data_one'] = 'Am';
+$string['delete_data_two'] = 'werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie bis dahin alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.';
+$string['date_room_examreview_set_one'] = 'Die Klausureinsicht findet am';
+$string['date_room_examreview_set_two'] = 'in Raum ';
+$string['date_room_examreview_set_three'] = 'statt.';
+$string['date_room_examreview_set_four'] = 'Die Klausureinsicht findet in Raum ';
+$string['date_room_examreview_set_five'] = 'Die Klausureinsicht findet am ';
+$string['date_room_examreview_not_set'] = 'Es wurden noch kein Datum und kein Raum für die Klausureinsicht festgelegt.';
+$string['exam_results_altered_one'] = 'Es wurden bisher ';
+$string['exam_results_altered_two'] = 'Prüfungsergebnisse nach der Klausureinsicht geändert.';
+$string['no_examresults_altered'] = 'Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.';
+$string['exam_results_altered_note'] = 'Hier erscheint nur die Zahl der Prüfungsergebnisse, die ab dem für die Klausureinsicht eingetragenen Zeitpunkt geändert wurden. Das Ändern eines Prüfungsergebnisses nach dem Klick auf die unten stehende Schaltfläche überschreibt dabei sämtliche vorher gespeicherten Ergebnisse für den oder die Teilnehmende. Stellen Sie deshalb sicher, dass Sie vor dem Ändern der Ergebnisse die alten Prüfungsergebnisse zu Sicherungszwecken einmal über die Dokumentenexport-Funktionen in der Phase "Nach der Klausur" exportiert haben.';
+$string['export_altered_examresults_str'] = 'Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden.';
+$string['export_altered_examresults_note'] = 'Diese Schaltfläche ermöglicht den einfachen Export aller seit dem Datum der Klausureinsicht geänderter Prüfungsergebnisse in einer Datei für das PAUL-Prüfungsamt. Möchten Sie stattdessen einen nach den eingelesenen PAUL-Listen getrennten Export der geänderten Ergebnisse stehen Ihnen dafür wieder die Möglichkeiten des Ergebnis-Exportes aus der Phase "Nach der Klausur" zur Verfügung.';
 
 //exammanagement_overview.mustache work steps buttons
 $string['configure_password'] = 'Passwort konfigurieren';
@@ -217,6 +246,7 @@ $string['customroom_name'] = 'Name des Raums';
 $string['customroom_placescount'] = 'Anzahl der Sitzplätze';
 $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
 $string['add_room'] = 'Raum speichern';
+$string['no_description_new_room'] = 'Keine Beschreibung vorhanden, ';
 
 //setDateTimeForm.php
 $string['set_date_time'] = 'Prüfungstermin festlegen';
@@ -564,6 +594,7 @@ $string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
 $string['err_js_internal_error'] = 'Interner Fehler. Bitte erneut versuchen.';
 $string['err_password_incorrect'] = 'Passwort nicht identisch. Bitte erneut eingeben.';
 $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
+$string['no_param_given'] = 'Matrikelnummernabgleich nicht möglich.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

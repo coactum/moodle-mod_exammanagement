@@ -80,7 +80,7 @@ $string['bonus_gradesteps'] = 'Bonus grade steps';
 $string['gradingscale'] = 'Grading scale';
 $string['exam_results'] = 'Exam results';
 $string['exam_results_overview'] = 'Exam results overview';
-$string['complete_correction'] = 'Complete correction';
+$string['complete_correction'] = 'Correction completion';
 $string['points_for_exam_review'] = 'Points for exam review';
 $string['results_with_percentages'] = 'Results with percentages';
 $string['results_and_statistics'] = 'Results and statistics';
@@ -138,6 +138,36 @@ $string['export_examlabels_str'] = 'Here exam labels can be exported as barcodes
 $string['export_examlabels_note'] = 'Only when places have been allocated to all participants do these appear on the exam labels.';
 $string['export_participantslists_str'] = 'Here you can export participant lists sorted by last name or place as a PDF document.';
 $string['export_participantslists_note'] = 'These lists are only intended for internal use by the teachers and must not be published for data protection reasons!';
+$string['no_exam_date_set_str'] = 'No exam date set yet.';
+$string['bonussteps_set_one'] = 'Bonus grade steps for ';
+$string['bonussteps_set_two'] = 'participants have been imported yet.';
+$string['bonussteps_not_set'] = 'No bonus grade steps have been entered yet.';
+$string['gradingscale_set_one'] = 'A grading scale has already been configured.';
+$string['gradingscale_not_set'] = 'No grading scale has been configured yet.';
+$string['results_set_one'] = '';
+$string['results_set_two'] = 'exam results have been entered yet.';
+$string['results_not_set'] = 'No exam results have yet been entered.';
+$string['exam_results_overview_str'] = 'All exam results already entered can be viewed here.';
+$string['complete_correction_str'] = 'The data entered in this exam organisation are very sensitive and must therefore be deleted for data protection reasons as soon as they are no longer needed. After you have confirmed the completion of the correction by moving the switch, you therefore have three months to export the exam results for further use before they are automatically deleted.';
+$string['export_points_examreview_str'] = 'Here you can export the achieved points as a PDF document.';
+$string['export_results_lists_note'] = 'This list of points is only intended for internal use by the teachers and must not be published for data protection reasons!';
+$string['export_results_percentages_str'] = 'Here you can export the results with percentages as a PDF document.';
+$string['export_results_statistics_str'] = 'Here the results and statistics can be exported as an Excel document.';
+$string['export_results_paul_str'] = 'The results for the exam office can be exported here as a PAUL-compatible text document.';
+$string['delete_data_one'] = 'On';
+$string['delete_data_two'] = 'all data stored in this instance such as participants, exam information and exam results will be automatically deleted. Therefore, make sure you have exported all important data, such as exam results, for further use via the document export functions.';
+$string['date_room_examreview_set_one'] = 'The exam review will take place on';
+$string['date_room_examreview_set_two'] = 'in room ';
+$string['date_room_examreview_set_three'] = '';
+$string['date_room_examreview_set_four'] = 'The exam review takes place in room ';
+$string['date_room_examreview_set_five'] = 'The exam review takes place on ';
+$string['date_room_examreview_not_set'] = 'No date or room has yet been set for the exam review.';
+$string['exam_results_altered_one'] = '';
+$string['exam_results_altered_two'] = 'exam results are altered after exam.';
+$string['no_examresults_altered'] = 'No exam results have yet been altered after the exam review.';
+$string['exam_results_altered_note'] = 'Only the number of exam results that have been changed since the date entered for the exam review appears here. Changing an exam result after clicking on the button below overwrites all previously saved results for the participant. Therefore, before changing the results, make sure that you have exported the old exam results once for backup purposes using the document export functions in the "After exam" phase.';
+$string['export_altered_examresults_str'] = 'Here you can export the results changed after the exam as a PAUL-compatible text document.';
+$string['export_altered_examresults_note'] = 'This button allows the easy export of all exam results changed since the date of the exam review to a file for the PAUL exam office. Instead, if you want to export the changed results separately according to the imported PAUL lists, you can again use the options for exporting the results from the "After exam" phase.';
 
 //exammanagement_overview.mustache work steps buttons
 $string['configure_password'] = 'Configure password';
@@ -217,6 +247,7 @@ $string['customroom_name'] = 'Name of exam room';
 $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
 $string['add_room'] = 'Save room';
+$string['no_description_new_room'] = 'No description available, ';
 
 //setDateTimeForm.php
 $string['set_date_time'] = 'Set exam date and time';
@@ -296,7 +327,7 @@ $string['subject'] = 'Subject';
 $string['content'] = 'Content';
 $string['send_message'] = 'Send message';
 
-// assignPlaces.php
+//assignPlaces.php
 $string['participants_missing_places'] = 'Some participants have not yet been assigned a place. Add enough rooms to the exam and repeat the assignment or assign the missing places manually.';
 
 //importBonusForm.php
@@ -563,6 +594,7 @@ $string['err_noalphanumeric'] = 'Contains invalid chars';
 $string['err_js_internal_error'] = 'Internal error. Please retry.';
 $string['err_password_incorrect'] = 'Password is not matching. Please enter again.';
 $string['err_novalidpassword'] = 'Not a valid password.';
+$string['no_param_given'] = 'Couldn`t match matriculation number';
 
 //universal
 $string['modulename'] = 'Exam management';

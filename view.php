@@ -75,9 +75,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen konnten nicht sichtbar geschaltet werden', 'error');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
             }
         } elseif ($calledfromformroom) { // saveRoom
     
@@ -89,9 +89,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen konnten nicht sichtbar geschaltet werden', 'error');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
             }
         } elseif ($calledfromformplace) { // savePlace
     
@@ -103,9 +103,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen sichtbar geschaltet', 'success');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen konnten nicht sichtbar geschaltet werden', 'error');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
             }
         } elseif ($calledfromformcorrection) { // save correction as completed
     
@@ -117,9 +117,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur abgeschlossen', 'success');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Korrektur konnte nicht abgeschlossen werden', 'error');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
             }
         } elseif ($calledfromformexamreview) { // save exam review
     
@@ -131,9 +131,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
             if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen zur Klausureinsicht freigeschaltet.', 'success');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
-                $MoodleObj->redirectToOverviewPage('forexam', 'Informationen zur Klausureinsicht konnten nicht freigeschaltet werden', 'error');
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
             }
         }
     
@@ -314,7 +314,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     $MoodleObj->outputFooter();
 } else {
-    redirect($CFG->wwwroot, 'Sie haben keine gültigen Rechte.', null, \core\output\notification::NOTIFY_ERROR);
+    redirect($CFG->wwwroot, get_string('nopermissions', 'mod_exammanagement'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 $ExammanagementInstanceObj->startEvent('view');
