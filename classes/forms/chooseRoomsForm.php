@@ -192,7 +192,7 @@ class chooseRoomsForm extends moodleform {
           }
       }
 
-      if(!preg_match("/^[a-zA-Z0-9_\-.]+$/", $roomid)){
+      if(!preg_match("/^[a-zA-Z0-9_\-. ]+$/", $roomid)){
         $errors['rooms['.$roomid.']'] = get_string('err_invalidcheckboxid_rooms', 'mod_exammanagement');
       }
     }

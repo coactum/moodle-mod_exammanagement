@@ -89,7 +89,7 @@ class addCustomRoomForm extends moodleform {
 
     if($data['existingroom'] !== 1 && $similiarroom){
        $errors['roomname'] = get_string('err_customroomname_taken', 'mod_exammanagement');
-    } else if(!preg_match('/^[a-zA-Z0-9_\-.]+$/', $data['roomname'])){
+    } else if(!preg_match('/^[a-zA-Z0-9_\-. ]+$/', $data['roomname'])){
       $errors['roomname'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
