@@ -43,7 +43,7 @@ $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
         $MoodleObj->setPage('showParticipants');
         $MoodleObj->outputPageHeader();
@@ -88,7 +88,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             echo('<table class="table table-striped exammanagement_table">');
             echo('<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("participants", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th>');
             
-            if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+            if(groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id) || groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id)){
                 echo('<th scope="col">'.get_string("course_groups", "mod_exammanagement").'</th>');
             }
 
@@ -123,7 +123,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     echo('<td>'.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid).'</td>');
                     echo('<td>'.$matrnr.'</td>');
 
-                    if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                    if(groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id) || groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id)){
                         echo('<td>'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</td>');
                     }
                     echo('<td>'.get_string("state_added_to_exam", "mod_exammanagement").'</td>');
@@ -163,7 +163,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     echo('<td>'.$participantObj->firstname.' '.$participantObj->lastname.'</td>');
                     echo('<td>'.$matrnr.'</td>');
 
-                    if(groups_get_all_groups($ExammanagementInstanceObj->courseid) || groups_get_user_groups($ExammanagementInstanceObj->courseid)){
+                    if(groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id) || groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id)){
                         echo('<td> - </td>');
                     }
 

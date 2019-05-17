@@ -49,7 +49,7 @@ $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page	
+	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page	
 
 		$MoodleObj->setPage('addParticipants');
 		$MoodleObj->outputPageHeader();
@@ -159,8 +159,30 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								} else { // for local testing during development
 
 										$user->imtlogin = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
-										$user->firstname = 'Mister';
-										$user->lastname = 'Testerin';
+										$rand = rand(1,3);
+										switch ($rand){
+											case 1:
+												$user->firstname = 'Peter';
+												break;
+											case 2:
+												$user->firstname = 'Tony';
+												break;
+											case 3:
+												$user->firstname = 'Steven';
+												break;
+										} 
+										$rand = rand(1,3);
+										switch ($rand){
+											case 1:
+												$user->lastname = 'Parker';
+												break;
+											case 2:
+												$user->lastname = 'Stark';
+												break;
+											case 3:
+												$user->lastname = 'Strange';
+												break;
+										} 
 										$user->email = 'Test@Testi.test';
 								}
 

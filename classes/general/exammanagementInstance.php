@@ -278,13 +278,15 @@ EOF;
 
 		$totalSeats = 0;
 
-		foreach($savedRoomsArray as $key => $roomID){
+		if($savedRoomsArray){
+			foreach($savedRoomsArray as $key => $roomID){
 
-			$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
-	  
-			$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
-
-			$totalSeats += $placesCount;
+				$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
+		  
+				$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
+	
+				$totalSeats += $placesCount;
+			}
 		}
 
 		return $totalSeats;

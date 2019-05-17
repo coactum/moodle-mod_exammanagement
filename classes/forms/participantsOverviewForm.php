@@ -146,11 +146,14 @@ class participantsOverviewForm extends moodleform {
 
                 if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']==$matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
 
-                    $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
-                    $mform->setType('edit', PARAM_INT);
-
-                    $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
-                    $mform->setType('editline', PARAM_INT);
+                    if(isset($this->_customdata['edit'])){                    
+                        $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
+                        $mform->setType('edit', PARAM_INT);
+                    }
+                    if(isset($this->_customdata['editline'])){
+                        $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
+                        $mform->setType('editline', PARAM_INT);    
+                    }
                     
                     $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
                     $mform->setType('editmoodleuserid', PARAM_INT);

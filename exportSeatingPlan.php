@@ -44,7 +44,7 @@ $MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
     global $CFG;
 
@@ -130,7 +130,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if($sortmode == 'place'){
           usort($participantsArray, function($a, $b){ //sort array by custom user function
 
-            return strcmp($a->place, $b->place); // sort by place
+            return strnatcmp($a->place, $b->place); // sort by place
   
           });
         } else if($sortmode == 'matrnr'){
@@ -138,7 +138,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             global $UserObj;
 
-            return strcmp($UserObj->getUserMatrNr($a->moodleuserid, $a->imtlogin), $UserObj->getUserMatrNr($b->moodleuserid, $b->imtlogin)); // sort by matrnr
+            return strnatcmp($UserObj->getUserMatrNr($a->moodleuserid, $a->imtlogin), $UserObj->getUserMatrNr($b->moodleuserid, $b->imtlogin)); // sort by matrnr
   
           });
         }        

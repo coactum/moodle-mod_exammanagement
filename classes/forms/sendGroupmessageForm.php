@@ -65,6 +65,8 @@ class sendGroupmessageForm extends moodleform {
 
         if($NoneMoodleParticipants){
             $NoneMoodleParticipantsCount = count($NoneMoodleParticipants);
+        } else {
+            $NoneMoodleParticipantsCount = false;
         }
 
  		if($MoodleParticipantsCount){

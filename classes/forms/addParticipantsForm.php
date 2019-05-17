@@ -218,6 +218,8 @@ class addParticipantsForm extends moodleform{
 
                     if($participant->imtlogin !== NULL && $participant->imtlogin !== false){
                         $matrnr = $UserObj->getUserMatrNr(false, $participant->imtlogin);
+                    } else {
+                        $matrnr = false;
                     }
     
                     if(!in_array($participant->moodleuserid, $tempIDsArray) && !in_array($matrnr, $tempIDsArray)){

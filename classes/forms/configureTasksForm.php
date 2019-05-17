@@ -168,7 +168,7 @@ class configureTasksForm extends moodleform {
 
             if(!$isnumeric){
                 $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
-            } else if($taskval<0) {
+            } else if($taskval<=0) {
                 $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
             }
         }

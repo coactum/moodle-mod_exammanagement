@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//exammanagement_participantsview.mustache
+//exammanagement_participantsview.mustache - can be seen on /view.php as participant
 $string['examinformation'] = 'Informationen zur Prüfung';
 $string['state'] = 'Status';
 $string['no_participant'] = 'Sie sind nicht zur Prüfung angemeldet.';
@@ -48,12 +48,12 @@ $string['exam_review'] = 'Klausureinsicht';
 $string['exam_review_one'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am ';
 $string['exam_review_two'] = 'findet die Klausureinsicht statt in Raum ';
 
-//exammanagement_overview.mustache
+//exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['overview'] = 'Überblick';
 $string['js_confirm_correction_completion'] = 'Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.';
 
-//exammanagement_overview.mustache phases
+//exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
 $string['phase_one'] = 'Vor der Prüfung';
 $string['phase_two'] = 'Für die Prüfung';
 $string['phase_three'] = 'Nach der Korrektur';
@@ -62,7 +62,7 @@ $string['phase_five'] = 'Klausureinsicht (optional)';
 $string['exam_appointment'] = 'Prüfungstermin';
 $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
-$string['partricipants_and_results_overview'] = 'Teilnehmer & Ergebnisübersicht';
+$string['participants_and_results_overview'] = 'Teilnehmer & Ergebnisübersicht';
 $string['exam_rooms'] = 'Prüfungsräume';
 $string['exam_date'] = 'Prüfungsdatum';
 $string['exam_participants'] = 'Prüfungsteilnehmer';
@@ -91,7 +91,7 @@ $string['set_visibility_of_exam_review_information'] = 'Informationen zur Klausu
 $string['altering_exam_results'] = 'Änderung der Prüfungsergebnisse';
 $string['export_altered_exam_results'] = 'Export der geänderten Ergebnisse';
 
-//exammanagement_overview.mustache states
+//exammanagement_overview.mustache states - can be seen on /view.php as lecturer
 $string['state_optional'] = 'Optional';
 $string['state_required'] = 'Zwingend';
 $string['state_success'] = 'Erfolgreich';
@@ -107,7 +107,7 @@ $string['state_notpossible_examreviewtime_missing'] = 'Zeit der Klausureinsicht 
 $string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht fehlt';
 $string['state_loading'] = 'Lädt ...';
 
-//exammanagement_overview.mustache work step texts
+//exammanagement_overview.mustache work step texts - can be seen on /view.php as lecturer
 $string['important_note'] = 'Wichtiger Hinweis:';
 $string['note'] = 'Hinweis:';
 $string['exam_rooms_set_one'] = 'Es wurden bereits die folgenden ';
@@ -170,7 +170,7 @@ $string['exam_results_altered_note'] = 'Hier erscheint nur die Zahl der Prüfung
 $string['export_altered_examresults_str'] = 'Hier können die nach der Klausureinsicht geänderten Ergebnisse als PAUL-kompatibles Text-Dokument exportiert werden.';
 $string['export_altered_examresults_note'] = 'Diese Schaltfläche ermöglicht den einfachen Export aller seit dem Datum der Klausureinsicht geänderter Prüfungsergebnisse in einer Datei für das PAUL-Prüfungsamt. Möchten Sie stattdessen einen nach den eingelesenen PAUL-Listen getrennten Export der geänderten Ergebnisse stehen Ihnen dafür wieder die Möglichkeiten des Ergebnis-Exportes aus der Phase "Nach der Klausur" zur Verfügung.';
 
-//exammanagement_overview.mustache work steps buttons
+//exammanagement_overview.mustache work steps buttons - can be seen on /view.php as lecturer
 $string['configure_password'] = 'Passwort konfigurieren';
 $string['choose_rooms'] = 'Räume auswählen';
 $string['set_date'] = 'Datum festlegen';

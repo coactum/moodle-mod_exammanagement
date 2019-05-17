@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//exammanagement_participantsview.mustache
+//exammanagement_participantsview.mustache - can be seen on /view.php as participant
 $string['examinformation'] = 'Information on the exam';
 $string['state'] = 'State';
 $string['no_participant'] = 'You are not registered for the exam.';
@@ -48,12 +48,12 @@ $string['exam_review'] = 'Exam review';
 $string['exam_review_one'] = 'The correction of the exam has now been completed. On ';
 $string['exam_review_two'] = 'there will be the exam review in room ';
 
-//exammanagement_overview.mustache
+//exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['maintitle'] = 'Exam management';
 $string['overview'] = 'Overview';
 $string['js_confirm_correction_completion'] = 'This action completes the correction phase. You then have 3 months to export all exam results before they are irretrievably deleted for data protection reasons.';
 
-//exammanagement_overview.mustache phases
+//exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
 $string['phase_one'] = 'Before exam';
 $string['phase_two'] = 'For exam';
 $string['phase_three'] = 'After correction';
@@ -62,10 +62,10 @@ $string['phase_five'] = 'Exam review (optional)';
 $string['exam_appointment'] = 'Exam appointment';
 $string['minimize_phase'] = 'Minimize phase';
 $string['maximize_phase'] = 'Maximize phase';
-$string['partricipants_and_results_overview'] = 'Participants & results overview';
+$string['participants_and_results_overview'] = 'Participants & results overview';
 $string['exam_rooms'] = 'Exam rooms';
 $string['exam_date'] = 'Exam date';
-$string['exam_participants'] = 'Exam partricipants';
+$string['exam_participants'] = 'Exam participants';
 $string['exam_tasks'] = 'Exam tasks';
 $string['freetext_field'] = 'Textfield for free text';
 $string['message_to_participants'] = 'Message to participants';
@@ -91,7 +91,7 @@ $string['set_visibility_of_exam_review_information'] = 'Set visibility of exam r
 $string['altering_exam_results'] = 'Altering exam results';
 $string['export_altered_exam_results'] = 'Export of altered exam results';
 
-//exammanagement_overview.mustache states
+//exammanagement_overview.mustache states - can be seen on /view.php as lecturer
 $string['state_optional'] = 'Optional';
 $string['state_required'] = 'Required';
 $string['state_success'] = 'Success';
@@ -107,7 +107,7 @@ $string['state_notpossible_examreviewtime_missing'] = 'Time for exam review miss
 $string['state_notpossible_examreviewroom_missing'] = 'Room for exam review missing';
 $string['state_loading'] = 'Loading ...';
 
-//exammanagement_overview.mustache work step texts
+//exammanagement_overview.mustache work step texts - can be seen on /view.php as lecturer
 $string['important_note'] = 'Please note:';
 $string['note'] = 'Note:';
 $string['exam_rooms_set_one'] = '';
@@ -170,7 +170,7 @@ $string['exam_results_altered_note'] = 'Only the number of exam results that hav
 $string['export_altered_examresults_str'] = 'Here you can export the results changed after the exam as a PAUL-compatible text document.';
 $string['export_altered_examresults_note'] = 'This button allows the easy export of all exam results changed since the date of the exam review to a file for the PAUL exam office. Instead, if you want to export the changed results separately according to the imported PAUL lists, you can again use the options for exporting the results from the "After exam" phase.';
 
-//exammanagement_overview.mustache work steps buttons
+//exammanagement_overview.mustache work steps buttons - can be seen on /view.php as lecturer
 $string['configure_password'] = 'Configure password';
 $string['choose_rooms'] = 'Choose rooms';
 $string['set_date'] = 'Set date';

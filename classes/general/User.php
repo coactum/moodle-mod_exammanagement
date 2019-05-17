@@ -351,7 +351,7 @@ class User{
 		foreach ($userGroups as $key => $value){
 			if ($value){
 				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>, ';
+					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
 				}
 			}
 			else{
@@ -462,38 +462,47 @@ class User{
 
 	public function calculateResultGradeWithBonus($grade, $state, $bonussteps){
 
-		switch ($bonussteps){
-			case '1':
-				$bonus = 0.3;
-				break;
-			case '2':
-				$bonus = 0.7;
-				break;
-			case '3':
-				$bonus = 1.0;
-				break;
-			default:
-				$bonus = 0;
-				break;
-		}
+		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		if(isset($grade) && $grade !== "-"){
-			$resultWithBonus = $grade-$bonus;
+		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-			$test = round($resultWithBonus-floor($resultWithBonus),1);
-
-			if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
-			if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
-
-			if($bonus == 0) return $grade;
-			if( $grade == 5.0 ) return 5.0;
-			if( $state !== 'normal' ) return get_string($state, "mod_exammanagement");
-			if( $resultWithBonus<=1.0) return '1.0';
-
-			return (str_pad (strval($resultWithBonus), 3, '.0'));
+		if($gradingscale){
+			switch ($bonussteps){
+				case '1':
+					$bonus = 0.3;
+					break;
+				case '2':
+					$bonus = 0.7;
+					break;
+				case '3':
+					$bonus = 1.0;
+					break;
+				default:
+					$bonus = 0;
+					break;
+			}
+	
+			if(isset($grade) && $grade !== "-"){
+				$resultWithBonus = $grade-$bonus;
+	
+				$test = round($resultWithBonus-floor($resultWithBonus),1);
+	
+				if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
+				if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
+	
+				if($bonus == 0) return $grade;
+				if( $grade == 5.0 ) return 5.0;
+				if( $state !== 'normal' ) return get_string($state, "mod_exammanagement");
+				if( $resultWithBonus<=1.0) return '1.0';
+	
+				return (str_pad (strval($resultWithBonus), 3, '.0'));
+			} else {
+				return '-';
+			}
 		} else {
 			return '-';
 		}
+		
 	}
 
 	public function getAllParticipantsWithResults(){

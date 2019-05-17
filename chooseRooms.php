@@ -46,10 +46,10 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && $SESSION->loggedInExamOrganizationId == $id)){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
     $MoodleObj->setPage('chooseRooms');
-    $MoodleObj-> outputPageHeader();
+    $MoodleObj->outputPageHeader();
 
     if($deletecustomroomid){
 
@@ -87,9 +87,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
 
         // reset places assignment if an exam room where participants are seated is deselected
-
-        $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam rooms are deselected
-                    
+        if($oldRooms){
+          $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam rooms are deselected
+        } else {
+          $deselectedRoomsArr = null;
+        }           
         if(isset($deselectedRoomsArr)){
 
           foreach($deselectedRoomsArr as $roomid){
@@ -104,7 +106,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           }
         }
 
-        sort($checkedRooms); //sort checked roomes ids for saving in DB
+        sort($checkedRooms); //sort checked rooms ids for saving in DB
 
         $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
 
