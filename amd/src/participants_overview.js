@@ -78,7 +78,7 @@ define(['jquery'], function ($) {
         }
       });
 
-      $(".form-group").not("#id_place").on("change", "input", function () { // if some input field changes
+      $(".form-group").not("#fitem_id_place").on("change", "input", function () { // if some input field changes
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
 

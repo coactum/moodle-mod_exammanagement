@@ -402,11 +402,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 2, $bonusstepnotset);
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 3, 0);
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 3, $bonusstepzero);
-        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 4, 1);
+        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 4, 1 .' (= 0,3)');
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 4, $bonusstepone);
-        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 5, 2);
+        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 5, 2 .' (= 0,7)');
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 5, $bonussteptwo);
-        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 6, 3);
+        $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 6, 3 .' (= 1,0)');
         $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 6, $bonusstepthree);
 
         ////////////////////////////////////////

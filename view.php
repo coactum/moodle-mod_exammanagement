@@ -296,7 +296,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
     //bonus
-    $bonus = $participantObj->bonus;
+    if($participantObj){
+        $bonus = $participantObj->bonus;
+    } else {
+        $bonus = false;
+    }
 
     //examreview date and room
     $examreviewtime = false;

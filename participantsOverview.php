@@ -107,42 +107,44 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $participantObj->exampoints = json_encode($fromform->points);
             }
 
-            switch ($fromform->state){
+            if(isset($fromform->state)){
+                switch ($fromform->state){
 
-                case 'normal':
-                    $examstate = new stdClass;
-                    $examstate->nt = "0";
-                    $examstate->fa = "0";
-                    $examstate->ill = "0";
-                    break;
-                case 'nt':
-                    $examstate = new stdClass;
-                    $examstate->nt = "1";
-                    $examstate->fa = "0";
-                    $examstate->ill = "0";
-                    break;
-                case 'fa':
-                    $examstate = new stdClass;
-                    $examstate->nt = "0";
-                    $examstate->fa = "1";
-                    $examstate->ill = "0";
-                    break;
-                case 'ill':
-                    $examstate = new stdClass;
-                    $examstate->nt = "0";
-                    $examstate->fa = "0";
-                    $examstate->ill = "1";
-                    break;
-                default:
-                    $examstate = new stdClass;
-                    $examstate->nt = "0";
-                    $examstate->fa = "0";
-                    $examstate->ill = "0";
-                    break;
+                    case 'normal':
+                        $examstate = new stdClass;
+                        $examstate->nt = "0";
+                        $examstate->fa = "0";
+                        $examstate->ill = "0";
+                        break;
+                    case 'nt':
+                        $examstate = new stdClass;
+                        $examstate->nt = "1";
+                        $examstate->fa = "0";
+                        $examstate->ill = "0";
+                        break;
+                    case 'fa':
+                        $examstate = new stdClass;
+                        $examstate->nt = "0";
+                        $examstate->fa = "1";
+                        $examstate->ill = "0";
+                        break;
+                    case 'ill':
+                        $examstate = new stdClass;
+                        $examstate->nt = "0";
+                        $examstate->fa = "0";
+                        $examstate->ill = "1";
+                        break;
+                    default:
+                        $examstate = new stdClass;
+                        $examstate->nt = "0";
+                        $examstate->fa = "0";
+                        $examstate->ill = "0";
+                        break;
+                }
+    
+    
+                $participantObj->examstate = json_encode($examstate);   
             }
-
-
-            $participantObj->examstate = json_encode($examstate);
 
             $participantObj->timeresultsentered = time();
 

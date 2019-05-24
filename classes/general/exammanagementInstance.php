@@ -283,7 +283,11 @@ EOF;
 
 				$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
 		  
-				$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
+				if(isset($RoomObj->places)){
+					$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
+				} else {
+					$placesCount = 0;	//get Places of this Room					
+				}
 	
 				$totalSeats += $placesCount;
 			}

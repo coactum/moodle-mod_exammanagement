@@ -326,7 +326,24 @@ class participantsOverviewForm extends moodleform {
 
                     if($UserObj->getEnteredBonusCount()){
                         if(isset($participant->bonus)){
-                            $mform->addElement('html', '<td>'.$participant->bonus.'</td>');
+                            $mform->addElement('html', '<td>'.$participant->bonus);
+                            
+                            switch ($participant->bonus){
+
+                                case 0:
+                                    break;
+                                case 1:
+                                    $mform->addElement('html', ' (= 0,3)');
+                                    break;
+                                case 2:
+                                    $mform->addElement('html', ' (= 0,7)');
+                                    break;
+                                case 3:
+                                    $mform->addElement('html', ' (= 1,0)');
+                                    break;
+                            }
+
+                            $mform->addElement('html', '</td>');
                         } else {
                             $mform->addElement('html', '<td>-</td>');                            
                         }
@@ -376,13 +393,19 @@ class participantsOverviewForm extends moodleform {
         $errors = array();
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
+        $examTasks = $ExammanagementInstanceObj->getTasks();
+
+        if($examTasks){
+            $savedTasksArr = array_values($examTasks);
+        } else {
+            $savedTasksArr = false;
+        }
 
         if(isset($data['place']) && $data['place']==''){
             $errors['place'] = get_string('err_filloutfield', 'mod_exammanagement');
         }
 
-        if($data['state'] != 'nt' && $data['state'] != 'fa' && $data['state'] != 'ill'){
+        if(isset($data['state']) && $data['state'] != 'nt' && $data['state'] != 'fa' && $data['state'] != 'ill'){
             foreach($data['points'] as $task => $points){
 
                 $floatval = floatval($points);
@@ -392,7 +415,7 @@ class participantsOverviewForm extends moodleform {
                     $errors['points['. $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
                 } else if($points<0) {
                     $errors['points['.$task.']'] = get_string('err_underzero', 'mod_exammanagement');
-                } else if($points > $savedTasksArr[$task-1]){
+                } else if($examTasks && $points > $savedTasksArr[$task-1]){
                      $errors['points['. $task .']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
                 }
             }

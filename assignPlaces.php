@@ -81,29 +81,32 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
 
-      $places = json_decode($RoomObj->places);	//get Places of this Room
+      if($RoomObj){
+        $places = json_decode($RoomObj->places);	//get Places of this Room
 
-      foreach($participantsArray as $key1 => $participantObj){
-
-        if($key1 >= $participantsCount){
-          
-          $participantObj->roomid = $RoomObj->roomid;
-          $participantObj->roomname = $RoomObj->name;
-          $participantObj->place = array_shift($places);
-
-          // set room and place
-          $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-
-          $participantsCount +=1;
-
-          if($places == NULL){  // if all places of room are assigned
-            break;
+        foreach($participantsArray as $key1 => $participantObj){
+  
+          if($key1 >= $participantsCount){
+            
+            $participantObj->roomid = $RoomObj->roomid;
+            $participantObj->roomname = $RoomObj->name;
+            $participantObj->place = array_shift($places);
+  
+            // set room and place
+            $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+  
+            $participantsCount +=1;
+  
+            if($places == NULL){  // if all places of room are assigned
+              break;
+            }
+  
+          } else if($participantsCount == count($participantsArray)){ //if all users have a place
+            break 2;
           }
-
-        } else if($participantsCount == count($participantsArray)){ //if all users have a place
-          break 2;
         }
       }
+      
     }
 
     if($participantsCount < count($participantsArray)){	//if users are left without a room
