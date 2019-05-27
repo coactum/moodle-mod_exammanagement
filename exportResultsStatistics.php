@@ -429,10 +429,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(5 + $n))->setWidth(8);
         }
 
-        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(5 + $n))->setWidth(10);
-        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(6 + $n))->setWidth(10);
-        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(7 + $n))->setWidth(10);
-        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(8 + $n))->setWidth(15);
+        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(5 + $n))->setWidth(15);
+        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(6 + $n))->setWidth(15);
+        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(7 + $n))->setWidth(12);
+        $PHPExcelObj->setActiveSheetIndex(2)->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(8 + $n))->setWidth(20);
 
         // header and centered
         $range = "A1:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . "1";

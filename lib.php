@@ -229,7 +229,7 @@ function exammanagement_extend_navigation_course($exammanagementnode, $course, $
 		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
 			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
 				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
-				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM);
+				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM,null , null , new pix_icon('barcode', $cm->name, 'mod_exammanagement'));
 				$exammanagementnode->add_node($node);
 				}
 			$index++;
@@ -246,4 +246,13 @@ function exammanagement_extend_navigation_course($exammanagementnode, $course, $
  * @param navigation_node $exammanagementnode {@link navigation_node}
  */
 function exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
+}
+
+/**
+ * Map icons for font-awesome themes.
+ */
+function exammanagement_get_fontawesome_icon_map() {
+    return [
+        'mod_exammanagement:barcode' => 'fa-barcode'
+    ];
 }

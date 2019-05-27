@@ -86,7 +86,7 @@ $string['results_with_percentages'] = 'Ergebnisse mit Prozentangaben';
 $string['results_and_statistics'] = 'Ergebnisse und Statistik';
 $string['results_for_exam_office'] = 'Ergebnisse für das Prüfungsamt';
 $string['delete_exam_data'] = 'Prüfungsdaten löschen';
-$string['date_and_room_exam_review'] = 'Datum und Raum für die Klausureinsicht';
+$string['date_and_room_exam_review'] = 'Termin und Raum für die Klausureinsicht';
 $string['set_visibility_of_exam_review_information'] = 'Informationen zur Klausureinsicht sichtbar schalten';
 $string['altering_exam_results'] = 'Änderung der Prüfungsergebnisse';
 $string['export_altered_exam_results'] = 'Export der geänderten Ergebnisse';
@@ -162,7 +162,7 @@ $string['date_room_examreview_set_two'] = 'in Raum ';
 $string['date_room_examreview_set_three'] = 'statt.';
 $string['date_room_examreview_set_four'] = 'Die Klausureinsicht findet in Raum ';
 $string['date_room_examreview_set_five'] = 'Die Klausureinsicht findet am ';
-$string['date_room_examreview_not_set'] = 'Es wurden noch kein Datum und kein Raum für die Klausureinsicht festgelegt.';
+$string['date_room_examreview_not_set'] = 'Es wurden noch kein Termin und kein Raum für die Klausureinsicht festgelegt.';
 $string['exam_results_altered_one'] = 'Es wurden bisher ';
 $string['exam_results_altered_two'] = 'Prüfungsergebnisse nach der Klausureinsicht geändert.';
 $string['no_examresults_altered'] = 'Bisher wurden noch keine Prüfungsergebnisse nach der Klausureinsicht geändert.';
@@ -192,8 +192,7 @@ $string['check_results'] = 'Ergebnisse prüfen';
 $string['export_as_pdf'] = 'PDF exportieren';
 $string['export_as_excel'] = 'Excel-Dokument exportieren';
 $string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
-$string['delete_examdata'] = 'Prüfungsdaten löschen';
-$string['examreview_dateroom'] = 'Datum und Räume festlegen';
+$string['examreview_dateroom'] = 'Termin und Raum für Klausureinsicht festlegen';
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
 //configurePasswordForm.php
@@ -449,10 +448,9 @@ $string['results'] = 'Prüfungsergebnisse';
 $string['cannot_create_zip_archive'] = 'Fehler beim Erzeugen des zip-Archives';
 
 // examReviewDateRoomForm.php
-$string['examreview_dateroom_str'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier das Datum und der Raum dafür ausgewählt werden.';
-$string['examreview_dateroom'] = 'Datum und Räume für Klausureinsicht';
-$string['examreview_date'] = 'Datum';
-$string['examreview_room'] = 'Räume (als Freitext eintragen)';
+$string['examreview_dateroom_str'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden.';
+$string['examreview_date'] = 'Termin';
+$string['examreview_room'] = 'Raum (als Freitext eintragen)';
 
 // forms (common)
 $string['operation_canceled'] = 'Vorgang abgebrochen';
@@ -571,10 +569,10 @@ $string['helptext_participantsOverview']= 'In dieser <strong>Teilnehmer- und Erg
 Für jede der alphabetisch sortiert angezeigten Prüfungsteilnehmerinnen werden standardmäßig sowohl der Vor- und der Nachname als auch die Matrikelnummer angezeigt. Wurden einem oder einer Teilnehmenden bereits ein Sitzplatz zugewiesen werden dieser sowie der zugehörige Raum in den entsprechend benannten Spalten ebenfalls angezeigt. Wurden bereits Prüfungsaufgaben angelegt und wurden für einen Teilnehmer bereits Prüfungsergebnisse eingetragen werden auch diese angezeigt. In der Spalte "Punkte" ist dabei zu sehen, wie viele Punkte der Teilnehmer in jeder einzelnen Aufgabe erreicht hat, während in der Spalte "Gesamtpunkte" die aufsummierte Gesamtpunktezahl angezeigt wird. Wurden noch keine Prüfungsaufgaben angelegt gibt ein Klick auf das stattdessen in der Spalte "Punkte" angezeigte Symbol die Möglichkeit, dies direkt zu erledigen. Wurde noch kein Notenschlüssel eingetragen kann dies nach einem Klick auf das entsprechende Symbol in der Spalte "Ergebnis" getan werden, andernfalls wird in dieser Spalte (falls für den Teilnehmer bereits Ergebnisse eingetragem wurden) dessen aus dem Notenschlüssel berechnete Prüfungsnote angezeigt. Hat der Teilnehmer einen besonderen Status (war er etwa bei der Prüfung krank oder liegt bei ihm ein Betrugsversuch vor) wird dies statt des Prüfungsergebnisses angezeigt. Außerdem stehen in der Spalte "Bonusschritte" die bereits vom Teilnehmenden errungenen Bonusnotenschritte für die Klausur, während in der Spalte "Ergebnis mit Bonus" die Endnote unter Berücksichtigung der Bonusnotenschritte angesehen werden kann. <br><br>
 Um die Informationen zu einem Prüfungsteilnehmer zu bearbeiten reicht ein Klick auf das Icon rechts in der Zeile des jeweiligen Prüfungsteilnehmenden. Danach können alle Angaben für den oder die Studierende bearbeitet werden. So können dem oder der Teilnehmenden zum Beispiel einer der bereits für die Prüfung als Prüfungsraum ausgewählten Räume und ein beliebiger Sitzplatz in diesem zugewiesen werden. In der Spalte "Punkte" können dagegen aufgabenweise die vom Prüfling erreichten Punkte eingetragen werden. Alternativ kann falls nötig zudem aus einem Dropdown-Menü ein besonderer Prüfungsstatus wie etwa "Krank", "Nicht Teilgenommen" ("NT") oder aber "Betrugsversuch" ausgewählt werden, wodurch die Punkte automatisch auf Null gesetzt werden. Es können außerdem manuell die von einem Prüfling erreichten Bonusschritte ausgewählt werden. Nach dem Speichern der Änderungen durch einen Klick auf den entsprechenden Button werden dann (falls bereits ein Notenschlüssel eingetragen wurde) das Ergebniss sowie das Ergebnis unter Berücksichtigung aller errungenen Bonusnotenschritte berechnet. <br><br>
 Für einen Studierenden können dabei alle diese Angaben gleichzeitig oder aber jede Angabe einzeln eingetragen beziehungsweise bearbeitet werden. Auf diese Weise kann diese Seite nicht nur genutzt werden, um fehlerhaft eingetragene Angaben zu korrigieren sondern auch, um für Prüfungsteilnehmende insgesamt manuell Ergebnisse einzutragen oder diesen händisch die gewünschten Sitzplätze zuzuweisen.';
-$string['helptext_examReviewDateRoom']= 'Falls für die Prüfung eine <strong>Klausureinsicht</strong> stattfinden soll können hier das Datum und der Raum dafür ausgewählt werden. <br><br>
+$string['helptext_examReviewDateRoom']= 'Falls für die Prüfung eine <strong>Klausureinsicht</strong> stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden. <br><br>
 Die Bezeichnung des Raumes kann dabei frei als normaler Text in das untere Formularfeld eingegeben werden. Auf diese Weise können Sie auch nicht im System als Prüfungsraum hinterlegte Räume wie etwa ihr Büro als Klausureinsichtsraum auswählen. <br><br>
 Wenn Sie nach dem Zeitpunkt der Klausureinsicht Prüfungsergebnisse für die Teilnehmenden ändern können Sie diese danach einfach auf der Übersichtsseite gesondert für das Prüfungsamt exportieren. <br><br>
-Die hier festgelegten Informationen zum Datum und Raum der Klausureinsicht können später auf der Übersichtsseite wieder für die Studierenden sichtbar geschaltet werden.';
+Die hier festgelegten Informationen zum Termin und Raum der Klausureinsicht können später auf der Übersichtsseite wieder für die Studierenden sichtbar geschaltet werden.';
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';

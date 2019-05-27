@@ -435,6 +435,8 @@ class User{
 		$totalpoints = $this->calculateTotalPoints($participantObj);
 		$lastpoints = 0;
 
+		$result = false;
+
 		if($totalpoints === '-'){
 		    $result = '-';
 		} else if($state == "nt" || $state == "fa" || $state == "ill"){

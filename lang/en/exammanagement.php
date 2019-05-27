@@ -192,8 +192,7 @@ $string['check_results'] = 'Check results';
 $string['export_as_pdf'] = 'Export PDF';
 $string['export_as_excel'] = 'Export excel file';
 $string['export_as_paultext'] = 'Export text file';
-$string['delete_examdata'] = 'Delete exam data';
-$string['examreview_dateroom'] = 'Set date and room';
+$string['examreview_dateroom'] = 'Set date and room for exam review';
 $string['change_examresults'] = 'Change exam results';
 
 //configurePasswordForm.php
@@ -450,9 +449,8 @@ $string['cannot_create_zip_archive'] = 'Error creating zip archive';
 
 // examReviewDateRoomForm.php
 $string['examreview_dateroom_str'] = 'If you are planning an exam review, you can select the date and the room for it here.';
-$string['examreview_dateroom'] = 'Date and rooms for exam review';
 $string['examreview_date'] = 'Date';
-$string['examreview_room'] = 'Rooms (enter as free text)';
+$string['examreview_room'] = 'Room (enter as free text)';
 
 // forms (common)
 $string['operation_canceled'] = 'Operation canceled';
