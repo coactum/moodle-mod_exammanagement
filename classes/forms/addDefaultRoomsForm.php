@@ -53,7 +53,7 @@ class addDefaultRoomsForm extends moodleform {
 
     //$maxbytes = $CFG->maxbytes;
 
-    $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('import_default_rooms', 'mod_exammanagement').'</h3>');
+    $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('addDefaultRooms', 'mod_exammanagement').'</h3>');
     $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
     $mform->addElement('html', '</div>');
 

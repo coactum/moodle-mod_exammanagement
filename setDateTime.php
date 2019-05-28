@@ -35,8 +35,6 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$resetdatetime  = optional_param('resetdatetime', 0, PARAM_RAW);
-
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
@@ -45,7 +43,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
   if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-  		$MoodleObj->setPage('set_date_time');
+  		$MoodleObj->setPage('setDateTime');
       $MoodleObj-> outputPageHeader();
       
       //Instantiate form

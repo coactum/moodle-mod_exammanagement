@@ -50,7 +50,7 @@ $string['exam_review_two'] = 'findet die Klausureinsicht statt in Raum ';
 
 //exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['maintitle'] = 'Prüfungsorganisation';
-$string['overview'] = 'Überblick';
+$string['view'] = 'Überblick';
 $string['js_confirm_correction_completion'] = 'Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.';
 
 //exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
@@ -196,13 +196,13 @@ $string['examreview_dateroom'] = 'Termin und Raum für Klausureinsicht festlegen
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
 //configurePasswordForm.php
-$string['configure_password_str'] = 'Passwort konfigurieren';
+$string['configurePassword'] = 'Passwort konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 $string['reset_password'] = 'Passwort zurücksetzen';
 
 //checkPasswordForm.php
-$string['check_password_str'] = 'Passwort eingeben';
+$string['checkPassword'] = 'Passwort eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['confirm_password'] = 'Passwort bestätigen';
 $string['reset_password_admin'] = 'Passwort zurücksetzen (nur für Administratoren)';
@@ -212,7 +212,7 @@ $string['wrong_password'] = 'Passwort falsch. Bitte erneut versuchen.';
 $string['password_reset_successful'] = 'Zurücksetzen des Passwortes erfolgreich.';
 
 //chooseRoomsForm.php
-$string['choose_exam_rooms'] = 'Prüfungsräume auswählen';
+$string['chooseRooms'] = 'Prüfungsräume auswählen';
 $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
@@ -234,13 +234,13 @@ $string['no_rooms_found'] = 'Keine Räume gefunden';
 $string['room_deselected_as_examroom'] = 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.';
 
 // addDefaultRoomsForm.php
-$string['import_default_rooms_from_file'] = 'Standardräume aus Datei importieren';
+$string['addDefaultRooms'] = 'Standardräume importieren';
 $string['import_default_rooms_str'] = 'Hier können die allen Dozenten als mögliche Prüfungsräume zur Auswahl stehenden Standardräume von Administratoren aus einer Text-Datei importiert werden.';
 $string['default_rooms_already_exists'] = '<strong>Achtung:</strong> Es wurden bereits Standardräume importiert. Diese werden durch den Import aus einer neuen Datei überschrieben.';
 $string['default_rooms_file_structure'] = 'Import der Standardräume aus Text-Datei (.txt). <br><strong>Aufbau</strong>: Pro Zeile ein Prüfungsraum. Erste Spalte systeminterne Raumid (Raumname_Variante; also z. B. Audimax_2), zweite Spalte benutzersichtbarer Raumname (z. B. Audimax), dritte Spalte benutzersichtbare Beschreibung inklusive Anzahl freigelassener sowie gesamter Plätze (z. B. 2 Plätze frei, 56 Plätze insgesamt), vierte Spalte zur Berechnung der Sitzplatzzahl benötigtes Array mit der Bezeichnung jedes einzelnen Platzes in json-Syntax (z. B. ["R/R01/P07","R/R01/P04","R/R01/P01"] ), fünfte Spalte Quellcode einer SVG-Datei mit dem Raumplan um diesen den Benutzern anzuzeigen (falls vorhanden, ansonsten leer lassen)';
 
 // addCustomRoomForm.php
-$string['change_or_add_custom_room'] = 'Eigenen Prüfungsraum anlegen oder bearbeiten';
+$string['addCustomRoom'] = 'Eigenen Prüfungsraum anlegen oder bearbeiten';
 $string['change_custom_room_name'] = '<strong>Hinweis:</strong> Falls Sie den Namen eines bestehenden Raumes ändern wird stattdessen ein neuer Raum angelegt. In diesem Fall muss der alte Raum noch manuell gelöscht werden.';
 $string['custom_room_places'] = '<strong>Hinweis:</strong> Der von Ihnen hier erstellte eigene Prüfungsraum erhält im System so viele Plätze wie von Ihnen unten angegeben werden, wobei die Nummerierung (unabhängig von der im Raum tatsächlich vorhandenen Sitzplatzanzahl oder deren Nummerieung) bei 1 startet und dann hoch zählt. Sie müssen also selbst sicherstellen, dass die von Ihnen angegebene Platzzahl mit den tatsächlich vorhandenen Sitzplätzen übereinstimmt und müssen zudem mögliche Abweichungen bei der Sitzplatznummerierung selbst anpassen.';
 $string['customroom_name'] = 'Name des Raums';
@@ -250,11 +250,11 @@ $string['add_room'] = 'Raum speichern';
 $string['no_description_new_room'] = 'Keine Beschreibung vorhanden, ';
 
 //setDateTimeForm.php
-$string['set_date_time'] = 'Prüfungstermin festlegen';
+$string['setDateTime'] = 'Prüfungstermin festlegen';
 $string['set_date_time_str'] = 'Hier können das Datum und die Uhrzeit der Prüfung ausgewählt werden.';
 
-//showParticipants.php
-$string['view_participants'] = 'Teilnehmer ansehen';
+//viewParticipants.php
+$string['viewParticipants'] = 'Teilnehmer ansehen';
 $string['import_participants_from_file_recommended'] = 'Teilnehmer aus Datei hinzufügen (empfohlen)';
 $string['import_course_participants_optional'] = 'Kursteilnehmer importieren (optional)';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmer.';
@@ -274,7 +274,7 @@ $string['all_participants_deletion_warning'] = 'Durch diese Aktion werden sämtl
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
 $string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
 $string['read_file'] = 'Datei einlesen';
-$string['import_participants'] = 'Teilnehmer hinzufügen';
+$string['addParticipants'] = 'Teilnehmer hinzufügen';
 $string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
 $string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Falls nun neue Prüfungsteilnehmende hinzugefügt werden müssen diesen noch Sitzplätze zugewiesen werden.';
 $string['newmatrnr'] = 'Benutzer werden zur Prüfung hinzugefügt.';
@@ -294,7 +294,7 @@ $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_deletedmatrnr'] = 'Werden gelöscht';
 
 //addCourseParticipantsForm.php
-$string['import_course_participants'] = 'Kursteilnehmer hinzufügen';
+$string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';
 $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
 $string['deletedmatrnr_no_course'] = 'Prüfungsteilnehmer werden entfernt (da sie keine Kursteilnehmer sind).';
@@ -302,7 +302,7 @@ $string['existingmatrnr_course'] = 'Kursteilnehmer sind bereits Prüfungsteilneh
 $string['course_participant_import_preventing_paul_export'] = '<strong>Achtung:</strong> Der Import der Kursteilnehmer als Prüfungsteilnehmer ist zwar möglich, allerdings werden diese Teilnehmer später beim Ergebnis-Export für das Prüfungsamt in einer eigenen Liste exportiert. Ihre Ergebnisse können somit gegebenenfalls nicht vernünftig in PAUL eingetragen werden. Wenn Sie vorhaben, die Prüfungsergebnisse in PAUL eintragen zu lassen, sollten Sie die Teilnehmer lieber mithilfe der aus PAUL exportierten Teilnehmerlisten der Prüfung importieren.';
 
 //configureTasksForm.php
-$string['configure_tasks_str'] = 'Aufgaben konfigurieren';
+$string['configureTasks'] = 'Aufgaben konfigurieren';
 $string['configure_tasks_text'] = 'Hier können die Anzahl und die Maximalpunktzahlen aller Prüfungsaufgaben festgelegt werden.';
 $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
@@ -312,12 +312,12 @@ $string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereit
 $string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 
 //setTextfieldForm.php
-$string['add_text_str'] = 'Freitext hinzufügen';
+$string['setTextfield'] = 'Freitext hinzufügen';
 $string['content_of_textfield'] = 'Inhalt des Textfeldes';
 $string['add_text_text'] = 'Hier kann ein beliebiger prüfungsbezogener Inhalt eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird. ';
 
 //sendGroupmessageForm.php
-$string['groupmessages_str'] = 'Nachrichtentext hinzufügen';
+$string['sendGroupmessage'] = 'Gruppennachricht schreiben';
 $string['groupmessages_text_1'] = 'Der unten eingegebene Text wird ';
 $string['groupmessages_text_2'] = ' zur Prüfung hinzugefügten Teilnehmern als PANDA-Benachrichtigung sowie als Email zugeschickt.';
 $string['groupmessages_warning_1'] = 'Achtung: ';
@@ -331,7 +331,7 @@ $string['send_message'] = 'Nachricht abschicken';
 $string['participants_missing_places'] = 'Einigen Teilnehmerinnen und Teilnehmern konnte noch kein Sitzplatz zugewiesen werden. Fügen Sie ausreichend Räume zur Prüfung hinzu und wiederholen Sie die Zuweisung oder weisen Sie die noch fehlenden Sitzplätze manuell zu.';
 
 //importBonusForm.php
-$string['import_bonus_str'] = 'Bonuspunkte importieren';
+$string['importBonus'] = 'Bonuspunkte importieren';
 $string['import_bonus_text'] = 'Hier können von den Teilnehmenden errungene Bonuspunkte importiert und in Bonusnotenschritte für die Prüfung umgerechnet werden.';
 $string['set_bonussteps'] = 'Bonusnotenschritte festlegen';
 $string['add_remove_bonusstep'] = 'Bonusschritt hinzufügen oder entfernen:';
@@ -350,11 +350,11 @@ $string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits 
 $string['points_bonussteps_invalid'] = 'Punkte für Bonusschritte ungültig';
 
 //configureGradingscaleForm.php
-$string['configure_gradingscale_str'] = 'Notenschlüssel konfigurieren';
+$string['configureGradingscale'] = 'Notenschlüssel konfigurieren';
 $string['configure_gradingscale_totalpoints'] = 'Die maximale Anzahl von Punkten ist';
 
 //inputResultsForm.php
-$string['input_results_str'] = 'Prüfungsergebnisse eintragen';
+$string['inputResults'] = 'Prüfungsergebnisse eintragen';
 $string['input_results_text'] = 'Hier können nach der Eingabe der Matrikelnummer eines Prüflings die von diesem in der Prüfung errungenen Punkte eingetragen werden.';
 $string['confirm_matrnr'] = 'Die Bestätigung der Matrikelnummer ist auch durch das Drücken der Enter- bzw. der Return-Taste sowie der Tabulator-Taste möglich.';
 $string['exam_participant'] = 'Prüfungsteilnehmer/in';
@@ -377,7 +377,7 @@ $string['invalid_barcode'] = 'Ungültiger Barcode';
 //participantsOverviewForm.php
 $string['participants_overview_text'] = 'Alle bereits zur Prüfung hinzugefügten Teilnehmerinnen können in dieser Liste angesehen und bearbeitet werden.';
 $string['edit'] = 'Bearbeiten';
-$string['show_results_str'] = 'Teilnehmer- und Ergebnisübersicht';
+$string['participantsOverview'] = 'Teilnehmer- und Ergebnisübersicht';
 $string['matriculation_number_short'] = 'Matr. Nr.';
 $string['totalpoints'] = 'Gesamtpunkte';
 $string['result'] = 'Ergebnis';
@@ -448,6 +448,7 @@ $string['results'] = 'Prüfungsergebnisse';
 $string['cannot_create_zip_archive'] = 'Fehler beim Erzeugen des zip-Archives';
 
 // examReviewDateRoomForm.php
+$string['examReviewDateRoom'] = 'Termin und Raum für Klausureinsicht festlegen';
 $string['examreview_dateroom_str'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden.';
 $string['examreview_date'] = 'Termin';
 $string['examreview_room'] = 'Raum (als Freitext eintragen)';
@@ -507,7 +508,7 @@ Wurden bereits Standardräume eingelesen werden diese durch einen Neuimport übe
 $string['helptext_setDateTime']= 'Hier können das <strong>Datum und die Uhrzeit der Prüfung</strong> ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. Zudem wird er den PrüfungsteilnehmerInnen in deren Ansicht angezeigt, sobald Sie diese Informationen auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben. <br /> <br />
 Das Datum und die Uhrzeit der Prüfung sollten hier also gesetzt werden, um die Prüfungsorganisation in PANDA sinnvoll nutzen zu können.';
-$string['helptext_showParticipants']= 'Auf dieser Seite können alle zur Prüfung hinzugefügten <strong>Prüfungsteilnehmer</strong> und Informationen wie deren Profil, Matrikelnummer sowie die ihnen gegebenenfalls in PANDA zugewiesenen Gruppen angesehen werden. <br /> <br />
+$string['helptext_viewParticipants']= 'Auf dieser Seite können alle zur Prüfung hinzugefügten <strong>Prüfungsteilnehmer</strong> und Informationen wie deren Profil, Matrikelnummer sowie die ihnen gegebenenfalls in PANDA zugewiesenen Gruppen angesehen werden. <br /> <br />
 Es können hier zudem neue Teilnehmerinnen zur Prüfung hinzugefügt werden. Dazu gibt es zwei Möglichkeiten: <br /> <br />
 1. Es können nach einem Klick auf den Button "Teilnehmer aus Datei hinzufügen" Teilnehmer aus einer oder mehreren, aus PAUL exportierten Prüfungslisten importiert werden. Dies ist der empfohlene Weg des Teilnehmerimportes, da nur auf diese Weise später ein Export der Prüfungsergebnisse der Anzahl und dem Aufbau dieser eingelesenen PAUL-Listen entsprechend möglich ist. Diese Variante sollte also gewählt werden, möchte man später die Prüfungsergebnisse direkt in PAUL eintragen (lassen).<br>
 2. Es besteht außerdem die Möglichkeit, nach einem Klick auf den Button "Kursteilnehmer importieren" Teilnehmer des PANDA-Kurses als Prüfungsteilnehmer zu importieren. Wird diese Variante gewählt können die Prüfungsergebnisse später allerdings nur in einer einzigen Ergebnisliste exportiert werden, ein listenweiser Export und ein einfaches anschließendes Eintragen der Prüfungsergebnisse in PAUL ist dann somit nicht möglich. Es besteht zudem auch nicht die Möglichkeit, einmal als Kursteilnehmer importierte Teilnehmer später durch nachträgliches Einlesen einer PAUL-Liste "umzuschreiben". Dafür muss der oder die Teilnehmerin zunächst komplett gelöscht werden.<br><br>

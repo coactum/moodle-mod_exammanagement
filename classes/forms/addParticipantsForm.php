@@ -66,7 +66,7 @@ class addParticipantsForm extends moodleform{
         $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
 
         if($tempParticipants){
-            $mform->addElement('html', '<h3>'.get_string("import_participants", "mod_exammanagement").'</h3>');
+            $mform->addElement('html', '<h3>'.get_string("addParticipants", "mod_exammanagement").'</h3>');
         } else {
             $mform->addElement('html', '<h3>'.get_string("import_participants_from_file", "mod_exammanagement").'</h3>');
         }

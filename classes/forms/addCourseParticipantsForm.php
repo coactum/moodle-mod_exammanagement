@@ -56,7 +56,7 @@ class addCourseParticipantsForm extends moodleform{
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
-        $mform->addElement('html', '<h3>'.get_string("import_course_participants", "mod_exammanagement").'</h3>');
+        $mform->addElement('html', '<h3>'.get_string("addCourseParticipants", "mod_exammanagement").'</h3>');
         $mform->addElement('html', '</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
         $mform->addElement('html', '</div>');

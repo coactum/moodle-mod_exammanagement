@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         global $USER;
 
-        $MoodleObj->setPage('addCustomRoomForm');
+        $MoodleObj->setPage('addCustomRoom');
         $MoodleObj->outputPageHeader();
 
         //Instantiate form

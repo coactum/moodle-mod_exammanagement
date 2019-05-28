@@ -45,14 +45,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-        $MoodleObj->setPage('showParticipants');
+        $MoodleObj->setPage('viewParticipants');
         $MoodleObj->outputPageHeader();
 
         #### delete participants if neccassary ####
 
         if($dap){
         $UserObj->deleteAllParticipants();
-        redirect ('showParticipants.php?id='.$id, null, null, null);
+        redirect ('viewParticipants.php?id='.$id, null, null, null);
         }
 
         if($dpmid){
@@ -64,7 +64,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         ###### list of participants ... ######
 
         echo('<div class="row"><div class="col-xs-4">');
-        echo('<h3>'.get_string("view_participants", "mod_exammanagement").'</h3>');
+        echo('<h3>'.get_string("viewParticipants", "mod_exammanagement").'</h3>');
         echo('</div><div class="col-xs-1"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
 
         echo('<div class="col-xs-7">');
@@ -73,7 +73,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         echo('</div></div>');
 
-        echo($ExammanagementInstanceObj->ConcatHelptextStr('showParticipants'));
+        echo($ExammanagementInstanceObj->ConcatHelptextStr('viewParticipants'));
 
         echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 
@@ -127,7 +127,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         echo('<td>'.$UserObj->getParticipantsGroupNames($participantObj->moodleuserid).'</td>');
                     }
                     echo('<td>'.get_string("state_added_to_exam", "mod_exammanagement").'</td>');
-                    echo('<td><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmid', $participantObj->moodleuserid).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
+                    echo('<td><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmid', $participantObj->moodleuserid).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
                     echo('</tr>');
 
                     $i++;
@@ -168,7 +168,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
 
                     echo('<td>'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement").'</td>');
-                    echo('<td><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dpmatrnr', $participantObj->imtlogin).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
+                    echo('<td><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmatrnr', $participantObj->imtlogin).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
                     echo('</tr>');
                 
                     $i++;
@@ -185,7 +185,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         echo('<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
         if($moodleParticipants || $noneMoodleParticipants){
-        echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/showParticipants.php', $id, 'dap', true).'" class="btn btn-danger m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+        echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-danger m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
         }
 
         $MoodleObj->outputFooter();

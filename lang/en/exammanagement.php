@@ -50,7 +50,7 @@ $string['exam_review_two'] = 'there will be the exam review in room ';
 
 //exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['maintitle'] = 'Exam management';
-$string['overview'] = 'Overview';
+$string['view'] = 'Overview';
 $string['js_confirm_correction_completion'] = 'This action completes the correction phase. You then have 3 months to export all exam results before they are irretrievably deleted for data protection reasons.';
 
 //exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
@@ -196,13 +196,13 @@ $string['examreview_dateroom'] = 'Set date and room for exam review';
 $string['change_examresults'] = 'Change exam results';
 
 //configurePasswordForm.php
-$string['configure_password_str'] = 'Configure password';
+$string['configurePassword'] = 'Configure password';
 $string['configure_password'] = 'This page allows setting and modifying the password for the exam management';
 $string['password'] = 'Password';
 $string['reset_password'] = 'Reset password';
 
 //checkPasswordForm.php
-$string['check_password_str'] = 'Enter password';
+$string['checkPassword'] = 'Enter password';
 $string['check_password'] = 'A password for this exam organization was set by the teacher. You have to enter it below to gain access to the content of this module.';
 $string['confirm_password'] = 'Confirm password';
 $string['reset_password_admin'] = 'Reset password (only for administrators)';
@@ -212,7 +212,7 @@ $string['wrong_password'] = 'Wrong password. Please retry.';
 $string['password_reset_successful'] = 'Password reset successful.';
 
 //chooseRoomsForm.php
-$string['choose_exam_rooms'] = 'Choose exam rooms';
+$string['chooseRooms'] = 'Choose exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
@@ -234,13 +234,13 @@ $string['no_rooms_found'] = 'No rooms found';
 $string['room_deselected_as_examroom'] = 'The room must first be deselected as an exam room.';
 
 //addDefaultRoomsForm.php
-$string['import_default_rooms_from_file'] = 'Import default rooms from text file';
+$string['addDefaultRooms'] = 'Import default rooms';
 $string['import_default_rooms_str'] = 'Here, administrators can import the standard rooms available to all lecturers as possible exam rooms from a text file.';
 $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms have already been imported. These are overwritten by this new import.';
 $string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty)';
 
 //addCustomRoomForm.php
-$string['change_or_add_custom_room'] = 'Change or add custom room';
+$string['addCustomRoom'] = 'Change or add custom room';
 $string['change_custom_room_name'] = '<strong>Please note:</strong> If you change the name of an existing room, a new room is created instead. In this case, the old room must still be deleted manually.';
 $string['custom_room_places'] = '<strong>Please note:</strong> The exam room you have created here gets as many seats as you specify below, with the numbering starting at 1 and then incrementing (regardless of the actual number of seats or their numbering in the room). This means that you must ensure that the number of seats you enter corresponds to the actual number of seats available, and you must also adjust any deviations in the numbering of seats yourself.';
 $string['customroom_name'] = 'Name of exam room';
@@ -250,11 +250,11 @@ $string['add_room'] = 'Save room';
 $string['no_description_new_room'] = 'No description available, ';
 
 //setDateTimeForm.php
-$string['set_date_time'] = 'Set exam date and time';
+$string['setDateTime'] = 'Set exam date and time';
 $string['set_date_time_str'] = 'The date and time of the exam can be selected here.';
 
-//showParticipants.php
-$string['view_participants'] = 'View participants';
+//viewParticipants.php
+$string['viewParticipants'] = 'View participants';
 $string['import_participants_from_file_recommended'] = 'Import participants from file (recommended)';
 $string['import_course_participants_optional'] = 'Import participants from course (optional)';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
@@ -274,7 +274,7 @@ $string['all_participants_deletion_warning'] = 'This action deletes all exam par
 $string['import_participants_from_file'] = 'Import participants from file';
 $string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
 $string['read_file'] = 'Read file';
-$string['import_participants'] = 'Import participants';
+$string['addParticipants'] = 'Import participants';
 $string['import_new_participants'] = 'Import other participants';
 $string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
 $string['newmatrnr'] = 'Users will be added to exam.';
@@ -294,7 +294,7 @@ $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_deletedmatrnr'] = 'Will be deleted';
 
 //addCourseParticipantsForm.php
-$string['import_course_participants'] = 'Import participants from course';
+$string['addCourseParticipants'] = 'Import participants from course';
 $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['deletedmatrnr_no_course'] = 'Participants will be deleted because they are no course participants.';
@@ -302,7 +302,7 @@ $string['existingmatrnr_course'] = 'Course participants are already exam partici
 $string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office. Their results can therefore maybe not be entered correctly in PAUL. If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
 
 //configureTasksForm.php
-$string['configure_tasks_str'] = 'Configure Tasks';
+$string['configureTasks'] = 'Configure Tasks';
 $string['configure_tasks_text'] = 'Here you can define the number and the maximum points of all exam tasks.';
 $string['add_remove_tasks'] = 'Add or remove tasks:';
 $string['task'] = 'Task';
@@ -312,12 +312,12 @@ $string['results_already_entered'] = '<strong>Warning:</strong> Some exam result
 $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check whether it may need to be updated.';
 
 //setTextfieldForm.php
-$string['add_text_str'] = 'Add textfield';
+$string['setTextfield'] = 'Add textfield';
 $string['content_of_textfield'] = 'Content of textfield';
 $string['add_text_text'] = 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.';
 
 //sendGroupmessageForm.php
-$string['groupmessages_str'] = 'Add Messagetext';
+$string['sendGroupmessage'] = 'Send groupmessage';
 $string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
 $string['groupmessages_text_2'] = ' participants of the exam.';
 $string['groupmessages_warning_1'] = 'Warning: ';
@@ -331,7 +331,7 @@ $string['send_message'] = 'Send message';
 $string['participants_missing_places'] = 'Some participants have not yet been assigned a place. Add enough rooms to the exam and repeat the assignment or assign the missing places manually.';
 
 //importBonusForm.php
-$string['import_bonus_str'] = 'Import bonus points';
+$string['importBonus'] = 'Import bonus points';
 $string['import_bonus_text'] = 'Bonus points achieved by the participants can be imported here and converted to bonus steps for the exam.';
 $string['set_bonussteps'] = 'Set bonus steps';
 $string['add_remove_bonusstep'] = 'Add or remove bonus step:';
@@ -350,11 +350,11 @@ $string['bonus_already_entered'] = '<strong>Warning:</strong> Some bonus points 
 $string['points_bonussteps_invalid'] = 'Points for bonus steps invalid';
 
 //configureGradingscaleForm.php
-$string['configure_gradingscale_str'] = 'Configure grading scale';
+$string['configureGradingscale'] = 'Configure grading scale';
 $string['configure_gradingscale_totalpoints'] = 'Number of total points';
 
 //inputResultsForm.php
-$string['input_results_str'] = 'Input exam results';
+$string['inputResults'] = 'Input exam results';
 $string['input_results_text'] = 'After entering the matriculation number of a participant, the points achieved by this participant in the exam can be entered here.';
 $string['confirm_matrnr'] = 'To confirm the matriculation number you can also press enter/return or tabulator.';
 $string['exam_participant'] = 'Exam participant';
@@ -377,7 +377,7 @@ $string['invalid_barcode'] = 'Invalid barcode';
 //participantsOverviewForm.php
 $string['participants_overview_text'] = 'All participants already added to the exam can be viewed and edited in this list.';
 $string['edit'] = 'Edit';
-$string['show_results_str'] = 'Participants and results list';
+$string['participantsOverview'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';
 $string['totalpoints'] = 'Total points';
 $string['result'] = 'Result';
@@ -448,6 +448,7 @@ $string['results'] = 'Results';
 $string['cannot_create_zip_archive'] = 'Error creating zip archive';
 
 // examReviewDateRoomForm.php
+$string['examReviewDateRoom'] = 'Set date and room for exam review';
 $string['examreview_dateroom_str'] = 'If you are planning an exam review, you can select the date and the room for it here.';
 $string['examreview_date'] = 'Date';
 $string['examreview_room'] = 'Room (enter as free text)';
@@ -506,7 +507,7 @@ If, on the other hand, an existing exam room has been selected for editing on th
 $string['helptext_setDateTime']= 'The <strong>date and time of the exam</strong> can be selected here.<br><br>
 The exam date selected here is displayed on the overview page of the exam organization and is used later in the documents generated, such as the list of participants or the exam labels. In addition, it will be displayed to the exam participants in their view as soon as you have made this information visible to the students on the overview page. <br /> <br />
 The date and time of the exam should therefore be set here so that the exam organization can be used effectively in PANDA.';
-$string['helptext_showParticipants']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in PANDA. <br /> <br />
+$string['helptext_viewParticipants']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in PANDA. <br /> <br />
 New participants can also be added to the exam here. There are two ways to do this: <br /> <br />
 1. After clicking on the button "Add participants from file", participants can be imported from one or more exam lists exported from PAUL. This is the recommended way of importing participants, as only in this way it is possible to export the exam results later according to the number and structure of these imported PAUL lists. You should therefore choose this variant if you want to enter the exam results directly in PAUL later.<br>
 2. It is also possible to import participants of the PANDA course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple subsequent entry of the exam results in PAUL is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a PAUL list. To do this, the participant must first be completely deleted.<br><br>

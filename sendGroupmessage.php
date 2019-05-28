@@ -46,7 +46,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $MoodleObj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
     }
 
-    $MoodleObj->setPage('groupmessage');
+    $MoodleObj->setPage('sendGroupmessage');
     $MoodleObj-> outputPageHeader();
 
     //Instantiate form

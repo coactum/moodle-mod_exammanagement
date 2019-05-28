@@ -65,7 +65,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		if ($mform->is_cancelled()) {
 			//Handle form cancel operation, if cancel button is present on form
 
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
 		} else if ($fromform = $mform->get_data()) {
 		//In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -219,10 +219,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$UserObj->deleteTempParticipants();
 
 					//redirect
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
 				} else {
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('showParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 				}
 
 			} else if($paul_file){
