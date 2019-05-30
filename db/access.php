@@ -50,7 +50,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
 
 	'mod/exammanagement:addinstance' => [
-        'riskbitmask' => RISK_XSS, RISK_SPAM,
+        'riskbitmask' => RISK_XSS | RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -78,7 +78,7 @@ $capabilities = [
     ],
 
 		'mod/exammanagement:viewparticipantspage' => [
-        'riskbitmask' => RISK_PERSONAL,
+
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -92,7 +92,7 @@ $capabilities = [
     ],
 
     'mod/exammanagement:takeexams'=> [
-        'riskbitmask' => RISK_PERSONAL,
+
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -118,7 +118,7 @@ $capabilities = [
         ],
     ],
 		'mod/exammanagement:adddefaultrooms'=> [
-        'riskbitmask' => RISK_XSS, RISK_SPAM,
+        'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -131,7 +131,7 @@ $capabilities = [
         ],
     ],
         'mod/exammanagement:resetpassword'=> [
-        'riskbitmask' => RISK_PERSONAL, RISK_SPAM,
+        'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [

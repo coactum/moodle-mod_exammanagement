@@ -623,7 +623,8 @@ $string['exammanagement:viewinstance'] = 'View exam organization';
 $string['exammanagement:viewparticipantspage'] = 'View participants page';
 $string['exammanagement:takeexams'] = 'Take exams';
 $string['exammanagement:sendgroupmessage'] = 'Send group message to participants';
-$string['exammanagement:addDefaultRooms'] = 'Import default rooms';
+$string['exammanagement:adddefaultrooms'] = 'Import default rooms';
+$string['exammanagement:resetpassword'] = 'Reset password';
 
 //delete_old_exam_data.php
 $string['delete_old_exam_data'] = 'Delete old exam data';
