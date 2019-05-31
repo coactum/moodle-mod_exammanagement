@@ -45,7 +45,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
-    $MoodleObj->setPage('exportExamLabels');
+    //$MoodleObj->setPage('exportExamLabels');
 
     if (!$UserObj->getParticipantsCount()) {
       $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');

@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
-    $MoodleObj->setPage('exportSeatingPlan');
+    //$MoodleObj->setPage('exportSeatingPlan');
 
     if (!$ExammanagementInstanceObj->getRoomsCount()) {
       $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');

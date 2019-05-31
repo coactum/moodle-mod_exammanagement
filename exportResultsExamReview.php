@@ -45,7 +45,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       global $CFG;
 
-      $MoodleObj->setPage('exportResultsExamReview');
+      //$MoodleObj->setPage('exportResultsExamReview');
 
       //include pdf
       require_once(__DIR__.'/classes/pdfs/resultsExamReview.php');

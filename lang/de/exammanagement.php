@@ -64,7 +64,7 @@ $string['minimize_phase'] = 'Phase minimieren';
 $string['maximize_phase'] = 'Phase öffnen';
 $string['participants_and_results_overview'] = 'Teilnehmer & Ergebnisübersicht';
 $string['exam_rooms'] = 'Prüfungsräume';
-$string['exam_date'] = 'Prüfungsdatum';
+$string['exam_date'] = 'Prüfungstermin';
 $string['exam_participants'] = 'Prüfungsteilnehmer';
 $string['exam_tasks'] = 'Prüfungsaufgaben';
 $string['freetext_field'] = 'Freitextfeld';
@@ -173,7 +173,7 @@ $string['export_altered_examresults_note'] = 'Diese Schaltfläche ermöglicht de
 //exammanagement_overview.mustache work steps buttons - can be seen on /view.php as lecturer
 $string['configure_password'] = 'Passwort konfigurieren';
 $string['choose_rooms'] = 'Räume auswählen';
-$string['set_date'] = 'Datum festlegen';
+$string['set_date'] = 'Termin festlegen';
 $string['add_participants'] = 'Teilnehmer hinzufügen';
 $string['configure_tasks'] = 'Aufgaben konfigurieren';
 $string['edit_textfield'] = 'Freitextfeld bearbeiten';

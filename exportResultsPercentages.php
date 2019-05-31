@@ -45,7 +45,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     global $CFG;
 
-    $MoodleObj->setPage('exportResultsPercentages');
+    //$MoodleObj->setPage('exportResultsPercentages');
 
     //include pdf
     require_once(__DIR__.'/classes/pdfs/resultsPercentages.php');

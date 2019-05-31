@@ -52,7 +52,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         global $CFG;
 
-        $MoodleObj->setPage('exportResultsStatistics');
+        //$MoodleObj->setPage('exportResultsStatistics');
 
         if(!$ExammanagementInstanceObj->getInputResultsCount()){
             $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
