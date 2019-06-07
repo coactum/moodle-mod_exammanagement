@@ -82,6 +82,29 @@ define(['jquery'], function ($) {
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
 
+      var id;
+      var posPoint;
+
+      $("#fitem_id_room").on("change", "select", function () { // if other room is choosen
+        id = $(this).children(":selected").attr("value");
+
+        $(".hiddenpattern").each(function () { // for removing the initial set hidden class
+          $(this).prop("class", 'hideablepattern');
+        });
+
+        $(".hideablepattern").each(function () {
+          $(this).hide(); // hide old places pattern
+        });
+
+        posPoint = id.indexOf('.'); // make room ids with . working
+
+        if (posPoint !== -1) {
+          id = id.substr(0, posPoint) + '\\' + id.substr(posPoint);
+        }
+
+        $('#' + id).show(); // make correct pattern for places visible
+      });
+
       // remove cols from form layout
       $('div').removeClass('col-md-3');
       $('div').removeClass('col-md-9');

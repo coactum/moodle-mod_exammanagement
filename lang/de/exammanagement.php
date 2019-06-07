@@ -247,7 +247,7 @@ $string['customroom_name'] = 'Name des Raums';
 $string['customroom_placescount'] = 'Anzahl der Sitzplätze';
 $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des Raums bei der Raumauswahl';
 $string['add_room'] = 'Raum speichern';
-$string['no_description_new_room'] = 'Keine Beschreibung vorhanden, ';
+$string['no_description_new_room'] = 'Keine Beschreibung vorhanden.';
 
 //setDateTimeForm.php
 $string['setDateTime'] = 'Prüfungstermin festlegen';
@@ -390,6 +390,7 @@ $string['normal'] = 'Normal';
 $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
+$string['existing'] = 'Verfügbar';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
@@ -604,7 +605,17 @@ $string['pluginname'] = 'Prüfungsorganisation';
 $string['coursecategory_name_no_semester'] = 'SEMESTERLOS';
 
 //add new module instance and mod_form.php
-$string['modulename_help'] = 'Mithilfe der PANDA-Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmerinnen und Teilnehmern bequem verwalten.';
+$string['modulename_help'] = 'Mithilfe der Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmerinnen und Teilnehmern bequem verwalten.
+
+Als Dozent oder Dozentin können Sie dabei
+
+* die Basisdaten der Prüfung einstellen
+* für die Prüfungsdurchführung hilfreiche Dokumente wie etwa Sitzpläne und Teilnehmerlisten exportieren
+* die Prüfungsergebnisse für die Teilnehmerinnen händisch oder mithilfe eines Barcodescanners eintragen
+* alle Ergebnisse in verschiedenen Dokumenten für die weitere Verwendung (z. B. durch das Prüfungsamt) exportieren.
+
+Die Teilnehmerinnen und Teilnehmer der Prüfung sehen hingegen in ihrer eigenen Ansicht alle relevanten Informationen der Prüfung wie etwa den Termin, den eigenen Sitzplatz oder für die Prüfung errungene Bonusnotenschritte. Außerdem kann mithilfe der Benachrichtigungsfunktion einfach und zuverlässig mit diesen kommuniziert werden.';
+$string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';

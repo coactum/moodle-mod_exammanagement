@@ -247,7 +247,7 @@ $string['customroom_name'] = 'Name of exam room';
 $string['customroom_placescount'] = 'Count of places';
 $string['customroom_description'] = 'Optional description shown when choosing rooms';
 $string['add_room'] = 'Save room';
-$string['no_description_new_room'] = 'No description available, ';
+$string['no_description_new_room'] = 'No description available.';
 
 //setDateTimeForm.php
 $string['setDateTime'] = 'Set exam date and time';
@@ -390,6 +390,7 @@ $string['normal'] = 'Normal';
 $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
+$string['existing'] = 'Existing';
 
 //participant list
 $string['participantslist'] = 'list of participants';
@@ -603,7 +604,17 @@ $string['pluginname'] = 'Exam management';
 $string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
 
 //add new module instance and mod_form.php
-$string['modulename_help'] = 'The PANDA exammanagement allows you the easy organization of exams for your course and makes it possible to manage even large exams with many participants.';
+$string['modulename_help'] = 'The exam management allows the easy organization of exams for a course and makes it possible to manage even large exams with many participants.
+
+In a separate view a lecturer can
+
+* set the basic exam data
+* export documents that are useful for the exam, such as seating plans and lists of participants
+* enter the exam results for the participants manually or using a barcode scanner
+* export all results in various documents for further use (e.g. by the exam office).
+
+The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat or the bonus grade steps achieved for the exam. In addition, the notification function allows an easy and reliable communication with them.';
+$string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
 $string['exammanagementname'] = 'Exam Management';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';

@@ -274,8 +274,21 @@
   border-color: #00205b;
 }
 
-.exammanagement_table_with{
+.exammanagement_table_width_room{
+  width: 125px !important;
+}
+
+.exammanagement_table_width_place{
+  width: 145px !important;
+}
+
+.exammanagement_table_width_points{
   width: 75px !important;
+}
+
+.exammanagement_position_existing_places_column{
+  position: relative; 
+  left: -10px; 
 }
 
 /* exammanagement_overview.mustache - panels (copied from bootstrap) */

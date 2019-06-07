@@ -62,7 +62,7 @@ class participantsOverviewForm extends moodleform {
         
         $mform->addElement('html', '<div class="table-responsive">');
         $mform->addElement('html', '<table class="table table-striped exammanagement_table" id="0">');
-        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col">'.get_string("room", "mod_exammanagement").'</th><th scope="col">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("edit", "mod_exammanagement").'</th></thead>');
+        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("room", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_place">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("edit", "mod_exammanagement").'</th></thead>');
         $mform->addElement('html', '<tbody>');
 
         $participantsArr = $UserObj->getAllExamParticipants();
@@ -175,12 +175,17 @@ class participantsOverviewForm extends moodleform {
 
                         $roomOptionsArr = array();
 
+                        $roomPlacesPatternsArr = array();
+
                         foreach($examrooms as $id => $roomid){
 
                             $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
 
                             if($roomObj){
                                 $roomOptionsArr[$roomid] = $roomObj->name;
+
+                                $decodedPlaces = json_decode($roomObj->places);
+                                $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces);
                             }
                         }                
     
@@ -197,8 +202,34 @@ class participantsOverviewForm extends moodleform {
                             $mform->addElement('text', 'place', '', $attributes);
                             $mform->setType('place', PARAM_TEXT);
                             $mform->setDefault('place', $place);
+
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('existing', 'mod_exammanagement').': <br>');
+                            if ($roomPlacesPatternsArr){
+                                foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
+                                    if($roomid == $participant->roomid){
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern" >'.$placesPattern.'</span>');
+                                    } else {
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern hiddenpattern hidden">'.$placesPattern.'</span>');
+                                    }
+                                }
+                            }
+                            $mform->addElement('html', '</span>');
+    
                         } else {
                             $mform->addElement('html', $place);
+
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('existing', 'mod_exammanagement').': <br>');
+                            if ($roomPlacesPatternsArr){
+                                foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
+                                    if($roomid == $participant->roomid){
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern" >'.$placesPattern.'</span>');
+                                    } else {
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern hiddenpattern hidden">'.$placesPattern.'</span>');
+                                    }
+                                }
+                            }
+                            $mform->addElement('html', '</span>');
+
                         }
 
     
@@ -214,7 +245,7 @@ class participantsOverviewForm extends moodleform {
                             $mform->addElement('html', '<table class="table-sm"><tr>');
 
                             foreach( $tasks as $tasknumber => $taskmaxpoints){
-                                $mform->addElement('html', '<th class="exammanagement_table_with">'.$tasknumber.'</th>');
+                                $mform->addElement('html', '<th class="exammanagement_table_width_points">'.$tasknumber.'</th>');
                             }
 
                             $mform->addElement('html', '</tr><tr>');

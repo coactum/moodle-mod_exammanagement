@@ -82,7 +82,7 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<div class="table-responsive">');
     $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
-    $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col">'.get_string("options", "mod_exammanagement").'</th></thead>');
+    $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("customroom_placescount", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col">'.get_string("options", "mod_exammanagement").'</th></thead>');
     $mform->addElement('html', '<tbody>');
 
     $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
@@ -119,6 +119,9 @@ class chooseRoomsForm extends moodleform {
         }
 
         $mform->addElement('html', '</td><td> '.$roomObj->description.' </td>');
+
+        $mform->addElement('html', '<td> '.count(json_decode($roomObj->places)).' </td>');
+
         $mform->addElement('html', '<td>');
         if ($roomObj->seatingplan){
 

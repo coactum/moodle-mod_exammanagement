@@ -73,7 +73,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($description){
                     $roomObj->description = $description;
                 } else {
-                    $roomObj->description = 'Keine Beschreibung vorhanden, '.$placesCount.' Plätze';
+                    $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
                 }
                 
                 $placesArr = array();
@@ -100,7 +100,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($description){
                     $roomObj->description = $description;
                 } else {
-                    $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement').$placesCount.' '. get_string('places', 'mod_exammanagement');
+                    $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
                 }
                 $roomObj->seatingplan = base64_encode('');
                 
