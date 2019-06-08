@@ -21,7 +21,6 @@
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
-          <FIELD NAME="bonusscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="scale for bonus for exam as json array"/>
           <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="gradingscale for exam as json array"/>
           <FIELD NAME="datadeletion" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="date of correction completion"/>
           <FIELD NAME="deletionwarningmailids" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="ids of mails with deletion warnings"/>
