@@ -203,7 +203,7 @@ class participantsOverviewForm extends moodleform {
                             $mform->setType('place', PARAM_TEXT);
                             $mform->setDefault('place', $place);
 
-                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('existing', 'mod_exammanagement').': <br>');
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
                             if ($roomPlacesPatternsArr){
                                 foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
                                     if($roomid == $participant->roomid){
@@ -218,7 +218,7 @@ class participantsOverviewForm extends moodleform {
                         } else {
                             $mform->addElement('html', $place);
 
-                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('existing', 'mod_exammanagement').': <br>');
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
                             if ($roomPlacesPatternsArr){
                                 foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
                                     if($roomid == $participant->roomid){
