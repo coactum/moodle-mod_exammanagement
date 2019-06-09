@@ -724,7 +724,7 @@ EOF;
 		$message->smallmessage = $text; // useful for plugins like sms or twitter
 		$message->notification = '0';
 		$message->contexturl = '';
-		$message->contexturlname = 'Context name';
+		$message->contexturlname = '';
 		$message->replyto = "";
 
 		$header = '';
@@ -750,7 +750,7 @@ EOF;
 		// 	$file = $fs->create_file_from_string($file, 'file1 content');
 		// 	$message->attachment = $file;
 
- 		//var_dump($message);
+		//var_dump($message);
 
 		$messageid = message_send($message);
 

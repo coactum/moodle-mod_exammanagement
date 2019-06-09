@@ -29,4 +29,6 @@ if ($ADMIN->fulltree) {
 
       $settings->add(new admin_setting_heading('mod_exammanagement/pluginname', '', new lang_string('pluginadministration', 'mod_exammanagement')));
 
+      $settings->add(new admin_setting_configtext('mod_exammanagement/moodleidsupportuser', get_string('moodleid_supportuser', 'mod_exammanagement'),
+                       get_string('moodleid_supportuser_help', 'mod_exammanagement'), '', PARAM_INT));
 }

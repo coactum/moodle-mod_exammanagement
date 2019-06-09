@@ -117,7 +117,7 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-		'mod/exammanagement:adddefaultrooms'=> [
+	'mod/exammanagement:adddefaultrooms'=> [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -130,8 +130,8 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-        'mod/exammanagement:resetpassword'=> [
-        'riskbitmask' => RISK_SPAM,
+    'mod/exammanagement:resetpassword'=> [
+        'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -139,6 +139,19 @@ $capabilities = [
             'coursecreator' => CAP_PROHIBIT,
             'teacher' => CAP_PROHIBIT,
             'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
+    'mod/exammanagement:requestpasswordreset'=> [
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             'student' => CAP_PROHIBIT,
             'guest' => CAP_PROHIBIT,
         ],

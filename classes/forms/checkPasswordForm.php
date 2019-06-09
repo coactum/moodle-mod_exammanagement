@@ -51,6 +51,8 @@ class checkPasswordForm extends moodleform {
 
         if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password_admin", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password_admin", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+        } else if($MoodleObj->checkCapability('mod/exammanagement:requestpasswordreset') && (get_config('mod_exammanagement', 'moodleidsupportuser') && get_config('mod_exammanagement', 'moodleidsupportuser') !== 0)){
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'requestPWReset', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("request_password_reset", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("request_password_reset", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div>');

@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		if($resetPW == true){
 			$ExammanagementInstanceObj->moduleinstance->password = NULL;
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_successful', 'mod_exammanagement'), 'success');
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 		}
 
 		$MoodleObj->setPage('configurePassword');

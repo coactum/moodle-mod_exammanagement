@@ -205,11 +205,15 @@ $string['reset_password'] = 'Passwort zurücksetzen';
 $string['checkPassword'] = 'Passwort eingeben';
 $string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
 $string['confirm_password'] = 'Passwort bestätigen';
-$string['reset_password_admin'] = 'Passwort zurücksetzen (nur für Administratoren)';
+$string['reset_password_admin'] = 'Passwort zurücksetzen und alle Lehrenden benachrichtigen';
+$string['request_password_reset'] = 'Zurücksetzen des Passwortes beim Support beantragen';
 
 //checkPassword.php
 $string['wrong_password'] = 'Passwort falsch. Bitte erneut versuchen.';
-$string['password_reset_successful'] = 'Zurücksetzen des Passwortes erfolgreich.';
+$string['password_reset_successfull'] = 'Das Passwort der Prüfungsorganisation wurde erfolgreich zurückgesetzt und alle Lehrenden des PANDA-Kurses wurden darüber via PANDA Benachrichtigung informiert.';
+$string['password_reset_failed'] = 'Zurücksetzen des Passwortes aufgrund fehlender Berechtigungen fehlgeschlagen.';
+$string['password_reset_request_successfull'] = 'Das Zurücksetzen des Passwortes der Prüfungsorganisation wurde erfolgreich beim Support beantragt. Sobald das Passwort zurückgesetzt wurde werden Sie und alle anderen Lehrenden des PANDA-Kurses darüber via PANDA-Nachricht informiert.';
+$string['password_reset_request_failed'] = 'Beantragung des Passwort-Zurücksetzens fehlgeschlagen. Bitte kontaktieren Sie den Support auf üblichem Weg via E-Mail.';
 
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Prüfungsräume auswählen';
@@ -476,7 +480,7 @@ Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese auto
 Jeder Arbeitsschritt kann nach einem Klick auf den entsprechenden Button durchgeführt werden. Dieser erscheint, sobald alle für einen Arbeitsschritte nötigen anderen Schritte erfüllt sind. <br /><br />
 Durch den Button "Passwort konfigurieren“ können Sie zudem ein Passwort festlegen (oder ändern), welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre PANDA Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zum Prüfungstermin.';
-$string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können.';
+$string['helptext_checkPassword'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br><br> Durch einen Klick auf den entsprechenden Button können Sie beim Support ein Zurücksetzen des Passwortes beantragen. Wurde das Passwort zurückgesetzt werden Sie und alle anderen Lehrenden des PANDA-Kurses darüber via PANDA-Benachrichtigung informiert.';
 $string['helptext_checkPasswordAdmin'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br> <br>
 Als Administrator können Sie hier auf Wunsch der oder des Lehrenden das Passwort der Prüfungsorganisation zurücksetzen. Alle Lehrenden des PANDA-Kurses werden darüber per PANDA-Nachricht benachrichtigt.';
 $string['helptext_configurePassword'] = 'Auf dieser Seite kann ein <strong>Passwort</strong> für die Prüfungsorganisation gesetzt oder geändert werden. Dieses muss ab dann von jeder oder jedem Lehrenden des PANDA-Kurses eingegeben werden, um auf die Inhalte der Prüfungsorganisation zugreifen zu können. <br><br>
@@ -619,7 +623,7 @@ $string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
 $string['exammanagementname'] = 'Prüfungsorganisation';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
-$string['pluginadministration'] = 'Administration der Prüfungsverwaltung';
+$string['pluginadministration'] = 'Administration der Prüfungsorganisation';
 $string['security_password'] = 'Passwortschutz';
 $string['new_password'] = 'Neues Passwort';
 $string['security_password_help'] = 'Durch das Festlegen eines Sicherheitspasswortes können Sie den Zugang zu dieser Prüfungsorganisation gegenüber anderen PANDA-Benutzern (z. B. Ihren studentischen Tutoren) begrenzen. Diese müssen dann zunächst das Passwort eingeben, bevor sie Zugang zu den Inhalten der Prüfungsorganisation erhalten.';
@@ -637,8 +641,13 @@ $string['exammanagement:takeexams'] = 'Prüfung ablegen';
 $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
 $string['exammanagement:adddefaultrooms'] = 'Standardräume importieren';
 $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
+$string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
 
-//delete_old_exam_data.php
+//settings.php - admin settings
+$string['moodleid_supportuser'] = 'Moodle-ID des Supportbenutzers';
+$string['moodleid_supportuser_help'] = 'Der oder die Benutzerin, deren systeminterne ID hier eingetragen wurde, erhält sämtliche bei der Beantragung der Zurücksetzung des Passwortes einer Prüfungsorganisation durch NutzerInnen automatisch generierten Nachrichten. Der Benutzer (am besten ein ausschließlich für den Support angelegter Benutzer mit einer der Rollen Admin, Manager oder Kursersteller) erhält die Nachricht sowohl als PANDA-Benachrichtigung als auch an die in seinem Profil hinterlegte E-Mail-Adresse weitergeleitet. Wurde hier noch keine ID eingetragen können NutzerInnen nicht das Zurücksetzen des Passwortes in ihrer Prüfungsorganisation beantragen.';
+
+//delete_old_exam_data.php - task
 $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';
 $string['warningmailsubjectone'] = 'Erinnerung: Zukünftige Löschung der Prüfungsdaten';
 $string['warningmailsubjecttwo'] = 'Warnung: Baldige Löschung der Prüfungsdaten';
