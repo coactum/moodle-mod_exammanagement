@@ -72,12 +72,13 @@ class exammanagement_overview implements renderable, templatable {
   protected $examreviewroom;
   protected $examreviewvisible;
   protected $resultsenteredafterexamreview;
+  protected $deleted;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -112,6 +113,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->examreviewroom = $examreviewroom;
         $this->examreviewvisible = $examreviewvisible;
         $this->resultsenteredafterexamreview = $resultsenteredafterexamreview;
+        $this->deleted = $deleted;
     }
 
     /**
@@ -156,6 +158,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->examreviewroom = $this->examreviewroom;
         $data->examreviewvisible = $this->examreviewvisible;
         $data->resultsenteredafterexamreview = $this->resultsenteredafterexamreview;
+        $data->deleted = $this->deleted;
         return $data;
     }
 

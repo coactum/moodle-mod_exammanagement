@@ -25,14 +25,32 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// $tasks = [
-//     [
-//         'classname' => 'mod_exammanagement\task\delete_old_exam_data',
-//         'blocking' => 0,
-//         'minute' => '00',
-//         'hour' => '23',
-//         'day' => '*',
-//         'month' => '*',
-//         'dayofweek' => '*',
-//     ],
-// ];
+$tasks = [
+     [
+         'classname' => 'mod_exammanagement\task\delete_temp_participants',
+         'blocking' => 0,
+         'minute' => '50',
+         'hour' => '23',
+         'day' => '*',
+         'month' => '*',
+         'dayofweek' => '*',
+     ],
+     [
+        'classname' => 'mod_exammanagement\task\check_participants_without_moodle_account',
+        'blocking' => 0,
+        'minute' => '52',
+        'hour' => '23',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+    [
+        'classname' => 'mod_exammanagement\task\delete_old_exam_data',
+        'blocking' => 0,
+        'minute' => '59',
+        'hour' => '23',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+ ];

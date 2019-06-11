@@ -64,6 +64,13 @@ class MoodleDB{
 
 		$DB->set_field($table, $newfield, $newvalue, $conditions);
 	}
+	
+	public function setFieldInDBSelect($table, $newfield, $newvalue, $select, $params=null){
+		global $DB;
+
+		$DB->set_field_select($table, $newfield, $newvalue, $select, $params);
+	}
+	
 
 	public function getRecordFromDB($table, $condition){
 		global $DB;
@@ -102,7 +109,12 @@ class MoodleDB{
 
 		return $DB->record_exists($table, $conditions);
 	}
-	
+
+	public function checkIfRecordExistsSelect($table, $select, $params=null){
+		global $DB;
+
+		return 	$DB->record_exists_select($table, $select, $params);
+	}
 
 	public function UpdateRecordInDB($table, $obj){
 		global $DB;

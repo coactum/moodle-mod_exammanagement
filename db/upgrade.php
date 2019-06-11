@@ -167,5 +167,20 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2019010700, 'exammanagement');
     }
 
+    if ($oldversion < 2019061700) { // added column for check if all data is deleted
+        var_dump($oldversion);
+        // Define field importfileheaders to be added to exammanagement.
+        $table = new xmldb_table('exammanagement');
+        $field = new xmldb_field('datadeleted', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
+ 
+        // Conditionally launch add field for exammanagement.
+        if (!$dbman->field_exists($table, $field)) {
+           $dbman->add_field($table, $field);
+        }
+
+        // Exammanagement savepoint reached.
+        upgrade_mod_savepoint(true, 2019061700, 'exammanagement');
+    }
+
     return true;
 }

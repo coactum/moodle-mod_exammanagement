@@ -41,158 +41,163 @@ $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+  if($ExammanagementInstanceObj->isExamDataDeleted()){
+    $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+  } else {
 
-      global $CFG;
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      //$MoodleObj->setPage('exportParticipantsListPlaces');
+        global $CFG;
 
-      if (!$ExammanagementInstanceObj->getRoomsCount()) {
-        $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
-      } else if (!$UserObj->getParticipantsCount()) {
-          $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-      } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-          $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
-      }
+        //$MoodleObj->setPage('exportParticipantsListPlaces');
 
-      //include pdf
-      require_once(__DIR__.'/classes/pdfs/participantsList.php');
-
-      define("WIDTH_COLUMN_NAME", 200);
-      define("WIDTH_COLUMN_FIRSTNAME", 150);
-      define("WIDTH_COLUMN_MATNO", 60);
-      define("WIDTH_COLUMN_ROOM", 90);
-      define("WIDTH_COLUMN_PLACE", 70);
-
-      // Include the main TCPDF library (search for installation path).
-      require_once(__DIR__.'/../../config.php');
-      require_once($CFG->libdir.'/pdflib.php');
-
-      // create new PDF document
-      $pdf = new participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-
-      // set document information
-      $pdf->SetCreator(PDF_CREATOR);
-      $pdf->SetAuthor('PANDA');
-      $pdf->SetTitle(get_string('participantslist_places', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
-      $pdf->SetSubject(get_string('participantslist_places', 'mod_exammanagement'));
-      $pdf->SetKeywords(get_string('participantslist_places', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
-
-      // set default monospaced font
-      $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-      // set default header data
-      $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-      // set margins
-      $pdf->SetMargins(25, 55, 25);
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-      //set auto page breaks
-      $pdf->SetAutoPageBreak(TRUE, 19);
-
-      // set image scale factor
-      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-      // set some language-dependent strings (optional)
-      // if (@file_exists(__DIR__.'/lang/eng.php')) {
-      // 	require_once(__DIR__.'/lang/eng.php');
-      // 	$pdf->setLanguageArray($l);
-      // }
-
-      // ---------------------------------------------------------
-
-      // Set font
-      // dejavusans is a UTF-8 Unicode font, if you only need to
-      // print standard ASCII chars, you can use core fonts like
-      // helvetica or times to reduce file size.
-      $pdf->SetFont('freeserif', '', 10);
-
-      // Add a page
-      // This method has several options, check the source code documentation for more information.
-      $pdf->AddPage();
-
-      // get users and construct content for document
-      $roomsArr = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
-      $fill = false;
-      $previousRoom;
-      $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-
-      foreach ($roomsArr as $roomID){
-        $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
-
-        $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
-
-        if($participantsArray){
-          if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-            //new room -> finish and print current table and begin new page
-            $tbl .= "</table>";
-            $pdf->writeHTML($tbl, true, false, false, false, '');
-            $pdf->AddPage();
-            $fill = false;
-            $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-          }
-
-          usort($participantsArray, function($a, $b){ //sort array by custom user function
-
-            return strnatcmp($a->place, $b->place); // sort by place
-
-          });
-
-        foreach ($participantsArray as $participant){
-          $user = $UserObj->getMoodleUser($participant->moodleuserid);
-
-          if($user){
-              $name = $user->lastname;
-              $firstname = $user->firstname;
-          } else {
-              $name = $participant->lastname;
-              $firstname = $participant->firstname;
-          }
-
-          $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
-
-          $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $firstname . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
-          $tbl .= "</tr>";
-
-          $fill = !$fill;
+        if (!$ExammanagementInstanceObj->getRoomsCount()) {
+          $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
+        } else if (!$UserObj->getParticipantsCount()) {
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+        } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
         }
 
-        $previousRoom = $currentRoom;
+        //include pdf
+        require_once(__DIR__.'/classes/pdfs/participantsList.php');
+
+        define("WIDTH_COLUMN_NAME", 200);
+        define("WIDTH_COLUMN_FIRSTNAME", 150);
+        define("WIDTH_COLUMN_MATNO", 60);
+        define("WIDTH_COLUMN_ROOM", 90);
+        define("WIDTH_COLUMN_PLACE", 70);
+
+        // Include the main TCPDF library (search for installation path).
+        require_once(__DIR__.'/../../config.php');
+        require_once($CFG->libdir.'/pdflib.php');
+
+        // create new PDF document
+        $pdf = new participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('PANDA');
+        $pdf->SetTitle(get_string('participantslist_places', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
+        $pdf->SetSubject(get_string('participantslist_places', 'mod_exammanagement'));
+        $pdf->SetKeywords(get_string('participantslist_places', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+        // set margins
+        $pdf->SetMargins(25, 55, 25);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        //set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, 19);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set some language-dependent strings (optional)
+        // if (@file_exists(__DIR__.'/lang/eng.php')) {
+        // 	require_once(__DIR__.'/lang/eng.php');
+        // 	$pdf->setLanguageArray($l);
+        // }
+
+        // ---------------------------------------------------------
+
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        $pdf->SetFont('freeserif', '', 10);
+
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+        $pdf->AddPage();
+
+        // get users and construct content for document
+        $roomsArr = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
+        $fill = false;
+        $previousRoom;
+        $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
+
+        foreach ($roomsArr as $roomID){
+          $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
+
+          $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
+
+          if($participantsArray){
+            if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+              //new room -> finish and print current table and begin new page
+              $tbl .= "</table>";
+              $pdf->writeHTML($tbl, true, false, false, false, '');
+              $pdf->AddPage();
+              $fill = false;
+              $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
+            }
+
+            usort($participantsArray, function($a, $b){ //sort array by custom user function
+
+              return strnatcmp($a->place, $b->place); // sort by place
+
+            });
+
+          foreach ($participantsArray as $participant){
+            $user = $UserObj->getMoodleUser($participant->moodleuserid);
+
+            if($user){
+                $name = $user->lastname;
+                $firstname = $user->firstname;
+            } else {
+                $name = $participant->lastname;
+                $firstname = $participant->firstname;
+            }
+
+            $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+
+            $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $firstname . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
+            $tbl .= "</tr>";
+
+            $fill = !$fill;
+          }
+
+          $previousRoom = $currentRoom;
+          }
+
         }
 
-      }
+        $tbl .= "</table>";
 
-      $tbl .= "</table>";
+        // Print text using writeHTMLCell()
 
-      // Print text using writeHTMLCell()
+        $pdf->writeHTML($tbl, true, false, false, false, '');
 
-      $pdf->writeHTML($tbl, true, false, false, false, '');
+        //generate filename without umlaute
+        $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+        $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+        $filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
+        $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-      //generate filename without umlaute
-      $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-      $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-      $filenameUmlaute = get_string("participantslist_places", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
-      $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
+        // ---------------------------------------------------------
 
-      // ---------------------------------------------------------
+        // Close and output PDF document
+        // This method has several options, check the source code documentation for more information.
+        $pdf->Output($filename, 'D');
 
-      // Close and output PDF document
-      // This method has several options, check the source code documentation for more information.
-      $pdf->Output($filename, 'D');
+        //============================================================+
+        // END OF FILE
+        //============================================================+
 
-      //============================================================+
-      // END OF FILE
-      //============================================================+
-
-  } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-    redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+    }
   }
 
 } else {

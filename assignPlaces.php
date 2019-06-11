@@ -43,80 +43,84 @@ $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-  if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+  if($ExammanagementInstanceObj->isExamDataDeleted()){
+    $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+  } else {
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-    //$MoodleObj->setPage('assignPlaces');
+      //$MoodleObj->setPage('assignPlaces');
 
-    $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
-    $participantsArray = array_values($UserObj->getAllExamParticipants());
-    $assignmentArray = array();
-    $newAssignmentObj = '';
+      $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
+      $participantsArray = array_values($UserObj->getAllExamParticipants());
+      $assignmentArray = array();
+      $newAssignmentObj = '';
 
-    if(!$savedRoomsArray){
-      $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
+      if(!$savedRoomsArray){
+        $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
 
-    } elseif(!$participantsArray){
-      $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+      } elseif(!$participantsArray){
+        $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 
-    }
-
-    $participantsCount = 0;
-
-    usort($savedRoomsArray, function($a, $b){ //sort array by custom user function (big rooms to smnall rooms)
-
-      global $ExammanagementInstanceObj;
-
-      $aPlaces = $ExammanagementInstanceObj->getRoomObj($a)->places;
-      $bPlaces = $ExammanagementInstanceObj->getRoomObj($b)->places;
-      
-      if ($aPlaces == $bPlaces) { //if names are even sort by first name
-          return strcmp($aPlaces, $bPlaces);
-      } else{
-          return strcmp($aPlaces, $bPlaces); // else sort by last name
       }
 
-    });
+      $participantsCount = 0;
 
-    foreach($savedRoomsArray as $key => $roomID){
+      usort($savedRoomsArray, function($a, $b){ //sort array by custom user function (big rooms to smnall rooms)
 
-      $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
+        global $ExammanagementInstanceObj;
 
-      if($RoomObj){
-        $places = json_decode($RoomObj->places);	//get Places of this Room
+        $aPlaces = $ExammanagementInstanceObj->getRoomObj($a)->places;
+        $bPlaces = $ExammanagementInstanceObj->getRoomObj($b)->places;
+        
+        if ($aPlaces == $bPlaces) { //if names are even sort by first name
+            return strcmp($aPlaces, $bPlaces);
+        } else{
+            return strcmp($aPlaces, $bPlaces); // else sort by last name
+        }
 
-        foreach($participantsArray as $key1 => $participantObj){
-  
-          if($key1 >= $participantsCount){
-            
-            $participantObj->roomid = $RoomObj->roomid;
-            $participantObj->roomname = $RoomObj->name;
-            $participantObj->place = array_shift($places);
-  
-            // set room and place
-            $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-  
-            $participantsCount +=1;
-  
-            if($places == NULL){  // if all places of room are assigned
-              break;
+      });
+
+      foreach($savedRoomsArray as $key => $roomID){
+
+        $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
+
+        if($RoomObj){
+          $places = json_decode($RoomObj->places);	//get Places of this Room
+
+          foreach($participantsArray as $key1 => $participantObj){
+    
+            if($key1 >= $participantsCount){
+              
+              $participantObj->roomid = $RoomObj->roomid;
+              $participantObj->roomname = $RoomObj->name;
+              $participantObj->place = array_shift($places);
+    
+              // set room and place
+              $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+    
+              $participantsCount +=1;
+    
+              if($places == NULL){  // if all places of room are assigned
+                break;
+              }
+    
+            } else if($participantsCount == count($participantsArray)){ //if all users have a place
+              break 2;
             }
-  
-          } else if($participantsCount == count($participantsArray)){ //if all users have a place
-            break 2;
           }
         }
+        
       }
-      
+
+      if($participantsCount < count($participantsArray)){	//if users are left without a room
+        $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
+      }
+
+      $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+
+    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
-
-    if($participantsCount < count($participantsArray)){	//if users are left without a room
-      $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
-    }
-
-    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-
-  } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-    redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
   }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');

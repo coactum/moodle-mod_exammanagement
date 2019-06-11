@@ -44,316 +44,319 @@ define( "SEPARATOR", chr(9) ); //Tabulator
 define( "NEWLINE", "\r\n" );
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+	if($ExammanagementInstanceObj->isExamDataDeleted()){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else {
+        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page    
 
-	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page    
+            global $CFG;
 
-        global $CFG;
+            //$MoodleObj->setPage('exportResultsPAULFile');
 
-        //$MoodleObj->setPage('exportResultsPAULFile');
+            if(!$ExammanagementInstanceObj->getInputResultsCount()){
+                $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
+            } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+                $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
+            }
 
-        if(!$ExammanagementInstanceObj->getInputResultsCount()){
-            $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
-        } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
-            $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
-        }
+            $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
+            $ResultFilesZipArchive = false;
 
-        $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
-        $ResultFilesZipArchive = false;
+            $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
 
-        $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
+            if ( !$PAULFileHeadersArr ){
+            $examdate = $ExammanagementInstanceObj->getHrExamtime();
+            $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
+            $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
 
-        if ( !$PAULFileHeadersArr ){
-        $examdate = $ExammanagementInstanceObj->getHrExamtime();
-        $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
-        $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
+            $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
-        $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
-
-        if($afterexamreview == false){
-            $ParticipantsArray = $UserObj->getAllExamParticipants();
-        } else {
-            $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
-        }
-
-        usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
-            global $UserObj;
-
-            if($a->moodleuserid){
-            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+            if($afterexamreview == false){
+                $ParticipantsArray = $UserObj->getAllExamParticipants();
             } else {
-            $aFirstname = $a->firstname;
-            $aLastname = $a->lastname;
+                $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
             }
 
-            if($b->moodleuserid){
-            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-            } else {
-            $bFirstname = $b->firstname;
-            $bLastname = $b->lastname;
+            usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+                global $UserObj;
+
+                if($a->moodleuserid){
+                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+                } else {
+                $aFirstname = $a->firstname;
+                $aLastname = $a->lastname;
+                }
+
+                if($b->moodleuserid){
+                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                } else {
+                $bFirstname = $b->firstname;
+                $bLastname = $b->lastname;
+                }
+
+                if ($aLastname == $bLastname) { //if names are even sort by first name
+                    return strcmp($aFirstname, $bFirstname);
+                } else{
+                    return strcmp($aLastname, $bLastname); // else sort by last name
+                }
+
+            });
+
+            foreach($ParticipantsArray as $participant){
+
+                $resultWithBonus = "";
+                $resultState = $UserObj->getExamState($participant);
+
+                if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                    $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                } else {
+                    $resultWithBonus = get_string($resultState, "mod_exammanagement");
+                }
+
+                $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+
+                if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
+                    $user = $UserObj->getMoodleUser($participant->moodleuserid);
+                    $foreName = '"' . $user->firstname . '"';
+                    $middleName = '"' . $user->middlename . '"';
+                    $name = '"' . $user->lastname . '"';
+                } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
+                    $foreName = '"' . $participant->firstname . '"';
+                    $middleName = '""';
+                    $name = '"' . $participant->lastname . '"';
+                }
+
+                $examNumber = '""';
+                $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
+                $resultWithBonus = '"' . $resultWithBonus . '"';
+
+                $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
             }
-
-            if ($aLastname == $bLastname) { //if names are even sort by first name
-                return strcmp($aFirstname, $bFirstname);
-            } else{
-                return strcmp($aLastname, $bLastname); // else sort by last name
-            }
-
-        });
-
-        foreach($ParticipantsArray as $participant){
-
-            $resultWithBonus = "";
-            $resultState = $UserObj->getExamState($participant);
-
-            if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
-            } else {
-                $resultWithBonus = get_string($resultState, "mod_exammanagement");
-            }
-
-            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
-
-            if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
-                $user = $UserObj->getMoodleUser($participant->moodleuserid);
-                $foreName = '"' . $user->firstname . '"';
-                $middleName = '"' . $user->middlename . '"';
-                $name = '"' . $user->lastname . '"';
-            } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
-                $foreName = '"' . $participant->firstname . '"';
-                $middleName = '""';
-                $name = '"' . $participant->lastname . '"';
-            }
-
-            $examNumber = '""';
-            $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
-            $resultWithBonus = '"' . $resultWithBonus . '"';
-
-            $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
-        }
-
-        //generate filename without umlaute
-        $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-        $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
-        $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-        //convert string to Latin1
-        $textfile = utf8_decode($textfile);
-
-        //return content as file
-        header( "Content-Type: application/force-download" );
-        header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
-        header( "Content-Length: ". strlen( $textfile ) );
-        echo $textfile;
-
-        } else {
 
             //generate filename without umlaute
             $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
             $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
+            $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
             $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-            if(count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))){
+            //convert string to Latin1
+            $textfile = utf8_decode($textfile);
 
-                // Prepare File
-                $tempfile = tempnam(sys_get_temp_dir(), "examresults.zip");
-                $ResultFilesZipArchive = new ZipArchive();
-                $ResultFilesZipArchive->open($tempfile, ZipArchive::OVERWRITE);
-            }
+            //return content as file
+            header( "Content-Type: application/force-download" );
+            header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
+            header( "Content-Length: ". strlen( $textfile ) );
+            echo $textfile;
 
-            $filecount = 0;
+            } else {
 
-            $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader(0);
+                //generate filename without umlaute
+                $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
+                $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
+                $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
+                $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-            if($ParticipantsArray){
-                usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
-                    global $UserObj;
-        
-                    if($a->moodleuserid){
-                    $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                    $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-                    } else {
-                    $aFirstname = $a->firstname;
-                    $aLastname = $a->lastname;
-                    }
-        
-                    if($b->moodleuserid){
-                    $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                    $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-                    } else {
-                    $bFirstname = $b->firstname;
-                    $bLastname = $b->lastname;
-                    }
-        
-                    if ($aLastname == $bLastname) { //if names are even sort by first name
-                        return strcmp($aFirstname, $bFirstname);
-                    } else{
-                        return strcmp($aLastname, $bLastname); // else sort by last name
-                    }
-        
-                });
-            }
-            
+                if(count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))){
 
-            if($ParticipantsArray && $afterexamreview == false){
-
-                $examdate = $ExammanagementInstanceObj->getHrExamtime();
-
-                $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
-                $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';    
-                $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
-
-                foreach($ParticipantsArray as $participant){
-        
-                        $resultWithBonus = "";
-                        $resultState = $UserObj->getExamState($participant);
-        
-                        if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
-                        } else {
-                            $resultWithBonus = get_string($resultState, "mod_exammanagement");
-                        }
-        
-                        $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
-        
-                        if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
-                            $user = $UserObj->getMoodleUser($participant->moodleuserid);
-                            $foreName = '"' . $user->firstname . '"';
-                            $middleName = '"' . $user->middlename . '"';
-                            $name = '"' . $user->lastname . '"';
-                        } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
-                            $foreName = '"' . $participant->firstname . '"';
-                            $middleName = '""';
-                            $name = '"' . $participant->lastname . '"';
-                        }
-        
-                        $examNumber = '""';
-                        $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
-                        $resultWithBonus = '"' . $resultWithBonus . '"';
-        
-                        $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                    // Prepare File
+                    $tempfile = tempnam(sys_get_temp_dir(), "examresults.zip");
+                    $ResultFilesZipArchive = new ZipArchive();
+                    $ResultFilesZipArchive->open($tempfile, ZipArchive::OVERWRITE);
                 }
 
-                $filecount += 1;
+                $filecount = 0;
 
-                if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))) && $ResultFilesZipArchive){
-                // add content
-                $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
-
-                }
-            }
-
-            foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
-
-                $ParticipantsArray = false;
-
-                if($afterexamreview == false){
-                    $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
-                } else {
-                    $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
-                }
-
-                usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
-                    global $UserObj;
-        
-                    if($a->moodleuserid){
-                    $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                    $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-                    } else {
-                    $aFirstname = $a->firstname;
-                    $aLastname = $a->lastname;
-                    }
-        
-                    if($b->moodleuserid){
-                    $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                    $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-                    } else {
-                    $bFirstname = $b->firstname;
-                    $bLastname = $b->lastname;
-                    }
-        
-                    if ($aLastname == $bLastname) { //if names are even sort by first name
-                        return strcmp($aFirstname, $bFirstname);
-                    } else{
-                        return strcmp($aLastname, $bLastname); // else sort by last name
-                    }
-        
-                });
-
-                $textfile = false;
+                $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader(0);
 
                 if($ParticipantsArray){
-
-                    $textfile = $PAULFileHeader;
-                    
-                    foreach($ParticipantsArray as $participant){
-        
-                        $resultWithBonus = "";
-                        $resultState = $UserObj->getExamState($participant);
-        
-                        if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                            $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                    usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+                        global $UserObj;
+            
+                        if($a->moodleuserid){
+                        $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                        $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
                         } else {
-                            $resultWithBonus = get_string($resultState, "mod_exammanagement");
+                        $aFirstname = $a->firstname;
+                        $aLastname = $a->lastname;
                         }
-        
-                        $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
-        
-                        if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
-                            $user = $UserObj->getMoodleUser($participant->moodleuserid);
-                            $foreName = '"' . $user->firstname . '"';
-                            $middleName = '"' . $user->middlename . '"';
-                            $name = '"' . $user->lastname . '"';
-                        } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
-                            $foreName = '"' . $participant->firstname . '"';
-                            $middleName = '""';
-                            $name = '"' . $participant->lastname . '"';
+            
+                        if($b->moodleuserid){
+                        $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                        $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                        } else {
+                        $bFirstname = $b->firstname;
+                        $bLastname = $b->lastname;
                         }
-        
-                        $examNumber = '""';
-                        $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
-                        $resultWithBonus = '"' . $resultWithBonus . '"';
-                            
-                        $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+            
+                        if ($aLastname == $bLastname) { //if names are even sort by first name
+                            return strcmp($aFirstname, $bFirstname);
+                        } else{
+                            return strcmp($aLastname, $bLastname); // else sort by last name
+                        }
+            
+                    });
+                }
+                
+
+                if($ParticipantsArray && $afterexamreview == false){
+
+                    $examdate = $ExammanagementInstanceObj->getHrExamtime();
+
+                    $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
+                    $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';    
+                    $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
+
+                    foreach($ParticipantsArray as $participant){
+            
+                            $resultWithBonus = "";
+                            $resultState = $UserObj->getExamState($participant);
+            
+                            if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                            } else {
+                                $resultWithBonus = get_string($resultState, "mod_exammanagement");
+                            }
+            
+                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+            
+                            if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
+                                $user = $UserObj->getMoodleUser($participant->moodleuserid);
+                                $foreName = '"' . $user->firstname . '"';
+                                $middleName = '"' . $user->middlename . '"';
+                                $name = '"' . $user->lastname . '"';
+                            } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
+                                $foreName = '"' . $participant->firstname . '"';
+                                $middleName = '""';
+                                $name = '"' . $participant->lastname . '"';
+                            }
+            
+                            $examNumber = '""';
+                            $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
+                            $resultWithBonus = '"' . $resultWithBonus . '"';
+            
+                            $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                    }
+
+                    $filecount += 1;
+
+                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))) && $ResultFilesZipArchive){
+                    // add content
+                    $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
+
                     }
                 }
 
-                $filecount += 1;
+                foreach($PAULFileHeadersArr as $key => $PAULFileHeader){
 
-                if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))) && $ResultFilesZipArchive){
-                // add content
-                $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
+                    $ParticipantsArray = false;
 
+                    if($afterexamreview == false){
+                        $ParticipantsArray = $UserObj->getAllExamParticipantsByHeader($key+1);
+                    } else {
+                        $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+                    }
+
+                    usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
+                        global $UserObj;
+            
+                        if($a->moodleuserid){
+                        $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
+                        $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
+                        } else {
+                        $aFirstname = $a->firstname;
+                        $aLastname = $a->lastname;
+                        }
+            
+                        if($b->moodleuserid){
+                        $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
+                        $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                        } else {
+                        $bFirstname = $b->firstname;
+                        $bLastname = $b->lastname;
+                        }
+            
+                        if ($aLastname == $bLastname) { //if names are even sort by first name
+                            return strcmp($aFirstname, $bFirstname);
+                        } else{
+                            return strcmp($aLastname, $bLastname); // else sort by last name
+                        }
+            
+                    });
+
+                    $textfile = false;
+
+                    if($ParticipantsArray){
+
+                        $textfile = $PAULFileHeader;
+                        
+                        foreach($ParticipantsArray as $participant){
+            
+                            $resultWithBonus = "";
+                            $resultState = $UserObj->getExamState($participant);
+            
+                            if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
+                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                            } else {
+                                $resultWithBonus = get_string($resultState, "mod_exammanagement");
+                            }
+            
+                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+            
+                            if($participant->moodleuserid !== false && $participant->moodleuserid !== null){
+                                $user = $UserObj->getMoodleUser($participant->moodleuserid);
+                                $foreName = '"' . $user->firstname . '"';
+                                $middleName = '"' . $user->middlename . '"';
+                                $name = '"' . $user->lastname . '"';
+                            } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
+                                $foreName = '"' . $participant->firstname . '"';
+                                $middleName = '""';
+                                $name = '"' . $participant->lastname . '"';
+                            }
+            
+                            $examNumber = '""';
+                            $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
+                            $resultWithBonus = '"' . $resultWithBonus . '"';
+                                
+                            $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                        }
+                    }
+
+                    $filecount += 1;
+
+                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $UserObj->getAllExamParticipantsByHeader(0))) && $ResultFilesZipArchive){
+                    // add content
+                    $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
+
+                    }
+
+                    if($afterexamreview == true){
+                        break;
+                    }
                 }
 
-                if($afterexamreview == true){
-                    break;
+                if($textfile && (count($PAULFileHeadersArr) == 1 || (count($PAULFileHeadersArr) == 0 && $UserObj->getAllExamParticipantsByHeader(0)) || $afterexamreview == true) && $ResultFilesZipArchive == false){
+                    $textfile = utf8_encode($textfile);
+                    header( "Content-Type: application/force-download" );
+                    header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );
+                    header( "Content-Length: ". strlen( $textfile ) );
+                    echo($textfile);
+                } else if($ResultFilesZipArchive){
+                // Close and send to users
+                    $ResultFilesZipArchive->close();
+                    header('Content-Type: application/zip');
+                    header('Content-Length: ' . filesize($tempfile));
+                    header('Content-Disposition: attachment; filename="'.$filename.'.zip"');
+                    readfile($tempfile);
+                    unlink($tempfile);
+                } else {
+                    $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');            
                 }
             }
-
-            if($textfile && (count($PAULFileHeadersArr) == 1 || (count($PAULFileHeadersArr) == 0 && $UserObj->getAllExamParticipantsByHeader(0)) || $afterexamreview == true) && $ResultFilesZipArchive == false){
-                $textfile = utf8_encode($textfile);
-                header( "Content-Type: application/force-download" );
-                header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );
-                header( "Content-Length: ". strlen( $textfile ) );
-                echo($textfile);
-            } else if($ResultFilesZipArchive){
-            // Close and send to users
-                $ResultFilesZipArchive->close();
-                header('Content-Type: application/zip');
-                header('Content-Length: ' . filesize($tempfile));
-                header('Content-Disposition: attachment; filename="'.$filename.'.zip"');
-                readfile($tempfile);
-                unlink($tempfile);
-            } else {
-                $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');            
-            }
+        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
         }
-    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');

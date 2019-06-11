@@ -550,9 +550,6 @@ class User{
 
 	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
 			
-		require_once(__DIR__.'/../ldap/ldapManager.php');
-
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($potentialParticipantId){

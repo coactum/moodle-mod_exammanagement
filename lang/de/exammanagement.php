@@ -47,11 +47,14 @@ $string['bonus_for_exam_not_added'] = 'Es wurden bisher keine Bonusnotenschritte
 $string['exam_review'] = 'Klausureinsicht';
 $string['exam_review_one'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am ';
 $string['exam_review_two'] = 'findet die Klausureinsicht statt in Raum ';
+$string['examdata_deleted_one'] = 'Die am ';
+$string['examdata_deleted_two'] = 'durchgeführte Prüfung ist nun abgeschlossen.';
 
 //exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['maintitle'] = 'Prüfungsorganisation';
 $string['view'] = 'Überblick';
 $string['js_confirm_correction_completion'] = 'Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.';
+$string['data_deleted'] = 'Die Prüfungsdaten aller Teilnehmenden dieser Prüfungsorganisation wurden aus Datenschutzgründen drei Monate nach dem Abschluss der Korrekturphase gelöscht. Diese Prüfungsorganisation kann somit nicht mehr weiter genutzt werden, es können lediglich noch die Basisdaten der Prüfung eingesehen werden.';
 
 //exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
 $string['phase_one'] = 'Vor der Prüfung';
@@ -600,6 +603,7 @@ $string['err_noalphanumeric'] = 'Enthält ungültige Zeichen';
 $string['err_js_internal_error'] = 'Interner Fehler. Bitte erneut versuchen.';
 $string['err_password_incorrect'] = 'Passwort nicht identisch. Bitte erneut eingeben.';
 $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
+$string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['no_param_given'] = 'Matrikelnummernabgleich nicht möglich.';
 
 //universal
@@ -646,6 +650,12 @@ $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes b
 //settings.php - admin settings
 $string['moodleid_supportuser'] = 'Moodle-ID des Supportbenutzers';
 $string['moodleid_supportuser_help'] = 'Der oder die Benutzerin, deren systeminterne ID hier eingetragen wurde, erhält sämtliche bei der Beantragung der Zurücksetzung des Passwortes einer Prüfungsorganisation durch NutzerInnen automatisch generierten Nachrichten. Der Benutzer (am besten ein ausschließlich für den Support angelegter Benutzer mit einer der Rollen Admin, Manager oder Kursersteller) erhält die Nachricht sowohl als PANDA-Benachrichtigung als auch an die in seinem Profil hinterlegte E-Mail-Adresse weitergeleitet. Wurde hier noch keine ID eingetragen können NutzerInnen nicht das Zurücksetzen des Passwortes in ihrer Prüfungsorganisation beantragen.';
+
+//delete_temp_participants.php - task
+$string['delete_temp_participants'] = 'Temporär gespeicherte Teilnehmer löschen';
+
+//check_participants_without_moodle_account.php - task
+$string['check_participants_without_moodle_account'] = 'Teilnehmer ohne Moodle Account überprüfen';
 
 //delete_old_exam_data.php - task
 $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';

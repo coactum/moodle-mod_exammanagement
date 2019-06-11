@@ -46,238 +46,243 @@ $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-	if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+	if($ExammanagementInstanceObj->isExamDataDeleted()){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else {
 
-		if(!$UserObj->getParticipantsCount()){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-		} else if(!$ExammanagementInstanceObj->getTaskCount()){
-			$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
-		}
+		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-		$MoodleObj->setPage('inputResults');
-		$MoodleObj-> outputPageHeader();
+			if(!$UserObj->getParticipantsCount()){
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+			} else if(!$ExammanagementInstanceObj->getTaskCount()){
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
+			}
 
-		$matrnr = false;
-		$case='';
-		$result;
-		$firstname = '';
-		$lastname = '';
+			$MoodleObj->setPage('inputResults');
+			$MoodleObj-> outputPageHeader();
 
-		if ($input){
+			$matrnr = false;
+			$case='';
+			$result;
+			$firstname = '';
+			$lastname = '';
 
-			$filtered_input = preg_replace('/[^0-9]/', '', $input);
+			if ($input){
 
-			if($filtered_input !== $input){ // input containes invalid chars
-				$case = 'novalidmatrnr';
+				$filtered_input = preg_replace('/[^0-9]/', '', $input);
 
-			} else {				//check if input is valid barcode and then convert barcoe to matrnr
-				$inputLength = strlen($filtered_input);
+				if($filtered_input !== $input){ // input containes invalid chars
+					$case = 'novalidmatrnr';
 
-				if ($inputLength == 13){ //input is correctly formatted barcode
-					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
+				} else {				//check if input is valid barcode and then convert barcoe to matrnr
+					$inputLength = strlen($filtered_input);
 
-					if ($checksum == substr($input, -1)){ //if checksum is correct
-						$matrnr = substr($input, 5, -1); //extract matrnr from barcode
-					} else {
-						$case = 'novalidbarcode';
+					if ($inputLength == 13){ //input is correctly formatted barcode
+						$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($input, 0, 12));
+
+						if ($checksum == substr($input, -1)){ //if checksum is correct
+							$matrnr = substr($input, 5, -1); //extract matrnr from barcode
+						} else {
+							$case = 'novalidbarcode';
+						}
+					} else if ($inputLength <= 7){ // input is probably a matrnr
+						$matrnr = $input;
+
+					} else if ($inputLength){ //input is probably a barcode but not correctly formatted (e. g. missing leading zeros)
+
+						$padded_input = str_pad($input, 13, "0", STR_PAD_LEFT);
+
+						$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($padded_input, 0, 12));
+
+						if ($checksum == substr($padded_input, -1)){ //if checksum is correct
+							$matrnr = substr($padded_input, 5, -1); //extract matrnr from barcode
+						} else {
+							$case = 'novalidbarcode';
+						}
+						
 					}
-				} else if ($inputLength <= 7){ // input is probably a matrnr
-					$matrnr = $input;
 
-				} else if ($inputLength){ //input is probably a barcode but not correctly formatted (e. g. missing leading zeros)
+					if($matrnr){
 
-					$padded_input = str_pad($input, 13, "0", STR_PAD_LEFT);
+						if($UserObj->checkIfValidMatrNr($matrnr)){
 
-					$checksum = $ExammanagementInstanceObj->buildChecksumExamLabels(substr($padded_input, 0, 12));
+							// convert matrnr to user
+							$userlogin;
+							$userid;
+		
+								if($LdapManagerObj->is_LDAP_config()){
+										$ldapConnection = $LdapManagerObj->connect_ldap();
+		
+										$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+		
+										if($userlogin){
+											$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+										}
+		
+								} else {
+									$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
+		
+									if(!$userid){
+										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
+									} else {
+										$userlogin = false;
+									}
+		
+								}
+		
+								$participantObj = false;
+		
+								// getParticipantObj
+								if($userid !== false && $userid !== null){
+									$participantObj = $UserObj->getExamParticipantObj($userid);
+								} else if($userlogin !== false && $userlogin !== null){
+									$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+								}
+		
+								// if user is participant
+								if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
+									$case = 'participant';
+		
+									if($userid !== false && $userid !== null){
+										$MoodleUserObj = $UserObj->getMoodleUser($userid);
+										$firstname = $MoodleUserObj->firstname;
+										$lastname = $MoodleUserObj->lastname;
+									} else {
+										$firstname = $participantObj->firstname;
+										$lastname = $participantObj->lastname;
+									}
+		
+									if($UserObj->participantHasResults($participantObj)){ // if participants has results
+										$case = 'participantwithresults';		
+									}
+								} else {
+									$case = 'noparticipant';
+									$matrnr = false;
+								}
+						} else {
+							$case = 'novalidmatrnr';
+							$matrnr = false;
+						}
+					}
 
-					if ($checksum == substr($padded_input, -1)){ //if checksum is correct
-						$matrnr = substr($padded_input, 5, -1); //extract matrnr from barcode
+				}
+
+				
+			}
+
+			//Instantiate Textfield_form
+			$mform = new inputResultsForm(null, array('id'=>$id, 'e'=>$e, 'matrnr'=>$matrnr, 'firstname'=>$firstname, 'lastname'=>$lastname));
+
+			//Form processing and displaying is done here
+			if ($mform->is_cancelled()) {
+				//Handle form cancel operation, if cancel button is present on form
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'success');
+
+			} else if ($fromform = $mform->get_data()) {
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+				$matrval = $fromform->matrval;
+
+				if ($matrval){
+						redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
+				} else {
+					
+					if($LdapManagerObj->is_LDAP_config()){
+							$ldapConnection = $LdapManagerObj->connect_ldap();
+
+							$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
+
+							if($userlogin){
+								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+							}
 					} else {
-						$case = 'novalidbarcode';
+							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+
+							if(!$userid){
+								$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
+							}
+					}
+
+					// getParticipantObj
+					if($userid !== false && $userid !== null){
+						$participantObj = $UserObj->getExamParticipantObj($userid);
+					} else if($userlogin !== false && $userlogin !== null){
+						$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+					}
+
+					if($participantObj){
+						$participantObj->examstate = json_encode($fromform->state);
+
+						if($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1'){
+								foreach ($fromform->points as $task => $points){
+										$fromform->points[$task] = 0;
+								}
+						}
+
+						$participantObj->exampoints = json_encode($fromform->points);
+						$participantObj->timeresultsentered = time();
+
+						$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+						if($update){
+							redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), null, null, null);
+						} else {
+							redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+						}
+
+
+					} else{
+						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('noparticipant', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+
 					}
 					
 				}
 
-				if($matrnr){
-
-					if($UserObj->checkIfValidMatrNr($matrnr)){
-
-						// convert matrnr to user
-						$userlogin;
-						$userid;
-	
-							if($LdapManagerObj->is_LDAP_config()){
-									$ldapConnection = $LdapManagerObj->connect_ldap();
-	
-									$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
-	
-									if($userlogin){
-										$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-									}
-	
-							} else {
-								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-	
-								if(!$userid){
-									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
-								} else {
-									$userlogin = false;
-								}
-	
-							}
-	
-							$participantObj = false;
-	
-							// getParticipantObj
-							if($userid !== false && $userid !== null){
-								$participantObj = $UserObj->getExamParticipantObj($userid);
-							} else if($userlogin !== false && $userlogin !== null){
-								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-							}
-	
-							// if user is participant
-							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
-								$case = 'participant';
-	
-								if($userid !== false && $userid !== null){
-									$MoodleUserObj = $UserObj->getMoodleUser($userid);
-									$firstname = $MoodleUserObj->firstname;
-									$lastname = $MoodleUserObj->lastname;
-								} else {
-									$firstname = $participantObj->firstname;
-									$lastname = $participantObj->lastname;
-								}
-	
-								if($UserObj->participantHasResults($participantObj)){ // if participants has results
-									$case = 'participantwithresults';		
-								}
-							} else {
-								$case = 'noparticipant';
-								$matrnr = false;
-							}
-					} else {
-						$case = 'novalidmatrnr';
-						$matrnr = false;
-					}
-				}
-
-			}
-
-			
-		}
-
-		//Instantiate Textfield_form
-		$mform = new inputResultsForm(null, array('id'=>$id, 'e'=>$e, 'matrnr'=>$matrnr, 'firstname'=>$firstname, 'lastname'=>$lastname));
-
-		//Form processing and displaying is done here
-		if ($mform->is_cancelled()) {
-			//Handle form cancel operation, if cancel button is present on form
-			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'success');
-
-		} else if ($fromform = $mform->get_data()) {
-		//In this case you process validated data. $mform->get_data() returns data posted in form.
-
-			$matrval = $fromform->matrval;
-
-			if ($matrval){
-					redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
 			} else {
-				
-				if($LdapManagerObj->is_LDAP_config()){
-						$ldapConnection = $LdapManagerObj->connect_ldap();
+			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+			// or on the first display of the form.
 
-						$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
+				switch ($case) {
+					case 'participantwithresults':
 
-						if($userlogin){
-							$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+						$stateObj = json_decode($participantObj->examstate);
+						$pointsArr = json_decode($participantObj->exampoints);
+
+						$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$stateObj->nt, 'state[fa]'=>$stateObj->fa, 'state[ill]'=>$stateObj->ill));
+
+						foreach ($pointsArr as $key=>$points){
+							$mform->set_data(array('points['.$key.']'=>$points));
 						}
-				} else {
-						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
-
-						if(!$userid){
-							$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
-						}
+						break;
+					case 'participant':
+								$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr));
+						break;
+					case 'noparticipant':
+								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+								\core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
+						break;
+						case 'novalidmatrnr':
+								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+								\core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
+						break;
+						case 'novalidbarcode':
+								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+								\core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
+						break;
+						default:
+								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+								break;
 				}
 
-				// getParticipantObj
-				if($userid !== false && $userid !== null){
-					$participantObj = $UserObj->getExamParticipantObj($userid);
-				} else if($userlogin !== false && $userlogin !== null){
-					$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-				}
-
-				if($participantObj){
-					$participantObj->examstate = json_encode($fromform->state);
-
-					if($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1'){
-							foreach ($fromform->points as $task => $points){
-									$fromform->points[$task] = 0;
-							}
-					}
-
-					$participantObj->exampoints = json_encode($fromform->points);
-					$participantObj->timeresultsentered = time();
-
-					$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-					if($update){
-						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), null, null, null);
-					} else {
-						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
-					}
-
-
-				} else{
-					redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('noparticipant', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
-
-				}
-				
+			//displays the form
+			$mform->display();
 			}
 
-		} else {
-		// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-		// or on the first display of the form.
+			$MoodleObj->outputFooter();
 
-			switch ($case) {
-				case 'participantwithresults':
-
-					$stateObj = json_decode($participantObj->examstate);
-					$pointsArr = json_decode($participantObj->exampoints);
-
-					$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$stateObj->nt, 'state[fa]'=>$stateObj->fa, 'state[ill]'=>$stateObj->ill));
-
-					foreach ($pointsArr as $key=>$points){
-						$mform->set_data(array('points['.$key.']'=>$points));
-					}
-					break;
-				case 'participant':
-							$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr));
-					break;
-				case 'noparticipant':
-							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
-					break;
-					case 'novalidmatrnr':
-							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
-					break;
-					case 'novalidbarcode':
-							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							\core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
-					break;
-					default:
-							$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-							break;
-			}
-
-		//displays the form
-		$mform->display();
+		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
-
-		$MoodleObj->outputFooter();
-
-	} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-    }
+	}
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

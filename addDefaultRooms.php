@@ -42,76 +42,81 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if($ExammanagementInstanceObj->isExamDataDeleted()){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else {
 
-        $MoodleObj->setPage('addDefaultRooms');
-        $MoodleObj->outputPageHeader();
+        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-        //Instantiate form
-        $mform = new addDefaultRoomsForm(null, array('id'=>$id, 'e'=>$e));
+            $MoodleObj->setPage('addDefaultRooms');
+            $MoodleObj->outputPageHeader();
 
-        //Form processing and displaying is done here
-        if ($mform->is_cancelled()) {
-            //Handle form cancel operation, if cancel button is present on form
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+            //Instantiate form
+            $mform = new addDefaultRoomsForm(null, array('id'=>$id, 'e'=>$e));
 
-        } else if ($fromform = $mform->get_data()) {
-            //In this case you process validated data. $mform->get_data() returns data posted in form.
+            //Form processing and displaying is done here
+            if ($mform->is_cancelled()) {
+                //Handle form cancel operation, if cancel button is present on form
+                redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
-            // retrieve file from form
-            $defaultRoomsFile = $mform->get_file_content('defaultrooms_list');
+            } else if ($fromform = $mform->get_data()) {
+                //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-            if($defaultRoomsFile){
+                // retrieve file from form
+                $defaultRoomsFile = $mform->get_file_content('defaultrooms_list');
 
-                if($ExammanagementInstanceObj->getDefaultRooms()){
-                    $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
+                if($defaultRoomsFile){
+
+                    if($ExammanagementInstanceObj->getDefaultRooms()){
+                        $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
+                    }
+
+                    $fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
+
+                    foreach ($fileContentArr as $key => $roomstr){
+
+                        $roomParameters = explode('+', $roomstr);
+
+                        $roomObj = new stdClass();
+                        $roomObj->roomid = $roomParameters[0];
+                        $roomObj->name = $roomParameters[1];
+                        $roomObj->description = $roomParameters[2];
+
+                        $svgStr = base64_encode($roomParameters[4]);
+
+                        $roomObj->seatingplan = $svgStr;
+                        $roomObj->places = $roomParameters[3];
+                        $roomObj->type = 'defaultroom';
+                        $roomObj->moodleuserid = NULL;
+                        $roomObj->misc = NULL;
+
+                        $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
+                    }
+
+                    if($import){
+                        redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, notification::NOTIFY_SUCCESS);
+                    } else {
+                        redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+                    }
                 }
 
-                $fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
+            } else {
+                // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // or on the first display of the form.
 
-                foreach ($fileContentArr as $key => $roomstr){
+                //Set default data (if any)
+                $mform->set_data(array('id'=>$id));
 
-                    $roomParameters = explode('+', $roomstr);
-
-                    $roomObj = new stdClass();
-                    $roomObj->roomid = $roomParameters[0];
-                    $roomObj->name = $roomParameters[1];
-                    $roomObj->description = $roomParameters[2];
-
-                    $svgStr = base64_encode($roomParameters[4]);
-
-                    $roomObj->seatingplan = $svgStr;
-                    $roomObj->places = $roomParameters[3];
-                    $roomObj->type = 'defaultroom';
-                    $roomObj->moodleuserid = NULL;
-                    $roomObj->misc = NULL;
-
-                    $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
-                }
-
-                if($import){
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, notification::NOTIFY_SUCCESS);
-                } else {
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
-                }
+                //displays the form
+                $mform->display();
             }
 
-        } else {
-            // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-            // or on the first display of the form.
+            $MoodleObj->outputFooter();
 
-            //Set default data (if any)
-            $mform->set_data(array('id'=>$id));
-
-            //displays the form
-            $mform->display();
-        }
-
-        $MoodleObj->outputFooter();
-
-    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-    }   
+        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+        }   
+    }
 } else {
 
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');

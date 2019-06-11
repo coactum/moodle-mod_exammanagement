@@ -25,7 +25,6 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
-use mod_exammanagement\ldap\ldapManager;
 
 use moodleform;
 
@@ -36,7 +35,6 @@ global $CFG, $PAGE;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
-require_once(__DIR__.'/../ldap/ldapManager.php');
 
 class participantsOverviewForm extends moodleform {
 

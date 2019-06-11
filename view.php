@@ -65,75 +65,79 @@ $MoodleDBObj = MoodleDB::getInstance();
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teacher
 
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
-        if ($calledfromformdt) { // saveDateTime
 
-            if ($datetimevisible) {
-                $ExammanagementInstanceObj->moduleinstance->datetimevisible = true;
-            } else {
-                $ExammanagementInstanceObj->moduleinstance->datetimevisible = false;
-            }
-    
-            $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-            }
-        } elseif ($calledfromformroom) { // saveRoom
-    
-            if ($roomvisible) {
-                $ExammanagementInstanceObj->moduleinstance->roomvisible = true;
-            } else {
-                $ExammanagementInstanceObj->moduleinstance->roomvisible = false;
-            }
-    
-            $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-            }
-        } elseif ($calledfromformplace) { // savePlace
-    
-            if ($placevisible) {
-                $ExammanagementInstanceObj->moduleinstance->placevisible = true;
-            } else {
-                $ExammanagementInstanceObj->moduleinstance->placevisible = false;
-            }
-    
-            $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-            }
-        } elseif ($calledfromformcorrection) { // save correction as completed
-    
-            if ($correctioncompleted) {
-                $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
-            } else {
-                $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
-            }
-    
-            $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-            }
-        } elseif ($calledfromformexamreview) { // save exam review
-    
-            if ($examreviewvisible) {
-                $ExammanagementInstanceObj->moduleinstance->examreviewvisible = true;
-            } else {
-                $ExammanagementInstanceObj->moduleinstance->examreviewvisible = false;
-            }
-    
-            $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if ($update) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-            } else {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+        if(!$ExammanagementInstanceObj->isExamDataDeleted()){
+        
+            if ($calledfromformdt) { // saveDateTime
+
+                if ($datetimevisible) {
+                    $ExammanagementInstanceObj->moduleinstance->datetimevisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->datetimevisible = false;
+                }
+        
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformroom) { // saveRoom
+        
+                if ($roomvisible) {
+                    $ExammanagementInstanceObj->moduleinstance->roomvisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->roomvisible = false;
+                }
+        
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformplace) { // savePlace
+        
+                if ($placevisible) {
+                    $ExammanagementInstanceObj->moduleinstance->placevisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->placevisible = false;
+                }
+        
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformcorrection) { // save correction as completed
+        
+                if ($correctioncompleted) {
+                    $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
+                }
+        
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformexamreview) { // save exam review
+        
+                if ($examreviewvisible) {
+                    $ExammanagementInstanceObj->moduleinstance->examreviewvisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->examreviewvisible = false;
+                }
+        
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
             }
         }
     
@@ -159,18 +163,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
         // delete temp participants and headers if exist
     
-        $tempparticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));
+        if ($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $id))) {
+            $ExammanagementInstanceObj->moduleinstance->tempimportfileheader = null;
     
-        $ExammanagementInstanceObj->moduleinstance->tempimportfileheader = null;
-    
-        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-    
-        if ($tempparticipants && $MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $id))) {
+            $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
             $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id));
         }
     
         // reset phase information if participants are deleted
-        if (!$UserObj->getParticipantsCount()) {
+        if (!$ExammanagementInstanceObj->isExamDataDeleted() && !$UserObj->getParticipantsCount()) {
             $ExammanagementInstanceObj->moduleinstance->importfileheader = null;
             $ExammanagementInstanceObj->moduleinstance->datetimevisible = null;
             $ExammanagementInstanceObj->moduleinstance->roomvisible = null;
@@ -242,6 +244,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
+        $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
     
         $resultsenteredafterexamreview = $UserObj->getAllParticipantsWithResultsAfterExamReview();
 
@@ -249,7 +252,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $resultsenteredafterexamreview = count($resultsenteredafterexamreview);
         }
     
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview);
+        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
     
         //$this->debugElementsOverview();
@@ -310,10 +313,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
     }
 
+    //check if exam data is deleted
+    $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
+
     //rendering and displaying content
     $output = $PAGE->get_renderer('mod_exammanagement');
 
-    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonus, $examreviewtime, $examreviewroom);
+    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonus, $examreviewtime, $examreviewroom, $deleted);
     echo $output->render($page);
 
     $MoodleObj->outputFooter();

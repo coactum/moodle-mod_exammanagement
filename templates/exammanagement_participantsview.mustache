@@ -25,6 +25,7 @@
 
    <div class = "container-fluid">
       <h4 class = "m-y-1">{{#str}}examinformation, mod_exammanagement{{/str}}</h4>
+
       <div class = "row">
           <p class = "col-xs-6">
               <strong>{{#str}}state, mod_exammanagement{{/str}}:</strong>
@@ -106,4 +107,9 @@
       </div>
       {{/examreviewtime}}
       {{/isparticipant}}
+      {{/deleted}}
+      {{#deleted}}
+            <p>{{#str}}examdata_deleted_one, mod_exammanagement{{/str}} {{examdate}} {{#str}}examdata_deleted_two, mod_exammanagement{{/str}}</p>
+      {{/deleted}}
+      
 </div>

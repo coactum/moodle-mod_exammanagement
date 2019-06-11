@@ -600,6 +600,16 @@ EOF;
 		}
 	}
 
+	public function isExamDataDeleted(){
+		$isExamDataDeleted = $this->moduleinstance->datadeleted;
+
+		if($isExamDataDeleted){
+				return true;
+		} else {
+				return false;
+		}
+	}
+
 	public function getTaskCount(){
 
 		$tasks = $this->getTasks();
