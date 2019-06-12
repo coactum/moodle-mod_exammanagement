@@ -116,6 +116,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                     $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
                 } else {
                     $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
+                    $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = null;
                 }
         
                 $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);

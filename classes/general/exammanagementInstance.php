@@ -36,17 +36,19 @@ class exammanagementInstance{
 
 	protected $id;
 	protected $e;
+	protected $cron;
 	protected $cm;
 	protected $course;
 	public $moduleinstance;
 	protected $modulecontext;
 
-	private function __construct($id, $e) {
+	public function __construct($id, $e, $cron=false ) {
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$this->id=$id;
 		$this->e=$e;
+		$this->cron=$cron;
 
         if ($id) {
 				$this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
@@ -60,9 +62,11 @@ class exammanagementInstance{
 				print_error(get_string('missingidandcmid', 'mod_exammanagement'));
 			}
 
-			require_login($this->course, true, $this->cm);
+			if($cron == false){ // do this only when not called to send message from cron job
+				require_login($this->course, true, $this->cm);
 
-			$this->modulecontext = context_module::instance($this->cm->id);
+				$this->modulecontext = context_module::instance($this->cm->id);
+			}
 
     }
 
@@ -739,7 +743,12 @@ EOF;
 
 		$header = '';
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->getCleanCourseCategoryName() . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+
+		if($this->cron == false){
+			$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->getCleanCourseCategoryName() . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+		} else {
+			$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+		}
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);

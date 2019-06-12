@@ -659,10 +659,14 @@ $string['check_participants_without_moodle_account'] = 'Teilnehmer ohne Moodle A
 
 //delete_old_exam_data.php - task
 $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';
-$string['warningmailsubjectone'] = 'Erinnerung: Zukünftige Löschung der Prüfungsdaten';
-$string['warningmailsubjecttwo'] = 'Warnung: Baldige Löschung der Prüfungsdaten';
-$string['warningmailsubjectthree'] = 'Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
+$string['warningmailsubjectone'] = '[Prüfungsorganisation] Erinnerung: Zukünftige Löschung der Prüfungsdaten';
+$string['warningmailsubjecttwo'] = '[Prüfungsorganisation] Warnung: Baldige Löschung der Prüfungsdaten';
+$string['warningmailsubjectthree'] = '[Prüfungsorganisation] Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
 $string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung ';
-$string['warningmailcontentparttwo'] = 'im Kurs ';
-$string['warningmailcontentpartthree'] = 'werden am ';
-$string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
+$string['warningmailcontentparttwo'] = ' im Kurs ';
+$string['warningmailcontentpartthree'] = ' werden am ';
+$string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
+$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All exam information of the exam ';
+$string['warningmailcontentparttwoenglish'] = ' in course ';
+$string['warningmailcontentpartthreeenglish'] = ' will be deleted on ';
+$string['warningmailcontentpartfourenglish'] = ' . Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the PANDA exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';

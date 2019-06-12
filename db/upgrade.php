@@ -167,7 +167,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2019010700, 'exammanagement');
     }
 
-    if ($oldversion < 2019061700) { // added column for check if all data is deleted
+    if ($oldversion < 2019060800) { // added column for check if all data is deleted
         var_dump($oldversion);
         // Define field importfileheaders to be added to exammanagement.
         $table = new xmldb_table('exammanagement');
@@ -179,7 +179,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         }
 
         // Exammanagement savepoint reached.
-        upgrade_mod_savepoint(true, 2019061700, 'exammanagement');
+        upgrade_mod_savepoint(true, 2019060800, 'exammanagement');
     }
 
     return true;

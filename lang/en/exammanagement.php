@@ -658,10 +658,14 @@ $string['check_participants_without_moodle_account'] = 'Check participants witho
 
 //delete_old_exam_data.php - task
 $string['delete_old_exam_data'] = 'Delete old exam data';
-$string['warningmailsubjectone'] = 'Reminder: Future deletion of exam data';
-$string['warningmailsubjecttwo'] = 'Warning: Soon deletion of old exam data';
-$string['warningmailsubjectthree'] = 'Last warning: Exam data will be deleted tomorrow';
-$string['warningmailcontentpartone'] = 'All exam data from the exam ';
-$string['warningmailcontentparttwo'] = 'in the course ';
-$string['warningmailcontentpartthree'] = 'will be deleted at ';
-$string['warningmailcontentpartfour'] = '. Please make sure you have exported all relevant data for further use via the export functions. After the data all exam data will be finally deleted and there is no possibility to access them again.';
+$string['warningmailsubjectone'] = '[Exam organization] Reminder: Future deletion of exam data';
+$string['warningmailsubjecttwo'] = '[Exam organization] Warning: Soon deletion of old exam data';
+$string['warningmailsubjectthree'] = '[Exam organization] Last warning: Exam data will be deleted tomorrow';
+$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung ';
+$string['warningmailcontentparttwo'] = ' im Kurs ';
+$string['warningmailcontentpartthree'] = ' werden am ';
+$string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
+$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All exam information of the exam ';
+$string['warningmailcontentparttwoenglish'] = ' in course ';
+$string['warningmailcontentpartthreeenglish'] = ' will be deleted on ';
+$string['warningmailcontentpartfourenglish'] = ' . Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the PANDA exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';

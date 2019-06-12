@@ -59,6 +59,25 @@ define(['jquery'], function ($) {
         });
       }
 
+      // show available places pattern
+      id = $("#id_room").children(":selected").attr("value");
+
+      $(".hiddenpattern").each(function () { // for removing the initial set hidden class
+        $(this).prop("class", 'hideablepattern');
+      });
+
+      $(".hideablepattern").each(function () {
+        $(this).hide(); // hide old places pattern
+      });
+
+      posPoint = id.indexOf('.'); // make room ids with . working
+
+      if (posPoint !== -1) {
+        id = id.substr(0, posPoint) + '\\' + id.substr(posPoint);
+      }
+
+      $('#' + id).show(); // make correct pattern for places visible
+
       // if examstate changes
       $("#id_state").change(function () {
 
@@ -85,12 +104,8 @@ define(['jquery'], function ($) {
       var id;
       var posPoint;
 
-      $("#fitem_id_room").on("change", "select", function () { // if other room is choosen
+      $("#fitem_id_room").on("change", "select", function () { // change avilable places pattern if other room is choosen
         id = $(this).children(":selected").attr("value");
-
-        $(".hiddenpattern").each(function () { // for removing the initial set hidden class
-          $(this).prop("class", 'hideablepattern');
-        });
 
         $(".hideablepattern").each(function () {
           $(this).hide(); // hide old places pattern

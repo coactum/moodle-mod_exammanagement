@@ -215,19 +215,6 @@ class participantsOverviewForm extends moodleform {
     
                         } else {
                             $mform->addElement('html', $place);
-
-                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
-                            if ($roomPlacesPatternsArr){
-                                foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
-                                    if($roomid == $participant->roomid){
-                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern" >'.$placesPattern.'</span>');
-                                    } else {
-                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern hiddenpattern hidden">'.$placesPattern.'</span>');
-                                    }
-                                }
-                            }
-                            $mform->addElement('html', '</span>');
-
                         }
 
     
