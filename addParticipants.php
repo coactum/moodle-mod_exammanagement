@@ -263,11 +263,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								}
 						}
 
+						$UserObj->deleteTempParticipants();
+
 						$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = json_encode(strip_tags($fileheader));
 
 						$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-						$UserObj->deleteTempParticipants();
 						$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersObjArr);
 
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('addParticipants',$id), get_string('operation_successfull', 'mod_exammanagement') , null, 'success');

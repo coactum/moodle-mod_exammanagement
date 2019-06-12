@@ -259,7 +259,11 @@ class User{
 	}
 	
 	public function deleteTempParticipants(){
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$MoodleDBObj = MoodleDB::getInstance();
+
+			$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
+			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
 			if($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $this->id))){
 				$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
