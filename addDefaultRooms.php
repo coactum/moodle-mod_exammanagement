@@ -26,6 +26,7 @@
 
  use mod_exammanagement\forms\addDefaultRoomsForm;
  use stdClass;
+ use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');

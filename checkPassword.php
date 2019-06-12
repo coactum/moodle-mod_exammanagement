@@ -57,7 +57,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         	$coursecontext = context_course::instance($courseid);
 			$teachers = get_role_users($role->id, $coursecontext);
 			
-			$mailsubject = "[PANDA-Support] Zurücksetzen des Passwortes der Prüfungsorganisation ".$ExammanagementInstanceObj->moduleinstance->name." im Kurs ".$ExammanagementInstanceObj->getCourse()->fullname . " erfolgreich.";
+			$mailsubject = "[PANDA-Support] Zurücksetzen des Passwortes der Prüfungsorganisation ".$ExammanagementInstanceObj->moduleinstance->name." im Kurs ".$ExammanagementInstanceObj->getCourse()->fullname . " erfolgreich";
 			$text =  'Der PANDA Support hat wie angefordert das Passwort der Prüfungsorganisation '.$ExammanagementInstanceObj->moduleinstance->name.' im Kurs '.$ExammanagementInstanceObj->getCourse()->fullname .' zurückgesetzt. Sie können nun ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen und falls gewünscht ein neues Passwort für die Prüfungsorganisation festlegen. <br>Viele Grüße, <br>Ihr PANDA-Team';
 			$text .= '<br><br> <b>English version:</b> The PANDA support has resetted the password of the exam organization '.$ExammanagementInstanceObj->moduleinstance->name.' in course '.$ExammanagementInstanceObj->getCourse()->fullname .'. You can now access the contents of the exam organization without entering a password and, if required, define a new password for the exam organization. <br>Greetings, <br>Your PANDA Team';
 
@@ -82,7 +82,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$user = $idSupportUser;
 			$mailsubject = "PANDA Prüfungsorganisation: Anforderung für Passwort-Reset für die Prüfungsorganisation ".$ExammanagementInstanceObj->moduleinstance->name." im Kurs ".$ExammanagementInstanceObj->getCourse()->fullname;
-			$text = 'Der bzw. die PANDA Benutzerin '. $UserObj->getUserProfileLink($USER->id). 'hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs '.$ExammanagementInstanceObj->getCourse()->fullname.' beantragt. <br> Durch einen Klick auf diesen <a href="'.$MoodleObj->getMoodleUrl("/mod/exammanagement/checkPassword.php", $id, 'resetPW', true).'">Link</a> können Sie als in PANDA angemeldeter Benutzer der Rollen Admin, Manager oder IMT-Kursersteller das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
+			$text = 'Der bzw. die PANDA Benutzerin '. $UserObj->getUserProfileLink($USER->id). ' hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs '.$ExammanagementInstanceObj->getCourse()->fullname.' beantragt. <br> Durch einen Klick auf diesen <a href="'.$MoodleObj->getMoodleUrl("/mod/exammanagement/checkPassword.php", $id, 'resetPW', true).'">Link</a> können Sie als in PANDA angemeldeter Benutzer der Rollen Admin, Manager oder IMT-Kursersteller das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 			$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text);
 		
 			if($messageid){

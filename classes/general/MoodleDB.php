@@ -140,10 +140,10 @@ class MoodleDB{
 		return $DB->delete_records($table, $condition);
 	}
 
-	public function DeleteRecordsFromDBSelect($table, $select, $params){
+	public function DeleteRecordsFromDBSelect($table, $select, $params=null){
 		global $DB;
 
-		return $DB->delete_records_select($table, $select, $params=null);
+		return $DB->delete_records_select($table, $select, $params);
 	}
 
 }

@@ -60,7 +60,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
         if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
             //$MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1569880800, $select); // set new datadeletion date to 01.10.2019 00:00:00
-            $MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1560346500, $select); // for testing 11.07.19 15:30:00
+            $MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1560368400, $select); // for testing 11.07.19 15:30:00
             
         }
 
