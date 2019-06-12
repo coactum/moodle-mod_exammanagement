@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Imports bonus points for mod_exammanagement.
+ * Allows teacher to import bonus points for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -131,7 +131,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						$participantObj = false;
 
-						if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual imoport (matriculation number)
+						if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual import (matriculation number)
 
 							if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();

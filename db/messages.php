@@ -19,7 +19,7 @@
  *
  * @package     mod_exammanagement
  * @category    message
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

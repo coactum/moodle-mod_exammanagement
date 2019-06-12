@@ -19,7 +19,7 @@
  *
  * @package     mod_exammanagement
  * @category    upgrade
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -168,8 +168,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
     }
 
     if ($oldversion < 2019060800) { // added column for check if all data is deleted
-        var_dump($oldversion);
-        // Define field importfileheaders to be added to exammanagement.
+        // Define field datadeleted to be added to exammanagement.
         $table = new xmldb_table('exammanagement');
         $field = new xmldb_field('datadeleted', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
  

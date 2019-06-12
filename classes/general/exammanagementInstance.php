@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing all general functions for exammanagement
+ * class containing all common functions for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,6 @@ namespace mod_exammanagement\general;
 
 defined('MOODLE_INTERNAL') || die();
 use mod_exammanagement\event\course_module_viewed;
-use mod_exammanagement\ldap\ldapManager;
 use context_module;
 use stdClass;
 use core\message\message;
@@ -117,9 +116,9 @@ class exammanagementInstance{
  		$url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
  		return $url;
-	 }
+	}
 	 
-	 public function getCleanCourseCategoryName(){
+	public function getCleanCourseCategoryName(){
 
 		global $PAGE;
 
@@ -193,9 +192,9 @@ EOF;
 
  	public function getTextfieldObject(){
 
- 		$textfield= $this->moduleinstance->textfield;
+ 		$textfield = $this->moduleinstance->textfield;
 
-		$textfield =json_decode($textfield);
+		$textfield = json_decode($textfield);
 
 		return $textfield;
 	}
@@ -409,13 +408,6 @@ EOF;
 		}
  	}
 
-	#### errors ####
-
-	public function throwError($errorMessage){
-			echo $errorMessage;
-
-	}
-
  	#### events ####
 
  	public function startEvent($type){
@@ -442,7 +434,6 @@ EOF;
 		global $DB;
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$defaultRooms = $MoodleDBObj->getRecordsSelectFromDB('exammanagement_rooms', "type = 'defaultroom'");
 
@@ -459,7 +450,6 @@ EOF;
 		global $DB, $USER;
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$customRooms = $MoodleDBObj->getRecordsSelectFromDB('exammanagement_rooms', "type = 'customroom' AND moodleuserid = " .$USER->id);
 
@@ -483,31 +473,6 @@ EOF;
 			return false;
 		}
 	}
-
-	// public function getAllRoomIDs($format){ //not used at the moment, use getAllRoomsIDsSortedByName() instead
-	//
-	// 	$MoodleDBObj = MoodleDB::getInstance();
-	//
-	// 	$allRooms = $this->getDefaultRooms();
-	// 	$allRoomsIDs;
-	//
-	// 	if ($allRooms){
-	// 		foreach ($allRooms as $key => $value){
-	// 			$temp=get_object_vars($value);
-	// 			$allRoomsIDs[$key] = $temp['id'];
-	// 		}
-	//
-	// 		if ($format=='String'){
-	// 			$allsRoomsIDs = implode(',', $allRoomsIDs);
-	// 		}
-	//
-	// 		return $allRoomsIDs;
-	//
-	// 	} else{
-	// 		return false;
-	// 	}
-	//
-	// }
 
 	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
 
@@ -551,10 +516,10 @@ EOF;
 		$rooms = $this->moduleinstance->rooms;
 
 		if ($rooms){
-				$roomsArray = json_decode($rooms);
-				return $roomsArray;
-			} else {
-				return false;
+			$roomsArray = json_decode($rooms);
+			return $roomsArray;
+		} else {
+			return false;
 		}
 	}
 
@@ -563,9 +528,9 @@ EOF;
 		$isDateTimeVisible = $this->moduleinstance->datetimevisible;
 
 		if($isDateTimeVisible){
-				return true;
+			return true;
 		} else {
-				return false;
+			return false;
 		}
 	}
 
@@ -574,9 +539,9 @@ EOF;
 		$isRoomVisible = $this->moduleinstance->roomvisible;
 
 		if($isRoomVisible){
-				return true;
+			return true;
 		} else {
-				return false;
+			return false;
 		}
 
 	}
@@ -586,9 +551,9 @@ EOF;
 		$isPlaceVisible = $this->moduleinstance->placevisible;
 
 		if($isPlaceVisible){
-				return true;
+			return true;
 		} else {
-				return false;
+			return false;
 		}
 
 	}
@@ -598,9 +563,9 @@ EOF;
 		$isExamReviewVisible = $this->moduleinstance->examreviewvisible;
 
 		if($isExamReviewVisible){
-				return true;
+			return true;
 		} else {
-				return false;
+			return false;
 		}
 	}
 
@@ -608,9 +573,9 @@ EOF;
 		$isExamDataDeleted = $this->moduleinstance->datadeleted;
 
 		if($isExamDataDeleted){
-				return true;
+			return true;
 		} else {
-				return false;
+			return false;
 		}
 	}
 
@@ -619,10 +584,10 @@ EOF;
 		$tasks = $this->getTasks();
 
 		if($tasks){
-				$taskcount = count((array)$tasks);
-				return $taskcount;
+			$taskcount = count((array)$tasks);
+			return $taskcount;
 		} else {
-				return false;
+			return false;
 		}
 
 	}
@@ -633,13 +598,13 @@ EOF;
 		$totalpoints = 0;
 
 		if($tasks){
-				foreach($tasks as $key => $points){
-						$totalpoints += floatval($points);
-				}
-				return $totalpoints;
+			foreach($tasks as $key => $points){
+					$totalpoints += floatval($points);
+			}
+			return $totalpoints;
 
 		} else {
-				return false;
+			return false;
 		}
 
 	}
@@ -653,7 +618,7 @@ EOF;
 		if($users){
 			return count($users);
 		} else {
-				return false;
+			return false;
 		}
 
 	}
@@ -692,7 +657,7 @@ EOF;
 
 	}
 
-######### feature: addParticipants ##########
+	######### feature: addParticipants ##########
 
 	public function getPAULTextFileHeaders(){
 
@@ -769,8 +734,6 @@ EOF;
 		// 	$file = $fs->create_file_from_string($file, 'file1 content');
 		// 	$message->attachment = $file;
 
-		//var_dump($message);
-
 		$messageid = message_send($message);
 
 		return $messageid;
@@ -790,109 +753,76 @@ EOF;
 			}
 	}
 
-// delete instance
-public function getDataDeletionDate(){
+	// delete instance
+	public function getDataDeletionDate(){
 
-		$dataDeletionDate = $this->moduleinstance->datadeletion;
+			$dataDeletionDate = $this->moduleinstance->datadeletion;
 
-		if($dataDeletionDate){
-				$dataDeletionDate = date('d.m.Y', $dataDeletionDate);
-		} else {
-			return false;
-		}
+			if($dataDeletionDate){
+					$dataDeletionDate = date('d.m.Y', $dataDeletionDate);
+			} else {
+				return false;
+			}
 
-		return $dataDeletionDate;
-}
+			return $dataDeletionDate;
+	}
 
 	########### Export PDFS ####
 
-		public function getParticipantsListTableHeader() { // to bemoved to pdf object
-			$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-			$header .= "<thead>";
-			$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-			$header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
-			$header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
-			$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-			$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-			$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-			$header .= "</tr>";
-			$header .= "</thead>";
+	public function getParticipantsListTableHeader() {
+		$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+		$header .= "<thead>";
+		$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+		$header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+		$header .= "</tr>";
+		$header .= "</thead>";
 
-			return $header;
-		}
-
-		public function getSeatingPlanTableHeader() { // to bemoved to pdf object
-
-				$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-				$header .= "<thead>";
-				$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-				$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-				$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-				$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-				$header .= "</tr>";
-				$header .= "</thead>";
-
-				return $header;
-			}
-
-		public function buildChecksumExamLabels($ean) {
-				$s = preg_replace("/([^\d])/", "", $ean);
-				if (strlen($s) != 12) {
-					return false;
-				}
-
-				$check = 0;
-				for ($i = 0; $i < 12; $i++) {
-					$check += (($i % 2) * 2 + 1) * $s{$i};
-				}
-
-				return (10 - ($check % 10)) % 10;
-		}
-
-		public function calculateCellAddress($n){
-			if ($n <= 26) return chr(64 + $n);
-			else if ($n <= 52) return "A" . $this->calculateCellAddress($n - 26);
-			else if ($n <= 78) return "B" . $this->calculateCellAddress($n - 52);
-			else if ($n <= 104) return "C" . $this->calculateCellAddress($n - 78);
-			else if ($n <= 130) return "D" . $this->calculateCellAddress($n - 104);
-			else if ($n <= 156) return "E" . $this->calculateCellAddress($n - 130);
-			else if ($n <= 192) return "F" . $this->calculateCellAddress($n - 156);
-			else if ($n <= 218) return "G" . $this->calculateCellAddress($n - 192);
-			else if ($n <= 244) return "H" . $this->calculateCellAddress($n - 218);
-			else if ($n <= 270) return "I" . $this->calculateCellAddress($n - 244);
-			else return;
-		}
-
-	########### debugging ########
-
-	public function debugElementsOverview(){
-
-		echo'<h4> Debug-Information </h4>';
-		echo('id:'.$this->debugElement('id').'<br>');
-		echo('e:'.$this->debugElement('e').'<br>');
-		echo('cm:'.json_encode($this->debugElement('cm')).'<br>');
-		echo('course:'.json_encode($this->debugElement('course')).'<br>');
-		echo('moduleinstance:'.json_encode($this->debugElement('moduleinstance')).'<br>');
-		echo('modulecontext:'.json_encode($this->debugElement('modulecontext')).'<br>');
+		return $header;
 	}
 
-	protected function debugElement($c){ //if some extern functions need some of the objects params
+	public function getSeatingPlanTableHeader() {
 
-		switch ($c){ //get requested element
+		$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+		$header .= "<thead>";
+		$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+		$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+		$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+		$header .= "</tr>";
+		$header .= "</thead>";
 
-			case 'id':
-				return $this->id;
-			case 'e':
-				return $this->e;
-			case 'cm':
-				return $this->cm;
-			case 'course':
-				return $this->course;
-			case 'moduleinstance':
-				return $this->moduleinstance;
-			case 'modulecontext':
-				return $this->modulecontext;
+		return $header;
+	}
+
+	public function buildChecksumExamLabels($ean) {
+		$s = preg_replace("/([^\d])/", "", $ean);
+		if (strlen($s) != 12) {
+			return false;
 		}
 
+		$check = 0;
+		for ($i = 0; $i < 12; $i++) {
+			$check += (($i % 2) * 2 + 1) * $s{$i};
+		}
+
+		return (10 - ($check % 10)) % 10;
+	}
+
+	public function calculateCellAddress($n){
+		if ($n <= 26) return chr(64 + $n);
+		else if ($n <= 52) return "A" . $this->calculateCellAddress($n - 26);
+		else if ($n <= 78) return "B" . $this->calculateCellAddress($n - 52);
+		else if ($n <= 104) return "C" . $this->calculateCellAddress($n - 78);
+		else if ($n <= 130) return "D" . $this->calculateCellAddress($n - 104);
+		else if ($n <= 156) return "E" . $this->calculateCellAddress($n - 130);
+		else if ($n <= 192) return "F" . $this->calculateCellAddress($n - 156);
+		else if ($n <= 218) return "G" . $this->calculateCellAddress($n - 192);
+		else if ($n <= 244) return "H" . $this->calculateCellAddress($n - 218);
+		else if ($n <= 270) return "I" . $this->calculateCellAddress($n - 244);
+		else return;
 	}
 }

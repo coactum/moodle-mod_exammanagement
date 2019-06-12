@@ -18,7 +18,7 @@
  * A cron_task class for checking if participants without moodle account now have an account to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

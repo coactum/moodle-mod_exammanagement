@@ -18,7 +18,7 @@
  * The main mod_exammanagement configuration form.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * Module instance settings form.
  *
  * @package    mod_exammanagement
- * @copyright  coactum GmbH 2018
+ * @copyright  coactum GmbH 2019
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_mod_form extends moodleform_mod {
@@ -57,7 +57,6 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        // $mform->addHelpButton('name', 'exammanagementname', 'mod_exammanagement');
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {

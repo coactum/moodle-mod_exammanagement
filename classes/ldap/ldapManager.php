@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing all build forms methods for moodle
+ * class containing all ldap methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -67,29 +67,31 @@ class ldapManager{
 	}
 
 	public function connect_ldap(){
-			$config = get_config('auth_ldap');
+		$config = get_config('auth_ldap');
 
-			return $connection = ldap_connect_moodle(
-				$config->host_url,
-				$config->ldap_version,
-				$config->user_type,
-				$config->bind_dn,
-				$config->bind_pw,
-				$config->opt_deref,
-				$debuginfo,
-				$config->start_tls
-			);
+		return $connection = ldap_connect_moodle(
+			$config->host_url,
+			$config->ldap_version,
+			$config->user_type,
+			$config->bind_dn,
+			$config->bind_pw,
+			$config->opt_deref,
+			$debuginfo,
+			$config->start_tls
+		);
 
 	}
 
-	public function is_LDAP_config(){ //for local testing, should be deleted
-			$config = get_config('auth_ldap');
+	public function is_LDAP_config(){
+		$config = get_config('auth_ldap');
 
-			if($config->host_url){
-					return true;
-			} else {
-					return false;
-			}
+		if($config->host_url){
+			return true;
+		} else {
+			//throw new Exception('LDAP not configured');
+
+			return false;
+		}
 	}
 
 	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!

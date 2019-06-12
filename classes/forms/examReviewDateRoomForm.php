@@ -18,13 +18,12 @@
  * class containing examReviewDateRoomForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User; // for testing
 
 use moodleform;
 
@@ -35,7 +34,6 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
 
 class examReviewDateRoomForm extends moodleform {
 

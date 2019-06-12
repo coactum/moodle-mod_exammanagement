@@ -18,7 +18,7 @@
  * Allows user to enter password to access module instance for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -121,7 +121,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			if( password_needs_rehash($password_hash, PASSWORD_DEFAULT) ){ // check if passwords needs rehash because of newer hash algorithm
 
 				// if so update saved password_hash
-
 				$hash = password_hash($password, PASSWORD_DEFAULT);
 				$ExammanagementInstanceObj->moduleinstance->password = $hash;
 				

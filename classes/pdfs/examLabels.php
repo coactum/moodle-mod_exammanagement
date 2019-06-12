@@ -18,18 +18,16 @@
  * class for examlabels PDF for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\pdfs;
-use mod_exammanagement\general\exammanagementInstance;
 use TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
-require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 // Extend the TCPDF class to create custom Header and Footer
 class examLabels extends TCPDF {

@@ -18,7 +18,7 @@
  * File containing tests for exam_management.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * The exam_management test class.
  *
  * @package    mod_exammanagement
- * @copyright  coactum GmbH 2017
+ * @copyright  coactum GmbH 2019
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_exam_management_testcase extends advanced_testcase {

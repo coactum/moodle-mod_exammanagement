@@ -18,7 +18,7 @@
  * A cron_task class for deleting temporary saved participants to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

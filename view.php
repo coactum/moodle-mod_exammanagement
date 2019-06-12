@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints an instance of mod_exammanagement.
+ * Prints main page of an instance of mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- namespace mod_exammanagement\general;
+namespace mod_exammanagement\general;
 
 use mod_exammanagement\output\exammanagement_overview;
 use mod_exammanagement\output\exammanagement_participantsview;
@@ -68,7 +68,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
         if(!$ExammanagementInstanceObj->isExamDataDeleted()){
         
-            if ($calledfromformdt) { // saveDateTime
+            if ($calledfromformdt) { // saveDateTimeVisible
 
                 if ($datetimevisible) {
                     $ExammanagementInstanceObj->moduleinstance->datetimevisible = true;
@@ -82,7 +82,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 } else {
                     $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
                 }
-            } elseif ($calledfromformroom) { // saveRoom
+            } elseif ($calledfromformroom) { // saveRoomVisible
         
                 if ($roomvisible) {
                     $ExammanagementInstanceObj->moduleinstance->roomvisible = true;
@@ -96,7 +96,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 } else {
                     $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
                 }
-            } elseif ($calledfromformplace) { // savePlace
+            } elseif ($calledfromformplace) { // savePlaceVisible
         
                 if ($placevisible) {
                     $ExammanagementInstanceObj->moduleinstance->placevisible = true;
@@ -125,7 +125,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 } else {
                     $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
                 }
-            } elseif ($calledfromformexamreview) { // save exam review
+            } elseif ($calledfromformexamreview) { // save exam review date time Visible
         
                 if ($examreviewvisible) {
                     $ExammanagementInstanceObj->moduleinstance->examreviewvisible = true;
@@ -255,9 +255,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
-    
-        //$this->debugElementsOverview();
-    
+        
         $MoodleObj->outputFooter();
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
         redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
@@ -329,11 +327,3 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 }
 
 $ExammanagementInstanceObj->startEvent('view');
-
-//for testing
-// global $SESSION;
-//
-// var_dump($SESSION);
-//
-// set_user_preference('helptexts','10011001');
-// var_dump(get_user_preferences());

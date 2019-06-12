@@ -18,7 +18,7 @@
  * class containing inputResultsForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -71,7 +71,6 @@ class inputResultsForm extends moodleform {
         }
 
         //create input field for matrnr
-
         if($this->_customdata['matrnr']){
             $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'), '');
         } else {
@@ -89,7 +88,6 @@ class inputResultsForm extends moodleform {
         }
 
         //create list of tasks
-
         if($this->_customdata['matrnr']){
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
         }

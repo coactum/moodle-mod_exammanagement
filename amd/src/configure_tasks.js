@@ -17,7 +17,7 @@
  * functions for tracking changes of input fields, adding and removing tasks and creating input type number fields
  *
  * @module      mod_exammanagement/configure_tasks
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

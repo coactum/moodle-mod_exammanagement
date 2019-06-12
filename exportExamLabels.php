@@ -18,7 +18,7 @@
  * Outputs pdf file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -48,8 +48,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       global $CFG;
-
-      //$MoodleObj->setPage('exportExamLabels');
 
       if (!$UserObj->getParticipantsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
@@ -342,8 +340,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
           }
       }
-
-      
 
       //generate filename without umlaute
       $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");

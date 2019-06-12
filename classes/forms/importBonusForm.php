@@ -18,7 +18,7 @@
  * class containing addParticipantsForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,9 +26,6 @@ namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
-use mod_exammanagement\ldap\ldapManager;
-use mod_exammanagement\general\Moodle;
-use mod_exammanagement\general\MoodleDB;
 use moodleform;
 use stdclass;
 
@@ -40,9 +37,6 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
-require_once(__DIR__.'/../ldap/ldapManager.php');
-require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
 
 class importBonusForm extends moodleform{
 
@@ -94,7 +88,6 @@ class importBonusForm extends moodleform{
           for($count; $count <= $bonusstepcount; $count++){
 
               //number of bonusstep
-
               array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$count.'</strong></span>'));
 
               //input field with points needed for bonus step

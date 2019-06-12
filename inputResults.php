@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints input results form for mod_exammanagement.
+ * Allows teacher to input results to mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -164,10 +164,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$matrnr = false;
 						}
 					}
-
 				}
-
-				
 			}
 
 			//Instantiate Textfield_form

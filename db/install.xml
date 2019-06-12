@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <XMLDB PATH="mod/exammanagement/db" VERSION="20170112" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
+  <XMLDB PATH="mod/exammanagement/db" VERSION="20190617" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
     <TABLES>
       <TABLE NAME="exammanagement" COMMENT="list of plugin-instances with all data">
         <FIELDS>

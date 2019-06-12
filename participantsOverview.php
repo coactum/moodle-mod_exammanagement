@@ -18,7 +18,7 @@
  * Prints participantsOverview form for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -164,7 +164,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 } else {
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
                 }
-
 
             } else {
                 // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

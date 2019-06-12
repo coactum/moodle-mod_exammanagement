@@ -17,7 +17,7 @@
  * Removes form classes col-md 3 and 9 for better layout
  *
  * @module      mod_exammanagement/remove_form_classes_col
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

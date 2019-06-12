@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * override methods get_url() and get_legacy_log_data(), too.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_viewed extends \core\event\course_module_viewed {
