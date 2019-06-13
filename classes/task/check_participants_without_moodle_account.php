@@ -46,16 +46,11 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
 
         // get all participants without moodle account
         if($MoodleDBObj->checkIfRecordExists("exammanagement_participants", array('moodleuserid' => NULL))){
-            var_dump('none moodle participants exist');
             
             $NoneMoodleParticipants = $MoodleDBObj->getRecordsFromDB("exammanagement_participants", array('moodleuserid' => NULL));
-            var_dump($NoneMoodleParticipants);
 
             foreach($NoneMoodleParticipants as $participant){
                 
-                var_dump($participant);
-                var_dump('is checked');
-
                 if($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->imtlogin))){                 // check if none moodle participants have now moodle account
                     
                     // if this is the case set moodle id instead of username and email
@@ -66,9 +61,6 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
                     $participant->firstname = Null;
                     $participant->lastname = Null;
                     $participant->email = Null;
-
-                    var_dump($participant);
-                    var_dump('is updated');
 
                     $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $participant);
                 }

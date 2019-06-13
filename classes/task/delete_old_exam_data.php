@@ -47,62 +47,31 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
         $MoodleDBObj = MoodleDB::getInstance();
 
-        // ### variante 1: filter records in db via sql select and get only matching records (not working) #####
-        // $select = "datadeletion IS NOT NULL AND TIMESTAMP(DATE_SUB(datadeletion, INTERVAL 1 MONTH)) <= ".$now; // not working
-        // // SELECT * FROM `mdl_exammanagement` WHERE `datadeletion` IS NOT NULL AND TIMESTAMP(DATE_SUB(`datadeletion`, INTERVAL 1 MONTH)) > 1547146064 // in PHP-Myadmin getestet
-        // $records = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement', 'datadeletion', $select);
-        // var_dump($records);
-        // var_dump(date('d.m.y h:m', $records[0]));
-
         // for legacy exam organizations on test servers: extend deletion date so that all teachers get the warning mails
-        //$select = "datadeletion IS NOT NULL AND datadeletion > ". 1569794400; // get all records where datadeletion date is set and that should already or soon be deleted (before 30.09.2019 00:00:00)
-        $select = "datadeletion IS NOT NULL AND datadeletion <= ". 1567337400; // for testing
+        $select = "datadeletion IS NOT NULL AND datadeletion <= ". 1569794400; // get all records where datadeletion date is set and that should already or soon be deleted (before 30.09.2019 00:00:00)
 
         if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
             //$MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1569880800, $select); // set new datadeletion date to 01.10.2019 00:00:00
-            $MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1560368400, $select); // for testing 11.07.19 15:30:00
-            
+            $MoodleDBObj->setFieldInDBSelect('exammanagement', 'datadeletion', 1560418200, $select); // for testing 11.07.19 15:30:00            
         }
-
 
         #### send warning mails for soon to be deleted module instances: ####
 
         // get all records where datadeletion date is set and that are not to be deleted yet
         $now = time();
         $select = "datadeletion IS NOT NULL AND datadeletion >= ".$now; 
-        
+
         if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
             $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
         
-            var_dump('now');
-            var_dump($now);
-
-            var_dump('instances where correction is completed and that should not be deleted yet');
-            //var_dump($records);
-
             foreach($records as $id => $record){
-    
-                var_dump($record->name);
 
                 // check warning mail state
-                var_dump('warning mail timestamps (one, two, three');
                 $warningperiodOne = strtotime("-1 month", $record->datadeletion);
                 $warningperiodTwo = strtotime("-7 days", $record->datadeletion);
                 $warningperiodThree = strtotime("-1 day", $record->datadeletion);
-
-                // var_dump('datadeletion');
-                // var_dump($record->datadeletion);
-                // var_dump('warningperiodone');
-                // var_dump($warningperiodOne);
-                //  var_dump('warningperiodtwo');
-                //  var_dump($warningperiodTwo);
-                // var_dump('warningperiodthree');
-                // var_dump($warningperiodThree);
                 
                 $deletionwarningmailidsArray = json_decode($record->deletionwarningmailids);
-    
-                var_dump('deletionmailidsarray');
-                var_dump($deletionwarningmailidsArray);
     
                 if(isset($deletionwarningmailidsArray)){
                     $warningmailscount = count($deletionwarningmailidsArray);
@@ -112,36 +81,15 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                 }
     
                 $warningstep = false;
-
-                var_dump('warningmailscount');
-                var_dump($warningmailscount);
-
-                var_dump('warningperiodtwo');
-                 var_dump(date('d.m.Y', $warningperiodTwo).' '.date('H:i', $warningperiodTwo));
-                
-                 var_dump('now');
-                 var_dump(date('d.m.Y', $now).' '.date('H:i', $now));
-                
-                 var_dump('datadeletion');
-                 var_dump(date('d.m.Y', $record->datadeletion).' '.date('H:i', $record->datadeletion));
-                
-                var_dump($warningperiodTwo <= $now);
-
     
                 // check if some warningmails were already send and determine if warning period is due
                 if($warningperiodOne <= $now && $warningmailscount == 0){
-                    var_dump('ishouldapplywarningtsep1');
                     $warningstep = 1;  // no warning mails yet, first to send
                 } else if($warningperiodTwo <= $now && $warningmailscount == 1){
-                    var_dump('ishouldapplywarningtsep2');
                     $warningstep = 2; // 1 warning mail yet, second to send
                 } else if($warningperiodThree <= $now && $warningmailscount == 2){
-                    var_dump('ishouldapplywarningtsep3');
                     $warningstep = 3; // 2 warning mails yet, last to send
                 }
-
-                var_dump('warningstep');
-                var_dump($warningstep);
     
                 if($warningstep){
                     // get user to whom warning mail should be send (teachers of course)
@@ -150,21 +98,12 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                     $coursecontext = context_course::instance($courseid);
                     $teachers = get_role_users($role->id, $coursecontext);
     
-                    var_dump('Preparing to send warning mail to teachers:');
-                    var_dump($teachers); // debug
-    
                     // set mail properties and contents
                     $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
     
-                    var_dump('cmid:');
-                    var_dump($cmid); // debug
-
                     //$ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
                     $ExammanagementInstanceObj = new exammanagementInstance($cmid, '', true);    
                     
-                    var_dump('exammanagementinstanceobj');
-                    var_dump($ExammanagementInstanceObj); // debug
-
                     switch ($warningstep){
     
                         case 1:
@@ -186,21 +125,14 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                     // send mail & save send warningmailid
                     foreach($teachers as $user){
                         $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user->id, $warningmailsubject, $warningmailcontent);
-                        
-                        var_dump('Mail with id '.$warningmailid.' and subject <strong>'. $warningmailsubject .' </strong> and content ' . $warningmailcontent .' send to user '.$user->id); // debug
-                        
+                                                
                         array_push($warningmailids, $warningmailid);
                     }
     
                     array_push($deletionwarningmailidsArray, $warningmailids);
 
-                    var_dump('warningmailidsarray');
-                    var_dump($deletionwarningmailidsArray);
-    
                     // update module instance
-    
-                    var_dump('Almost done, updating module instance with warning mail id ...'); // debug
-    
+        
                     $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailidsArray);
     
                     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
@@ -208,39 +140,32 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                 }
                 
             }
-    
-            // delete expired  exam data and instances
-            $select = "datadeleted IS NULL AND datadeletion IS NOT NULL AND datadeletion <= ".$now;
+        }
 
-            if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
-               
-                $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
+        // delete expired  exam data and instances
+        $select = "datadeleted IS NULL AND datadeletion IS NOT NULL AND datadeletion <= ".$now;
 
-                var_dump('i should delete records');
-                var_dump($records);
+        if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
+           
+            $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
 
-                foreach($records as $record){
-                    // set deleted property of instance true (for display purposes)
-                    $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
-                    //$ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
-                    $ExammanagementInstanceObj = new exammanagementInstance($cmid, '', true);    
+            foreach($records as $record){
+                // set deleted property of instance true (for display purposes)
+                $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
+                //$ExammanagementInstanceObj = exammanagementInstance::getInstance($cmid, '');
+                $ExammanagementInstanceObj = new exammanagementInstance($cmid, '', true);    
 
-                    $ExammanagementInstanceObj->moduleinstance->datadeleted = 1;
-    
-                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                $ExammanagementInstanceObj->moduleinstance->datadeleted = 1;
 
-                    // delete participants data
-                    if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $cmid))){
-                        $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $cmid));
-                        var_dump('i should delete all participants data for this instance');
-                        var_dump($ExammanagementInstanceObj->moduleinstance);
-                    }
+                $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+                // delete participants data
+                if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $cmid))){
+                    $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $cmid));
                 }
             }
-
-            var_dump('task finished');
-
-            \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
         }
+
+        \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
     }
 }

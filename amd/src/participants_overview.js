@@ -59,6 +59,9 @@ define(['jquery'], function ($) {
         });
       }
 
+      var id;
+      var posPoint;
+
       // show available places pattern
       id = $("#id_room").children(":selected").attr("value");
 
@@ -100,9 +103,6 @@ define(['jquery'], function ($) {
       $(".form-group").not("#fitem_id_place").on("change", "input", function () { // if some input field changes
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
-
-      var id;
-      var posPoint;
 
       $("#fitem_id_room").on("change", "select", function () { // change avilable places pattern if other room is choosen
         id = $(this).children(":selected").attr("value");

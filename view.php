@@ -174,7 +174,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     
         // reset phase information if participants are deleted
         if (!$ExammanagementInstanceObj->isExamDataDeleted() && !$UserObj->getParticipantsCount()) {
-            $ExammanagementInstanceObj->moduleinstance->importfileheader = null;
+            $ExammanagementInstanceObj->moduleinstance->importfileheaders = null;
             $ExammanagementInstanceObj->moduleinstance->datetimevisible = null;
             $ExammanagementInstanceObj->moduleinstance->roomvisible = null;
             $ExammanagementInstanceObj->moduleinstance->placevisible = null;

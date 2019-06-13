@@ -47,8 +47,6 @@ class delete_temp_participants extends \core\task\scheduled_task {
 
         // delete whole temp_part table
         if($MoodleDBObj->checkIfRecordExists("exammanagement_temp_part", array())){
-            var_dump('records in temp_part exist');
-            var_dump($MoodleDBObj->getRecordsFromDB("exammanagement_temp_part", array()));
 
             $MoodleDBObj->DeleteRecordsFromDB("exammanagement_temp_part", array());
         }
