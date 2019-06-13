@@ -18,18 +18,16 @@
  * class for examlabels PDF for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\pdfs;
-use mod_exammanagement\general\exammanagementInstance;
 use TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
-require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 // Extend the TCPDF class to create custom Header and Footer
 class examLabels extends TCPDF {
@@ -37,7 +35,7 @@ class examLabels extends TCPDF {
   public function Footer() {
     $this->SetFont('helvetica', 'BI', 10);
 		$this->SetXY(10, -15); // 1.5 cm from bottom
-		$this->Cell(0, 12, gettext("required label type: ") . "Avery Zweckform L4744", 0, 0, 'L');
+		$this->Cell(0, 12, get_string("required_label_type", "mod_exammanagement") . " Avery Zweckform L4744", 0, 0, 'L');
 		$this->SetX(100);
 		$this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
   }

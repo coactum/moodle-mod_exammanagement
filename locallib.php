@@ -18,7 +18,7 @@
  * Plugin internal classes, functions and constants are defined here.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

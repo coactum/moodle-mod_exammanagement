@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing all db wrapper functions for moodle
+ * class containing all db wrapper functions for moodle db methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,6 +42,15 @@ class MoodleDB{
 
 	#### wrapped Moodle DB functions #####
 
+	public function countRecordsInDB($table, $select, $params=null, $countitem="COUNT('x')"){
+		global $DB;
+
+		$count = $DB->count_records_select($table, $select, $params, $countitem); 
+		
+		return $count;
+	}
+	
+
 	 public function getFieldFromDB($table, $fieldname, $condition){
 	 	global $DB;
 
@@ -49,6 +58,19 @@ class MoodleDB{
 
 	 	return $field;
 	 }
+
+	 public function setFieldInDB($table, $newfield, $newvalue, $conditions=null){
+		global $DB;
+
+		$DB->set_field($table, $newfield, $newvalue, $conditions);
+	}
+	
+	public function setFieldInDBSelect($table, $newfield, $newvalue, $select, $params=null){
+		global $DB;
+
+		$DB->set_field_select($table, $newfield, $newvalue, $select, $params);
+	}
+	
 
 	public function getRecordFromDB($table, $condition){
 		global $DB;
@@ -66,6 +88,34 @@ class MoodleDB{
 		return $records;
 	}
 
+	public function getRecordsSelectFromDB($table, $select){
+		global $DB;
+
+		$records = $DB->get_records_select($table, $select);
+
+		return $records;
+	}
+
+	public function getFieldsetFromRecordsInDB($table, $field, $select){
+		global $DB;
+
+		$records = $DB->get_fieldset_select($table, $field, $select);
+
+		return $records;
+	}
+
+	public function checkIfRecordExists($table, $conditions){
+		global $DB;
+
+		return $DB->record_exists($table, $conditions);
+	}
+
+	public function checkIfRecordExistsSelect($table, $select, $params=null){
+		global $DB;
+
+		return 	$DB->record_exists_select($table, $select, $params);
+	}
+
 	public function UpdateRecordInDB($table, $obj){
 		global $DB;
 
@@ -78,10 +128,22 @@ class MoodleDB{
 		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
 	}
 
-	// public function InsertBulkRecordsInDB($table, $dataobjects){ // not used at the moment
-	// 	global $DB;
-	//
-	// 	$DB->insert_records($table, $dataobjects);
-	// }
+	public function InsertBulkRecordsInDB($table, $dataobjects){
+		global $DB;
+
+		$DB->insert_records($table, $dataobjects);
+	}
+
+	public function DeleteRecordsFromDB($table, $condition){
+		global $DB;
+
+		return $DB->delete_records($table, $condition);
+	}
+
+	public function DeleteRecordsFromDBSelect($table, $select, $params=null){
+		global $DB;
+
+		return $DB->delete_records_select($table, $select, $params);
+	}
 
 }

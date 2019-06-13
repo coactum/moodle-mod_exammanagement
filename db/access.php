@@ -41,7 +41,7 @@
  *
  * @package     mod_exammanagement
  * @category    access
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -50,7 +50,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
 
 	'mod/exammanagement:addinstance' => [
-        'riskbitmask' => RISK_XSS, RISK_SPAM,
+        'riskbitmask' => RISK_XSS | RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -78,7 +78,7 @@ $capabilities = [
     ],
 
 		'mod/exammanagement:viewparticipantspage' => [
-        'riskbitmask' => RISK_PERSONAL,
+
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -92,7 +92,7 @@ $capabilities = [
     ],
 
     'mod/exammanagement:takeexams'=> [
-        'riskbitmask' => RISK_PERSONAL,
+
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -117,8 +117,8 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-		'mod/exammanagement:adddefaultrooms'=> [
-        'riskbitmask' => RISK_XSS, RISK_SPAM,
+	'mod/exammanagement:adddefaultrooms'=> [
+        'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -126,6 +126,32 @@ $capabilities = [
             'coursecreator' => CAP_PROHIBIT,
             'teacher' => CAP_PROHIBIT,
             'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
+    'mod/exammanagement:resetpassword'=> [
+        'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+        ],
+    ],
+    'mod/exammanagement:requestpasswordreset'=> [
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             'student' => CAP_PROHIBIT,
             'guest' => CAP_PROHIBIT,
         ],

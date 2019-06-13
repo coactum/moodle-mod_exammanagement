@@ -17,20 +17,20 @@
  * Removes form classes col-md 3 and 9 for better layout
  *
  * @module      mod_exammanagement/remove_form_classes_col
- * @copyright   coactum GmbH 2018
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function($) {
+define(['jquery'], function ($) {
 
-   return {
-        remove_form_classes_col: function() {
-           $('div').removeClass('col-md-3');
-           $('div').removeClass('col-md-9');
+    return {
+        remove_form_classes_col: function () {
+            $('div').removeClass('col-md-3');
+            $('div').removeClass('col-md-9');
 
-           $('form > .form-group > div:first-child').addClass('col-md-3');
-           $('form > .form-group > div:last-child').addClass('col-md-9');
-          }
+            $('form > .form-group > div:first-child').addClass('col-md-3');
+            $('form > .form-group > div:last-child').addClass('col-md-9');
+        }
     };
 
 });

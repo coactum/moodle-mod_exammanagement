@@ -18,10 +18,11 @@
  * Class containing data for exammanagement main page for participants
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_exammanagement\output;
+
 defined('MOODLE_INTERNAL') || die();
 
 use renderable;
@@ -33,24 +34,27 @@ use stdClass;
  * Class containing data for exammanagement_overview
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class exammanagement_participantsview implements renderable, templatable {
-
+class exammanagement_participantsview implements renderable, templatable{
     protected $cmid;
     protected $isparticipant;
     protected $examdate;
     protected $examtime;
     protected $room;
     protected $place;
-	  protected $textfield;
+    protected $textfield;
+    protected $bonus;
+    protected $examreviewtime;
+    protected $examreviewroom;
+    protected $deleted;
 
     /**
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield) {
+    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield, $bonus, $examreviewtime, $examreviewroom, $deleted){
         $this->cmid = $cmid;
         $this->isparticipant = $isparticipant;
         $this->examdate = $examdate;
@@ -58,6 +62,10 @@ class exammanagement_participantsview implements renderable, templatable {
         $this->room = $room;
         $this->place = $place;
         $this->textfield = $textfield;
+        $this->bonus = $bonus;
+        $this->examreviewtime = $examreviewtime;
+        $this->examreviewroom = $examreviewroom;
+        $this->deleted = $deleted;
     }
 
     /**
@@ -66,7 +74,7 @@ class exammanagement_participantsview implements renderable, templatable {
      * @param renderer_base $output Renderer base.
      * @return stdClass
      */
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template(renderer_base $output){
         $data = new stdClass();
         $data->cmid = $this->cmid;
         $data->isparticipant = $this->isparticipant;
@@ -75,7 +83,10 @@ class exammanagement_participantsview implements renderable, templatable {
         $data->room = $this->room;
         $data->place = $this->place;
         $data->textfield = $this->textfield;
+        $data->bonus = $this->bonus;
+        $data->examreviewtime = $this->examreviewtime;
+        $data->examreviewroom = $this->examreviewroom;
+        $data->deleted = $this->deleted;
         return $data;
     }
-
 }

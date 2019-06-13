@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing all db wrapper functions for moodle
+ * class containing all wrapper functions for moodle methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -59,11 +59,16 @@ class Moodle{
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
+		$url = $ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id);
 		// Print the page header.
-		$PAGE->set_url($ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id));
+		$PAGE->set_url($url);
 		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
 		$PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
 		$PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
+
+		require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
+
+		$navbar = $PAGE->navbar->add(get_string($substring, 'mod_exammanagement'), $url);		
 
 		/*
 		 * Other things you may want to set - remove if not needed.

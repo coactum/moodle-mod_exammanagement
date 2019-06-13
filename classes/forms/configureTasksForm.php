@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing textfieldForm for exammanagement
+ * class containing configureTasksForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,17 +44,25 @@ class configureTasksForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events and creating input type number fields
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configure_tasks_str', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right" type="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configureTasks', 'mod_exammanagement').'</h3>');
+        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
         $mform->addElement('html', '</div>');
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureTasks'));
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
+
+        if($ExammanagementInstanceObj->getInputResultsCount()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
+        }
+        
+        if($ExammanagementInstanceObj->getGradingscale()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("gradingscale_already_entered", "mod_exammanagement").'</div>');
+        }
 
         //group for add and remove tasks buttons
         $tasks_buttonarray = array();
@@ -73,43 +81,98 @@ class configureTasksForm extends moodleform {
         $tasknumbers_array = array();
         $tasks_array = array();
         $attributes = array('size'=>'1'); // length of input field
+        $oldtaskcount = 0;
+        $temptaskcount = $this->_customdata['newtaskcount'];
 
+        //add tasks from DB
         if ($tasks){
 
           foreach($tasks as $key => $points){
+
+              $oldtaskcount+=1;
+
               //number of task
 
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>'.$key.'</strong></span>'));
+              array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$oldtaskcount.'</strong></span>'));
 
               //input field with points
-              array_push($tasks_array, $mform->createElement('text', 'task['.$key.']', '', $attributes));
-              $mform->setType('task['.$key.']', PARAM_INT);
-              $mform->setDefault('task['.$key.']', $points);
+              array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
+              $mform->setType('task['.$oldtaskcount.']', PARAM_FLOAT);
+              $mform->setDefault('task['.$oldtaskcount.']', $points);
+
           }
 
-          $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
-          $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
-
-        } else {
-          array_push($tasknumbers_array, $mform->createElement('html', '<span class="task_spacing"><strong>1</strong></span>'));
-          array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
-
-          $mform->setType('task[1]', PARAM_INT);
-          $mform->setDefault('task[1]', 0);
-
-          $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
-          $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
         }
 
-        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+        // add temptasks
+        if($temptaskcount>0){
+
+          $temptaskpoints = 10;
+          //$temptaskpoints = $this->_customdata['newtaskpoints'];
+
+          for ($i = 0; $i < $temptaskcount; $i++) {
+
+            $newtaskcount = intval($oldtaskcount+1+$i);
+
+            //number of task
+            array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$newtaskcount.'</strong></span>'));
+
+            //input field with points
+            array_push($tasks_array, $mform->createElement('text', 'task['.$newtaskcount.']', '', $attributes));
+            $mform->setType('task['.$newtaskcount.']', PARAM_FLOAT);
+            $mform->setDefault('task['.$newtaskcount.']', $temptaskpoints);
+
+            $totalpoints += $temptaskpoints;
+         }
+      }
+
+      if(!$tasks && !$temptaskcount) {
+          array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
+          array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
+
+          $mform->setType('task[1]', PARAM_FLOAT);
+          $mform->setDefault('task[1]', 0);
+
+          $oldtaskcount=1;
+
+        }
+
+        $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
+        $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
+
+        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.str_replace('.', ',', $totalpoints).'</span></strong></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
+
+        if(!$tasks && !$temptaskcount) {
+            $mform->addElement('hidden', 'newtaskcount', 1);
+            $mform->setType('newtaskcount', PARAM_INT);
+        } else{
+            $mform->addElement('hidden', 'newtaskcount', 0);
+            $mform->setType('newtaskcount', PARAM_INT);
+        }
+
         $this->add_action_buttons();
+
+        $mform->disable_form_change_checker();
     }
 
     //Custom validation should be added here
     function validation($data, $files) {
-        return array();
+
+        $errors= array();
+
+        foreach($data['task'] as $key => $taskval){
+            $isnumeric = is_numeric($taskval);
+
+            if(!$isnumeric){
+                $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+            } else if($taskval<=0) {
+                $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
+            }
+        }
+
+        return $errors;
     }
 }

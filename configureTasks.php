@@ -15,20 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints textfield form for mod_exammanagement.
+ * Allows teacher to configure tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\exammanagementForms;
+use mod_exammanagement\forms\configureTasksForm;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/classes/forms/exammanagementForms.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -36,16 +35,67 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$newtaskcount  = optional_param('newtaskcount', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementFormsObj = exammanagementForms::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
+$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
-		$MoodleObj->setPage('configureTasks');
-		$MoodleObj-> outputPageHeader();
-		$ExammanagementFormsObj->buildConfigureTasksForm();
+	if($ExammanagementInstanceObj->isExamDataDeleted()){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else {
 
-		$MoodleObj->outputFooter();
+		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
+			$MoodleObj->setPage('configureTasks');
+			$MoodleObj-> outputPageHeader();
+
+			//Instantiate form
+			$mform = new configureTasksForm(null, array('id'=>$id, 'e'=>$e, 'newtaskcount'=>$newtaskcount));
+
+			//Form processing and displaying is done here
+			if ($mform->is_cancelled()) {
+				//Handle form cancel operation, if cancel button is present on form
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+
+			} else if ($fromform = $mform->get_data()) {
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
+
+				$tasks = $fromform->task;
+
+				if($fromform->newtaskcount < 0){
+					$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount, true);
+				}
+
+				$tasks = json_encode($tasks);
+
+				$ExammanagementInstanceObj->moduleinstance->tasks=$tasks;
+
+				$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+				if($update){
+					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+				} else {
+					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+				}
+
+			} else {
+			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+			// or on the first display of the form.
+
+			//Set default data (if any)
+			$mform->set_data(array('id'=>$id));
+
+			//displays the form
+			$mform->display();
+			}
+
+			$MoodleObj->outputFooter();
+		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+		}
+	}
 } else {
     $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

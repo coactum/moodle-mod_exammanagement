@@ -19,7 +19,7 @@
  *
  * @package     mod_exammanagement
  * @category    upgrade
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,5 +30,5 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_exammanagement_install() {
 
-    return true;
+  return true;
 }

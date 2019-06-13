@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <XMLDB PATH="mod/exammanagement/db" VERSION="20170112" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
+  <XMLDB PATH="mod/exammanagement/db" VERSION="20190617" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
     <TABLES>
       <TABLE NAME="exammanagement" COMMENT="list of plugin-instances with all data">
         <FIELDS>
@@ -10,21 +10,24 @@
           <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)"/>
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
-          <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="not relevant for this module"/>
-          <FIELD NAME="categoryid" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
+          <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
+          <FIELD NAME="password" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="password set for plugin instance"/>
+          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
-          <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="participants for exam as array sorted by ids"/>
-          <FIELD NAME="tmpparticipants" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="temorary participants for exam as array sorted by ids"/>
+          <FIELD NAME="importfileheaders" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="headers of imported paul files as jsonstring"/>
+          <FIELD NAME="tempimportfileheader" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="header of temporary imported paul files as jsonstring"/>
           <FIELD NAME="tasks" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="count of tasks and points per taks as jsonstring"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="content and format of textfield as jsonstring"/>
-          <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
-          <FIELD NAME="stateofplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="state of places"/>
-          <FIELD NAME="assignedplaces" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="assigned places"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is room and places visible"/>
           <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="gradingscale for exam as json array"/>
-          <FIELD NAME="userinformation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="specific user information for plugin as json"/>
+          <FIELD NAME="datadeletion" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="date of correction completion"/>
+          <FIELD NAME="deletionwarningmailids" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="ids of mails with deletion warnings"/>
+          <FIELD NAME="examreviewtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam review"/>
+          <FIELD NAME="examreviewroom" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
+          <FIELD NAME="examreviewvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is exam review time visible"/>
+          <FIELD NAME="datadeleted" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="is the exam data deleted"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
@@ -33,6 +36,49 @@
         <INDEXES>
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
         </INDEXES>
+      </TABLE>
+      <TABLE NAME="exammanagement_participants" COMMENT="list of participants for all plugin-instances">
+        <FIELDS>
+          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+          <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+          <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course exammanagement activity belongs to"/>
+          <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
+          <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="moodle user id"/>
+          <FIELD NAME="imtlogin" TYPE="char" LENGTH="25" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="matrnr of user"/>
+          <FIELD NAME="firstname" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="first name of user"/>
+          <FIELD NAME="lastname" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="last name of user"/>
+          <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="email of user"/>
+          <FIELD NAME="headerid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="id of header from import file"/>
+          <FIELD NAME="roomid" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="roomid of assigned place"/>
+          <FIELD NAME="roomname" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="roomid of assigned place"/>
+          <FIELD NAME="place" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="roomid of assigned place"/>
+          <FIELD NAME="exampoints" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="results (points) as json array"/>
+          <FIELD NAME="examstate" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="results (points) as json array"/>
+          <FIELD NAME="timeresultsentered" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="results (points) as json array"/>
+          <FIELD NAME="bonus" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="bonus"/>
+    	</FIELDS>
+        <KEYS>
+          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        </KEYS>
+        <INDEXES>
+          <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
+        </INDEXES>
+      </TABLE>
+      <TABLE NAME="exammanagement_temp_part" COMMENT="list of all temp participants for all exammanagement plugin instances">
+          <FIELDS>
+              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+              <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of plugin instance"/>
+              <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of course of plugin instance for diagnostics only"/>
+              <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="category id of course of plugin instance"/>
+              <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="identifier of participant"/>
+              <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="line number from import file"/>              
+    	    </FIELDS>
+          <KEYS>
+              <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+          </KEYS>
+          <INDEXES>
+              <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
+          </INDEXES>
       </TABLE>
       <TABLE NAME="exammanagement_rooms" COMMENT="list of rooms for exammanagement plugin">
         <FIELDS>
@@ -43,11 +89,15 @@
           <FIELD NAME="seatingplan" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="seating plan as vector graphic"/>
           <FIELD NAME="places" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="places in each room"/>
           <FIELD NAME="type" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="room type (standard vs custom)"/>
+          <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="moodle user id for custom rooms"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="other config values as json array"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
+        <INDEXES>
+          <INDEX NAME="roomid" UNIQUE="false" FIELDS="roomid"/>
+        </INDEXES>
       </TABLE>
     </TABLES>
   </XMLDB>

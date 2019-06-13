@@ -14,29 +14,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * functions for tracking changes of input fields, adding and removing tasks
+ * functions for tracking changes of input fields, adding and removing tasks and creating input type number fields
  *
- * @module      mod_exammanagement/select_all_choices
- * @copyright   coactum GmbH 2018
+ * @module      mod_exammanagement/configure_tasks
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function($) {
+define(['jquery'], function ($) {
 
-  var getTotalpoints = function() {
+  var getTotalpoints = function () {
     var totalpoints = 0;
+    var newval;
 
-    $(".form-group input.form-control").each(function() {
-      totalpoints += parseInt($(this).val());
+    $(".form-group input.form-control").each(function () {
+      newval = parseFloat($(this).val());
+      if (newval) {
+        totalpoints += newval;
+      }
     });
+
+    totalpoints = String(totalpoints.toFixed(2)).replace('.', ',');
 
     return totalpoints;
   };
 
-  var getTaskCount = function() {
+  var getTaskCount = function () {
     var taskcount = 0;
 
-    $(".form-group input.form-control").each(function() {
+    $(".form-group input.form-control").each(function () {
       taskcount += 1;
     });
 
@@ -44,44 +50,70 @@ define(['jquery'], function($) {
   };
 
   return {
-    init: function() {
-      $(".form-group").on("change", "input", function() {
-        $("#totalpoints").text(getTotalpoints());
-      });
-    },
-    addtask: function() {
+    init: function () {
 
-      $("#id_add_task").click(function() {
+      // create input type number elements
+      $("input[type=text]").attr("type", "number");
 
-        var taskcount = getTaskCount();
-        var newtaskcount = taskcount + 1;
-        var pointsofnewtask = 10;
+      var styles = {
+        "-webkit-appearance": "textfield",
+        "-moz-appearance": "textfield",
+        "margin": "0px",
+        "width": "70px"
+      };
 
-        var temp = '<div class="form-group  fitem  ">';
-        temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
-        temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
-        temp += pointsofnewtask + '" size="1" type="text"></span><div class="form-control-feedback" id="id_error_task[';
-        temp += newtaskcount + ']" style="display: none;"></div></div> ';
+      $("input[type=number]").css(styles);
+      $("input[type=number]").attr("step", "0.01");
+      $("input[type=number]").attr("min", "0");
 
-        $(".form-group:nth-of-type(5) .col-md-9").append('<span class="task_spacing"><strong>' + newtaskcount + '</strong></span>');
-        $(".form-group:nth-of-type(6) .col-md-9").append(temp);
+      $(".form-group").on("change", "input", function () { // update totalpoints if some field changes
 
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);
       });
     },
-    removetask: function() {
+    addtask: function () { //add new tasks
 
-      $("#id_remove_task").click(function() {
+      $("#id_add_task").click(function () {
+
+        var taskcount = getTaskCount();
+        var newtaskcount = taskcount + 1;
+        var pointsofnewtask = 10;
+
+        if (taskcount <= 19) {
+
+          var temp = '<div class="form-group  fitem  ">';
+          temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
+          temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
+          temp += pointsofnewtask + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
+          temp += 'margin: 0px; width: 70px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
+          temp += newtaskcount + ']" style="display: none;"></div></div> ';
+
+          $("div[data-groupname='tasknumbers_array'] .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
+          $("div[data-groupname='tasks_array'] .col-md-9").append(temp);
+
+          var totalpoints = getTotalpoints();
+          $("#totalpoints").text(totalpoints);
+
+          $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()) + 1);
+        }
+
+      });
+    },
+    removetask: function () { //remove task
+
+      $("#id_remove_task").click(function () {
 
         var taskcount = getTaskCount();
 
         if (taskcount > 1) {
-          $(".form-group:nth-of-type(5) .col-md-9 span:last").remove();
-          $(".form-group:nth-of-type(6) .col-md-9 .form-group:last").remove();
+          $("div[data-groupname='tasknumbers_array'] .col-md-9 span:last").remove();
+          $("div[data-groupname='tasks_array'] .col-md-9 .form-group:last").remove();
 
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
+
+          $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val() - 1));
         }
       });
     }

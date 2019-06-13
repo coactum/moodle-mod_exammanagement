@@ -18,7 +18,7 @@
  * The main mod_exammanagement configuration form.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * Module instance settings form.
  *
  * @package    mod_exammanagement
- * @copyright  coactum GmbH 2017
+ * @copyright  coactum GmbH 2019
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_mod_form extends moodleform_mod {
@@ -47,7 +47,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off", 'autocorrect' => "off", "spellcheck" => "false"));
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -57,7 +57,6 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        // $mform->addHelpButton('name', 'exammanagementname', 'mod_exammanagement');
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
@@ -68,17 +67,46 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_exammanagement settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        // $mform->addElement('header', get_string('exammanagementfieldset', 'mod_exammanagement'), get_string('exammanagementfieldset', 'mod_exammanagement'));
-        // $mform->addElement('static', 'label2', get_string('exammanagementdescription', 'mod_exammanagement'), get_string('exammanagementdescriptiontext', 'mod_exammanagement'));
+        $mform->addElement('header', get_string('security_password', 'mod_exammanagement'), get_string('security_password', 'mod_exammanagement'));
 
+        $mform->addElement('password', 'newpassword', get_string('new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->setType('newpassword', PARAM_TEXT);
+        $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('newpassword', 'security_password', 'mod_exammanagement');
+
+        $mform->addElement('password', 'confirmnewpassword', get_string('confirm_new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->setType('newpassword', PARAM_TEXT);
+        $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('confirmnewpassword', 'confirm_new_password', 'mod_exammanagement');
+
+        $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->setType('oldpassword', PARAM_TEXT);
+        $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+        $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
 
         // Add standard grading elements.
-        $this->standard_grading_coursemodule_elements();
+        //$this->standard_grading_coursemodule_elements();
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    //Custom validation should be added here
+    function validation($data, $files) {
+        $errors= array();
+  
+        if($data['newpassword']){
+            if ($data['confirmnewpassword'] == Null){
+                $errors['confirmnewpassword'] = get_string('err_filloutfield', 'mod_exammanagement');
+            } else if(strcmp($data['newpassword'], $data['confirmnewpassword']) !== 0){
+                $errors['newpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
+                $errors['confirmnewpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
+            }
+        }
+  
+        return $errors;   
     }
 }

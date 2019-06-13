@@ -23,7 +23,7 @@
  * Moodle is performing actions across all modules.
 *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -41,11 +41,7 @@ function exammanagement_supports($feature) {
             return true;
     	case FEATURE_SHOW_DESCRIPTION:
             return true;
-        case FEATURE_GRADE_HAS_GRADE:
-            return true;
-        case FEATURE_BACKUP_MOODLE2:
-            return true;
-        default:
+      default:
             return null;
     }
 }
@@ -65,7 +61,13 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     global $DB, $PAGE;
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->categoryid = $PAGE->category->name; //set course category
+    $moduleinstance->categoryid = $PAGE->category->id; //set course category
+    
+    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+        $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
+    } else {
+        $moduleinstance->password = NULL;
+    }
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 
@@ -83,12 +85,26 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
  * @return bool True if successful, false otherwise.
  */
 function exammanagement_update_instance($moduleinstance, $mform = null) {
-    global $DB;
+    global $DB, $PAGE;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+    $moduleinstance->categoryid = $PAGE->category->id; //set course category
+
+    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+
+        $existingPW = base64_decode($DB->get_record('exammanagement', array('id'=>$moduleinstance->instance))->password);
+
+        if (!isset($existingPW) || $existingPW =='' || (isset($existingPW) && password_verify($mform->get_data()->oldpassword, $existingPW))){
+            $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT)); 
+           
+        } else {
+            throw new Exception(get_string('incorrect_password_change', 'mod_exammanagement'));
+        }
+    }
 
     return $DB->update_record('exammanagement', $moduleinstance);
+
 }
 
 /**
@@ -100,6 +116,29 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 function exammanagement_delete_instance($id) {
     global $DB;
 
+    $moduleinstance = $DB->get_record('exammanagement', array('id'=>$id));
+
+     if (!$moduleinstance){
+         return false;
+     }
+     if (!$cm = get_coursemodule_from_instance('exammanagement', $moduleinstance->id)) {
+         return false;
+     }
+
+     // delete participants
+     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     if($exists) {
+        $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     }
+
+
+    // delete temporary participants
+    $exists = $DB->get_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+    if ($exists) {
+        $DB->delete_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+    }
+
+    // delete plugin instance
     $exists = $DB->get_record('exammanagement', array('id' => $id));
     if (!$exists) {
         return false;
@@ -108,109 +147,6 @@ function exammanagement_delete_instance($id) {
     $DB->delete_records('exammanagement', array('id' => $id));
 
     return true;
-}
-
-/**
- * Is a given scale used by the instance of mod_exammanagement?
- *
- * This function returns if a scale is being used by one mod_exammanagement
- * if it has support for grading and scales.
- *
- * @param int $moduleinstanceid ID of an instance of this module.
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by the given mod_exammanagement instance.
- */
-function exammanagement_scale_used($moduleinstanceid, $scaleid) {
-    global $DB;
-
-    if ($scaleid && $DB->record_exists('exammanagement', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Checks if scale is being used by any instance of mod_exammanagement.
- *
- * This is used to find out if scale used anywhere.
- *
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by any mod_exammanagement instance.
- */
-function exammanagement_scale_used_anywhere($scaleid) {
-    global $DB;
-
-    if ($scaleid and $DB->record_exists('exammanagement', array('grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Creates or updates grade item for the given mod_exammanagement instance.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param bool $reset Reset grades in the gradebook.
- * @return void.
- */
-function exammanagement_grade_item_update($moduleinstance, $reset=false) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    $item = array();
-    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
-    $item['gradetype'] = GRADE_TYPE_VALUE;
-
-    if ($moduleinstance->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $moduleinstance->grade;
-        $item['grademin']  = 0;
-    } else if ($moduleinstance->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$moduleinstance->grade;
-    } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
-    }
-    if ($reset) {
-        $item['reset'] = true;
-    }
-
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, null, $item);
-}
-
-/**
- * Delete grade item for given mod_exammanagement instance.
- *
- * @param stdClass $moduleinstance Instance object.
- * @return grade_item.
- */
-function exammanagement_grade_item_delete($moduleinstance) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    return grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement',
-                        $moduleinstance->id, 0, null, array('deleted' => 1));
-}
-
-/**
- * Update mod_exammanagement grades in the gradebook.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param int $userid Update grade of specific user only, 0 means all participants.
- */
-function exammanagement_update_grades($moduleinstance, $userid = 0) {
-    global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    // Populate array of grade objects indexed by userid.
-    $grades = array();
-    grade_update('/mod/exammanagement', $moduleinstance->course, 'mod', 'exammanagement', $moduleinstance->id, 0, $grades);
 }
 
 /**
@@ -293,7 +229,7 @@ function exammanagement_extend_navigation_course($exammanagementnode, $course, $
 		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
 			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
 				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
-				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM);
+				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM,null , null , new pix_icon('barcode', $cm->name, 'mod_exammanagement'));
 				$exammanagementnode->add_node($node);
 				}
 			$index++;
@@ -310,4 +246,13 @@ function exammanagement_extend_navigation_course($exammanagementnode, $course, $
  * @param navigation_node $exammanagementnode {@link navigation_node}
  */
 function exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
+}
+
+/**
+ * Map icons for font-awesome themes.
+ */
+function exammanagement_get_fontawesome_icon_map() {
+    return [
+        'mod_exammanagement:barcode' => 'fa-barcode'
+    ];
 }
