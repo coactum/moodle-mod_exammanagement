@@ -126,32 +126,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
           if($participantsArray){
     
-            usort($participantsArray, function($a, $b){ //sort array of assignments by name
-              global $UserObj;
-    
-              if($a->moodleuserid){
-                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-              } else {
-                $aFirstname = $a->firstname;
-                $aLastname = $a->lastname;
-              }
-    
-              if($b->moodleuserid){
-                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-              } else {
-                $bFirstname = $b->firstname;
-                $bLastname = $b->lastname;
-              }
-    
-              if ($aLastname == $bLastname) { //if names are even sort by first name
-                  return strcmp($aFirstname, $bFirstname);
-              } else{
-                  return strcmp($aLastname, $bLastname); // else sort by last name
-              }
-    
-            });
+            $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
     
             $counter = 0;
             $leftLabel = true;
@@ -236,32 +211,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
           if($participantsArray){
     
-            usort($participantsArray, function($a, $b){ //sort array of assignments by name
-              global $UserObj;
-    
-              if($a->moodleuserid){
-                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-              } else {
-                $aFirstname = $a->firstname;
-                $aLastname = $a->lastname;
-              }
-    
-              if($b->moodleuserid){
-                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-              } else {
-                $bFirstname = $b->firstname;
-                $bLastname = $b->lastname;
-              }
-    
-              if ($aLastname == $bLastname) { //if names are even sort by first name
-                  return strcmp($aFirstname, $bFirstname);
-              } else{
-                  return strcmp($aLastname, $bLastname); // else sort by last name
-              }
-    
-            });
+            $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
     
             $counter = 0;
             $leftLabel = true;

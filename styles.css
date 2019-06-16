@@ -289,7 +289,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .exammanagement_brand_backgroundcolor{
-  background-color: #00205b;
+  background-color: #00205b !important;
 }
 
 .exammanagement_brand_bordercolor{

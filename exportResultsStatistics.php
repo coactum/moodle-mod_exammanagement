@@ -188,32 +188,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $ParticipantsArray = $UserObj->getAllExamParticipants();
 
-            usort($ParticipantsArray, function($a, $b){ //sort array by custom user function
-                global $UserObj;
-
-                if($a->moodleuserid){
-                $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-                } else {
-                $aFirstname = $a->firstname;
-                $aLastname = $a->lastname;
-                }
-
-                if($b->moodleuserid){
-                $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-                } else {
-                $bFirstname = $b->firstname;
-                $bLastname = $b->lastname;
-                }
-
-                if ($aLastname == $bLastname) { //if names are even sort by first name
-                    return strcmp($aFirstname, $bFirstname);
-                } else{
-                    return strcmp($aLastname, $bLastname); // else sort by last name
-                }
-
-            });
+            $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
 
             $notPassed = 0;
             $notRated = 0;

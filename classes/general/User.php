@@ -613,4 +613,38 @@ class User{
 				return false;
 		}
 	}
+
+	public function sortParticipantsArrayByName($participantsArr){ // sort participants array for all exported documents and participants overview
+
+		usort($participantsArr, function($a, $b){ //sort array by custom user function
+
+			$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
+			$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
+
+			if($a->moodleuserid){
+				$aFirstname = $this->getMoodleUser($a->moodleuserid)->firstname;
+				$aLastname = str_replace($searchArr, $replaceArr, $this->getMoodleUser($a->moodleuserid)->lastname);  
+			} else {
+				$aFirstname = $a->firstname;
+				$aLastname = str_replace($searchArr, $replaceArr, $a->lastname);
+			}
+
+			if($b->moodleuserid){
+				$bFirstname = $this->getMoodleUser($b->moodleuserid)->firstname;
+				$bLastname = str_replace($searchArr, $replaceArr, $this->getMoodleUser($b->moodleuserid)->lastname);
+			} else {
+				$bFirstname = $b->firstname;
+				$bLastname = str_replace($searchArr, $replaceArr, $b->lastname);
+			}
+
+			if ($aLastname == $bLastname) { //if names are even sort by first name
+				return strcmp($aFirstname, $bFirstname);
+			} else{
+				return strcmp($aLastname, $bLastname); // else sort by last name
+			}
+
+		});
+
+		return $participantsArr;
+	}
 }

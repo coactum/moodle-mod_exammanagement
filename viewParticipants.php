@@ -104,11 +104,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     usort($moodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
 
                         global $UserObj;
+                        $searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
+                        $replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
 
                         $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                        $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;
+                        $aLastname = str_replace($searchArr, $replaceArr, $UserObj->getMoodleUser($a->moodleuserid)->lastname);
                         $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                        $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
+                        $bLastname = str_replace($searchArr, $replaceArr, $UserObj->getMoodleUser($b->moodleuserid)->lastname);
 
                         if ($aLastname == $bLastname) { //if names are even sort by first name
                             return strcmp($aFirstname, $bFirstname);
@@ -116,7 +118,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             return strcmp($aLastname, $bLastname); // else sort by last name
                         }
                     });
-
 
                     foreach ($moodleParticipants as $key => $participantObj) {
 
@@ -146,10 +147,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     usort($noneMoodleParticipants, function($a, $b){ //sort participants ids by name (custom function)
 
+                        $searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
+                        $replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
+                        
                         $aFirstname = $a->firstname;
-                        $aLastname = $a->lastname;
+                        $aLastname = str_replace($searchArr, $replaceArr, $a->lastname);
                         $bFirstname = $b->firstname;
-                        $bLastname = $b->lastname;
+                        $bLastname = str_replace($searchArr, $replaceArr, $b->lastname);
 
                         if ($aLastname == $bLastname) { //if names are even sort by first name
                             return strcmp($aFirstname, $bFirstname);
