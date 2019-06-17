@@ -41,7 +41,7 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
+if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
     if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');

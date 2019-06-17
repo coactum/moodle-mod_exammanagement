@@ -642,7 +642,7 @@ $string['exammanagement:viewinstance'] = 'Prüfungsorganisation ansehen';
 $string['exammanagement:viewparticipantspage'] = 'Teilnehmeransicht ansehen';
 $string['exammanagement:takeexams'] = 'Prüfung ablegen';
 $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
-$string['exammanagement:adddefaultrooms'] = 'Standardräume importieren';
+$string['exammanagement:importdefaultrooms'] = 'Standardräume importieren';
 $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
 $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
 

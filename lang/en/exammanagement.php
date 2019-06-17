@@ -642,7 +642,7 @@ $string['exammanagement:viewinstance'] = 'View exam organization';
 $string['exammanagement:viewparticipantspage'] = 'View participants page';
 $string['exammanagement:takeexams'] = 'Take exams';
 $string['exammanagement:sendgroupmessage'] = 'Send group message to participants';
-$string['exammanagement:adddefaultrooms'] = 'Import default rooms';
+$string['exammanagement:importdefaultrooms'] = 'Import default rooms';
 $string['exammanagement:resetpassword'] = 'Reset password';
 $string['exammanagement:requestpasswordreset'] = 'Request password reset';
 

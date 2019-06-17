@@ -117,7 +117,7 @@ $capabilities = [
             'guest' => CAP_PROHIBIT,
         ],
     ],
-	'mod/exammanagement:adddefaultrooms'=> [
+	'mod/exammanagement:importdefaultrooms'=> [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
