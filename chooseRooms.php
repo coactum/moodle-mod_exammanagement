@@ -39,6 +39,8 @@ global $USER;
 
 $deletecustomroomid  = optional_param('deletecustomroomid', 0, PARAM_TEXT);
 
+$deletedefaultroomid  = optional_param('deletedefaultroomid', 0, PARAM_TEXT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e);
@@ -63,6 +65,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else {
               redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
             }
+          }
+        }
+
+        if($deletedefaultroomid){
+          if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
+            if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))){
+              $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
+            }
+          } else {
+            $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
           }
         }
 

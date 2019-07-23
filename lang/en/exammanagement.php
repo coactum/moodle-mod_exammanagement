@@ -256,6 +256,33 @@ $string['customroom_description'] = 'Optional description shown when choosing ro
 $string['add_room'] = 'Save room';
 $string['no_description_new_room'] = 'No description available.';
 
+//editDefaultRoomForm.php
+$string['editDefaultRoom'] = 'Edit default room';
+$string['edit_defaultroom_str'] = 'Here administrators can edit the existing default exam rooms or create new ones.';
+$string['general'] = 'General information';
+$string['roomid'] = 'Room id (internal)';
+$string['defaultroom_description'] = 'Uservisible description';
+$string['placespreview'] = 'Preview of places';
+$string['roomplan_available'] = 'Seatingplan available';
+$string['new_places'] = 'New places';
+$string['edit_places'] = 'Edit places bearbeiten';
+$string['places_mode'] = 'Mode of places';
+$string['placesmode_default'] = 'Default';
+$string['placesmode_rows'] = 'Rowwise';
+$string['placesmode_all_individual'] = 'All individual';
+$string['placesroom'] = 'Count of places in the room';
+$string['placesrow'] = 'Places per row';
+$string['placesfree'] = 'Free places';
+$string['one_place_free'] = 'One place free';
+$string['two_places_free'] = 'Two places free';
+$string['rowscount'] = 'Rows count';
+$string['placesarray'] = 'Array with all places';
+$string['new_seatingplan'] = 'New seatingplan';
+$string['defaultroom_svg'] = 'Seatingplan';
+
+//editDefaultRoom.php
+$string['no_editable_default_room'] = 'No editable default room';
+
 //setDateTimeForm.php
 $string['setDateTime'] = 'Set exam date and time';
 $string['set_date_time_str'] = 'The date and time of the exam can be selected here.';
@@ -508,6 +535,7 @@ The text file to be imported must contain the following information for each exa
 <li>Fourth column: An array needed to calculate the number of seats in a room, which contains the name of each individual seat in the room. The array must be written in json syntax, e.g. look like this: <i>["R/R01/P07", "R/R01/P04", "R/R01/P01", ...] </i></li>
 <li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
 If default rooms have already been imported, they are overwritten by the new import. The information on any deleted rooms is retained in all exam organization instances in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats.';
+$string['helptext_editDefaultRoom']= 'As a PANDA administrator, you can <strong>edit a default room </strong> here or create a new one. <br><br> ...';
 $string['helptext_addCustomRoom'] = 'On this page, you as a lecturer can create a <strong>custom exam room</strong> if the room in which you want to hold your exam is not listed as an exam room within the system. Alternatively, you can also edit an existing exam room you have created yourself here.<br><br>
 To create a new room, first enter its name. Next, you must specify the number of seats you want the room to have. Note that you must check for yourself how many seats are actually available in the room and that the numbering of the seats in the room created here in the system always starts with 1, regardless of the numbering actually available in the room. This means that you must manually adjust any discrepancies that may occur with the actual seat numbering. Finally, you can enter an optional description of the room. This should contain all important information about the room so that you can use the room again later, for example in the next semester, if necessary. Finally, a click on the "Save room" button creates the new exam room.<br><br>
 A room created in this way can then be selected from the list of available exam rooms as a room and can then be used regularly like any other exam room.<br><br>

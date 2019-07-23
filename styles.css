@@ -255,6 +255,27 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
  	display:block;
 }
 
+/* editDefaultRoomForm.php */
+
+.exammanagement_editdefaultroom_placespreview{
+	position:relative;
+	width:300px;
+	overflow: hidden;
+	z-index:1000;
+	display:block;
+}
+
+.exammanagement_editdefaultroom_svg{
+	position:relative;
+	width:300px;
+	height:300px;
+	background:white;
+	overflow: hidden;
+	z-index:1000;
+	display:block;
+	border: 2px solid black;
+}
+
 /* configureTasksForm.php - spacing between task numbers */
 
 .exammanagement_task_spacing{

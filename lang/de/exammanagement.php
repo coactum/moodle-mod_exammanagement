@@ -256,6 +256,34 @@ $string['customroom_description'] = 'Optionale Beschreibung für die Anzeige des
 $string['add_room'] = 'Raum speichern';
 $string['no_description_new_room'] = 'Keine Beschreibung vorhanden.';
 
+//editDefaultRoomForm.php
+$string['editDefaultRoom'] = 'Standardraum bearbeiten';
+$string['edit_defaultroom_str'] = 'Hier können Administratoren die vorhandenen Standardprüfungungsräume bearbeiten oder neue erstellen.';
+$string['general'] = 'Basisinformationen';
+$string['roomid'] = 'Raumid (systemintern)';
+$string['defaultroom_description'] = 'Benutzersichtbare Beschreibung';
+$string['placespreview'] = 'Vorschau der Sitzplätze';
+$string['roomplan_available'] = 'Vorhandener Sitzplan';
+$string['new_places'] = 'Neue Sitzplätze';
+$string['edit_places'] = 'Sitzplätze bearbeiten';
+$string['general'] = 'Basisinformationen';
+$string['places_mode'] = 'Modus Sitzplätze';
+$string['placesmode_default'] = 'Standard';
+$string['placesmode_rows'] = 'Reihenweise';
+$string['placesmode_all_individual'] = 'Vollständig individuell';
+$string['placesroom'] = 'Anzahl der Sitzplätze des Raumes';
+$string['placesrow'] = 'Sitzplätze pro Reihe';
+$string['placesfree'] = 'Freie Sitzplätze';
+$string['one_place_free'] = '1 Platz frei';
+$string['two_places_free'] = '2 Plätze frei';
+$string['rowscount'] = 'Anzahl an Reihen';
+$string['placesarray'] = 'Array aller Sitzplätze';
+$string['new_seatingplan'] = 'Neuer Sitzplan';
+$string['defaultroom_svg'] = 'Sitzplan';
+
+//editDefaultRoom.php
+$string['no_editable_default_room'] = 'Kein bearbeitbarer Standardraum';
+
 //setDateTimeForm.php
 $string['setDateTime'] = 'Prüfungstermin festlegen';
 $string['set_date_time_str'] = 'Hier können das Datum und die Uhrzeit der Prüfung ausgewählt werden.';
@@ -512,6 +540,7 @@ Die einzulesende Textdatei muss dabei die folgenden Informationen zu jedem Prüf
 <li>Vierte Spalte: Ein zur Berechnung der Sitzplatzzahl des Raumes benötigtes Array, welches die Bezeichnung jedes einzelnen im Raum vorhandenen Sitzplatzes enthält. Das Array muss dabei in json-Syntax verfasst sein, also zum Beispiel folgendermaßen aussehen: <i>["R/R01/P07","R/R01/P04","R/R01/P01", ...] </i></li>
 <li>Fünfte Spalte: Wenn ein Sitzplan für den Raum als .svg-Datei vorhanden ist und dieser den Benutzern angezeigt werden soll muss in dieser Spalte der Quellcode der SVG-Datei stehen, ansonsten kann diese Spalte leer gelassen werden.</li></ul>
 Wurden bereits Standardräume eingelesen werden diese durch einen Neuimport überschrieben. Die Informationen zu allen dabei gegebenenfalls gelöschten Räumen bleiben anschließend in allen Prüfungsorganisations-Instanzen, in denen Sie aktuell genutzt werden, zunächst erhalten. Gelöschte Räume können jedoch von den Dozenten nicht mehr als neue Prüfungsräume ausgewählt oder aber für die (Neu-)Zuweisung von Sitzplätzen genutzt werden.';
+$string['helptext_editDefaultRoom']= 'Hier können Sie als PANDA-Administrator einen bestehenden <strong>Standardraum bearbeiten</strong> oder einen neuen anlegen.<br><br> ...';
 $string['helptext_setDateTime']= 'Hier können das <strong>Datum und die Uhrzeit der Prüfung</strong> ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. Zudem wird er den PrüfungsteilnehmerInnen in deren Ansicht angezeigt, sobald Sie diese Informationen auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben. <br /> <br />
 Das Datum und die Uhrzeit der Prüfung sollten hier also gesetzt werden, um die Prüfungsorganisation in PANDA sinnvoll nutzen zu können.';
