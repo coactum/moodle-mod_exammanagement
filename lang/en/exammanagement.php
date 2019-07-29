@@ -223,6 +223,8 @@ $string['chooseRooms'] = 'Choose exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
+$string['add_default_room'] = 'Add default exam room';
+$string['roomid'] = 'Room ID';
 $string['exam_room'] = 'Room';
 $string['description'] = 'Description';
 $string['room_type'] = 'Room type';
@@ -232,6 +234,7 @@ $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
 $string['change_room'] = 'Change room';
 $string['delete_room'] = 'Delete room';
+$string['delete_defaultroom_confirm'] = 'This action deletes the selected default room. If this room has already been selected by teachers as an exam room, its information is preserved in the corresponding exam organizations for the moment, but it can no longer be selected as a new exam room or used for the (re-) assignment of seats.';
 $string['delete_room_confirm'] = 'This action deletes this self created room. Make sure that the room is not currently selected as an exam room.';
 $string['hint_room_modelling'] = '<strong>Please note:</strong> Some rooms are listed here several times. These are different models of the same room. "1 Platz frei" means that every 2nd space will be used. "2 Plätze frei" means that every 3rd place will be used.';
 $string['places_already_assigned_rooms'] = '<strong>Warning:</strong> Seats in this room have already been assigned to some participants. If this room is now deselected as an exam room, the entire assignment of places is deleted and must then be carried out again.';
@@ -258,30 +261,35 @@ $string['no_description_new_room'] = 'No description available.';
 
 //editDefaultRoomForm.php
 $string['editDefaultRoom'] = 'Edit default room';
-$string['edit_defaultroom_str'] = 'Here administrators can edit the existing default exam rooms or create new ones.';
+$string['edit_defaultroom_str'] = 'Here administrators can edit an existing default exam room or create a new one.';
 $string['general'] = 'General information';
-$string['roomid'] = 'Room id (internal)';
-$string['defaultroom_description'] = 'Uservisible description';
-$string['placespreview'] = 'Preview of places';
-$string['roomplan_available'] = 'Seatingplan available';
-$string['new_places'] = 'New places';
-$string['edit_places'] = 'Edit places bearbeiten';
-$string['places_mode'] = 'Mode of places';
+$string['roomid_internal'] = 'Room ID (system-internal; roomname_variant, e.g. L1.202_1, Audimax_2; permitted characters: Letters, numbers, periods and underscores)';
+$string['defaultroom_name'] = 'Name of the room (user-visible, permitted characters: Letters, numbers, periods, and spaces)';
+$string['defaultroom_description'] = 'Description (user-visible, e.g. modeling information such as number of free places between two seats, permitted characters: Letters, numbers, periods, minus and spaces)';
+$string['defaultroom_placescount'] = 'Number of seats that can be occupied';
+$string['placespreview'] = 'Designation of all seats that can be occupied';
+$string['roomplan_available'] = ' Available seating plan';
+$string['new_places'] = 'New seats';
+$string['edit_places'] = 'Edit seats';
+$string['places_mode'] = 'Mode of seats';
 $string['placesmode_default'] = 'Default';
-$string['placesmode_rows'] = 'Rowwise';
-$string['placesmode_all_individual'] = 'All individual';
-$string['placesroom'] = 'Count of places in the room';
-$string['placesrow'] = 'Places per row';
-$string['placesfree'] = 'Free places';
-$string['one_place_free'] = 'One place free';
-$string['two_places_free'] = 'Two places free';
-$string['rowscount'] = 'Rows count';
-$string['placesarray'] = 'Array with all places';
-$string['new_seatingplan'] = 'New seatingplan';
-$string['defaultroom_svg'] = 'Seatingplan';
+$string['placesmode_rows'] = 'Rows';
+$string['placesmode_all_individual'] = 'Completely individual';
+$string['placesroom'] = ' Number of total seats in the room';
+$string['rowscount'] = 'Number of rows in the room';
+$string['placesrow'] = 'Seats per row';
+$string['placesfree'] = 'Free places between two seats that can be occupied';
+$string['one_place_free'] = '1 place free';
+$string['two_places_free'] = '2 places free';
+$string['rowsfree'] = 'Free rows';
+$string['no_row_free'] = 'No rows free';
+$string['one_row_free'] = 'One row free';
+$string['placesarray'] = 'All seats (designation of all seats separated by comma, permitted characters: Letters, numbers, periods, minus, slash and spaces)';
+$string['new_seatingplan'] = 'New seating plan';
+$string['defaultroom_svg'] = 'Seating plan (text file (.txt) with the source code of a SVG of the room plan)';
 
 //editDefaultRoom.php
-$string['no_editable_default_room'] = 'No editable default room';
+$string['no_editable_default_room'] = 'No editable default room because the room is a custom room created by a lecturer';
 
 //setDateTimeForm.php
 $string['setDateTime'] = 'Set exam date and time';
@@ -535,7 +543,11 @@ The text file to be imported must contain the following information for each exa
 <li>Fourth column: An array needed to calculate the number of seats in a room, which contains the name of each individual seat in the room. The array must be written in json syntax, e.g. look like this: <i>["R/R01/P07", "R/R01/P04", "R/R01/P01", ...] </i></li>
 <li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
 If default rooms have already been imported, they are overwritten by the new import. The information on any deleted rooms is retained in all exam organization instances in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats.';
-$string['helptext_editDefaultRoom']= 'As a PANDA administrator, you can <strong>edit a default room </strong> here or create a new one. <br><br> ...';
+$string['helptext_editDefaultRoom']= 'Here, administrators can edit an existing <strong> default exam room </strong> or create a new one.<br><br>
+First the basic information of the room is displayed, which may be entered or edited at the same time. This is first the system-internal ID of the room, which is used internally by the plugin to identify the room and should be structured according to the following schema: The room name followed by an underscore followed by the variant of the room, which is particularly relevant for several models of the same room with a different number of free seats between the occupiable seats. For the part of the room name all letters, numbers and also dots are allowed, room variants can exist at a maximum of ten at the same time. If an existing room is edited, the room ID cannot be changed. The room ID is followed by the name of the room, which is visible to all lecturers and may consist of letters, numbers, dots and spaces. The room description is also visible for the users, should contain information about the selected modelling (one or two free seats between two occupiable seats) and may contain the same characters as the room name. Under this information, if an existing room has been selected for editing, further information about the room is displayed, such as the previous number of available seats and an overview of their designations and (if available) the seating plan stored for the room. <br><br>
+If seats are to be edited in an existing room, this is possible as soon as the option "Yes" has been selected in the next section under "Edit seats". This is not necessary when creating a new room, in this case you can continue directly with entering the new seats in the "New seats" section. For the filling of the room with seats there are three different modes, which should enable the simple replication of all important modelling types of exam rooms: In the " Default " mode, a number of assignable seats is automatically created for a room until the specified total number of seats in the room is reached, taking into account the specified number of free seats between two assignable seats. The naming of the seats starts with 1 and then counts upwards. If a room is to be filled with 100 total seats, between each of them a seat remains unused, it would receive a total of 50 seats with the designations 1, 3, 5, ..., 100 that can be assigned in the examination organisation. With two places free there would be 34 places with the designations 1, 4, 7, ..., 100. The seat mode "Rows" works similarly, only the number of rows to be filled existing in a room as well as the available places per row must be specified here. Each row is then filled with the corresponding number of seats, whereby the specified number of free seats and the number of rows to be left free are taken into account. The places of each row are identically named, thus in each case e. g. 1,3,5,7 ... . For all room modelling that cannot be replicated using these two modes, there is a third mode with the name "Completely individual". In this mode, the names of all places can be entered completely freely, whereby a comma must always be placed between two seat designations. All letters, numbers, dots, minus signs, slashes and spaces are allowed inside the seat names. This mode is very well suited for more complex seat modelling or for adapting models created with the first two modes. This is useful, for example, if the first or last row of a room has fewer seats than the others due to structural conditions, or if seats are still arranged in rows and every second row is to be left empty. When editing an already existing room, this mode is therefore already preselected, but can of course be replaced by another mode at any time.<br><br>
+Finally, a new room plan can be added for a room. This must be drawn up outside the exam organisation and should contain all the seats and their designations provided for the standard room. The room plan must be saved as SVG in a text file (.txt), which must then be uploaded in the last section of this page. Please note that the contents of the file with the SVG of the room plan must be carefully checked before uploading, as the plugin cannot detect malicious or incorrect contents in the file at this point. If a file with a room plan was selected, this is saved after a click on "Save room" together with the rest of the specified information. <br><br>
+The room thus created or modified can immediately be selected as the exam room by all teachers in their exam organisations. When a name is changed or a seat is changed in an existing exam room that is already used in exam organizations, the name and previous seat assignments remain stored there for the time being. Teachers must therefore reassign seats once before the changes to the room take effect.';
 $string['helptext_addCustomRoom'] = 'On this page, you as a lecturer can create a <strong>custom exam room</strong> if the room in which you want to hold your exam is not listed as an exam room within the system. Alternatively, you can also edit an existing exam room you have created yourself here.<br><br>
 To create a new room, first enter its name. Next, you must specify the number of seats you want the room to have. Note that you must check for yourself how many seats are actually available in the room and that the numbering of the seats in the room created here in the system always starts with 1, regardless of the numbering actually available in the room. This means that you must manually adjust any discrepancies that may occur with the actual seat numbering. Finally, you can enter an optional description of the room. This should contain all important information about the room so that you can use the room again later, for example in the next semester, if necessary. Finally, a click on the "Save room" button creates the new exam room.<br><br>
 A room created in this way can then be selected from the list of available exam rooms as a room and can then be used regularly like any other exam room.<br><br>

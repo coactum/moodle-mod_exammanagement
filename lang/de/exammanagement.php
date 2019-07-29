@@ -223,6 +223,8 @@ $string['chooseRooms'] = 'Prüfungsräume auswählen';
 $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
+$string['add_default_room'] = 'Neuen Standardraum anlegen';
+$string['roomid'] = 'Raum ID';
 $string['exam_room'] = 'Raum';
 $string['description'] = 'Beschreibung';
 $string['room_type'] = 'Raumart';
@@ -232,6 +234,7 @@ $string['default_room'] = 'Standardraum';
 $string['custom_room'] = 'Eigener Raum';
 $string['change_room'] = 'Raum ändern';
 $string['delete_room'] = 'Raum löschen';
+$string['delete_defaultroom_confirm'] = 'Durch diese Aktion wird der gewählte Standardraum gelöscht. Falls dieser bereits von Lehrenden als Prüfungsraum ausgewählt wurde bleiben seine Informationen in den entsprechenden Prüfungsorganisationen zunächst erhalten, er kann jedoch nicht mehr als neuer Prüfungsraum ausgewählt oder für die (Neu-)Zuweisung von Sitzplätzen genutzt werden.';
 $string['delete_room_confirm'] = 'Durch diese Aktion wird dieser selbst erstellte Raum gelöscht. Stellen Sie sicher, dass der Raum aktuell nicht als Prüfungsraum ausgewählt ist.';
 $string['hint_room_modelling'] = '<strong>Hinweis:</strong> Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.';
 $string['places_already_assigned_rooms'] = '<strong>Achtung:</strong> Es wurden bereits einigen Teilnehmenden Sitzplätze in diesem Raum zugewiesen. Falls dieser Raum jetzt als Prüfungsraum abgewählt wird wird die gesamte Sitzplatzzuweisung gelöscht und muss dann neu durchgeführt werden.';
@@ -258,31 +261,35 @@ $string['no_description_new_room'] = 'Keine Beschreibung vorhanden.';
 
 //editDefaultRoomForm.php
 $string['editDefaultRoom'] = 'Standardraum bearbeiten';
-$string['edit_defaultroom_str'] = 'Hier können Administratoren die vorhandenen Standardprüfungungsräume bearbeiten oder neue erstellen.';
+$string['edit_defaultroom_str'] = 'Hier können Administratorinnen und Administratoren die vorhandenen Standardprüfungungsräume bearbeiten oder Neue erstellen.';
 $string['general'] = 'Basisinformationen';
-$string['roomid'] = 'Raumid (systemintern)';
-$string['defaultroom_description'] = 'Benutzersichtbare Beschreibung';
-$string['placespreview'] = 'Vorschau der Sitzplätze';
+$string['roomid_internal'] = 'Raum ID (systemintern; Raumname_Variante, also z. B. L1.202_1, Audimax_2; erlaubte Zeichen: Buchstaben, Zahlen, Punkt und Unterstrich)';
+$string['defaultroom_name'] = 'Name des Raums (benutzersichtbar, erlaubte Zeichen: Buchstaben, Zahlen, Punkt und Leerzeichen)';
+$string['defaultroom_description'] = 'Beschreibung (benutzersichtbar, z. B. Informationen zur Modellierung  wie die Zahl freier Plätze zwischen zwei Sitzplätzen, erlaubte Zeichen: Buchstaben, Zahlen, Punkt, Minus und Leerzeichen)';
+$string['defaultroom_placescount'] = 'Anzahl der besetzbaren Sitzplätze';
+$string['placespreview'] = 'Benennung aller besetzbaren Sitzplätze';
 $string['roomplan_available'] = 'Vorhandener Sitzplan';
 $string['new_places'] = 'Neue Sitzplätze';
 $string['edit_places'] = 'Sitzplätze bearbeiten';
-$string['general'] = 'Basisinformationen';
-$string['places_mode'] = 'Modus Sitzplätze';
+$string['places_mode'] = 'Modus der Sitzplätze';
 $string['placesmode_default'] = 'Standard';
 $string['placesmode_rows'] = 'Reihenweise';
 $string['placesmode_all_individual'] = 'Vollständig individuell';
-$string['placesroom'] = 'Anzahl der Sitzplätze des Raumes';
+$string['placesroom'] = 'Anzahl der Gesamtsitzplätze des Raumes';
+$string['rowscount'] = 'Anzahl an Reihen im Raum';
 $string['placesrow'] = 'Sitzplätze pro Reihe';
-$string['placesfree'] = 'Freie Sitzplätze';
-$string['one_place_free'] = '1 Platz frei';
-$string['two_places_free'] = '2 Plätze frei';
-$string['rowscount'] = 'Anzahl an Reihen';
-$string['placesarray'] = 'Array aller Sitzplätze';
+$string['placesfree'] = 'Freie Plätze zwischen zwei besetzbaren Sitzplätzen';
+$string['one_place_free'] = '1 Platz frei (z. B. 1, 3, 5 ...)';
+$string['two_places_free'] = '2 Plätze frei (z. B. 1, 4, 7 ...)';
+$string['rowsfree'] = 'Freie Reihen';
+$string['no_row_free'] = 'Keine Reihe frei';
+$string['one_row_free'] = 'Eine Reihe frei';
+$string['placesarray'] = 'Alle Sitzplätze (Bezeichnung aller Sitzplätze durch Komma getrennt, erlaubt Zeichen: Buchstaben, Zahlen, Punkt, Minus, Slash und Leerzeichen)';
 $string['new_seatingplan'] = 'Neuer Sitzplan';
-$string['defaultroom_svg'] = 'Sitzplan';
+$string['defaultroom_svg'] = 'Sitzplan (Textdatei (.txt) mit dem Quellcode einer SVG des Raumplanes)';
 
 //editDefaultRoom.php
-$string['no_editable_default_room'] = 'Kein bearbeitbarer Standardraum';
+$string['no_editable_default_room'] = 'Kein bearbeitbarer Standardraum da durch Dozent angelegt';
 
 //setDateTimeForm.php
 $string['setDateTime'] = 'Prüfungstermin festlegen';
@@ -540,7 +547,11 @@ Die einzulesende Textdatei muss dabei die folgenden Informationen zu jedem Prüf
 <li>Vierte Spalte: Ein zur Berechnung der Sitzplatzzahl des Raumes benötigtes Array, welches die Bezeichnung jedes einzelnen im Raum vorhandenen Sitzplatzes enthält. Das Array muss dabei in json-Syntax verfasst sein, also zum Beispiel folgendermaßen aussehen: <i>["R/R01/P07","R/R01/P04","R/R01/P01", ...] </i></li>
 <li>Fünfte Spalte: Wenn ein Sitzplan für den Raum als .svg-Datei vorhanden ist und dieser den Benutzern angezeigt werden soll muss in dieser Spalte der Quellcode der SVG-Datei stehen, ansonsten kann diese Spalte leer gelassen werden.</li></ul>
 Wurden bereits Standardräume eingelesen werden diese durch einen Neuimport überschrieben. Die Informationen zu allen dabei gegebenenfalls gelöschten Räumen bleiben anschließend in allen Prüfungsorganisations-Instanzen, in denen Sie aktuell genutzt werden, zunächst erhalten. Gelöschte Räume können jedoch von den Dozenten nicht mehr als neue Prüfungsräume ausgewählt oder aber für die (Neu-)Zuweisung von Sitzplätzen genutzt werden.';
-$string['helptext_editDefaultRoom']= 'Hier können Sie als PANDA-Administrator einen bestehenden <strong>Standardraum bearbeiten</strong> oder einen neuen anlegen.<br><br> ...';
+$string['helptext_editDefaultRoom']= 'Hier können Administratorinnen und Administratoren einen bestehenden <strong>Standardraum bearbeiten</strong> oder einen Neuen anlegen.<br><br>
+Dazu werden zuerst die Basisinformationen des Raumes angezeigt, die zugleich eingetragen beziehungsweise bearbeitet werden können. Dies ist zunächst die systeminterne ID des Raumes, die pluginintern für die Identifikation des Raumes verwendet wird und dem folgenden Schema entsprechend aufgebaut sein sollte: Der Raumname gefolgt von einem Unterstrich gefolgt von der Variante des Raumes, die besonders bei mehreren Modellierungen desselben Raumes mit einer unterschiedlichen Anzahl an freien Plätzen zwischen den belegbaren Sitzplätzen relevant ist. Für den Teil des Raumnamens sind dabei alle Buchstaben, Zahlen und auch der Punkt erlaubt, Raumvarianten kann es maximal zehn gleichzeitig geben. Wird ein vorhandener Raum bearbeitet kann die Raum ID nicht verändert werden. Es folgt der Name des Raumes, der für alle Dozierenden sichtbar ist und aus Buchstaben, Zahlen, Punkten und Leerzeichen bestehen darf. Die Raumbeschreibung ist ebenfalls für die Benutzer sichtbar, sollte zum Beispiel Informationen über die gewählte Modellierung (einen oder zwei Plätze frei zwischen zwei besetzbaren Sitzplätzen) enthalten und darf dieselben Zeichen enthalten wie der Raumname. Unter diesen Informationen werden, falls ein bereits existierender Raum zur Bearbeitung ausgewählt wurde, noch weitere Informationen zum Raum angezeigt, etwa die bisherige Anzahl an besetzbaren Sitzplätzen und eine Übersicht über deren Benennung sowie (falls dieser vorhanden ist) der für den Raum hinterlegten Sitzplan. <br><br>
+Falls bei einem bestehenden Raum Sitzplätze bearbeitet werden sollen ist dies möglich, sobald im nächsten Abschnitt bei "Sitzplätze bearbeiten" die Option "Ja" ausgewählt wurde. Bei der Erstellung eines neuen Raumes ist dies nicht nötig, in diesem Fall kann direkt im Abschnitt "Neue Sitzplätze" mit dem Eintragen derselben fortgefahren werden. Für die Befüllung des Raumes mit Sitzplätzen gibt es drei verschiedene Modi, welche die einfache Nachbildung aller wichtigen Modellierungsarten von Prüfungsräumen ermöglichen sollen: Im Modus "Standard" werden für einen Raum automatisch so viele zuweisbare Sitzplätze angelegt, bis die angegebene Gesamtplatzzahl des Raumes erreicht ist, wobei die angegebene Anzahl freier Plätze zwischen zwei zuweisbaren Sitzplätzen berücksichtigt wird. Die Benennung der Plätze beginnt dabei bei 1 und zählt dann aufwärts. Soll also ein Raum mit 100 Gesamtplätzen befüllt werden, zwischen denen jeweils ein Platz unbenutzt bleibt, würde dieser insgesamt 50 in der Prüfungsorganisation belegbare Plätze mit den Benennungen 1, 3, 5, ..., 100 bekommen. Bei zwei Plätzen frei wären es 34 Plätze mit den Benennungen 1, 4, 7, ..., 100. Der Sitzplatz-Modus "Reihenweise" funktioniert ähnlich, nur müssen hier die Anzahl der in einem Raum vorhandenen zu befüllenden Reihen sowie die pro Reihe vorhandenen Plätze angegeben werden. Jede Reihe wird dann mit entsprechend vielen Plätzen befüllt, wobei wieder die angegebene Anzahl freier Plätze und die ebenfalls anzugebene Zahl an gegebenenfalls freizulassenden Reihen berücksichtigt wird. Die Plätze jeder Reihe werden dabei identisch benannt, also jeweils etwa 1,3,5,7 ... . Für alle Raummodellierungen, die mithilfe dieser beiden Modi nicht nachgebildet werden können gibt es den dritten Modus mit dem Namen "Vollständig individuell". In diesem können die Bezeichnungen aller Plätze komplett frei eingetragen werden, wobei zwischen zwei Platzbezeichnungen stets ein Komma stehen muss. In den Platzbezeichnungen sind alle Buchstaben, Zahlen, Punkte, Minuszeichen, Slashs sowie Leerzeichen erlaubt. Dieser Modus eignet sich sehr gut dazu, komplexere Sitzplatzmodellierungen vorzunehmen oder aber mit den ersten beiden Modi erstellte Modellierungen etwas anzupassen. Dies ist zum Beispiel hilfreich, wenn die erste oder die letzte Reihe eines Raumes aufgrund baulicher Begebenheiten weniger Plätze hat als die anderen oder wenn bei durchgehender Platznummerierung Sitzplätze trotzdem in Reihen angeordnet sind und dabei etwa jede zweite Reihe freigelassen werden soll. Bei der Bearbeitung eines bereits existierenden Raumes ist dieser Modus deswegen bereits vorausgewählt, kann aber natürlich jederzeit durch einen anderen Modus ersetzt werden.<br><br>
+Als Letztes kann für einen Raum ein neuer Raumplan hinzufügt werden. Dieser muss außerhalb der Prüfungsorganisation erstellt werden und sollte sämtliche für den Standardraum angelegte Sitzplätze und deren Bezeichnungen enthalten. Der Raumplan muss dazu als SVG in einer Textdatei (.txt) gespeichert sein, die dann im letzten Abschnitt dieser Seite hochgeladen werden muss. Dabei ist zu beachten, dass der Inhalt der Datei mit der SVG des Raumplans vor dem Upload sorgfältig geprüft werden muss, da das Plugin an dieser Stelle böswillige oder fehlerhafte Inhalte in der Datei nicht erkennen kann. Wurde eine Datei mit einem Raumplan ausgewählt wird dieser nach einem Klick auf "Raum speichern" zusammen mit den restlichen angegebenen Informationen gespeichert. <br><br>
+Der auf diese Weise angelegte oder geänderte Raum kann sofort von allen Lehrenden in ihren Prüfungsorganisationen als Prüfungsraum ausgewählt werden. Bei der Änderung des Namens oder der Anpassung von Sitzplätzen in einem bestehenden und bereits in Prüfungsorganisationen verwendeten Prüfungsraum bleiben der Name und die bisherigen Sitzplatzzuweisungen dort zunächst gespeichert. Die Lehrenden müssen somit die Sitzplätze einmal erneut zuweisen, bevor die Änderungen am Raum dort wirksam werden.';
 $string['helptext_setDateTime']= 'Hier können das <strong>Datum und die Uhrzeit der Prüfung</strong> ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. Zudem wird er den PrüfungsteilnehmerInnen in deren Ansicht angezeigt, sobald Sie diese Informationen auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben. <br /> <br />
 Das Datum und die Uhrzeit der Prüfung sollten hier also gesetzt werden, um die Prüfungsorganisation in PANDA sinnvoll nutzen zu können.';

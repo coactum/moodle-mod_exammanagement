@@ -61,7 +61,7 @@ define(['jquery', 'core/notification'], function ($) {
 
       var matrnr = $('#id_matrnr').val();
 
-      if (matrnr) { // initial disabling of field matrnr if it already exists (ggf. entfernen wenn fokus klappt)
+      if (matrnr) { // initial disabling of field matrnr if it already exists
         $('#id_matrnr').prop("disabled", true);
       }
 

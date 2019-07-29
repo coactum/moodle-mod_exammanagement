@@ -113,9 +113,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
                     
                     if($placesmode == 'rows'){
+                        $rowscount = $fromform->rowscount;
                         $placesrow = $fromform->placesrow;
                         $placesfree = $fromform->placesfree;
-                        $rowscount = $fromform->rowscount;
+                        $rowsfree = $fromform->rowsfree;
                     }
     
                     if($placesmode == 'all_individual'){
@@ -148,7 +149,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         if($placesmode == 'rows'){
                             $placesArr = array();
 
-                            for($i = 1; $i <= $rowscount; $i+= 1){
+                            for($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree){
                                 for ($j = 1; $j <= $placesrow; $j+=$placesfree+1) {
                                     array_push($placesArr, strval($j));
                                 }
@@ -231,13 +232,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // or on the first display of the form.
 
                 //Set default data (if any)
-
                 if($roomid){
 
-                    if($roomObj->type == 'defaultroom'){
+                    if(isset($roomObj) && $roomObj !== false && $roomObj->type == 'defaultroom'){
                         $mform->set_data(array('id'=>$id, 'roomid'=>$roomid,'roomname'=>$roomname, 'placescount'=>$placescount, 'description'=>$description, 'placesarray'=>$placesarray, 'existingroom'=>true));
                     } else {
-                        $mform->set_data(array('id'=>$id));                
+                        $mform->set_data(array('id'=>$id, 'existingroom'=>false));                
                     }
                 } else {
                     $mform->set_data(array('id'=>$id, 'existingroom'=>false));

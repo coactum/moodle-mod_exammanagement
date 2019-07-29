@@ -259,7 +259,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_editdefaultroom_placespreview{
 	position:relative;
-	width:300px;
+	width:500px;
 	overflow: hidden;
 	z-index:1000;
 	display:block;

@@ -126,11 +126,11 @@ class inputResultsForm extends moodleform {
 
         $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
         $mform->addGroup($taskspoints_array, 'tasks_array', get_string('max_points', 'mod_exammanagement'), ' ', false);
-        $mform->addGroup($points_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
+        $mform->addGroup($points_array, 'points_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
         $mform->hideIf('tasknumbers_array', 'matrval', 'eq', 1);
         $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
-        $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
+        $mform->hideIf('points_array', 'matrval', 'eq', 1);
 
         if($this->_customdata['matrnr']){
             $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
