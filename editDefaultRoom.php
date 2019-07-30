@@ -151,7 +151,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                             for($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree){
                                 for ($j = 1; $j <= $placesrow; $j+=$placesfree+1) {
-                                    array_push($placesArr, strval($j));
+                                    array_push($placesArr, 'R'.str_pad ( strval($i), 2, '0', STR_PAD_LEFT ).'/P'.str_pad ( strval($j), 2, '0', STR_PAD_LEFT ));
                                 }
                             }
 
@@ -196,9 +196,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     if($placesmode == 'rows'){
                         $placesArr = array();
 
-                        for($i = 1; $i <= $rowscount; $i+= 1){
+                        for($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree){
                             for ($j = 1; $j <= $placesrow; $j+=$placesfree+1) {
-                                array_push($placesArr, strval($j));
+                                array_push($placesArr, 'R'.str_pad ( strval($i), 2, '0', STR_PAD_LEFT ).'/P'.str_pad ( strval($j), 2, '0', STR_PAD_LEFT ));
                             }
                         }
 

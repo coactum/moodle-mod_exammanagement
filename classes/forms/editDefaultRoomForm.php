@@ -135,6 +135,8 @@ class editDefaultRoomForm extends moodleform {
     $select = $mform->addElement('select', 'rowsfree', get_string('rowsfree', 'mod_exammanagement'), array(0 => get_string('no_row_free', 'mod_exammanagement'), 1 => get_string('one_row_free', 'mod_exammanagement'))); 
     $mform->hideIf('rowsfree', 'placesmode', 'neq', 'rows');
 
+    $attributes = array('size'=>'200');
+
     $mform->addElement('text', 'placesarray', get_string('placesarray', 'mod_exammanagement'), $attributes);
     $mform->setType('placesarray', PARAM_TEXT);
     $mform->hideIf('placesarray', 'placesmode', 'neq', 'all_individual');
@@ -180,15 +182,15 @@ class editDefaultRoomForm extends moodleform {
           $roomid .= '_1';
         }
                 
-        for($i = 1; $i <= 10; $i++){
+        for($i = 1; $i <= 9; $i++){
           $roomid = substr_replace($roomid, '_'.$i, -2);
 
           if($ExammanagementInstanceObj->getRoomObj($roomid) == false){
-            $i = 10;
+            $i = 9;
           }
         }
 
-        $errors['roomid'] = get_string('err_already_defaultroom', 'mod_exammanagement') . get_string('err_try_roomid', 'mod_exammanagement') . $roomid;
+        $errors['roomid'] = get_string('err_already_defaultroom', 'mod_exammanagement') . $roomid;
     }
     
     if(isset($data['roomid']) && $data['roomid'] !== '' && !preg_match('/^[a-zA-Z0-9_.]+$/', $data['roomid'])){ // if roomid is set and not empty and contains non alphanumerical chars
@@ -199,7 +201,7 @@ class editDefaultRoomForm extends moodleform {
       $errors['roomname'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(isset($data['description']) && $data['description'] !== '' && !preg_match('/^[a-zA-Z0-9\-. äÄüÜöÖ]+$/', $data['description'])){ // if description is set and not empty and contains non alphanumerical chars
+    if(isset($data['description']) && $data['description'] !== '' && !preg_match('/^[a-zA-Z0-9\-., äÄüÜöÖ]+$/', $data['description'])){ // if description is set and not empty and contains non alphanumerical chars
       $errors['description'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
