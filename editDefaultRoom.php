@@ -167,6 +167,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     if(isset($defaultroom_svg) && $defaultroom_svg !== false){
                         $roomObj->seatingplan = base64_encode($defaultroom_svg);
                     }
+
+                    $roomObj->misc = json_encode(array('timelastmodified' => time()));
                         
                     $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_rooms', $roomObj);
                         
@@ -216,7 +218,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $roomObj->type = 'defaultroom';
                     $roomObj->moodleuserid = NULL;
-                    $roomObj->misc = NULL;
+                    $roomObj->misc = json_encode(array('timelastmodified' => time()));
 
                     $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj);
 

@@ -267,7 +267,7 @@ $string['roomid_internal'] = 'Raum ID (systemintern; Raumname_Variante, also z. 
 $string['defaultroom_name'] = 'Name des Raums (benutzersichtbar, erlaubte Zeichen: Buchstaben, Zahlen, Punkt und Leerzeichen)';
 $string['defaultroom_description'] = 'Beschreibung (benutzersichtbar, z. B. Informationen zur Modellierung  wie die Zahl freier Plätze zwischen zwei Sitzplätzen, erlaubte Zeichen: Buchstaben, Zahlen, Punkt, Minus und Leerzeichen)';
 $string['defaultroom_placescount'] = 'Anzahl der besetzbaren Sitzplätze';
-$string['placespreview'] = 'Benennung aller besetzbaren Sitzplätze';
+$string['placespreview'] = 'Benennungen aller besetzbaren Sitzplätze';
 $string['roomplan_available'] = 'Vorhandener Sitzplan';
 $string['new_places'] = 'Neue Sitzplätze';
 $string['edit_places'] = 'Sitzplätze bearbeiten';
@@ -688,8 +688,8 @@ $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
 $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
 
 //settings.php - admin settings
-$string['moodleid_supportuser'] = 'Moodle-ID des Supportbenutzers';
-$string['moodleid_supportuser_help'] = 'Der oder die Benutzerin, deren systeminterne ID hier eingetragen wurde, erhält sämtliche bei der Beantragung der Zurücksetzung des Passwortes einer Prüfungsorganisation durch NutzerInnen automatisch generierten Nachrichten. Der Benutzer (am besten ein ausschließlich für den Support angelegter Benutzer mit einer der Rollen Admin, Manager oder Kursersteller) erhält die Nachricht sowohl als PANDA-Benachrichtigung als auch an die in seinem Profil hinterlegte E-Mail-Adresse weitergeleitet. Wurde hier noch keine ID eingetragen können NutzerInnen nicht das Zurücksetzen des Passwortes in ihrer Prüfungsorganisation beantragen.';
+$string['enablepasswordresetrequest'] = 'Beantragen des Passwort-Zurücksetzens aktivieren';
+$string['enablepasswordresetrequest_help'] = 'Sobald diese Funktion aktiviert wurde können alle Lehrenden in ihren Prüfungsorganisationen durch einen Klick auf den entsprechenden Button das Zurücksetzen der dort gesetzten Passwörter beantragen. Hat ein Dozent dies getan bekommen alle BenutzerInnen mit der Rolle "Manager/in" eine automatisch generierte Nachricht sowohl als PANDA-Benachrichtigung als auch an die in ihrem Profil hinterlegte E-Mail-Adresse weitergeleitet und können danach durch einen Klick auf den in dieser Nachricht enthaltenen Link das Passwort zurücksetzen. Dadurch werden alle Lehrenden der betroffenen Prüfungsorganisation automatisch per PANDA-Benachrichtigung sowie E-Mail über das Zurücksetzen des Passwortes informiert und können danach wieder ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen. Ist die Funktion hier deaktiviert können NutzerInnen das Zurücksetzen des Passwortes in ihrer Prüfungsorganisation nicht automatisch beantragen, allerdings können Manager und Administratoren trotzdem das Passwort jeder Prüfungsorganisation zurücksetzen.';
 
 //delete_temp_participants.php - task
 $string['delete_temp_participants'] = 'Temporär gespeicherte Teilnehmer löschen';

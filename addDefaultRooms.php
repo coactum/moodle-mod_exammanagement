@@ -89,7 +89,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                         $roomObj->places = $roomParameters[3];
                         $roomObj->type = 'defaultroom';
                         $roomObj->moodleuserid = NULL;
-                        $roomObj->misc = NULL;
+                        $roomObj->misc = json_encode(array('timelastmodified' => time()));
 
                         $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
                     }
