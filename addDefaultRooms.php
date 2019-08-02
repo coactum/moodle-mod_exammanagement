@@ -83,9 +83,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                         $roomObj->name = $roomParameters[1];
                         $roomObj->description = $roomParameters[2];
 
-                        if(isset($roomParameters[4]) && $roomParameters[4] !== ''){
+                        if(isset($roomParameters[4]) && $roomParameters[4] !== '' && json_encode($roomParameters[4]) !== '"\r"' && json_encode($roomParameters[4]) !== '"\n"' && json_encode($roomParameters[4]) !== '"\r\n"'){
                             $svgStr = base64_encode($roomParameters[4]);
-                            var_dump($svgStr);
                         } else {
                             $svgStr = '';
                         }

@@ -114,11 +114,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.txt';
             $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-            //convert string to Latin1
-            $textfile = utf8_decode($textfile);
-
             //return content as file
-            header( "Content-Type: application/force-download" );
+            header( "Content-Type: application/force-download; charset=UTF-8" );
             header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
             header( "Content-Length: ". strlen( $textfile ) );
             echo $textfile;
@@ -259,15 +256,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
 
                 if($textfile && (count($PAULFileHeadersArr) == 1 || (count($PAULFileHeadersArr) == 0 && $UserObj->getAllExamParticipantsByHeader(0)) || $afterexamreview == true) && $ResultFilesZipArchive == false){
-                    $textfile = utf8_encode($textfile);
-                    header( "Content-Type: application/force-download" );
+                    header( "Content-Type: application/force-download; charset=UTF-8"  );
                     header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );
                     header( "Content-Length: ". strlen( $textfile ) );
                     echo($textfile);
                 } else if($ResultFilesZipArchive){
                 // Close and send to users
                     $ResultFilesZipArchive->close();
-                    header('Content-Type: application/zip');
+                    header('Content-Type: application/zip; charset=UTF-8');
                     header('Content-Length: ' . filesize($tempfile));
                     header('Content-Disposition: attachment; filename="'.$filename.'.zip"');
                     readfile($tempfile);
