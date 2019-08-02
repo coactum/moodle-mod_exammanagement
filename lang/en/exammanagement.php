@@ -221,6 +221,7 @@ $string['password_reset_request_failed'] = 'Password reset request failed. Pleas
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Choose exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
+$string['export_default_rooms'] = 'Export default rooms';
 $string['import_default_rooms'] = 'Import default rooms';
 $string['add_custom_room'] = 'Add custom exam room';
 $string['add_default_room'] = 'Add default exam room';
@@ -242,6 +243,10 @@ $string['no_rooms_found'] = 'No rooms found';
 
 //chooseRooms.php
 $string['room_deselected_as_examroom'] = 'The room must first be deselected as an exam room.';
+
+//exportDefaultRooms.php
+$string['default_exam_rooms'] = 'Default exam rooms';
+$string['no_default_rooms'] = 'No default exam rooms available';
 
 //addDefaultRoomsForm.php
 $string['addDefaultRooms'] = 'Import default rooms';

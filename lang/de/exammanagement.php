@@ -221,6 +221,7 @@ $string['password_reset_request_failed'] = 'Beantragung des Passwort-Zurücksetz
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Prüfungsräume auswählen';
 $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
+$string['export_default_rooms'] = 'Standardräume exportieren';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
 $string['add_default_room'] = 'Neuen Standardraum anlegen';
@@ -242,6 +243,10 @@ $string['no_rooms_found'] = 'Keine Räume gefunden';
 
 //chooseRooms.php
 $string['room_deselected_as_examroom'] = 'Der Raum muss zunächst als Prüfungsraum abgewählt werden.';
+
+//exportDefaultRooms.php
+$string['default_exam_rooms'] = 'Standardprüfungsräume';
+$string['no_default_rooms'] = 'Keine Standardprüfungsräume vorhanden';
 
 // addDefaultRoomsForm.php
 $string['addDefaultRooms'] = 'Standardräume importieren';

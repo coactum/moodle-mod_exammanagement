@@ -83,7 +83,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                         $roomObj->name = $roomParameters[1];
                         $roomObj->description = $roomParameters[2];
 
-                        $svgStr = base64_encode($roomParameters[4]);
+                        if(isset($roomParameters[4]) && $roomParameters[4] !== ''){
+                            $svgStr = base64_encode($roomParameters[4]);
+                            var_dump($svgStr);
+                        } else {
+                            $svgStr = '';
+                        }
 
                         $roomObj->seatingplan = $svgStr;
                         $roomObj->places = $roomParameters[3];

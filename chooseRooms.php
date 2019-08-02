@@ -74,7 +74,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
             }
           } else {
-            $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+            redirect ('chooseRooms.php?id='.$id, get_string('nopermissions', 'mod_exammanagement'), null, 'error');
+
           }
         }
 
