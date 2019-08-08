@@ -257,7 +257,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($textfile && (count($PAULFileHeadersArr) == 1 || (count($PAULFileHeadersArr) == 0 && $UserObj->getAllExamParticipantsByHeader(0)) || $afterexamreview == true) && $ResultFilesZipArchive == false){
                     header( "Content-Type: application/force-download; charset=UTF-8"  );
-                    header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt \"" );
+                    header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt\"" );
                     header( "Content-Length: ". strlen( $textfile ) );
                     echo($textfile);
                 } else if($ResultFilesZipArchive){

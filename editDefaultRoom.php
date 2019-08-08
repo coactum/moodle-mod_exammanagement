@@ -160,6 +160,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         
                         if($placesmode == 'all_individual'){
                             $placesarray = explode(',', $placesarray);
+                            $placesarray = array_values(array_filter($placesarray, function($value) { return !is_null($value) && $value !== '' && $value !== ' ' && $value !== '  '; }));
                             $roomObj->places = json_encode($placesarray);
                         }
                     }
@@ -209,6 +210,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         
                     if($placesmode == 'all_individual'){
                         $placesarray = explode(',', $placesarray);
+                        $placesarray = array_values(array_filter($placesarray, function($value) { return !is_null($value) && $value !== '' && $value !== ' ' && $value !== '  '; }));
                         $roomObj->places = json_encode($placesarray);
                     }
 
