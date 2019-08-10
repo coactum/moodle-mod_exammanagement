@@ -784,18 +784,53 @@ EOF;
 		return $header;
 	}
 
-	public function getSeatingPlanTableHeader() {
+	public function getSeatingPlanTable($leftCol, $rightCol) {
 
-		$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-		$header .= "<thead>";
-		$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-		$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-		$header .= "</tr>";
-		$header .= "</thead>";
+		$fill = false;
 
-		return $header;
+		$table = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+		$table .= "<thead>";
+		$table .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+		$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+		$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+		$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+		$table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
+
+		if(count($rightCol) > 0){
+			$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";	
+		} else {
+			$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
+		}
+
+		$table .= "</tr>";
+		$table .= "</thead>";
+
+		for ($n = 0; $n < count($leftCol); $n++) {
+
+			$table .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $leftCol[$n]["matrnr"] . "</td>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $leftCol[$n]["roomname"] . "</td>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $leftCol[$n]["place"] . "</td>";
+			$table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
+
+			if ($n < count($rightCol)) {
+				$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $rightCol[$n]["matrnr"] . "</td>";
+				$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $rightCol[$n]["roomname"] . "</td>";
+				$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $rightCol[$n]["place"] . "</td>";
+			} else {
+				$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
+			}
+
+			$table .= "</tr>";
+
+			$fill = !$fill;
+		}
+
+		$table .= "</table>";
+
+		return $table;
 	}
 
 	public function buildChecksumExamLabels($ean) {
