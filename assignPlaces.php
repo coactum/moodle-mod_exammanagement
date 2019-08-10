@@ -50,6 +50,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
       $participantsArray = array_values($UserObj->getAllExamParticipants());
+      $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
       $assignmentArray = array();
       $newAssignmentObj = '';
 
