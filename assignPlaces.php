@@ -64,20 +64,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participantsCount = 0;
 
-      usort($savedRoomsArray, function($a, $b){ //sort array by custom user function (big rooms to smnall rooms)
+      usort($savedRoomsArray, function($a, $b){ //sort rooms array by custom user function (small to big rooms)
 
         global $ExammanagementInstanceObj;
 
-        $aPlaces = $ExammanagementInstanceObj->getRoomObj($a)->places;
-        $bPlaces = $ExammanagementInstanceObj->getRoomObj($b)->places;
-        
-        if ($aPlaces == $bPlaces) { //if names are even sort by first name
-            return strcmp($aPlaces, $bPlaces);
-        } else{
-            return strcmp($aPlaces, $bPlaces); // else sort by last name
-        }
+        $aPlaces = count(json_decode($ExammanagementInstanceObj->getRoomObj($a)->places));
+        $bPlaces = count(json_decode($ExammanagementInstanceObj->getRoomObj($b)->places));
+
+        return strnatcmp($aPlaces, $bPlaces); // sort by places count
 
       });
+
+      $savedRoomsArray = array_reverse($savedRoomsArray); // reverse array: now big to small rooms
 
       foreach($savedRoomsArray as $key => $roomID){
 

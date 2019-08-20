@@ -105,13 +105,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       // get users and construct user tables for document
       $roomsArray = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
       
-      $roomsCount = 1;
+      $roomsCount = 0;
       
       foreach ($roomsArray as $roomID){
 
         $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
         if($participantsArray){
+
+          foreach ($participantsArray as $key => $participant){
+              $participant->matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+          }
 
           if($sortmode == 'place'){
             usort($participantsArray, function($a, $b){ //sort array by custom user function
@@ -124,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
               global $UserObj;
 
-              return strnatcmp($UserObj->getUserMatrNr($a->moodleuserid, $a->imtlogin), $UserObj->getUserMatrNr($b->moodleuserid, $b->imtlogin)); // sort by matrnr
+              return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
     
             });
           }
@@ -134,7 +138,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $tbl;
 
           foreach ($participantsArray as $key => $participant){
-            $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+            $matrnr = $participant->matrnr;
 
             if($matrnr === '-'){
               $matrnr = $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin)->firstname . ' ' . $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin)->lastname;

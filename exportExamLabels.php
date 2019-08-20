@@ -126,8 +126,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
           if($participantsArray){
     
-            $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
-    
+            usort($participantsArray, function($a, $b){ //sort array by custom user function
+
+              return strnatcmp($a->place, $b->place); // sort by place
+
+            });
+
             $counter = 0;
             $leftLabel = true;
                     
@@ -211,8 +215,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
           if($participantsArray){
     
-            $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
-    
+            usort($participantsArray, function($a, $b){ //sort array by custom user function
+
+              return strnatcmp($a->place, $b->place); // sort by place
+
+            });
+                
             $counter = 0;
             $leftLabel = true;
                     
