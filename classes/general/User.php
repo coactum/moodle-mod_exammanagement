@@ -355,7 +355,7 @@ class User{
 		foreach ($userGroups as $key => $value){
 			if ($value){
 				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
+					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
 				}
 			}
 			else{
