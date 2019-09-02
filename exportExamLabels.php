@@ -47,10 +47,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      global $CFG;
+      global $CFG, $SESSION;
 
       if (!$UserObj->getParticipantsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+      }
+
+      if(!get_config('auth_ldap')->host_url && !(isset($SESSION->ldaptest) || (isset($SESSION->ldaptest) && !$SESSION->ldaptest === true))){ // cancel export if seatingplan should be sorted by matrnr and no matrnr are availiable because no ldap is configured and user is not in testmode
+        $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement'), 'error');
       }
 
       //include pdf
@@ -220,7 +224,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               return strnatcmp($a->place, $b->place); // sort by place
 
             });
-                
+
             $counter = 0;
             $leftLabel = true;
                     

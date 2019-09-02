@@ -654,6 +654,7 @@ $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID ';
 $string['no_param_given'] = 'Matrikelnummernabgleich nicht möglich.';
+$string['not_possible_no_matrnr'] = 'Nicht möglich da keine Matrikelnummern vorhanden';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

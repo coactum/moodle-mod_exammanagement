@@ -654,6 +654,7 @@ $string['err_novalidpassword'] = 'Not a valid password.';
 $string['err_examdata_deleted'] = 'The exam data has already been deleted. It is no longer possible to use the exam organization.';
 $string['err_already_defaultroom'] = 'Already default room. Try instead room ID ';
 $string['no_param_given'] = 'Couldn`t match matriculation number';
+$string['not_possible_no_matrnr'] = 'Not possible because no matriculation numbers are available';
 
 //universal
 $string['modulename'] = 'Exam management';

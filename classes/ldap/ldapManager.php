@@ -45,7 +45,7 @@ class ldapManager{
 	protected $id; // only for testing without real ldap!
 	protected $e; // only for testing without real ldap!
 
-	private static $instance = NULL;
+	//private static $instance = NULL;
 
 	private $markedForPreload = array();
 
@@ -89,14 +89,16 @@ class ldapManager{
 			return true;
 		} else {
 			//throw new Exception('LDAP not configured');
-
 			return false;
 		}
 	}
 
 	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
 
-		$MoodleDBObj = MoodleDB::getInstance();
+		global $SESSION;
+		
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+			$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -111,12 +113,18 @@ class ldapManager{
 			} else {
 				return false;
 			}
-
+		} else {
+			return false;
+		}
 	}
 
 	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
 
-		$MoodleDBObj = MoodleDB::getInstance();
+		global $SESSION;
+
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+
+			$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -127,32 +135,43 @@ class ldapManager{
 			} else {
 				return false;
 			}
+		} else {
+			return false;
+		}
 
 	}
 
 	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
-			require_once(__DIR__.'/../general/User.php');
 
-			$UserObj = User::getInstance($this->id, $this->e);
+		global $SESSION;
+			
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+		
+				require_once(__DIR__.'/../general/User.php');
 
-			if($userid !== NULL && $userid !== false){
-				$user = $UserObj->getMoodleUser($userid);
-				$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			} else if($login){
-				$login = explode('_', $login);
-				$imtlogin = substr($login[2], -3);
-				$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			}
+				$UserObj = User::getInstance($this->id, $this->e);
 
-			if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
-				return false;
-			}else if($matrNr){
-				return $matrNr;
-			} else {
-				return false;
-			}
+				if($userid !== NULL && $userid !== false){
+					$user = $UserObj->getMoodleUser($userid);
+					$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
+					$matrNr = 7 . $matrNr;
+				} else if($login){
+					$login = explode('_', $login);
+					$imtlogin = substr($login[2], -3);
+					$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
+					$matrNr = 7 . $matrNr;
+				}
+
+				if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
+					return false;
+				}else if($matrNr){
+					return $matrNr;
+				} else {
+					return false;
+				}
+		} else {
+			return false;
+		}
 	}
 
 	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
