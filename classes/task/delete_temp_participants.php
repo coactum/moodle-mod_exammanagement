@@ -48,6 +48,8 @@ class delete_temp_participants extends \core\task\scheduled_task {
         // delete whole temp_part table
         if($MoodleDBObj->checkIfRecordExists("exammanagement_temp_part", array())){
 
+            $MoodleDBObj->setFieldInDB('exammanagement', 'tempimportfileheader', NULL, array());
+
             $MoodleDBObj->DeleteRecordsFromDB("exammanagement_temp_part", array());
         }
         

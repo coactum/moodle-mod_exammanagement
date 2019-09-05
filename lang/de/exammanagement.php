@@ -108,6 +108,7 @@ $string['state_notpossible_results_missing'] = 'Ergebnisse fehlen';
 $string['state_notpossible_correctioncompleted_missing'] = 'Korrekturabschluss fehlt';
 $string['state_notpossible_examreviewtime_missing'] = 'Zeit der Klausureinsicht fehlt';
 $string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht fehlt';
+$string['state_notpossible_gradingscale_missing'] = 'Notenschlüssel fehlt';
 $string['state_loading'] = 'Lädt ...';
 
 //exammanagement_overview.mustache work step texts - can be seen on /view.php as lecturer
@@ -712,11 +713,11 @@ $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';
 $string['warningmailsubjectone'] = '[Prüfungsorganisation] Erinnerung: Zukünftige Löschung der Prüfungsdaten';
 $string['warningmailsubjecttwo'] = '[Prüfungsorganisation] Warnung: Baldige Löschung der Prüfungsdaten';
 $string['warningmailsubjectthree'] = '[Prüfungsorganisation] Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
-$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung ';
-$string['warningmailcontentparttwo'] = ' im Kurs ';
-$string['warningmailcontentpartthree'] = ' werden am ';
+$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung "';
+$string['warningmailcontentparttwo'] = '" im Kurs "';
+$string['warningmailcontentpartthree'] = '" werden am ';
 $string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
-$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All information on the exam ';
-$string['warningmailcontentparttwoenglish'] = ' in course ';
-$string['warningmailcontentpartthreeenglish'] = ' will be deleted on ';
+$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All information on the exam "';
+$string['warningmailcontentparttwoenglish'] = '" in course "';
+$string['warningmailcontentpartthreeenglish'] = '" will be deleted on ';
 $string['warningmailcontentpartfourenglish'] = ' . Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the PANDA exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';
