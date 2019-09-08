@@ -47,10 +47,6 @@ class ldapManager{
 
 	//private static $instance = NULL;
 
-	private $markedForPreload = array();
-
-	private $preloadedValues = array();
-
 	private function __construct($id, $e) {
 		$this->id = $id; // only for testing without real ldap!
 		$this->e = $e;		 // only for testing without real ldap!
@@ -186,7 +182,7 @@ class ldapManager{
 		$entry = ldap_first_entry($ldapConnection, $search);
 
 		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
-    ldap_free_result($search);
+    	ldap_free_result($search);
 
 		return $result[ 0 ];
 	}
@@ -209,22 +205,62 @@ class ldapManager{
 			return $result[ 0 ];
 	}
 
-	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
-			if ( ! is_array( $pAttributes ) ){
-					throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
-			}
-			
-			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
-			$entry  = ldap_first_entry( $ldapConnection, $search );
+	public function getMatriculationNumbersForUsers($ldapConnection, $loginsArray){ // get matriculation numbers for array of user logins
 
-			$result = array();
-			if ($entry) {    // FALSE is uid not found
-					foreach( $pAttributes as $attribute ){
-							$value = ldap_get_values( $ldapConnection, $entry, $attribute );
-							$result[ $attribute ] = $value[ 0 ];
-					}
+		$resultArr = array();
+
+		// build ldap query string with all user logins
+		$filterString = "";
+		$filterStringFirst = true;
+		
+		if(isset($loginsArray)){
+			foreach($loginsArray as $login){
+				if ($filterStringFirst){ // first participant
+						$filterString = "(".LDAP_ATTRIBUTE_UID."=".$login.")";
+				} else { // all other participants
+					$filterString = "(|".$filterString."(".LDAP_ATTRIBUTE_UID."=".$login."))";
+				}
+				$filterStringFirst = false;
 			}
-			return $result;
+
+			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$search = ldap_search( $ldapConnection, $dn, $filterString, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
+
+			//get ldap attributes
+			for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection, $entryID)){
+
+				$login = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_UID);
+				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID);
+
+				$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
+			}
+
+			ldap_free_result($search);
+
+			if(isset($resultArr)){
+				return $resultArr;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
+		if ( ! is_array( $pAttributes ) ){
+				throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
+		}
+			
+		$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+		$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
+		$entry  = ldap_first_entry( $ldapConnection, $search );
+
+		$result = array();
+		if ($entry) {    // FALSE is uid not found
+				foreach( $pAttributes as $attribute ){
+						$value = ldap_get_values( $ldapConnection, $entry, $attribute );
+						$result[ $attribute ] = $value[ 0 ];
+				}
+		}
+		return $result;
 	}
 }

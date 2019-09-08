@@ -75,15 +75,15 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .exammanagement_overview .exmammanagement-summary::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #ddd;
-    left: 31px;
-    margin: 0;
-    border-radius: 2px;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #ddd;
+    left: 31px;
+    margin: 0;
+    border-radius: 2px;
 }
 
 .exammanagement_overview .exmammanagement-summary li:target{

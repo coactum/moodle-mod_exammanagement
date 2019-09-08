@@ -69,6 +69,8 @@ class participantsOverviewForm extends moodleform {
 
         $participantsArr = $UserObj->sortParticipantsArrayByName($participantsArr);
 
+        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
+
         if($participantsArr){
 
             $i = 1;
@@ -84,7 +86,19 @@ class participantsOverviewForm extends moodleform {
                     $firstname = $participant->firstname;
                 }
 
-                $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+                $matrnr = false;
+
+                if($matrNrArr){
+                    if(array_key_exists($participant->moodleuserid, $matrNrArr)){
+                        $matrnr = $matrNrArr[$participant->moodleuserid];
+                    } else if(array_key_exists($participant->imtlogin, $matrNrArr)){
+                        $matrnr = $matrNrArr[$participant->imtlogin];
+                    } 
+                }
+
+                if($matrnr == false){
+                    $matrnr = '-';
+                }
 
                 if(isset($participant->roomname)){
                     $room = $participant->roomname;

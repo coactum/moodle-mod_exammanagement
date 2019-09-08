@@ -274,36 +274,50 @@ class User{
 
 	#### methods to get user props
 
-	public function getUserMatrNr($userid, $login = false){
+	public function getMultipleUsersMatrNr($participantsArray){
 
 		require_once(__DIR__.'/../ldap/ldapManager.php');
 
 		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		if($LdapManagerObj->is_LDAP_config()){
-				$ldapConnection = $LdapManagerObj->connect_ldap();
+		$matrNrArray = array();
 
-				if($userid !== false && $userid !== NULL){
-					$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+		if(isset($participantsArray)){
+
+			if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+
+				$loginsArray = array();
+
+				foreach($participantsArray as $key => $participant){ // set logins array for ldap method
+					if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){ // if user is moodle user get moodle username aka imtlogin and set it as login
+						array_push($loginsArray, $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid)));
+					} else { // else set imtlogin as login
+						array_push($loginsArray, $participant->imtlogin);
+					}
 				}
 
-				$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $login);
+				$ldapConnection = $LdapManagerObj->connect_ldap();
 
-		} else { // for local testing during development
+				$matrNrArray = $LdapManagerObj->getMatriculationNumbersForUsers($ldapConnection, $loginsArray);
+				
+			} else { // for local testing during development
 
-			if($userid !== false && $userid !== NULL){
-				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
+				foreach($participantsArray as $participant){
 
-			} else {
-				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $login);
+					if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
+						$matrNrArray[$participant->moodleuserid] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+					} else {
+						$matrNrArray[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $participant->imtlogin);
+					}
+				}
 			}
-		}
 
-		if($userMatrNr){
-			return $userMatrNr;
-		} else {
-			return '-';
+			if(isset($matrNrArray) && $matrNrArray !== false){
+				return $matrNrArray;
+			} else {
+				return false;
+			}
 		}
 	}
 
