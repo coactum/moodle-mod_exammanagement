@@ -83,9 +83,13 @@ class participantsOverviewForm extends moodleform {
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;
                     $firstname = $moodleUserObj->firstname;
+                    var_dump('i am a moodle user');
+
                 } else if($participant->imtlogin){
                     $lastname = $participant->lastname;
                     $firstname = $participant->firstname;
+                    var_dump('i am a non moodle user');
+
                 }
 
                 var_dump('participant');
@@ -105,7 +109,7 @@ class participantsOverviewForm extends moodleform {
                     } 
                 }
 
-                if($matrnr == false){
+                if($matrnr === false){
                     var_dump('i have no matrnr :( from ldap');
 
                     $matrnr = '-';
