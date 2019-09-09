@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
+use mod_exammanagement\general\MoodleDB;
 
 use moodleform;
 
@@ -35,6 +36,7 @@ global $CFG, $PAGE;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/MoodleDB.php');
 
 class participantsOverviewForm extends moodleform {
 
@@ -45,6 +47,7 @@ class participantsOverviewForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 		$UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+		$MoodleDBObj = MoodleDB::getInstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init'); //call jquery for tracking input value change events and creating input type number fields
 
@@ -85,7 +88,11 @@ class participantsOverviewForm extends moodleform {
                 var_dump('participant moodleuserid');
                 var_dump($participant->moodleuserid);
 
+                $login = false;
+
                 if($participant->moodleuserid){
+                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;
                     $firstname = $moodleUserObj->firstname;
@@ -98,7 +105,6 @@ class participantsOverviewForm extends moodleform {
 
                 }
 
-
                 $matrnr = false;
 
                 var_dump('matrnrarray');
@@ -106,9 +112,9 @@ class participantsOverviewForm extends moodleform {
 
                 if($matrNrArr){
                     var_dump('is $participant->moodleuserid in $matrNrArr');
-                     var_dump(array_key_exists($participant->moodleuserid, $matrNrArr));
+                     var_dump(array_key_exists($login, $matrNrArr));
 
-                    if(array_key_exists($participant->moodleuserid, $matrNrArr)){
+                    if(array_key_exists($login, $matrNrArr)){
                         $matrnr = $matrNrArr[$participant->moodleuserid];
                         var_dump('i get matrnr for moodle user');
 
