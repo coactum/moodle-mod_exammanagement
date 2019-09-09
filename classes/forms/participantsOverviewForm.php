@@ -114,6 +114,8 @@ class participantsOverviewForm extends moodleform {
                     // var_dump('is $participant->moodleuserid in $matrNrArr');
                     //  var_dump(array_key_exists($login, $matrNrArr));
 
+                    var_dump($login);
+
                     if(array_key_exists($login, $matrNrArr)){
                         $matrnr = $matrNrArr[$login];
                         // var_dump('i get matrnr for moodle user');
