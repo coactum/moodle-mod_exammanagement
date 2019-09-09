@@ -88,7 +88,7 @@ class participantsOverviewForm extends moodleform {
                 // var_dump('participant moodleuserid');
                 // var_dump($participant->moodleuserid);
 
-                $login = false;
+                $login = '';
 
                 if($participant->moodleuserid){
                     $login = (string) $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
@@ -113,8 +113,6 @@ class participantsOverviewForm extends moodleform {
                 if($matrNrArr){
                     // var_dump('is $participant->moodleuserid in $matrNrArr');
                     //  var_dump(array_key_exists($login, $matrNrArr));
-
-                    var_dump($login);
 
                     if(array_key_exists($login, $matrNrArr)){
                         $matrnr = $matrNrArr[$login];
