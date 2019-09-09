@@ -100,15 +100,11 @@ class addParticipantsForm extends moodleform{
 
             $tempIDsArray = array();
 
-            $loginsArray = array();
-            $moodleuseridsArray = array();
-
-            var_dump($tempParticipants);
-
             ###### classify temp participants
             
-            foreach($tempParticipants as $key => $participant){ // filter invalid/bad matrnr
+            foreach($tempParticipants as $key => $participant){
 
+                // filter invalid/bad matrnr
                 if (!$UserObj->checkIfValidMatrNr($participant->identifier)){
                     $tempUserObj = new stdclass;
                     $tempUserObj->line = $participant->line;
@@ -117,114 +113,64 @@ class addParticipantsForm extends moodleform{
                     
                     array_push($badMatriculationnumbersArr, $tempUserObj);
                     unset($tempParticipants[$key]);
-                }
-            }
+                } else {
+                    // convert matriculation numbers to moodle userdis using LDAP and save them in moodleuseridsarray                
+                    if($LdapManagerObj->is_LDAP_config()){
+                        $ldapConnection = $LdapManagerObj->connect_ldap();
 
-            if($LdapManagerObj->is_LDAP_config()){
-                $ldapConnection = $LdapManagerObj->connect_ldap();
+                        $username = $LdapManagerObj->studentid2uid($ldapConnection, $participant->identifier);
 
-                $matrnrArray = array();
-                
-                foreach($tempParticipants as $key => $participant){
-                    array_push($matrnrArray, $participant->identifier);
-                }
+                        if($username){
+                            $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $username));
+                        }
 
-                $loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrnrArray, array(LDAP_ATTRIBUTE_UID));
-
-                foreach($loginsArray as $matrnr => $login){
-                    $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login));
-
-                    if($moodleuserid){
-                        $moodleuseridsArray[$matrnr] = $moodleuserid; 
-                    }
-                }
-
-            } else {
-                foreach($tempParticipants as $key => $participant){ // unterscheiden für nicht moodle users
-
-                    $userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
-
-                    if($userid){
-                        $moodleuseridsArray[$participant->identifier] = $userid;
                     } else {
-                        $login = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($participant->identifier);
-                        $loginsArray[$participant->identifier] = $login;
-                    }
-                }
-            }
-
-            var_dump($moodleuseridsArray);
-            var_dump($loginsArray);
-            
-            var_dump('test');
-
-            $linesArray = array_column($tempParticipants, 'line', 'identifier');
-            
-            var_dump($linesArray);
-
-            // check tempusers moodle userids using LDAP and save them in moodleuseridsarray                
-                    
-            foreach($moodleuseridsArray as $matrnr => $moodleuserid){ // check all moodle users
-
-                var_dump('test');
-
-                if (isset($moodleuserid) && $moodleuserid){
-                    $tempUserObj = new stdclass;
-                    $tempUserObj->line = $linesArray[$matrnr];
-                    $tempUserObj->moodleid = $moodleuserid;
-                    $tempUserObj->matrnr = $matrnr;
-
-                    var_dump('test');
-
-                    if(in_array($moodleuserid, $tempIDsArray)){ // if participant is already known as temp participant
-                        $tempUserObj->state = 'state_doubled';
-                        array_push($badMatriculationnumbersArr, $tempUserObj);
-                        var_dump('doublematrnr');
-                    } else if($UserObj->checkIfAlreadyParticipant($moodleuserid)){ // if participant is already saved for instance
-                        array_push($existingMoodleParticipantsArr, $tempUserObj);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
-                    } else if (!in_array($moodleuserid, $UserObj->getCourseParticipantsIDs())){ // if participant is not in course
-                        array_push($oddMatriculationnumbersArr, $tempUserObj);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
-                    } else {	// if participant is valid participant
-                        array_push($newMoodleParticipantsArr, $tempUserObj);
-                        array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                            $moodleuserid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
                     }
 
-                    foreach($tempParticipants as $key => $participant){ // unterscheiden für nicht moodle users
-                        if($participant->identifier == $matrnr){
+                    if (isset($moodleuserid) && $moodleuserid){
+                        $tempUserObj = new stdclass;
+                        $tempUserObj->line = $participant->line;
+                        $tempUserObj->moodleid = $moodleuserid;
+                        $tempUserObj->matrnr = $participant->identifier;
+
+                        if(in_array($moodleuserid, $tempIDsArray)){ // if participant is already known as temp participant
+                            $tempUserObj->state = 'state_doubled';
+                            array_push($badMatriculationnumbersArr, $tempUserObj);
                             unset($tempParticipants[$key]);
-                            var_dump($tempParticipants);
+                        } else if($UserObj->checkIfAlreadyParticipant($moodleuserid)){ // if participant is already saved for instance
+                            array_push($existingMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        } else if (!in_array($moodleuserid, $UserObj->getCourseParticipantsIDs())){ // if participant is not in course
+                            array_push($oddMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        } else {	// if participant is valid participant
+                            array_push($newMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $moodleuserid); //for finding already temp users
+                        }
+                    } else {	// if participant is no moodle user
+                        $tempUserObj = new stdclass;
+                        $tempUserObj->line = $participant->line;
+                        $tempUserObj->moodleid = false;
+                        $tempUserObj->matrnr = $participant->identifier;
 
-                            break;
+                        if(in_array($participant->identifier, $tempIDsArray)){
+                            $tempUserObj->state = 'state_doubled';
+                            array_push($badMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                        } else if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
+                            array_push($existingMatriculationnumbersArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
+                        } else {
+                            array_push($newNoneMoodleParticipantsArr, $tempUserObj);
+                            unset($tempParticipants[$key]);
+                            array_push($tempIDsArray, $participant->identifier); //for finding already temp users
                         }
                     }
-                    var_dump($tempParticipants);
-
-                }
-            }
-            
-            foreach($loginsArray as $matrnr => $login){
-
-                if (isset($login) && $login){	// if participant is no moodle user
-                    $tempUserObj = new stdclass;
-                    $tempUserObj->line = $linesArray[$matrnr];
-                    $tempUserObj->moodleid = false;
-                    $tempUserObj->matrnr = $matrnr;
-
-                    if(in_array($participant->identifier, $tempIDsArray)){
-                        $tempUserObj->state = 'state_doubled';
-                        array_push($badMatriculationnumbersArr, $tempUserObj);
-                    } else if($UserObj->checkIfAlreadyParticipant(false, $participant->identifier)){ // if participant is already saved for instance
-                        array_push($existingMatriculationnumbersArr, $tempUserObj);
-                        array_push($tempIDsArray, $participant->identifier); //for finding already temp users
-                    } else {
-                        array_push($newNoneMoodleParticipantsArr, $tempUserObj);
-                        array_push($tempIDsArray, $participant->identifier); //for finding already temp users
-                    }
-
-                    unset($tempParticipants[$matrnr]);
-
                 }
             }
 
@@ -530,7 +476,7 @@ class addParticipantsForm extends moodleform{
             $mform->addRule('participantslist_paul', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
-        }
+          }
     }
 
     //Custom validation should be added here
