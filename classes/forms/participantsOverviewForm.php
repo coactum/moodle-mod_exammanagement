@@ -88,6 +88,9 @@ class participantsOverviewForm extends moodleform {
                     $firstname = $participant->firstname;
                 }
 
+                var_dump('participant');
+                var_dump($participant);
+
                 $matrnr = false;
 
                 if($matrNrArr){
