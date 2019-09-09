@@ -274,6 +274,39 @@ class User{
 
 	#### methods to get user props
 
+	public function getUserMatrNr($userid, $login = false){ // if ldap rework is done this should not be used anymoire, then comment it out
+
+		require_once(__DIR__.'/../ldap/ldapManager.php');
+
+		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		if($LdapManagerObj->is_LDAP_config()){
+				$ldapConnection = $LdapManagerObj->connect_ldap();
+
+				if($userid !== false && $userid !== NULL){
+					$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+				}
+
+				$userMatrNr = $LdapManagerObj->uid2studentid($ldapConnection, $login);
+
+		} else { // for local testing during development
+
+			if($userid !== false && $userid !== NULL){
+				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($userid);
+
+			} else {
+				$userMatrNr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $login);
+			}
+		}
+
+		if($userMatrNr){
+			return $userMatrNr;
+		} else {
+			return '-';
+		}
+	}
+
 	public function getMultipleUsersMatrNr($participantsArray){
 
 		require_once(__DIR__.'/../ldap/ldapManager.php');
@@ -299,7 +332,7 @@ class User{
 
 				$ldapConnection = $LdapManagerObj->connect_ldap();
 
-				$matrNrArray = $LdapManagerObj->getMatriculationNumbersForUsers($ldapConnection, $loginsArray);
+				$matrNrArray = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $loginsArray);
 				
 			} else { // for local testing during development
 

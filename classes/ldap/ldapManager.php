@@ -205,7 +205,7 @@ class ldapManager{
 			return $result[ 0 ];
 	}
 
-	public function getMatriculationNumbersForUsers($ldapConnection, $loginsArray){ // get matriculation numbers for array of user logins
+	public function getMatriculationNumbersForLogins($ldapConnection, $loginsArray){ // get matriculation numbers for array of user logins
 
 		$resultArr = array();
 
@@ -233,6 +233,60 @@ class ldapManager{
 				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID);
 
 				$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
+			}
+
+			ldap_free_result($search);
+
+			if(isset($resultArr)){
+				return $resultArr;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes){ // get matriculation numbers for array of user logins
+
+		$resultArr = array();
+
+		// build ldap query string with all user matrnrs
+		$filterString = "";
+		$filterStringFirst = true;
+		
+		if(isset($matrNrsArray)){
+			foreach($matrNrsArray as $matrnr){
+				if ($filterStringFirst){ // first participant
+						$filterString = "(".LDAP_ATTRIBUTE_STUDID."=".$matrnr.")";
+				} else { // all other participants
+					$filterString = "(|".$filterString."(".LDAP_ATTRIBUTE_STUDID."=".$matrnr."))";
+				}
+				$filterStringFirst = false;
+			}
+
+			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$search = ldap_search( $ldapConnection, $dn, $filterString, $attributes);
+
+			//get ldap attributes
+			for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection,$entryID)){
+				foreach( $attributes as $attribute ){
+					$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
+
+					switch ($phase){
+
+						case "uid":
+							$result['imtlogin'] = $value[ 0 ];
+						case "sn":
+							$result['firstname'] = $value[ 0 ];
+						case "givenName":
+							$result['lastname'] = $value[ 0 ];
+						case "upbMailPreferredAddress":
+							$result['email'] = $value[ 0 ];
+					}
+				}
+				
+				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID);
+
+				$resultArr[$matrnr] = $result;
 			}
 
 			ldap_free_result($search);
