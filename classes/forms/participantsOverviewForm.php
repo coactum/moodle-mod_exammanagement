@@ -96,12 +96,18 @@ class participantsOverviewForm extends moodleform {
                 if($matrNrArr){
                     if(array_key_exists($participant->moodleuserid, $matrNrArr)){
                         $matrnr = $matrNrArr[$participant->moodleuserid];
+                        var_dump('i get matrnr for moodle user');
+
                     } else if(array_key_exists($participant->imtlogin, $matrNrArr)){
                         $matrnr = $matrNrArr[$participant->imtlogin];
+                        var_dump('i get matrnr for nonmoodle user');
+
                     } 
                 }
 
                 if($matrnr == false){
+                    var_dump('i have no matrnr :( from ldap');
+
                     $matrnr = '-';
                 }
 
