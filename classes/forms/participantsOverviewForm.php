@@ -76,19 +76,11 @@ class participantsOverviewForm extends moodleform {
         var_dump($time);
         $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
-        // var_dump($matrNrArr);
-
         if($participantsArr){
 
             $i = 1;
 
             foreach($participantsArr as $key => $participant){
-
-
-                // var_dump('participant moodleuserid');
-                // var_dump($participant->moodleuserid);
-
-                $login = '';
 
                 if($participant->moodleuserid){
                     $login = (string) $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
@@ -96,32 +88,20 @@ class participantsOverviewForm extends moodleform {
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;
                     $firstname = $moodleUserObj->firstname;
-                    // var_dump('i am a moodle user');
-
                 } else if($participant->imtlogin){
+                    $login = false;
+
                     $lastname = $participant->lastname;
                     $firstname = $participant->firstname;
-                    // var_dump('i am a non moodle user');
-
                 }
 
                 $matrnr = false;
 
-                // var_dump('matrnrarray');
-                // var_dump($matrNrArr);
-
                 if($matrNrArr){
-                    // var_dump('is $participant->moodleuserid in $matrNrArr');
-                    //  var_dump(array_key_exists($login, $matrNrArr));
-
-                    if(array_key_exists($login, $matrNrArr)){
+                    if($login && array_key_exists($login, $matrNrArr)){
                         $matrnr = $matrNrArr[$login];
-                        // var_dump('i get matrnr for moodle user');
-
-                    } else if(array_key_exists($participant->imtlogin, $matrNrArr)){
+                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
                         $matrnr = $matrNrArr[$participant->imtlogin];
-                        // var_dump('i get matrnr for nonmoodle user');
-
                     } 
                 }
 

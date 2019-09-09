@@ -339,7 +339,7 @@ class User{
 				foreach($participantsArray as $participant){
 
 					if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
-						$matrNrArray[$participant->moodleuserid] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+						$matrNrArray[$MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid))] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
 					} else {
 						$matrNrArray[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $participant->imtlogin);
 					}
@@ -347,7 +347,7 @@ class User{
 			}
 
 			if(isset($matrNrArray) && $matrNrArray !== false){
-				return $matrNrArray;
+				return $matrNrArray; // array(login/username=>matrnr)
 			} else {
 				return false;
 			}

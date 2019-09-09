@@ -138,7 +138,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									array_push($userObjArr, $user);
 
-									for ($i = 0; $i <= 50; $i++){ // testing
+									for ($i = 0; $i <= 200; $i++){ // testing
 										array_push($userObjArr, $user);
 									} 
 								} else {
@@ -198,9 +198,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									array_push($userObjArr, $user);
 
-									// for ($i = 0; $i <= 50; $i++){ // testing
-									// 	array_push($userObjArr, $user);
-									// }
+									for ($i = 0; $i <= 200; $i++){ // testing
+										array_push($userObjArr, $user);
+									}
 								}
 							}
 
