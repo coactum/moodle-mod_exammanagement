@@ -73,6 +73,8 @@ class participantsOverviewForm extends moodleform {
         var_dump($time);
         $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
+        var_dump($matrNrArr);
+
         if($participantsArr){
 
             $i = 1;
@@ -80,7 +82,7 @@ class participantsOverviewForm extends moodleform {
             foreach($participantsArr as $key => $participant){
 
 
-                var_dump('participant');
+                var_dump('participant moodleuserid');
                 var_dump($participant->moodleuserid);
 
                 if($participant->moodleuserid){
@@ -98,6 +100,9 @@ class participantsOverviewForm extends moodleform {
 
 
                 $matrnr = false;
+
+                var_dump('matrnrarray');
+                var_dump($matrNrArr);
 
                 if($matrNrArr){
                     var_dump('is $participant->moodleuserid in $matrNrArr');
