@@ -346,14 +346,6 @@ class User{
 				}
 			}
 
-			var_dump('participantsarray getmultipleusermatrnr');
-
-			var_dump($participantsArray);
-
-			var_dump('matrnr array getmultipleusermatrnr');
-
-			var_dump($matrNrArray);
-
 			if(isset($matrNrArray) && $matrNrArray !== false){
 				return $matrNrArray;
 			} else {

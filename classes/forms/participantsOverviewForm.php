@@ -79,6 +79,10 @@ class participantsOverviewForm extends moodleform {
 
             foreach($participantsArr as $key => $participant){
 
+
+                var_dump('participant');
+                var_dump($participant->moodleuserid);
+
                 if($participant->moodleuserid){
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;
@@ -92,12 +96,13 @@ class participantsOverviewForm extends moodleform {
 
                 }
 
-                var_dump('participant');
-                var_dump($participant);
 
                 $matrnr = false;
 
                 if($matrNrArr){
+                    var_dump('is $participant->moodleuserid in $matrNrArr');
+                     var_dump(array_key_exists($participant->moodleuserid, $matrNrArr));
+
                     if(array_key_exists($participant->moodleuserid, $matrNrArr)){
                         $matrnr = $matrNrArr[$participant->moodleuserid];
                         var_dump('i get matrnr for moodle user');
@@ -110,8 +115,6 @@ class participantsOverviewForm extends moodleform {
                 }
 
                 if($matrnr === false){
-                    var_dump('i have no matrnr :( from ldap');
-
                     $matrnr = '-';
                 }
 
