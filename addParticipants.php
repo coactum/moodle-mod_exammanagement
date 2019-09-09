@@ -137,6 +137,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$user->headerid = $newheaderid;
 
 									array_push($userObjArr, $user);
+
+									for ($i = 0; $i <= 50; $i++){ // testing
+										array_push($userObjArr, $user);
+									} 
 								} else {
 
 									$user = new stdClass();
@@ -193,6 +197,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$user->headerid = $newheaderid;
 
 									array_push($userObjArr, $user);
+
+									for ($i = 0; $i <= 50; $i++){ // testing
+										array_push($userObjArr, $user);
+									}
 								}
 							}
 
