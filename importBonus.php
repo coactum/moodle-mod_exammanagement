@@ -124,46 +124,63 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$worksheetObj = $readerObj->getActiveSheet();
 					$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
 
-					$userIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
+					$potentialUserIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
+					$matrNrsArr = array();
+					$linesArr = array();
+					$uidsArr = array();
 					$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
 
-					foreach($userIDsArr as $key => $uid){
+					foreach($potentialUserIDsArr as $key => $potentialIdentifier){ // unset all identifiers that are no valid matriculation numbers or mail adresses
 
+						if ($potentialIdentifier[0] && filter_var($potentialIdentifier[0], FILTER_VALIDATE_EMAIL)){ // if identifier is mail adress (import of moodle grades export)
+							$uidsArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$potentialIdentifier[0])));
+						} else if($potentialIdentifier[0] && $UserObj->checkIfValidMatrNr($potentialIdentifier[0])){ // if identifier is matrnr (individual import)
+							$matrNrsArr[$key] = $potentialIdentifier[0];
+							array_push($linesArr, $key);
+						}
+					}
+
+					$isLDAP = $LdapManagerObj->is_LDAP_config();
+						
+					if($isLDAP){
+						$ldapConnection = $LdapManagerObj->connect_ldap();
+
+						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID), $linesArr);
+					} else {
+						foreach($matrNrsArr as $key => $matrnr){
+							$loginsArray[$key] = array('matrnr' => $matrnr, 'login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
+						}
+					}
+
+					array_merge($uidsArr, $loginsArray);
+
+					foreach($uidsArr as $line => $data){
 						$participantObj = false;
 
-						if($uid[0] && $UserObj->checkIfValidMatrNr($uid[0])){ // individual import (matriculation number)
-
-							if($LdapManagerObj->is_LDAP_config()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $uid[0]);
-
-							} else {
-									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($uid[0]);
-							}
-
-							$uid = $uid[0];
-
-						} else { // import of moodle grades export (moodle mail adress)
-							$uid = $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$uid[0]));
+						if($data['moodleuserid'] && $UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){
+							$participantObj = $UserObj->getExamParticipantObj($data['moodleuserid']);
+						} else if($data['login'] && $UserObj->checkIfAlreadyParticipant(false, $data['login'])){
+							$participantObj = $UserObj->getExamParticipantObj(false, $data['login']);
 						}
 
-						if($UserObj->checkIfAlreadyParticipant($uid)){
-							$participantObj = $UserObj->getExamParticipantObj($uid);
-						} else if($UserObj->checkIfAlreadyParticipant(false, $userlogin)){
-							$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-						}
+						if($participantObj && isset($pointsArr[$line][0]) && $pointsArr[$line][0] !== '-'){
 
-						if($participantObj && isset($pointsArr[$key][0]) && $pointsArr[$key][0] !== '-'){
+							$participantObj->bonus = 0;
+
+							var_dump($pointsArr[$line][0]);
 
 							foreach($fromform->bonussteppoints as $step => $points){
+
+								var_dump($step);
 								
-								if(floatval($pointsArr[$key][0]) >= $points){
+								if(floatval($pointsArr[$line][0]) >= $points){
 									$participantObj->bonus = $step; // change to detect bonus step
 								} else {
 									break;
 								}
 							}
+
+							var_dump($participantObj);
 
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 
@@ -173,14 +190,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					fclose($handle);
 					unlink($tempfile);	
 					
+					if($update){
+						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+					} else {
+						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+					}
 				}
-
-				if($update){
-					$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-				} else {
-					$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-				}
-
 			} else {
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			// or on the first display of the form.
