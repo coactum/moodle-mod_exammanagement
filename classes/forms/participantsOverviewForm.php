@@ -83,7 +83,7 @@ class participantsOverviewForm extends moodleform {
             foreach($participantsArr as $key => $participant){
 
                 if($participant->moodleuserid){
-                    $login = (string) $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
 
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;

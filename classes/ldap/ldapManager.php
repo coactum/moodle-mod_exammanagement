@@ -245,9 +245,10 @@ class ldapManager{
 		}
 	}
 
-	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes){ // get matriculation numbers for array of user logins
+	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes, $externalIdentifier = false){ // get matriculation numbers for array of user logins
 
 		$resultArr = array();
+		$i = 0;
 
 		// build ldap query string with all user matrnrs
 		$filterString = "";
@@ -271,14 +272,14 @@ class ldapManager{
 				foreach( $attributes as $attribute ){
 					$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
 
-					switch ($phase){
+					switch ($attribute){
 
 						case "uid":
-							$result['imtlogin'] = $value[ 0 ];
+							$result['login'] = $value[ 0 ];
 						case "sn":
-							$result['firstname'] = $value[ 0 ];
-						case "givenName":
 							$result['lastname'] = $value[ 0 ];
+						case "givenName":
+							$result['firstname'] = $value[ 0 ];
 						case "upbMailPreferredAddress":
 							$result['email'] = $value[ 0 ];
 					}
@@ -286,7 +287,14 @@ class ldapManager{
 				
 				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID);
 
-				$resultArr[$matrnr] = $result;
+				if(!isset($externalIdentifier)){
+					$resultArr[$matrnr] = $result;
+				} else {
+					$result['matrnr'] = $matrnr;
+					$resultArr[$externalIdentifier[$i]] = $result;
+				}
+
+				$i++;
 			}
 
 			ldap_free_result($search);
@@ -299,7 +307,7 @@ class ldapManager{
 		}
 	}
 
-	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
+	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){ // should not be used anymore, auskommentieren
 		if ( ! is_array( $pAttributes ) ){
 				throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
 		}

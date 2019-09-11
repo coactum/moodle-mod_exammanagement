@@ -343,7 +343,7 @@ $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
-$string['state_deletedmatrnr'] = 'Werden gelöscht';
+$string['state_deletedmatrnr'] = 'Wird gelöscht';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';
