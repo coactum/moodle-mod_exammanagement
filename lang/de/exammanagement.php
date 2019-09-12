@@ -396,7 +396,7 @@ $string['individual'] = 'Individuell';
 $string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A, B, C ... ; Beim Import von aus PANDA exportierten Bewertungen automatisch gesetzt)';
 $string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (in PANDA hinterlegte E-Mailadresse beim Bewertungsimport oder Matrikelnummer beim individuellen Import und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
-$string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für Teilnehmende importiert. Diese werden durch den erneuten Import gelöscht und ersetzt.';
+$string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für {$a->bonuscount} Teilnehmende importiert. Diese werden, falls bei dem neuen Import für die betroffenen Teilnehmenden erneut Bonuspunkte eingelesen werden, durch die neuen Werte überschrieben.';
 
 //importBonus.php
 $string['points_bonussteps_invalid'] = 'Punkte für Bonusschritte ungültig';

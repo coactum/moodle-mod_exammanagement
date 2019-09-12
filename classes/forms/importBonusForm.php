@@ -61,8 +61,9 @@ class importBonusForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
 
-        if($UserObj->getEnteredBonusCount()){
-            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("bonus_already_entered", "mod_exammanagement").'</div>');
+        $bonuscount = $UserObj->getEnteredBonusCount();
+        if($bonuscount){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("bonus_already_entered", "mod_exammanagement", ['bonuscount' => $bonuscount]).'</div>');
         }
 
         ###### set bonus steps #####

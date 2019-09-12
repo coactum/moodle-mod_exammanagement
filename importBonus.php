@@ -130,6 +130,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$uidsArr = array();
 					$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
 
+					var_dump('array with all potential userids from file');
+					var_dump($potentialUserIDsArr);
+
 					foreach($potentialUserIDsArr as $key => $potentialIdentifier){ // unset all identifiers that are no valid matriculation numbers or mail adresses
 
 						if ($potentialIdentifier[0] && filter_var($potentialIdentifier[0], FILTER_VALIDATE_EMAIL)){ // if identifier is mail adress (import of moodle grades export)
@@ -152,10 +155,38 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 					}
 
-					array_merge($uidsArr, $loginsArray);
+					foreach($loginsArray as $key => $data){
+
+						$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
+
+						if($moodleuserid){
+							$uidsArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $moodleuserid);
+							unset($loginsArray[$key]);
+						}
+
+					}
+
+					var_dump('array with data for all moodleuserids');
+
+					var_dump($uidsArr);
+
+					var_dump('array with data for all logins');
+
+					var_dump($loginsArray);
+
+					$uidsArr = array_merge($uidsArr, $loginsArray);
+
+					var_dump('combined array with data for all logins and moodleuserids');
+
+					var_dump($uidsArr);
+
 
 					foreach($uidsArr as $line => $data){
 						$participantObj = false;
+
+						var_dump('data for actual login');
+						var_dump($data['login']);
+
 
 						if($data['moodleuserid'] && $UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){
 							$participantObj = $UserObj->getExamParticipantObj($data['moodleuserid']);
@@ -163,15 +194,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$participantObj = $UserObj->getExamParticipantObj(false, $data['login']);
 						}
 
+						var_dump('participantobj that should get new bonuspoints');
+						var_dump($participantObj);
+
 						if($participantObj && isset($pointsArr[$line][0]) && $pointsArr[$line][0] !== '-'){
 
 							$participantObj->bonus = 0;
 
+							var_dump('bonussteps from userform');
+
+							var_dump($fromform->bonussteppoints);
+
+
+							var_dump('points for user from file');
+
 							var_dump($pointsArr[$line][0]);
 
 							foreach($fromform->bonussteppoints as $step => $points){
-
-								var_dump($step);
 								
 								if(floatval($pointsArr[$line][0]) >= $points){
 									$participantObj->bonus = $step; // change to detect bonus step
@@ -179,6 +218,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									break;
 								}
 							}
+
+							var_dump('final participantobj with new bonus');
 
 							var_dump($participantObj);
 

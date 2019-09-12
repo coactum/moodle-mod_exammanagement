@@ -396,7 +396,7 @@ $string['individual'] = 'Other';
 $string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from PANDA)';
 $string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA email adress or matriculation number) and bonus points must fit the chosen column.';
-$string['bonus_already_entered'] = '<strong>Warning:</strong> Some bonus points are already entered and will be replaced through the new imported ones.';
+$string['bonus_already_entered'] = '<strong>Warning:</strong> Bonus points for {$a->bonuscount} participants have already been entered. If new points are now imported for these participants the old values will be replaced through this import.';
 
 //importBonus.php
 $string['points_bonussteps_invalid'] = 'Points for bonus steps invalid';
