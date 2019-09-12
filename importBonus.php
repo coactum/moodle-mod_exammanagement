@@ -124,10 +124,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$worksheetObj = $readerObj->getActiveSheet();
 					$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
 
-					$potentialUserIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
+					$dataArr = array();
 					$matrNrsArr = array();
 					$linesArr = array();
-					$uidsArr = array();
+
+					$potentialUserIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
 					$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
 
 					var_dump('array with all potential userids from file');
@@ -136,7 +137,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					foreach($potentialUserIDsArr as $key => $potentialIdentifier){ // unset all identifiers that are no valid matriculation numbers or mail adresses
 
 						if ($potentialIdentifier[0] && filter_var($potentialIdentifier[0], FILTER_VALIDATE_EMAIL)){ // if identifier is mail adress (import of moodle grades export)
-							$uidsArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$potentialIdentifier[0])));
+							$dataArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$potentialIdentifier[0])), 'points' =>$pointsArr[$key][0]);
 						} else if($potentialIdentifier[0] && $UserObj->checkIfValidMatrNr($potentialIdentifier[0])){ // if identifier is matrnr (individual import)
 							$matrNrsArr[$key] = $potentialIdentifier[0];
 							array_push($linesArr, $key);
@@ -151,7 +152,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID), $linesArr);
 					} else {
 						foreach($matrNrsArr as $key => $matrnr){
-							$loginsArray[$key] = array('matrnr' => $matrnr, 'login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
+							$loginsArray[$key] = array('login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
 						}
 					}
 
@@ -160,32 +161,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
 
 						if($moodleuserid){
-							$uidsArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $moodleuserid);
-							unset($loginsArray[$key]);
+							$dataArr[$key] = array('login' => false, 'moodleuserid' => $moodleuserid, 'points' =>$pointsArr[$key][0]);
+						} else {
+							$dataArr[$key] = array('login' => $data['login'], 'moodleuserid' => false, 'points' =>$pointsArr[$key][0]);
 						}
 
 					}
 
-					var_dump('array with data for all moodleuserids');
+					var_dump('array with data for all imported participants');
 
-					var_dump($uidsArr);
+					var_dump($dataArr);
 
-					var_dump('array with data for all logins');
-
-					var_dump($loginsArray);
-
-					$uidsArr = array_merge($uidsArr, $loginsArray);
-
-					var_dump('combined array with data for all logins and moodleuserids');
-
-					var_dump($uidsArr);
-
-
-					foreach($uidsArr as $line => $data){
+					foreach($dataArr as $line => $data){
 						$participantObj = false;
 
 						var_dump('data for actual login');
-						var_dump($data['login']);
+						var_dump($data);
 
 
 						if($data['moodleuserid'] && $UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){
@@ -197,34 +188,37 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						var_dump('participantobj that should get new bonuspoints');
 						var_dump($participantObj);
 
-						if($participantObj && isset($pointsArr[$line][0]) && $pointsArr[$line][0] !== '-'){
+						if($participantObj){
 
 							$participantObj->bonus = 0;
+							
+							if(isset($data['points']) && $data['points']){
 
-							var_dump('bonussteps from userform');
+								var_dump('bonussteps from userform');
 
-							var_dump($fromform->bonussteppoints);
+								var_dump($fromform->bonussteppoints);
 
+								var_dump('points for user from file');
 
-							var_dump('points for user from file');
+								var_dump($data['points']);
 
-							var_dump($pointsArr[$line][0]);
-
-							foreach($fromform->bonussteppoints as $step => $points){
-								
-								if(floatval($pointsArr[$line][0]) >= $points){
-									$participantObj->bonus = $step; // change to detect bonus step
-								} else {
-									break;
+								foreach($fromform->bonussteppoints as $step => $points){
+									
+									if(floatval($data['points']) >= $points){
+										$participantObj->bonus = $step; // change to detect bonus step
+									} else {
+										break;
+									}
 								}
+
+								var_dump('final participantobj with new bonus');
+
+								var_dump($participantObj);
+
 							}
 
-							var_dump('final participantobj with new bonus');
-
-							var_dump($participantObj);
-
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-
+						
 						}
 					}
 
