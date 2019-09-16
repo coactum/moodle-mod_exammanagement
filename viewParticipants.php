@@ -91,9 +91,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $allParticipantsArr = $moodleParticipants;
             } else if( !$moodleParticipants && $noneMoodleParticipants){
                 $allParticipantsArr = $noneMoodleParticipants;
+            } else {
+                $allParticipantsArr = false;
             }
 
-            $matrNrArr = $UserObj->getMultipleUsersMatrNr($allParticipantsArr);
+            if ($allParticipantsArr){
+                $matrNrArr = $UserObj->getMultipleUsersMatrNr($allParticipantsArr);
+            }
 
             $i = 1;
 
