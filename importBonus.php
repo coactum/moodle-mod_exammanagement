@@ -79,6 +79,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.	
 
+
+			$time = microtime();
+			var_dump($time);
+
 				if ($fromform->bonuspoints_list){
 
 					if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
@@ -148,14 +152,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						
 					if($isLDAP){
 						$ldapConnection = $LdapManagerObj->connect_ldap();
-
-						$time = microtime();
-				        var_dump($time);
 				
 						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID), $linesArr);
-				
-						$time2 = microtime();
-				        var_dump($time2 - $time . 'milisekunden');
 
 					} else {
 						foreach($matrNrsArr as $key => $matrnr){
@@ -231,6 +229,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 					fclose($handle);
 					unlink($tempfile);	
+
+					$time2 = microtime();
+					var_dump($time2 - $time . 'milisekunden');
 					
 					if($update){
 						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
