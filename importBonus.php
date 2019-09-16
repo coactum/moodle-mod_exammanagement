@@ -153,7 +153,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					if($isLDAP){
 						$ldapConnection = $LdapManagerObj->connect_ldap();
 				
-						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID), $linesArr);
+						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $linesArr);
 
 					} else {
 						foreach($matrNrsArr as $key => $matrnr){

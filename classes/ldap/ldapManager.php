@@ -258,12 +258,16 @@ class ldapManager{
 
 						case "uid":
 							$result['login'] = $value[ 0 ];
+							break;
 						case "sn":
 							$result['lastname'] = $value[ 0 ];
+							break;
 						case "givenName":
 							$result['firstname'] = $value[ 0 ];
+							break;
 						case "upbMailPreferredAddress":
 							$result['email'] = $value[ 0 ];
+							break;
 					}
 				}
 				
