@@ -115,10 +115,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
+        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+
         if($participantsArray){
 
           foreach ($participantsArray as $key => $participant){
-              $participant->matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+
+            $matrnr = false;
+
+            $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+
+            if($matrNrArr){
+                if($login && array_key_exists($login, $matrNrArr)){
+                    $matrnr = $matrNrArr[$login];
+                } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                    $matrnr = $matrNrArr[$participant->imtlogin];
+                } 
+            }
+
+            if($matrnr === false){
+                $matrnr = '-';
+            }
+            
+            $participant->matrnr = $matrnr;
           }
 
           if($sortmode == 'place'){

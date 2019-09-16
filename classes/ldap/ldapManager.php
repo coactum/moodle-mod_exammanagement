@@ -170,7 +170,7 @@ class ldapManager{
 		}
 	}
 
-	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
+	public function getLoginForMatrNr($ldapConnection, $pStudentId){ // matrnr to imtlogin
 		if (empty($pStudentId)) {
 				throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
 		}
@@ -185,24 +185,6 @@ class ldapManager{
     	ldap_free_result($search);
 
 		return $result[ 0 ];
-	}
-
-	public function uid2studentid($ldapConnection, $uid){ // imtlogin to matrnr
-
-			if (empty($uid)) {
-					throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
-			}
-
-			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $uid . "))";
-
-			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
-			$entry = ldap_first_entry($ldapConnection, $search);
-
-			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
-			ldap_free_result($search);
-
-			return $result[ 0 ];
 	}
 
 	public function getMatriculationNumbersForLogins($ldapConnection, $loginsArray){ // get matriculation numbers for array of user logins
@@ -305,24 +287,5 @@ class ldapManager{
 				return false;
 			}
 		}
-	}
-
-	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){ // should not be used anymore, auskommentieren
-		if ( ! is_array( $pAttributes ) ){
-				throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
-		}
-			
-		$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-		$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
-		$entry  = ldap_first_entry( $ldapConnection, $search );
-
-		$result = array();
-		if ($entry) {    // FALSE is uid not found
-				foreach( $pAttributes as $attribute ){
-						$value = ldap_get_values( $ldapConnection, $entry, $attribute );
-						$result[ $attribute ] = $value[ 0 ];
-				}
-		}
-		return $result;
 	}
 }

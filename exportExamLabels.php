@@ -38,6 +38,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -127,7 +128,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         foreach ($roomsArray as $roomID){
 
           $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
-    
+          $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+
           if($participantsArray){
     
             usort($participantsArray, function($a, $b){ //sort array by custom user function
@@ -151,13 +153,26 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               if($user){
                 $name = $user->lastname;
                 $firstname = $user->firstname;
+                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
               } else {
                 $name = $participant->lastname;
                 $firstname = $participant->firstname;
               }
     
-              $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
-    
+              $matrnr = false;
+
+              if($matrNrArr){
+                  if($login && array_key_exists($login, $matrNrArr)){
+                      $matrnr = $matrNrArr[$login];
+                  } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                      $matrnr = $matrNrArr[$participant->imtlogin];
+                  } 
+              }
+      
+              if($matrnr === false){
+                  $matrnr = '-';
+              }
+                  
               $room = $participant->roomname;
               $place = $participant->place;
     
@@ -216,7 +231,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       } else { // if no rooms are set or no places are assigned
         $participantsArray = $UserObj->getAllExamParticipants();
-    
+        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+
           if($participantsArray){
     
             usort($participantsArray, function($a, $b){ //sort array by custom user function
@@ -240,13 +256,26 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               if($user){
                 $name = $user->lastname;
                 $firstname = $user->firstname;
+                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
               } else {
                 $name = $participant->lastname;
                 $firstname = $participant->firstname;
               }
     
-              $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
-    
+              $matrnr = false;
+
+              if($matrNrArr){
+                  if($login && array_key_exists($login, $matrNrArr)){
+                      $matrnr = $matrNrArr[$login];
+                  } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                      $matrnr = $matrNrArr[$participant->imtlogin];
+                  } 
+              }
+      
+              if($matrnr === false){
+                  $matrnr = '-';
+              }
+                  
               $room = '';
               $place = '';
     

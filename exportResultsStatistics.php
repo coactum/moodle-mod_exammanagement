@@ -45,6 +45,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -189,6 +190,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $ParticipantsArray = $UserObj->getAllExamParticipants();
 
             $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+            $matrNrArr = $UserObj->getMultipleUsersMatrNr($ParticipantsArray);
 
             $notPassed = 0;
             $notRated = 0;
@@ -451,7 +453,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $firstname = $participant->firstname;
                 }
 
-                $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+                $matrnr = false;
+                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+
+                if($matrNrArr){
+                    if($login && array_key_exists($login, $matrNrArr)){
+                        $matrnr = $matrNrArr[$login];
+                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                        $matrnr = $matrNrArr[$participant->imtlogin];
+                    } 
+                }
+
+                if($matrnr === false){
+                    $matrnr = '-';
+                }
 
                 $room = $participant->roomname;
                 $place = $participant->place;
