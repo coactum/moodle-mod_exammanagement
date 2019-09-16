@@ -79,11 +79,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.	
 
+
+			$time = microtime();
+			var_dump($time);	
+			
 				if ($fromform->bonuspoints_list){
 
 					if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
 						redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
-					}
+					}		
 				
 					// retrieve Files from form
 					$file = $mform->get_file_content('bonuspoints_list');
@@ -173,6 +177,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					fclose($handle);
 					unlink($tempfile);	
 					
+					$time2 = microtime();
+					var_dump($time2 - $time . 'milisekunden');
 				}
 
 				if($update){

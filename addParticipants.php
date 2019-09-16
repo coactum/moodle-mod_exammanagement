@@ -81,6 +81,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				if (!$excel_file && !$paul_file){
 					//saveParticipants in DB
+
+					$time = microtime();
+					var_dump($time);
+			
 					
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
 					$deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
@@ -228,6 +232,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					} else {
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
+
+					$time2 = microtime();
+					var_dump($time2 - $time . 'milisekunden');
+			
 
 				} else if($paul_file){
 
