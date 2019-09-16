@@ -141,10 +141,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									array_push($userObjArr, $user);
 
-									for ($i = 0; $i <= 200; $i++){ // testing
-										array_push($userObjArr, $user);
-									} 
-
 									unset($participantsIdsArr[$key]);
 
 								} else {
@@ -240,10 +236,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 								$user->headerid = $newheaderid;
 
-								array_push($userObjArr, $user);
-							}
-
-							for ($i = 0; $i <= 200; $i++){ // testing
 								array_push($userObjArr, $user);
 							}
 
