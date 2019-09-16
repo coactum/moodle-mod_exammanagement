@@ -78,6 +78,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$paul_file = $mform->get_file_content('participantslist_paul');
 
 				if (!$paul_file){
+
+					$time = microtime();
+        var_dump($time);
+        
 					//saveParticipants in DB
 					
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
@@ -137,9 +141,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									array_push($userObjArr, $user);
 
-									// for ($i = 0; $i <= 200; $i++){ // testing
-									// 	array_push($userObjArr, $user);
-									// } 
+									for ($i = 0; $i <= 200; $i++){ // testing
+										array_push($userObjArr, $user);
+									} 
 
 									unset($participantsIdsArr[$key]);
 
@@ -239,9 +243,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								array_push($userObjArr, $user);
 							}
 
-							// for ($i = 0; $i <= 200; $i++){ // testing
-							// 	array_push($userObjArr, $user);
-							// }
+							for ($i = 0; $i <= 200; $i++){ // testing
+								array_push($userObjArr, $user);
+							}
 
 							// insert records of new participants
 							$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
@@ -275,6 +279,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					} else {
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
+
+					$time2 = microtime();
+        var_dump($time2 - $time . 'milisekunden');
+
 
 				} else if($paul_file){
 

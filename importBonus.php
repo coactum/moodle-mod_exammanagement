@@ -149,7 +149,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					if($isLDAP){
 						$ldapConnection = $LdapManagerObj->connect_ldap();
 
+						$time = microtime();
+				        var_dump($time);
+				
 						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID), $linesArr);
+				
+						$time2 = microtime();
+				        var_dump($time2 - $time . 'milisekunden');
+
 					} else {
 						foreach($matrNrsArr as $key => $matrnr){
 							$loginsArray[$key] = array('login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);

@@ -85,6 +85,10 @@ class addParticipantsForm extends moodleform{
 
         if($tempParticipants){
 
+            $time = microtime();
+        var_dump($time);
+        
+
             if($ExammanagementInstanceObj->allPlacesAssigned()){
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
             }
@@ -540,6 +544,9 @@ class addParticipantsForm extends moodleform{
             }
 
             $mform->addElement('html', '</div>');
+
+            $time2 = microtime();
+        var_dump($time2 - $time . 'milisekunden');
 
         } else {
 
