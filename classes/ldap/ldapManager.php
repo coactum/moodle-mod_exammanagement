@@ -273,7 +273,7 @@ class ldapManager{
 				
 				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID)[0];
 
-				if(!isset($externalIdentifier)){
+				if(!isset($externalIdentifier) || !$externalIdentifier){
 					$resultArr[$matrnr] = $result;
 				} else {
 					$result['matrnr'] = $matrnr;
