@@ -136,7 +136,7 @@ class addParticipantsForm extends moodleform{
 
                 $linesArray = array_column($tempParticipants, 'line');
 
-                $loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrnrArray, array(LDAP_ATTRIBUTE_UID), $linesArray);
+                $loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrnrArray, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $linesArray);
 
                 foreach($loginsArray as $line => $login){
                     $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login']));

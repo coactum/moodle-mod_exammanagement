@@ -157,7 +157,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							if($LdapManagerObj->is_LDAP_config()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
-								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $NoneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress" ));
+								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress" ));
 											
 							} else { // for local testing during development
 
