@@ -85,7 +85,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $moodleParticipants = $UserObj->getAllMoodleExamParticipants();
             $noneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
 
-            $matrNrArr = $UserObj->getMultipleUsersMatrNr(array_merge($moodleParticipants, $noneMoodleParticipants));
+            if($moodleParticipants && $noneMoodleParticipants){
+                $allParticipantsArr = array_merge($moodleParticipants, $noneMoodleParticipants);
+            } else if( $moodleParticipants && !$noneMoodleParticipants) {
+                $allParticipantsArr = $moodleParticipants;
+            } else if( !$moodleParticipants && $noneMoodleParticipants){
+                $allParticipantsArr = $noneMoodleParticipants;
+            }
+
+            $matrNrArr = $UserObj->getMultipleUsersMatrNr($allParticipantsArr);
 
             $i = 1;
 

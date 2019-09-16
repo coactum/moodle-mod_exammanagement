@@ -142,7 +142,7 @@ class addParticipantsForm extends moodleform{
                     $moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login']));
 
                     if($moodleuserid){
-                        $moodleuseridsArray[$line] = array('matrnr' => $login->matrnr, 'moodleuserid' => $moodleuserid);
+                        $moodleuseridsArray[$line] = array('matrnr' => $login['matrnr'], 'moodleuserid' => $moodleuserid);
                         unset($loginsArray[$line]);
                     }
                 }
@@ -264,9 +264,13 @@ class addParticipantsForm extends moodleform{
             // get saved participants for headerid
             $oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->_customdata['id'], 'headerid' => $headerid));
             
-            $matrNrForOldParticipants = $UserObj->getMultipleUsersMatrNr($oldParticipants);
+            if(!empty($oldParticipants)){
+                $matrNrForOldParticipants = $UserObj->getMultipleUsersMatrNr($oldParticipants);
+            } else {
+                $matrNrForOldParticipants = false;
+            }
 
-            if($oldParticipants){ //if participant is deleted
+            if(!empty($oldParticipants)){ //if participant is deleted
 
                 foreach($oldParticipants as $key => $participant){
                     if($participant->moodleuserid){
