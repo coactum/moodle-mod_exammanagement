@@ -72,8 +72,6 @@ class participantsOverviewForm extends moodleform {
 
         $participantsArr = $UserObj->sortParticipantsArrayByName($participantsArr);
 
-        $time = microtime();
-        var_dump($time);
         $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
         if($participantsArr){
@@ -387,10 +385,7 @@ class participantsOverviewForm extends moodleform {
             }
         } else {
             $mform->addElement('html', get_string("no_participants_added", "mod_exammanagement"));
-        }
-
-        $time2 = microtime();
-        var_dump($time2 - $time . 'milisekunden');
+        }        
 
         $mform->addElement('html', '</tbody></table></div>');
 

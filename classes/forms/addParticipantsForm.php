@@ -85,10 +85,6 @@ class addParticipantsForm extends moodleform{
 
         if($tempParticipants){
 
-            $time = microtime();
-        var_dump($time);
-        
-
             if($ExammanagementInstanceObj->allPlacesAssigned()){
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
             }
@@ -106,9 +102,6 @@ class addParticipantsForm extends moodleform{
 
             $loginsArray = array();
             $moodleuseridsArray = array();
-
-            var_dump('saved tempParticipants');
-            var_dump($tempParticipants);
 
             ###### classify temp participants
             
@@ -160,11 +153,6 @@ class addParticipantsForm extends moodleform{
                     }
                 }
             }
-
-            var_dump('moodleuserarray');
-            var_dump($moodleuseridsArray);
-            var_dump('loginuserarray');
-            var_dump($loginsArray);
 
             // check tempusers moodle userids using LDAP and save them in moodleuseridsarray                
                     
@@ -548,9 +536,6 @@ class addParticipantsForm extends moodleform{
             }
 
             $mform->addElement('html', '</div>');
-
-            $time2 = microtime();
-        var_dump($time2 - $time . 'milisekunden');
 
         } else {
 

@@ -79,10 +79,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.	
 
-
-			$time = microtime();
-			var_dump($time);
-
 				if ($fromform->bonuspoints_list){
 
 					if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
@@ -135,9 +131,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$potentialUserIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
 					$pointsArr = $worksheetObj->rangeToArray($fromform->pointsfield.'2:'.$fromform->pointsfield.$highestRow);
 
-					var_dump('array with all potential userids from file');
-					var_dump($potentialUserIDsArr);
-
 					foreach($potentialUserIDsArr as $key => $potentialIdentifier){ // unset all identifiers that are no valid matriculation numbers or mail adresses
 
 						if ($potentialIdentifier[0] && filter_var($potentialIdentifier[0], FILTER_VALIDATE_EMAIL)){ // if identifier is mail adress (import of moodle grades export)
@@ -173,16 +166,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 					}
 
-					var_dump('array with data for all imported participants');
-
-					var_dump($dataArr);
-
 					foreach($dataArr as $line => $data){
 						$participantObj = false;
-
-						var_dump('data for actual login');
-						var_dump($data);
-
 
 						if($data['moodleuserid'] && $UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){
 							$participantObj = $UserObj->getExamParticipantObj($data['moodleuserid']);
@@ -190,22 +175,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$participantObj = $UserObj->getExamParticipantObj(false, $data['login']);
 						}
 
-						var_dump('participantobj that should get new bonuspoints');
-						var_dump($participantObj);
-
 						if($participantObj){
 
 							$participantObj->bonus = 0;
 							
 							if(isset($data['points']) && $data['points']){
-
-								var_dump('bonussteps from userform');
-
-								var_dump($fromform->bonussteppoints);
-
-								var_dump('points for user from file');
-
-								var_dump($data['points']);
 
 								foreach($fromform->bonussteppoints as $step => $points){
 									
@@ -215,11 +189,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 										break;
 									}
 								}
-
-								var_dump('final participantobj with new bonus');
-
-								var_dump($participantObj);
-
 							}
 
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
@@ -230,9 +199,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					fclose($handle);
 					unlink($tempfile);	
 
-					$time2 = microtime();
-					var_dump($time2 - $time . 'milisekunden');
-					
 					if($update){
 						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 					} else {

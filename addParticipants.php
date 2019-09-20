@@ -78,9 +78,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$paul_file = $mform->get_file_content('participantslist_paul');
 
 				if (!$paul_file){
-
-					$time = microtime();
-        var_dump($time);
         
 					//saveParticipants in DB
 					
@@ -271,10 +268,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					} else {
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
-
-					$time2 = microtime();
-        var_dump($time2 - $time . 'milisekunden');
-
 
 				} else if($paul_file){
 
