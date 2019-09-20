@@ -108,6 +108,7 @@ $string['state_notpossible_results_missing'] = 'Ergebnisse fehlen';
 $string['state_notpossible_correctioncompleted_missing'] = 'Korrekturabschluss fehlt';
 $string['state_notpossible_examreviewtime_missing'] = 'Zeit der Klausureinsicht fehlt';
 $string['state_notpossible_examreviewroom_missing'] = 'Raum der Klausureinsicht fehlt';
+$string['state_notpossible_gradingscale_missing'] = 'Notenschlüssel fehlt';
 $string['state_loading'] = 'Lädt ...';
 
 //exammanagement_overview.mustache work step texts - can be seen on /view.php as lecturer
@@ -342,7 +343,7 @@ $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
-$string['state_deletedmatrnr'] = 'Werden gelöscht';
+$string['state_deletedmatrnr'] = 'Wird gelöscht';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';
@@ -395,7 +396,7 @@ $string['individual'] = 'Individuell';
 $string['idfield'] = 'Spalte in der die Benutzeridentifikatoren stehen (z. B. A, B, C ... ; Beim Import von aus PANDA exportierten Bewertungen automatisch gesetzt)';
 $string['pointsfield'] = 'Spalte welche die zu wertenden Bonuspunkte enthält (z. B. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Bonuspunkte aus Excel-Datei importieren; Benutzeridentifikator (in PANDA hinterlegte E-Mailadresse beim Bewertungsimport oder Matrikelnummer beim individuellen Import und Bonuspunkte müssen in den oben ausgewählten Spalten stehen).';
-$string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für Teilnehmende importiert. Diese werden durch den erneuten Import gelöscht und ersetzt.';
+$string['bonus_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Bonusnotenschritte für {$a->bonuscount} Teilnehmende importiert. Diese werden, falls bei dem neuen Import für die betroffenen Teilnehmenden erneut Bonuspunkte eingelesen werden, durch die neuen Werte überschrieben.';
 
 //importBonus.php
 $string['points_bonussteps_invalid'] = 'Punkte für Bonusschritte ungültig';
@@ -654,6 +655,7 @@ $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID ';
 $string['no_param_given'] = 'Matrikelnummernabgleich nicht möglich.';
+$string['not_possible_no_matrnr'] = 'Nicht möglich da keine Matrikelnummern vorhanden';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
@@ -711,11 +713,11 @@ $string['delete_old_exam_data'] = 'Alte Prüfungsdaten löschen';
 $string['warningmailsubjectone'] = '[Prüfungsorganisation] Erinnerung: Zukünftige Löschung der Prüfungsdaten';
 $string['warningmailsubjecttwo'] = '[Prüfungsorganisation] Warnung: Baldige Löschung der Prüfungsdaten';
 $string['warningmailsubjectthree'] = '[Prüfungsorganisation] Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
-$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung ';
-$string['warningmailcontentparttwo'] = ' im Kurs ';
-$string['warningmailcontentpartthree'] = ' werden am ';
+$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung "';
+$string['warningmailcontentparttwo'] = '" im Kurs "';
+$string['warningmailcontentpartthree'] = '" werden am ';
 $string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
-$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All information on the exam ';
-$string['warningmailcontentparttwoenglish'] = ' in course ';
-$string['warningmailcontentpartthreeenglish'] = ' will be deleted on ';
+$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All information on the exam "';
+$string['warningmailcontentparttwoenglish'] = '" in course "';
+$string['warningmailcontentpartthreeenglish'] = '" will be deleted on ';
 $string['warningmailcontentpartfourenglish'] = ' . Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the PANDA exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';

@@ -39,6 +39,7 @@ $afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance($id, $e);
 
 define( "SEPARATOR", chr(9) ); //Tabulator
 define( "NEWLINE", "\r\n" );
@@ -75,7 +76,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
             }
 
-            $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+            if($ParticipantsArray){
+                $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+                $matrNrArr = $UserObj->getMultipleUsersMatrNr($ParticipantsArray);
+            }
 
             foreach($ParticipantsArray as $participant){
 
@@ -95,6 +99,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $foreName = '"' . $user->firstname . '"';
                     $middleName = '"' . $user->middlename . '"';
                     $name = '"' . $user->lastname . '"';
+                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
                 } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                     $foreName = '"' . $participant->firstname . '"';
                     $middleName = '""';
@@ -102,10 +107,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
 
                 $examNumber = '""';
-                $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
+
+                $matrnr = false;
+
+                if($matrNrArr){
+                    if($login && array_key_exists($login, $matrNrArr)){
+                        $matrnr = $matrNrArr[$login];
+                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                        $matrnr = $matrNrArr[$participant->imtlogin];
+                    } 
+                }
+        
+                if($matrnr === false){
+                    $matrnr = '-';
+                }
+
                 $resultWithBonus = '"' . $resultWithBonus . '"';
 
-                $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                $textfile .= $examNumber . SEPARATOR . $matrnr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
             }
 
             //generate filename without umlaute
@@ -142,6 +161,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($ParticipantsArray){
                     $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+                    $matrNrArr = $UserObj->getMultipleUsersMatrNr($ParticipantsArray);
                 }
 
                 if($ParticipantsArray && $afterexamreview == false){
@@ -170,6 +190,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 $foreName = '"' . $user->firstname . '"';
                                 $middleName = '"' . $user->middlename . '"';
                                 $name = '"' . $user->lastname . '"';
+                                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
                             } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                                 $foreName = '"' . $participant->firstname . '"';
                                 $middleName = '""';
@@ -177,10 +198,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             }
             
                             $examNumber = '""';
-                            $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
-                            $resultWithBonus = '"' . $resultWithBonus . '"';
+
+                            $matrnr = false;
+
+                            if($matrNrArr){
+                                if($login && array_key_exists($login, $matrNrArr)){
+                                    $matrnr = $matrNrArr[$login];
+                                } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                                    $matrnr = $matrNrArr[$participant->imtlogin];
+                                } 
+                            }
+                    
+                            if($matrnr === false){
+                                $matrnr = '-';
+                            }                            $resultWithBonus = '"' . $resultWithBonus . '"';
             
-                            $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                            $textfile .= $examNumber . SEPARATOR . $matrnr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
                     }
 
                     $filecount += 1;
@@ -202,7 +235,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $ParticipantsArray = $UserObj->getAllParticipantsWithResultsAfterExamReview();
                     }
 
-                    $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+                    if($ParticipantsArray){
+                        $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
+                        $matrNrArr = $UserObj->getMultipleUsersMatrNr($ParticipantsArray);
+                    }
 
                     $textfile = false;
 
@@ -228,6 +264,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 $foreName = '"' . $user->firstname . '"';
                                 $middleName = '"' . $user->middlename . '"';
                                 $name = '"' . $user->lastname . '"';
+                                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
                             } else if($participant->imtlogin !== false && $participant->imtlogin !== null){
                                 $foreName = '"' . $participant->firstname . '"';
                                 $middleName = '""';
@@ -235,10 +272,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             }
             
                             $examNumber = '""';
-                            $matNr = '"' . $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin) .'"';
-                            $resultWithBonus = '"' . $resultWithBonus . '"';
+
+                            $matrnr = false;
+
+                            if($matrNrArr){
+                                if($login && array_key_exists($login, $matrNrArr)){
+                                    $matrnr = $matrNrArr[$login];
+                                } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                                    $matrnr = $matrNrArr[$participant->imtlogin];
+                                } 
+                            }
+                    
+                            if($matrnr === false){
+                                $matrnr = '-';
+                            }                            $resultWithBonus = '"' . $resultWithBonus . '"';
                                 
-                            $textfile .= $examNumber . SEPARATOR . $matNr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
+                            $textfile .= $examNumber . SEPARATOR . $matrnr . SEPARATOR . $foreName . SEPARATOR . $middleName . SEPARATOR . $name . SEPARATOR . $resultWithBonus . NEWLINE;
                         }
                     }
 

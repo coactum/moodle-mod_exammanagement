@@ -66,8 +66,14 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<div class="col-xs-6">');
 
+    $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
+    $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
+    $i = 1;
+
     if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-      $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary m-b-1" title="'.get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("export_default_rooms", "mod_exammanagement").'</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
+      if($allRoomIDs){
+        $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary m-b-1" title="'.get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("export_default_rooms", "mod_exammanagement").'</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
+      }
       $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary pull-right m-b-1" title="'.get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_default_rooms", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
     }
 
@@ -83,24 +89,21 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<p>'.get_string('choose_rooms_str', 'mod_exammanagement').'</p>');
 
-    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
-
-    $mform->addElement('html', '<div class="table-responsive">');
-    $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
-
-    if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-      $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("roomid", "mod_exammanagement").'</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("customroom_placescount", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("options", "mod_exammanagement").'</th></thead>');
-    } else {
-      $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("customroom_placescount", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("options", "mod_exammanagement").'</th></thead>');
-    }
-
-    $mform->addElement('html', '<tbody>');
-
-    $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
-    $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
-    $i = 1;
-
     if ($allRoomIDs){
+
+      $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
+
+      $mform->addElement('html', '<div class="table-responsive">');
+      $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
+
+      if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
+        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("roomid", "mod_exammanagement").'</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("customroom_placescount", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("options", "mod_exammanagement").'</th></thead>');
+      } else {
+        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("exam_room", "mod_exammanagement").'</th><th scope="col">'.get_string("description", "mod_exammanagement").'</th><th scope="col">'.get_string("customroom_placescount", "mod_exammanagement").'</th><th scope="col">'.get_string("seatingplan", "mod_exammanagement").'</th><th scope="col">'.get_string("room_type", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("options", "mod_exammanagement").'</th></thead>');
+      }
+
+      $mform->addElement('html', '<tbody>');
+
       foreach($allRoomIDs as $key => $value){
 
         $roomObj = $ExammanagementInstanceObj->getRoomObj($value);
@@ -196,7 +199,7 @@ class chooseRoomsForm extends moodleform {
       $this->add_action_buttons(true,get_string('choose_rooms', 'mod_exammanagement'));
 
     } else{
-      $mform->addElement('html', get_string('no_rooms_found', 'mod_exammanagement'));
+      $mform->addElement('html', '<p>'.get_string('no_rooms_found', 'mod_exammanagement').'</p>');
 
     }
 

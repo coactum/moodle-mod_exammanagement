@@ -45,11 +45,7 @@ class ldapManager{
 	protected $id; // only for testing without real ldap!
 	protected $e; // only for testing without real ldap!
 
-	private static $instance = NULL;
-
-	private $markedForPreload = array();
-
-	private $preloadedValues = array();
+	//private static $instance = NULL;
 
 	private function __construct($id, $e) {
 		$this->id = $id; // only for testing without real ldap!
@@ -89,14 +85,16 @@ class ldapManager{
 			return true;
 		} else {
 			//throw new Exception('LDAP not configured');
-
 			return false;
 		}
 	}
 
 	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
 
-		$MoodleDBObj = MoodleDB::getInstance();
+		global $SESSION;
+		
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+			$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -111,12 +109,18 @@ class ldapManager{
 			} else {
 				return false;
 			}
-
+		} else {
+			return false;
+		}
 	}
 
 	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
 
-		$MoodleDBObj = MoodleDB::getInstance();
+		global $SESSION;
+
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+
+			$MoodleDBObj = MoodleDB::getInstance();
 
 			$temp = explode('_', $matrNr);
 
@@ -127,35 +131,46 @@ class ldapManager{
 			} else {
 				return false;
 			}
+		} else {
+			return false;
+		}
 
 	}
 
 	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
-			require_once(__DIR__.'/../general/User.php');
 
-			$UserObj = User::getInstance($this->id, $this->e);
+		global $SESSION;
+			
+		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
+		
+				require_once(__DIR__.'/../general/User.php');
 
-			if($userid !== NULL && $userid !== false){
-				$user = $UserObj->getMoodleUser($userid);
-				$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			} else if($login){
-				$login = explode('_', $login);
-				$imtlogin = substr($login[2], -3);
-				$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			}
+				$UserObj = User::getInstance($this->id, $this->e);
 
-			if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
-				return false;
-			}else if($matrNr){
-				return $matrNr;
-			} else {
-				return false;
-			}
+				if($userid !== NULL && $userid !== false){
+					$user = $UserObj->getMoodleUser($userid);
+					$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
+					$matrNr = 7 . $matrNr;
+				} else if($login){
+					$login = explode('_', $login);
+					$imtlogin = substr($login[2], -3);
+					$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
+					$matrNr = 7 . $matrNr;
+				}
+
+				if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
+					return false;
+				}else if($matrNr){
+					return $matrNr;
+				} else {
+					return false;
+				}
+		} else {
+			return false;
+		}
 	}
 
-	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
+	public function getLoginForMatrNr($ldapConnection, $pStudentId){ // matrnr to imtlogin
 		if (empty($pStudentId)) {
 				throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
 		}
@@ -167,45 +182,114 @@ class ldapManager{
 		$entry = ldap_first_entry($ldapConnection, $search);
 
 		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
-    ldap_free_result($search);
+    	ldap_free_result($search);
 
 		return $result[ 0 ];
 	}
 
-	public function uid2studentid($ldapConnection, $uid){ // imtlogin to matrnr
+	public function getMatriculationNumbersForLogins($ldapConnection, $loginsArray){ // get matriculation numbers for array of user logins
 
-			if (empty($uid)) {
-					throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
+		$resultArr = array();
+
+		// build ldap query string with all user logins
+		$filterString = "";
+		$filterStringFirst = true;
+		
+		if(isset($loginsArray)){
+			foreach($loginsArray as $login){
+				if ($filterStringFirst){ // first participant
+						$filterString = "(".LDAP_ATTRIBUTE_UID."=".$login.")";
+				} else { // all other participants
+					$filterString = "(|".$filterString."(".LDAP_ATTRIBUTE_UID."=".$login."))";
+				}
+				$filterStringFirst = false;
 			}
 
 			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $uid . "))";
+			$search = ldap_search( $ldapConnection, $dn, $filterString, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
 
-			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
-			$entry = ldap_first_entry($ldapConnection, $search);
+			//get ldap attributes
+			for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection, $entryID)){
 
-			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
+				$login = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_UID);
+				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID);
+
+				$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
+			}
+
 			ldap_free_result($search);
 
-			return $result[ 0 ];
+			if(isset($resultArr)){
+				return $resultArr;
+			} else {
+				return false;
+			}
+		}
 	}
 
-	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
-			if ( ! is_array( $pAttributes ) ){
-					throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
-			}
-			
-			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
-			$entry  = ldap_first_entry( $ldapConnection, $search );
+	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes, $externalIdentifier = false){ // get matriculation numbers for array of user logins
 
-			$result = array();
-			if ($entry) {    // FALSE is uid not found
-					foreach( $pAttributes as $attribute ){
-							$value = ldap_get_values( $ldapConnection, $entry, $attribute );
-							$result[ $attribute ] = $value[ 0 ];
-					}
+		$resultArr = array();
+		$i = 0;
+
+		// build ldap query string with all user matrnrs
+		$filterString = "";
+		$filterStringFirst = true;
+		
+		if(isset($matrNrsArray)){
+			foreach($matrNrsArray as $matrnr){
+				if ($filterStringFirst){ // first participant
+						$filterString = "(".LDAP_ATTRIBUTE_STUDID."=".$matrnr.")";
+				} else { // all other participants
+					$filterString = "(|".$filterString."(".LDAP_ATTRIBUTE_STUDID."=".$matrnr."))";
+				}
+				$filterStringFirst = false;
 			}
-			return $result;
+
+			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
+			$search = ldap_search( $ldapConnection, $dn, $filterString, $attributes);
+
+			//get ldap attributes
+			for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection,$entryID)){
+				foreach( $attributes as $attribute ){
+					$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
+
+					switch ($attribute){
+
+						case "uid":
+							$result['login'] = $value[ 0 ];
+							break;
+						case "sn":
+							$result['lastname'] = $value[ 0 ];
+							break;
+						case "givenName":
+							$result['firstname'] = $value[ 0 ];
+							break;
+						case "upbMailPreferredAddress":
+							$result['email'] = $value[ 0 ];
+							break;
+					}
+				}
+				
+				$matrnr = @ldap_get_values($ldapConnection, $entryID, LDAP_ATTRIBUTE_STUDID)[0];
+
+				if(!isset($externalIdentifier) || !$externalIdentifier){
+					$resultArr[$matrnr] = $result;
+				} else {
+					$result['matrnr'] = $matrnr;
+					$resultArr[$externalIdentifier[$i]] = $result;
+				}
+
+				$i++;
+			}
+
+			ldap_free_result($search);
+
+			if(isset($resultArr)){
+				return $resultArr;
+			} else {
+				return false;
+			}
+		}
 	}
 }

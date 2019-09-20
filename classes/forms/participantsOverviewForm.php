@@ -25,6 +25,7 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
+use mod_exammanagement\general\MoodleDB;
 
 use moodleform;
 
@@ -35,6 +36,7 @@ global $CFG, $PAGE;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/MoodleDB.php');
 
 class participantsOverviewForm extends moodleform {
 
@@ -45,6 +47,7 @@ class participantsOverviewForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 		$UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+		$MoodleDBObj = MoodleDB::getInstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init'); //call jquery for tracking input value change events and creating input type number fields
 
@@ -71,6 +74,7 @@ class participantsOverviewForm extends moodleform {
 
         $time = microtime();
         var_dump($time);
+        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
         if($participantsArr){
 
@@ -79,15 +83,31 @@ class participantsOverviewForm extends moodleform {
             foreach($participantsArr as $key => $participant){
 
                 if($participant->moodleuserid){
+                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+
                     $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
                     $lastname = $moodleUserObj->lastname;
                     $firstname = $moodleUserObj->firstname;
                 } else if($participant->imtlogin){
+                    $login = false;
+
                     $lastname = $participant->lastname;
                     $firstname = $participant->firstname;
                 }
 
-                $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+                $matrnr = false;
+
+                if($matrNrArr){
+                    if($login && array_key_exists($login, $matrNrArr)){
+                        $matrnr = $matrNrArr[$login];
+                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                        $matrnr = $matrNrArr[$participant->imtlogin];
+                    } 
+                }
+
+                if($matrnr === false){
+                    $matrnr = '-';
+                }
 
                 if(isset($participant->roomname)){
                     $room = $participant->roomname;

@@ -49,7 +49,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      global $CFG;
+      global $CFG, $SESSION;
 
       if (!$ExammanagementInstanceObj->getRoomsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
@@ -58,6 +58,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
       }  
+
+      if($sortmode == 'matrnr' && (!get_config('auth_ldap')->host_url && !(isset($SESSION->ldaptest) || (isset($SESSION->ldaptest) && !$SESSION->ldaptest === true)))){ // cancel export if seatingplan should be sorted by matrnr and no matrnr are availiable because no ldap is configured and user is not in testmode
+        $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement'), 'error');
+      }
 
       //include pdf
       require_once(__DIR__.'/classes/pdfs/seatingPlan.php');
@@ -111,10 +115,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
 
+        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+
         if($participantsArray){
 
           foreach ($participantsArray as $key => $participant){
-              $participant->matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+
+            $matrnr = false;
+
+            $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+
+            if($matrNrArr){
+                if($login && array_key_exists($login, $matrNrArr)){
+                    $matrnr = $matrNrArr[$login];
+                } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
+                    $matrnr = $matrNrArr[$participant->imtlogin];
+                } 
+            }
+
+            if($matrnr === false){
+                $matrnr = '-';
+            }
+            
+            $participant->matrnr = $matrnr;
           }
 
           if($sortmode == 'place'){
@@ -174,35 +197,38 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       // construct svg-files pages
         foreach ($roomsArray as $key => $roomID){
           $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
-          $roomName = $roomObj->name;
+
+          if($roomObj){
+            $roomName = $roomObj->name;
     
-          // ---------------------------------------------------------
-          if ($key < $roomsCount){
-
-              $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
-
-              if(isset($svgFile) && $svgFile !== ''){
-
-                  $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
-                  $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
-            
-                  $pdf->setPrintHeader(false);
-                  $pdf->AddPage('L', 'A4');
-                  $pdf->SetFont('freeserif', '', 20);
-                  $pdf->Text(0, 15, get_string('seatingplan', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
-                  $pdf->Text(15, 15, get_string('lecture_room', 'mod_exammanagement'));
-                  $pdf->SetFont('freeserif', 'B', 25);
-                  $pdf->Text(15, 25, $roomName);
-                  $pdf->SetFont('freeserif', '', 10);
-                  $pdf->Text(15, 180, get_string('places_differ', 'mod_exammanagement'));
-                  $pdf->Text(15, 185, get_string('places_alternative', 'mod_exammanagement'));
-                  $pdf->Text(15, 180, $maxSeats, false, false, true, 0, 0, 'R');
-                  $pdf->setTextColor(204, 0, 0);
-                  $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
-                  $pdf->setTextColor(0, 0, 0);
-            
-                  $pdf->ImageSVG('@'.$svgFile, $x = '40', $y = '30', $w = '1000', $h = '1000', $link = '', $border=1, $fitonpage=false);
-              }
+            // ---------------------------------------------------------
+            if ($key < $roomsCount){
+  
+                $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
+  
+                if(isset($svgFile) && $svgFile !== ''){
+  
+                    $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
+                    $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
+              
+                    $pdf->setPrintHeader(false);
+                    $pdf->AddPage('L', 'A4');
+                    $pdf->SetFont('freeserif', '', 20);
+                    $pdf->Text(0, 15, get_string('seatingplan', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+                    $pdf->Text(15, 15, get_string('lecture_room', 'mod_exammanagement'));
+                    $pdf->SetFont('freeserif', 'B', 25);
+                    $pdf->Text(15, 25, $roomName);
+                    $pdf->SetFont('freeserif', '', 10);
+                    $pdf->Text(15, 180, get_string('places_differ', 'mod_exammanagement'));
+                    $pdf->Text(15, 185, get_string('places_alternative', 'mod_exammanagement'));
+                    $pdf->Text(15, 180, $maxSeats, false, false, true, 0, 0, 'R');
+                    $pdf->setTextColor(204, 0, 0);
+                    $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
+                    $pdf->setTextColor(0, 0, 0);
+              
+                    $pdf->ImageSVG('@'.$svgFile, $x = '40', $y = '30', $w = '1000', $h = '1000', $link = '', $border=1, $fitonpage=false);
+                }
+            }
           }
       }
 

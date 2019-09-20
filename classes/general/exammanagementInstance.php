@@ -479,6 +479,8 @@ EOF;
 		$defaultRooms = $this->getDefaultRooms();
 		$customRooms = $this->getCustomRooms();
 
+		$allRooms = false;
+
 		if($defaultRooms && $customRooms){
 			$allRooms = array_merge($defaultRooms, $customRooms);
 		} else if ($defaultRooms){

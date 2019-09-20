@@ -87,7 +87,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     if($LdapManagerObj->is_LDAP_config()){
                         $ldapConnection = $LdapManagerObj->connect_ldap();
 
-                        $userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->edit);
+                        $userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->edit);
 
                     } else {
                         $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($fromform->edit);

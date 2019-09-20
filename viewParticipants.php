@@ -38,6 +38,7 @@ $dpmatrnr  = optional_param('dpmatrnr', 0, PARAM_TEXT);
 $dpmid  = optional_param('dpmid', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 
@@ -84,6 +85,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $moodleParticipants = $UserObj->getAllMoodleExamParticipants();
             $noneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
 
+            if($moodleParticipants && $noneMoodleParticipants){
+                $allParticipantsArr = array_merge($moodleParticipants, $noneMoodleParticipants);
+            } else if( $moodleParticipants && !$noneMoodleParticipants) {
+                $allParticipantsArr = $moodleParticipants;
+            } else if( !$moodleParticipants && $noneMoodleParticipants){
+                $allParticipantsArr = $noneMoodleParticipants;
+            } else {
+                $allParticipantsArr = false;
+            }
+
+            if ($allParticipantsArr){
+                $matrNrArr = $UserObj->getMultipleUsersMatrNr($allParticipantsArr);
+            }
+
             $i = 1;
 
             if($moodleParticipants || $noneMoodleParticipants){
@@ -121,7 +136,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     foreach ($moodleParticipants as $key => $participantObj) {
 
-                        $matrnr = $UserObj->getUserMatrNr($participantObj->moodleuserid);
+                        $matrnr = false;
+
+                        if($matrNrArr){
+                            $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participantObj->moodleuserid));
+
+                            if($login && array_key_exists($login, $matrNrArr)){
+                                $matrnr = $matrNrArr[$login];
+                            }
+                        }
+
+                        if($matrnr === false){
+                            $matrnr = '-';
+                        }
 
                         echo('<tr>');
                         echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
@@ -142,6 +169,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // show participants withouth moodle account
 
                 if($noneMoodleParticipants){
+
+                    if(!$moodleParticipants){
+                        echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
+                    }
 
                     echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_without_panda_account", "mod_exammanagement").'</strong></td></tr>');
 
@@ -164,7 +195,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     foreach ($noneMoodleParticipants as $key => $participantObj) {
 
-                        $matrnr = $UserObj->getUserMatrNr(false, $participantObj->imtlogin);
+                        $matrnr = false;
+
+                        if($matrNrArr){
+                            if($participantObj->imtlogin && array_key_exists($participantObj->imtlogin, $matrNrArr)){
+                                $matrnr = $matrNrArr[$participantObj->imtlogin];
+                            } 
+                        }
+
+                        if($matrnr === false){
+                            $matrnr = '-';
+                        }
 
                         echo('<tr>');
                         echo('<th scope="row" id="'.$i.'">'.$i.'</th>');

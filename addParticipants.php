@@ -76,17 +76,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				// retrieve Files from form
 				$paul_file = $mform->get_file_content('participantslist_paul');
-				$excel_file = false;
-				//$excel_file = $mform->get_file_content('participantslist_excel');
 
-				if (!$excel_file && !$paul_file){
-					//saveParticipants in DB
+				if (!$paul_file){
 
 					$time = microtime();
-					var_dump($time);
-			
+        var_dump($time);
+        
+					//saveParticipants in DB
 					
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
+					$noneMoodleParticipantsMatrNrArr = array();
 					$deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
 									
 					if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
@@ -124,7 +123,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						if($participantsIdsArr){ 
 							$userObjArr = array();
 
-							foreach($participantsIdsArr as $identifier){
+							foreach($participantsIdsArr as $key => $identifier){
 
 								$temp = explode('_', $identifier);
 
@@ -141,63 +140,103 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$user->headerid = $newheaderid;
 
 									array_push($userObjArr, $user);
+
+									unset($participantsIdsArr[$key]);
+
 								} else {
+									array_push($noneMoodleParticipantsMatrNrArr, $temp[1]);
+								}
+							}
 
-									$user = new stdClass();
-									$user->plugininstanceid = $id;
-									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-									$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
-									$user->moodleuserid = null;
+							$noneMoodleParticipantsArr = array();
 
-									if($LdapManagerObj->is_LDAP_config()){
-										$ldapConnection = $LdapManagerObj->connect_ldap();
+							if($LdapManagerObj->is_LDAP_config()){
+								$ldapConnection = $LdapManagerObj->connect_ldap();
 
-										$user->imtlogin = ''.$LdapManagerObj->studentid2uid($ldapConnection, $temp[1]);
+								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
+											
+							} else { // for local testing during development
 
-										$ldapUser = $LdapManagerObj->get_ldap_attribute($ldapConnection, array( "sn", "givenName", "upbMailPreferredAddress" ), $user->imtlogin );
-										if($ldapUser){
-											$user->firstname = $ldapUser['givenName'];
-											$user->lastname = $ldapUser['sn'];
-											$user->email = ''.$ldapUser['upbMailPreferredAddress'];
-										} else {
-											$user->firstname = NULL;
-											$user->lastname = NULL;
-											$user->email = NULL;
-										}				
-									} else { // for local testing during development
+								foreach($participantsIdsArr as $key => $identifier){
+									$temp = explode('_', $identifier);
+									$matrnr = $temp[1];
 
-											$user->imtlogin = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
-											$rand = rand(1,3);
-											switch ($rand){
-												case 1:
-													$user->firstname = 'Peter';
-													break;
-												case 2:
-													$user->firstname = 'Tony';
-													break;
-												case 3:
-													$user->firstname = 'Steven';
-													break;
-											} 
-											$rand = rand(1,3);
-											switch ($rand){
-												case 1:
-													$user->lastname = 'Parker';
-													break;
-												case 2:
-													$user->lastname = 'Stark';
-													break;
-												case 3:
-													$user->lastname = 'Strange';
-													break;
-											} 
-											$user->email = 'Test@Testi.test';
+									$login = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
+
+									$rand = rand(1,3);
+									switch ($rand){
+										case 1:
+											$firstname = 'Peter';
+											break;
+										case 2:
+											$firstname = 'Tony';
+											break;
+										case 3:
+											$firstname = 'Steven';
+											break;
+									} 
+
+									$rand = rand(1,3);
+									switch ($rand){
+										case 1:
+											$lastname = 'Parker';
+											break;
+										case 2:
+											$lastname = 'Stark';
+											break;
+										case 3:
+											$lastname = 'Strange';
+											break;
 									}
 
-									$user->headerid = $newheaderid;
-
-									array_push($userObjArr, $user);
+									$email = 'Test@Testi.test';
+									
+									$noneMoodleParticipantsArr[$matrnr] = array('login' => $login, 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email);
 								}
+							}
+
+							foreach($participantsIdsArr as $key => $identifier){
+								$temp = explode('_', $identifier);
+
+								$matrnr = $temp[1];
+
+								$user = new stdClass();
+								$user->plugininstanceid = $id;
+								$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+								$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
+								$user->moodleuserid = null;
+								
+								$login = $noneMoodleParticipantsArr[$matrnr]['login'];
+								if($login){
+									$user->imtlogin = $login;
+								} else {
+									$user->imtlogin = null;
+								}
+
+								$firstname = $noneMoodleParticipantsArr[$matrnr]['firstname'];
+								if($firstname){
+									$user->firstname = $firstname;
+								} else {
+									$user->firstname = null;
+								}
+
+								$lastname = $noneMoodleParticipantsArr[$matrnr]['lastname'];
+								if($lastname){
+									$user->lastname = $lastname;
+								} else {
+									$user->lastname = null;
+								}
+
+								$email = $noneMoodleParticipantsArr[$matrnr]['email'];
+								if($email){
+									$user->email = $email;
+								} else {
+									$user->email = null;
+								}
+
+								$user->headerid = $newheaderid;
+
+								array_push($userObjArr, $user);
 							}
 
 							// insert records of new participants
@@ -234,8 +273,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					}
 
 					$time2 = microtime();
-					var_dump($time2 - $time . 'milisekunden');
-			
+        var_dump($time2 - $time . 'milisekunden');
+
 
 				} else if($paul_file){
 

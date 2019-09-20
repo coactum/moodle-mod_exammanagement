@@ -52,6 +52,8 @@ $correctioncompleted = optional_param('correctioncompleted', 0, PARAM_RAW);
 $calledfromformexamreview = optional_param('calledfromformexamreview', 0, PARAM_RAW);
 $examreviewvisible = optional_param('examreviewvisible', 0, PARAM_RAW);
 
+$mode  = optional_param('mode', 0, PARAM_RAW); // activate ldap testmode for debugging
+
 global $PAGE, $CFG, $USER, $SESSION;
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
@@ -257,6 +259,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         echo $output->render($page);
         
         $MoodleObj->outputFooter();
+
+        if(is_siteadmin() && $mode && $mode === 'ldaptest' ){ // set test mode to simulate configured ldap
+            $SESSION->ldaptest = true;
+        }
+        
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
         redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
@@ -322,6 +329,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     echo $output->render($page);
 
     $MoodleObj->outputFooter();
+
 } else {
     redirect($CFG->wwwroot, get_string('nopermissions', 'mod_exammanagement'), null, \core\output\notification::NOTIFY_ERROR);
 }

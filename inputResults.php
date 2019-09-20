@@ -113,7 +113,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								if($LdapManagerObj->is_LDAP_config()){
 										$ldapConnection = $LdapManagerObj->connect_ldap();
 		
-										$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $matrnr);
+										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $matrnr);
 		
 										if($userlogin){
 											$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
@@ -187,7 +187,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					if($LdapManagerObj->is_LDAP_config()){
 							$ldapConnection = $LdapManagerObj->connect_ldap();
 
-							$userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->matrnr);
+							$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->matrnr);
 
 							if($userlogin){
 								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
