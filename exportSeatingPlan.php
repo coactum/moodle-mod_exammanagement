@@ -173,7 +173,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               $rightCol[] = array("matrnr" => $matrnr, "roomname" => $participant->roomname, "place" => $participant->place);
             }
           
-            if ($key % 70 == 69) {
+            if ($key % 70 == 69 && isset($participantsArray[$key+1])) {
               $tbl = $ExammanagementInstanceObj->getSeatingPlanTable($leftCol, $rightCol);
               $pdf->AddPage();
               $pdf->writeHTML($tbl, true, false, false, false, '');

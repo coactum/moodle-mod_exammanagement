@@ -74,6 +74,12 @@ class participantsOverviewForm extends moodleform {
 
         $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
+        if($ExammanagementInstanceObj->getTaskCount()){
+            $tasks = $ExammanagementInstanceObj->getTasks();
+        } else {
+            $tasks = false;
+        }
+
         if($participantsArr){
 
             $i = 1;
@@ -121,10 +127,8 @@ class participantsOverviewForm extends moodleform {
 
                 $totalpoints = false;
 
-
                 $state = $UserObj->getExamState($participant);
                 $exampoints = array_values((array) json_decode($participant->exampoints));
-                $tasks = $ExammanagementInstanceObj->getTasks();
 
                 if($state == 'nt'){
                     $totalpoints = get_string("nt", "mod_exammanagement");
@@ -221,7 +225,7 @@ class participantsOverviewForm extends moodleform {
                     }
 
                 
-                    if($ExammanagementInstanceObj->getTaskCount()){
+                    if($tasks){
 
                             $mform->addElement('html', '<table class="table-sm"><tr>');
 
@@ -240,6 +244,9 @@ class participantsOverviewForm extends moodleform {
                                 if(isset($exampoints[$tasknumber-1])){
                                     $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
                                 }
+
+                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.$taskmaxpoints.'<br>');
+
                                 $mform->addElement('html', '</td>');
                             }
 
@@ -303,7 +310,7 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '<td>');
 
-                    if($ExammanagementInstanceObj->getTaskCount()){
+                    if($tasks){
                         $mform->addElement('html', '<table class="table-sm"><tr>');
 
                         foreach($tasks as $tasknumber => $taskmaxpoints){
