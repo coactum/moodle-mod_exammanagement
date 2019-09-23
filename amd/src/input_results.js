@@ -166,6 +166,30 @@ define(['jquery', 'core/notification'], function ($) {
       });
 
       $('#id_cancel').val('Zurück zur Prüfungsorganisation');
+
+      var lastpointsfield = $('input[name="lastkeypoints"]').val();
+
+      $('input[name^="points["]').keypress(function (e) {
+
+        if (e.which == 13 || e.which == 3) {
+
+          var name = $(this).attr('name');
+
+          var newfieldnumber = parseInt(name.match(/\d+/)) + 1;
+
+          e.preventDefault();
+          $('input[name="points[' + newfieldnumber + ']"]').focus();
+        }
+      });
+
+      $('input[name="points[' + lastpointsfield + ']"]').keydown(function (e) {
+        if (e.which == 9 || e.which == 13 || e.which == 3) {
+          $("#id_matrnr").prop("disabled", false);
+          $('form#mform1').submit();
+          return false;
+        }
+      });
+
     },
   };
 });

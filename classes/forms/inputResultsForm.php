@@ -157,6 +157,12 @@ class inputResultsForm extends moodleform {
             $this->add_action_buttons(true, get_string("validate_matrnr", "mod_exammanagement"));
         }
 
+        end($tasks);
+        $lastkey = key($tasks);
+        
+        $mform->addElement('hidden', 'lastkeypoints', $lastkey);
+        $mform->setType('lastkeypoints', PARAM_INT);
+
         $mform->disable_form_change_checker();
 
     }
