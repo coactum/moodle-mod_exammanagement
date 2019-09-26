@@ -145,8 +145,6 @@ class addCourseParticipantsForm extends moodleform{
 
                     $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$participantObj->moodleuserid.']', ' '.$UserObj->getUserPicture($participantObj->moodleuserid).' '.$UserObj->getUserProfileLink($participantObj->moodleuserid), null, array('group' => 1));
 
-                    $mform->setDefault('deletedparticipants[mid_'.$participantObj->moodleuserid.']', false);
-
                     $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div><div class="col-xs-3">');
 
                     $mform->addElement('html', $UserObj->getParticipantsGroupNames($participantObj->moodleuserid));
@@ -179,8 +177,6 @@ class addCourseParticipantsForm extends moodleform{
                     $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-3 remove_col pl-4">');
 
                     $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$participantObj->imtlogin.']', ' '. $participantObj->firstname .' '.$participantObj->lastname, null, array('group' => 1));
-
-                    $mform->setDefault('deletedparticipants[matrnr_'.$participantObj->imtlogin.']', false);
 
                     $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div><div class="col-xs-3">');
 
@@ -272,7 +268,6 @@ class addCourseParticipantsForm extends moodleform{
                 }
                 $mform->addElement('html', '<div class="row"><div class="col-xs-3 remove_col pl-4">');
                 $mform->addElement('advcheckbox', 'participants['.$value.']', ' '.$UserObj->getUserPicture($value).' '.$UserObj->getUserProfileLink($value), null, array('group' => 2));
-                $mform->setDefault('participants['.$value.']', false);
                 $mform->addElement('html', '</div><div class="col-xs-3">'.$matrnr.'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.$UserObj->getParticipantsGroupNames($value).'</div>');
                 $mform->addElement('html', '<div class="col-xs-3">'.get_string("state_courseparticipant", "mod_exammanagement").'</div></div>');
