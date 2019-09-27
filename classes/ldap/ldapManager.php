@@ -148,8 +148,7 @@ class ldapManager{
 				$UserObj = User::getInstance($this->id, $this->e);
 
 				if($userid !== NULL && $userid !== false){
-					$user = $UserObj->getMoodleUser($userid);
-					$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
+					$matrNr = str_pad($userid, 6, "0", STR_PAD_LEFT);
 					$matrNr = 7 . $matrNr;
 				} else if($login){
 					$login = explode('_', $login);

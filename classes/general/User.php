@@ -69,6 +69,112 @@ class User{
 		}
 	}
 
+	public function getAllExamParticipantsTest($participantsMode, $requestedAttributes , $sortOrder='name'){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$allParticipants = array();
+
+		if($participantsMode['mode'] === 'all'){
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid'=>$this->id));
+		} else if($participantsMode['mode'] === 'room'){
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $participantsMode['id']));
+		} else if($participantsMode['mode'] === 'header'){
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'headerid' => $participantsMode['id']));
+		} else {
+			return false;
+		}
+
+        if($rs->valid()){
+            foreach ($rs as $record) {
+
+				// add login if requested
+				if(in_array('login', $requestedAttributes) && isset($record->moodleuserid)){
+                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $record->moodleuserid));
+					$record->imtlogin = $login;
+				}
+
+				// add login if requested
+				if(in_array('name', $requestedAttributes) && isset($record->moodleuserid)){
+                    $moodleUserObj = $this->getMoodleUser($record->moodleuserid);
+					$record->firstname = $moodleUserObj->firstname;
+					$record->lastname = $moodleUserObj->lastname;
+				}
+
+				array_push($allParticipants, $record);
+			}
+
+			$rs->close();			
+
+			// matrnr hinzufügen
+			if(in_array('matrnr', $requestedAttributes)){
+
+				require_once(__DIR__.'/../ldap/ldapManager.php');
+
+				$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+
+				$matriculationNumbers = array();
+				$allLogins = array();
+
+				if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+
+					foreach($allParticipants as $key => $participant){ // set logins array for ldap method
+						array_push($allLogins, $participant->imtlogin);
+					}
+
+					$ldapConnection = $LdapManagerObj->connect_ldap();
+
+					$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins);
+						
+				} else { // for local testing during development
+					foreach($allParticipants as $participant){
+						$matriculationNumbers[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+					}
+				}
+
+				if(!empty($matriculationNumbers)){
+					foreach($allParticipants as $key => $participant){
+						if(isset($participant->imtlogin) && array_key_exists($participant->imtlogin, $matriculationNumbers)){
+							$participant->matrnr = $matriculationNumbers[$participant->imtlogin];
+						} else {
+							$participant->matrnr = NULL;
+						} 
+					}
+				} else {
+					$participant->matrnr = NULL;
+				}
+			}
+			
+			// sort all participant sarray
+			if($sortOrder == 'name'){
+				usort($allParticipants, function($a, $b){ //sort participants array by name through custom user function
+
+					$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
+					$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
+		
+					if (str_replace($searchArr, $replaceArr, $a->lastname) == str_replace($searchArr, $replaceArr, $b->lastname)) { //if lastnames are even sort by first name
+						return strcmp($aFirstname, $bFirstname);
+					} else{
+						return strcmp(str_replace($searchArr, $replaceArr, $a->lastname) , str_replace($searchArr, $replaceArr, $b->lastname)); // else sort by last name
+					}
+		
+				});		
+			} else if($sortOrder == 'matrnr'){
+				usort($allParticipants, function($a, $b){ //sort participants array by matrnr through custom user function
+	  
+					return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
+		  
+				});
+			}
+			
+			return $allParticipants;
+
+        } else {
+			$rs->close();
+			return false;
+		}
+	}
+
 	public function getAllMoodleExamParticipants(){
 
 		$MoodleDBObj = MoodleDB::getInstance();
@@ -628,7 +734,7 @@ class User{
 		}
 	}
 
-	public function sortParticipantsArrayByName($participantsArr){ // sort participants array for all exported documents and participants overview
+	public function sortParticipantsArrayByName($participantsArr){ // sort participants array for all exported documents and participants overview 
 
 		usort($participantsArr, function($a, $b){ //sort array by custom user function
 

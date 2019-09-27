@@ -149,8 +149,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           } else if($sortmode == 'matrnr'){
             usort($participantsArray, function($a, $b){ //sort array by custom user function
 
-              global $UserObj;
-
               return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
     
             });

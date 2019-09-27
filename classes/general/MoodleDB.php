@@ -146,4 +146,9 @@ class MoodleDB{
 		return $DB->delete_records_select($table, $select, $params);
 	}
 
+	public function getRecordset($table, $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0){
+		global $DB;
+
+		return $DB->get_recordset($table, $conditions, $sort, $fields, $limitfrom, $limitnum);
+	}
 }
