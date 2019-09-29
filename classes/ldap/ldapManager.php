@@ -120,8 +120,6 @@ class ldapManager{
 
 		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
 
-			$MoodleDBObj = MoodleDB::getInstance();
-
 			$temp = explode('_', $matrNr);
 
 			$imtlogin = 'tool_generator_000'.substr($temp[0], -3);
@@ -144,8 +142,6 @@ class ldapManager{
 		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
 		
 				require_once(__DIR__.'/../general/User.php');
-
-				$UserObj = User::getInstance($this->id, $this->e);
 
 				if($userid !== NULL && $userid !== false){
 					$matrNr = str_pad($userid, 6, "0", STR_PAD_LEFT);

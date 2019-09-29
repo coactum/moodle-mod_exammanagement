@@ -69,7 +69,7 @@ class User{
 		}
 	}
 
-	public function getAllExamParticipantsTest($participantsMode, $requestedAttributes , $sortOrder='name'){
+	public function getExamParticipants($participantsMode, $requestedAttributes, $sortOrder='name'){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -77,6 +77,11 @@ class User{
 
 		if($participantsMode['mode'] === 'all'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid'=>$this->id));
+		} else if($participantsMode['mode'] === 'moodle'){
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
+		} else if($participantsMode['mode'] === 'nonmoodle'){
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
+			var_dump($rs);
 		} else if($participantsMode['mode'] === 'room'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $participantsMode['id']));
 		} else if($participantsMode['mode'] === 'header'){
@@ -88,14 +93,14 @@ class User{
         if($rs->valid()){
             foreach ($rs as $record) {
 
-				// add login if requested
-				if(in_array('login', $requestedAttributes) && isset($record->moodleuserid)){
+				// add login if it is requested as attribute or needed for matrnr
+				if((in_array('login', $requestedAttributes) && isset($record->moodleuserid)) || (in_array('matrnr', $requestedAttributes) && isset($record->moodleuserid))){
                     $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $record->moodleuserid));
 					$record->imtlogin = $login;
 				}
 
-				// add login if requested
-				if(in_array('name', $requestedAttributes) && isset($record->moodleuserid)){
+				// add name if it is requested as attribute or needed for sorting
+				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || $sortOrder == 'name')){
                     $moodleUserObj = $this->getMoodleUser($record->moodleuserid);
 					$record->firstname = $moodleUserObj->firstname;
 					$record->lastname = $moodleUserObj->lastname;
@@ -128,7 +133,18 @@ class User{
 						
 				} else { // for local testing during development
 					foreach($allParticipants as $participant){
-						$matriculationNumbers[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+
+						if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
+							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+						} else {
+							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(Null, $participant->imtlogin);
+						}
+
+						if($matrnr){
+							$matriculationNumbers[$participant->imtlogin] = $matrnr;
+						} else {
+							$matriculationNumbers[$participant->imtlogin] = '-';							
+						}
 					}
 				}
 
@@ -137,11 +153,11 @@ class User{
 						if(isset($participant->imtlogin) && array_key_exists($participant->imtlogin, $matriculationNumbers)){
 							$participant->matrnr = $matriculationNumbers[$participant->imtlogin];
 						} else {
-							$participant->matrnr = NULL;
+							$participant->matrnr = '-';
 						} 
 					}
 				} else {
-					$participant->matrnr = NULL;
+					$participant->matrnr = '-';
 				}
 			}
 			
@@ -153,7 +169,7 @@ class User{
 					$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
 		
 					if (str_replace($searchArr, $replaceArr, $a->lastname) == str_replace($searchArr, $replaceArr, $b->lastname)) { //if lastnames are even sort by first name
-						return strcmp($aFirstname, $bFirstname);
+						return strcmp($a->firstname, $b->firstname);
 					} else{
 						return strcmp(str_replace($searchArr, $replaceArr, $a->lastname) , str_replace($searchArr, $replaceArr, $b->lastname)); // else sort by last name
 					}

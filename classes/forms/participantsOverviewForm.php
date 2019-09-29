@@ -66,13 +66,9 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("room", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_place">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("edit", "mod_exammanagement").'</th></thead>');
         $mform->addElement('html', '<tbody>');
 
-        $participantsArr = $UserObj->getAllExamParticipants();
+        $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));        
         $examrooms = json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms);
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-
-        $participantsArr = $UserObj->sortParticipantsArrayByName($participantsArr);
-
-        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArr);
 
         if($ExammanagementInstanceObj->getTaskCount()){
             $tasks = $ExammanagementInstanceObj->getTasks();
@@ -80,38 +76,11 @@ class participantsOverviewForm extends moodleform {
             $tasks = false;
         }
 
-        if($participantsArr){
+        if($participants){
 
             $i = 1;
 
-            foreach($participantsArr as $key => $participant){
-
-                if($participant->moodleuserid){
-                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-
-                    $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
-                    $lastname = $moodleUserObj->lastname;
-                    $firstname = $moodleUserObj->firstname;
-                } else if($participant->imtlogin){
-                    $login = false;
-
-                    $lastname = $participant->lastname;
-                    $firstname = $participant->firstname;
-                }
-
-                $matrnr = false;
-
-                if($matrNrArr){
-                    if($login && array_key_exists($login, $matrNrArr)){
-                        $matrnr = $matrNrArr[$login];
-                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
-                        $matrnr = $matrNrArr[$participant->imtlogin];
-                    } 
-                }
-
-                if($matrnr === false){
-                    $matrnr = '-';
-                }
+            foreach($participants as $key => $participant){
 
                 if(isset($participant->roomname)){
                     $room = $participant->roomname;
@@ -142,7 +111,7 @@ class participantsOverviewForm extends moodleform {
                     $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']==$matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
+                if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']== $participant->matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
 
                     if(isset($this->_customdata['edit'])){                    
                         $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
@@ -161,9 +130,9 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '<tr class="table-info">');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
-                    $mform->addElement('html', '<td>'.$firstname.'</td>');
-                    $mform->addElement('html', '<td>'.$lastname.'</td>');
-                    $mform->addElement('html', '<td>'.$matrnr.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
                     
                     $attributes = array('size'=>'3');
 
@@ -191,7 +160,7 @@ class participantsOverviewForm extends moodleform {
                             $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
                             $select->setSelected($participant->roomid);    
                         } else {
-                            $mform->addElement('html', $participant->roomname.' ('.get_string('deleted_room', 'mod_exammanagement').')');
+                            $mform->addElement('html', $roomname.' ('.get_string('deleted_room', 'mod_exammanagement').')');
                         }
                          
                         $mform->addElement('html', '</td><td>');
@@ -302,9 +271,9 @@ class participantsOverviewForm extends moodleform {
                 } else { // if user is non editable
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
-                    $mform->addElement('html', '<td>'.$firstname.'</td>');
-                    $mform->addElement('html', '<td>'.$lastname.'</td>');
-                    $mform->addElement('html', '<td>'.$matrnr.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
                     $mform->addElement('html', '<td>'.$room.'</td>');
                     $mform->addElement('html', '<td>'.$place.'</td>');
 
@@ -378,8 +347,8 @@ class participantsOverviewForm extends moodleform {
 
                     $anchorid = $i-1;
                     
-                    if($matrnr !== '-'){
-                        $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
+                    if($participant->matrnr !== '-'){
+                        $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$participant->matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
                     } else {
                         $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&editline='.$i.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
                     }
