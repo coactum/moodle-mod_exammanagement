@@ -81,7 +81,6 @@ class User{
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
 		} else if($participantsMode['mode'] === 'nonmoodle'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
-			var_dump($rs);
 		} else if($participantsMode['mode'] === 'room'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $participantsMode['id']));
 		} else if($participantsMode['mode'] === 'header'){
@@ -100,10 +99,26 @@ class User{
 				}
 
 				// add name if it is requested as attribute or needed for sorting
-				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || $sortOrder == 'name')){
+				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || in_array('profile', $requestedAttributes) || $sortOrder == 'name' )){
                     $moodleUserObj = $this->getMoodleUser($record->moodleuserid);
 					$record->firstname = $moodleUserObj->firstname;
 					$record->lastname = $moodleUserObj->lastname;
+
+					if(in_array('profile', $requestedAttributes)){
+						global $OUTPUT;
+
+						$MoodleObj = Moodle::getInstance($this->id, $this->e);
+						$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+						$courseid = $ExammanagementInstanceObj->getCourse()->id;
+						
+						$image = $OUTPUT->user_picture($moodleUserObj, array('courseid' => $courseid, 'link' => true));
+						
+						$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUserObj->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
+
+						$record->profile = $image.' '.$link;
+						
+					}
 				}
 
 				array_push($allParticipants, $record);

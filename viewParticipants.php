@@ -82,7 +82,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 
-            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr'));        
+            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile'));        
 
             $noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
@@ -107,7 +107,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                         echo('<tr>');
                         echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
-                        echo('<td>'.$UserObj->getUserPicture($participant->moodleuserid).' '.$UserObj->getUserProfileLink($participant->moodleuserid).'</td>');
+                        echo('<td>'.$participant->profile.'</td>');
                         echo('<td>'.$participant->matrnr.'</td>');
 
                         if(groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id) || groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id)){
@@ -132,8 +132,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_without_panda_account", "mod_exammanagement").'</strong></td></tr>');
 
                     foreach ($noneMoodleParticipants as $key => $participant) {
-
-                        var_dump($participant);
 
                         echo('<tr>');
                         echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
