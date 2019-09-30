@@ -98,19 +98,21 @@ class User{
 					$record->imtlogin = $login;
 				}
 
-				// add name if it is requested as attribute or needed for sorting
+				// add name if it is requested as attribute or needed for sorting or profile
 				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || in_array('profile', $requestedAttributes) || $sortOrder == 'name' )){
                     $moodleUserObj = $this->getMoodleUser($record->moodleuserid);
 					$record->firstname = $moodleUserObj->firstname;
 					$record->lastname = $moodleUserObj->lastname;
 
-					if(in_array('profile', $requestedAttributes)){
-						global $OUTPUT;
-
-						$MoodleObj = Moodle::getInstance($this->id, $this->e);
+					if(in_array('profile', $requestedAttributes) || in_array('groups', $requestedAttributes)){
 						$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+						$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 						$courseid = $ExammanagementInstanceObj->getCourse()->id;
+					}
+
+					if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
+						global $OUTPUT;
 						
 						$image = $OUTPUT->user_picture($moodleUserObj, array('courseid' => $courseid, 'link' => true));
 						
@@ -119,6 +121,28 @@ class User{
 						$record->profile = $image.' '.$link;
 						
 					}
+
+					if(in_array('groups', $requestedAttributes)){ 			// add group if it is requested
+						$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $record->moodleuserid);
+						$groupnames = false;
+
+						foreach ($userGroups as $key => $value){
+							if ($value){
+								foreach ($value as $key2 => $value2){
+									if(!$groupnames){
+										$groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
+									} else {
+										$groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
+									}
+								}
+							} else{
+								$groupnames = '-';
+								break;
+							}
+						}
+
+						$record->groups = $groupnames;
+					}
 				}
 
 				array_push($allParticipants, $record);
@@ -126,7 +150,7 @@ class User{
 
 			$rs->close();			
 
-			// matrnr hinzufügen
+			// add matrnr if it is requested
 			if(in_array('matrnr', $requestedAttributes)){
 
 				require_once(__DIR__.'/../ldap/ldapManager.php');
@@ -144,15 +168,15 @@ class User{
 
 					$ldapConnection = $LdapManagerObj->connect_ldap();
 
-					$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins);
+					$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap 
 						
 				} else { // for local testing during development
 					foreach($allParticipants as $participant){
 
 						if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
-							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
+							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid); // only gets matrnr if ldap testmode is on
 						} else {
-							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(Null, $participant->imtlogin);
+							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(Null, $participant->imtlogin);  // only gets matrnr if ldap testmode is on
 						}
 
 						if($matrnr){
