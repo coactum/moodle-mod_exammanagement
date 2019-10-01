@@ -39,7 +39,7 @@ $afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 
 define( "SEPARATOR", chr(9) ); //Tabulator
 define( "NEWLINE", "\r\n" );

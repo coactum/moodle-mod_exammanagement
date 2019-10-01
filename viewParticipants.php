@@ -38,7 +38,7 @@ $dpmatrnr  = optional_param('dpmatrnr', 0, PARAM_TEXT);
 $dpmid  = optional_param('dpmid', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 
@@ -97,7 +97,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 } else {
                     $courseGroups = false;                    
                 }
-                
+
                 echo('<div class="table-responsive">');
                 echo('<table class="table table-striped exammanagement_table">');
                 echo('<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("participants", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th>');

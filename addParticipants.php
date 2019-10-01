@@ -44,7 +44,7 @@ $dtp  = optional_param('dtp', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $LdapManagerObj = ldapManager::getInstance($id, $e);	
-$MoodleDBObj = MoodleDB::getInstance($id, $e);
+$MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){

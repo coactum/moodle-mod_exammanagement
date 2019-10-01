@@ -90,6 +90,14 @@ class User{
 		}
 
         if($rs->valid()){
+
+			if(in_array('profile', $requestedAttributes) || in_array('groups', $requestedAttributes)){
+				$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+				$MoodleObj = Moodle::getInstance($this->id, $this->e);
+
+				$courseid = $ExammanagementInstanceObj->getCourse()->id;
+			}
+
             foreach ($rs as $record) {
 
 				// add login if it is requested as attribute or needed for matrnr
@@ -100,23 +108,16 @@ class User{
 
 				// add name if it is requested as attribute or needed for sorting or profile
 				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || in_array('profile', $requestedAttributes) || $sortOrder == 'name' )){
-                    $moodleUserObj = $this->getMoodleUser($record->moodleuserid);
-					$record->firstname = $moodleUserObj->firstname;
-					$record->lastname = $moodleUserObj->lastname;
-
-					if(in_array('profile', $requestedAttributes) || in_array('groups', $requestedAttributes)){
-						$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-						$MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-						$courseid = $ExammanagementInstanceObj->getCourse()->id;
-					}
+                    $moodleUser = $this->getMoodleUser($record->moodleuserid);
+					$record->firstname = $moodleUser->firstname;
+					$record->lastname = $moodleUser->lastname;
 
 					if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
 						global $OUTPUT;
 						
-						$image = $OUTPUT->user_picture($moodleUserObj, array('courseid' => $courseid, 'link' => true));
+						$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
 						
-						$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUserObj->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
+						$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
 
 						$record->profile = $image.' '.$link;
 						
