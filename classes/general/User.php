@@ -348,12 +348,19 @@ class User{
 	public function filterCheckedParticipants($returnObj){
 
 			$returnObj = get_object_vars($returnObj);
-			$allParicipantsArray = $returnObj["participants"];
+
+			$allParicipantsArray = array();
+
+			if(isset($returnObj["participants"])){
+				$allParicipantsArray = $returnObj["participants"];
+			}
 			$participantsArr = array();
 
-			foreach ($allParicipantsArray as $key => $value){
-				if ($value == 1){
-					array_push($participantsArr, $key);
+			if($allParicipantsArray){
+				foreach ($allParicipantsArray as $key => $value){
+					if ($value == 1){
+						array_push($participantsArr, $key);
+					}
 				}
 			}
 

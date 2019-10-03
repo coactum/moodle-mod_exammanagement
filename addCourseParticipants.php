@@ -72,12 +72,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $userObjArr = array();
 
                     if($participantsIdsArr){
+
+                        $courseid = $ExammanagementInstanceObj->getCourse()->id;
+
                         foreach($participantsIdsArr as $participantId){
 
                             if($UserObj->checkIfAlreadyParticipant($participantId) == false){
                                 $user = new stdClass();
                                 $user->plugininstanceid = $id;
-                                $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+                                $user->courseid = $courseid;
                                 $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                 $user->moodleuserid = $participantId;
                                 $user->headerid = 0;

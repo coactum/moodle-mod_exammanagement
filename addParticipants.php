@@ -240,56 +240,33 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$headerid = 0;
 				}
 
-				### get saved participants for headerid ###
-				$oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $id, 'headerid' => $headerid));
-				
-				if(!empty($oldParticipants)){
-					$matrNrForOldParticipants = $UserObj->getMultipleUsersMatrNr($oldParticipants);
-				} else {
-					$matrNrForOldParticipants = false;
-				}
+				### get saved participants for headerid ###				
+				$oldParticipants = $UserObj->getExamParticipants(array('mode'=>'header', 'id' =>$headerid), array('matrnr'));        
 
-				if(!empty($oldParticipants)){ //if participant is deleted
+				if($oldParticipants){
 
 					foreach($oldParticipants as $key => $participant){
-						if($participant->moodleuserid){
-							$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-						} else {
-							$login = false;
-						}
-
-						$matrnr = false;
-
-						if($matrNrForOldParticipants){
-							if($login && array_key_exists($login, $matrNrForOldParticipants)){
-								$matrnr = $matrNrForOldParticipants[$login];
-							} else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrForOldParticipants)){
-								$matrnr = $matrNrForOldParticipants[$participant->imtlogin];
-							} 
-						}
 		
-						if(!in_array($participant->moodleuserid, $tempIDs) && $matrnr && !in_array($matrnr, $tempIDs)){
+						if($participant->moodleuserid && !in_array($participant->moodleuserid, $tempIDs)){ // moodle participant that is not readed in again and should therefore be deleted
 
-							if($participant->moodleuserid){
-								$deletedMatrNrObj = new stdclass;
-								$deletedMatrNrObj->moodleuserid = $participant->moodleuserid;
-								$deletedMatrNrObj->matrnr = $matrnr;
-								$deletedMatrNrObj->firstname = false;
-								$deletedMatrNrObj->lastname = false;
-								$deletedMatrNrObj->line = '';
+							$deletedMatrNrObj = new stdclass;
+							$deletedMatrNrObj->moodleuserid = $participant->moodleuserid;
+							$deletedMatrNrObj->matrnr = $participant->matrnr;
+							$deletedMatrNrObj->firstname = false;
+							$deletedMatrNrObj->lastname = false;
+							$deletedMatrNrObj->line = '';
 			
-								array_push($deletedParticipants, $deletedMatrNrObj);
-							} else if($participant->imtlogin){
-								$deletedMatrNrObj = new stdclass;
-								$deletedMatrNrObj->moodleuserid = false;
-								$deletedMatrNrObj->matrnr = $matrnr;
-								$deletedMatrNrObj->firstname = $participant->firstname;
-								$deletedMatrNrObj->lastname = $participant->lastname;
-								$deletedMatrNrObj->line = '';
+							array_push($deletedParticipants, $deletedMatrNrObj);
 
-								array_push($deletedParticipants, $deletedMatrNrObj);
-							}
-							
+						} else if($participant->moodleuserid === null && $participant->imtlogin && !in_array($participant->imtlogin, $tempIDs)){  // moodle participant that is not readed in again and should therefore be deleted
+							$deletedMatrNrObj = new stdclass;
+							$deletedMatrNrObj->moodleuserid = false;
+							$deletedMatrNrObj->matrnr = $participant->matrnr;
+							$deletedMatrNrObj->firstname = $participant->firstname;
+							$deletedMatrNrObj->lastname = $participant->lastname;
+							$deletedMatrNrObj->line = '';
+
+							array_push($deletedParticipants, $deletedMatrNrObj);
 						}
 					}
 				}
@@ -487,13 +464,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						// delete deleted participants
 						if($deletedParticipantsIdsArr){
 							foreach($deletedParticipantsIdsArr as $identifier){
-									$temp = explode('_', $identifier);
+								$temp = explode('_', $identifier);
 
-									if($temp[0]== 'mid'){
-										$UserObj->deleteParticipant($temp[1], false);
-									} else {
-										$UserObj->deleteParticipant(false, $temp[1]);
-									}
+								if($temp[0]== 'mid'){
+									$UserObj->deleteParticipant($temp[1], false);
+								} else {
+									$UserObj->deleteParticipant(false, $temp[1]);
+								}
 							}
 						}
 
