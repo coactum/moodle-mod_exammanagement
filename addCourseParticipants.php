@@ -83,7 +83,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 $user->headerid = 0;
 
                                 array_push($userObjArr, $user);
-
                             }
                         }
                     }

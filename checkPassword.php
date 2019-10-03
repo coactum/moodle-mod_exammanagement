@@ -80,7 +80,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			global $USER;
 
 			$mailsubject = get_string('password_reset_request_mailsubject', 'mod_exammanagement', ['name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
-			$text = get_string('password_reset_request_mailtext', 'mod_exammanagement', ['user' => $UserObj->getUserProfileLink($USER->id), 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'url' => strval($MoodleObj->getMoodleUrl("/mod/exammanagement/checkPassword.php", $id, 'resetPW', true))]);
+				
+			$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $USER->id, 'course', $ExammanagementInstanceObj->getCourse()->id).'">'.$USER->firstname.' '.$USER->lastname.'</a></strong>';
+
+			$text = get_string('password_reset_request_mailtext', 'mod_exammanagement', ['user' => $profilelink, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'url' => strval($MoodleObj->getMoodleUrl("/mod/exammanagement/checkPassword.php", $id, 'resetPW', true))]);
 			
 			foreach($supportusers as $user){
 				$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text);

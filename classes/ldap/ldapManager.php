@@ -100,7 +100,7 @@ class ldapManager{
 
 			$imtlogin = substr($temp[0], -3);
 
-			$imtlogin = str_pad(intval($imtlogin)-2, 3, "0", STR_PAD_LEFT);
+			$imtlogin = str_pad(intval($imtlogin), 3, "0", STR_PAD_LEFT);
 
 			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
 			

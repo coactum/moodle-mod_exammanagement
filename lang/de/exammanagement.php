@@ -338,12 +338,12 @@ $string['select_deselect_all'] = 'Alle aus-/abwählen';
 $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['no_participants_added_page'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['state_newmatrnr'] = 'Neu eingelesen';
-$string['state_newmatrnr_no_moodle'] = 'Neu eingelesen (ohne PANDA Benutzerkonto)';
+$string['state_nonmoodle'] = 'Ohne PANDA Benutzerkonto';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_doubled'] = 'Doppelte Matrikelnummer';
-$string['state_oddmatrnr_nocourseparticipant'] = 'Neu eingelesen (kein Kursteilnehmer)';
+$string['state_no_courseparticipant'] = 'Kein Kursteilnehmer';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
-$string['state_deletedmatrnr'] = 'Wird gelöscht';
+$string['state_to_be_deleted'] = 'Wird gelöscht';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';

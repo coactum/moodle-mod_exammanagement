@@ -62,24 +62,267 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$UserObj->deleteTempParticipants();
 			}
 
-			//Instantiate form
-			$mform = new addParticipantsForm(null, array('id'=>$id, 'e'=>$e));
+			# define participants for form #
+			$tempParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id)); // get all participants that are already readed in and saved as temnp participants
 
-			//Form processing and displaying is done here
+			if($tempParticipants){
+
+				$allParticipants = array(); // will contain all participants ordered in their respective sub array 
+
+				$moodleUsers = array(); // will contain all moodle users for further classification
+				$nonMoodleUsers = array(); // will contain all nonmoodle users for further classification
+
+				$badMatriculationnumbers = array(); // will contain all invalid or doubled identifier
+				$oddParticipants = array(); // will contain all users that are no course members or have no moodle account but can still be added as exam participants
+				$deletedParticipants = array(); // will contain all users that are already read in from file with same header but not in this file and should therefore be deleted
+				$existingParticipants = array(); // will contain all user that are already exam participants
+				$newMoodleParticipants = array(); // will contain all valid moodle participants that can be added
+
+				$tempIDs = array(); // will contain moodleids and logins of all participants already sorted to other arrays for checking double entries
+
+				$courseParticipantsIDs = $UserObj->getCourseParticipantsIDs(); // contains moodle user ids of all course participants
+
+				## sort out bad matriculation numbers to badmatrnr array ##
+
+				foreach($tempParticipants as $key => $participant){ // filter invalid/bad matrnr
+
+					if (!$UserObj->checkIfValidMatrNr($participant->identifier)){
+						$tempUserObj = new stdclass;
+						$tempUserObj->line = $participant->line;
+						$tempUserObj->matrnr = $participant->identifier;
+						$tempUserObj->state = 'state_badmatrnr';
+						
+						array_push($badMatriculationnumbers, $tempUserObj);
+						unset($tempParticipants[$key]);
+					}
+				}
+
+				## construct arrays with all users (moodle and nonmoodle) with all needed data ##
+
+				if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+					$ldapConnection = $LdapManagerObj->connect_ldap();
+					
+					foreach($tempParticipants as $key => $participant){ // construct helper arrays needed for ldap method
+						$allMatriculationNumbers[$key] = $participant->identifier;
+						$allLines[$key] = $participant->line;
+					}
+
+					$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $lines); //get data for all remaining matriculation numbers from ldap 
+
+					foreach($users as $line => $login){
+						$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
+
+						if($moodleuserid){ // if moodle user
+							$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
+						} else { // if not a moodle user
+							$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
+						}
+					}
+				} else { // for local testing
+					foreach($tempParticipants as $key => $participant){
+
+						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
+
+						if($userid){
+							$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
+
+							$moodleUsers[$participant->line] = array('matrnr' => $participant->identifier, 'login'=> $login, 'moodleuserid' => $userid);
+						} else {
+							$login = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($participant->identifier);
+							$nonMoodleUsers[$participant->line] = array('matrnr' => $participant->identifier, 'login' => $login, 'moodleuserid' => false);
+						}
+					}
+				}
+
+				## check moodle users and classify them to array according to case ##
+						
+				foreach($moodleUsers as $line => $data){ 
+
+					if (isset($data['moodleuserid']) && $data['moodleuserid']){
+						$tempUserObj = new stdclass;
+						$tempUserObj->line = $line;
+						$tempUserObj->moodleuserid = $data['moodleuserid'];
+						$tempUserObj->matrnr = $data['matrnr'];
+						$tempUserObj->login = $data['login'];
+
+						if(in_array($data['moodleuserid'], $tempIDs)){ 							// if user is already known as temp participant
+							$tempUserObj->state = 'state_doubled';
+							array_push($badMatriculationnumbers, $tempUserObj);
+						} else if($UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){ 	// if user is already saved for instance
+							$tempUserObj->state = 'state_existingmatrnr';
+							array_push($existingParticipants, $tempUserObj);
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+						} else if (!in_array($data['moodleuserid'], $courseParticipantsIDs)){ 	// if user is not in course
+							$tempUserObj->state = 'state_no_courseparticipant';
+							array_push($oddParticipants, $tempUserObj);
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+						} else {																// if user is a valid new moodle participant
+							array_push($newMoodleParticipants, $tempUserObj);
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+						}
+
+						foreach($tempParticipants as $key => $participant){ 					// unset user from original tempuser array
+							if($participant->identifier == $data['matrnr']){
+								unset($tempParticipants[$key]);
+								break;
+							}
+						}
+					}
+				}
+				
+				## check nonmoodle users and classify them to array according to case ##
+
+				foreach($nonMoodleUsers as $line => $data){
+
+					if (isset($data['login']) && $data['login']){
+						$tempUserObj = new stdclass;
+						$tempUserObj->line = $line;
+						$tempUserObj->moodleuserid = false;
+						$tempUserObj->matrnr = $data['matrnr'];
+						$tempUserObj->login = $data['login'];
+
+						if(in_array($data['login'], $tempIDs)){ 							// if user is already known as temp participant
+							$tempUserObj->state = 'state_doubled';
+							array_push($badMatriculationnumbers, $tempUserObj);
+						} else if($UserObj->checkIfAlreadyParticipant(false, $data['login'])){ // if user is already saved as participant
+							$tempUserObj->state = 'state_existingmatrnr';
+							array_push($existingParticipants, $tempUserObj);
+							array_push($tempIDs, $data['login']); 							//for finding already temp users
+						} else { 															// if user is a valid new nonmoodle participant
+							$tempUserObj->state = 'state_nonmoodle';
+							array_push($oddParticipants, $tempUserObj);
+							array_push($tempIDs, $data['login']); 							//for finding already temp users
+						}
+
+						foreach($tempParticipants as $key => $participant){					 // unset user from original tempuser array
+							if($participant->identifier == $data['matrnr']){
+								unset($tempParticipants[$key]);
+								break;
+							}
+						}
+					}
+				}
+
+				## push all remaining matriculation numbers that could not be resolved by ldap into the bad matriculationnumbers array ##
+
+				foreach($tempParticipants as $key => $participant){
+					$tempUserObj = new stdclass;
+					$tempUserObj->line = $participant->line;
+					$tempUserObj->matrnr = $participant->identifier;
+					$tempUserObj->state = 'state_badmatrnr';
+
+					array_push($badMatriculationnumbers, $tempUserObj);
+					unset($tempParticipants[$key]);
+				}
+
+				## check if users should be deleted ##
+				
+				### get header id ###
+				$tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
+				$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
+				$headerid;
+
+				if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
+					$headerid = 1;
+				} else if($savedFileHeadersArr && $tempfileheader){
+					$saved = false;
+					foreach($savedFileHeadersArr as $key => $header){ // if new header is already saved
+						if($tempfileheader == $header){
+							$headerid = $key+1;
+							$saved = true;
+						}
+					}
+						
+					if(!$saved){ // if new header is not saved yet
+						$headerid = count($savedFileHeadersArr)+1;
+					}
+				} else if(!$tempfileheader){ // if reading of tempfileheader fails
+					$headerid = 0;
+				}
+
+				### get saved participants for headerid ###
+				$oldParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $id, 'headerid' => $headerid));
+				
+				if(!empty($oldParticipants)){
+					$matrNrForOldParticipants = $UserObj->getMultipleUsersMatrNr($oldParticipants);
+				} else {
+					$matrNrForOldParticipants = false;
+				}
+
+				if(!empty($oldParticipants)){ //if participant is deleted
+
+					foreach($oldParticipants as $key => $participant){
+						if($participant->moodleuserid){
+							$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
+						} else {
+							$login = false;
+						}
+
+						$matrnr = false;
+
+						if($matrNrForOldParticipants){
+							if($login && array_key_exists($login, $matrNrForOldParticipants)){
+								$matrnr = $matrNrForOldParticipants[$login];
+							} else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrForOldParticipants)){
+								$matrnr = $matrNrForOldParticipants[$participant->imtlogin];
+							} 
+						}
+		
+						if(!in_array($participant->moodleuserid, $tempIDs) && $matrnr && !in_array($matrnr, $tempIDs)){
+
+							if($participant->moodleuserid){
+								$deletedMatrNrObj = new stdclass;
+								$deletedMatrNrObj->moodleuserid = $participant->moodleuserid;
+								$deletedMatrNrObj->matrnr = false;
+								$deletedMatrNrObj->firstname = false;
+								$deletedMatrNrObj->lastname = false;
+								$deletedMatrNrObj->line = '';
+			
+								array_push($deletedParticipants, $deletedMatrNrObj);
+							} else if($participant->imtlogin){
+								$deletedMatrNrObj = new stdclass;
+								$deletedMatrNrObj->moodleuserid = false;
+								$deletedMatrNrObj->matrnr = $matrnr;
+								$deletedMatrNrObj->firstname = $participant->firstname;
+								$deletedMatrNrObj->lastname = $participant->lastname;
+								$deletedMatrNrObj->line = '';
+
+								array_push($deletedParticipants, $deletedMatrNrObj);
+							}
+							
+						}
+					}
+				}
+
+				$allParticipants['badMatriculationNumbers'] = $badMatriculationnumbers;
+				$allParticipants['deletedParticipants'] = $deletedParticipants;
+				$allParticipants['oddParticipants'] = $oddParticipants;
+				$allParticipants['existingParticipants'] = $existingParticipants;
+				$allParticipants['newMoodleParticipants'] = $newMoodleParticipants;
+
+				# Instantiate form #
+				$mform = new addParticipantsForm(null, array('id'=>$id, 'e'=>$e, 'allParticipants' => $allParticipants));
+
+			} else {
+				# Instantiate form #
+				$mform = new addParticipantsForm(null, array('id'=>$id, 'e'=>$e));
+			}
+
+			// Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
-				//Handle form cancel operation, if cancel button is present on form
+				// Handle form cancel operation, if cancel button is present on form
 
 				redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
 			} else if ($fromform = $mform->get_data()) {
-			//In this case you process validated data. $mform->get_data() returns data posted in form.
+			// In this case you process validated data. $mform->get_data() returns data posted in form.
 
 				// retrieve Files from form
 				$paul_file = $mform->get_file_content('participantslist_paul');
 
 				if (!$paul_file){
         
-					//saveParticipants in DB
+					// saveParticipants in DB
 					
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
 					$noneMoodleParticipantsMatrNrArr = array();
@@ -320,12 +563,29 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			// or on the first display of the form.
 
-			//Set default data (if any)
-			//$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-			$mform->set_data(array('id'=>$id));
+				$default_values = array('id'=>$id);
 
-			//displays the form
-			$mform->display();
+				if(isset($newMoodleParticipants)){
+					foreach($newMoodleParticipants as $participant){
+						$default_values['participants[mid_'.$participant->moodleuserid.']'] = true;
+					}
+				}
+
+				if(isset($deletedParticipants)){
+					foreach($deletedParticipants as $participant){
+						if($participant->moodleuserid){
+							$default_values['deletedparticipants[mid_'.$participant->moodleuserid.']'] = true;
+						} else if($participant->matrnr){
+							$default_values['deletedparticipants[matrnr_'.$participant->matrnr.']'] = true;
+						}
+					}
+				}
+				
+				//Set default data (if any)
+				$mform->set_data($default_values);
+
+				//displays the form
+				$mform->display();
 			}
 
 			$MoodleObj->outputFooter();

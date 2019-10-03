@@ -338,12 +338,12 @@ $string['add_to_exam'] = 'Add to exam';
 $string['select_deselect_all'] = 'Select/deselect all';
 $string['no_participants_added_page'] = 'No participants added.';
 $string['state_newmatrnr'] = 'New';
-$string['state_newmatrnr_no_moodle'] = 'New (without PANDA account)';
+$string['state_nonmoodle'] = 'Without PANDA account';
 $string['state_badmatrnr'] = 'Bad matriculation number';
 $string['state_doubled'] = 'Duplicated matriculation number';
-$string['state_oddmatrnr_nocourseparticipant'] = 'New (no course participant)';
+$string['state_no_courseparticipant'] = 'No course participant';
 $string['state_existingmatrnr'] = 'Already exam participant';
-$string['state_deletedmatrnr'] = 'Will be deleted';
+$string['state_to_be_deleted'] = 'Will be deleted';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Import participants from course';
