@@ -344,6 +344,7 @@ $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_no_courseparticipant'] = 'No course participant';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_to_be_deleted'] = 'Will be deleted';
+$string['state_not_in_file_anymore'] = 'Not in file anymore';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Import participants from course';

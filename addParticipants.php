@@ -273,7 +273,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							if($participant->moodleuserid){
 								$deletedMatrNrObj = new stdclass;
 								$deletedMatrNrObj->moodleuserid = $participant->moodleuserid;
-								$deletedMatrNrObj->matrnr = false;
+								$deletedMatrNrObj->matrnr = $matrnr;
 								$deletedMatrNrObj->firstname = false;
 								$deletedMatrNrObj->lastname = false;
 								$deletedMatrNrObj->line = '';

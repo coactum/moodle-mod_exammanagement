@@ -271,9 +271,9 @@ class addParticipantsForm extends moodleform{
                     }
 
                     if($deletedUser->moodleuserid){
-                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_no_courseparticipant', "mod_exammanagement") .')</div></div>');
+                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_not_in_file_anymore', "mod_exammanagement") .')</div></div>');
                     } else if ($deletedUser->matrnr){
-                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_nonmoodle', "mod_exammanagement") .')</div></div>');
+                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_not_in_file_anymore', "mod_exammanagement") .')</div></div>');
                     }
 
 

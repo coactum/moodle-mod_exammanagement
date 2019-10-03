@@ -344,6 +344,7 @@ $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_no_courseparticipant'] = 'Kein Kursteilnehmer';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_to_be_deleted'] = 'Wird gelöscht';
+$string['state_not_in_file_anymore'] = 'Nicht mehr in Datei';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';
