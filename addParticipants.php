@@ -297,21 +297,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				// retrieve Files from form
 				$paul_file = $mform->get_file_content('participantslist_paul');
 
-				if (!$paul_file){
-        
-					// saveParticipants in DB
+				if (!$paul_file){ // if no import file and exam participants should be saved in db
 					
+					# get checked userids from form #
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
 					$noneMoodleParticipantsMatrNrArr = array();
 					$deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
 									
 					if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
+						# get headers and temp file header #
 						$tempfileheader = json_decode($ExammanagementInstanceObj->moduleinstance->tempimportfileheader);
 						$savedFileHeadersArr = json_decode($ExammanagementInstanceObj->moduleinstance->importfileheaders);
 						$newheaderid;
 
-						// save new file header
+						# save new file header #
 						if(!$savedFileHeadersArr && $tempfileheader){ // if there are no saved headers by now
 							$savedFileHeadersArr = array();
 							$newheaderid = 1;
@@ -336,7 +336,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						$ExammanagementInstanceObj->moduleinstance->importfileheaders = json_encode($savedFileHeadersArr);
 
-						// add new participants
+						# add new participants #
 						if($participantsIdsArr){ 
 							$userObjArr = array();
 
@@ -344,7 +344,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 								$temp = explode('_', $identifier);
 
-								if($temp[0]== 'mid'){
+								if($temp[0]== 'mid'){ // if participant is moodle user
 									$user = new stdClass();
 									$user->plugininstanceid = $id;
 									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
@@ -367,7 +367,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 							$noneMoodleParticipantsArr = array();
 
-							if($LdapManagerObj->is_LDAP_config()){
+							if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
 								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
@@ -412,7 +412,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								}
 							}
 
-							foreach($participantsIdsArr as $key => $identifier){
+							foreach($participantsIdsArr as $key => $identifier){ // if participant is has no moodle account
 								$temp = explode('_', $identifier);
 
 								$matrnr = $temp[1];
@@ -456,42 +456,57 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								array_push($userObjArr, $user);
 							}
 
-							// insert records of new participants
+							## insert records of new participants ##
 							$MoodleDBObj->InsertBulkRecordsInDB('exammanagement_participants', $userObjArr);
 
 						}
 
-						// delete deleted participants
+						# delete participants that should be deleted #
+
 						if($deletedParticipantsIdsArr){
 							foreach($deletedParticipantsIdsArr as $identifier){
 								$temp = explode('_', $identifier);
 
-								if($temp[0]== 'mid'){
+								if($temp[0]== 'mid'){ // delete moodle participant
 									$UserObj->deleteParticipant($temp[1], false);
-								} else {
-									$UserObj->deleteParticipant(false, $temp[1]);
+								} else { // delete participant without moodle account
+
+									$userlogin = false;
+
+									if($LdapManagerObj->is_LDAP_config()){
+										$ldapConnection = $LdapManagerObj->connect_ldap();
+		
+										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $temp[1]);
+		
+									} else {
+										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
+									}
+
+									if($userlogin){
+										$UserObj->deleteParticipant(false, $userlogin);
+									}
 								}
 							}
 						}
 
-						// delete temp file header and update saved file headers
+						# delete temp file header and update saved file headers #
 						$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 
 						$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-						//delete temp participants
+						# delete temp participants #
 						$UserObj->deleteTempParticipants();
 
-						//redirect
+						# redirect #
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
 					} else {
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
 
-				} else if($paul_file){
+				} else if($paul_file){ // if participants are readed in from import file and should be saved as temporary participants
 
-					// get matriculation numbers from paul file as an array
+					# get matriculation numbers from paul file as an array #
 					$fileContentArr = explode(PHP_EOL, $paul_file); // separate lines
 					
 					if($fileContentArr){
@@ -540,6 +555,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 			// or on the first display of the form.
 
+				# set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants) # 
 				$default_values = array('id'=>$id);
 
 				if(isset($newMoodleParticipants)){
