@@ -48,52 +48,53 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
-      $participantsArray = array_values($UserObj->getAllExamParticipants());
-      $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
-      $assignmentArray = array();
-      $newAssignmentObj = '';
+      $participants = $UserObj->getExamParticipants(array('mode'=>'all')); // get all exam participants sorted by name
 
-      if(!$savedRoomsArray){
+      $savedRoomIDs = $ExammanagementInstanceObj->getSavedRooms(); // get the ids of all used exam rooms
+      $savedRooms = false;
+
+      foreach($savedRoomIDs as $roomid){                            // construct array with all used exam room objects
+          $room = $ExammanagementInstanceObj->getRoomObj($roomid);
+          
+          $savedRooms[$roomid] = $room;
+      }
+
+      if(!$savedRooms){
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
 
-      } elseif(!$participantsArray){
+      } else if(!$participants){
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 
       }
 
-      $participantsCount = 0;
+      usort($savedRooms, function($a, $b){ // sort rooms by places count through custom user function (small to big rooms)
 
-      usort($savedRoomsArray, function($a, $b){ //sort rooms array by custom user function (small to big rooms)
-
-        global $ExammanagementInstanceObj;
-
-        $aPlaces = count(json_decode($ExammanagementInstanceObj->getRoomObj($a)->places));
-        $bPlaces = count(json_decode($ExammanagementInstanceObj->getRoomObj($b)->places));
+        $aPlaces = count(json_decode($a->places));
+        $bPlaces = count(json_decode($b->places));
 
         return strnatcmp($aPlaces, $bPlaces); // sort by places count
 
       });
 
-      $savedRoomsArray = array_reverse($savedRoomsArray); // reverse array: now big to small rooms
+      $savedRooms = array_reverse($savedRooms); // reverse array: now big to small rooms
 
-      foreach($savedRoomsArray as $key => $roomID){
+      $participantsCount = 0;
 
-        $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
+      foreach($savedRooms as $key => $room){
 
-        if($RoomObj){
-          $places = json_decode($RoomObj->places);	//get Places of this Room
+        if($room){
+          $places = json_decode($room->places);	// get places of this room
 
-          foreach($participantsArray as $key1 => $participantObj){
+          foreach($participants as $key1 => $participant){
     
             if($key1 >= $participantsCount){
               
-              $participantObj->roomid = $RoomObj->roomid;
-              $participantObj->roomname = $RoomObj->name;
-              $participantObj->place = array_shift($places);
+              $participant->roomid = $room->roomid;
+              $participant->roomname = $room->name;
+              $participant->place = array_shift($places);
     
               // set room and place
-              $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+              $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
     
               $participantsCount +=1;
     
@@ -101,7 +102,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 break;
               }
     
-            } else if($participantsCount == count($participantsArray)){ //if all users have a place
+            } else if($participantsCount == count($participants)){ // if all users have a place
               break 2;
             }
           }
@@ -109,7 +110,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         
       }
 
-      if($participantsCount < count($participantsArray)){	//if users are left without a room
+      if($participantsCount < count($participants)){	// if users are left without a room
         $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
       }
 
