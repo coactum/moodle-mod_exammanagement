@@ -38,7 +38,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -116,68 +115,41 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $pdf->AddPage();
 
             // get users and construct content for document
-            $roomsArr = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
+            $roomIDs = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
             $fill = false;
             $previousRoom;
             $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
 
-            foreach ($roomsArr as $roomID){
-            $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
+            foreach ($roomIDs as $roomID){
+                $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
 
-            $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
-            $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+                $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-            if($participantsArray){
-                if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-                    //new room -> finish and print current table and begin new page
-                    $tbl .= "</table>";
-                    $pdf->writeHTML($tbl, true, false, false, false, '');
-                    $pdf->AddPage();
-                    $fill = false;
-                    $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-                }
-        
-                $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
+                if($participants){
+                    if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+                        //new room -> finish and print current table and begin new page
+                        $tbl .= "</table>";
+                        $pdf->writeHTML($tbl, true, false, false, false, '');
+                        $pdf->AddPage();
+                        $fill = false;
+                        $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
+                    }
+                        
+                    foreach ($participants as $participant){
+
+                        $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $participant->firstname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
+                        $tbl .= "</tr>";
+                
+                        $fill = !$fill;
+                    }
             
-                foreach ($participantsArray as $participant){
-                $user = $UserObj->getMoodleUser($participant->moodleuserid);
-        
-                if($user){
-                    $name = $user->lastname;
-                    $firstname = $user->firstname;
-                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-                } else {
-                    $name = $participant->lastname;
-                    $firstname = $participant->firstname;
+                    $previousRoom = $currentRoom;
                 }
-        
-                $matrnr = false;
-
-                if($matrNrArr){
-                    if($login && array_key_exists($login, $matrNrArr)){
-                        $matrnr = $matrNrArr[$login];
-                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
-                        $matrnr = $matrNrArr[$participant->imtlogin];
-                    } 
-                }
-        
-                if($matrnr === false){
-                    $matrnr = '-';
-                }
-
-                $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $firstname . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
-                $tbl .= "</tr>";
-        
-                $fill = !$fill;
-                }
-        
-                $previousRoom = $currentRoom;
-            }
             }
 
             $tbl .= "</table>";

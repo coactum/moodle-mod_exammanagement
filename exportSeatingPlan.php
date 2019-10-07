@@ -107,47 +107,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       // ---------------------------------------------------------
 
       // get users and construct user tables for document
-      $roomsArray = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
+      $roomIDs = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
       
       $roomsCount = 0;
       
-      foreach ($roomsArray as $roomID){
+      foreach ($roomIDs as $roomID){
 
-        $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
+        $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-        $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
-
-        if($participantsArray){
-
-          foreach ($participantsArray as $key => $participant){
-
-            $matrnr = false;
-
-            $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-
-            if($matrNrArr){
-                if($login && array_key_exists($login, $matrNrArr)){
-                    $matrnr = $matrNrArr[$login];
-                } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
-                    $matrnr = $matrNrArr[$participant->imtlogin];
-                } 
-            }
-
-            if($matrnr === false){
-                $matrnr = '-';
-            }
-            
-            $participant->matrnr = $matrnr;
-          }
+        if($participants){
 
           if($sortmode == 'place'){
-            usort($participantsArray, function($a, $b){ //sort array by custom user function
+            usort($participants, function($a, $b){ //sort array by custom user function
 
               return strnatcmp($a->place, $b->place); // sort by place
     
             });
           } else if($sortmode == 'matrnr'){
-            usort($participantsArray, function($a, $b){ //sort array by custom user function
+            usort($participants, function($a, $b){ //sort array by custom user function
 
               return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
     
@@ -158,11 +135,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $rightCol = array();
           $tbl;
 
-          foreach ($participantsArray as $key => $participant){
+          foreach ($participants as $key => $participant){
             $matrnr = $participant->matrnr;
 
             if($matrnr === '-'){
-              $matrnr = $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin)->firstname . ' ' . $UserObj->getMoodleUser($participant->moodleuserid, $participant->imtlogin)->lastname;
+              $matrnr = $participant->firstname . ' ' . $participant->lastname;
             }
 
             if ($key % 70 < 35) {
@@ -171,7 +148,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               $rightCol[] = array("matrnr" => $matrnr, "roomname" => $participant->roomname, "place" => $participant->place);
             }
           
-            if ($key % 70 == 69 && isset($participantsArray[$key+1])) {
+            if ($key % 70 == 69 && isset($participants[$key+1])) {
               $tbl = $ExammanagementInstanceObj->getSeatingPlanTable($leftCol, $rightCol);
               $pdf->AddPage();
               $pdf->writeHTML($tbl, true, false, false, false, '');
@@ -193,7 +170,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       }
 
       // construct svg-files pages
-        foreach ($roomsArray as $key => $roomID){
+        foreach ($roomIDs as $key => $roomID){
           $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
 
           if($roomObj){
