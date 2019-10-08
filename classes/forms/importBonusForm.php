@@ -139,7 +139,7 @@ class importBonusForm extends moodleform{
         
         $maxbytes=$CFG->maxbytes;
 
-        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xls', '.xlsx', '.ods')));
+        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xlsx', '.ods')));
         $mform->addRule('bonuspoints_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
         
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
