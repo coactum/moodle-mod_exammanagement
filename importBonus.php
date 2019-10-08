@@ -98,31 +98,44 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
 					$ExcelReaderWrapper->setReadDataOnly(true);
 
-					// class MyReadFilter implements PHPExcel_Reader_IReadFilter { not working in the way intended (read only cells with relevant data)
+					function excelColumnRange($lower, $upper) {
+						++$upper;
+						for ($i = $lower; $i !== $upper; ++$i) {
+							yield $i;
+						}
+					}
 
-					// 	public function __construct($fromColumn, $toColumn) {
-					// 		$this->columns = array();
-					// 		$toColumn++;
+					class MyReadFilter implements PHPExcel_Reader_IReadFilter { // not working in the way intended (read only cells with relevant data)
 
-					// 		while ($fromColumn !== $toColumn+1) {
-					// 			$this->columns[] = $fromColumn++;
-					// 		}
-					// 	}
+						private $columns = array();
+
+						public function __construct($toColumn) {
+							
+							foreach (excelColumnRange('A', $toColumn) as $value) {
+								array_push($this->columns, $value);
+							}
+
+						}
+
+						public function readCell($column, $row, $worksheetName = '') {
+
+							if(in_array($column, $this->columns)){
+
+								return true;
+							}
+							
+							return false;
+						}
+					}
+
+					$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->pointsfield) );
 					
-					// 	public function readCell($column, $row, $worksheetName = '') {
-					// 		  // Read columns from 'A' to 'AF'
-					// 		  if (in_array($column, $this->columns)) {
-					// 			  return true;
-					// 		  }
-					// 		  return false;
-					// 	  }
-					// }
+					$ExcelReaderWrapper->setReadDataOnly(true);
 
-					//$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->idfield,$fromform->pointsfield) );
 					$readerObj = $ExcelReaderWrapper->load($tempfile);
 
 					$worksheetObj = $readerObj->getActiveSheet();
-					$highestRow = $worksheetObj->getHighestRow(); // e.g. 10
+					$highestRow = $worksheetObj->getHighestRow();
 
 					$dataArr = array();
 					$matrNrsArr = array();
