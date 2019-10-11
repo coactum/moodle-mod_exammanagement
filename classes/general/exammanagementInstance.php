@@ -348,7 +348,7 @@ EOF;
 						return false;
 				}
 			case 2:
-				if ($this->allPlacesAssigned()){
+				if ($this->allPlacesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))){
 					return true;
 				} else {
 						return false;
