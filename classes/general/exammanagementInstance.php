@@ -611,14 +611,23 @@ EOF;
 
 	}
 
-	public function getInputResultsCount(){
+	public function getEnteredResultsCount($timestamp = false){
 
-		$UserObj = User::getInstance($this->id, $this->e);
+		$MoodleDBObj = MoodleDB::getInstance();
+		
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND exampoints IS NOT NULL";
+		$select .= " AND examstate IS NOT NULL";
 
-		$users = $UserObj->getAllParticipantsWithResults();
+		if($timestamp){
+			$select .= " AND timeresultsentered IS NOT NULL";
+			$select .= " AND timeresultsentered >=" . $timestamp;
+		}
+		
+		$enteredResultsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
-		if($users){
-			return count($users);
+		if($enteredResultsCount){
+			return $enteredResultsCount;
 		} else {
 			return false;
 		}
@@ -627,7 +636,7 @@ EOF;
 
 	public function getHRExamReviewTime(){
 
-		$examReviewTime = $this->moduleinstance->examreviewtime;
+		$examReviewTime = $this->getExamReviewTime();
 		if($examReviewTime){
 			$hrexamReviewTime = date('d.m.Y', $examReviewTime).' '.get_string('at', 'mod_exammanagement').' '.date('H:i', $examReviewTime);
 			return $hrexamReviewTime;

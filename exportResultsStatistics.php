@@ -45,7 +45,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -55,9 +54,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-            global $CFG;
 
-            if(!$ExammanagementInstanceObj->getInputResultsCount()){
+            if(!$ExammanagementInstanceObj->getEnteredResultsCount()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
             } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
@@ -187,10 +185,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // set data for table 2
 
-            $ParticipantsArray = $UserObj->getAllExamParticipants();
-
-            $ParticipantsArray = $UserObj->sortParticipantsArrayByName($ParticipantsArray);
-            $matrNrArr = $UserObj->getMultipleUsersMatrNr($ParticipantsArray);
+            $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
 
             $notPassed = 0;
             $notRated = 0;
@@ -204,7 +199,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $bonussteptwo = 0;
             $bonusstepthree = 0;
 
-            foreach($ParticipantsArray as $participant){
+            foreach($participants as $participant){
 
                 $resultState = $UserObj->getExamState($participant);
 
@@ -415,14 +410,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             // header and centered
             $range = "A1:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . "1";
             $PHPExcelObj->setActiveSheetIndex(2)->getStyle($range)->applyFromArray($headerStyle);
-            $range = "A2:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . ( count($ParticipantsArray) + 1 );
+            $range = "A2:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . ( count($participants) + 1 );
             $PHPExcelObj->setActiveSheetIndex(2)->getStyle($range)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
             // border lines
-            $PHPExcelObj->setActiveSheetIndex(2)->getStyle('C1:C' . (count($ParticipantsArray) + 1))->applyFromArray($borderStyleArray);
-            $PHPExcelObj->setActiveSheetIndex(2)->getStyle('E1:E' . (count($ParticipantsArray) + 1))->applyFromArray($borderStyleArray);
-            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($ParticipantsArray) + 1))->applyFromArray($borderStyleArray);
-            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($ParticipantsArray) + 1))->applyFromArray($borderStyleArray);
+            $PHPExcelObj->setActiveSheetIndex(2)->getStyle('C1:C' . (count($participants) + 1))->applyFromArray($borderStyleArray);
+            $PHPExcelObj->setActiveSheetIndex(2)->getStyle('E1:E' . (count($participants) + 1))->applyFromArray($borderStyleArray);
+            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($participants) + 1))->applyFromArray($borderStyleArray);
+            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($participants) + 1))->applyFromArray($borderStyleArray);
 
             // output table 1
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue('A1', get_string('matrno', 'mod_exammanagement'));
@@ -442,42 +437,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $rowCounter=2;
 
-            foreach($ParticipantsArray as $participant){
-
-                if($participant->moodleuserid){
-                    $moodleUserObj = $UserObj->getMoodleUser($participant->moodleuserid);
-                    $lastname = $moodleUserObj->lastname;
-                    $firstname = $moodleUserObj->firstname;
-                } else if($participant->imtlogin){
-                    $lastname = $participant->lastname;
-                    $firstname = $participant->firstname;
-                }
-
-                $matrnr = false;
-                $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-
-                if($matrNrArr){
-                    if($login && array_key_exists($login, $matrNrArr)){
-                        $matrnr = $matrNrArr[$login];
-                    } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
-                        $matrnr = $matrNrArr[$participant->imtlogin];
-                    } 
-                }
-
-                if($matrnr === false){
-                    $matrnr = '-';
-                }
-
-                $room = $participant->roomname;
-                $place = $participant->place;
+            foreach($participants as $participant){
 
                 $state = $UserObj->getExamState($participant);
 
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("A$rowCounter", $matrnr);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("B$rowCounter", $lastname);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("C$rowCounter", $firstname);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("D$rowCounter", $room);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("E$rowCounter", $place);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("A$rowCounter", $participant->matrnr);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("B$rowCounter", $participant->lastname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("C$rowCounter", $participant->firstname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("D$rowCounter", $participant->roomname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("E$rowCounter", $participant->place);
 
                 if($state == 'normal'){
                     $temp = $UserObj->calculateTotalPoints($participant);
@@ -527,7 +495,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // table 2 sheet 1 formular mean
 
-            $participantscount = count($ParticipantsArray)+1;
+            $participantscount = count($participants)+1;
 
             $PHPExcelObj->setActiveSheetIndex(1)->getStyle("C2:C".$n)->getNumberFormat()->setFormatCode('0.00');
 

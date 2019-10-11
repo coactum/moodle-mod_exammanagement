@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\inputResultsForm;
 use mod_exammanagement\ldap\ldapManager;
+use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');

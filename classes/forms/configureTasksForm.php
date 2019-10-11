@@ -56,7 +56,7 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
-        if($ExammanagementInstanceObj->getInputResultsCount()){
+        if($ExammanagementInstanceObj->getEnteredResultsCount()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
         }
         

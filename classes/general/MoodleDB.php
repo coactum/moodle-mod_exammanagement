@@ -151,4 +151,11 @@ class MoodleDB{
 
 		return $DB->get_recordset($table, $conditions, $sort, $fields, $limitfrom, $limitnum);
 	}
+
+	public function getRecordsetSelect($table, $select, $params=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0){
+		global $DB;
+
+		return 	$DB->get_recordset_select($table, $select, $params, $sort, $fields, $limitfrom, $limitnum);
+	}
+
 }

@@ -38,7 +38,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -59,7 +58,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       define("WIDTH_COLUMN_POINTS", 80);
       define("WIDTH_COLUMN_PERCENT", 80);
 
-      if(!$ExammanagementInstanceObj->getInputResultsCount()){
+      if(!$ExammanagementInstanceObj->getEnteredResultsCount()){
         $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
       } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
         $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
@@ -129,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $pdf->SetXY(20, 65);
 
       $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
-      $participantsArray = $UserObj->getAllExamParticipants();
+
       $fill = false;
 
       $tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
@@ -143,10 +142,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $tbl .= "</tr>";
       $tbl .= "</thead>";
 
-      $participantsArray = $UserObj->sortParticipantsArrayByName($participantsArray);
-      $matrNrArr = $UserObj->getMultipleUsersMatrNr($participantsArray);
+      $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
 
-      foreach ($participantsArray as $participant){
+      foreach ($participants as $participant){
 
         $totalPoints = 0;
         $percentages = '-';
@@ -167,37 +165,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               }
         }
 
-        $user = $UserObj->getMoodleUser($participant->moodleuserid);
-    
-        if($user){
-            $name = $user->lastname;
-            $firstname = $user->firstname;
-            $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid));
-        } else {
-            $name = $participant->lastname;
-            $firstname = $participant->firstname;
-        }
-
-        $matrnr = false;
-
-        if($matrNrArr){
-            if($login && array_key_exists($login, $matrNrArr)){
-                $matrnr = $matrNrArr[$login];
-            } else if($participant->imtlogin && array_key_exists($participant->imtlogin, $matrNrArr)){
-                $matrnr = $matrNrArr[$participant->imtlogin];
-            } 
-        }
-
-        if($matrnr === false){
-            $matrnr = '-';
-        }
-
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $firstname . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_PERCENT . "\" align=\"center\">" . $percentages . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_PERCENT . "\" align=\"center\">" . $percentages . "</td>";
         $tbl .= "</tr>";
 
         $fill = !$fill;

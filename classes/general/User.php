@@ -85,6 +85,19 @@ class User{
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $participantsMode['id']));
 		} else if($participantsMode['mode'] === 'header'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'headerid' => $participantsMode['id']));
+		} else if($participantsMode['mode'] === 'resultsafterexamreview'){
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+			$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
+
+			$select = "plugininstanceid =".$this->id;
+			$select .= " AND exampoints IS NOT NULL";
+			$select .= " AND examstate IS NOT NULL";
+			$select .= " AND timeresultsentered IS NOT NULL";
+			$select .= " AND timeresultsentered >=" . $examReviewTime;
+
+			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select);
+
 		} else {
 			return false;
 		}
@@ -692,45 +705,6 @@ class User{
 			return '-';
 		}
 		
-	}
-
-	public function getAllParticipantsWithResults(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-	
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
-	
-		if($participantsArr){
-			foreach($participantsArr as $key => $participant){
-				if(!$participant->exampoints || !$participant->examstate){
-					unset($participantsArr[$key]);
-				}
-			}
-			return $participantsArr;
-		} else{
-			return false;
-		}
-	}
-
-	public function getAllParticipantsWithResultsAfterExamReview(){
-
-		$ExammanagementInstanceObj = ExammanagementInstance::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance();
-	
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
-		$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
-
-		if($participantsArr && $examReviewTime){
-			foreach($participantsArr as $key => $participant){
-				if(!$participant->exampoints || !$participant->examstate || !$participant->timeresultsentered || $participant->timeresultsentered == null || intval($participant->timeresultsentered) < $examReviewTime){
-					unset($participantsArr[$key]);
-				}
-			}
-
-			return $participantsArr;
-		} else{
-			return false;
-		}
 	}
 
 	#### other methods  ####
