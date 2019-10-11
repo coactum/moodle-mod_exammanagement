@@ -353,24 +353,19 @@ ajaxsetcorrectioncompletion = function(value){
                     </div>
                     <div class="row row-eq-height">
 											<div class="col-xs-6">
-												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
+												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
-																{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
-																<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-																{{^hrexamtime}}<a href="setDateTime.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
+																	{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 															</span>
-															<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
+															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-														{{#datetimevisible}}
-																<p class="datetimeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																<p class="datetimeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-														{{/datetimevisible}}
-														{{^datetimevisible}}
-																<p class="datetimeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																<p class="datetimeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-														{{/datetimevisible}}
+															<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
+													</div>
+													<div class="panel-footer">
+														{{^deleted}}{{#allplacesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
 													</div>
 												</div>
 											</div>
@@ -395,6 +390,28 @@ ajaxsetcorrectioncompletion = function(value){
 											</div>
                     </div>
                     <div class="row row-eq-height">
+											<div class="col-xs-6">
+												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
+													<div class="panel-heading">
+															<span class="statebar pull-right">
+																{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+																<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+																{{^hrexamtime}}<a href="setDateTime.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
+															</span>
+															<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
+													</div>
+													<div class="panel-body">
+														{{#datetimevisible}}
+																<p class="datetimeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																<p class="datetimeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+														{{/datetimevisible}}
+														{{^datetimevisible}}
+																<p class="datetimeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+																<p class="datetimeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+														{{/datetimevisible}}
+													</div>
+												</div>
+											</div>
 											<div class="col-xs-6">
 												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
 													<div class="panel-heading">
@@ -436,23 +453,6 @@ ajaxsetcorrectioncompletion = function(value){
 																		{{/placevisible}}
 																</div>
 														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-6">
-												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																	{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-															</span>
-															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-															<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#allplacesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
 													</div>
 												</div>
 											</div>
