@@ -676,7 +676,8 @@ Als Dozent oder Dozentin können Sie dabei
 
 Die Teilnehmerinnen und Teilnehmer der Prüfung sehen hingegen in ihrer eigenen Ansicht alle relevanten Informationen der Prüfung wie etwa den Termin, den eigenen Sitzplatz oder für die Prüfung errungene Bonusnotenschritte. Außerdem kann mithilfe der Benachrichtigungsfunktion einfach und zuverlässig mit diesen kommuniziert werden.';
 $string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
-$string['exammanagementname'] = 'Prüfungsorganisation';
+$string['exammanagement_name'] = 'Name der Prüfungsorganisation';
+$string['exammanagement_name_help'] = 'Der im Kurs angezeigte Name der Aktivität (z. B. "Klausur 1").';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
 $string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
 $string['pluginadministration'] = 'Administration der Prüfungsorganisation';

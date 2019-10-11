@@ -47,7 +47,8 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"));
+        $mform->addElement('text', 'name', get_string('exammanagement_name', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"));
+        $mform->addHelpButton('name', 'exammanagement_name', 'mod_exammanagement');
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);

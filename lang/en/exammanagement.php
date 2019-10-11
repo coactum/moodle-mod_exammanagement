@@ -676,17 +676,18 @@ In a separate view a lecturer can
 
 The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat or the bonus grade steps achieved for the exam. In addition, the notification function allows an easy and reliable communication with them.';
 $string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
-$string['exammanagementname'] = 'Exam Management';
+$string['exammanagement_name'] = 'Name of the exam management';
+$string['exammanagement_name_help'] = 'The name of the activity displayed in the course (e.g. "Exam 1").';
 $string['exammanagement:enable exam management'] = 'enable exam management';
 $string['messageprovider:exam management messages'] = 'exam management messages';
 $string['pluginadministration'] = 'Exam management administration';
-$string['security_password'] = 'Security Password';
+$string['security_password'] = 'Security password';
 $string['new_password'] = 'New password';
 $string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organization. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organization.';
 $string['confirm_new_password'] = 'Repeat new password';
 $string['confirm_new_password_help'] = 'For setting the new password it has to be repeated here.';
 $string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
-$string['old_password_help'] = 'If some already existing password should be changed you need to enter it here.';
+$string['old_password_help'] = 'If an already existing password should be changed you need to enter it here.';
 $string['incorrect_password_change'] = 'Incorrect password. Terminated password change';
 
 //capabilities
