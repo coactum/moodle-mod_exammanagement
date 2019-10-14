@@ -596,4 +596,27 @@ class User{
 				return false;
 		}
 	}
+
+	public function getEnteredResultsCount($timestamp = false){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+		
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND exampoints IS NOT NULL";
+		$select .= " AND examstate IS NOT NULL";
+
+		if($timestamp){
+			$select .= " AND timeresultsentered IS NOT NULL";
+			$select .= " AND timeresultsentered >=" . $timestamp;
+		}
+		
+		$enteredResultsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+
+		if($enteredResultsCount){
+			return $enteredResultsCount;
+		} else {
+			return false;
+		}
+
+	}
 }

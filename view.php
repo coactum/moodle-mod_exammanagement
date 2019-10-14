@@ -114,7 +114,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 }
             } elseif ($calledfromformcorrection) { // save correction as completed
         
-                $resultscount = $ExammanagementInstanceObj->getEnteredResultsCount();
+                $resultscount = $UserObj->getEnteredResultsCount();
 
                 if($resultscount){
                     if ($correctioncompleted) {
@@ -249,21 +249,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
         $bonuscount = $UserObj->getEnteredBonusCount();
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-        $resultscount = $ExammanagementInstanceObj->getEnteredResultsCount();
+        $resultscount = $UserObj->getEnteredResultsCount();
         $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
         $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
         $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
-        $resultsenteredafterexamreview = $ExammanagementInstanceObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
+        $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
 
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
-
-        var_dump($ExammanagementInstanceObj->getRooms('examrooms'));
-        var_dump($ExammanagementInstanceObj->getRooms('examrooms', 'places_smalltobig'));
-        var_dump($ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall'));
-        var_dump($ExammanagementInstanceObj->getRooms('all'));
 
             // //for modifying usernames for users in local user database, not for production
 

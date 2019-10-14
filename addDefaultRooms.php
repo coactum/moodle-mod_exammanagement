@@ -68,7 +68,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
                 if($defaultRoomsFile){
 
-                    if($ExammanagementInstanceObj->getDefaultRooms()){
+                    if($ExammanagementInstanceObj->countDefaultRooms()){
                         $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
                     }
 

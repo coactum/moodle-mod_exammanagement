@@ -55,7 +55,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 
-            if(!$ExammanagementInstanceObj->getEnteredResultsCount()){
+            if(!$UserObj->getEnteredResultsCount()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
             } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');

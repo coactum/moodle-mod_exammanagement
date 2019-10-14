@@ -56,7 +56,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         define("WIDTH_COLUMN_MATNO", 70);
         define("WIDTH_COLUMN_POINTS", 80);
 
-        if(!$ExammanagementInstanceObj->getEnteredResultsCount()){
+        if(!$UserObj->getEnteredResultsCount()){
           $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
         } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
           $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');

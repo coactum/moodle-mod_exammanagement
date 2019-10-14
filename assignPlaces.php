@@ -28,7 +28,6 @@ require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
 use mod_exammanagement;
-use stdClass;
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -50,16 +49,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array()); // get all exam participants sorted by name
 
-      $savedRoomIDs = $ExammanagementInstanceObj->getSavedRooms(); // get the ids of all used exam rooms
-      $savedRooms = false;
+      $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall'); // get the ids of all used exam rooms
 
-      foreach($savedRoomIDs as $roomid){                            // construct array with all used exam room objects
-          $room = $ExammanagementInstanceObj->getRoomObj($roomid);
-          
-          $savedRooms[$roomid] = $room;
-      }
-
-      if(!$savedRooms){
+      if(!$examRooms){
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
 
       } else if(!$participants){
@@ -67,27 +59,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       }
 
-      usort($savedRooms, function($a, $b){ // sort rooms by places count through custom user function (small to big rooms)
-
-        $aPlaces = count(json_decode($a->places));
-        $bPlaces = count(json_decode($b->places));
-
-        return strnatcmp($aPlaces, $bPlaces); // sort by places count
-
-      });
-
-      $savedRooms = array_reverse($savedRooms); // reverse array: now big to small rooms
-
       $participantsCount = 0;
 
-      foreach($savedRooms as $key => $room){
+      foreach($examRooms as $room){
 
         if($room){
           $places = json_decode($room->places);	// get places of this room
 
-          foreach($participants as $key1 => $participant){
+          foreach($participants as $key => $participant){
     
-            if($key1 >= $participantsCount){
+            if($key >= $participantsCount){
               
               $participant->roomid = $room->roomid;
               $participant->roomname = $room->name;

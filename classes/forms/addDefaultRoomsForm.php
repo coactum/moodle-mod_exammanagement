@@ -59,7 +59,7 @@ class addDefaultRoomsForm extends moodleform {
 
     $mform->addElement('html', '<p>'.get_string("import_default_rooms_str", "mod_exammanagement").'</p>');
 
-    if($ExammanagementInstanceObj->getDefaultRooms()){
+    if($ExammanagementInstanceObj->countDefaultRooms()){
       $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("default_rooms_already_exists", "mod_exammanagement").'</div>');
     }
 

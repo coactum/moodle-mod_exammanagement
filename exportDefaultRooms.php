@@ -43,7 +43,7 @@ define( "NEWLINE", "\r\n" );
 if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page    
 
-        $allDefaultRooms = $ExammanagementInstanceObj->getDefaultRooms();
+        $allDefaultRooms = $ExammanagementInstanceObj->getRooms('defaultrooms');
 
         if(!isset($allDefaultRooms) || $allDefaultRooms == false){
             redirect ('chooseRooms.php?id='.$id, get_string('no_default_rooms', 'mod_exammanagement'), null, 'error');
@@ -51,19 +51,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
         global $CFG;
 
-        usort($allDefaultRooms, function($a, $b){ //sort array by custom user function
-
-			$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß");
-			$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss");
-
-			$aRoomid = str_replace($searchArr, $replaceArr, $a->roomid);
-            
-            $bRoomid = str_replace($searchArr, $replaceArr, $b->roomid);
-
-			return strcmp($aRoomid, $bRoomid);
-		});
-
-        $textfile = ''; 
+        $textfile = '';
         
         foreach($allDefaultRooms as $roomObj){
 

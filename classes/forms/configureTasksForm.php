@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\general\user;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,6 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once(__DIR__.'/../general/user.php');
 
 class configureTasksForm extends moodleform {
 
@@ -43,6 +45,7 @@ class configureTasksForm extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events and creating input type number fields
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
@@ -56,7 +59,7 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
-        if($ExammanagementInstanceObj->getEnteredResultsCount()){
+        if($UserObj->getEnteredResultsCount()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
         }
         
