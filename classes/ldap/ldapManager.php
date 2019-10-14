@@ -224,6 +224,9 @@ class ldapManager{
 
 	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes, $externalIdentifier = false){ // get matriculation numbers for array of user logins
 
+		$matrNrsArray = array_values($matrNrsArray);
+		$externalIdentifier = array_values($externalIdentifier);
+
 		$resultArr = array();
 		$i = 0;
 
