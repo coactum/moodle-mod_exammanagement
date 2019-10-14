@@ -678,22 +678,6 @@ EOF;
 
 	}
 
-	public function countCustomRoomsForCurrentUser(){
-
-		global $USER;
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$customRoomsCount = $MoodleDBObj->countRecordsInDB('exammanagement_rooms', "type = 'customroom' AND moodleuserid = " .$USER->id);
-
-		if($customRoomsCount && $customRoomsCount !== 0){
-			return $customRoomsCount;
-		} else {
-			return false;
-		}
-
-	}
-
 	### paul file headers ###
 
 	public function getPAULTextFileHeaders(){

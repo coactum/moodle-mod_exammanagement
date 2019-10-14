@@ -444,6 +444,7 @@ $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 $string['available'] = 'Verfügbar';
+$string['jump_to_end'] = 'Zum Tabellenende springen';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';
