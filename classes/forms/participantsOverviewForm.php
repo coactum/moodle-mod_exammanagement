@@ -67,7 +67,7 @@ class participantsOverviewForm extends moodleform {
         $mform->addElement('html', '<tbody>');
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));        
-        $examrooms = json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms);
+        $examrooms = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
         if($ExammanagementInstanceObj->getTaskCount()){
@@ -111,164 +111,7 @@ class participantsOverviewForm extends moodleform {
                     $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participant));
                 }
 
-                if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']== $participant->matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
-
-                    if(isset($this->_customdata['edit'])){                    
-                        $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
-                        $mform->setType('edit', PARAM_INT);
-                    }
-                    if(isset($this->_customdata['editline'])){
-                        $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
-                        $mform->setType('editline', PARAM_INT);    
-                    }
-                    
-                    $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
-                    $mform->setType('editmoodleuserid', PARAM_INT);
-
-                    $mform->addElement('hidden', 'pne', true);
-                    $mform->setType('pne', PARAM_INT);
-
-                    $mform->addElement('html', '<tr class="table-info">');
-                    $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
-                    $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
-                    $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
-                    $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
-                    
-                    $attributes = array('size'=>'3');
-
-                    if($examrooms){
-
-                        $mform->addElement('html', '<td>');
-
-                        $roomOptionsArr = array();
-
-                        $roomPlacesPatternsArr = array();
-
-                        foreach($examrooms as $id => $roomid){
-
-                            $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
-
-                            if($roomObj){
-                                $roomOptionsArr[$roomid] = $roomObj->name;
-
-                                $decodedPlaces = json_decode($roomObj->places);
-                                $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces);
-                            }
-                        }                
-    
-                        if(!empty($roomOptionsArr)){
-                            $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
-                            $select->setSelected($participant->roomid);    
-                        } else {
-                            $mform->addElement('html', $roomname.' ('.get_string('deleted_room', 'mod_exammanagement').')');
-                        }
-                         
-                        $mform->addElement('html', '</td><td>');
-    
-                        if(!empty($roomOptionsArr)){
-                            $mform->addElement('text', 'place', '', $attributes);
-                            $mform->setType('place', PARAM_TEXT);
-                            $mform->setDefault('place', $place);
-
-                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
-                            if ($roomPlacesPatternsArr){
-                                foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
-                                    if($roomid == $participant->roomid){
-                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern" >'.$placesPattern.'</span>');
-                                    } else {
-                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern hiddenpattern hidden">'.$placesPattern.'</span>');
-                                    }
-                                }
-                            }
-                            $mform->addElement('html', '</span>');
-    
-                        } else {
-                            $mform->addElement('html', $place);
-                        }
-
-    
-                        $mform->addElement('html', '</td><td>');
-                    } else {
-                        $mform->addElement('html', '<td>-</td>');
-                        $mform->addElement('html', '<td>-</td><td>');
-                    }
-
-                
-                    if($tasks){
-
-                            $mform->addElement('html', '<table class="table-sm"><tr>');
-
-                            foreach( $tasks as $tasknumber => $taskmaxpoints){
-                                $mform->addElement('html', '<th class="exammanagement_table_width_points">'.$tasknumber.'</th>');
-                            }
-
-                            $mform->addElement('html', '</tr><tr>');
-
-                            foreach($tasks as $tasknumber => $taskmaxpoints){
-                                    
-                                $mform->addElement('html', '<td>');
-                                $mform->addElement('text', 'points['.$tasknumber.']', '', $attributes);
-                                $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
-
-                                if(isset($exampoints[$tasknumber-1])){
-                                    $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
-                                }
-
-                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.$taskmaxpoints.'<br>');
-
-                                $mform->addElement('html', '</td>');
-                            }
-
-                            $mform->addElement('html', '</tr></table>');
-                    } else {
-                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
-                    }
-                    
-                    $mform->addElement('html', '</td>');
-                    
-                    $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
-                   
-                    if($ExammanagementInstanceObj->getTaskCount()){
-                        $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
-                        $select->setSelected($state);
-                    }
-                    
-                    $mform->addElement('html', '</td></tr></table>');
-
-                    if($gradingscale){
-                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
-                    } else {
-                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
-                    }
-
-                    if($UserObj->getEnteredBonusCount()){
-                        if(isset($participant->bonus)){
-                            $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                            $select->setSelected($participant->bonus);
-                            $mform->addElement('html', '</td>');
-                        } else {
-                            $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                            $select->setSelected('-');
-                            $mform->addElement('html', '</td>');                            
-                        }
-                    } else {
-                        $mform->addElement('html', '<td>');
-                        $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
-                        $select->setSelected('-');
-                        $mform->addElement('html', '</td>');                            
-                    }
-
-                    if($gradingscale){
-                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
-                    } else {
-                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
-                    }
-                    
-                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"></td>');
-
-                } else { // if user is non editable
+                if((!isset($this->_customdata['edit']) || $this->_customdata['edit'] === 0) && (!isset($this->_customdata['editline']) || $this->_customdata['editline'] === 0 )){ // if user is non editable
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
@@ -353,7 +196,164 @@ class participantsOverviewForm extends moodleform {
                         $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"><a href="participantsOverview.php?id='.$this->_customdata['id'].'&editline='.$i.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a></td>');
                     }
                     
+                } else if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']== $participant->matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
+
+                    if(isset($this->_customdata['edit'])){                    
+                        $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
+                        $mform->setType('edit', PARAM_INT);
+                    }
+                    if(isset($this->_customdata['editline'])){
+                        $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
+                        $mform->setType('editline', PARAM_INT);    
+                    }
+                    
+                    $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
+                    $mform->setType('editmoodleuserid', PARAM_INT);
+
+                    $mform->addElement('hidden', 'pne', true);
+                    $mform->setType('pne', PARAM_INT);
+
+                    $mform->addElement('html', '<tr class="table-info">');
+                    $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
+                    $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
+                    $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
+                    
+                    $attributes = array('size'=>'3');
+
+                    if($examrooms){
+
+                        $mform->addElement('html', '<td>');
+
+                        $roomOptionsArr = array();
+
+                        $roomPlacesPatternsArr = array();
+
+                        foreach($examrooms as $id => $roomid){
+
+                            $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
+
+                            if($roomObj){
+                                $roomOptionsArr[$roomid] = $roomObj->name;
+
+                                $decodedPlaces = json_decode($roomObj->places);
+                                $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces);
+                            }
+                        }                
+    
+                        if(!empty($roomOptionsArr)){
+                            $select = $mform->addElement('select', 'room', '', $roomOptionsArr, $attributes); 
+                            $select->setSelected($participant->roomid);    
+                        } else {
+                            $mform->addElement('html', $roomname.' ('.get_string('deleted_room', 'mod_exammanagement').')');
+                        }
+                         
+                        $mform->addElement('html', '</td><td>');
+    
+                        if(!empty($roomOptionsArr)){
+                            $mform->addElement('text', 'place', '', $attributes);
+                            $mform->setType('place', PARAM_TEXT);
+                            $mform->setDefault('place', $place);
+
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
+                            if ($roomPlacesPatternsArr){
+                                foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
+                                    if($roomid == $participant->roomid){
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern" >'.$placesPattern.'</span>');
+                                    } else {
+                                        $mform->addElement('html', '<span id="'.$roomid.'" class="hideablepattern hiddenpattern hidden">'.$placesPattern.'</span>');
+                                    }
+                                }
+                            }
+                            $mform->addElement('html', '</span>');
+    
+                        } else {
+                            $mform->addElement('html', $place);
+                        }
+
+    
+                        $mform->addElement('html', '</td><td>');
+                    } else {
+                        $mform->addElement('html', '<td>-</td>');
+                        $mform->addElement('html', '<td>-</td><td>');
+                    }
+
+                    if($tasks){
+
+                            $mform->addElement('html', '<table class="table-sm"><tr>');
+
+                            foreach( $tasks as $tasknumber => $taskmaxpoints){
+                                $mform->addElement('html', '<th class="exammanagement_table_width_points">'.$tasknumber.'</th>');
+                            }
+
+                            $mform->addElement('html', '</tr><tr>');
+
+                            foreach($tasks as $tasknumber => $taskmaxpoints){
+                                    
+                                $mform->addElement('html', '<td>');
+                                $mform->addElement('text', 'points['.$tasknumber.']', '', $attributes);
+                                $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
+
+                                if(isset($exampoints[$tasknumber-1])){
+                                    $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
+                                }
+
+                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.$taskmaxpoints.'<br>');
+
+                                $mform->addElement('html', '</td>');
+                            }
+
+                            $mform->addElement('html', '</tr></table>');
+                    } else {
+                        $mform->addElement('html', '<a href="configureTasks.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
+                    }
+                    
+                    $mform->addElement('html', '</td>');
+                    
+                    $mform->addElement('html', '<td><table class="table-sm"><tr><td><span id="totalpoints">'. $totalpoints . '</span></td></tr><tr><td>');
+                   
+                    if($ExammanagementInstanceObj->getTaskCount()){
+                        $select = $mform->addElement('select', 'state', '', array('normal' => get_string('normal', 'mod_exammanagement'), 'nt' => get_string('nt', 'mod_exammanagement'), 'fa' => get_string('fa', 'mod_exammanagement'), 'ill' => get_string('ill', 'mod_exammanagement')), $attributes); 
+                        $select->setSelected($state);
+                    }
+                    
+                    $mform->addElement('html', '</td></tr></table>');
+
+                    if($gradingscale){
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
+                    } else {
+                      $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
+                    }
+
+                    if($UserObj->getEnteredBonusCount()){
+                        if(isset($participant->bonus)){
+                            $mform->addElement('html', '<td>');
+                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select->setSelected($participant->bonus);
+                            $mform->addElement('html', '</td>');
+                        } else {
+                            $mform->addElement('html', '<td>');
+                            $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                            $select->setSelected('-');
+                            $mform->addElement('html', '</td>');                            
+                        }
+                    } else {
+                        $mform->addElement('html', '<td>');
+                        $select = $mform->addElement('select', 'bonus', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3)); 
+                        $select->setSelected('-');
+                        $mform->addElement('html', '</td>');                            
+                    }
+
+                    if($gradingscale){
+                        $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');                    
+                    } else {
+                        $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
+                    }
+                    
+                    $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left"></td>');
+
                 }
+
                 $mform->addElement('html', '</tr>');                
                 
                 $i++;
