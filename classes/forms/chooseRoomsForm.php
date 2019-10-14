@@ -119,28 +119,17 @@ class chooseRoomsForm extends moodleform {
 
         $mform->addElement('html', '<tr>');
         
-        if($isRoomFilled){
-          $mform->addElement('html', '<th scope="row" id="'.$i.'" rowspan="2">'.$i.'</th>');
-        } else {
-          $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
-        }
+        $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
 
         if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-          if($isRoomFilled){
-            $mform->addElement('html', '<td rowspan="2">');
-          } else {
-            $mform->addElement('html', '<td>');          
-          }
+        
+          $mform->addElement('html', '<td>');
           
           $mform->addElement('html', $room->roomid);       
           $mform->addElement('html', '</td>');          
         }
 
-        if($isRoomFilled){
-            $mform->addElement('html', '<td rowspan="2">');
-        } else {
-          $mform->addElement('html', '<td>');          
-        }
+        $mform->addElement('html', '<td>'); 
 
         $mform->addElement('advcheckbox', 'rooms['.$room->roomid.']', $room->name, null, array('group' => 1));
 
@@ -203,7 +192,16 @@ class chooseRoomsForm extends moodleform {
         $mform->addElement('html', '</tr>');
 
         if($isRoomFilled){
-          $mform->addElement('html', '<tr><td colspan="4"><div class="alert alert-warning alert-block fade in " role="alert">'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div></td></tr>');
+
+          $colspan = 6;
+
+          if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
+            $colspan += 2;
+          } else if($isCustomRooms){
+            $colspan += 1;
+          }
+
+          $mform->addElement('html', '<tr><td colspan="'.$colspan.'"><div class="alert alert-warning alert-block fade in " role="alert">'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div></td></tr>');
         }
         $i++;
       }
