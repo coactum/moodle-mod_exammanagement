@@ -114,12 +114,19 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 }
             } elseif ($calledfromformcorrection) { // save correction as completed
         
-                if ($correctioncompleted) {
-                    $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
+                $resultscount = $ExammanagementInstanceObj->getEnteredResultsCount();
+
+                if($resultscount){
+                    if ($correctioncompleted) {
+                        $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
+                    } else {
+                        $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
+                        $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = null;
+                    }
                 } else {
-                    $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
-                    $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = null;
+                    $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
                 }
+                
         
                 $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
                 if ($update) {
@@ -242,21 +249,44 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
         $bonuscount = $UserObj->getEnteredBonusCount();
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-        $resultscount = $ExammanagementInstanceObj->getInputResultsCount();
+        $resultscount = $ExammanagementInstanceObj->getEnteredResultsCount();
         $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
         $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
         $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
-    
-        $resultsenteredafterexamreview = $UserObj->getAllParticipantsWithResultsAfterExamReview();
+        $resultsenteredafterexamreview = $ExammanagementInstanceObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
 
-        if ($resultsenteredafterexamreview) {
-            $resultsenteredafterexamreview = count($resultsenteredafterexamreview);
-        }
-    
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
+
+        var_dump($ExammanagementInstanceObj->getRooms('examrooms'));
+        var_dump($ExammanagementInstanceObj->getRooms('examrooms', 'places_smalltobig'));
+        var_dump($ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall'));
+        var_dump($ExammanagementInstanceObj->getRooms('all'));
+
+            // //for modifying usernames for users in local user database, not for production
+
+            //  $allusers = $MoodleDBObj->getRecordsFromDB('user', array());
+
+            //  foreach($allusers as $key => $user){
+
+
+            //      if($user->username !== 'tool_generator_'.str_pad($user->id, 6, '0', STR_PAD_LEFT) && substr( $user->username, 0,15 ) === 'tool_generator_'){
+
+            //         $user->username = 'tool_generator_'.str_pad($user->id, 6, '0', STR_PAD_LEFT);
+
+            //      }
+            //  }
+
+            //  $MoodleDBObj->UpdateRecordInDB('user', $user);
+
+            //  $allusers = array_reverse($allusers, true);
+
+            //  foreach($allusers as $key => $user){
+            //     $MoodleDBObj->UpdateRecordInDB('user', $user);
+            //  }
+
         
         $MoodleObj->outputFooter();
 
@@ -287,7 +317,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     }
 
     //room and place
-    $participantObj = $UserObj->getParticipantObj();
+    global $USER;
+
+    $MoodleDBObj = MoodleDB::getInstance();
+
+    $participantObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
 
     if ($ExammanagementInstanceObj->isRoomVisible() && $participantObj->roomname) {
         $room = $participantObj->roomname;
