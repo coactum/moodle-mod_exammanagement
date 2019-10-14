@@ -27,9 +27,7 @@ namespace mod_exammanagement\general;
 defined('MOODLE_INTERNAL') || die();
 use mod_exammanagement\event\course_module_viewed;
 use context_module;
-use stdClass;
 use core\message\message;
-use core\output\notification;
 
 class exammanagementInstance{
 
@@ -277,17 +275,17 @@ EOF;
 
 	public function getTotalNumberOfSeats(){
 
-		$savedRoomsArray = $this->getSavedRooms();
+		$rooms = $this->getRooms('examrooms');
 
 		$totalSeats = 0;
 
-		if($savedRoomsArray){
-			foreach($savedRoomsArray as $key => $roomID){
+		if($rooms){
+			foreach($rooms as $room){
 
-				$RoomObj = $this->getRoomObj($roomID);		//get current Room Object
+				$places = json_decode($room->places);
 		  
-				if(isset($RoomObj->places)){
-					$placesCount = count(json_decode($RoomObj->places));	//get Places of this Room
+				if(isset($places)){
+					$placesCount = count($places);	//get Places of this Room
 				} else {
 					$placesCount = 0;	//get Places of this Room					
 				}
@@ -474,45 +472,6 @@ EOF;
 		}
 	}
 
-	public function getAllRoomIDsSortedByName(){ // used for displaying rooms
-
-		$defaultRooms = $this->getDefaultRooms();
-		$customRooms = $this->getCustomRooms();
-
-		$allRooms = false;
-
-		if($defaultRooms && $customRooms){
-			$allRooms = array_merge($defaultRooms, $customRooms);
-		} else if ($defaultRooms){
-			$allRooms = $defaultRooms;
-		} else if($customRooms){
-			$allRooms = $customRooms;
-		}
-
-		$allRoomNames;
-		$allRoomIDs;
-
-		if ($allRooms){
-			foreach ($allRooms as $key => $value){
-				$temp=get_object_vars($value);
-				$allRoomNames[$key] = $temp['name'];
-			}
-
-			foreach ($allRooms as $key => $value){
-				$temp=get_object_vars($value);
-				$allRoomIDs[$key] = $temp['roomid'];
-			}
-
-			array_multisort($allRoomNames, $allRoomIDs);
-
-			return $allRoomIDs;
-
-		} else{
-			return false;
-		}
-
-	}
-
 	public function getSavedRooms(){
 
 		$rooms = $this->moduleinstance->rooms;
@@ -521,6 +480,67 @@ EOF;
 			$roomsArray = json_decode($rooms);
 			return $roomsArray;
 		} else {
+			return false;
+		}
+	}
+
+
+	public function getRooms($mode, $sortorder = 'name'){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$rooms = array();
+
+		if($mode === 'examrooms'){
+			$roomIDs = json_decode($this->moduleinstance->rooms);
+			$roomIDs = join("', '", $roomIDs);
+
+			$select = "roomid IN ('" . $roomIDs . "')";
+
+			if($sortorder == 'name'){
+				$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC');
+			} else {
+				$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select);
+			}
+		} else if($mode === 'all'){
+
+			global $USER;
+
+			$select = "type = 'defaultroom'";
+			$select .= " OR type = 'customroom' AND moodleuserid = " .$USER->id;
+
+			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC');
+		} else {
+			return false;
+		}
+
+        if($rs->valid()){
+
+            foreach ($rs as $record) {
+				array_push($rooms, $record);
+			}
+
+			$rs->close();
+
+			if($sortorder == 'places_bigtosmall' || $sortorder == 'places_smalltobig' ){
+				usort($rooms, function($a, $b){ // sort rooms by places count through custom user function (small to big rooms)
+
+					$aPlaces = count(json_decode($a->places));
+					$bPlaces = count(json_decode($b->places));
+			
+					return strnatcmp($aPlaces, $bPlaces); // sort by places count
+			
+				  });
+			
+				  if($sortorder == 'places_bigtosmall'){
+					$rooms = array_reverse($rooms); // reverse array: now big to small rooms
+				  }
+			}
+			
+			return $rooms;
+
+        } else {
+			$rs->close();
 			return false;
 		}
 	}

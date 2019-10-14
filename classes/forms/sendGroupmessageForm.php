@@ -56,18 +56,8 @@ class sendGroupmessageForm extends moodleform {
 
         $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessage'));
 
-        $MoodleParticipants = $UserObj->getAllMoodleExamParticipants();
-        $NoneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
-
-        if($MoodleParticipants){
-            $MoodleParticipantsCount = count($MoodleParticipants);
-        }
-
-        if($NoneMoodleParticipants){
-            $NoneMoodleParticipantsCount = count($NoneMoodleParticipants);
-        } else {
-            $NoneMoodleParticipantsCount = false;
-        }
+        $MoodleParticipantsCount = $UserObj->getParticipantsCount('moodle');
+        $NoneMoodleParticipantsCount = $UserObj->getParticipantsCount('nonmoodle');
 
  		if($MoodleParticipantsCount){
 

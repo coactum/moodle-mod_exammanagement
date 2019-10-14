@@ -25,8 +25,6 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\ldap\ldapManager;
-use stdClass;
-use core\output\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -52,22 +50,7 @@ class User{
 
 	}
 
-	#### getting ids for multiple participants #####
-
-	public function getAllExamParticipants(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$allParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
-
-		if($allParticipantsArr){
-			return $allParticipantsArr;
-
-		} else {
-			return false;
-
-		}
-	}
+	#### get array with all requested exam participants #####
 
 	public function getExamParticipants($participantsMode, $requestedAttributes, $sortOrder='name'){
 
@@ -244,65 +227,7 @@ class User{
 		}
 	}
 
-	public function getAllMoodleExamParticipants(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$allMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
-
-		if($allMoodleParticipantsArr){
-			return $allMoodleParticipantsArr;
-
-		} else {
-			return false;
-
-		}
-	}
-
-	public function getAllNoneMoodleExamParticipants(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$allNoneMoodleParticipantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
-
-		if($allNoneMoodleParticipantsArr){
-			return $allNoneMoodleParticipantsArr;
-
-		} else {
-			return false;
-
-		}
-	}
-
-	public function getAllExamParticipantsByRoom($roomid){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $roomid));
-
-		if($participantsArr){
-			return $participantsArr;
-
-		} else {
-			return false;
-
-		}
-	}
-
-	public function getAllExamParticipantsByHeader($headerid){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$participantsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'headerid' => $headerid));
-
-		if($participantsArr){
-			return $participantsArr;
-
-		} else {
-			return false;
-
-		}
-	}
+	#### get IDs of all participants enrolled in the course #####
 
 	public function getCourseParticipantsIDs(){
 
@@ -324,22 +249,9 @@ class User{
 
 	}
 
-	public function getParticipantObj(){ // get current user obj
+	#### get single exam participant #####
 
-		global $USER;
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
-
-		if($participantsObj){
-			return $participantsObj;
-		} else{
-			return false;
-		}
-	}
-
-	public function getExamParticipantObj($userid, $userlogin = false){ // get exam participants obj
+	public function getExamParticipantObj($userid, $userlogin = false){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -356,7 +268,42 @@ class User{
 		}
 	}
 
-	#### add participants ####
+	#### get single moodle user #####
+
+	public function getMoodleUser($userid){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
+
+		if($user){
+			return $user;
+		} else {
+			return false;
+		}
+
+	}
+
+	#### get mail adresses of all nonmoodle users #####
+
+	public function getNoneMoodleParticipantsEmailadresses(){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$select = "plugininstanceid =".$this->id;
+		$select .= " AND moodleuserid IS NULL";
+
+		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
+
+		if(!empty($NoneMoodleParticipantsEmailadressesArr)){
+			return $NoneMoodleParticipantsEmailadressesArr;
+		} else {
+			return false;
+
+		}
+	}
+
+	#### filter checked participants from form ####
 
 	public function filterCheckedParticipants($returnObj){
 
@@ -454,132 +401,7 @@ class User{
 			}
 	}
 
-	#### methods to get user props
-
-	public function getMultipleUsersMatrNr($participantsArray){
-
-		require_once(__DIR__.'/../ldap/ldapManager.php');
-
-		$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$matrNrArray = array();
-
-		if(isset($participantsArray)){
-
-			if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
-
-				$loginsArray = array();
-
-				foreach($participantsArray as $key => $participant){ // set logins array for ldap method
-					if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){ // if user is moodle user get moodle username aka imtlogin and set it as login
-						array_push($loginsArray, $MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid)));
-					} else { // else set imtlogin as login
-						array_push($loginsArray, $participant->imtlogin);
-					}
-				}
-
-				$ldapConnection = $LdapManagerObj->connect_ldap();
-
-				$matrNrArray = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $loginsArray);
-				
-			} else { // for local testing during development
-
-				foreach($participantsArray as $participant){
-
-					if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
-						$matrNrArray[$MoodleDBObj->getFieldFromDB('user','username', array('id' => $participant->moodleuserid))] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid);
-					} else {
-						$matrNrArray[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(NULL, $participant->imtlogin);
-					}
-				}
-			}
-
-			if(isset($matrNrArray) && $matrNrArray !== false){
-				return $matrNrArray; // array(login/username=>matrnr)
-			} else {
-				return false;
-			}
-		}
-	}
-
-	public function getMoodleUser($userid){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
-
-		if($user){
-			return $user;
-		} else {
-			return false;
-		}
-
-	}
-
-	public function getUserPicture($userid){
-
-		global $OUTPUT;
-
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-		$user = $this->getMoodleUser($userid);
-		return $OUTPUT->user_picture($user, array('courseid' => $ExammanagementInstanceObj->getCourse()->id, 'link' => true));
-
-	}
-
-	public function getUserProfileLink($userid){
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-		$user = $this->getMoodleUser($userid);
-		$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $user->id, 'course', $ExammanagementInstanceObj->getCourse()->id).'">'.fullname($user).'</a></strong>';
-
-		return $profilelink;
-
-	}
-
-	public function getParticipantsGroupNames($userid){
-
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-		$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $userid);
-		$groupNameStr = false;
-
-		foreach ($userGroups as $key => $value){
-			if ($value){
-				foreach ($value as $key2 => $value2){
-					$groupNameStr.='<strong><a href="'.$MoodleObj->getMoodleUrl('/user/index.php', $ExammanagementInstanceObj->getCourse()->id, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
-				}
-			}
-			else{
-				$groupNameStr='-';
-				break;
-			}
-		}
-
-		return $groupNameStr;
-
-	}
-
-	public function getNoneMoodleParticipantsEmailadresses(){
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-		$select = "plugininstanceid =".$this->id;
-		$select .= " AND moodleuserid IS NULL";
-
-		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
-
-		if(!empty($NoneMoodleParticipantsEmailadressesArr)){
-			return $NoneMoodleParticipantsEmailadressesArr;
-		} else {
-			return false;
-
-		}
-	}
+	#### results ####
 
 	public function participantHasResults($participantObj){
 
@@ -707,7 +529,7 @@ class User{
 		
 	}
 
-	#### other methods  ####
+	#### checks  ####
 
 	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
 			
@@ -716,11 +538,7 @@ class User{
 		if($potentialParticipantId){
 			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
-			$imtlogin = $potentialParticipantLogin;
-			
-			if($imtlogin){
-				return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $imtlogin));
-			}
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
 		}
 	}
 
@@ -738,11 +556,21 @@ class User{
 		}
 	}
 
-	public function getParticipantsCount(){
+	#### counts ####
+
+	public function getParticipantsCount($mode = 'all', $id = false){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "plugininstanceid =".$this->id;
+
+		if($mode == 'moodle'){
+			$select .= " AND moodleuserid IS NOT NULL";
+		} else if($mode =='nonmoodle'){
+			$select .= " AND moodleuserid IS NULL";
+		} else if($mode =='room' && $id){
+			$select .= " AND roomid = '" . $id . "'";
+		}
 		
 		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
@@ -767,39 +595,5 @@ class User{
 			} else {
 				return false;
 		}
-	}
-
-	public function sortParticipantsArrayByName($participantsArr){ // sort participants array for all exported documents and participants overview 
-
-		usort($participantsArr, function($a, $b){ //sort array by custom user function
-
-			$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
-			$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
-
-			if($a->moodleuserid){
-				$aFirstname = $this->getMoodleUser($a->moodleuserid)->firstname;
-				$aLastname = str_replace($searchArr, $replaceArr, $this->getMoodleUser($a->moodleuserid)->lastname);  
-			} else {
-				$aFirstname = $a->firstname;
-				$aLastname = str_replace($searchArr, $replaceArr, $a->lastname);
-			}
-
-			if($b->moodleuserid){
-				$bFirstname = $this->getMoodleUser($b->moodleuserid)->firstname;
-				$bLastname = str_replace($searchArr, $replaceArr, $this->getMoodleUser($b->moodleuserid)->lastname);
-			} else {
-				$bFirstname = $b->firstname;
-				$bLastname = str_replace($searchArr, $replaceArr, $b->lastname);
-			}
-
-			if ($aLastname == $bLastname) { //if names are even sort by first name
-				return strcmp($aFirstname, $bFirstname);
-			} else{
-				return strcmp($aLastname, $bLastname); // else sort by last name
-			}
-
-		});
-
-		return $participantsArr;
 	}
 }

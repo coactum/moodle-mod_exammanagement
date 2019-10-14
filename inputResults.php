@@ -133,7 +133,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		
 								$participantObj = false;
 		
-								// getParticipantObj
+								// getExamParticipantObj
 								if($userid !== false && $userid !== null){
 									$participantObj = $UserObj->getExamParticipantObj($userid);
 								} else if($userlogin !== false && $userlogin !== null){
@@ -201,7 +201,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							}
 					}
 
-					// getParticipantObj
+					// getExamParticipantObj
 					if($userid !== false && $userid !== null){
 						$participantObj = $UserObj->getExamParticipantObj($userid);
 					} else if($userlogin !== false && $userlogin !== null){

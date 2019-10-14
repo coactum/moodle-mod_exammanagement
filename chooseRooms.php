@@ -60,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if($deletecustomroomid){
 
           if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
-            if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
+            if(!in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
               $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
             } else {
               redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
@@ -113,7 +113,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
               foreach($deselectedRoomsArr as $roomid){
 
-                if($UserObj->getAllExamParticipantsByRoom($roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+                if($UserObj->getParticipantsCount('room', $roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
 
                   $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
                   $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));

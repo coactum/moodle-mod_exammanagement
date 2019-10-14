@@ -66,12 +66,12 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<div class="col-xs-6">');
 
-    $allRoomIDs = $ExammanagementInstanceObj->getAllRoomIDsSortedByName();
-    $checkedRoomIDs = $ExammanagementInstanceObj->getSavedRooms();
+    $allRooms = $ExammanagementInstanceObj->getRooms('all');
+    $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
     $i = 1;
 
     if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-      if($allRoomIDs){
+      if($allRooms){
         $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary m-b-1" title="'.get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("export_default_rooms", "mod_exammanagement").'</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
       }
       $mform->addElement('html', '<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addDefaultRooms", $this->_customdata['id']).'" class="btn btn-primary pull-right m-b-1" title="'.get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_default_rooms", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
@@ -89,7 +89,7 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '<p>'.get_string('choose_rooms_str', 'mod_exammanagement').'</p>');
 
-    if ($allRoomIDs){
+    if ($allRooms){
 
       $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
 
@@ -104,54 +104,55 @@ class chooseRoomsForm extends moodleform {
 
       $mform->addElement('html', '<tbody>');
 
-      foreach($allRoomIDs as $key => $value){
+      foreach($allRooms as $room){
 
-        $roomObj = $ExammanagementInstanceObj->getRoomObj($value);
-        $similiarRoomIDsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomObj->name));;
-        $disableName = explode('_', $roomObj->roomid);
+        $isRoomFilled = $UserObj->getParticipantsCount('room', $room->roomid);
+
+        $similiarRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $room->name));;
+        $disableName = explode('_', $room->roomid);
 
         $mform->addElement('html', '<tr>');
         
-        if($UserObj->getAllExamParticipantsByRoom($value)){
+        if($isRoomFilled){
           $mform->addElement('html', '<th scope="row" id="'.$i.'" rowspan="2">'.$i.'</th>');
         } else {
           $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
         }
 
         if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])){
-          if($UserObj->getAllExamParticipantsByRoom($value)){
+          if($isRoomFilled){
             $mform->addElement('html', '<td rowspan="2">');
           } else {
             $mform->addElement('html', '<td>');          
           }
           
-          $mform->addElement('html', $roomObj->roomid);       
+          $mform->addElement('html', $room->roomid);       
           $mform->addElement('html', '</td>');          
         }
 
-        if($UserObj->getAllExamParticipantsByRoom($value)){
+        if($isRoomFilled){
             $mform->addElement('html', '<td rowspan="2">');
         } else {
           $mform->addElement('html', '<td>');          
         }
 
-        $mform->addElement('advcheckbox', 'rooms['.$roomObj->roomid.']', $roomObj->name, null, array('group' => 1));
+        $mform->addElement('advcheckbox', 'rooms['.$room->roomid.']', $room->name, null, array('group' => 1));
 
-        foreach($similiarRoomIDsArr as $key => $similiarRoomObj){ // code for preventing selection of multiple versions of the same room
+        foreach($similiarRooms as $similiarRoomObj){ // code for preventing selection of multiple versions of the same room
 
             if (strpos($similiarRoomObj->roomid, $disableName[0])!==false){
-              $mform->disabledif('rooms['.$roomObj->roomid.']', 'rooms['.$similiarRoomObj->roomid.']', 'checked');
+              $mform->disabledif('rooms['.$room->roomid.']', 'rooms['.$similiarRoomObj->roomid.']', 'checked');
             }
         }
 
-        $mform->addElement('html', '</td><td> '.$roomObj->description.' </td>');
+        $mform->addElement('html', '</td><td> '.$room->description.' </td>');
 
-        $mform->addElement('html', '<td> '.count(json_decode($roomObj->places)).' </td>');
+        $mform->addElement('html', '<td> '.count(json_decode($room->places)).' </td>');
 
         $mform->addElement('html', '<td>');
-        if ($roomObj->seatingplan){
+        if ($room->seatingplan){
 
-          $svgStr = base64_decode($roomObj->seatingplan);
+          $svgStr = base64_decode($room->seatingplan);
 
           $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_rooms_svg collapse">'.$svgStr.'</div>');
 
@@ -161,12 +162,12 @@ class chooseRoomsForm extends moodleform {
         $mform->addElement('html', '</td><td>');
 
 
-        if ($roomObj->type=='defaultroom'){
+        if ($room->type=='defaultroom'){
           if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
               $mform->addElement('html', get_string('default_room', 'mod_exammanagement'));
               $mform->addElement('html', '</td><td class="exammanagement_brand_bordercolor_left">');
-              $mform->addElement('html', '<a href="editDefaultRoom.php?id='.$this->_customdata['id'].'&roomid='.$roomObj->roomid.'" title="'.get_string("change_room", "mod_exammanagement").'"><i class="fa fa-2x fa-edit"></i></a>');
-              $mform->addElement('html', '<a class="m-l-1" href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletedefaultroomid', $roomObj->roomid).'" onClick="javascript:return confirm(\''.get_string("delete_defaultroom_confirm", "mod_exammanagement").'\');" title="'.get_string("delete_defaultroom_confirm", "mod_exammanagement").'"><i class="fa fa-2x fa-trash"></i></a></td>');              
+              $mform->addElement('html', '<a href="editDefaultRoom.php?id='.$this->_customdata['id'].'&roomid='.$room->roomid.'" title="'.get_string("change_room", "mod_exammanagement").'"><i class="fa fa-2x fa-edit"></i></a>');
+              $mform->addElement('html', '<a class="m-l-1" href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletedefaultroomid', $room->roomid).'" onClick="javascript:return confirm(\''.get_string("delete_defaultroom_confirm", "mod_exammanagement").'\');" title="'.get_string("delete_defaultroom_confirm", "mod_exammanagement").'"><i class="fa fa-2x fa-trash"></i></a></td>');              
           } else {
               $mform->addElement('html', get_string('default_room', 'mod_exammanagement'));
               $mform->addElement('html', '</td><td class="exammanagement_brand_bordercolor_left"></td>');
@@ -174,21 +175,21 @@ class chooseRoomsForm extends moodleform {
         } else {
           $mform->addElement('html', get_string('custom_room', 'mod_exammanagement'));
           $mform->addElement('html', '</td><td class="exammanagement_brand_bordercolor_left">');
-          $mform->addElement('html', '<a href="addCustomRoom.php?id='.$this->_customdata['id'].'&roomid='.$roomObj->roomid.'" title="'.get_string("change_room", "mod_exammanagement").'"><i class="fa fa-2x fa-edit"></i></a>');
-          $mform->addElement('html', '<a class="m-l-1" href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletecustomroomid', $roomObj->roomid).'" onClick="javascript:return confirm(\''.get_string("delete_room_confirm", "mod_exammanagement").'\');" title="'.get_string("delete_room", "mod_exammanagement").'"><i class="fa fa-2x fa-trash"></i></a></td>');
+          $mform->addElement('html', '<a href="addCustomRoom.php?id='.$this->_customdata['id'].'&roomid='.$room->roomid.'" title="'.get_string("change_room", "mod_exammanagement").'"><i class="fa fa-2x fa-edit"></i></a>');
+          $mform->addElement('html', '<a class="m-l-1" href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/chooseRooms.php', $this->_customdata['id'], 'deletecustomroomid', $room->roomid).'" onClick="javascript:return confirm(\''.get_string("delete_room_confirm", "mod_exammanagement").'\');" title="'.get_string("delete_room", "mod_exammanagement").'"><i class="fa fa-2x fa-trash"></i></a></td>');
         }
 
-        if($checkedRoomIDs){
-          foreach($checkedRoomIDs as $key2 => $value2){
-            if($roomObj->roomid==$value2){
-              $mform->setDefault('rooms['.$roomObj->roomid.']', true);
+        if($examRooms){
+          foreach($examRooms as $room2){
+            if($room->roomid == $room2->roomid){
+              $mform->setDefault('rooms['.$room->roomid.']', true);
             }
           }
         }
 
         $mform->addElement('html', '</tr>');
 
-        if($UserObj->getAllExamParticipantsByRoom($value)){
+        if($isRoomFilled){
           $mform->addElement('html', '<tr><td colspan="4"><div class="alert alert-warning alert-block fade in " role="alert">'.get_string("places_already_assigned_rooms", "mod_exammanagement").'</div></td></tr>');
         }
         $i++;
@@ -217,9 +218,9 @@ class chooseRoomsForm extends moodleform {
           $MoodleDBObj = MoodleDB::getInstance();
 
           $roomname = explode('_', $roomid);
-          $similiarRoomIDsArr = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomname[0]));
+          $similiarRooms = $MoodleDBObj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomname[0]));
 
-          foreach($similiarRoomIDsArr as $key => $similiarRoomObj){
+          foreach($similiarRooms as $key => $similiarRoomObj){
 
               if(is_string($data['rooms'][$similiarRoomObj->roomid]) && $data['rooms'][$similiarRoomObj->roomid] !== "0" && is_string($data['rooms'][$roomid]) && $similiarRoomObj->roomid !== $roomid){
 

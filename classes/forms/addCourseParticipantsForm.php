@@ -160,7 +160,8 @@ class addCourseParticipantsForm extends moodleform{
                     $mform->addElement('html', '</div><div class="col-xs-'.$col.'">'.$participant->matrnr.'</div>');
 
                     if($courseGroups){
-                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.$participant->groups).'</div>';
+
+                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.$participant->groups.'</div>');
                     }
                     
                     $mform->addElement('html', '<div class="col-xs-'.$col.'">' . get_string("state_to_be_deleted", "mod_exammanagement").' ('.get_string("state_no_courseparticipant", "mod_exammanagement").')</div></div>');

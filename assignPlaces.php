@@ -48,7 +48,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      $participants = $UserObj->getExamParticipants(array('mode'=>'all')); // get all exam participants sorted by name
+      $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array()); // get all exam participants sorted by name
 
       $savedRoomIDs = $ExammanagementInstanceObj->getSavedRooms(); // get the ids of all used exam rooms
       $savedRooms = false;

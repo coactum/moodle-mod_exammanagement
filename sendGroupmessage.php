@@ -66,8 +66,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     
         $mailsubject = "PANDA - Prüfungsorganisation: Kurs ".$ExammanagementInstanceObj->getCourse()->fullname.' Betreff: '. $fromform->groupmessages_subject;
         $mailtext = $fromform->groupmessages_content;
-        $participants = $UserObj->getAllMoodleExamParticipants();
-    
+
+        $participants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array());
+
         if($mailsubject && $mailtext && $participants){
           foreach ($participants as $key => $participantObj){
     
