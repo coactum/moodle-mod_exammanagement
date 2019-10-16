@@ -58,6 +58,7 @@ class addParticipantsForm extends moodleform{
 
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
+        $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -112,9 +113,13 @@ class addParticipantsForm extends moodleform{
 
             if($allParticipants['badMatriculationNumbers']){ // invalid or doubled matriculation numbers
 
-                $mform->addElement('html', '<div class="panel panel-danger">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($allParticipants['badMatriculationNumbers']) . ' ' . get_string("badmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body">');
+                $mform->addElement('html', '<div class="panel panel-danger exammanagement_panel">');
+                $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="invalid">');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($allParticipants['badMatriculationNumbers']) . ' ' . get_string("badmatrnr", "mod_exammanagement"). '</h3>');
+                $mform->addElement('html', '<span class="collapse.show invalid_minimize pull-right" title="' . get_string("minimize_phase", "mod_exammanagement"). '" aria-label="' . get_string("minimize_phase", "mod_exammanagement"). '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
+                $mform->addElement('html', '<span class="collapse invalid_maximize pull-right" title="' . get_string("maximize_phase", "mod_exammanagement"). '" aria-label="' . get_string("maximize_phase", "mod_exammanagement"). '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
+                                    
+                $mform->addElement('html', '<div class="panel-body invalid_body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
                 
@@ -144,10 +149,13 @@ class addParticipantsForm extends moodleform{
 
                 $count = count($allParticipants['oddParticipants']);
 
-                $mform->addElement('html', '<div class="panel panel-warning">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("oddmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body">');
-
+                $mform->addElement('html', '<div class="panel panel-warning exammanagement_panel">');
+                $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="odd">');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("oddmatrnr", "mod_exammanagement"). '</h3>');
+                $mform->addElement('html', '<span class="collapse.show odd_minimize pull-right" title="' . get_string("minimize_phase", "mod_exammanagement"). '" aria-label="' . get_string("minimize_phase", "mod_exammanagement"). '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
+                $mform->addElement('html', '<span class="collapse odd_maximize pull-right" title="' . get_string("maximize_phase", "mod_exammanagement"). '" aria-label="' . get_string("maximize_phase", "mod_exammanagement"). '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
+                                    
+                $mform->addElement('html', '<div class="panel-body odd_body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
                 
@@ -199,10 +207,13 @@ class addParticipantsForm extends moodleform{
 
                 $count = count($allParticipants['deletedParticipants']);
 
-                $mform->addElement('html', '<div class="panel panel-success">');
-                $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $count . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body">');
-
+                $mform->addElement('html', '<div class="panel panel-success exammanagement_panel">');
+                $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="deleted">');
+                $mform->addElement('html', '<div class="panel-heading text-danger"><h3 class="panel-title">' . $count . ' ' . get_string("deletedmatrnr", "mod_exammanagement"). '</h3>');
+                $mform->addElement('html', '<span class="collapse.show deleted_minimize pull-right" title="' . get_string("minimize_phase", "mod_exammanagement"). '" aria-label="' . get_string("minimize_phase", "mod_exammanagement"). '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
+                $mform->addElement('html', '<span class="collapse deleted_maximize pull-right" title="' . get_string("maximize_phase", "mod_exammanagement"). '" aria-label="' . get_string("maximize_phase", "mod_exammanagement"). '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
+                                    
+                $mform->addElement('html', '<div class="panel-body deleted_body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
                 
@@ -287,10 +298,13 @@ class addParticipantsForm extends moodleform{
 
                 $count = count($allParticipants['existingParticipants']);
 
-                $mform->addElement('html', '<div class="panel panel-info">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body">');
-
+                $mform->addElement('html', '<div class="panel panel-info exammanagement_panel">');
+                $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="existing">');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . $count . ' ' . get_string("existingmatrnr", "mod_exammanagement"). '</h3>');
+                $mform->addElement('html', '<span class="collapse.show existing_minimize pull-right" title="' . get_string("minimize_phase", "mod_exammanagement"). '" aria-label="' . get_string("minimize_phase", "mod_exammanagement"). '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
+                $mform->addElement('html', '<span class="collapse existing_maximize pull-right" title="' . get_string("maximize_phase", "mod_exammanagement"). '" aria-label="' . get_string("maximize_phase", "mod_exammanagement"). '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
+                                    
+                $mform->addElement('html', '<div class="panel-body existing_body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
                 
@@ -362,10 +376,13 @@ class addParticipantsForm extends moodleform{
 
             if($allParticipants['newMoodleParticipants']){
 
-                $mform->addElement('html', '<div class="panel panel-success">');
-                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($allParticipants['newMoodleParticipants']) . ' ' . get_string("newmatrnr", "mod_exammanagement"). '</h3></div>');
-                $mform->addElement('html', '<div class="panel-body">');
-
+                $mform->addElement('html', '<div class="panel panel-success exammanagement_panel">');
+                $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="new">');
+                $mform->addElement('html', '<div class="panel-heading"><h3 class="panel-title">' . count($allParticipants['newMoodleParticipants']) . ' ' . get_string("newmatrnr", "mod_exammanagement"). '</h3>');
+                $mform->addElement('html', '<span class="collapse.show new_minimize pull-right" title="' . get_string("minimize_phase", "mod_exammanagement"). '" aria-label="' . get_string("minimize_phase", "mod_exammanagement"). '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
+                $mform->addElement('html', '<span class="collapse new_maximize pull-right" title="' . get_string("maximize_phase", "mod_exammanagement"). '" aria-label="' . get_string("maximize_phase", "mod_exammanagement"). '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
+                                    
+                $mform->addElement('html', '<div class="panel-body new_body">');
 
                 $mform->addElement('html', '<div class="row"><div class="col-xs-1"></div><div class="col-xs-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-xs-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
                 

@@ -171,7 +171,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             echo('<div class="row" id="end"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
             if($moodleParticipants || $noneMoodleParticipants){
-            echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-danger m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+            echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-default m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
             }
 
             $MoodleObj->outputFooter();

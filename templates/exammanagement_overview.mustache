@@ -25,18 +25,18 @@
 
 {{#js}}
 
-toogleHelptextPanel = function(){
+toggleHelptextPanel = function(){
 		$('.helptextpanel').slideToggle("slow");
 		$('.helptextpanel-icon').toggle();
 };
 
-tooglePhase = function(phase){
+togglePhase = function(phase){
 		$(phase).slideToggle("slow");
 		$(phase+'_maximize').toggle();
 		$(phase+'_minimize').toggle();
 };
 
-ajaxtoogleInformation = function(command, value){
+ajaxtoggleInformation = function(command, value){
 
 		$('.loadable').toggle();
 
@@ -135,7 +135,7 @@ ajaxsetcorrectioncompletion = function(value){
    <div class="container-fluid exammanagement_overview">
 			<div class="row">
 				<h4 class="m-y-1 col-xs-4">{{#str}}overview, mod_exammanagement{{/str}}</h4>
-				<span class="m-y-1 col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="{{#str}}helptext_open, mod_exammanagement{{/str}}"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
+				<span class="m-y-1 col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toggleHelptextPanel(); return true;" title="{{#str}}helptext_open, mod_exammanagement{{/str}}"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></span>
 				<span class="m-y-1 col-xs-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
 				<span class="helptextpanel helptextpanel-arrow collapse"></span>
 			</div>
@@ -166,7 +166,7 @@ ajaxsetcorrectioncompletion = function(value){
             {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
             <div class="panel panel-primary mainpanel">
               <div class="panel-heading">
-								<a aria-expanded="false" onclick="tooglePhase('.phase_one'); return true;">
+								<a aria-expanded="false" onclick="togglePhase('.phase_one'); return true;">
 		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
 		                <span class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}}{{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -303,7 +303,7 @@ ajaxsetcorrectioncompletion = function(value){
             {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 								<div class="panel-heading">
-									<a aria-expanded="false" onclick="tooglePhase('.phase_two'); return true;">
+									<a aria-expanded="false" onclick="togglePhase('.phase_two'); return true;">
 											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
 											<span class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}}{{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 											<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -394,7 +394,7 @@ ajaxsetcorrectioncompletion = function(value){
 												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
-																{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoogleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+																{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
 																<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 																{{^hrexamtime}}<a href="setDateTime.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
 															</span>
@@ -424,7 +424,7 @@ ajaxsetcorrectioncompletion = function(value){
 														<div class="row">
 																<div class="col-xs-6">
 																		<span class="pull-right">
-																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoogleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
+																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
 																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 																		</span>
 																		<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
@@ -439,7 +439,7 @@ ajaxsetcorrectioncompletion = function(value){
 																</div>
 																<div class="col-xs-6">
 																		<span class="pull-right">
-																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoogleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
+																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
 																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 																		</span>
 																		<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
@@ -468,7 +468,7 @@ ajaxsetcorrectioncompletion = function(value){
             {{^examphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/examphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 							<div class="panel-heading">
-								<a aria-expanded="false" onclick="tooglePhase('.examappointment'); return true;">
+								<a aria-expanded="false" onclick="togglePhase('.examappointment'); return true;">
 										<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
 										<span class="{{#examphaseactive}}collapse.show{{/examphaseactive}}{{^examphaseactive}}collapse{{/examphaseactive}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -495,7 +495,7 @@ ajaxsetcorrectioncompletion = function(value){
             {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 								<div class="panel-heading">
-									<a aria-expanded="false" onclick="tooglePhase('.phase_three'); return true;">
+									<a aria-expanded="false" onclick="togglePhase('.phase_three'); return true;">
 											<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
 											<span class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}}{{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
 											<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -612,7 +612,7 @@ ajaxsetcorrectioncompletion = function(value){
             {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
 						<div class="panel panel-primary mainpanel">
 							<div class="panel-heading">
-								<a aria-expanded="false" onclick="tooglePhase('.phase_four'); return true;">
+								<a aria-expanded="false" onclick="togglePhase('.phase_four'); return true;">
 										<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
 										<span class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}}{{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 										<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -720,7 +720,7 @@ ajaxsetcorrectioncompletion = function(value){
 								{{^fifthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fifthphasecompleted}}
 								<div class="panel panel-primary mainpanel">
 									<div class="panel-heading">
-										<a aria-expanded="false" onclick="tooglePhase('.phase_five'); return true;">
+										<a aria-expanded="false" onclick="togglePhase('.phase_five'); return true;">
 												<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
 												<span class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}}{{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
 												<span class="{{#fifthphaseactive}}collapse{{/fifthphaseactive}}{{^fifthphaseactive}}collapse.show{{/fifthphaseactive}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
@@ -757,7 +757,7 @@ ajaxsetcorrectioncompletion = function(value){
 													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
-																	{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoogleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+																	{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 																	<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 																	{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
 																	{{#datadeletiondate}}{{^examreviewtime}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}{{/datadeletiondate}}

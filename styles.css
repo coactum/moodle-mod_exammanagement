@@ -276,6 +276,24 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 	border: 2px solid black;
 }
 
+/* addParticipantsForm.php & addCourseParticipantsForm.php */
+.exammanagement_panel a{
+  cursor: pointer;
+}
+
+.exammanagement_panel > .panel-heading span { /* minimize/maximize buttons */
+  background: rgba(0, 0, 0, 0.15);
+  display: inline;
+  margin-top: -27px;
+  padding: 6px 12px;
+  border-radius: 4px
+}
+
+
+.exammanagement_panel > .panel-heading span.collapse {
+  display: none;
+}
+
 /* configureTasksForm.php - spacing between task numbers */
 
 .exammanagement_task_spacing{

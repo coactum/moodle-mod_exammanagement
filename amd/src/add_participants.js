@@ -39,6 +39,13 @@ define(['jquery'], function ($) {
     remove_form_classes_col: function () {
       $('div.remove_col > div > div').removeClass('col-md-3');
       $('div.remove_col > div > div').removeClass('col-md-9');
-    }
+    },
+    togglesection: function () {
+      $('.toggable').click(function () {
+        $('.' + $(this).attr('id') + '_body').slideToggle("slow");
+        $('.' + $(this).attr('id') + '_maximize').toggle();
+        $('.' + $(this).attr('id') + '_minimize').toggle();
+      });
+    },
   };
 });
