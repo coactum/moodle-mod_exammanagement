@@ -259,29 +259,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
-
-            // //for modifying usernames for users in local user database, not for production
-
-            //  $allusers = $MoodleDBObj->getRecordsFromDB('user', array());
-
-            //  foreach($allusers as $key => $user){
-
-
-            //      if($user->username !== 'tool_generator_'.str_pad($user->id, 6, '0', STR_PAD_LEFT) && substr( $user->username, 0,15 ) === 'tool_generator_'){
-
-            //         $user->username = 'tool_generator_'.str_pad($user->id, 6, '0', STR_PAD_LEFT);
-
-            //      }
-            //  }
-
-            //  $MoodleDBObj->UpdateRecordInDB('user', $user);
-
-            //  $allusers = array_reverse($allusers, true);
-
-            //  foreach($allusers as $key => $user){
-            //     $MoodleDBObj->UpdateRecordInDB('user', $user);
-            //  }
-
         
         $MoodleObj->outputFooter();
 
@@ -316,7 +293,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     $MoodleDBObj = MoodleDB::getInstance();
 
-    $participantObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $USER->id));
+    $participantObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $id, 'moodleuserid' => $USER->id));
 
     if ($ExammanagementInstanceObj->isRoomVisible() && $participantObj->roomname) {
         $room = $participantObj->roomname;
