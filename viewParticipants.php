@@ -136,7 +136,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($noneMoodleParticipants){
 
                     if(!$moodleParticipants){
-                        echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
+                        if($courseGroups){
+                            echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');                        
+                        } else {
+                            echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
+                        }
                     }
 
                     echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_without_panda_account", "mod_exammanagement").'</strong></td></tr>');

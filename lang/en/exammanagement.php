@@ -321,6 +321,7 @@ $string['delete_participant'] = 'Delete participant';
 $string['participant_deletion_warning'] = 'This action deletes the selected exam participant and all results entered for him.';
 $string['delete_all_participants'] = 'Delete all participants';
 $string['all_participants_deletion_warning'] = 'This action deletes all exam participants and all results entered for them.';
+$string['deleted_user'] = 'User deleted from PANDA';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';

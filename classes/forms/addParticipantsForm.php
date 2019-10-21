@@ -420,25 +420,30 @@ class addParticipantsForm extends moodleform{
 
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                    $userGroups = groups_get_user_groups($courseid, $newMoodleUser->moodleuserid);
-                    $groupnames = false;
-                        
-                    foreach ($userGroups as $groupskey => $value){
-                        if ($value){
-                            foreach ($value as $groupskey2 => $groupid){
-                                if(!$groupnames){
-                                    $groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
-                                } else {
-                                    $groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                    if($courseGroups){
+                        if($existingUser->moodleuserid){
+                            $userGroups = groups_get_user_groups($courseid, $newMoodleUser->moodleuserid);
+                            $groupnames = false;
+                                
+                            foreach ($userGroups as $groupskey => $value){
+                                if ($value){
+                                    foreach ($value as $groupskey2 => $groupid){
+                                        if(!$groupnames){
+                                            $groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
+                                        } else {
+                                            $groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                                        }
+                                    }
+                                } else{
+                                    $groupnames = '-';
+                                    break;
                                 }
                             }
-                        } else{
-                            $groupnames = '-';
-                            break;
                         }
+
+                        $mform->addElement('html', '<div class="col-xs-'.$col.'">'.$groupnames.'</div>');
                     }
 
-                    $mform->addElement('html', '<div class="col-xs-'.$col.'">'.$groupnames.'</div>');
                     $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string('state_newmatrnr', "mod_exammanagement").'</div></div>');
                 }
 

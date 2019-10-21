@@ -104,41 +104,51 @@ class User{
 
 				// add name if it is requested as attribute or needed for sorting or profile
 				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || in_array('profile', $requestedAttributes) || $sortOrder == 'name' )){
-                    $moodleUser = $this->getMoodleUser($record->moodleuserid);
-					$record->firstname = $moodleUser->firstname;
-					$record->lastname = $moodleUser->lastname;
+					$moodleUser = $this->getMoodleUser($record->moodleuserid);
 
-					if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
-						global $OUTPUT;
-						
-						$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-						
-						$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
+					if($moodleUser){
+						$record->firstname = $moodleUser->firstname;
+						$record->lastname = $moodleUser->lastname;
+						if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
+							global $OUTPUT;
+							
+							$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
+							
+							$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
 
-						$record->profile = $image.' '.$link;
-						
-					}
-
-					if(in_array('groups', $requestedAttributes)){ 			// add group if it is requested
-						$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $record->moodleuserid);
-						$groupnames = false;
-
-						foreach ($userGroups as $key => $value){
-							if ($value){
-								foreach ($value as $key2 => $value2){
-									if(!$groupnames){
-										$groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
-									} else {
-										$groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
-									}
-								}
-							} else{
-								$groupnames = '-';
-								break;
-							}
+							$record->profile = $image.' '.$link;
+							
 						}
 
-						$record->groups = $groupnames;
+						if(in_array('groups', $requestedAttributes)){ 			// add group if it is requested
+							$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $record->moodleuserid);
+							$groupnames = false;
+
+							foreach ($userGroups as $key => $value){
+								if ($value){
+									foreach ($value as $key2 => $value2){
+										if(!$groupnames){
+											$groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
+										} else {
+											$groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
+										}
+									}
+								} else{
+									$groupnames = '-';
+									break;
+								}
+							}
+							$record->groups = $groupnames;
+						}
+					} else {
+						$record->firstname = get_string('deleted_user', 'mod_exammanagement');
+						$record->lastname = get_string('deleted_user', 'mod_exammanagement');
+						if(in_array('profile', $requestedAttributes)){
+							$record->profile = get_string('deleted_user', 'mod_exammanagement');
+						}
+						if(in_array('groups', $requestedAttributes)){
+							$record->groups = '-';
+						}
 					}
 				}
 
@@ -186,7 +196,7 @@ class User{
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){
-						if(isset($participant->imtlogin) && array_key_exists($participant->imtlogin, $matriculationNumbers)){
+						if(isset($participant->imtlogin) && $participant->imtlogin && array_key_exists($participant->imtlogin, $matriculationNumbers)){
 							$participant->matrnr = $matriculationNumbers[$participant->imtlogin];
 						} else {
 							$participant->matrnr = '-';
