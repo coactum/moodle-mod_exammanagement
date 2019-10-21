@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/user.php');
+require_once(__DIR__.'/../general/User.php');
 
 class configureTasksForm extends moodleform {
 
