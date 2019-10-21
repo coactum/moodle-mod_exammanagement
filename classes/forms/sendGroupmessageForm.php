@@ -93,10 +93,25 @@ class sendGroupmessageForm extends moodleform {
 			$mform->addElement('hidden', 'id', 'dummy');
 			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,get_string('send_message', 'mod_exammanagement'));
-		    }
-		else {
+
+        } else if ($NoneMoodleParticipantsCount){
+            $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
+
+            $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
+
+            $mform->addElement('html', '<a href="mailto:?bcc=');
+
+            foreach($mailAdressArr as $adress){
+                $mform->addElement('html', $adress.';');
+            }
+
+            $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
+        
+            $mform->addElement('html', '<span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+
+        } else {
             $MoodleObj->redirectToOverviewPage('', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-	   	}
+        }
     }
 
     //Custom validation should be added here
