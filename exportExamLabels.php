@@ -199,15 +199,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         }
 
       } else if($roomsArray){ // if no rooms are set or no places are assigned
-        $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
+
+          $participants = $UserObj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
         
           if($participants){
-    
-            usort($participants, function($a, $b){ //sort array by custom user function
-
-              return strnatcmp($a->place, $b->place); // sort by place
-
-            });
 
             $counter = 0;
             $leftLabel = true;
@@ -232,8 +227,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                   $pdf->SetFont('helvetica', '', 10);
                   $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
                   $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 36, true);
-                  $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' . $room, 0, 'L', 0, 0, X1 + 61, $y + 25, true);
-                  $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X1 + 61, $y + 30, true);
                   $pdf->SetFont('helvetica', 'B', 14);
                   $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 36, true);
     
@@ -248,8 +241,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $pdf->SetFont('helvetica', '', 10);
                     $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
                     $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 36, true);
-                    $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$room, 0, 'L', 0, 0, X2 + 61, $y + 25, true);
-                    $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $place, 0, 'L', 0, 0, X2 + 61, $y + 30, true);
                     $pdf->SetFont('helvetica', 'B', 14);
                     $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 36, true);
     

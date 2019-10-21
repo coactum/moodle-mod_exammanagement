@@ -187,7 +187,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $ExammanagementInstanceObj->moduleinstance->datetimevisible = null;
             $ExammanagementInstanceObj->moduleinstance->roomvisible = null;
             $ExammanagementInstanceObj->moduleinstance->placevisible = null;
-            $ExammanagementInstanceObj->moduleinstance->correctioncompletiondate = null;
+            $ExammanagementInstanceObj->moduleinstance->datadeletion = null;
+            $ExammanagementInstanceObj->moduleinstance->examreviewvisible = null;
       
             $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
         }
@@ -255,7 +256,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
         $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
-        $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
+
+        if($ExammanagementInstanceObj->getExamReviewTime()){
+            $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
+        } else {
+            $resultsenteredafterexamreview = false;
+        }
 
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);

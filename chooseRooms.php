@@ -60,7 +60,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if($deletecustomroomid){
 
           if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
-            if(!in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
+            if(!json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms) || !in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
               $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
             } else {
               redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');

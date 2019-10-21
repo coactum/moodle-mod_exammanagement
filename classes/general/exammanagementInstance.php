@@ -594,15 +594,21 @@ EOF;
 
 		if($mode === 'examrooms'){
 			$roomIDs = json_decode($this->moduleinstance->rooms);
-			$roomIDs = implode("', '", $roomIDs);
 
-			$select = "roomid IN ('" . $roomIDs . "')";
-
-			if($sortorder == 'name'){
-				$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC');
+			if($roomIDs){
+				$roomIDs = implode("', '", $roomIDs);
+	
+				$select = "roomid IN ('" . $roomIDs . "')";
+	
+				if($sortorder == 'name'){
+					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC');
+				} else {
+					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select);
+				}
 			} else {
-				$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select);
+				return false;
 			}
+			
 		} else if($mode === 'defaultrooms'){
 
 			$select = "type = 'defaultroom'";
