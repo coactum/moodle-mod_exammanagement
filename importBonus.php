@@ -60,9 +60,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$MoodleObj->setPage('importBonus');
 			
 			if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-			} else if (!$UserObj->getParticipantsCount()) {
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
+			} else if (!$UserObj->getParticipantsCount()) {
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 			}
 
 			$MoodleObj->outputPageHeader();

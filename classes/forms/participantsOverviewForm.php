@@ -304,7 +304,7 @@ class participantsOverviewForm extends moodleform {
                                     $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
                                 }
 
-                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.$taskmaxpoints.'<br>');
+                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.number_format( $taskmaxpoints, 2, "," , "." ).'<br>');
 
                                 $mform->addElement('html', '</td>');
                             }

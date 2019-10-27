@@ -421,7 +421,7 @@ class addParticipantsForm extends moodleform{
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
                     if($courseGroups){
-                        if($existingUser->moodleuserid){
+                        if($newMoodleUser->moodleuserid){
                             $userGroups = groups_get_user_groups($courseid, $newMoodleUser->moodleuserid);
                             $groupnames = false;
                                 

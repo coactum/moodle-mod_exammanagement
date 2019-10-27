@@ -127,7 +127,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $pdf->Line(20, 62, 190, 62);
       $pdf->SetXY(20, 65);
 
-      $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
+      $totalPoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+
+      $maxPoints = str_replace( '.', ',', $totalPoints);
 
       $fill = false;
 
@@ -146,30 +148,33 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       foreach ($participants as $participant){
 
-        $totalPoints = 0;
+        $points = 0;
         $percentages = '-';
 
         $state = $UserObj->getExamState($participant);
 
         if ($state == "nt") {
-          $totalPoints = get_string('nt', 'mod_exammanagement');
+          $points = get_string('nt', 'mod_exammanagement');
         } else if ($state == "fa") {
-          $totalPoints = get_string('fa', 'mod_exammanagement');
+          $points = get_string('fa', 'mod_exammanagement');
         } else if ($state == "ill") {
-          $totalPoints = get_string('ill', 'mod_exammanagement');
+          $points = get_string('ill', 'mod_exammanagement');
         } else {
-              $totalPoints = str_replace( '.', ',', $UserObj->calculateTotalPoints($participant));
 
-              if($totalPoints != "-"){
-                  $percentages = number_format( ( $totalPoints / $maxPoints ) * 100, 2, "," , "." ).' %';
-              }
+            $points = $UserObj->calculateTotalPoints($participant);
+
+            if($points != "-"){
+                $percentages = number_format( ( $points / $totalPoints ) * 100, 2, "," , "." ).' %';
+            }
+              
+            $points = str_replace( '.', ',', $points);
         }
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
+        $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $points . "</td>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_PERCENT . "\" align=\"center\">" . $percentages . "</td>";
         $tbl .= "</tr>";
 

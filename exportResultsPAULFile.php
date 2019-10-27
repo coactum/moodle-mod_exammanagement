@@ -159,7 +159,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $filecount += 1;
 
-                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $participants)) && $ResultFilesZipArchive){ // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
+                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){ // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
                         $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
                     }
                 }

@@ -198,7 +198,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           }
         }
 
-      } else if($roomsArray){ // if no rooms are set or no places are assigned
+      } else { // if no rooms are set or no places are assigned
 
           $participants = $UserObj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
         
