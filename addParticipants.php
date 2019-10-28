@@ -102,12 +102,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
 					$ldapConnection = $LdapManagerObj->connect_ldap();
 					
+					// temp participants from stored in db that should get ldap attributes
+					var_dump($tempParticipants);
+
 					foreach($tempParticipants as $key => $participant){ // construct helper arrays needed for ldap method
 						$allMatriculationNumbers[$key] = $participant->identifier;
 						$allLines[$key] = $participant->line;
 					}
 
+
 					$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $allLines); //get data for all remaining matriculation numbers from ldap 
+
+					// users from ldap
+					var_dump($users);
 
 					foreach($users as $line => $login){
 						$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
