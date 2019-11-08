@@ -79,6 +79,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$newMoodleParticipants = array(); // will contain all valid moodle participants that can be added
 
 				$tempIDs = array(); // will contain moodleids and logins of all valid temp participants for checking for deleted users
+				$allPotentialIdentifiers = array(); // will contain all potential identifiers from file to check for double entries
 
 				$courseParticipantsIDs = $UserObj->getCourseParticipantsIDs(); // contains moodle user ids of all course participants
 
@@ -94,7 +95,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						
 						array_push($badMatriculationnumbers, $tempUserObj);
 						unset($tempParticipants[$key]);
-					} else {
+					} else if(in_array($participant->identifier, $allPotentialIdentifiers)){
 						$tempUserObj = new stdclass;
 						$tempUserObj->line = $participant->line;
 						$tempUserObj->matrnr = $participant->identifier;
@@ -102,6 +103,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						
 						array_push($badMatriculationnumbers, $tempUserObj);
 						unset($tempParticipants[$key]);
+					} else {
+						array_push($allPotentialIdentifiers, $participant->identifier);
 					}
 				}
 
