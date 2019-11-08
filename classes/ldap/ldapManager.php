@@ -283,6 +283,8 @@ class ldapManager{
 					$resultArr[$matrnr] = $result;
 				} else {
 					$result['matrnr'] = $matrnr;
+					var_dump(array_search($matrnr, $matrNrsArray));
+
 					$resultArr[$externalIdentifier[array_search($matrnr, $matrNrsArray)]] = $result;
 				}
 
