@@ -78,7 +78,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$existingParticipants = array(); // will contain all user that are already exam participants
 				$newMoodleParticipants = array(); // will contain all valid moodle participants that can be added
 
-				$tempIDs = array(); // will contain moodleids and logins of all participants already sorted to other arrays for checking double entries
+				$tempIDs = array(); // will contain moodleids and logins of all valid temp participants for checking for deleted users
 
 				$courseParticipantsIDs = $UserObj->getCourseParticipantsIDs(); // contains moodle user ids of all course participants
 
@@ -91,6 +91,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->line = $participant->line;
 						$tempUserObj->matrnr = $participant->identifier;
 						$tempUserObj->state = 'state_badmatrnr';
+						
+						array_push($badMatriculationnumbers, $tempUserObj);
+						unset($tempParticipants[$key]);
+					} else {
+						$tempUserObj = new stdclass;
+						$tempUserObj->line = $participant->line;
+						$tempUserObj->matrnr = $participant->identifier;
+						$tempUserObj->state = 'state_doubled';
 						
 						array_push($badMatriculationnumbers, $tempUserObj);
 						unset($tempParticipants[$key]);
@@ -152,20 +160,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->matrnr = $data['matrnr'];
 						$tempUserObj->login = $data['login'];
 
-						if(in_array($data['moodleuserid'], $tempIDs)){ 							// if user is already known as temp participant
-							$tempUserObj->state = 'state_doubled';
-							array_push($badMatriculationnumbers, $tempUserObj);
-						} else if($UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){ 	// if user is already saved for instance
+						if($UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){ 	// if user is already saved for instance
 							$tempUserObj->state = 'state_existingmatrnr';
 							array_push($existingParticipants, $tempUserObj);
-							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding deleted users
 						} else if (!in_array($data['moodleuserid'], $courseParticipantsIDs)){ 	// if user is not in course
 							$tempUserObj->state = 'state_no_courseparticipant';
 							array_push($oddParticipants, $tempUserObj);
-							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding deleted users
 						} else {																// if user is a valid new moodle participant
 							array_push($newMoodleParticipants, $tempUserObj);
-							array_push($tempIDs, $data['moodleuserid']); 						//for finding doubled users
+							array_push($tempIDs, $data['moodleuserid']); 						//for finding deleted users
 						}
 
 						foreach($tempParticipants as $key => $participant){ 					// unset user from original tempuser array
@@ -188,17 +193,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->matrnr = $data['matrnr'];
 						$tempUserObj->login = $data['login'];
 
-						if(in_array($data['login'], $tempIDs)){ 							// if user is already known as temp participant
-							$tempUserObj->state = 'state_doubled';
-							array_push($badMatriculationnumbers, $tempUserObj);
-						} else if($UserObj->checkIfAlreadyParticipant(false, $data['login'])){ // if user is already saved as participant
+						if($UserObj->checkIfAlreadyParticipant(false, $data['login'])){ // if user is already saved as participant
 							$tempUserObj->state = 'state_existingmatrnr';
 							array_push($existingParticipants, $tempUserObj);
-							array_push($tempIDs, $data['login']); 							//for finding already temp users
+							array_push($tempIDs, $data['login']); 							//for finding deleted users
 						} else { 															// if user is a valid new nonmoodle participant
 							$tempUserObj->state = 'state_nonmoodle';
 							array_push($oddParticipants, $tempUserObj);
-							array_push($tempIDs, $data['login']); 							//for finding already temp users
+							array_push($tempIDs, $data['login']); 							//for finding deleted users
 						}
 
 						foreach($tempParticipants as $key => $participant){					 // unset user from original tempuser array
