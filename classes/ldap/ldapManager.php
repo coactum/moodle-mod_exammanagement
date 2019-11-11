@@ -225,15 +225,11 @@ class ldapManager{
 	public function getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArray, $attributes, $externalIdentifier = false){ // get matriculation numbers for array of user logins
 
 		// matrnr and identifier in ldap method before array_values
-		var_dump($matrNrsArray);
-		var_dump($externalIdentifier);
 
 		$matrNrsArray = array_values($matrNrsArray);
 		$externalIdentifier = array_values($externalIdentifier);
 
 		// matrnr and identifier in ldap method after array_values
-		var_dump($matrNrsArray);
-		var_dump($externalIdentifier);
 
 		$resultArr = array();
 		$i = 0;
@@ -283,7 +279,6 @@ class ldapManager{
 					$resultArr[$matrnr] = $result;
 				} else {
 					$result['matrnr'] = $matrnr;
-					var_dump(array_search($matrnr, $matrNrsArray));
 
 					$resultArr[$externalIdentifier[array_search($matrnr, $matrNrsArray)]] = $result;
 				}
@@ -292,7 +287,6 @@ class ldapManager{
 			}
 
 			// results at the end of ldap method
-			var_dump($resultArr);
 
 			ldap_free_result($search);
 
