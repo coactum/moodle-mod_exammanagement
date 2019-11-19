@@ -141,10 +141,10 @@ class User{
 							$record->groups = $groupnames;
 						}
 					} else {
-						$record->firstname = get_string('deleted_user', 'mod_exammanagement');
-						$record->lastname = get_string('deleted_user', 'mod_exammanagement');
+						$record->firstname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
+						$record->lastname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
 						if(in_array('profile', $requestedAttributes)){
-							$record->profile = get_string('deleted_user', 'mod_exammanagement');
+							$record->profile = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
 						}
 						if(in_array('groups', $requestedAttributes)){
 							$record->groups = '-';

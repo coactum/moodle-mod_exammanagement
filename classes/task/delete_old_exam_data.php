@@ -116,8 +116,8 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                             break;
                     }
     
-                    $warningmailcontent = get_string("warningmailcontentpartone", "mod_exammanagement"). $ExammanagementInstanceObj->moduleinstance->name .get_string("warningmailcontentparttwo", "mod_exammanagement"). $ExammanagementInstanceObj->getCourse()->fullname .get_string("warningmailcontentpartthree", "mod_exammanagement"). $ExammanagementInstanceObj->getDataDeletionDate() .get_string("warningmailcontentpartfour", "mod_exammanagement");
-                    $warningmailcontent .= '<br><br>'.get_string("warningmailcontentpartoneenglish", "mod_exammanagement"). $ExammanagementInstanceObj->moduleinstance->name .get_string("warningmailcontentparttwoenglish", "mod_exammanagement"). $ExammanagementInstanceObj->getCourse()->fullname .get_string("warningmailcontentpartthreeenglish", "mod_exammanagement"). $ExammanagementInstanceObj->getDataDeletionDate() .get_string("warningmailcontentpartfourenglish", "mod_exammanagement");
+                    $warningmailcontent = get_string("warningmailcontent", "mod_exammanagement" , ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'examname' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'datadeletiondate' => $ExammanagementInstanceObj->getDataDeletionDate()]);
+                    $warningmailcontent .= '<br><br>'.get_string("warningmailcontentenglish", "mod_exammanagement" , ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'examname' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'datadeletiondate' => $ExammanagementInstanceObj->getDataDeletionDate()]);
     
                     $warningmailids = array();
     

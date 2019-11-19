@@ -196,7 +196,7 @@ class addParticipantsForm extends moodleform{
                     if($courseGroups){
                         $mform->addElement('html', '<div class="col-xs-'.$col.'"> - </div>');
                     }
-                    $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string($oddUser->state, "mod_exammanagement").'</div></div>');  
+                    $mform->addElement('html', '<div class="col-xs-'.$col.'">'.get_string($oddUser->state, "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</div></div>');  
                 }
 
                 $mform->addElement('html', '</div></div>');

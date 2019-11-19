@@ -105,6 +105,17 @@ class exammanagementInstance{
 
 	}
 
+	public function getMoodleSystemName(){
+
+		$moodlename = get_config('mod_exammanagement', 'moodlesystemname');
+
+		if($moodlename){
+			return $moodlename;
+		} else {
+			return '';
+		}
+	}
+
 	#### universal functions for exammanagement ####
 
  	public function getExammanagementUrl($component, $id){
@@ -137,7 +148,7 @@ class exammanagementInstance{
 		$helptextstr.= '<h4>'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '<div class="panel-body">';
-		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement').'</p>';
+		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName()]).'</p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '<div class="panel-footer">';
 		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';

@@ -29,6 +29,18 @@ if ($ADMIN->fulltree) {
 
       $settings->add(new admin_setting_heading('mod_exammanagement/pluginname', '', new lang_string('pluginadministration', 'mod_exammanagement')));
 
+      // enter name of moodle system to be displayed in the plugin (e.g. in help texts)
+      $settings->add(new admin_setting_configtext('mod_exammanagement/moodlesystemname', get_string('moodlesystemname', 'mod_exammanagement'),
+      get_string('moodlesystemname_help', 'mod_exammanagement'), 'Moodle', PARAM_TEXT));
+
+      // enable additional help texts in plugin and configure link to additional ressources
+      $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enablehelptexts', get_string('enablehelptexts', 'mod_exammanagement'),
+      get_string('enablehelptexts_help', 'mod_exammanagement'), 0));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/additionalressources',
+         get_string('additionalressources', 'mod_exammanagement'), get_string('additionalressources_help', 'mod_exammanagement'),
+         '', PARAM_TEXT));
+
       // acitvate possibility to request password reset by moodle admins
       $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enablepasswordresetrequest', get_string('enablepasswordresetrequest', 'mod_exammanagement'),
       get_string('enablepasswordresetrequest_help', 'mod_exammanagement'), 0));

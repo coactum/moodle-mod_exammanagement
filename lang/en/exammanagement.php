@@ -131,7 +131,7 @@ $string['exam_tasks_set_three'] = '<strong>points</strong> in total have been ad
 $string['exam_tasks_not_set'] = 'No exam tasks have been set yet.';
 $string['textfield_set'] = 'The text field contains the following content: ';
 $string['textfield_not_set'] = 'No content has been entered for the text field yet.';
-$string['message_to_participants_str'] = 'Messages (PANDA notifications) can be sent here to all participants added to the exam.';
+$string['message_to_participants_str'] = 'Here a message can be sent to all exam participants as internal notification and email.';
 $string['places_assigned_one'] = 'places have already been assigned to participants.';
 $string['places_assigned_two'] = 'The assignment of places is now successfully completed.';
 $string['places_assigned_three'] = 'Some participants still have to be assigned places before you can continue with the further work steps.';
@@ -214,14 +214,14 @@ $string['request_password_reset'] = 'Request password reset via support';
 
 //checkPassword.php
 $string['wrong_password'] = 'Wrong password. Please retry.';
-$string['password_reset_successfull'] = 'The password of the exam organization was successfully reset and all teachers of the PANDA course were informed about this via PANDA message.';
+$string['password_reset_successfull'] = 'The password of the exam organization was successfully reset and all teachers of the {$a->systemname} course were informed about this via {$a->systemname} message.';
 $string['password_reset_failed'] = 'Password reset failed due to missing permissions.';
-$string['password_reset_request_successfull'] = 'The reset of the password of the exam organization was successfully applied for at the support. As soon as the password has been reset, you and all other teachers of the PANDA course will be informed via PANDA message.';
+$string['password_reset_request_successfull'] = 'The reset of the password of the exam organization was successfully applied for at the support. As soon as the password has been reset, you and all other teachers of the {$a->systemname} course will be informed via {$a->systemname} message.';
 $string['password_reset_request_failed'] = 'Password reset request failed. Please contact support via e-mail in the usual way.';
-$string['password_reset_mailsubject'] = '[PANDA-Support] Zurücksetzen des Passwortes der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" erfolgreich';
-$string['password_reset_mailtext'] = 'Der PANDA Support hat wie angefordert das Passwort der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" zurückgesetzt. Sie können nun ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen und falls gewünscht ein neues Passwort für die Prüfungsorganisation festlegen. <br>Viele Grüße, <br>Ihr PANDA-Team <br><br> <b>English version:</b> The PANDA support has resetted the password of the exam organization "{$a->name}" in course "{$a->coursename}". You can now access the contents of the exam organization without entering a password and, if required, define a new password for the exam organization. <br>Greetings, <br>Your PANDA team';
-$string['password_reset_request_mailsubject'] = 'PANDA Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
-$string['password_reset_request_mailtext'] = 'Der bzw. die PANDA Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <a href="{$a->url}">Link</a> können Sie als in PANDA angemeldeter Benutzer mit der Rolle Admin, Manager oder IMT-Kursersteller das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
+$string['password_reset_mailsubject'] = '[{$a->systemname}-Support] Zurücksetzen des Passwortes der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" erfolgreich';
+$string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angefordert das Passwort der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" zurückgesetzt. Sie können nun ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen und falls gewünscht ein neues Passwort für die Prüfungsorganisation festlegen. <br>Viele Grüße, <br>Ihr {$a->systemname}-Team <br><br> <b>English version:</b> The {$a->systemname} support has resetted the password of the exam organization "{$a->name}" in course "{$a->coursename}". You can now access the contents of the exam organization without entering a password and, if required, define a new password for the exam organization. <br>Greetings, <br>Your {$a->systemname} team';
+$string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
+$string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <a href="{$a->url}">Link</a> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder IMT-Kursersteller das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Choose exam rooms';
@@ -278,14 +278,14 @@ $string['defaultroom_name'] = 'Name of the room (user-visible, permitted charact
 $string['defaultroom_description'] = 'Description (user-visible, e.g. modeling information such as number of free places between two seats, permitted characters: Letters, numbers, periods, minus and spaces)';
 $string['defaultroom_placescount'] = 'Number of seats that can be occupied';
 $string['placespreview'] = 'Designations of all seats that can be occupied';
-$string['roomplan_available'] = ' Available seating plan';
+$string['roomplan_available'] = 'Available seating plan';
 $string['new_places'] = 'New seats';
 $string['edit_places'] = 'Edit seats';
 $string['places_mode'] = 'Mode of seats';
 $string['placesmode_default'] = 'Default';
 $string['placesmode_rows'] = 'Rows';
 $string['placesmode_all_individual'] = 'Completely individual';
-$string['placesroom'] = ' Number of total seats in the room';
+$string['placesroom'] = 'Number of total seats in the room';
 $string['rowscount'] = 'Number of rows in the room';
 $string['placesrow'] = 'Seats per row';
 $string['placesfree'] = 'Free places between two seats that can be occupied';
@@ -315,13 +315,13 @@ $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
 $string['state_added_to_exam'] = 'Participant of exam';
-$string['participants_without_panda_account'] = 'Participants of exam without PANDA account';
-$string['state_added_to_exam_no_moodle'] = 'Participant of exam (without PANDA account)';
+$string['participants_without_moodle_account'] = 'Participants of exam without {$a->systemname} account';
+$string['state_added_to_exam_no_moodle'] = 'Participant of exam (without {$a->systemname} account)';
 $string['delete_participant'] = 'Delete participant';
 $string['participant_deletion_warning'] = 'This action deletes the selected exam participant and all results entered for him.';
 $string['delete_all_participants'] = 'Delete all participants';
 $string['all_participants_deletion_warning'] = 'This action deletes all exam participants and all results entered for them.';
-$string['deleted_user'] = 'User deleted from PANDA';
+$string['deleted_user'] = 'User deleted from {$a->systemname}';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';
@@ -339,7 +339,7 @@ $string['add_to_exam'] = 'Add to exam';
 $string['select_deselect_all'] = 'Select/deselect all';
 $string['no_participants_added_page'] = 'No participants added.';
 $string['state_newmatrnr'] = 'New';
-$string['state_nonmoodle'] = 'Without PANDA account';
+$string['state_nonmoodle'] = 'Without {$a->systemname} account';
 $string['state_badmatrnr'] = 'Bad matriculation number';
 $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_no_courseparticipant'] = 'No course participant';
@@ -372,10 +372,8 @@ $string['add_text_text'] = 'Any content can be entered here as <strong>free text
 
 //sendGroupmessageForm.php
 $string['sendGroupmessage'] = 'Send groupmessage';
-$string['groupmessages_text_1'] = 'An email with the text added below will be send to ';
-$string['groupmessages_text_2'] = ' participants of the exam.';
-$string['groupmessages_warning_1'] = 'Warning: ';
-$string['groupmessages_warning_2'] = ' exam participants have no PANDA account and will not recieve this message. Please contact them manually via email using the following button:';
+$string['groupmessages_text'] = 'An email and {$a->systemname} notification with the text added below will be send to <strong>{$a->participantscount}</strong> participants of the exam.';
+$string['groupmessages_warning'] = '<strong>Warning: {$a->participantscount}</strong> exam participants have no {$a->systemname} account and will not recieve this message. Please contact them manually via email using the following button:';
 $string['send_manual_message'] = 'Write email';
 $string['subject'] = 'Subject';
 $string['content'] = 'Content';
@@ -393,11 +391,11 @@ $string['bonusstep'] = 'Bonus step (max 3)';
 $string['required_points'] = 'Required points for bonus step';
 $string['configure_fileimport'] = 'Configure file import';
 $string['import_mode'] = 'Import mode';
-$string['moodle_export'] = 'Exported grades from PANDA';
+$string['moodle_export'] = 'Exported grades from {$a->systemname}';
 $string['individual'] = 'Other';
-$string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from PANDA)';
+$string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from {$a->systemname})';
 $string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
-$string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator (PANDA email adress or matriculation number) and bonus points must fit the chosen column.';
+$string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator ({$a->systemname} email adress or matriculation number) and bonus points must fit the chosen column';
 $string['bonus_already_entered'] = '<strong>Warning:</strong> Bonus points for {$a->bonuscount} participants have already been entered. If new points are now imported for these participants the old values will be replaced through this import.';
 
 //importBonus.php
@@ -528,26 +526,26 @@ $string['helptext_open'] = 'Open/close helptext';
 $string['helptext_overview']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
 These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing state is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
 Each work step can be opened by clicking on the corresponding button that will appear as soon as all required steps for the worksteps have been completed.<br><br>
-The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your PANDA courses from accessing the sensitive contents of the exam organization. <br><br>
+The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your courses from accessing the sensitive contents of the exam organization. <br><br>
 <strong>Note:</strong> Students do not have access to this view. Instead, they will see all information of the exam which has been enabled for them in a separate view.';
-$string['helptext_configurePassword'] = 'On this page, you can set or change the password for the exam organization. This password has to be entered by every teacher of the PANDA course in order to access the contents of the exam organization.<br><br>
+$string['helptext_configurePassword'] = 'On this page, you can set or change the password for the exam organization. This password has to be entered by every teacher of the {$a->systemname} course in order to access the contents of the exam organization.<br><br>
 To set a password, it must initially be entered in the first and then confirmed in the second field.<br><br>
 Remember to choose your password with sufficient security and especially do not use a password that you already use elsewhere (especially not in the context of university!).<br><br>
 By clicking on the button "Reset password" you can revoke the password protection for the exam organization.';
-$string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br><br> By clicking on the corresponding button, you can request a password reset via support if necessary. If the password has been reset, you and all other teachers of the PANDA course will be informed via PANDA notification.';
+$string['helptext_checkPassword'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br><br> By clicking on the corresponding button, you can request a password reset via support if necessary. If the password has been reset, you and all other teachers of the {$a->systemname} course will be informed via {$a->systemname} notification.';
 $string['helptext_checkPasswordAdmin'] = 'A password for this exam management was set by the teacher. You have to enter it below to gain access to the content of this module. <br> <br>
-Admins can reset the password of the exam organization here if teachers request this. All teachers of the PANDA course will be informed about this via PANDA message.';
+Admins can reset the password of the exam organization here if teachers request this. All teachers of the {$a->systemname} course will be informed about this via {$a->systemname} message.';
 $string['helptext_chooseRooms']= 'On this page you can view the list of all possible <strong>exam rooms</strong> available in the system and select one or more of them as the room for the current exam. <br /> <br />
 After clicking on the button "Add custom exam room", you can also add your own exam rooms to the list (and later select them as exam rooms). <br /> <br />
 To select a room as an exam room, first click on the box to the left of its name. A click on the button "Choose rooms" saves the selected rooms as exam rooms. If a room is already marked after opening the page, it has already been saved as a room for the exam. <br /> <br />
 The chosen exam rooms will be used later to assign seats to the participants added to the exam. Their seats will later be displayed to them in their view (as soon as you have made this information visible to the students on the overview page). The seat allocation is also used in documents such as the list of participants or the seating plan. <br /> <br />
 A description of each room and the number of places available in it is given in the table. If a seating plan is stored in the system for a room, it can be viewed by pressing the left mouse button over the info icon in the "Seating plan" column. If a room is a self-created custom exam room, it can be edited by clicking on the pencil icon at the right end of the line, while a click on the trash can icon next to it and a subsequent confirmation deletes it (although it must not be selected as an exam room). <br /> <br />
 <strong>Please note:</strong>
-<ul><li>In order to be able to use the other functions of the PANDA exam organization, at least one room must be selected here as exam room. In addition, the selected rooms must offer at least as many seats as participants are to take part in the exam.</li>
+<ul><li>In order to be able to use the other functions of the {$a->systemname} exam organization, at least one room must be selected here as exam room. In addition, the selected rooms must offer at least as many seats as participants are to take part in the exam.</li>
 <li>If an exam room is deselected after participants have been assigned seats in it, the entire seat assignment is deleted and must be repeated. Rooms affected by this are marked with a warning.</li>
 <li>Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.</li></ul>
 <strong>Attention:</strong> The system does not take the availability of the selected rooms into account. As a lecturer, you must book the rooms in which the exam should take place at the central room administration of the University of Paderborn and clarify that the corresponding rooms are actually available at the time of the exam.';
-$string['helptext_addDefaultRooms']= 'As a PANDA administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
+$string['helptext_addDefaultRooms']= 'As a {$a->systemname} administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
 In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
 The text file to be imported must contain the following information for each exam room, where each line stands for one exam room: 
 <ul><li>First column: The system-internal room id according to the pattern <i>room_name_variant</i>, for example <i>Audimax_2</i></li>
@@ -567,13 +565,13 @@ A room created in this way can then be selected from the list of available exam 
 If, on the other hand, an existing exam room has been selected for editing on the room selection page, it can now be modified here. In this case, the number of seats and the description of the selected room can now be altered and then saved by clicking on "Save room". If the number of seats is reduced, all exam participants still retain their previously assigned seats until you perform the automatic seat assignment again.';
 $string['helptext_setDateTime']= 'The <strong>date and time of the exam</strong> can be selected here.<br><br>
 The exam date selected here is displayed on the overview page of the exam organization and is used later in the documents generated, such as the list of participants or the exam labels. In addition, it will be displayed to the exam participants in their view as soon as you have made this information visible to the students on the overview page. <br /> <br />
-The date and time of the exam should therefore be set here so that the exam organization can be used effectively in PANDA.';
-$string['helptext_viewParticipants']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in PANDA. <br /> <br />
+The date and time of the exam should therefore be set here so that the exam organization can be used effectively in {$a->systemname}.';
+$string['helptext_viewParticipants']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in {$a->systemname}. <br /> <br />
 New participants can also be added to the exam here. There are two ways to do this: <br /> <br />
 1. After clicking on the button "Add participants from file", participants can be imported from one or more exam lists exported from PAUL. This is the recommended way of importing participants, as only in this way it is possible to export the exam results later according to the number and structure of these imported PAUL lists. You should therefore choose this variant if you want to enter the exam results directly in PAUL later.<br>
-2. It is also possible to import participants of the PANDA course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple subsequent entry of the exam results in PAUL is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a PAUL list. To do this, the participant must first be completely deleted.<br><br>
-Adding participants is one of the most important steps in the exam organization. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the PANDA course) also do not have access to the participant view with the exam information and do not receive any notifications send with the messaging function on the overview page of the exam organization.<br /> <br />
-If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in PANDA. Although these can also be imported from a PAUL file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
+2. It is also possible to import participants of the {$a->systemname} course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple subsequent entry of the exam results in PAUL is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a PAUL list. To do this, the participant must first be completely deleted.<br><br>
+Adding participants is one of the most important steps in the exam organization. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the {$a->systemname} course) also do not have access to the participant view with the exam information and do not receive any notifications send with the messaging function on the overview page of the exam organization.<br /> <br />
+If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in {$a->systemname}. Although these can also be imported from a PAUL file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
 It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
 $string['helptext_addParticipants']= 'On this page you can add <strong>participants</strong> from PAUL exam lists to the exam. In this way their results can be exported later again list by list and then simply entered in PAUL. <br /> <br />
 To do this, you first need the list of your exam participants exported from PAUL. You can then select this file in the selection area and import it by clicking on the corresponding button. <br><br>
@@ -581,8 +579,8 @@ On the following page you will see all matriculation numbers read from the file.
 In the following the different states are briefly explained:<br>
 <ul><li><strong>Bad matriculation number</strong>: The entered matriculation number is invalid because, for example, it contains illegal characters such as letters. It cannot therefore be read in as a participant. The number on the far left of the line indicates the number of the line in which the invalid matriculation number is located in the read in PAUL file and where it can be checked if necessary.</li>
 <li><strong>Duplicated matriculation number</strong>: The matriculation number occurs several times in the file. However, it can only be read in once as a exam participant in the corresponding section.</li>
-<li><strong>New (no course participant)</strong>: The student belonging to this matriculation number is not part of the PANDA course. He can easily be imported as an exam participant. However, since he cannot view the participant view of the plugin, he must be selected manually by ticking the checkbox in order to exclude the possibility of an error here.</li>
-<li><strong>New (without PANDA account)</strong>: The student belonging to this matriculation number does not yet have an account in PANDA. This can happen, for example, if the student has never registered in PANDA before. Although the student can be imported as an exam participant, he or she cannot view the participant view of the exam organization and you cannot reach him or her via the notification function of the exam organization. Therefore you have to check this student here manually.</li>
+<li><strong>New (no course participant)</strong>: The student belonging to this matriculation number is not part of the {$a->systemname} course. He can easily be imported as an exam participant. However, since he cannot view the participant view of the plugin, he must be selected manually by ticking the checkbox in order to exclude the possibility of an error here.</li>
+<li><strong>New (without {$a->systemname} account)</strong>: The student belonging to this matriculation number does not yet have an account in {$a->systemname}. This can happen, for example, if the student has never registered in {$a->systemname} before. Although the student can be imported as an exam participant, he or she cannot view the participant view of the exam organization and you cannot reach him or her via the notification function of the exam organization. Therefore you have to check this student here manually.</li>
 <li><strong>Will be deleted</strong>: This participant was already imported as an exam participant with an earlier version of the used PAUL list, but is no longer included in the current one (for example, because he has deregistered from the PAUL exam in the meantime). You can now select this participant to remove him from the current exam.</li>
 <li><strong>Already exam participant</strong>: This participant has already been imported as an exam participant and is not modified by the current import.</li>
 <li><strong>New</strong>: This is a valid participant that can be added to the exam without any problems. All participants in this section are preselected to be added to the exam.</li>
@@ -590,7 +588,7 @@ In the following the different states are briefly explained:<br>
 All participants to be added to (or removed from) the exam can now be selected either by checking the box next to the name or by checking the "Select/deselect all" box of the respective area. Then press the "Add to exam" button to add the selected participants to the exam.<br><br>
 If you have read in the wrong file, you can immediately read in a new file by clicking on the button "Import other participants". The currently readed participants then will not be imported but discarded.<br><br>
 You can perform this procedure several times for the import of participants from several lists.';
-$string['helptext_addCourseParticipants']= 'Here you can import all <strong>course participants</strong> enrolled in PANDA  as exam participants. <br><br>
+$string['helptext_addCourseParticipants']= 'Here you can import all <strong>course participants</strong> enrolled in {$a->systemname}  as exam participants. <br><br>
 In the lowest section, all course participants who should be added to the exam must be selected. Individual participants can be selected by checking the box next to their name. To select (or deselect) all course participants it is sufficient to click in the corresponding box "Select/deselect all". In the corresponding section, you can also select existing participants who are not course participants. These are then removed from the exam by clicking on the "Add to exam" button at the bottom, while the selected course participants are then added to the exam. For all participants with the state "Already exam participants" nothing changes. <br><br>
 If participants are added after places have already been assigned, they must still be assigned places.<br><br>
 <strong>Please note:</strong> If this variant of participant import is selected, the results of all participants added in this way will be exported later in a single separate list for the exam office, which may make it difficult to enter them in PAUL. If you plan to have the exam results entered into PAUL, you may want to add participants to the exam using the appropriate PAUL participant lists in the corresponding import.';
@@ -601,18 +599,18 @@ If the tasks are changed after the exam results have already been entered or aft
 $string['helptext_setTextfield']= 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.  <br /> <br />
 In this way, the exam participants can e. g. be easily informed about the equipment permitted in the exam. In addition to simple texts, more complex elements such as pictures or even formulas can be used. <br /> <br />
 This function is purely optional. If, for example, you do not have any information for the exam participants, you can simply leave the field below empty and click on the "Cancel" button. <br /> <br />
-<Strong>Note:</strong> This function is mainly intended for messages that are not time-critical. If, however, you would like to inform the exam participants e. g. about a short-term change of exam rooms on the day before the exam, it is advisable to use the function "Write message to participants" on the overview page instead. In this way, the exam participants will immediately receive an e-mail and will thus be able to see the information entered even if they do not actively look in PANDA.';
+<Strong>Note:</strong> This function is mainly intended for messages that are not time-critical. If, however, you would like to inform the exam participants e. g. about a short-term change of exam rooms on the day before the exam, it is advisable to use the function "Write message to participants" on the overview page instead. In this way, the exam participants will immediately receive an e-mail and will thus be able to see the information entered even if they do not actively look in {$a->systemname}.';
 $string['helptext_sendGroupmessage']= '
 On this page the subject and content of a <strong>message</strong> can be entered, which will be sent to all </strong> students added as <strong>exam participants</strong> after clicking the button "Send message". <br /> <br />
-They receive the message immediately after sending it both as a PANDA notification and as an e-mail to their university e-mail account and can thus, for example, simply be made aware of short-term changes (such as changes of the exam times or rooms). <br /> <br />
-If you have added participants to the exam who do not yet have a PANDA user account, this will be displayed below. Since these participants will not automatically receive the message written here, you will have to write to them manually by e-mail instead. You can do this, for example, by clicking on the "Write Email" button, which opens your email client and enters the email addresses of the corresponding participants. <br /> <br />
-The whole notification function is purely optional, you do not have to use it to send a message to the participants. ';
+They receive the message immediately after sending it both as a {$a->systemname} notification and as an e-mail to their university e-mail account and can thus, for example, simply be made aware of short-term changes (such as changes of the exam times or rooms). <br /> <br />
+If you have added participants to the exam who do not yet have a {$a->systemname} user account, this will be displayed below. Since these participants will not automatically receive the message written here, you will have to write to them manually by e-mail instead. You can do this, for example, by clicking on the "Write Email" button, which opens your email client and enters the email addresses of the corresponding participants. <br /> <br />
+The whole notification function is purely optional, you do not have to use it to send a message to the participants.';
 $string['helptext_importBonus']= 'Here you can import the participants bonus points and convert them into <strong>bonus grade steps</strong> for the exam. In this way, for example, bonus points earned by students while completing exercises can be directly converted into bonus grade steps for the exam. <br><br>
 To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>
-1. Exported grades from PANDA: If your students have submitted their exercise sheets via the PANDA assignment activity and these have been corrected and graded there, the exported grades from PANDA should be selected here, since in this way all bonus points for the complete PANDA course can be easily read in. <br>
-To do this, the gradings from the PANDA course must first be exported (see <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
-2. Individual: If you have not managed your bonus points via the PANDA assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in PANDA or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
+1. Exported grades from {$a->systemname}: If your students have submitted their exercise sheets via the {$a->systemname} assignment activity and these have been corrected and graded there, the exported grades from {$a->systemname} should be selected here, since in this way all bonus points for the complete {$a->systemname} course can be easily read in. <br>
+To do this, the gradings from the {$a->systemname} course must first be exported (see <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+2. Individual: If you have not managed your bonus points via the {$a->systemname} assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in {$a->systemname} or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
 Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported bonus grade steps are immediately displayed to the participants in their view.';
 $string['helptext_configureGradingscale']= 'Here a <strong>grading scale</strong> can be configured for the exam.<br><br>
 As soon as the exam results have been entered, the grading scale is used to automatically calculate the exam grades for all participants. If no grading scale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
@@ -656,7 +654,7 @@ $string['err_js_internal_error'] = 'Internal error. Please retry.';
 $string['err_password_incorrect'] = 'Password is not matching. Please enter again.';
 $string['err_novalidpassword'] = 'Not a valid password.';
 $string['err_examdata_deleted'] = 'The exam data has already been deleted. It is no longer possible to use the exam organization.';
-$string['err_already_defaultroom'] = 'Already default room. Try instead room ID ';
+$string['err_already_defaultroom'] = 'Already default room. Try instead room ID';
 $string['no_param_given'] = 'Couldn`t match matriculation number';
 $string['not_possible_no_matrnr'] = 'Not possible because no matriculation numbers are available';
 
@@ -677,7 +675,7 @@ In a separate view a lecturer can
 * export all results in various documents for further use (e.g. by the exam office).
 
 The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat or the bonus grade steps achieved for the exam. In addition, the notification function allows an easy and reliable communication with them.';
-$string['modulename_link'] = 'https://hilfe.uni-paderborn.de/PANDA';
+$string['modulename_link'] = '{$a->additionalressources}';
 $string['exammanagement_name'] = 'Name of the exam management';
 $string['exammanagement_name_help'] = 'The name of the activity displayed in the course (e.g. "Exam 1").';
 $string['exammanagement:enable exam management'] = 'enable exam management';
@@ -704,7 +702,13 @@ $string['exammanagement:requestpasswordreset'] = 'Request password reset';
 
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Enable requesting password reset';
-$string['enablepasswordresetrequest_help'] = 'As soon as this function has been activated, all teachers in their exam organizations can request the reset of the passwords set there by clicking on the corresponding button. If a lecturer has done this, all users with the role "Manager" receive an automatically generated message both as PANDA notification and forwarded to the e-mail address stored in their profile and can then reset the password by clicking on the link contained in this message. This means that all teachers of the exam organization concerned are automatically informed via PANDA notification and e-mail that the password has been reset and can then access the contents of the exam organization again without having to enter a password. If the function is deactivated here, users cannot automatically request the password reset in their exam organization, but managers and administrators can still reset the password of any exam organization.';
+$string['enablepasswordresetrequest_help'] = 'As soon as this function has been activated, all teachers in their exam organizations can request the reset of the passwords set there by clicking on the corresponding button. If a lecturer has done this, all users with the role "Manager" receive an automatically generated message both as internal notification and forwarded to the e-mail address stored in their profile and can then reset the password by clicking on the link contained in this message. This means that all teachers of the exam organization concerned are automatically informed via internal notification and e-mail that the password has been reset and can then access the contents of the exam organization again without having to enter a password. If the function is deactivated here, users cannot automatically request the password reset in their exam organization, but managers and administrators can still reset the password of any exam organization.';
+$string['moodlesystemname'] = 'Name of Moodle';
+$string['moodlesystemname_help'] = 'The name of the moodle installation. Will be displayed in the plugin (e.g. in helptexts).';
+$string['enablehelptexts'] = 'Enable intern help texts';
+$string['enablehelptexts_help'] = 'If this option is activated, plugin-in help texts are displayed in all exam organizations.';
+$string['additionalressources'] = 'Additional ressources';
+$string['additionalressources_help'] = 'The text entered here (such as a web link to further user documentation) is displayed as a source for additional information in the plugin\'s internal help text if this is activated for the plugin..';
 
 //delete_temp_participants.php - task
 $string['delete_temp_participants'] = 'Delete temporary saved participants';
@@ -717,11 +721,5 @@ $string['delete_old_exam_data'] = 'Delete old exam data';
 $string['warningmailsubjectone'] = '[Exam organization] Reminder: Future deletion of exam data';
 $string['warningmailsubjecttwo'] = '[Exam organization] Warning: Soon deletion of old exam data';
 $string['warningmailsubjectthree'] = '[Exam organization] Last warning: Exam data will be deleted tomorrow';
-$string['warningmailcontentpartone'] = 'Alle Prüfungsinformationen der Prüfung "';
-$string['warningmailcontentparttwo'] = '" im Kurs "';
-$string['warningmailcontentpartthree'] = '" werden am ';
-$string['warningmailcontentpartfour'] = ' gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der PANDA Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
-$string['warningmailcontentpartoneenglish'] = '<strong>English version</strong>: All information on the exam "';
-$string['warningmailcontentparttwoenglish'] = '" in course "';
-$string['warningmailcontentpartthreeenglish'] = '" will be deleted on ';
-$string['warningmailcontentpartfourenglish'] = ' . Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the PANDA exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';
+$string['warningmailcontent'] = 'Alle Prüfungsinformationen der Prüfung "{$a->examname}" im Kurs "{$a->coursename}" werden am {$a->datadeletiondate} gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der {$a->systemname} Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
+$string['warningmailcontentenglish'] = '<strong>English version</strong>: All information on the exam "{$a->examname}" in course "{$a->coursename}" will be deleted on {$a->datadeletiondate}. Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the {$a->systemname} exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';

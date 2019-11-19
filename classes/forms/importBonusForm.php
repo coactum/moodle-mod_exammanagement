@@ -125,10 +125,10 @@ class importBonusForm extends moodleform{
 
         $mform->addElement('html', '<h3>'.get_string('configure_fileimport', 'mod_exammanagement').'</h3>');
 
-        $select = $mform->addElement('select', 'importmode', get_string('import_mode', 'mod_exammanagement'), array('me' => get_string('moodle_export', 'mod_exammanagement'), 'i' => get_string('individual', 'mod_exammanagement'))); 
+        $select = $mform->addElement('select', 'importmode', get_string('import_mode', 'mod_exammanagement'), array('me' => get_string('moodle_export', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'i' => get_string('individual', 'mod_exammanagement'))); 
         $select->setSelected('me');
 
-        $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement'), $attributes);
+        $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), $attributes);
         $mform->setType('idfield', PARAM_TEXT);
         $mform->setDefault('idfield', 'F');
         $mform->disabledIf('idfield', 'importmode', 'eq', 'me');
@@ -139,7 +139,7 @@ class importBonusForm extends moodleform{
         
         $maxbytes=$CFG->maxbytes;
 
-        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xlsx', '.ods')));
+        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement", ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xlsx', '.ods')));
         $mform->addRule('bonuspoints_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
         
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
