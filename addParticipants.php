@@ -123,8 +123,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 					$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $allLines); //get data for all remaining matriculation numbers from ldap 
 
-					// users from ldap
+					ksort($users);
 
+					// users from ldap
+					
 					foreach($users as $line => $login){
 						$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
 
