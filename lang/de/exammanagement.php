@@ -521,7 +521,7 @@ $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbei
 //helptexts
 $string['help'] = 'Hilfe';
 $string['helptext_str'] = 'Hilfetext';
-$string['helptext_link'] = 'Eine ausführliche Erläuterung aller Elemente und Funktionen der Prüfungsorganisation findet sich im "IMT HilfeWiki" unter dem folgenden Link:';
+$string['helptext_link'] = 'Eine ausführliche Erläuterung aller Elemente und Funktionen der Prüfungsorganisation findet sich unter folgendem Link:';
 $string['helptext_open'] = 'Hilfetext öffnen/schließen';
 $string['helptext_overview']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen & Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
 Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können. Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />
@@ -633,6 +633,15 @@ Die Bezeichnung des Raumes kann dabei frei als normaler Text in das untere Formu
 Wenn Sie nach dem Zeitpunkt der Klausureinsicht Prüfungsergebnisse für die Teilnehmenden ändern können Sie diese danach einfach auf der Übersichtsseite gesondert für das Prüfungsamt exportieren. <br><br>
 Die hier festgelegten Informationen zum Termin und Raum der Klausureinsicht können später auf der Übersichtsseite wieder für die Studierenden sichtbar geschaltet werden.';
 
+$string['viewParticipants_help'] = 'Auf dieser Seite können alle zur Prüfung hinzugefügten <strong>Prüfungsteilnehmer</strong> und Informationen wie deren Profil, Matrikelnummer sowie die ihnen gegebenenfalls in '. get_config('mod_exammanagement', 'moodlesystemname') .' zugewiesenen Gruppen angesehen werden. <br /> <br />
+Es können hier zudem neue Teilnehmerinnen zur Prüfung hinzugefügt werden. Dazu gibt es zwei Möglichkeiten: <br /> <br />
+1. Es können nach einem Klick auf den Button "Teilnehmer aus Datei hinzufügen" Teilnehmer aus einer oder mehreren, aus PAUL exportierten Prüfungslisten importiert werden. Dies ist der empfohlene Weg des Teilnehmerimportes, da nur auf diese Weise später ein Export der Prüfungsergebnisse der Anzahl und dem Aufbau dieser eingelesenen PAUL-Listen entsprechend möglich ist. Diese Variante sollte also gewählt werden, möchte man später die Prüfungsergebnisse direkt in PAUL eintragen (lassen).<br>
+2. Es besteht außerdem die Möglichkeit, nach einem Klick auf den Button "Kursteilnehmer importieren" Teilnehmer des '. get_config('mod_exammanagement', 'moodlesystemname') .'-Kurses als Prüfungsteilnehmer zu importieren. Wird diese Variante gewählt können die Prüfungsergebnisse später allerdings nur in einer einzigen Ergebnisliste exportiert werden, ein listenweiser Export und ein einfaches anschließendes Eintragen der Prüfungsergebnisse in PAUL ist dann somit nicht möglich. Es besteht zudem auch nicht die Möglichkeit, einmal als Kursteilnehmer importierte Teilnehmer später durch nachträgliches Einlesen einer PAUL-Liste "umzuschreiben". Dafür muss der oder die Teilnehmerin zunächst komplett gelöscht werden.<br><br>
+Das Hinzufügen von TeilnehmerInnen ist einer der wichtigsten Arbeitsschritte in der Prüfungsorganisation. Nur wenn Sie hier mindestens einen hinzugefügten Teilnehmemenden sehen können Sie später Sitzplätze zuweisen, Prüfungspunkte eintragen oder Ergebnisdokumente exportieren. Nicht als PrüfungsteilnehmerInnen hinzugefügte Studierende haben (selbst wenn sie bereits im '. get_config('mod_exammanagement', 'moodlesystemname') .' Kurs eingeschrieben sind) außerdem keinen Zugriff auf die Teilnehmeransicht mit den Prüfungsinformationen und erhalten auch keine Benachrichtigungen über die Nachrichtenfunktion auf der Übersichtsseite der Prüfungsorganisation. <br /> <br />
+Falls Sie einen durch eine Zwischenüberschrift abgetrennten unteren Teil der Tabelle sehen, dann haben Sie Prüfungsteilnehmer importiert, die keinen Benutzeraccount in '. get_config('mod_exammanagement', 'moodlesystemname') .' haben. Diese können zwar auch aus einer PAUL-Datei importiert werden, einige Arbeitsschritte wie etwa das Schreiben einer Benachrichtigung müssen für diese Teilnehmer jedoch manuell durchgeführt werden und andere (etwa das Ansehen der Studentenansicht für die Teilnehmer selbst) sind gänzlich unmöglich.<br><br>
+Es besteht auf dieser Seite außerdem die Möglichkeit, einzelne oder alle bereits importierte Prüfungsteilnehmer wieder zu löschen. Um einzelne Teilnehmer zu löschen genügt ein Klick auf den Mülleimer in der Zeile des jeweiligen Teilnehmenden, um alle Teilnehmer zu löschen muss hingegen der rote Button unter der Tabelle gedrückt werden. Beachten Sie jedoch, dass durch das Löschen eines oder aller Teilnehmer automatisch alle für diese hinterlegten Informationen wie etwa Sitzplätze oder eingetragene Prüfungspunkte gelöscht werden und dass diese Informationen danach nicht wieder hergestellt werden können.';
+$string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
+
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
@@ -675,7 +684,7 @@ Als Dozent oder Dozentin können Sie dabei
 * alle Ergebnisse in verschiedenen Dokumenten für die weitere Verwendung (z. B. durch das Prüfungsamt) exportieren.
 
 Die Teilnehmerinnen und Teilnehmer der Prüfung sehen hingegen in ihrer eigenen Ansicht alle relevanten Informationen der Prüfung wie etwa den Termin, den eigenen Sitzplatz oder für die Prüfung errungene Bonusnotenschritte. Außerdem kann mithilfe der Benachrichtigungsfunktion einfach und zuverlässig mit diesen kommuniziert werden.';
-$string['modulename_link'] = '{$a->additionalressources}';
+$string['modulename_link'] = 'https://docs.moodle.org/de/mod/exammanagement';
 $string['exammanagement_name'] = 'Name der Prüfungsorganisation';
 $string['exammanagement_name_help'] = 'Der im Kurs angezeigte Name der Aktivität (z. B. "Klausur 1").';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
@@ -707,8 +716,8 @@ $string['moodlesystemname'] = 'Name des Moodle Systems';
 $string['moodlesystemname_help'] = 'Der Name des Moodle Systems. Dieser wird im Plugin zum Beispiel in Hilfetexten angezeigt.';
 $string['enablehelptexts'] = 'Plugininterne Hilfetexte aktivieren';
 $string['enablehelptexts_help'] = 'Wird diese Option aktiviert werden plugininterne Hilfetexte in sämtlichen Prüfungsorganisationen angezeigt.';
-$string['additionalressources'] = 'Zusätzliche Hilfen';
-$string['additionalressources_help'] = 'Der hier eingetragene Text (etwa ein Weblink zu einer weiterführenden Benutzerdokumentation) wird als Quelle für zusätzliche Informationen im plugininternen Hilfetext angezeigt wenn dieser für das Plugin aktiviert wurde.';
+$string['additionalressources'] = 'Zusätzliche Hilfe';
+$string['additionalressources_help'] = 'Der hier eingetragene Weblink wird in den plugininternen Hilfetexten als Quelle für weiterführende Informationen angezeigt, wenn diese für das Plugin aktiviert wurden.';
 
 //delete_temp_participants.php - task
 $string['delete_temp_participants'] = 'Temporär gespeicherte Teilnehmer löschen';

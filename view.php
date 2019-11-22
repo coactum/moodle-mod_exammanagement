@@ -235,6 +235,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             break;
       }
     
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+        $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
         $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
         $taskcount = $ExammanagementInstanceObj->getTaskCount();
         $taskpoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
@@ -263,7 +265,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $resultsenteredafterexamreview = false;
         }
 
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
+        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptextsenabled, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
         
         $MoodleObj->outputFooter();

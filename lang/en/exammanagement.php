@@ -521,7 +521,7 @@ $string['correction_not_completed'] = 'Marking not completed. Work step not poss
 //helptexts
 $string['help'] = 'Help';
 $string['helptext_str'] = 'Help text';
-$string['helptext_link'] = 'A detailed explanation of all elements and functions of the exam management can be found at the "IMT HilfeWiki" under the following link:';
+$string['helptext_link'] = 'A detailed explanation of all elements and functions of the exam management can be found under the following link:';
 $string['helptext_open'] = 'Open/close helptext';
 $string['helptext_overview']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
 These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing state is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
@@ -633,6 +633,15 @@ The name of the room can be freely entered as normal text in the lower form fiel
 If you change the exam results for the participants after the time of the exam review set on this page, you can simply export them separately for the exam office on the overview page. <br><br>
 The information on the date and room of the exam review can later be made visible to the students on the overview page.';
 
+$string['viewParticipants_help'] = 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in {$a->systemname}. <br /> <br />
+New participants can also be added to the exam here. There are two ways to do this: <br /> <br />
+1. After clicking on the button "Add participants from file", participants can be imported from one or more exam lists exported from PAUL. This is the recommended way of importing participants, as only in this way it is possible to export the exam results later according to the number and structure of these imported PAUL lists. You should therefore choose this variant if you want to enter the exam results directly in PAUL later.<br>
+2. It is also possible to import participants of the {$a->systemname} course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple subsequent entry of the exam results in PAUL is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a PAUL list. To do this, the participant must first be completely deleted.<br><br>
+Adding participants is one of the most important steps in the exam organization. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the {$a->systemname} course) also do not have access to the participant view with the exam information and do not receive any notifications send with the messaging function on the overview page of the exam organization.<br /> <br />
+If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in {$a->systemname}. Although these can also be imported from a PAUL file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
+It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
+$string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
+
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
@@ -675,7 +684,7 @@ In a separate view a lecturer can
 * export all results in various documents for further use (e.g. by the exam office).
 
 The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat or the bonus grade steps achieved for the exam. In addition, the notification function allows an easy and reliable communication with them.';
-$string['modulename_link'] = '{$a->additionalressources}';
+$string['modulename_link'] = 'https://docs.moodle.org/en/mod/exammanagement';
 $string['exammanagement_name'] = 'Name of the exam management';
 $string['exammanagement_name_help'] = 'The name of the activity displayed in the course (e.g. "Exam 1").';
 $string['exammanagement:enable exam management'] = 'enable exam management';
@@ -708,7 +717,7 @@ $string['moodlesystemname_help'] = 'The name of the moodle installation. Will be
 $string['enablehelptexts'] = 'Enable intern help texts';
 $string['enablehelptexts_help'] = 'If this option is activated, plugin-in help texts are displayed in all exam organizations.';
 $string['additionalressources'] = 'Additional ressources';
-$string['additionalressources_help'] = 'The text entered here (such as a web link to further user documentation) is displayed as a source for additional information in the plugin\'s internal help text if this is activated for the plugin..';
+$string['additionalressources_help'] = 'The web link entered here is displayed in the plugin internal help texts as a source for further information if these have been activated for the plugin.';
 
 //delete_temp_participants.php - task
 $string['delete_temp_participants'] = 'Delete temporary saved participants';

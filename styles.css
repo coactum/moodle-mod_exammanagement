@@ -236,6 +236,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+.path-mod-exammanagement .popover{
+  max-width: 50%;
+}
+
 /* chooseRooms.php - SVG Overlay */
 .exammanagement_rooms_svg{
 	position:fixed;

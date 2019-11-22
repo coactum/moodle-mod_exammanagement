@@ -151,7 +151,11 @@ class exammanagementInstance{
 		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName()]).'</p>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '<div class="panel-footer">';
-		$helptextstr.= '	<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="https://hilfe.uni-paderborn.de/PANDA" class="alert-link" target="_blank">https://hilfe.uni-paderborn.de/PANDA</a></p>';
+
+		if(get_config('mod_exammanagement', 'additionalressources')){
+			$helptextstr.= '<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="'.get_config('mod_exammanagement', 'additionalressources').'" class="alert-link" target="_blank">'. get_config('mod_exammanagement', 'additionalressources').'</a></p>';
+		}
+
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
 		$helptextstr.= '</div>';
