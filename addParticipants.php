@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Allows teacher to add participants from paul file to mod_exammanagement.
+ * Allows teacher to add participants from text file to mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2019
@@ -307,9 +307,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			// In this case you process validated data. $mform->get_data() returns data posted in form.
 
 				// retrieve Files from form
-				$paul_file = $mform->get_file_content('participantslist_paul');
+				$text_file = $mform->get_file_content('participantslist_text');
 
-				if (!$paul_file){ // if no import file and exam participants should be saved in db
+				if (!$text_file){ // if no import file and exam participants should be saved in db
 					
 					# get checked userids from form #
 					$participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
@@ -516,10 +516,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
 
-				} else if($paul_file){ // if participants are readed in from import file and should be saved as temporary participants
+				} else if($text_file){ // if participants are readed in from import file and should be saved as temporary participants
 
-					# get matriculation numbers from paul file as an array #
-					$fileContentArr = explode(PHP_EOL, $paul_file); // separate lines
+					# get matriculation numbers from text file as an array #
+					$fileContentArr = explode(PHP_EOL, $text_file); // separate lines
 					
 					if($fileContentArr){
 						$fileheader = $fileContentArr[0]."\r\n".$fileContentArr[1];

@@ -456,7 +456,7 @@ class addParticipantsForm extends moodleform{
                 $maxbytes=$CFG->maxbytes;
 
                 $mform->addElement('html', '<div class="hidden">');
-                $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+                $mform->addElement('filepicker', 'participantslist_text', get_string("import_from_text_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
                 $mform->addElement('html', '</div>');
 
                 $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
@@ -472,8 +472,8 @@ class addParticipantsForm extends moodleform{
 
             $maxbytes=$CFG->maxbytes;
 
-            $mform->addElement('filepicker', 'participantslist_paul', get_string("import_from_paul_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
-            $mform->addRule('participantslist_paul', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
+            $mform->addElement('filepicker', 'participantslist_text', get_string("import_from_text_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
+            $mform->addRule('participantslist_text', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
         }

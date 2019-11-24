@@ -148,7 +148,7 @@ $string['export_points_examreview_str'] = 'Hier können die erreichten Punkte al
 $string['export_results_lists_note'] = 'Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!';
 $string['export_results_percentages_str'] = 'Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.';
 $string['export_results_statistics_str'] = 'Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.';
-$string['export_results_paul_str'] = 'Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.';
+$string['export_results_text_str'] = 'Hier können die Ergebnisse für das Prüfungsamt als PAUL-kompatibles Text-Dokument exportiert werden.';
 $string['data_deletion_date_set'] = 'Am <strong>{$a}</strong> werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie bis dahin alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.';
 $string['date_room_examreview_set'] = 'Die Klausureinsicht findet am <strong>{$a->examreviewdate}</strong> in Raum <strong>{$a->examreviewroom}</strong> statt.';
 $string['room_examreview_set'] = 'Die Klausureinsicht findet in Raum <strong>{$a}</strong> statt.';
@@ -181,7 +181,7 @@ $string['add_examresults'] = 'Ergebnisse eintragen';
 $string['check_results'] = 'Ergebnisse prüfen';
 $string['export_as_pdf'] = 'PDF exportieren';
 $string['export_as_excel'] = 'Excel-Dokument exportieren';
-$string['export_as_paultext'] = 'PAUL-Textdokument exportieren';
+$string['export_as_text'] = 'PAUL-Textdokument exportieren';
 $string['examreview_dateroom'] = 'Termin und Raum für Klausureinsicht festlegen';
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 
@@ -311,7 +311,7 @@ $string['deleted_user'] = 'Aus {$a->systemname} gelöschter Teilnehmer';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
-$string['import_from_paul_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
+$string['import_from_text_file'] = 'Externe Teilnehmer von aus PAUL exportierter Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
 $string['read_file'] = 'Datei einlesen';
 $string['addParticipants'] = 'Teilnehmer hinzufügen';
 $string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
@@ -339,7 +339,7 @@ $string['state_courseparticipant'] = 'Kursteilnehmer';
 $string['view_added_and_course_partipicants'] = 'Liste aller bisher zur Prüfung hinzugefügten Teilnehmer sowie aller Kursteilnehmer.';
 $string['deletedmatrnr_no_course'] = 'Prüfungsteilnehmer werden entfernt (da sie keine Kursteilnehmer sind).';
 $string['existingmatrnr_course'] = 'Kursteilnehmer sind bereits Prüfungsteilnehmer (keine Änderungen).';
-$string['course_participant_import_preventing_paul_export'] = '<strong>Achtung:</strong> Der Import der Kursteilnehmer als Prüfungsteilnehmer ist zwar möglich, allerdings werden diese Teilnehmer später beim Ergebnis-Export für das Prüfungsamt in einer eigenen Liste exportiert. Ihre Ergebnisse können somit gegebenenfalls nicht vernünftig in PAUL eingetragen werden. Wenn Sie vorhaben, die Prüfungsergebnisse in PAUL eintragen zu lassen, sollten Sie die Teilnehmer lieber mithilfe der aus PAUL exportierten Teilnehmerlisten der Prüfung importieren.';
+$string['course_participant_import_preventing_text_export'] = '<strong>Achtung:</strong> Der Import der Kursteilnehmer als Prüfungsteilnehmer ist zwar möglich, allerdings werden diese Teilnehmer später beim Ergebnis-Export für das Prüfungsamt in einer eigenen Liste exportiert. Ihre Ergebnisse können somit gegebenenfalls nicht vernünftig in PAUL eingetragen werden. Wenn Sie vorhaben, die Prüfungsergebnisse in PAUL eintragen zu lassen, sollten Sie die Teilnehmer lieber mithilfe der aus PAUL exportierten Teilnehmerlisten der Prüfung importieren.';
 
 //configureTasksForm.php
 $string['configureTasks'] = 'Aufgaben konfigurieren';
@@ -364,6 +364,10 @@ $string['send_manual_message'] = 'E-Mail schreiben';
 $string['subject'] = 'Betreff';
 $string['content'] = 'Inhalt';
 $string['send_message'] = 'Nachricht abschicken';
+
+//sendGroupmessage.php
+$string['mailsubject'] = '[{$a->systemname} - Prüfungsorganisation] {$a->coursename}: {$a->subject}';
+$string['mailfooter'] = 'Diese Nachricht wurde über die Prüfungsorganisation in {$a->systemname} verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br> {$a->categoryname} -> {$a->coursename} -> Prüfungsorganisation -> {$a->name} <br> {$a->url}';
 
 // assignPlaces.php
 $string['participants_missing_places'] = 'Einigen Teilnehmerinnen und Teilnehmern konnte noch kein Sitzplatz zugewiesen werden. Fügen Sie ausreichend Räume zur Prüfung hinzu und wiederholen Sie die Zuweisung oder weisen Sie die noch fehlenden Sitzplätze manuell zu.';
@@ -483,7 +487,7 @@ $string['mean'] = 'Mittelwert';
 $string['count'] = 'Anzahl';
 $string['details'] = 'Details';
 
-// exportResultsPAULFile.php
+// exportResultsTextFile.php
 $string['results'] = 'Prüfungsergebnisse';
 $string['cannot_create_zip_archive'] = 'Fehler beim Erzeugen des zip-Archives';
 
@@ -530,7 +534,7 @@ Eine Beschreibung jedes Raumes und die Zahl der in ihm vorhandenen Sitzplätze b
 <ul><li>Um die weiteren Funktionen der {$a->systemname} Prüfungsorganisation nutzen zu können muss hier mindestens ein Raum als Prüfungsraum ausgewählt werden. Zudem müssen die gewählten Räume mindestens so viele Sitzplätze bieten, wie TeilnehmerInnen an der Prüfung teilnehmen sollen.</li>
 <li>Wird ein Prüfungsraum abgewählt, nachdem TeilnehmerInnen Sitzplätze in diesem zugewiesen wurden, wird die gesamte Sitzplatzzuweisung gelöscht und muss wiederholt werden. Davon betroffene Räume sind mit einem Warnhinweis versehen.</li>
 <li>Einige Räume sind hier mehrfach aufgeführt. Dabei handelt es sich um unterschiedliche Modellierungen desselben Raumes. "1 Platz frei" bedeutet, dass jeder 2. Platz besetzt wird. "2 Plätze frei" bedeutet, dass jeder 3. Platz besetzt wird.</li></ul>
-<strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung der Universität Paderborn buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
+<strong>Achtung:</strong> Das System berücksichtigt nicht die Verfügbarkeit der gewählten Räume. Als DozentIn müssen Sie die Räume, in welchen die Prüfung stattfinden soll, bei der zentralen Raumverwaltung buchen und so abklären, dass die entsprechenden Räume auch tatsächlich zum Zeitpunkt der Prüfung verfügbar sind.';
 $string['helptext_addCustomRoom'] = 'Auf dieser Seite können Sie als Dozentin oder Dozent einen <strong>eigenen Prüfungsraum</strong> erstellen, falls der Raum, in welchem Sie Ihre Prüfung halten wollen, nicht als Prüfungsraum im System aufgeführt ist. Alternativ können Sie hier auch einen bereits vorhandenen selbst erstellten Prüfungsraum bearbeiten. <br><br>
 Um einen neuen Raum zu erstellen muss zunächst dessen Name angegeben werden. Als Nächstes müssen Sie die Zahl der Sitzplätze angeben, die der Raum haben soll. Beachten Sie dabei, dass Sie selbst nachsehen müssen, wie viele Plätze tatsächlich im Raum vorhanden sind und dass die Nummerierung der Sitzplätze des hier erstellten Raums im System unabhängig von der tatsächlich im Raum vorhandenen Nummerierung immer bei 1 beginnt. Das bedeutet, dass Sie möglicherweise auftretende Unstimmigkeiten mit der tatsächlichen Sitzplatznummerierung manuell anpassen müssen. Abschließend kann noch eine optionale Beschreibung des Raumes angegeben werden. Diese sollte alle für Sie wichtigen Informationen über den Raum enthalten, damit Sie den Raum später zum Beispiel im nächsten Semester bei Bedarf einfach erneut benutzen können. Ein Klick auf den Button "Raum speichern" legt schließlich den neuen Prüfungsraum an.<br><br>
 Ein auf diese Weise angelegter Raum kann anschließend aus der Liste der verfügbaren Prüfungsräume als Raum ausgewählt und danach wie jeder andere Prüfungsraum regulär genutzt werden.<br><br>
@@ -595,7 +599,7 @@ $string['helptext_importBonus']= 'Hier können Bonuspunkte der Prüfungsteilnehm
 Dazu muss zunächst im oberen Abschnitt die Zahl der für die Klausur möglichen Bonusnotenschritte festgelegt werden. Es sind maximal drei Bonusnotenschritte (ein Notenschritt wäre etwa die Verbesserung von 1,7 auf 1,3) möglich, insgesamt können Prüfungsteilnehmer sich also um maximal eine Note verbessern. Für jeden Bonusnotenschritt muss danach zudem angegeben werden, wie viele Punkte die Studierenden zum Erhalten dieses Schrittes mindestens erreicht haben müssen. <br><br>
 Im unteren Abschnitt kann als Nächstes die Art des Dateiimportes festgelegt werden. Dazu gibt es zwei Möglichkeiten:<br><br>
 1. Bewertungsexport aus {$a->systemname}: Haben Ihre Studierenden ihre Übungszettel über die {$a->systemname} Aufgabenabgabe abgegeben und wurden diese dort korrigiert und bewertet sollte hier der Bewertungsexport aus {$a->systemname} ausgewählt werden, da auf diese Weise sämtliche Bonuspunkte für den kompletten {$a->systemname} Kurs unkompliziert eingelesen werden können.<br>
-Dazu müssen die Bewertungen aus dem {$a->systemname} Kurs zunächst wie <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">hier</a> beschrieben exportiert werden. Danach müssen Sie die exportierte Datei einmal öffnen und nachsehen, in welcher Spalte die Punkte eingetragen sind. Die Bezeichnung der Spalte muss dann im dafür vorgesehenen Feld im unteren Abschnitt eingetragen werden.<br><br>
+Dazu müssen die Bewertungen aus dem {$a->systemname} Kurs zunächst wie <a href="https://docs.moodle.org/35/de/Bewertungen_exportieren" class="alert-link" target="_blank">hier</a> beschrieben exportiert werden. Danach müssen Sie die exportierte Datei einmal öffnen und nachsehen, in welcher Spalte die Punkte eingetragen sind. Die Bezeichnung der Spalte muss dann im dafür vorgesehenen Feld im unteren Abschnitt eingetragen werden.<br><br>
 2. Individuell: Falls Sie ihre Bonuspunkte nicht über die {$a->systemname} Aufgabenabgabe verwaltet haben können Sie alternativ den Modus des individuellen Importes auswählen. Für diesen brauchen Sie eine Excel-Datei, bei der für jeden betroffenen Teilnehmenden in einer eigenen Zeile entweder die in {$a->systemname} hinterlegte Email-Adresse oder aber die Matrikelnummer in einer und die erreichte Punktzahl in einer anderen Spalte steht. Die Bezeichnung sowohl der Spalte, in der die Benutzerindentfikatoren aller Studierenden steht als auch die der Spalte, die alle Bonuspunktzahlen enthält müssen dann in den entsprechenden Feldern im unteren Abschnitt angegeben werden. <br><br>
 Zum Abschluss muss nun noch die einzulesende Datei mit den Bonuspunkten ausgewählt und dann durch einen Klick auf den Button "Datei einlesen" eingelesen werden, um den Bonuspunkteimport durchzuführen. Die importierten Bonusnotenschritte werden den TeilnehmerInnen sofort in deren Ansicht angezeigt.';
 $string['helptext_configureGradingscale']= 'Hier kann ein <strong>Notenschlüssel</strong> für die Prüfung konfiguriert werden. <br><br>

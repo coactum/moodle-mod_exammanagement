@@ -690,10 +690,10 @@ ajaxsetcorrectioncompletion = function(value){
 															<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
 													</div>
 													<div class="panel-body">
-															<p>{{#str}}export_results_paul_str, mod_exammanagement{{/str}}</p>
+															<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
 													</div>
 													<div class="panel-footer">
-														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsPAULFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 													</div>
 												</div>
                       						</div>
@@ -820,7 +820,7 @@ ajaxsetcorrectioncompletion = function(value){
 																<p>{{#str}}export_altered_examresults_str, mod_exammanagement{{/str}} <br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_altered_examresults_note, mod_exammanagement{{/str}}</p>
 														</div>
 														<div class="panel-footer">
-															{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsPAULFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_paultext, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_paultext, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
+															{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsTextFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
 														</div>
 													</div>
 	                      </div>

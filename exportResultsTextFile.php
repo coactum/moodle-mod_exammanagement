@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Outputs exam results as PAUL text file for mod_exammanagement.
+ * Outputs exam results as text file for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2019
@@ -59,12 +59,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             # get saved import file headers #
 
-            $PAULFileHeadersArr = $ExammanagementInstanceObj->getPaulTextfileHeaders();
+            $TextFileHeadersArr = $ExammanagementInstanceObj->getTextfileHeaders();
             $ResultFilesZipArchive = false;
 
             # if no headers of import files are saved because all participants are imported from course #
 
-            if ( !$PAULFileHeadersArr ){
+            if ( !$TextFileHeadersArr ){
                 $examdate = $ExammanagementInstanceObj->getHrExamtime();
                 $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
                 $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
@@ -119,7 +119,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $participantsFromCourse = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => 0), array('matrnr')); // get all participants that are imported from course (header id = 0)
 
-                if(count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $participantsFromCourse)){ // if there are other participants that are read in from file
+                if(count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)){ // if there are other participants that are read in from file
 
                     // Prepare zip file
                     $tempfile = tempnam(sys_get_temp_dir(), "examresults.zip");
@@ -159,12 +159,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $filecount += 1;
 
-                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){ // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
+                    if($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){ // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
                         $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
                     }
                 }
 
-                foreach($PAULFileHeadersArr as $key => $PAULFileHeader){ // iterate over all headers and create new file for archive
+                foreach($TextFileHeadersArr as $key => $TextFileHeader){ // iterate over all headers and create new file for archive
 
                     if($afterexamreview == false){
                         $participants = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => $key+1), array('matrnr'));
@@ -176,7 +176,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     if($participants){
 
-                        $textfile = $PAULFileHeader . NEWLINE;
+                        $textfile = $TextFileHeader . NEWLINE;
 
                         $examNumber = '""';
                         
@@ -201,7 +201,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $filecount += 1;
 
-                    if($textfile && (count($PAULFileHeadersArr) > 1 || (count($PAULFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){
+                    if($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){
                     // add content
                     $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
 
@@ -212,7 +212,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
                 }
 
-                if($textfile && (count($PAULFileHeadersArr) == 1 || (count($PAULFileHeadersArr) == 0 && $participantsFromCourse) || $afterexamreview == true) && $ResultFilesZipArchive == false){
+                if($textfile && (count($TextFileHeadersArr) == 1 || (count($TextFileHeadersArr) == 0 && $participantsFromCourse) || $afterexamreview == true) && $ResultFilesZipArchive == false){
                     header( "Content-Type: application/force-download; charset=UTF-8"  );
                     header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt\"" );
                     header( "Content-Length: ". strlen( $textfile ) );

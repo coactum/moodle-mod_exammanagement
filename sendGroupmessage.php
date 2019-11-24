@@ -64,7 +64,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       } else if ($fromform = $mform->get_data()) {
         //In this case you process validated data. $mform->get_data() returns data posted in form.
     
-        $mailsubject = "PANDA - Prüfungsorganisation: Kurs ".$ExammanagementInstanceObj->getCourse()->fullname.' Betreff: '. $fromform->groupmessages_subject;
+        $mailsubject = get_string('mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'subject' => $fromform->groupmessages_subject]);
         $mailtext = $fromform->groupmessages_content;
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array());

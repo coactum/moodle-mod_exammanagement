@@ -686,9 +686,9 @@ EOF;
 
 	}
 
-	### paul file headers ###
+	### text file headers ###
 
-	public function getPAULTextFileHeaders(){
+	public function getTextFileHeaders(){
 
 		$textfileheaders = 	json_decode($this->moduleinstance->importfileheaders);
 
@@ -726,9 +726,9 @@ EOF;
 		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
 
 		if($this->cron == false){
-			$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->getCleanCourseCategoryName() . ' -> ' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'coursecategory' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
 		} else {
-			$footer = '<br><br> --------------------------------------------------------------------- <br> Diese Nachricht wurde über die Prüfungsorganisation in PANDA verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br>' . $this->course->fullname.' -> Prüfungsorganisation -> ' . $this->moduleinstance->name . ' <br> ' . $url;
+			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'coursecategory' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
 		}
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 

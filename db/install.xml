@@ -14,8 +14,8 @@
           <FIELD NAME="password" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="password set for plugin instance"/>
           <FIELD NAME="rooms" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="rooms for exam as json array"/>
           <FIELD NAME="examtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp of date and time of exam"/>
-          <FIELD NAME="importfileheaders" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="headers of imported paul files as jsonstring"/>
-          <FIELD NAME="tempimportfileheader" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="header of temporary imported paul files as jsonstring"/>
+          <FIELD NAME="importfileheaders" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="headers of imported text files as jsonstring"/>
+          <FIELD NAME="tempimportfileheader" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="header of temporary imported text files as jsonstring"/>
           <FIELD NAME="tasks" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="count of tasks and points per taks as jsonstring"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="content and format of textfield as jsonstring"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="is date and time visible"/>

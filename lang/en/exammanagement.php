@@ -148,7 +148,7 @@ $string['export_points_examreview_str'] = 'Here you can export the achieved poin
 $string['export_results_lists_note'] = 'This list of points is only intended for internal use by the teachers and must not be published for data protection reasons!';
 $string['export_results_percentages_str'] = 'Here you can export the results with percentages as a PDF document.';
 $string['export_results_statistics_str'] = 'Here the results and statistics can be exported as an Excel document.';
-$string['export_results_paul_str'] = 'The results for the exam office can be exported here as a PAUL-compatible text document.';
+$string['export_results_text_str'] = 'The results for the exam office can be exported here as a PAUL-compatible text document.';
 $string['data_deletion_date_set'] = 'On <strong>{$a}</strong> all data stored in this instance such as participants, exam information and exam results will be automatically deleted. Therefore, make sure you have exported all important data, such as exam results, for further use via the document export functions.';
 $string['date_room_examreview_set'] = 'The exam review will take place on <strong>{$a->examreviewdate}</strong> in room <strong>{$a->examreviewroom}</strong>.';
 $string['room_examreview_set'] = 'The exam review takes place in room <strong>{$a}</strong>.';
@@ -181,7 +181,7 @@ $string['add_examresults'] = 'Add results';
 $string['check_results'] = 'Check results';
 $string['export_as_pdf'] = 'Export PDF';
 $string['export_as_excel'] = 'Export excel file';
-$string['export_as_paultext'] = 'Export text file';
+$string['export_as_text'] = 'Export text file';
 $string['examreview_dateroom'] = 'Set date and room for exam review';
 $string['change_examresults'] = 'Change exam results';
 
@@ -311,7 +311,7 @@ $string['deleted_user'] = 'User deleted from {$a->systemname}';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';
-$string['import_from_paul_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
+$string['import_from_text_file'] = 'Import participants from paul file (entries separated by tabs; first two lines with exam information) and add them to course.';
 $string['read_file'] = 'Read file';
 $string['addParticipants'] = 'Import participants';
 $string['import_new_participants'] = 'Import other participants';
@@ -339,7 +339,7 @@ $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
 $string['deletedmatrnr_no_course'] = 'Participants will be deleted because they are no course participants.';
 $string['existingmatrnr_course'] = 'Course participants are already exam participants (no changes)';
-$string['course_participant_import_preventing_paul_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office. Their results can therefore maybe not be entered correctly in PAUL. If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
+$string['course_participant_import_preventing_text_export'] = '<strong>Warning:</strong> It is possible to import the course participants as exam participants, but these participants will later be exported in a separate list for the exam office. Their results can therefore maybe not be entered correctly in PAUL. If you intend to have the exam results entered in PAUL, you should import the participants using the corresponding PAUL participant lists of the exam.';
 
 //configureTasksForm.php
 $string['configureTasks'] = 'Configure Tasks';
@@ -364,6 +364,10 @@ $string['send_manual_message'] = 'Write email';
 $string['subject'] = 'Subject';
 $string['content'] = 'Content';
 $string['send_message'] = 'Send message';
+
+//sendGroupmessage.php
+$string['mailsubject'] = '[{$a->systemname} - Exam management] {$a->coursename}: {$a->subject}';
+$string['mailfooter'] = 'This message was sent via the exam organization in {$a->systemname}. You can find all further information under the following link: <br> {$a->categoryname} -> {$a->coursename} -> Prüfungsorganisation -> {$a->name} <br> {$a->url}';
 
 //assignPlaces.php
 $string['participants_missing_places'] = 'Some participants have not yet been assigned a place. Add enough rooms to the exam and repeat the assignment or assign the missing places manually.';
@@ -483,7 +487,7 @@ $string['mean'] = 'Mean';
 $string['count'] = 'Count';
 $string['details'] = 'Details';
 
-// exportResultsPAULFile.php
+// exportResultsTextFile.php
 $string['results'] = 'Results';
 $string['cannot_create_zip_archive'] = 'Error creating zip archive';
 
@@ -530,7 +534,7 @@ A description of each room and the number of places available in it is given in 
 <ul><li>In order to be able to use the other functions of the {$a->systemname} exam organization, at least one room must be selected here as exam room. In addition, the selected rooms must offer at least as many seats as participants are to take part in the exam.</li>
 <li>If an exam room is deselected after participants have been assigned seats in it, the entire seat assignment is deleted and must be repeated. Rooms affected by this are marked with a warning.</li>
 <li>Some rooms are listed here several times. These are different models of the same room. "1 free space" means that every 2nd space will be used. "2 places free" means that every 3rd place will be used.</li></ul>
-<strong>Attention:</strong> The system does not take the availability of the selected rooms into account. As a lecturer, you must book the rooms in which the exam should take place at the central room administration of the University of Paderborn and clarify that the corresponding rooms are actually available at the time of the exam.';
+<strong>Attention:</strong> The system does not take the availability of the selected rooms into account. As a lecturer, you must book the rooms in which the exam should take place at the central room administration and clarify that the corresponding rooms are actually available at the time of the exam.';
 $string['helptext_addDefaultRooms']= 'As a {$a->systemname} administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
 In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
 The text file to be imported must contain the following information for each exam room, where each line stands for one exam room: 
@@ -595,7 +599,7 @@ $string['helptext_importBonus']= 'Here you can import the participants bonus poi
 To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>
 1. Exported grades from {$a->systemname}: If your students have submitted their exercise sheets via the {$a->systemname} assignment activity and these have been corrected and graded there, the exported grades from {$a->systemname} should be selected here, since in this way all bonus points for the complete {$a->systemname} course can be easily read in. <br>
-To do this, the gradings from the {$a->systemname} course must first be exported (see <a href="https://hilfe.uni-paderborn.de/Dozent:_Bewertungen_Export_von_Gruppen#Setup_f.C3.BCr_Bewertungen" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+To do this, the gradings from the {$a->systemname} course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
 2. Individual: If you have not managed your bonus points via the {$a->systemname} assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in {$a->systemname} or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
 Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported bonus grade steps are immediately displayed to the participants in their view.';
 $string['helptext_configureGradingscale']= 'Here a <strong>grading scale</strong> can be configured for the exam.<br><br>
