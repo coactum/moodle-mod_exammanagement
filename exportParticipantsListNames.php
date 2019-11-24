@@ -75,7 +75,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('PANDA');
+            $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
             $pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
             $pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
             $pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);

@@ -91,7 +91,7 @@
           </p>
           <div class="col-xs-6">
             {{#bonus}}
-                {{#str}}bonus_for_exam_added_one, mod_exammanagement{{/str}}<strong> {{{bonus}}}</strong> {{#str}}bonus_for_exam_added_two, mod_exammanagement{{/str}}
+                {{#str}}bonus_for_exam_added, mod_exammanagement, {{{bonus}}}{{/str}}
             {{/bonus}}
             {{^bonus}}{{#str}}bonus_for_exam_not_added, mod_exammanagement{{/str}}{{/bonus}}
           </div>
@@ -103,14 +103,14 @@
               <strong>{{#str}}exam_review, mod_exammanagement{{/str}}:</strong>
           </p>
           <div class="col-xs-6">            
-              {{#str}}exam_review_one, mod_exammanagement{{/str}} <strong>{{examreviewtime}}</strong> {{#str}}exam_review_two, mod_exammanagement{{/str}}<strong>{{examreviewroom}}</strong>.
+              {{#str}}exam_review_added, mod_exammanagement, { "examreviewtime":  {{# quote }}{{ examreviewtime }}{{/ quote }}, "examreviewroom": {{# quote }}{{ examreviewroom }}{{/ quote }} }{{/str}}
           </div>
       </div>
       {{/examreviewtime}}
       {{/isparticipant}}
       {{/deleted}}
-      {{#deleted}}
-            <p>{{#str}}examdata_deleted_one, mod_exammanagement{{/str}} {{examdate}} {{#str}}examdata_deleted_two, mod_exammanagement{{/str}}</p>
-      {{/deleted}}
+      {{#isparticipant}}{{#deleted}}
+            <p>{{#str}}examdata_deleted, mod_exammanagement, {{examdate}}{{/str}}</p>
+      {{/deleted}}{{/isparticipant}}
       
 </div>

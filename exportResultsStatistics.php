@@ -65,8 +65,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj = new PHPExcel();
 
             // Set properties for document
-            $PHPExcelObj->getProperties()->setCreator('PANDA')
-                                        ->setLastModifiedBy('PANDA')
+            $PHPExcelObj->getProperties()->setCreator($ExammanagementInstanceObj->getMoodleSystemName())
+                                        ->setLastModifiedBy($ExammanagementInstanceObj->getMoodleSystemName())
                                         ->setTitle(get_string('examresults_statistics', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name)
                                         ->setSubject(get_string('examresults_statistics', 'mod_exammanagement'))
                                         ->setDescription(get_string('examresults_statistics_description', 'mod_exammanagement'))

@@ -341,19 +341,6 @@ EOF;
 			}
 	}
 
-	public function getShortenedTextfield(){
-		$textfield = format_string($this->getTextFromTextfield());
-
-		if ($textfield && strlen($textfield)>49){
-				$shtextfield = substr($textfield, 0, 49).' ...';
-				return $shtextfield;
-			} elseif($textfield) {
-				return $textfield;
-			} else{
-				return false;
-			}
-	}
-
 	public function allPlacesAssigned(){
 
 		$UserObj = User::getInstance($this->id, $this->e);

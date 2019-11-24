@@ -240,7 +240,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
         $taskcount = $ExammanagementInstanceObj->getTaskCount();
         $taskpoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
-        $textfieldcontent = $ExammanagementInstanceObj->getShortenedTextfield();
+        $textfieldcontent = format_string($ExammanagementInstanceObj->getTextFromTextfield());
         $participantscount = $UserObj->getParticipantsCount();
         $roomscount = $ExammanagementInstanceObj->getRoomsCount();
         $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
@@ -303,13 +303,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     $participantObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $id, 'moodleuserid' => $USER->id));
 
-    if ($ExammanagementInstanceObj->isRoomVisible() && $participantObj->roomname) {
+    if ($ExammanagementInstanceObj->isRoomVisible() && $participantObj && $participantObj->roomname) {
         $room = $participantObj->roomname;
     } else {
         $room = false;
     }
 
-    if ($ExammanagementInstanceObj->isPlaceVisible() && $participantObj->place) {
+    if ($ExammanagementInstanceObj->isPlaceVisible() && $participantObj && $participantObj->place) {
         $place = $participantObj->place;
     } else {
         $place = false;

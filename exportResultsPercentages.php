@@ -73,7 +73,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       // set document information
       $pdf->SetCreator(PDF_CREATOR);
-      $pdf->SetAuthor('PANDA');
+      $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
       $pdf->SetTitle(get_string('pointslist_percentages', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
       $pdf->SetSubject(get_string('pointslist_percentages', 'mod_exammanagement'));
       $pdf->SetKeywords(get_string('pointslist_percentages', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
