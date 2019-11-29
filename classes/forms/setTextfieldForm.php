@@ -38,24 +38,31 @@ class setTextfieldForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        global $OUTPUT;
+
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('setTextfield', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setTextfield'));
+        $mform->addElement('html', '<h3>'.get_string("setTextfield", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('setTextfield', 'mod_exammanagement', ''));
+        }
 
+        $mform->addElement('html', '</h3>');
+        
  		$mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
+
+         $mform->addElement('hidden', 'id', 'dummy');
+         $mform->setType('id', PARAM_INT);
 
  		$mform->addElement('editor', 'textfield', get_string('content_of_textfield', 'mod_exammanagement'));
         $mform->setType('textfield', PARAM_RAW);
         $mform->addRule('textfield', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
         $this->add_action_buttons();
     }
 

@@ -48,7 +48,7 @@ class addParticipantsForm extends moodleform{
 
     //Add elements to form
     public function definition(){
-        global $PAGE, $CFG;
+        global $PAGE, $CFG, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -68,22 +68,27 @@ class addParticipantsForm extends moodleform{
             $allParticipants = false;
         }
 
-        $mform->addElement('html', '<div class="row"><div class="col-xs-6">');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+        $mform->addElement('html', '<div class="row"><div class="col-xs-8"><h3>');
 
         if($allParticipants){
-            $mform->addElement('html', '<h3>'.get_string("addParticipants", "mod_exammanagement").'</h3>');
+            $mform->addElement('html', get_string("addParticipants", "mod_exammanagement"));
         } else {
-            $mform->addElement('html', '<h3>'.get_string("import_participants_from_file", "mod_exammanagement").'</h3>');
+            $mform->addElement('html', get_string("import_participants_from_file", "mod_exammanagement"));
         }
-        $mform->addElement('html', '</div><div class="col-xs-2"><a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
+            
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('addParticipants', 'mod_exammanagement', ''));
+        }
+    
+        $mform->addElement('html', '</h3></div><div class="col-xs-4">');
 
         if($allParticipants){
-            $mform->addElement('html', '<div class="col-xs-4"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
-        $mform->addElement('html', '</div>');
-
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addParticipants'));
+        $mform->addElement('html', '</div></div>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);

@@ -131,13 +131,10 @@ ajaxsetcorrectioncompletion = function(value){
 }
 
 {{/js}}
-
    <div class="container-fluid exammanagement_overview">
 			<div class="row">
-				<h4 class="m-y-1 col-xs-4">{{#str}}overview, mod_exammanagement{{/str}}</h4>
-				<span class="m-y-1 col-xs-2">{{#helptextsenabled}}<a class="helptext-button" role="button" aria-expanded="false" onclick="toggleHelptextPanel(); return true;" title="{{#str}}helptext_open, mod_exammanagement{{/str}}"><span class="label label-info pull-right">{{#str}}help, mod_exammanagement{{/str}} <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>{{/helptextsenabled}}</span>
+				<h4 class="m-y-1 col-xs-6">{{#str}}overview, mod_exammanagement{{/str}}</h4> {{helptexticon}}
 				<span class="m-y-1 col-xs-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
-				{{#helptextsenabled}}<span class="helptextpanel helptextpanel-arrow collapse"></span>{{/helptextsenabled}}
 			</div>
 			
 			{{#deleted}}
@@ -145,18 +142,6 @@ ajaxsetcorrectioncompletion = function(value){
     		{{#str}}data_deleted, mod_exammanagement{{/str}}
 			</div>
 			{{/deleted}}
-
-			{{#helptextsenabled}}<div class="panel panel-info helptextpanel collapse">
-					<div class="panel-heading">
-							<h4>{{#str}}helptext_str, mod_exammanagement{{/str}}</h4>
-					</div>
-					<div class="panel-body">
-						<p>{{#str}}helptext_overview, mod_exammanagement{{/str}}</p>
-					</div>
-					<div class="panel-footer">
-						{{#additionalressourceslink}}<p class="mb-0">{{#str}}helptext_link, mod_exammanagement{{/str}} <a href="{{additionalressourceslink}}" class="alert-link" target="_blank">{{additionalressourceslink}}</a></p>{{/additionalressourceslink}}
-					</div>
-			</div>{{/helptextsenabled}}
 
       <ul class="exmammanagement-summary list-unstyled">
           {{!before_exam}}

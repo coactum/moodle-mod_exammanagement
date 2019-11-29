@@ -40,17 +40,26 @@ class examReviewDateRoomForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        $mform = $this->_form; // Don't forget the underscore!
+        global $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('examReviewDateRoom', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('examReviewDateRoom'));
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+        $mform->addElement('html', '<h3>'.get_string("examReviewDateRoom", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('examReviewDateRoom', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
 
         $mform->addElement('html', '<p>'.get_string('examreview_dateroom_str', 'mod_exammanagement').'</p>');
+
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
         $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreview_date', 'mod_exammanagement'));
 
@@ -59,9 +68,6 @@ class examReviewDateRoomForm extends moodleform {
         $mform->addElement('text', 'examreviewroom', get_string('examreview_room', 'mod_exammanagement'), $attributes);
         $mform->setType('examreviewroom', PARAM_TEXT);
         $mform->addRule('examreviewroom', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
-
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
         
         $this->add_action_buttons();
 

@@ -38,14 +38,24 @@ class configureGradingscaleForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        global $PAGE;
+        global $PAGE, $OUTPUT;
+
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init'); //creating input type number fields
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+        $mform->addElement('html', '<h3>'.get_string("configureGradingscale", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('configureGradingscale', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
 
         //create gradingscale input list
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
@@ -56,13 +66,10 @@ class configureGradingscaleForm extends moodleform {
           $totalpoints = 0;
         }
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configureGradingscale', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $mform->addElement('html', get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').' <span id="totalpoints"><strong>'.str_replace( '.', ',', $totalpoints).'</strong></span>');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureGradingscale'));
-
-        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.str_replace( '.', ',', $totalpoints).'</strong></span></div>');
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
         if (!$gradingscale){
           $gradingscale = array(
@@ -103,9 +110,6 @@ class configureGradingscaleForm extends moodleform {
           }
 
         $mform->addElement('html', '</div>');
-
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
 
         $this->add_action_buttons();
 

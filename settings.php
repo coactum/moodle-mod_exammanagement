@@ -37,11 +37,32 @@ if ($ADMIN->fulltree) {
       $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enablehelptexts', get_string('enablehelptexts', 'mod_exammanagement'),
       get_string('enablehelptexts_help', 'mod_exammanagement'), 0));
 
-      $settings->add(new admin_setting_configtext('mod_exammanagement/additionalressources',
-         get_string('additionalressources', 'mod_exammanagement'), get_string('additionalressources_help', 'mod_exammanagement'),
-         'https://docs.moodle.org/en/mod/exammanagement', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/additionalressources', get_string('additionalressources', 'mod_exammanagement'),
+      get_string('additionalressources_help', 'mod_exammanagement'),'https://docs.moodle.org/en/mod/exammanagement', PARAM_TEXT));
 
       // acitvate possibility to request password reset by moodle admins
       $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enablepasswordresetrequest', get_string('enablepasswordresetrequest', 'mod_exammanagement'),
       get_string('enablepasswordresetrequest_help', 'mod_exammanagement'), 0));
+
+      // configure ldap for fetching matriculation numbers
+      $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enableldap', get_string('enableldap', 'mod_exammanagement'),
+      get_string('enableldap_help', 'mod_exammanagement'), 0));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapdn', get_string('ldapdn', 'mod_exammanagement'),
+      get_string('ldapdn_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldusername', get_string('ldapfieldusername', 'mod_exammanagement'),
+      get_string('ldapfieldusername_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldmatriculationnumber', get_string('ldapfieldmatriculationnumber', 'mod_exammanagement'),
+      get_string('ldapfieldmatriculationnumber_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldfirstname', get_string('ldapfieldfirstname', 'mod_exammanagement'),
+      get_string('ldapfieldfirstname_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldlastname', get_string('ldapfieldlastname', 'mod_exammanagement'),
+      get_string('ldapfieldlastname_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldmail', get_string('ldapfieldmail', 'mod_exammanagement'),
+      get_string('ldapfieldmail_help', 'mod_exammanagement'),'', PARAM_TEXT));
 }

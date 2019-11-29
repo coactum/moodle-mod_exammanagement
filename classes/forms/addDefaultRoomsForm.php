@@ -44,24 +44,30 @@ class addDefaultRoomsForm extends moodleform {
   //Add elements to form
   public function definition() {
 
+    global $OUTPUT;
+
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
     $mform = $this->_form; // Don't forget the underscore!
 
-    $mform->addElement('hidden', 'id', 'dummy');
-    $mform->setType('id', PARAM_INT);
+    $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-    $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('addDefaultRooms', 'mod_exammanagement').'</h3>');
-    $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-    $mform->addElement('html', '</div>');
+    $mform->addElement('html', '<h3>'.get_string("addDefaultRooms", "mod_exammanagement"));
+        
+    if($helptextsenabled){
+        $mform->addElement('html', $OUTPUT->help_icon('addDefaultRooms', 'mod_exammanagement', ''));
+    }
 
-    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addDefaultRooms'));
+    $mform->addElement('html', '</h3>');
 
     $mform->addElement('html', '<p>'.get_string("import_default_rooms_str", "mod_exammanagement").'</p>');
 
     if($ExammanagementInstanceObj->countDefaultRooms()){
       $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("default_rooms_already_exists", "mod_exammanagement").'</div>');
     }
+
+    $mform->addElement('hidden', 'id', 'dummy');
+    $mform->setType('id', PARAM_INT);
 
     $mform->addElement('filepicker', 'defaultrooms_list', get_string("default_rooms_file_structure", "mod_exammanagement"), null, array('accepted_types' => '.txt'));
     $mform->addRule('defaultrooms_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');

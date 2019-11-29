@@ -46,7 +46,7 @@ class chooseRoomsForm extends moodleform {
   //Add elements to form
   public function definition() {
 
-    global $PAGE;
+    global $PAGE, $OUTPUT;
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -57,14 +57,15 @@ class chooseRoomsForm extends moodleform {
 
     $mform = $this->_form; // Don't forget the underscore!
 
-    $mform->addElement('hidden', 'id', 'dummy');
-    $mform->setType('id', PARAM_INT);
+    $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-    $mform->addElement('html', '<div class="row"><div class="col-xs-4">');
-    $mform->addElement('html', '<h3>'.get_string('chooseRooms', 'mod_exammanagement').'</h3></div>');
-    $mform->addElement('html', '<div class="col-xs-2"><a class=" helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-
-    $mform->addElement('html', '<div class="col-xs-6">');
+    $mform->addElement('html', '<div class="row"><div class="col-xs-6"><h3>'. get_string('chooseRooms', 'mod_exammanagement'));
+    
+    if($helptextsenabled){
+      $mform->addElement('html', $OUTPUT->help_icon('chooseRooms', 'mod_exammanagement', ''));
+    }
+    
+    $mform->addElement('html', '</h3></div><div class="col-xs-6">');
 
     $allRooms = $ExammanagementInstanceObj->getRooms('all');
     $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
@@ -85,13 +86,12 @@ class chooseRoomsForm extends moodleform {
 
     $mform->addElement('html', '</div>');
 
-    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('chooseRooms'));
-
     $mform->addElement('html', '<p>'.get_string('choose_rooms_str', 'mod_exammanagement').'</p>');
 
-    if ($allRooms){
+    $mform->addElement('hidden', 'id', 'dummy');
+    $mform->setType('id', PARAM_INT);
 
-      $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("hint_room_modelling", "mod_exammanagement").'</div>');
+    if ($allRooms){
 
       $mform->addElement('html', '<div class="table-responsive">');
       $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
@@ -143,7 +143,7 @@ class chooseRoomsForm extends moodleform {
 
           $svgStr = base64_decode($room->seatingplan);
 
-          $mform->addElement('html', '<a id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_rooms_svg collapse">'.$svgStr.'</div>');
+          $mform->addElement('html', '<a href="#" id="show"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_rooms_svg collapse">'.$svgStr.'</div>');
 
         } else {
           $mform->addElement('html', get_string('no_seatingplan_available', 'mod_exammanagement'));

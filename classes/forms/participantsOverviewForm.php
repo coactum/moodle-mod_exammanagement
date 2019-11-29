@@ -43,7 +43,7 @@ class participantsOverviewForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        global $PAGE;
+        global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 		$UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -53,13 +53,20 @@ class participantsOverviewForm extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-sm-10">'.get_string('participantsOverview', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-sm-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('participantsOverview'));
+        $mform->addElement('html', '<h3>'.get_string("participantsOverview", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('participantsOverview', 'mod_exammanagement', ''));
+        }
 
+        $mform->addElement('html', '</h3>');
+        
         $mform->addElement('html', '<p>'.get_string("participants_overview_text", "mod_exammanagement").'</p>');
+
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
         
         $mform->addElement('html', '<div class="table-responsive">');
         $mform->addElement('html', '<table class="table table-striped exammanagement_table" id="0">');
@@ -370,9 +377,6 @@ class participantsOverviewForm extends moodleform {
         }        
 
         $mform->addElement('html', '</tbody></table></div>');
-
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
 
         if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0)|| (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0)){
             $mform->addElement('html', '<div id="end"></div>');

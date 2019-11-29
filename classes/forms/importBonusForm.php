@@ -42,7 +42,7 @@ class importBonusForm extends moodleform{
 
     //Add elements to form
     public function definition(){
-        global $PAGE, $CFG;
+        global $PAGE, $CFG, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -53,13 +53,20 @@ class importBonusForm extends moodleform{
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('importBonus', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('importBonus'));
+        $mform->addElement('html', '<h3>'.get_string("importBonus", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('importBonus', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
 
         $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
+
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
         $bonuscount = $UserObj->getEnteredBonusCount();
         if($bonuscount){
@@ -115,9 +122,6 @@ class importBonusForm extends moodleform{
 
         $mform->addGroup($bonussstepnumbers_array, 'bonussstepnumbers_array', get_string('bonusstep', 'mod_exammanagement'), '', false);
         $mform->addGroup($bonussteps_array, 'bonussteppoints_array', get_string('required_points', 'mod_exammanagement'), ' ', false);
-
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
 
         $mform->addElement('html', '<hr>');
 

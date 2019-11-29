@@ -140,39 +140,6 @@ class exammanagementInstance{
 		}
  	}
 
-	public function ConcatHelptextStr($langstr){
-
-		$helptextstr= '<div class="exammanagement_overview">';
-		$helptextstr.= '<div class="panel panel-info helptextpanel collapse">';
-		$helptextstr.= '<div class="panel-heading">';
-		$helptextstr.= '<h4>'.get_string('helptext_str', 'mod_exammanagement').'</h4>';
-		$helptextstr.= '</div>';
-		$helptextstr.= '<div class="panel-body">';
-		$helptextstr.= '<p>'.get_string('helptext_'.$langstr, 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName()]).'</p>';
-		$helptextstr.= '</div>';
-		$helptextstr.= '<div class="panel-footer">';
-
-		if(get_config('mod_exammanagement', 'additionalressources')){
-			$helptextstr.= '<p class="mb-0">'.get_string('helptext_link', 'mod_exammanagement').' <a href="'.get_config('mod_exammanagement', 'additionalressources').'" class="alert-link" target="_blank">'. get_config('mod_exammanagement', 'additionalressources').'</a></p>';
-		}
-
-		$helptextstr.= '</div>';
-		$helptextstr.= '</div>';
-		$helptextstr.= '</div>';
-
-		$helptextstr.= <<< EOF
-<script>
-toogleHelptextPanel = function(){
-	$('.helptextpanel').slideToggle("slow");
-	$('.helptextpanel-icon').toggle();
-};
-</script>
-EOF;
-
-		return $helptextstr;
-
-	}
-
 	#### get display values for overview page ####
 
 	public function getRoomsCount(){

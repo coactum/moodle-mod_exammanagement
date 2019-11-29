@@ -49,7 +49,7 @@ class addCourseParticipantsForm extends moodleform{
 
     //Add elements to form
     public function definition(){
-        global $PAGE;
+        global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -63,23 +63,15 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
-
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'.get_string("addCourseParticipants", "mod_exammanagement"));
         
         if($helptextsenabled){
-            $mform->addElement('html', ' <a class="helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a>');
+            $mform->addElement('html', $OUTPUT->help_icon('addCourseParticipants', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3>');
-
-        if($helptextsenabled){
-
-            $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addCourseParticipants'));
-        }
 
         $mform->addElement('html', '<p>'.get_string("view_added_and_course_partipicants", "mod_exammanagement").'</p>');
 
@@ -88,6 +80,9 @@ class addCourseParticipantsForm extends moodleform{
         if($ExammanagementInstanceObj->allPlacesAssigned()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
         }
+
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
         # get all nedded user data #
         

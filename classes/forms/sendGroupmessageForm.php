@@ -44,17 +44,26 @@ class sendGroupmessageForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        global $OUTPUT;
+
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('sendGroupmessage', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessage'));
+        $mform->addElement('html', '<h3>'.get_string("sendGroupmessage", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('sendGroupmessage', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
+
+		$mform->addElement('hidden', 'id', 'dummy');
+		$mform->setType('id', PARAM_INT);
 
         $MoodleParticipantsCount = $UserObj->getParticipantsCount('moodle');
         $NoneMoodleParticipantsCount = $UserObj->getParticipantsCount('nonmoodle');
@@ -90,8 +99,6 @@ class sendGroupmessageForm extends moodleform {
             $mform->setType('groupmessages_content', PARAM_TEXT);
             $mform->addRule('groupmessages_content', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-			$mform->addElement('hidden', 'id', 'dummy');
-			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,get_string('send_message', 'mod_exammanagement'));
 
         } else if ($NoneMoodleParticipantsCount){
