@@ -84,7 +84,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $moodleuserid = NULL;
                     $userlogin = NULL;
 
-                    if($LdapManagerObj->is_LDAP_config()){
+                    if($LdapManagerObj->isLDAPenabled()){
                         $ldapConnection = $LdapManagerObj->connect_ldap();
 
                         $userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->edit);

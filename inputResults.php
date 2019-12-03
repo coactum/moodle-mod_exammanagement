@@ -111,7 +111,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$userlogin;
 							$userid;
 		
-								if($LdapManagerObj->is_LDAP_config()){
+								if($LdapManagerObj->isLDAPenabled()){
 										$ldapConnection = $LdapManagerObj->connect_ldap();
 		
 										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $matrnr);
@@ -185,7 +185,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
 				} else {
 					
-					if($LdapManagerObj->is_LDAP_config()){
+					if($LdapManagerObj->isLDAPenabled()){
 							$ldapConnection = $LdapManagerObj->connect_ldap();
 
 							$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->matrnr);

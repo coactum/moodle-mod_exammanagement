@@ -509,7 +509,7 @@ $string['no_results_entered'] = 'Noch keine Prüfungsergebnisse eingetragen. Arb
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbeitsschritt nicht möglich';
 
 // helptexts
-$string['overview_help']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen & Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
+$string['overview_help']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen und Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
 Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können. Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />
 Jeder Arbeitsschritt kann nach einem Klick auf den entsprechenden Button durchgeführt werden. Dieser erscheint, sobald alle für einen Arbeitsschritte nötigen anderen Schritte erfüllt sind. <br /><br />
 Durch den Button "Passwort konfigurieren“ können Sie zudem ein Passwort festlegen (oder ändern), welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
@@ -642,6 +642,7 @@ $string['examReviewDateRoom_link'] = get_config('mod_exammanagement', 'additiona
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
+$string['ldapnotconfigured'] = 'Kein gültiges LDAP konfiguriert.';
 $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';

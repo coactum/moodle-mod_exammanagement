@@ -110,7 +110,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				## construct arrays with all users (moodle and nonmoodle) with all needed data ##
 
-				if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+				if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
 					$ldapConnection = $LdapManagerObj->connect_ldap();
 					
 					// temp participants from stored in db that should get ldap attributes
@@ -379,7 +379,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 							$noneMoodleParticipantsArr = array();
 
-							if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+							if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
 								$ldapConnection = $LdapManagerObj->connect_ldap();
 
 								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
@@ -485,7 +485,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									$userlogin = false;
 
-									if($LdapManagerObj->is_LDAP_config()){
+									if($LdapManagerObj->isLDAPenabled()){
 										$ldapConnection = $LdapManagerObj->connect_ldap();
 		
 										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $temp[1]);

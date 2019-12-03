@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\ldap\ldapManager;
+use core\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -167,16 +168,21 @@ class User{
 				$matriculationNumbers = array();
 				$allLogins = array();
 
-				if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+				if($LdapManagerObj->isLDAPenabled()){ // if use of ldap is enabled in plugin settings
 
-					foreach($allParticipants as $key => $participant){ // set logins array for ldap method
-						array_push($allLogins, $participant->imtlogin);
+					if($LdapManagerObj->isLDAPconfigured()){
+
+						foreach($allParticipants as $key => $participant){ // set logins array for ldap method
+							array_push($allLogins, $participant->imtlogin);
+						}
+	
+						$ldapConnection = $LdapManagerObj->connect_ldap();
+	
+						$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap
+					} else {
+						error(get_string('ldapnotconfigured', 'mod_exammanagement'));
 					}
-
-					$ldapConnection = $LdapManagerObj->connect_ldap();
-
-					$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap 
-						
+ 			
 				} else { // for local testing during development
 					foreach($allParticipants as $participant){
 

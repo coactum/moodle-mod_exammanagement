@@ -154,7 +154,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 					}
 
-					$isLDAP = $LdapManagerObj->is_LDAP_config();
+					$isLDAP = $LdapManagerObj->isLDAPenabled();
 						
 					if($isLDAP){
 						$ldapConnection = $LdapManagerObj->connect_ldap();

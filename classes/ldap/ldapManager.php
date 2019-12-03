@@ -78,13 +78,20 @@ class ldapManager{
 
 	}
 
-	public function is_LDAP_config(){
-		$config = get_config('auth_ldap');
-
-		if($config->host_url){
+	public function isLDAPenabled(){
+		if(get_config('mod_exammanagement', 'enableldap')){
 			return true;
 		} else {
-			//throw new Exception('LDAP not configured');
+			return false;
+		}
+	}
+
+	public function isLDAPconfigured(){
+		$config = get_config('auth_ldap');
+
+		if($config->host_url && $config->ldap_version && $config->user_type && $config->bind_dn && $config->bind_pw && $config->opt_deref){
+			return true;
+		} else {
 			return false;
 		}
 	}

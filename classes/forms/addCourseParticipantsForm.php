@@ -305,7 +305,7 @@ class addCourseParticipantsForm extends moodleform{
                 $courseParticipants[$key] = $courseParticipant;
             }
 
-            if($LdapManagerObj->is_LDAP_config()){ // if ldap is configured
+            if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
 
                 $ldapConnection = $LdapManagerObj->connect_ldap();
 

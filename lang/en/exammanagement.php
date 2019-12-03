@@ -642,6 +642,7 @@ $string['examReviewDateRoom_link'] = get_config('mod_exammanagement', 'additiona
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
+$string['ldapnotconfigured'] = 'No valid LDAP configured.';
 $string['err_underzero'] = 'Entered number ca not be lower than zero.';
 $string['err_novalidinteger'] = 'Entered number has to be a valid number.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';

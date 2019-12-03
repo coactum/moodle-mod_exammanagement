@@ -100,17 +100,17 @@ ajaxtoggleInformation = function(command, value){
 };
 
 ajaxsetcorrectioncompletion = function(value){
-	
+
 		$('.loadable').toggle();
-		
+
 		var confirmed = false;
-		
+
 		if(value == true){
 			confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}");
 		} else {
 			confirmed = true;
 		}
-		
+
 		if(confirmed){
 			jQuery.ajax ({
 					url: './view.php',
@@ -133,10 +133,10 @@ ajaxsetcorrectioncompletion = function(value){
 {{/js}}
    <div class="container-fluid exammanagement_overview">
 			<div class="row">
-				<h4 class="m-y-1 col-xs-6">{{#str}}overview, mod_exammanagement{{/str}}</h4> {{helptexticon}}
+				<h3 class="m-y-1 col-xs-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3> 
 				<span class="m-y-1 col-xs-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
 			</div>
-			
+
 			{{#deleted}}
 			<div class="alert alert-danger alert-block">
     		{{#str}}data_deleted, mod_exammanagement{{/str}}
