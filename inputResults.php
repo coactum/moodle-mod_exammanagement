@@ -49,6 +49,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 	if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else if(!$LdapManagerObj->isLDAPenabled()){
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
+	} else if(!$LdapManagerObj->isLDAPconfigured()){
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
 	} else {
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
@@ -108,58 +112,66 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						if($UserObj->checkIfValidMatrNr($matrnr)){
 
 							// convert matrnr to user
-							$userlogin;
-							$userid;
+							$userlogin = false;
+							$userid = false;
 		
-								if($LdapManagerObj->isLDAPenabled()){
-										$ldapConnection = $LdapManagerObj->connect_ldap();
+							if($LdapManagerObj->isLDAPenabled()){
+								
+								if($LdapManagerObj->isLDAPconfigured()){
+
+									$ldapConnection = $LdapManagerObj->connect_ldap();
 		
-										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $matrnr);
+									$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $matrnr);
 		
-										if($userlogin){
-											$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-										}
-		
-								} else {
-									$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-		
-									if(!$userid){
-										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
-									} else {
-										$userlogin = false;
+									if($userlogin){
+										$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 									}
-		
+								} else {
+									\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
 								}
 		
-								$participantObj = false;
+							} else {
+								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 		
-								// getExamParticipantObj
+								if(!$userid){
+									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
+								} else {
+									$userlogin = false;
+								}
+							}
+							// } else {
+							// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
+							// }
+		
+							$participantObj = false;
+		
+							// getExamParticipantObj
+							if($userid !== false && $userid !== null){
+								$participantObj = $UserObj->getExamParticipantObj($userid);
+							} else if($userlogin !== false && $userlogin !== null){
+								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+							}
+		
+							// if user is participant
+							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
+								$case = 'participant';
+		
 								if($userid !== false && $userid !== null){
-									$participantObj = $UserObj->getExamParticipantObj($userid);
-								} else if($userlogin !== false && $userlogin !== null){
-									$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
-								}
-		
-								// if user is participant
-								if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
-									$case = 'participant';
-		
-									if($userid !== false && $userid !== null){
-										$MoodleUserObj = $UserObj->getMoodleUser($userid);
-										$firstname = $MoodleUserObj->firstname;
-										$lastname = $MoodleUserObj->lastname;
-									} else {
-										$firstname = $participantObj->firstname;
-										$lastname = $participantObj->lastname;
-									}
-		
-									if($UserObj->participantHasResults($participantObj)){ // if participants has results
-										$case = 'participantwithresults';		
-									}
+									$MoodleUserObj = $UserObj->getMoodleUser($userid);
+									$firstname = $MoodleUserObj->firstname;
+									$lastname = $MoodleUserObj->lastname;
 								} else {
-									$case = 'noparticipant';
-									$matrnr = false;
+									$firstname = $participantObj->firstname;
+									$lastname = $participantObj->lastname;
 								}
+		
+								if($UserObj->participantHasResults($participantObj)){ // if participants has results
+									$case = 'participantwithresults';		
+								}
+							} else {
+								$case = 'noparticipant';
+								$matrnr = false;
+							}
 						} else {
 							$case = 'novalidmatrnr';
 							$matrnr = false;
@@ -181,11 +193,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				$matrval = $fromform->matrval;
 
+				$userid = false;
+				$userlogin = false;
+				$participantObj = false;
+
 				if ($matrval){
 						redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
 				} else {
 					
 					if($LdapManagerObj->isLDAPenabled()){
+
+						if($LdapManagerObj->isLDAPconfigured()){
+
 							$ldapConnection = $LdapManagerObj->connect_ldap();
 
 							$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->matrnr);
@@ -193,13 +212,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							if($userlogin){
 								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 							}
-					} else {
-							$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+						} else {
+							\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
+						}
 
-							if(!$userid){
-								$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
-							}
+					} else {
+						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
+
+						if(!$userid){
+							$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
+						}
 					}
+					// } else {
+					// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
+					// }
 
 					// getExamParticipantObj
 					if($userid !== false && $userid !== null){
@@ -252,23 +278,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 						break;
 					case 'participant':
-								$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr));
+						$mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr));
 						break;
 					case 'noparticipant':
-								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-								\core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
+						$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+						\core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
 						break;
-						case 'novalidmatrnr':
-								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-								\core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
+					case 'novalidmatrnr':
+						$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+						\core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
 						break;
-						case 'novalidbarcode':
-								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-								\core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
+					case 'novalidbarcode':
+						$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+						\core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
 						break;
-						default:
-								$mform->set_data(array('id'=>$id, 'matrval'=>1,));
-								break;
+					default:
+						$mform->set_data(array('id'=>$id, 'matrval'=>1,));
+						break;
 				}
 
 			//displays the form

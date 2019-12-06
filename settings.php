@@ -51,18 +51,18 @@ if ($ADMIN->fulltree) {
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldapdn', get_string('ldapdn', 'mod_exammanagement'),
       get_string('ldapdn_help', 'mod_exammanagement'),'', PARAM_TEXT));
 
-      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldusername', get_string('ldapfieldusername', 'mod_exammanagement'),
-      get_string('ldapfieldusername_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_username', get_string('ldap_field_map_username', 'mod_exammanagement'),
+      get_string('ldap_field_map_username_help', 'mod_exammanagement'),'', PARAM_TEXT));
       
-      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldmatriculationnumber', get_string('ldapfieldmatriculationnumber', 'mod_exammanagement'),
-      get_string('ldapfieldmatriculationnumber_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_matriculationnumber', get_string('ldap_field_map_matriculationnumber', 'mod_exammanagement'),
+      get_string('ldap_field_map_matriculationnumber_help', 'mod_exammanagement'),'', PARAM_TEXT));
 
-      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldfirstname', get_string('ldapfieldfirstname', 'mod_exammanagement'),
-      get_string('ldapfieldfirstname_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_firstname', get_string('ldap_field_map_firstname', 'mod_exammanagement'),
+      get_string('ldap_field_map_firstname_help', 'mod_exammanagement'),'', PARAM_TEXT));
 
-      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldlastname', get_string('ldapfieldlastname', 'mod_exammanagement'),
-      get_string('ldapfieldlastname_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_lastname', get_string('ldap_field_map_lastname', 'mod_exammanagement'),
+      get_string('ldap_field_map_lastname_help', 'mod_exammanagement'),'', PARAM_TEXT));
 
-      $settings->add(new admin_setting_configtext('mod_exammanagement/ldapfieldmail', get_string('ldapfieldmail', 'mod_exammanagement'),
-      get_string('ldapfieldmail_help', 'mod_exammanagement'),'', PARAM_TEXT));
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_mail', get_string('ldap_field_map_mail', 'mod_exammanagement'),
+      get_string('ldap_field_map_mail_help', 'mod_exammanagement'),'', PARAM_TEXT));
 }

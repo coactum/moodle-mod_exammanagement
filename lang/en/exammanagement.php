@@ -642,7 +642,11 @@ $string['examReviewDateRoom_link'] = get_config('mod_exammanagement', 'additiona
 //errors and permissions
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
+$string['ldapnotenabled'] = 'LDAP usage disabled.';
 $string['ldapnotconfigured'] = 'No valid LDAP configured.';
+$string['nomatrnravailable'] = 'No matriculation numbers available.';
+$string['importmatrnrnotpossible'] = 'Import by matriculation number not possible.';
+$string['enterresultsmatrnr'] = 'Entering results by matriculation number not possible.';
 $string['err_underzero'] = 'Entered number ca not be lower than zero.';
 $string['err_novalidinteger'] = 'Entered number has to be a valid number.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
@@ -717,7 +721,13 @@ $string['enablehelptexts_help'] = 'If this option is activated, plugin-in help t
 $string['additionalressources'] = 'Additional ressources';
 $string['additionalressources_help'] = 'The web link entered here is displayed in the plugin internal help texts as a source for further information if these have been activated for the plugin.';
 $string['enableldap'] = 'Use LDAP';
-$string['enableldap_help'] = 'Checking this box allows the plugin for exam organization to use an external LDAP server specified in the system to determine the basic data of the exam participants, such as matriculation numbers. In order for this to work, the external LDAP server must be configured in Moodle <a href="https://docs.moodle.org/35/en/LDAP_authentication">/a>. In addition, in the following settings the "distinguished name" (short dn) and the name of all LDAP fields containing the information required by the plugin must be entered. Once this is done, the plugin automatically uses the data stored in the LDAP. Otherwise the corresponding plugin functionalities may not be available.';
+$string['enableldap_help'] = 'Checking this box allows the plugin for exam organization to use an external LDAP server specified in the system to determine the basic data of the exam participants, such as their matriculation numbers. In order for this to work, the external LDAP server must be available and configured in Moodle <a href="https://docs.moodle.org/35/en/LDAP_authentication">/a>. In addition, in the following settings the "distinguished name" (short dn) and the names of all LDAP fields containing the information required by the plugin must be entered. Once this is done, the plugin automatically uses the data stored in the LDAP. Otherwise the corresponding plugin functionalities (e.g. the import of participants or the entering of results after matriculation number or the export of exam labels) are not available.';
+$string['ldapdn'] = '"Distinguished name" (short "dn")';
+$string['ldap_field_map_username'] = 'Field username';
+$string['ldap_field_map_matriculationnumber'] = 'Field matriculation number';
+$string['ldap_field_map_firstname'] = 'Feld firstname';
+$string['ldap_field_map_lastname'] = 'Feld lastname';
+$string['ldap_field_map_mail'] = 'Feld emailadress';
 
 //delete_temp_participants.php - task
 $string['delete_temp_participants'] = 'Delete temporary saved participants';

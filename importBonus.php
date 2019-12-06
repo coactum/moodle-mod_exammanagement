@@ -139,6 +139,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 					$dataArr = array();
 					$matrNrsArr = array();
+					$loginsArray = array();
 					$linesArr = array();
 
 					$potentialUserIDsArr = $worksheetObj->rangeToArray($fromform->idfield.'2:'.$fromform->idfield.$highestRow);
@@ -153,30 +154,39 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							array_push($linesArr, $key);
 						}
 					}
-
-					$isLDAP = $LdapManagerObj->isLDAPenabled();
-						
-					if($isLDAP){
-						$ldapConnection = $LdapManagerObj->connect_ldap();
-				
-						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $linesArr);
-
-					} else {
-						foreach($matrNrsArr as $key => $matrnr){
-							$loginsArray[$key] = array('login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
+					
+					if(!empty($matrNrsArr)){
+						if($LdapManagerObj->isLDAPenabled()){
+							if($LdapManagerObj->isLDAPconfigured()){
+								$ldapConnection = $LdapManagerObj->connect_ldap();
+					
+								$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $linesArr);
+							} else {
+								\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+							}
+	
+						} else {
+							foreach($matrNrsArr as $key => $matrnr){
+								$loginsArray[$key] = array('login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
+							}
 						}
+						// } else {
+						// 	\core\notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+						// }
 					}
 
-					foreach($loginsArray as $key => $data){
+					if(!empty($loginsArray)){
+						foreach($loginsArray as $key => $data){
 
-						$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
-
-						if($moodleuserid){
-							$dataArr[$key] = array('login' => false, 'moodleuserid' => $moodleuserid, 'points' =>$pointsArr[$key][0]);
-						} else {
-							$dataArr[$key] = array('login' => $data['login'], 'moodleuserid' => false, 'points' =>$pointsArr[$key][0]);
+							$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
+	
+							if($moodleuserid){
+								$dataArr[$key] = array('login' => false, 'moodleuserid' => $moodleuserid, 'points' =>$pointsArr[$key][0]);
+							} else {
+								$dataArr[$key] = array('login' => $data['login'], 'moodleuserid' => false, 'points' =>$pointsArr[$key][0]);
+							}
+	
 						}
-
 					}
 
 					foreach($dataArr as $line => $data){

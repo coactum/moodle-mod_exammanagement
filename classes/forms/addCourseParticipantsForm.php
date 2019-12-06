@@ -32,6 +32,7 @@ use mod_exammanagement\ldap\ldapManager;
 
 use moodleform;
 use stdclass;
+use notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -307,9 +308,14 @@ class addCourseParticipantsForm extends moodleform{
 
             if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
 
-                $ldapConnection = $LdapManagerObj->connect_ldap();
+                if($LdapManagerObj->isLDAPconfigured()){
 
-                $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap 
+                    $ldapConnection = $LdapManagerObj->connect_ldap();
+
+                    $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap 
+                } else {
+                    notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
+                }
                 
             } else { // for local testing during development
                 foreach($courseParticipants as $participant){

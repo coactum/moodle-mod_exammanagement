@@ -51,6 +51,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 	if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+	} else if(!$LdapManagerObj->isLDAPenabled()){
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+	} else if(!$LdapManagerObj->isLDAPconfigured()){
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
 	} else {
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page	
@@ -111,31 +115,38 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				## construct arrays with all users (moodle and nonmoodle) with all needed data ##
 
 				if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
-					$ldapConnection = $LdapManagerObj->connect_ldap();
+
+					if($LdapManagerObj->isLDAPconfigured()){
+
+						$ldapConnection = $LdapManagerObj->connect_ldap();
 					
-					// temp participants from stored in db that should get ldap attributes
+						// temp participants from stored in db that should get ldap attributes
 
-					foreach($tempParticipants as $key => $participant){ // construct helper arrays needed for ldap method
-						$allMatriculationNumbers[$key] = $participant->identifier;
-						$allLines[$key] = $participant->line;
-					}
-
-
-					$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $allLines); //get data for all remaining matriculation numbers from ldap 
-
-					ksort($users);
-
-					// users from ldap
-					
-					foreach($users as $line => $login){
-						$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
-
-						if($moodleuserid){ // if moodle user
-							$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
-						} else { // if not a moodle user
-							$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
+						foreach($tempParticipants as $key => $participant){ // construct helper arrays needed for ldap method
+							$allMatriculationNumbers[$key] = $participant->identifier;
+							$allLines[$key] = $participant->line;
 						}
+
+
+						$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $allLines); //get data for all remaining matriculation numbers from ldap 
+
+						ksort($users);
+
+						// users from ldap
+						
+						foreach($users as $line => $login){
+							$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
+
+							if($moodleuserid){ // if moodle user
+								$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
+							} else { // if not a moodle user
+								$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
+							}
+						}
+					} else {
+						$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
 					}
+
 				} else { // for local testing
 					foreach($tempParticipants as $key => $participant){
 
@@ -151,6 +162,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 					}
 				}
+				// else {
+				// 	$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+				// }
+
 
 				## check moodle users and classify them to array according to case ##
 						
@@ -380,10 +395,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$noneMoodleParticipantsArr = array();
 
 							if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
-								$ldapConnection = $LdapManagerObj->connect_ldap();
 
-								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
-											
+								if($LdapManagerObj->isLDAPconfigured()){
+
+									$ldapConnection = $LdapManagerObj->connect_ldap();
+
+									$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
+								} else {
+									$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+								} 			
 							} else { // for local testing during development
 
 								foreach($participantsIdsArr as $key => $identifier){
@@ -423,6 +443,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$noneMoodleParticipantsArr[$matrnr] = array('login' => $login, 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email);
 								}
 							}
+							// else {
+							// 	$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+							// }
 
 							foreach($participantsIdsArr as $key => $identifier){ // if participant is has no moodle account
 								$temp = explode('_', $identifier);
@@ -486,13 +509,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$userlogin = false;
 
 									if($LdapManagerObj->isLDAPenabled()){
-										$ldapConnection = $LdapManagerObj->connect_ldap();
-		
-										$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $temp[1]);
+
+										if($LdapManagerObj->isLDAPconfigured()){
+
+											$ldapConnection = $LdapManagerObj->connect_ldap();
+			
+											$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $temp[1]);
+										
+										} else {
+											$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+										}
 		
 									} else {
 										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
 									}
+									
+									// else {
+									// 	$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+									// }
 
 									if($userlogin){
 										$UserObj->deleteParticipant(false, $userlogin);

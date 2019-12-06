@@ -180,7 +180,7 @@ class User{
 	
 						$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap
 					} else {
-						error(get_string('ldapnotconfigured', 'mod_exammanagement'));
+						notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
 					}
  			
 				} else { // for local testing during development
@@ -199,6 +199,9 @@ class User{
 						}
 					}
 				}
+				// } else {
+				// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
+				// }
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){
@@ -209,7 +212,9 @@ class User{
 						} 
 					}
 				} else {
-					$participant->matrnr = '-';
+					foreach($allParticipants as $key => $participant){
+						$participant->matrnr = '-';
+					}
 				}
 			}
 			
