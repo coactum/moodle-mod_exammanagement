@@ -46,7 +46,7 @@ $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$LdapManagerObj = ldapManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -85,10 +85,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $userlogin = NULL;
 
                     $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->edit);
-                            
-                    if($LdapManagerObj->isLDAPenabled()) { // only for testing
-                        $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($fromform->edit);
-                    }
                 }
 
                 $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);

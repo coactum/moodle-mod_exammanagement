@@ -163,7 +163,7 @@ class User{
 
 				require_once(__DIR__.'/../ldap/ldapManager.php');
 
-				$LdapManagerObj = ldapManager::getInstance($this->id, $this->e);
+				$LdapManagerObj = ldapManager::getInstance();
 
 				$matriculationNumbers = array();
 				$allLogins = array();
@@ -173,23 +173,6 @@ class User{
 				}
 	
 				$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
- 			
-				if($LdapManagerObj->isLDAPenabled()) { // only for testing
-					foreach($allParticipants as $participant){
-
-						if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
-							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid); // only gets matrnr if ldap testmode is on
-						} else {
-							$matrnr = $LdapManagerObj->getIMTLogin2MatriculationNumberTest(Null, $participant->imtlogin);  // only gets matrnr if ldap testmode is on
-						}
-
-						if($matrnr){
-							$matriculationNumbers[$participant->imtlogin] = $matrnr;
-						} else {
-							$matriculationNumbers[$participant->imtlogin] = '-';							
-						}
-					}
-				}
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){

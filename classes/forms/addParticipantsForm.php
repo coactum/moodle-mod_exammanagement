@@ -26,7 +26,6 @@ namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
-use mod_exammanagement\ldap\ldapManager;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\general\MoodleDB;
 use moodleform;
@@ -40,7 +39,6 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
-require_once(__DIR__.'/../ldap/ldapManager.php');
 require_once(__DIR__.'/../general/Moodle.php');
 require_once(__DIR__.'/../general/MoodleDB.php');
 
@@ -51,7 +49,6 @@ class addParticipantsForm extends moodleform{
         global $PAGE, $CFG, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleDBObj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);

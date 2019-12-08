@@ -42,7 +42,7 @@ $input  = optional_param('matrnr', 0, PARAM_RAW);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$LdapManagerObj = ldapManager::getInstance();
 $UserObj = User::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -121,16 +121,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 							}
 		
-							if(!$LdapManagerObj->isLDAPenabled()) { // only for testing
-								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
-		
-								if(!$userid){
-									$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
-								} else {
-									$userlogin = false;
-								}
-							}
-		
 							$participantObj = false;
 		
 							// getExamParticipantObj
@@ -193,14 +183,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 					if($userlogin){
 						$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-					}
-						
-					if(!$LdapManagerObj->isLDAPenabled()){ // only for testing
-						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
-
-						if(!$userid){
-							$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
-						}
 					}
 
 					// getExamParticipantObj

@@ -43,7 +43,7 @@ $dtp  = optional_param('dtp', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);	
+$LdapManagerObj = ldapManager::getInstance();	
 $MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e);
 
@@ -135,22 +135,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
 						} else { // if not a moodle user
 							$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
-						}
-					}
-				}
-
-				if(!$LdapManagerObj->isLDAPenabled()) { // only for testing
-					foreach($tempParticipants as $key => $participant){
-
-						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($participant->identifier);
-
-						if($userid){
-							$login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $userid));
-
-							$moodleUsers[$participant->line] = array('matrnr' => $participant->identifier, 'login'=> $login, 'moodleuserid' => $userid);
-						} else {
-							$login = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($participant->identifier);
-							$nonMoodleUsers[$participant->line] = array('matrnr' => $participant->identifier, 'login' => $login, 'moodleuserid' => false);
 						}
 					}
 				}
@@ -381,46 +365,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							}
 
 							$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($noneMoodleParticipantsMatrNrArr, 'all_attributes');
-											
-							if($LdapManagerObj->isLDAPenabled()) { // only for testing
-
-								foreach($participantsIdsArr as $key => $identifier){
-									$temp = explode('_', $identifier);
-									$matrnr = $temp[1];
-
-									$login = ''.$LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr);
-
-									$rand = rand(1,3);
-									switch ($rand){
-										case 1:
-											$firstname = 'Peter';
-											break;
-										case 2:
-											$firstname = 'Tony';
-											break;
-										case 3:
-											$firstname = 'Steven';
-											break;
-									} 
-
-									$rand = rand(1,3);
-									switch ($rand){
-										case 1:
-											$lastname = 'Parker';
-											break;
-										case 2:
-											$lastname = 'Stark';
-											break;
-										case 3:
-											$lastname = 'Strange';
-											break;
-									}
-
-									$email = 'Test@Testi.test';
-									
-									$noneMoodleParticipantsArr[$matrnr] = array('login' => $login, 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email);
-								}
-							}
 
 							foreach($participantsIdsArr as $key => $identifier){ // now only contains participants that have no moodle account
 								$temp = explode('_', $identifier);

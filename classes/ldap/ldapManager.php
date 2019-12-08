@@ -24,8 +24,6 @@
 
 namespace mod_exammanagement\ldap;
 
-use mod_exammanagement\general\MoodleDB;
-use mod_exammanagement\general\User; // only for testing without real ldap!
 use core\notification;
 
 defined('MOODLE_INTERNAL') || die();
@@ -34,9 +32,6 @@ global $CFG;
 require_once($CFG->libdir.'/ldaplib.php');
 
 class ldapManager{
-
-	protected $id; // only for testing without real ldap!
-	protected $e; // only for testing without real ldap!
 	
 	protected $dn;
 	protected $ldapobjectclassstudent;
@@ -49,9 +44,7 @@ class ldapManager{
 	protected $missingconfig;
 
 	private function __construct($id, $e) {
-		$this->id = $id; // only for testing without real ldap!
-		$this->e = $e;		 // only for testing without real ldap!
-
+		
 		$pluginconfig = get_config('mod_exammanagement');
 		$ldapconfig = get_config('auth_ldap');
 
@@ -121,7 +114,7 @@ class ldapManager{
 
 	}
 
-	public function connect_ldap(){
+	private function connect_ldap(){
 		$config = get_config('auth_ldap');
 
 		return $connection = ldap_connect_moodle(
@@ -148,84 +141,8 @@ class ldapManager{
 	public function isLDAPconfigured(){
 		$config = get_config('auth_ldap');
 
-		// if($config->host_url && $config->ldap_version && $config->user_type && $config->bind_dn && $config->bind_pw && $config->opt_deref){
+		if($config->host_url && $config->ldap_version && $config->user_type && $config->bind_dn && $config->bind_pw && $config->opt_deref){
 			return true;
-		// } else {
-		// 	return false;
-		// }
-	}
-
-	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
-
-		global $SESSION;
-		
-		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
-			$MoodleDBObj = MoodleDB::getInstance();
-
-			$temp = explode('_', $matrNr);
-
-			$imtlogin = substr($temp[0], -3);
-
-			$imtlogin = str_pad(intval($imtlogin), 3, "0", STR_PAD_LEFT);
-
-			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
-			
-			if($moodleuserid){
-				return $moodleuserid;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-
-	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
-
-		global $SESSION;
-
-		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
-
-			$temp = explode('_', $matrNr);
-
-			$imtlogin = 'tool_generator_000'.substr($temp[0], -3);
-
-			if($imtlogin){
-				return $imtlogin;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-
-	}
-
-	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
-
-		global $SESSION;
-			
-		if(isset($SESSION->ldaptest) && $SESSION->ldaptest === true){
-		
-				require_once(__DIR__.'/../general/User.php');
-
-				if($userid !== NULL && $userid !== false){
-					$matrNr = str_pad($userid, 6, "0", STR_PAD_LEFT);
-					$matrNr = 7 . $matrNr;
-				} else if($login){
-					$login = explode('_', $login);
-					$imtlogin = substr($login[2], -3);
-					$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
-					$matrNr = 7 . $matrNr;
-				}
-
-				if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
-					return false;
-				}else if($matrNr){
-					return $matrNr;
-				} else {
-					return false;
-				}
 		} else {
 			return false;
 		}

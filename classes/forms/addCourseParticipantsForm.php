@@ -56,7 +56,7 @@ class addCourseParticipantsForm extends moodleform{
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleDBObj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $LdapManagerObj = ldapManager::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $LdapManagerObj = ldapManager::getInstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
@@ -307,17 +307,6 @@ class addCourseParticipantsForm extends moodleform{
             }
 
             $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap 
-            
-            if($LdapManagerObj->isLDAPenabled()) { // only for testing
-                foreach($courseParticipants as $participant){
-
-                    if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
-                        $matriculationNumbers[$participant->imtlogin] = $LdapManagerObj->getIMTLogin2MatriculationNumberTest($participant->moodleuserid); // only gets matrnr if ldap testmode is on
-                    } else {
-                        $matriculationNumbers[$participant->imtlogin] = false;
-                    }
-                }
-            }
 
             if(!empty($courseParticipants)){
                 foreach ($courseParticipants as $key => $participant) {
