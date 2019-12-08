@@ -156,28 +156,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					}
 					
 					if(!empty($matrNrsArr)){
-						if($LdapManagerObj->isLDAPenabled()){
-							if($LdapManagerObj->isLDAPconfigured()){
-								$ldapConnection = $LdapManagerObj->connect_ldap();
-
-								if($ldapConnection){
-									$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
-								} else {
-									\core\notification::error(get_string('ldaoconnectionfailed', 'mod_exammanagement'), 'error');
-								}
+						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
 								
-							} else {
-								\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
-							}
-	
-						} else {
+						if($LdapManagerObj->isLDAPenabled()) { // only for testing
 							foreach($matrNrsArr as $key => $matrnr){
 								$loginsArray[$key] = array('login' => $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($matrnr), 'moodleuserid' => false);
 							}
 						}
-						// } else {
-						// 	\core\notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
-						// }
 					}
 
 					if(!empty($loginsArray)){

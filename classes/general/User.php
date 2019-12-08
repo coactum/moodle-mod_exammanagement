@@ -168,22 +168,13 @@ class User{
 				$matriculationNumbers = array();
 				$allLogins = array();
 
-				if($LdapManagerObj->isLDAPenabled()){ // if use of ldap is enabled in plugin settings
-
-					if($LdapManagerObj->isLDAPconfigured()){
-
-						foreach($allParticipants as $key => $participant){ // set logins array for ldap method
-							array_push($allLogins, $participant->imtlogin);
-						}
+				foreach($allParticipants as $key => $participant){ // set logins array for ldap method
+					array_push($allLogins, $participant->imtlogin);
+				}
 	
-						$ldapConnection = $LdapManagerObj->connect_ldap();
-	
-						$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap
-					} else {
-						notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
-					}
+				$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
  			
-				} else { // for local testing during development
+				if($LdapManagerObj->isLDAPenabled()) { // only for testing
 					foreach($allParticipants as $participant){
 
 						if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){
@@ -199,9 +190,6 @@ class User{
 						}
 					}
 				}
-				// } else {
-				// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
-				// }
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){

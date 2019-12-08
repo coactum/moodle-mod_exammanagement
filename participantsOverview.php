@@ -84,20 +84,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $moodleuserid = NULL;
                     $userlogin = NULL;
 
-                    if($LdapManagerObj->isLDAPenabled()){
-
-                        if($LdapManagerObj->isLDAPconfigured()){    // if no ldap is configured there is no fallback because then the participant is automatically identified by moodleuserid and moodle shouldn't reach this place
-                            $ldapConnection = $LdapManagerObj->connect_ldap();
-
-                            if($ldapConnection){
-                                $userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->edit);
-                            }
-                        }
-
-                    } else {
+                    $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->edit);
+                            
+                    if($LdapManagerObj->isLDAPenabled()) { // only for testing
                         $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($fromform->edit);
-
-                    } // löschen
+                    }
                 }
 
                 $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);

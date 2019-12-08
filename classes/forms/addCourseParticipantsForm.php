@@ -306,18 +306,9 @@ class addCourseParticipantsForm extends moodleform{
                 $courseParticipants[$key] = $courseParticipant;
             }
 
-            if($LdapManagerObj->isLDAPenabled()){ // if ldap is configured
-
-                if($LdapManagerObj->isLDAPconfigured()){
-
-                    $ldapConnection = $LdapManagerObj->connect_ldap();
-
-                    $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($ldapConnection, $allLogins); // retrieve matrnrs for all logins from ldap 
-                } else {
-                    notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('nomatrnravailable', 'mod_exammanagement'), 'error');
-                }
-                
-            } else { // for local testing during development
+            $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap 
+            
+            if($LdapManagerObj->isLDAPenabled()) { // only for testing
                 foreach($courseParticipants as $participant){
 
                     if($participant->moodleuserid !== false && $participant->moodleuserid !== NULL){

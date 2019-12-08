@@ -115,22 +115,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$userlogin = false;
 							$userid = false;
 		
-							if($LdapManagerObj->isLDAPenabled()){
-								
-								if($LdapManagerObj->isLDAPconfigured()){
-
-									$ldapConnection = $LdapManagerObj->connect_ldap();
+							$userlogin = $LdapManagerObj->getLoginForMatrNr($matrnr, 'enterresultsmatrnr');
 		
-									$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $matrnr);
+							if($userlogin){
+								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+							}
 		
-									if($userlogin){
-										$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-									}
-								} else {
-									\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
-								}
-		
-							} else {
+							if(!$LdapManagerObj->isLDAPenabled()) { // only for testing
 								$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($matrnr);
 		
 								if(!$userid){
@@ -139,9 +130,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$userlogin = false;
 								}
 							}
-							// } else {
-							// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
-							// }
 		
 							$participantObj = false;
 		
@@ -201,31 +189,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
 				} else {
 					
-					if($LdapManagerObj->isLDAPenabled()){
+					$userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->matrnr, 'enterresultsmatrnr');
 
-						if($LdapManagerObj->isLDAPconfigured()){
-
-							$ldapConnection = $LdapManagerObj->connect_ldap();
-
-							$userlogin = $LdapManagerObj->getLoginForMatrNr($ldapConnection, $fromform->matrnr);
-
-							if($userlogin){
-								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
-							}
-						} else {
-							\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
-						}
-
-					} else {
+					if($userlogin){
+						$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
+					}
+						
+					if(!$LdapManagerObj->isLDAPenabled()){ // only for testing
 						$userid = $LdapManagerObj->getMatriculationNumber2ImtLoginTest($fromform->matrnr);
 
 						if(!$userid){
 							$userlogin = 'tool_generator_'.substr($fromform->matrnr, 1);
 						}
 					}
-					// } else {
-					// 	notification::error(get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('enterresultsmatrnr', 'mod_exammanagement'), 'error');
-					// }
 
 					// getExamParticipantObj
 					if($userid !== false && $userid !== null){
