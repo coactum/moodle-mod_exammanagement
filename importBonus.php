@@ -159,8 +159,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						if($LdapManagerObj->isLDAPenabled()){
 							if($LdapManagerObj->isLDAPconfigured()){
 								$ldapConnection = $LdapManagerObj->connect_ldap();
-					
-								$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $linesArr);
+
+								if($ldapConnection){
+									$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
+								} else {
+									\core\notification::error(get_string('ldaoconnectionfailed', 'mod_exammanagement'), 'error');
+								}
+								
 							} else {
 								\core\notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
 							}

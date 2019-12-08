@@ -51,6 +51,9 @@ if ($ADMIN->fulltree) {
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldapdn', get_string('ldapdn', 'mod_exammanagement'),
       get_string('ldapdn_help', 'mod_exammanagement'),'', PARAM_TEXT));
 
+      $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_objectclass_student', get_string('ldap_objectclass_student', 'mod_exammanagement'),
+      get_string('ldap_objectclass_student_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_username', get_string('ldap_field_map_username', 'mod_exammanagement'),
       get_string('ldap_field_map_username_help', 'mod_exammanagement'),'', PARAM_TEXT));
       

@@ -128,19 +128,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 
 
-						$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, array(LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID), $allLines); //get data for all remaining matriculation numbers from ldap 
+						$users = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $allMatriculationNumbers, 'usernames_and_matriculationnumbers', $allLines); //get data for all remaining matriculation numbers from ldap 
 
-						ksort($users);
+						if($users){
+							ksort($users);
 
-						// users from ldap
-						
-						foreach($users as $line => $login){
-							$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
-
-							if($moodleuserid){ // if moodle user
-								$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
-							} else { // if not a moodle user
-								$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
+							// users from ldap
+							
+							foreach($users as $line => $login){
+								$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $login['login'])); // get moodleid for user
+	
+								if($moodleuserid){ // if moodle user
+									$moodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => $moodleuserid); // add to array
+								} else { // if not a moodle user
+									$nonMoodleUsers[$line] = array('matrnr' => $login['matrnr'], 'login' => $login['login'], 'moodleuserid' => false); // add to array
+								}
 							}
 						}
 					} else {
@@ -400,7 +402,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 									$ldapConnection = $LdapManagerObj->connect_ldap();
 
-									$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, array( "sn", "givenName", "upbMailPreferredAddress", LDAP_ATTRIBUTE_UID, LDAP_ATTRIBUTE_STUDID));
+									$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($ldapConnection, $noneMoodleParticipantsMatrNrArr, 'all_attributes');
 								} else {
 									$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
 								} 			
@@ -523,7 +525,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									} else {
 										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
 									}
-									
+
 									// else {
 									// 	$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
 									// }

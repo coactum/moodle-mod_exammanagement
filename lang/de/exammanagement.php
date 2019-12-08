@@ -644,6 +644,8 @@ $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';
 $string['nopermissions'] = 'Sie haben keine Berechtigung dies zu tun.';
 $string['ldapnotenabled'] = 'LDAP-Nutzung deaktiviert.';
 $string['ldapnotconfigured'] = 'Kein gültiges LDAP konfiguriert.';
+$string['ldapconfigmissing'] = 'LDAP nicht vollständig konfiguriert. Die folgenden vom Plugin benötigten Elemente müssen noch in den globalen Plugineinstellungen spezifiziert werden:';
+$string['ldaoconnectionfailed'] = 'Verbindung zum LDAP fehlgeschlagen. Bitte versuchen Sie es erneut oder kontaktieren Sie Ihren System-Administrator.';
 $string['nomatrnravailable'] = 'Keine Matrikelnummern verfügbar.';
 $string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich.';
 $string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich.';
@@ -723,6 +725,7 @@ $string['additionalressources_help'] = 'Der hier eingetragene Weblink wird in de
 $string['enableldap'] = 'LDAP verwenden';
 $string['enableldap_help'] = 'Das Setzen des Hakens erlaubt dem Plugin zur Prüfungsorganisation die Verwendung eines im System hinterlegten externen LDAP-Servers zur Ermittlung der Stammdaten der Prüfungsteilnehmer wie etwa deren Matrikelnummern. Damit dies funktioniert muss der externe LDAP-Server zur Verfügung stehen und in Moodle <a href="https://docs.moodle.org/35/de/LDAP-Server">konfiguriert</a> sein. Zudem müssen in den folgenden Einstellungen der "distinguished name" (kurz dn) sowie die Namen all jener Felder des LDAP eingetragen werden, welche die vom Plugin benötigten Informationen enthalten. Ist dies geschehen verwendet das Plugin automatisch die im LDAP hinterlegten Daten. Andernfalls stehen die entsprechenden Funktionalitäten des Plugins (z. B. Teilnehmerimport bzw. Punkteeintragen nach Matrikelnummern oder Export der Prüfungsetiketten) nicht zur Verfügung.';
 $string['ldapdn'] = '"Distinguished name" (kurz "dn")';
+$string['ldap_objectclass_student'] = 'LDAP-Klasse des Studenten-Objekts';
 $string['ldap_field_map_username'] = 'Feld Benutzername';
 $string['ldap_field_map_matriculationnumber'] = 'Feld Matrikelnummer';
 $string['ldap_field_map_firstname'] = 'Feld Vorname';

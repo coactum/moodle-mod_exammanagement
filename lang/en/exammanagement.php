@@ -644,6 +644,8 @@ $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 $string['ldapnotenabled'] = 'LDAP usage disabled.';
 $string['ldapnotconfigured'] = 'No valid LDAP configured.';
+$string['ldapconfigmissing'] = 'LDAP is not configured completly. The following elements needed by the plugin have to be specified in the global plugin settings:';
+$string['ldaoconnectionfailed'] = 'Connection to ldap failed. Please retry or contact the system administrator.';
 $string['nomatrnravailable'] = 'No matriculation numbers available.';
 $string['importmatrnrnotpossible'] = 'Import by matriculation number not possible.';
 $string['enterresultsmatrnr'] = 'Entering results by matriculation number not possible.';
@@ -723,6 +725,7 @@ $string['additionalressources_help'] = 'The web link entered here is displayed i
 $string['enableldap'] = 'Use LDAP';
 $string['enableldap_help'] = 'Checking this box allows the plugin for exam organization to use an external LDAP server specified in the system to determine the basic data of the exam participants, such as their matriculation numbers. In order for this to work, the external LDAP server must be available and configured in Moodle <a href="https://docs.moodle.org/35/en/LDAP_authentication">/a>. In addition, in the following settings the "distinguished name" (short dn) and the names of all LDAP fields containing the information required by the plugin must be entered. Once this is done, the plugin automatically uses the data stored in the LDAP. Otherwise the corresponding plugin functionalities (e.g. the import of participants or the entering of results after matriculation number or the export of exam labels) are not available.';
 $string['ldapdn'] = '"Distinguished name" (short "dn")';
+$string['ldap_objectclass_student'] = 'LDAP class of the student object';
 $string['ldap_field_map_username'] = 'Field username';
 $string['ldap_field_map_matriculationnumber'] = 'Field matriculation number';
 $string['ldap_field_map_firstname'] = 'Feld firstname';
