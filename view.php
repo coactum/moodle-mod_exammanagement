@@ -275,10 +275,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         echo $output->render($page);
         
         $MoodleObj->outputFooter();
-
-        if(is_siteadmin() && $mode && $mode === 'ldaptest' ){ // set test mode to simulate configured ldap
-            $SESSION->ldaptest = true;
-        }
         
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
         redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);

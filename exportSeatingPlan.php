@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\ldap\ldapManager;
 use mod_exammanagement\pdfs\seatingPlan;
 
 require(__DIR__.'/../../config.php');
@@ -41,6 +42,7 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
+$LDAPManagerObj = LDAPManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -59,8 +61,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
       }  
 
-      if($sortmode == 'matrnr' && (!get_config('auth_ldap')->host_url && !(isset($SESSION->ldaptest) || (isset($SESSION->ldaptest) && !$SESSION->ldaptest === true)))){ // cancel export if seatingplan should be sorted by matrnr and no matrnr are availiable because no ldap is configured and user is not in testmode
-        $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement'), 'error');
+      if($sortmode == 'matrnr'){
+        if(!$LDAPManagerObj->isLDAPenabled()){ // cancel export if no matrnrs are availiable because ldap is not enabled or configured
+          $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+        } else if(!$LDAPManagerObj->isLDAPconfigured()){
+          $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');        
+        }
       }
 
       //include pdf

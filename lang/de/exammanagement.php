@@ -646,9 +646,10 @@ $string['ldapnotenabled'] = 'LDAP-Nutzung deaktiviert.';
 $string['ldapnotconfigured'] = 'Kein gültiges LDAP konfiguriert.';
 $string['ldapconfigmissing'] = 'LDAP nicht vollständig konfiguriert. Die folgenden vom Plugin benötigten Elemente müssen noch in den globalen Plugineinstellungen spezifiziert werden:';
 $string['ldapconnectionfailed'] = 'Verbindung zum LDAP fehlgeschlagen. Bitte versuchen Sie es erneut oder kontaktieren Sie Ihren System-Administrator.';
-$string['nomatrnravailable'] = 'Keine Matrikelnummern verfügbar.';
-$string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich.';
-$string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich.';
+$string['nomatrnravailable'] = 'Keine Matrikelnummern verfügbar da';
+$string['not_possible_no_matrnr'] = 'Nicht möglich weil keine Matrikelnummern verfügbar sind da';
+$string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich da';
+$string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich da';
 $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
@@ -668,8 +669,6 @@ $string['err_password_incorrect'] = 'Passwort nicht identisch. Bitte erneut eing
 $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID';
-$string['no_param_given'] = 'Matrikelnummernabgleich nicht möglich.';
-$string['not_possible_no_matrnr'] = 'Nicht möglich da keine Matrikelnummern vorhanden';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

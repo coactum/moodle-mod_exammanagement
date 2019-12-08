@@ -52,9 +52,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else if(!$LdapManagerObj->isLDAPenabled()){
-		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotenabled', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
 	} else if(!$LdapManagerObj->isLDAPconfigured()){
-		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('ldapnotconfigured', 'mod_exammanagement'). ' ' .get_string('importmatrnrnotpossible', 'mod_exammanagement'), 'error');
+		$MoodleObj->redirectToOverviewPage('beforeexam', get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
 	} else {
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page	

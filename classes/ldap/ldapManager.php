@@ -43,7 +43,7 @@ class ldapManager{
 
 	protected $missingconfig;
 
-	private function __construct($id, $e) {
+	private function __construct() {
 		
 		$pluginconfig = get_config('mod_exammanagement');
 		$ldapconfig = get_config('auth_ldap');
@@ -104,11 +104,11 @@ class ldapManager{
 		}
 	}
 
-	public static function getInstance($id, $e){
+	public static function getInstance(){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new ldapManager($id, $e);
+				$inst = new ldapManager();
 			}
 			return $inst;
 
@@ -173,7 +173,7 @@ class ldapManager{
 						}
 
 						if($disabledfeature){
-							notification::error(get_string($disabledfeature, 'mod_exammanagement') . get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
+							notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
 						} else {
 							notification::error(get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
 						}
@@ -193,7 +193,7 @@ class ldapManager{
 					return $result[ 0 ];
 				} else {
 					if($disabledfeature){
-						notification::error(get_string($disabledfeature, 'mod_exammanagement') . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
+						notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
 					} else {
 						notification::error(get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
 					}
@@ -201,7 +201,7 @@ class ldapManager{
 				}
 			} else {
 				if($disabledfeature){
-					notification::error(get_string($disabledfeature, 'mod_exammanagement') . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+					notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
 				} else {
 					notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
 				}
@@ -209,7 +209,7 @@ class ldapManager{
 			}
 		} else {
 			if($disabledfeature){
-				notification::error(get_string($disabledfeature, 'mod_exammanagement') . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+				notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
 			} else {
 				notification::error(get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
 			}
