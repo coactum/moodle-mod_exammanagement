@@ -712,6 +712,39 @@ $string['exammanagement:importdefaultrooms'] = 'Standardräume importieren';
 $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
 $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
 
+//privacy
+$string['privacy:metadata:exammanagement'] = 'Enthält keine personenbezogenen Daten. Enthält stattdessen alle mit dem Plugin zur Prüfungsorganisation angelegten Prüfungen und deren allgemeine Prüfungsinformationen.';
+$string['privacy:metadata:exammanagement_participants'] = 'Enthält alle Prüfungsteilnehmer aus allen Prüfungsorganisationen und deren persönliche Prüfungsinformationen.';
+$string['privacy:metadata:exammanagement_temp_part'] = 'Enthält alle temporär gespeicherten potenziellen Prüfungsteilnehmer aller Prüfungsorganisationen und deren persönliche Prüfungsinformationen. Diese potenziellen Prüfungsteilnehmer können nicht immer einem Moodle Benutzer zugeordnet werden und werden einmal täglich durch einen geplanten Vorgang gelöscht. Ein Export dieser Daten ist somit nicht möglich und eine weitergehende Löschung nicht notwendig.';
+$string['privacy:metadata:exammanagement_rooms'] = 'Enthält alle standard- und benutzerdefinierten Prüfungsräume die in den einzelnen Prüfungsorganisationen ausgewählt werden können.';
+$string['privacy:metadata:exammanagement_participants:plugininstanceid'] = 'ID der Prüfungsorganisation des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:courseid'] = 'Kurs der Prüfungsorganisation des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:categoryid'] = 'Category-ID des Kurses der Prüfungsorganisation des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:moodleuserid'] = 'Moodleinterne ID des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:login'] = 'Login des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:firstname'] = 'Vorname des Teilnehmers (falls kein Moodle-Account vorhanden)';
+$string['privacy:metadata:exammanagement_participants:lastname'] = 'Nachname des Teilnehmers (falls kein Moodle-Account vorhanden)';
+$string['privacy:metadata:exammanagement_participants:email'] = 'E-Mailadresse des Teilnehmers (falls kein Moodle-Account vorhanden)';
+$string['privacy:metadata:exammanagement_participants:headerid'] = 'ID der Kopfzeile der Datei aus welcher der Teilnehmer importiert ist';
+$string['privacy:metadata:exammanagement_participants:roomid'] = 'ID des dem Teilnehmer zugewiesenen Raumes';
+$string['privacy:metadata:exammanagement_participants:roomname'] = 'Name des dem Teilnehmer zugewiesenen Raumes';
+$string['privacy:metadata:exammanagement_participants:place'] = 'Sitzplatz des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:exampoints'] = 'Prüfungsergebnisse des Teilnehmers als Objekt in JSON-Syntax';
+$string['privacy:metadata:exammanagement_participants:examstate'] = 'Prüfungsstatus des Teilnehmers als Objekt in JSON-Syntax';
+$string['privacy:metadata:exammanagement_participants:timeresultsentered'] = 'Zeitstempel wann das Ergebnis eingetragen wird';
+$string['privacy:metadata:exammanagement_participants:bonus'] = 'Bonusnotenschritte des Teilnehmers';
+$string['privacy:metadata:exammanagement_temp_part:identifier'] = 'Matrikelnummer des potenziellen Teilnehmers';
+$string['privacy:metadata:exammanagement_temp_part:line'] = 'Zeilennummer des potenziellen Teilnehmers in der importierten Teilnehmerliste';
+$string['privacy:metadata:exammanagement_rooms:roomid'] = 'Raum-ID (intern)';
+$string['privacy:metadata:exammanagement_rooms:name'] = 'Raumname';
+$string['privacy:metadata:exammanagement_rooms:description'] = 'Raumbeschreibung';
+$string['privacy:metadata:exammanagement_rooms:seatingplan'] = 'Sitzplan als Vektorgrafik';
+$string['privacy:metadata:exammanagement_rooms:places'] = 'Sitzplätze des Raumes als Array in JSON-Syntax';
+$string['privacy:metadata:exammanagement_rooms:type'] = 'Raumtyp (Standard oder benutzerdefiniert)';
+$string['privacy:metadata:exammanagement_rooms:moodleuserid'] = 'Moodleinterne ID des Nutzers der den benutzerdefinierten Raum angelegt hat';
+$string['privacy:metadata:exammanagement_rooms:misc'] = 'Weitere Werte in JSON-Syntax (momentan nur Zeitstempel wann Standardraum erstellt wurde)';
+$string['privacy:metadata:core_message'] = 'Das Plugin zur Prüfungsorganisation sendet Nachrichten an Benutzer und speichert deren Inhalte in der Datenbank. Dies können Gruppennachrichten mit Prüfungsinformationen an Teilnehmer sein, Nachrichten an den Support wenn ein Lehrender diesen bittet das Passwort einer Prüfungsorganisation zurückzusetzen oder aber Systemnachrichten, die einen Lehrenden über die baldige Löschung der sensiblen Daten einer Prüfungsorganisation informieren.';
+
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Beantragen des Passwort-Zurücksetzens aktivieren';
 $string['enablepasswordresetrequest_help'] = 'Sobald diese Funktion aktiviert wurde können alle Lehrenden in ihren Prüfungsorganisationen durch einen Klick auf den entsprechenden Button das Zurücksetzen der dort gesetzten Passwörter beantragen. Hat ein Dozent dies getan bekommen alle BenutzerInnen mit der Rolle "Manager/in" eine automatisch generierte Nachricht sowohl als interne Benachrichtigung als auch an die in ihrem Profil hinterlegte E-Mail-Adresse weitergeleitet und können danach durch einen Klick auf den in dieser Nachricht enthaltenen Link das Passwort zurücksetzen. Dadurch werden alle Lehrenden der betroffenen Prüfungsorganisation automatisch per interner Benachrichtigung sowie E-Mail über das Zurücksetzen des Passwortes informiert und können danach wieder ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen. Ist die Funktion hier deaktiviert können NutzerInnen das Zurücksetzen des Passwortes in ihrer Prüfungsorganisation nicht automatisch beantragen, allerdings können Manager und Administratoren trotzdem das Passwort jeder Prüfungsorganisation zurücksetzen.';

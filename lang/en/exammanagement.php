@@ -712,6 +712,39 @@ $string['exammanagement:importdefaultrooms'] = 'Import default rooms';
 $string['exammanagement:resetpassword'] = 'Reset password';
 $string['exammanagement:requestpasswordreset'] = 'Request password reset';
 
+//privacy
+$string['privacy:metadata:exammanagement'] = 'Contains no personal data. Contains all exams created with the exammanagement plugin and their general exam information instead.';
+$string['privacy:metadata:exammanagement_participants'] = 'Contains all exam participants from all exam managements and their respective personal data.';
+$string['privacy:metadata:exammanagement_temp_part'] = 'Contains all temporary saved potential exam participants from all exam managements and their respective personal data. This potential participants can not always be mapped to a moodle user and will be deleted once a day via a sheduled task, so no export is possible and no further deletion is needed.';
+$string['privacy:metadata:exammanagement_rooms'] = 'Contains all default and custom exam rooms available in the exam managements.';
+$string['privacy:metadata:exammanagement_participants:plugininstanceid'] = 'Id of the exam management activity the participant belongs to';
+$string['privacy:metadata:exammanagement_participants:courseid'] = 'Course of the exam management activity the participant belongs to';
+$string['privacy:metadata:exammanagement_participants:categoryid'] = 'Course category id of the exammanagement activity the participant belongs to';
+$string['privacy:metadata:exammanagement_participants:moodleuserid'] = 'Moodle intern user id of the participant';
+$string['privacy:metadata:exammanagement_participants:login'] = 'Login of the participant';
+$string['privacy:metadata:exammanagement_participants:firstname'] = 'First name of the participant (in case of nonmoodle)';
+$string['privacy:metadata:exammanagement_participants:lastname'] = 'Last name of the participant (in case of nonmoodle)';
+$string['privacy:metadata:exammanagement_participants:email'] = 'Mail address of the participant (in case of nonmoodle)';
+$string['privacy:metadata:exammanagement_participants:headerid'] = 'Id of the header of the file the participant is imported from';
+$string['privacy:metadata:exammanagement_participants:roomid'] = 'Id of the room assigned to the participant';
+$string['privacy:metadata:exammanagement_participants:roomname'] = 'Name of the room assigned to the participant';
+$string['privacy:metadata:exammanagement_participants:place'] = 'Place assigned to the participant';
+$string['privacy:metadata:exammanagement_participants:exampoints'] = 'Exam results of the participant as object in json syntax';
+$string['privacy:metadata:exammanagement_participants:examstate'] = 'Exam state of the participant as object in json syntax';
+$string['privacy:metadata:exammanagement_participants:timeresultsentered'] = 'Timestamp of the date when the results where entered';
+$string['privacy:metadata:exammanagement_participants:bonus'] = 'Bonusstep of the participant';
+$string['privacy:metadata:exammanagement_temp_part:identifier'] = 'Identifier of the potential participant';
+$string['privacy:metadata:exammanagement_temp_part:line'] = 'Line number of the potential participant in the imported participants list';
+$string['privacy:metadata:exammanagement_rooms:roomid'] = 'Room id (internal)';
+$string['privacy:metadata:exammanagement_rooms:name'] = 'Name of the room';
+$string['privacy:metadata:exammanagement_rooms:description'] = 'Description of the room';
+$string['privacy:metadata:exammanagement_rooms:seatingplan'] = 'Seating plan as scalable vector graphic';
+$string['privacy:metadata:exammanagement_rooms:places'] = 'Places of the room as array in json syntax';
+$string['privacy:metadata:exammanagement_rooms:type'] = 'Room type (default or custom)';
+$string['privacy:metadata:exammanagement_rooms:moodleuserid'] = 'Moodle intern id of user who created custom room';
+$string['privacy:metadata:exammanagement_rooms:misc'] = 'Other config values in json syntax (at the moment only timestamp when default room is created)';
+$string['privacy:metadata:core_message'] = 'The exam management plugin sends messages to users and saves their content in the database. This can either be group messages to the participants with exam information, messages to the support if a teacher wants the support to reset the password of an exam management or a system message that informs the teacher about the upcoming deletion of the sensible exam data of an exam management.';
+
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Enable requesting password reset';
 $string['enablepasswordresetrequest_help'] = 'As soon as this function has been activated, all teachers in their exam organizations can request the reset of the passwords set there by clicking on the corresponding button. If a lecturer has done this, all users with the role "Manager" receive an automatically generated message both as internal notification and forwarded to the e-mail address stored in their profile and can then reset the password by clicking on the link contained in this message. This means that all teachers of the exam organization concerned are automatically informed via internal notification and e-mail that the password has been reset and can then access the contents of the exam organization again without having to enter a password. If the function is deactivated here, users cannot automatically request the password reset in their exam organization, but managers and administrators can still reset the password of any exam organization.';
