@@ -702,21 +702,6 @@ class exammanagementInstance{
 		$message->set_additional_content('email', $content);
 		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
 
-		//// Create a file instance.
-		//	$usercontext = context_user::instance($user->id);
-		// 	$file = new stdClass;
-		// 	$file->contextid = $usercontext->id;
-		// 	$file->component = 'user';
-		// 	$file->filearea  = 'private';
-		// 	$file->itemid    = 0;
-		// 	$file->filepath  = '/';
-		// 	$file->filename  = '1.txt';
-		// 	$file->source    = 'test';
-		//
-		// 	$fs = get_file_storage();
-		// 	$file = $fs->create_file_from_string($file, 'file1 content');
-		// 	$message->attachment = $file;
-
 		$messageid = message_send($message);
 
 		return $messageid;

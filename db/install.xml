@@ -44,7 +44,7 @@
           <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course of the exam management activity the participant belongs to"/>
           <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the participant belongs to"/>
           <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="Moodle intern user id of the participant"/>
-          <FIELD NAME="imtlogin" TYPE="char" LENGTH="25" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="Login of the participant"/>
+          <FIELD NAME="login" TYPE="char" LENGTH="25" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="Login of the participant"/>
           <FIELD NAME="firstname" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="First name of the participant (in case of nonmoodle)"/>
           <FIELD NAME="lastname" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Last name of the participant (in case of nonmoodle)"/>
           <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Mail address of the participant (in case of nonmoodle)"/>

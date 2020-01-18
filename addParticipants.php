@@ -257,7 +257,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			
 							array_push($deletedParticipants, $deletedMatrNrObj);
 
-						} else if($participant->moodleuserid === null && $participant->imtlogin && !in_array($participant->imtlogin, $tempIDs)){  // moodle participant that is not readed in again and should therefore be deleted
+						} else if($participant->moodleuserid === null && $participant->login && !in_array($participant->login, $tempIDs)){  // moodle participant that is not readed in again and should therefore be deleted
 							$deletedMatrNrObj = new stdclass;
 							$deletedMatrNrObj->moodleuserid = false;
 							$deletedMatrNrObj->matrnr = $participant->matrnr;
@@ -349,7 +349,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 									$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 									$user->moodleuserid = $temp[1];
-									$user->imtlogin = null;
+									$user->login = null;
 									$user->firstname = null;
 									$user->lastname = null;
 									$user->email = null;
@@ -379,9 +379,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								
 								$login = $noneMoodleParticipantsArr[$matrnr]['login'];
 								if($login){
-									$user->imtlogin = $login;
+									$user->login = $login;
 								} else {
-									$user->imtlogin = null;
+									$user->login = null;
 								}
 
 								$firstname = $noneMoodleParticipantsArr[$matrnr]['firstname'];
@@ -428,10 +428,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$userlogin = false;
 
 									$userlogin = $LdapManagerObj->getLoginForMatrNr($temp[1], 'importmatrnrnotpossible');
-										
-									if(!$LdapManagerObj->isLDAPenabled()) { // only for testiong
-										$userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($temp[1]);
-									}
 
 									if($userlogin){
 										$UserObj->deleteParticipant(false, $userlogin);

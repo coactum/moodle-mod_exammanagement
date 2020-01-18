@@ -97,13 +97,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 if($temp[0]== 'mid'){
                                     $UserObj->deleteParticipant($temp[1], false);
                                 } else {
-
-                                    if($temp[1] && $temp[2]){ //for testing
-
-                                        $UserObj->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
-                                    } else {
-                                        $UserObj->deleteParticipant(false, $temp[1]);
-                                    }
+                                    $UserObj->deleteParticipant(false, $temp[1]);
                                 }
                         }
                     }

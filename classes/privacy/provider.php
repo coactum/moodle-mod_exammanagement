@@ -115,7 +115,7 @@ class provider implements
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
-     * In the case of forum, that is any forum where the user has made any post, rated any content, or has any preferences.
+     * In this case of all exammanagements where a user is exam participant.
      *
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
@@ -124,103 +124,22 @@ class provider implements
         $contextlist = new \core_privacy\local\request\contextlist();
 
         $params = [
-            'modname'       => 'forum',
+            'modname'       => 'exammanagement',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $userid,
         ];
 
-        // Discussion creators.
+        // Where user is participant.
         $sql = "SELECT c.id
                   FROM {context} c
                   JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
-                 WHERE d.userid = :userid
+                  JOIN {exammanagement_participants} p ON p.plugininstanceid = cm.id
+                 WHERE p.moodleuserid = :userid
         ";
         $contextlist->add_from_sql($sql, $params);
 
-        // Post authors.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
-                  JOIN {forum_posts} p ON p.discussion = d.id
-                 WHERE p.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Forum digest records.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_digests} dig ON dig.forum = f.id
-                 WHERE dig.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Forum subscriptions.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_subscriptions} sub ON sub.forum = f.id
-                 WHERE sub.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Discussion subscriptions.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussion_subs} dsub ON dsub.forum = f.id
-                 WHERE dsub.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Discussion tracking preferences.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_track_prefs} pref ON pref.forumid = f.id
-                 WHERE pref.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Discussion read records.
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_read} hasread ON hasread.forumid = f.id
-                 WHERE hasread.userid = :userid
-        ";
-        $contextlist->add_from_sql($sql, $params);
-
-        // Rating authors.
-        $ratingsql = \core_rating\privacy\provider::get_sql_join('rat', 'mod_forum', 'post', 'p.id', $userid, true);
-        $sql = "SELECT c.id
-                  FROM {context} c
-                  JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
-                  JOIN {forum_posts} p ON p.discussion = d.id
-                  {$ratingsql->join}
-                 WHERE {$ratingsql->userwhere}
-        ";
-        $params += $ratingsql->params;
-        $contextlist->add_from_sql($sql, $params);
+        // Where user is teacher??.
 
         return $contextlist;
     }
@@ -239,142 +158,19 @@ class provider implements
 
         $params = [
             'instanceid'    => $context->instanceid,
-            'modulename'    => 'forum',
+            'modulename'    => 'exammanagement',
         ];
 
-        // Discussion authors.
-        $sql = "SELECT d.userid
+        // Participants
+        $sql = "SELECT p.moodleuserid
                   FROM {course_modules} cm
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
+                  JOIN {exammanagement_participants} p ON p.plugininstanceid = cm.id
                  WHERE cm.id = :instanceid";
         $userlist->add_from_sql('userid', $sql, $params);
 
-        // Forum authors.
-        $sql = "SELECT p.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
-                  JOIN {forum_posts} p ON d.id = p.discussion
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
+        // Teachers??
 
-        // Forum post ratings.
-        $sql = "SELECT p.id
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussions} d ON d.forum = f.id
-                  JOIN {forum_posts} p ON d.id = p.discussion
-                 WHERE cm.id = :instanceid";
-        \core_rating\privacy\provider::get_users_in_context_from_sql($userlist, 'rat', 'mod_forum', 'post', $sql, $params);
-
-        // Forum Digest settings.
-        $sql = "SELECT dig.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_digests} dig ON dig.forum = f.id
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
-
-        // Forum Subscriptions.
-        $sql = "SELECT sub.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_subscriptions} sub ON sub.forum = f.id
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
-
-        // Discussion subscriptions.
-        $sql = "SELECT dsub.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_discussion_subs} dsub ON dsub.forum = f.id
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
-
-        // Read Posts.
-        $sql = "SELECT hasread.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_read} hasread ON hasread.forumid = f.id
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
-
-        // Tracking Preferences.
-        $sql = "SELECT pref.userid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-                  JOIN {forum} f ON f.id = cm.instance
-                  JOIN {forum_track_prefs} pref ON pref.forumid = f.id
-                 WHERE cm.id = :instanceid";
-        $userlist->add_from_sql('userid', $sql, $params);
-    }
-
-    /**
-     * Store all user preferences for the plugin.
-     *
-     * @param   int         $userid The userid of the user whose data is to be exported.
-     */
-    public static function export_user_preferences(int $userid) {
-        $user = \core_user::get_user($userid);
-
-        switch ($user->maildigest) {
-            case 1:
-                $digestdescription = get_string('emaildigestcomplete');
-                break;
-            case 2:
-                $digestdescription = get_string('emaildigestsubjects');
-                break;
-            case 0:
-            default:
-                $digestdescription = get_string('emaildigestoff');
-                break;
-        }
-        writer::export_user_preference('mod_forum', 'maildigest', $user->maildigest, $digestdescription);
-
-        switch ($user->autosubscribe) {
-            case 0:
-                $subscribedescription = get_string('autosubscribeno');
-                break;
-            case 1:
-            default:
-                $subscribedescription = get_string('autosubscribeyes');
-                break;
-        }
-        writer::export_user_preference('mod_forum', 'autosubscribe', $user->autosubscribe, $subscribedescription);
-
-        switch ($user->trackforums) {
-            case 0:
-                $trackforumdescription = get_string('trackforumsno');
-                break;
-            case 1:
-            default:
-                $trackforumdescription = get_string('trackforumsyes');
-                break;
-        }
-        writer::export_user_preference('mod_forum', 'trackforums', $user->trackforums, $trackforumdescription);
-
-        $markasreadonnotification = get_user_preferences('markasreadonnotification', null, $user->id);
-        if (null !== $markasreadonnotification) {
-            switch ($markasreadonnotification) {
-                case 0:
-                    $markasreadonnotificationdescription = get_string('markasreadonnotificationno', 'mod_forum');
-                    break;
-                case 1:
-                default:
-                    $markasreadonnotificationdescription = get_string('markasreadonnotificationyes', 'mod_forum');
-                    break;
-            }
-            writer::export_user_preference('mod_forum', 'markasreadonnotification', $markasreadonnotification,
-                    $markasreadonnotificationdescription);
-        }
     }
 
     /**

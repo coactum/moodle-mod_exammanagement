@@ -186,7 +186,7 @@ class addCourseParticipantsForm extends moodleform{
                     
                     $mform->addElement('html', '<div class="row text-danger"><div class="col-xs-'.$col.' remove_col pl-4">');
 
-                    $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$participant->imtlogin.']', ' '. $participant->firstname .' '.$participant->lastname, null, array('group' => 1));
+                    $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$participant->login.']', ' '. $participant->firstname .' '.$participant->lastname, null, array('group' => 1));
 
                     $mform->addElement('html', '</div><div class="col-xs-'.$col.'">'.$participant->matrnr.'</div>');
 
@@ -268,9 +268,9 @@ class addCourseParticipantsForm extends moodleform{
 
                 $courseParticipant = new stdclass;
                 $courseParticipant->moodleuserid = $id;
-                $courseParticipant->imtlogin = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $id));
+                $courseParticipant->login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $id));
                 
-                array_push($allLogins, $courseParticipant->imtlogin);
+                array_push($allLogins, $courseParticipant->login);
 
                 $moodleUser = $UserObj->getMoodleUser($id);
 
@@ -313,8 +313,8 @@ class addCourseParticipantsForm extends moodleform{
 
                     if(!empty($matriculationNumbers)){
 
-                        if(isset($participant->imtlogin) && array_key_exists($participant->imtlogin, $matriculationNumbers) && $matriculationNumbers[$participant->imtlogin] !== false){
-                            $matrnr = $matriculationNumbers[$participant->imtlogin];
+                        if(isset($participant->login) && array_key_exists($participant->login, $matriculationNumbers) && $matriculationNumbers[$participant->login] !== false){
+                            $matrnr = $matriculationNumbers[$participant->login];
                         } else {
                             $matrnr = '-';
                         }

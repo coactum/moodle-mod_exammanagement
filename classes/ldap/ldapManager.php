@@ -148,7 +148,7 @@ class ldapManager{
 		}
 	}
 
-	public function getLoginForMatrNr($username, $disabledfeature){ // matrnr to imtlogin
+	public function getLoginForMatrNr($username, $disabledfeature){ // matrnr to login
 
 		if($this->isLDAPenabled()){
 			if($this->isLDAPconfigured()){

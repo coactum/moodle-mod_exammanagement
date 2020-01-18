@@ -51,13 +51,13 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
 
             foreach($NoneMoodleParticipants as $participant){
                 
-                if($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->imtlogin))){                 // check if none moodle participants have now moodle account
+                if($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->login))){                 // check if none moodle participants have now moodle account
                     
                     // if this is the case set moodle id instead of username and email
-                    $user = $MoodleDBObj->getRecordFromDB('user', array('username'=>$participant->imtlogin));
+                    $user = $MoodleDBObj->getRecordFromDB('user', array('username'=>$participant->login));
                     
                     $participant->moodleuserid = $user->id;
-                    $participant->imtlogin = Null;
+                    $participant->login = Null;
                     $participant->firstname = Null;
                     $participant->lastname = Null;
                     $participant->email = Null;

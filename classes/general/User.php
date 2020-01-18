@@ -62,7 +62,7 @@ class User{
 		if($participantsMode['mode'] === 'all'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid'=>$this->id));
 		} else if($participantsMode['mode'] === 'moodle'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => NULL));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => NULL));
 		} else if($participantsMode['mode'] === 'nonmoodle'){
 			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
 		} else if($participantsMode['mode'] === 'room'){
@@ -100,7 +100,7 @@ class User{
 				// add login if it is requested as attribute or needed for matrnr
 				if((in_array('login', $requestedAttributes) && isset($record->moodleuserid)) || (in_array('matrnr', $requestedAttributes) && isset($record->moodleuserid))){
                     $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $record->moodleuserid));
-					$record->imtlogin = $login;
+					$record->login = $login;
 				}
 
 				// add name if it is requested as attribute or needed for sorting or profile
@@ -169,15 +169,15 @@ class User{
 				$allLogins = array();
 
 				foreach($allParticipants as $key => $participant){ // set logins array for ldap method
-					array_push($allLogins, $participant->imtlogin);
+					array_push($allLogins, $participant->login);
 				}
 	
 				$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){
-						if(isset($participant->imtlogin) && $participant->imtlogin && array_key_exists($participant->imtlogin, $matriculationNumbers)){
-							$participant->matrnr = $matriculationNumbers[$participant->imtlogin];
+						if(isset($participant->login) && $participant->login && array_key_exists($participant->login, $matriculationNumbers)){
+							$participant->matrnr = $matriculationNumbers[$participant->login];
 						} else {
 							$participant->matrnr = '-';
 						} 
@@ -250,7 +250,7 @@ class User{
 		if($userid !== false && $userid !== null){
 			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
 		} else if($userlogin !== false && $userlogin !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $userlogin));
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $userlogin));
 		}
 
 		if($participantsObj){
@@ -361,8 +361,8 @@ class User{
 
 		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid))){
 			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
-		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $login))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $login));
+		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $login))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $login));
 		}
 	}
 
@@ -530,7 +530,7 @@ class User{
 		if($potentialParticipantId){
 			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'imtlogin' => $potentialParticipantLogin));
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $potentialParticipantLogin));
 		}
 	}
 
