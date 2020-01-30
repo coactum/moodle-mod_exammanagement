@@ -717,7 +717,7 @@ $string['privacy:metadata:exammanagement'] = 'Enthält keine personenbezogenen D
 $string['privacy:metadata:exammanagement_participants'] = 'Enthält alle Prüfungsteilnehmer aus allen Prüfungsorganisationen und deren persönliche Prüfungsinformationen.';
 $string['privacy:metadata:exammanagement_temp_part'] = 'Enthält alle temporär gespeicherten potenziellen Prüfungsteilnehmer aller Prüfungsorganisationen und deren persönliche Prüfungsinformationen. Diese potenziellen Prüfungsteilnehmer können nicht immer einem Moodle Benutzer zugeordnet werden und werden einmal täglich durch einen geplanten Vorgang gelöscht. Ein Export dieser Daten ist somit nicht möglich und eine weitergehende Löschung nicht notwendig.';
 $string['privacy:metadata:exammanagement_rooms'] = 'Enthält alle standard- und benutzerdefinierten Prüfungsräume die in den einzelnen Prüfungsorganisationen ausgewählt werden können.';
-$string['privacy:metadata:exammanagement_participants:plugininstanceid'] = 'ID der Prüfungsorganisation des Teilnehmers';
+$string['privacy:metadata:exammanagement_participants:exammanagement'] = 'ID der Prüfungsorganisation des Teilnehmers';
 $string['privacy:metadata:exammanagement_participants:courseid'] = 'Kurs der Prüfungsorganisation des Teilnehmers';
 $string['privacy:metadata:exammanagement_participants:categoryid'] = 'Category-ID des Kurses der Prüfungsorganisation des Teilnehmers';
 $string['privacy:metadata:exammanagement_participants:moodleuserid'] = 'Moodleinterne ID des Teilnehmers';
@@ -784,3 +784,5 @@ $string['warningmailsubjecttwo'] = '[Prüfungsorganisation] Warnung: Baldige Lö
 $string['warningmailsubjectthree'] = '[Prüfungsorganisation] Letzte Warnung: Die Prüfungsdaten werden morgen gelöscht';
 $string['warningmailcontent'] = 'Alle Prüfungsinformationen der Prüfung "{$a->examname}" im Kurs "{$a->coursename}" werden am {$a->datadeletiondate} gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der {$a->systemname} Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
 $string['warningmailcontentenglish'] = '<strong>English version</strong>: All information on the exam "{$a->examname}" in course "{$a->coursename}" will be deleted on {$a->datadeletiondate}. Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the {$a->systemname} exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';
+
+$string['upb_migrate_plugininstanceid_to_exammanagement'] = 'DB-Feld plugininstance zu exammanagement migrieren (UPB)'; // only for upb migration to pluginversion XXX

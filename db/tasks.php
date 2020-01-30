@@ -53,4 +53,14 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+
+    [
+        'classname' => 'mod_exammanagement\task\upb_migrate_plugininstanceid_to_exammanagement',
+        'blocking' => 0,
+        'minute' => '40',
+        'hour' => '23',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
  ];
