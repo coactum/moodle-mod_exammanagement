@@ -45,7 +45,7 @@ class importBonusForm extends moodleform{
         global $PAGE, $CFG, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'init'); //call jquery for tracking input value change events and creating input type number fields
         $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'addbonusstep'); //call jquery for adding tasks

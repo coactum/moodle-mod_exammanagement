@@ -46,7 +46,8 @@ class participantsOverviewForm extends moodleform {
         global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-		$UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
+
 		$MoodleDBObj = MoodleDB::getInstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init'); //call jquery for tracking input value change events and creating input type number fields

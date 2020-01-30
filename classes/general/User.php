@@ -33,19 +33,21 @@ class User{
 
 	protected $id;
 	protected $e;
+	protected $exammanagement;
 
-	private function __construct($id, $e) {
+	private function __construct($id, $e, $exammanagement) {
 		$this->id = $id;
 		$this->e = $e;
+		$this->exammanagement = $exammanagement;
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e){
+	public static function getInstance($id, $e, $exammanagement){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new User($id, $e);
+				$inst = new User($id, $e, $exammanagement);
 			}
 			return $inst;
 
@@ -60,21 +62,21 @@ class User{
 		$allParticipants = array();
 
 		if($participantsMode['mode'] === 'all'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid'=>$this->id));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement'=>$this->exammanagement));
 		} else if($participantsMode['mode'] === 'moodle'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => NULL));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => NULL));
 		} else if($participantsMode['mode'] === 'nonmoodle'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => NULL));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => NULL));
 		} else if($participantsMode['mode'] === 'room'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'roomid' => $participantsMode['id']));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'roomid' => $participantsMode['id']));
 		} else if($participantsMode['mode'] === 'header'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('plugininstanceid' => $this->id, 'headerid' => $participantsMode['id']));
+			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsMode['id']));
 		} else if($participantsMode['mode'] === 'resultsafterexamreview'){
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 			$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
 
-			$select = "plugininstanceid =".$this->id;
+			$select = "exammanagement =".$this->exammanagement;
 			$select .= " AND exampoints IS NOT NULL";
 			$select .= " AND examstate IS NOT NULL";
 			$select .= " AND timeresultsentered IS NOT NULL";
@@ -248,9 +250,9 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($userid !== false && $userid !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid));
 		} else if($userlogin !== false && $userlogin !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $userlogin));
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $userlogin));
 		}
 
 		if($participantsObj){
@@ -282,7 +284,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "plugininstanceid =".$this->id;
+		$select = "exammanagement =".$this->exammanagement;
 		$select .= " AND moodleuserid IS NULL";
 
 		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
@@ -359,10 +361,10 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $userid));
-		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $login))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $login));
+		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid));
+		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login));
 		}
 	}
 
@@ -374,8 +376,8 @@ class User{
 		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-		if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $this->id));
+		if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement))){
+			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement));
 		}
 	}
 	
@@ -386,8 +388,8 @@ class User{
 			$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-			if($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('plugininstanceid' => $this->id))){
-				$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $this->id));
+			if($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $this->exammanagement))){
+				$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $this->exammanagement));
 			} else {
 				return false;
 			}
@@ -528,9 +530,9 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($potentialParticipantId){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'moodleuserid' => $potentialParticipantId));
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $potentialParticipantId));
 		} else if($potentialParticipantLogin){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $this->id, 'login' => $potentialParticipantLogin));
+			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $potentialParticipantLogin));
 		}
 	}
 
@@ -554,7 +556,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "plugininstanceid =".$this->id;
+		$select = "exammanagement =".$this->exammanagement;
 
 		if($mode == 'moodle'){
 			$select .= " AND moodleuserid IS NOT NULL";
@@ -577,7 +579,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "plugininstanceid =".$this->id;
+		$select = "exammanagement =".$this->exammanagement;
 		$select .= " AND bonus IS NOT NULL";
 		
 		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
@@ -593,7 +595,7 @@ class User{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 		
-		$select = "plugininstanceid =".$this->id;
+		$select = "exammanagement =".$this->exammanagement;
 		$select .= " AND exampoints IS NOT NULL";
 		$select .= " AND examstate IS NOT NULL";
 

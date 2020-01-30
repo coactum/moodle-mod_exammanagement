@@ -126,16 +126,16 @@ function exammanagement_delete_instance($id) {
      }
 
      // delete participants
-     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+     $exists = $DB->get_records('exammanagement_participants', array('exammanagement' => $cm->id));
      if($exists) {
-        $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
+        $DB->delete_records('exammanagement_participants', array('exammanagement' => $cm->id));
      }
 
 
     // delete temporary participants
-    $exists = $DB->get_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+    $exists = $DB->get_records('exammanagement_temp_part', array('exammanagement' => $cm->id));
     if ($exists) {
-        $DB->delete_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+        $DB->delete_records('exammanagement_temp_part', array('exammanagement' => $cm->id));
     }
 
     // delete plugin instance

@@ -37,7 +37,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if($ExammanagementInstanceObj->isExamDataDeleted()){

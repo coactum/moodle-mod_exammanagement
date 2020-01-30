@@ -38,7 +38,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -48,9 +48,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       // reset all exiting places for participants
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $id));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $id));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $id));
 
       $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array()); // get all exam participants sorted by name
 

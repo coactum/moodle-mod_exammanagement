@@ -39,7 +39,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -79,7 +79,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                             if($UserObj->checkIfAlreadyParticipant($participantId) == false){
                                 $user = new stdClass();
-                                $user->plugininstanceid = $id;
+                                $user->exammanagement = $id;
                                 $user->courseid = $courseid;
                                 $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                 $user->moodleuserid = $participantId;

@@ -45,7 +45,7 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $LdapManagerObj = ldapManager::getInstance();	
 $MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -67,7 +67,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			}
 
 			# define participants for form #
-			$tempParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('plugininstanceid' => $id)); // get all participants that are already readed in and saved as temnp participants
+			$tempParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $id)); // get all participants that are already readed in and saved as temnp participants
 
 			if($tempParticipants){
 
@@ -345,7 +345,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 								if($temp[0]== 'mid'){ // if participant is moodle user
 									$user = new stdClass();
-									$user->plugininstanceid = $id;
+									$user->exammanagement = $id;
 									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 									$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 									$user->moodleuserid = $temp[1];
@@ -372,7 +372,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								$matrnr = $temp[1];
 
 								$user = new stdClass();
-								$user->plugininstanceid = $id;
+								$user->exammanagement = $id;
 								$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 								$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 								$user->moodleuserid = null;
@@ -472,7 +472,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 										$identifier = str_replace('"', '', $pmatrnr);
 										if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
 											$tempUserObj = new stdclass;
-											$tempUserObj->plugininstanceid = $id;
+											$tempUserObj->exammanagement = $id;
 											$tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
 											$tempUserObj->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 											$tempUserObj->identifier = $identifier;

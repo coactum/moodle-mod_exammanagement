@@ -185,33 +185,32 @@ function xmldb_exammanagement_upgrade($oldversion) {
 
         $table = new xmldb_table('exammanagement_participants');
         $field = new xmldb_field('imtlogin', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+        
         if ($dbman->field_exists($table, $field)) {
             $dbman->rename_field($table, $field, 'login');
-        }
-
-        // Conditionally launch add field for exammanagement.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
         }
 
         // Exammanagement savepoint reached.
         upgrade_mod_savepoint(true, 2020010400, 'exammanagement');
     }
 
-    if ($oldversion < 2020011000) { // rename field plugininstanceid to meet moodle standards
+    if ($oldversion < 2020011800) { // add new field exammanagement to meet moodle standards, field plugininstanceid now deprecated
 
         $table = new xmldb_table('exammanagement_participants');
-        $field = new xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-            if ($dbman->field_exists($table, $field)) {
-                $dbman->rename_field($table, $field, 'exammanagement');
-            }
+        $field = new xmldb_field('exammanagement', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+            
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
-            $table = new xmldb_table('exammanagement_temp_part');
-            if ($dbman->field_exists($table, $field)) {
-                $dbman->rename_field($table, $field, 'exammanagement');
-            }
+        $table = new xmldb_table('exammanagement_temp_part');
+        
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
         // Exammanagement savepoint reached.
-        upgrade_mod_savepoint(true, 2020011000, 'exammanagement');
+        upgrade_mod_savepoint(true, 2020011800, 'exammanagement');
     }
 
     return true;

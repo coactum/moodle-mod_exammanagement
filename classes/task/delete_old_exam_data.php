@@ -159,8 +159,8 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                 $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
                 // delete participants data
-                if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('plugininstanceid' => $cmid))){
-                    $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('plugininstanceid' => $cmid));
+                if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $cmid))){
+                    $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $cmid));
                 }
             }
         }

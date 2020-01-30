@@ -53,7 +53,7 @@ class addCourseParticipantsForm extends moodleform{
         global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
         $MoodleDBObj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $LdapManagerObj = ldapManager::getInstance();

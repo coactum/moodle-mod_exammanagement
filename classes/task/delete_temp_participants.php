@@ -26,7 +26,6 @@ namespace mod_exammanagement\task;
 use mod_exammanagement\general\MoodleDB;
 
 require_once(__DIR__.'/../general/MoodleDB.php');
-require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 class delete_temp_participants extends \core\task\scheduled_task { 
     /**

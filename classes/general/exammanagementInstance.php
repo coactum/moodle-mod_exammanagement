@@ -310,7 +310,7 @@ class exammanagementInstance{
 
 	public function allPlacesAssigned(){
 
-		$UserObj = User::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
 
 		$assignedPlacesCount = $this->getAssignedPlacesCount();
 
@@ -328,7 +328,7 @@ class exammanagementInstance{
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "plugininstanceid =".$this->id;
+		$select = "exammanagement =".$this->getCm()->instance;
 		$select .= " AND place IS NOT NULL";
 		
 		$assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
@@ -461,7 +461,7 @@ class exammanagementInstance{
 
  	public function checkPhaseCompletion($phase){
 
-		$UserObj = User::getInstance($this->id, $this->e);
+		$UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
 
  		switch ($phase){
 

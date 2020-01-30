@@ -43,8 +43,8 @@ $deletedefaultroomid  = optional_param('deletedefaultroomid', 0, PARAM_TEXT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -115,9 +115,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($UserObj->getParticipantsCount('room', $roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
 
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $id));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $id));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $id));
                   break;
                 }      
               }

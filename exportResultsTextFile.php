@@ -37,7 +37,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 define( "SEPARATOR", chr(9) ); //Tabulator

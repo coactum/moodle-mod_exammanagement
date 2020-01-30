@@ -43,7 +43,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){

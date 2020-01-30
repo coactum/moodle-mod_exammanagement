@@ -39,7 +39,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 $sortmode  = optional_param('sortmode', 0, PARAM_TEXT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $LDAPManagerObj = LDAPManager::getInstance();

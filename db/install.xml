@@ -40,7 +40,7 @@
       <TABLE NAME="exammanagement_participants" COMMENT="contains all exam participants from all exam management instances and their respective data">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-          <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Id of the exam management activity the participant belongs to"/>
+          <FIELD NAME="exammanagement" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Id of the exam management activity the participant belongs to"/>
           <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course of the exam management activity the participant belongs to"/>
           <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the participant belongs to"/>
           <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="Moodle intern user id of the participant"/>
@@ -61,13 +61,13 @@
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
         <INDEXES>
-          <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
+          <INDEX NAME="exammanagement" UNIQUE="false" FIELDS="exammanagement"/>
         </INDEXES>
       </TABLE>
       <TABLE NAME="exammanagement_temp_part" COMMENT="contains all temporary saved potential participants from all exam management instances and their respective data">
           <FIELDS>
               <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-              <FIELD NAME="plugininstanceid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Id of the exam management activity the potential participant belongs to"/>
+              <FIELD NAME="exammanagement" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Id of the exam management activity the potential participant belongs to"/>
               <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course of the exam management activity the potential participant belongs to"/>
               <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the potential participant belongs to"/>
               <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Identifier of the potential participant"/>
@@ -77,7 +77,7 @@
               <KEY NAME="primary" TYPE="primary" FIELDS="id" />
           </KEYS>
           <INDEXES>
-              <INDEX NAME="plugininstanceid" UNIQUE="false" FIELDS="plugininstanceid"/>
+              <INDEX NAME="exammanagement" UNIQUE="false" FIELDS="exammanagement"/>
           </INDEXES>
       </TABLE>
       <TABLE NAME="exammanagement_rooms" COMMENT="contains all default and custom exam rooms available in the exam management instances">
