@@ -273,156 +273,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
         
-        // ############# test #################
-
-        // ### test contextlist exammanagement ####
-        // $params = [
-        //     'modname'       => 'exammanagement',
-        //     'contextlevel'  => CONTEXT_MODULE,
-        //     'userid'        => 9,
-        // ];
-
-        // // Where user is participant.
-        // $sql = "SELECT c.id
-        //           FROM {context} c
-        //           JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-        //           JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-        //           JOIN {role_assignments} t ON t.contextid = c.id
-        //          WHERE t.userid = :userid AND t.roleid = 3
-        // ";
-
-        // var_dump($DB->get_records_sql($sql, $params, $limitfrom=0, $limitnum=0));
-
-
-        // // normally method param
-
-        // $contextlist = new \core_privacy\local\request\contextlist();
-
-        // ### /test contextlist exammanagement####
-
-        // ### test exportdata glossary
-
-        // // get exammanagement entries.
-        // $sql = "SELECT c.id
-        //           FROM {context} c
-        //           JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-        //           JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-        //           JOIN {glossary} g ON g.id = cm.instance
-        //           JOIN {glossary_entries} ge ON ge.glossaryid = g.id
-        //          WHERE ge.userid = :glossaryentryuserid";
-        // $params = [
-        //     'contextlevel' => CONTEXT_MODULE,
-        //     'modname' => 'glossary',
-        //     'commentarea' => 'glossary_entry',
-        //     'glossaryentryuserid' => 8,
-        // ];
-        // $contextlist->add_from_sql($sql, $params);
-        
-        // var_dump('contextlist: ');
-        // var_dump($contextlist);
-
-        // // method export_user_data
-        // global $DB;
-
-        // if (empty($contextlist->count())) {
-        //     return;
-        // }
-
-        // $user = new stdclass; $user->id = 33;         //$user = $contextlist->get_user();
-
-        // list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
-
-        // $params = [
-        //     'userid' => $user->id,
-        //     'modulename' => 'exammanagement',
-        //     'contextlevel' => CONTEXT_MODULE,
-        // ] + $contextparams;
-
-        // var_dump('params: ');
-        // var_dump($params);
-
-        // $sql = "SELECT c.id, p.lastname, e.name
-        //         FROM {context} c
-        //         JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-        //         JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
-        //         JOIN {exammanagement} p ON p.exammanagement = cm.id
-        //         JOIN {exammanagement_participants} p ON p.exammanagement = cm.id
-        //         WHERE p.moodleuserid = :userid
-        //         ORDER BY c.id, p.moodleuserid";
-        
-        // $exammanagementdata = $DB->get_recordset_sql($sql, $params);
-
-        // var_dump('exammanagementdata: ');
-        // var_dump($exammanagementdata);
-
-
-
-        // // Reference to the glossary activity seen in the last iteration of the loop. By comparing this with the
-        // // current record, and because we know the results are ordered, we know when we've moved to the entries
-        // // for a new glossary activity and therefore when we can export the complete data for the last activity.
-        // $lastcmid = null;
-
-        // $glossarydata = [];
-        // foreach ($glossaryentries as $record) {
-        //     $concept = format_string($record->concept);
-        //     $path = array_merge([get_string('entries', 'mod_glossary'), $concept . " ({$record->entryid})"]);
-
-        //     // If we've moved to a new glossary, then write the last glossary data and reinit the glossary data array.
-        //     if (!is_null($lastcmid)) {
-        //         if ($lastcmid != $record->cmid) {
-        //             if (!empty($glossarydata)) {
-        //                 $context = \context_module::instance($lastcmid);
-        //                 var_dump($glossarydata); self::export_glossary_data_for_user($glossarydata, $context, [], $user);
-        //                 $glossarydata = [];
-        //             }
-        //         }
-        //     }
-        //     $lastcmid = $record->cmid;
-        //     $context = \context_module::instance($lastcmid);
-
-        //     // Export files added on the glossary entry definition field.
-        //     $definition = format_text(\core_privacy\local\request\writer::with_context($context)->rewrite_pluginfile_urls($path, 'mod_glossary',
-        //         'entry',  $record->entryid, $record->definition), $record->definitionformat);
-
-        //     // Export just the files attached to this user entry.
-        //     if ($record->userid == $user->id) {
-        //         // Get all files attached to the glossary attachment.
-        //         \core_privacy\local\request\writer::with_context($context)->export_area_files($path, 'mod_glossary', 'entry', $record->entryid);
-
-        //         // Get all files attached to the glossary attachment.
-        //         \core_privacy\local\request\writer::with_context($context)->export_area_files($path, 'mod_glossary', 'attachment', $record->entryid);
-        //     }
-
-        //     // Export associated comments.
-        //     \core_comment\privacy\provider::export_comments($context, 'mod_glossary', 'glossary_entry',
-        //             $record->entryid, $path, $record->userid != $userid);
-
-        //     // Export associated tags.
-        //     \core_tag\privacy\provider::export_item_tags($userid, $context, $path, 'mod_glossary', 'glossary_entries',
-        //             $record->entryid, $record->userid != $userid);
-
-        //     // Export associated ratings.
-        //     \core_rating\privacy\provider::export_area_ratings($userid, $context, $path, 'mod_glossary', 'entry',
-        //             $record->entryid, $record->userid != $userid);
-
-        //     $glossarydata['entries'][] = [
-        //         'concept'       => $record->concept,
-        //         'definition'    => $definition,
-        //         'timecreated'   => \core_privacy\local\request\transform::datetime($record->timecreated),
-        //         'timemodified'  => \core_privacy\local\request\transform::datetime($record->timemodified)
-        //     ];
-        // }
-        // $glossaryentries->close();
-
-        // // The data for the last activity won't have been written yet, so make sure to write it now!
-        // if (!empty($glossarydata)) {
-        //     $context = \context_module::instance($lastcmid);
-        //     var_dump($glossarydata); //self::export_glossary_data_for_user($glossarydata, $context, [], $user);
-        // }
-
-        // ############# /test #################
-
-
         $MoodleObj->outputFooter();
         
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
@@ -501,29 +351,27 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
 $ExammanagementInstanceObj->startEvent('view');
 
-// $event = \mod_exammanagement\event\log_variable::create(['other' => 'hallo' . json_encode($ExammanagementInstanceObj)]); // auch objekte übergebbar, jedoch müssen diese in json codiert sein
-// $event->trigger();
-
-
-
-if ($rs = $MoodleDBObj->getRecordset('exammanagement_participants', array())) {
+// if ($rs = $MoodleDBObj->getRecordset('exammanagement_participants', array())) {
     
-    if($rs->valid()){
+//     if($rs->valid()){
 
-        foreach ($rs as $record) {
+//         foreach ($rs as $record) {
 
-            $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
+//             $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
             
-            $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance));
+//             $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance));
 
-            $record->exammanagement = '0';
+//             $record->exammanagement = '0';
 
-            $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $record);
+//             $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $record);
 
-        }
+//         }
 
-        $rs->close();
+//         $rs->close();
     
-    }
+//     }
 
-}
+// }
+
+// $event = \mod_exammanagement\event\log_variable::create(['other' => 'export_user_data:' .  'exammanagements' . json_encode($exammanagements)]);
+// $event->trigger();

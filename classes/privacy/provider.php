@@ -27,18 +27,17 @@ namespace mod_exammanagement\privacy;
 use \core_privacy\local\request\userlist;
 use \core_privacy\local\request\approved_contextlist;
 use \core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\deletion_criteria;
 use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper as request_helper;
+use \core_privacy\local\request\helper;
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Based on the implementation of the privacy subsystem plugin provider for the forum activity module.
+ * Implementation of the privacy subsystem plugin provider for the exammanagement activity module.
  *
- * @copyright  2018 Andrew Nicols <andrew@nicols.co.uk>
+ * @copyright  coactum GmbH 2019
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
@@ -141,11 +140,6 @@ class provider implements
 
         $contextlist->add_from_sql($sql, $params);
 
-        // Where user is teacher??.
-
-        $event = \mod_exammanagement\event\log_variable::create(['other' => 'get_contexts_for_userid: ' . 'userid' . $userid  . 'contextlist' .json_encode($contextlist)]);
-        $event->trigger();
-
         return $contextlist;
     }
 
@@ -156,6 +150,9 @@ class provider implements
      */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
+
+        $event = \mod_exammanagement\event\log_variable::create(['other' => 'get_users_in_context: ' . 'userlist' .json_encode($userlist) .'context' . json_encode($context)]);
+        $event->trigger();
 
         if (!is_a($context, \context_module::class)) {
             return;
@@ -174,12 +171,6 @@ class provider implements
                   JOIN {exammanagement_participants} p ON p.exammanagement = e.id
                  WHERE cm.id = :instanceid";
         $userlist->add_from_sql('userid', $sql, $params);
-
-        $event = \mod_exammanagement\event\log_variable::create(['other' => 'get_users_in_context: ' . json_encode($userlist)]);
-        $event->trigger();
-
-        // Teachers??
-
     }
 
     /**
@@ -190,9 +181,6 @@ class provider implements
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
-        $event = \mod_exammanagement\event\log_variable::create(['other' => 'export_user_data: ' . json_encode($contextlist)]);
-        $event->trigger();
-
         if (empty($contextlist)) {
             return;
         }
@@ -202,12 +190,26 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        // debug via event?
-        
-        // Digested forums.
+        // exammanagement and participants exam data
         $sql = "SELECT
-                    c.id AS contextid,
-                    p.moodleuserid AS moodlesuerid
+                    cm.id AS cmid,
+                    e.id,
+                    e.name,
+                    e.timecreated,
+                    e.timemodified,
+                    p.moodleuserid AS moodleuserid,
+                    p.login,
+                    p.firstname,
+                    p.lastname,
+                    p.email,
+                    p.headerid,
+                    p.roomid,
+                    p.roomname,
+                    p.place,
+                    p.exampoints,
+                    p.examstate,
+                    p.timeresultsentered,
+                    p.bonus
                   FROM {context} c
                   JOIN {course_modules} cm ON cm.id = c.instanceid
                   JOIN {exammanagement} e ON e.id = cm.instance
@@ -217,81 +219,83 @@ class provider implements
                     c.id {$contextsql}
                 )
         ";
+
         $params = $contextparams;
         $params['userid'] = $userid;
-        $exammanagements = $DB->get_records_sql_menu($sql, $params);
-
-
-        $event = \mod_exammanagement\event\log_variable::create(['other' => 'hallo']);
-        $event->trigger();
+        $exammanagements = $DB->get_recordset_sql($sql, $params);
 
         foreach ($exammanagements as $exammanagement) {
 
             $concept = format_string($exammanagement->name);
             $path = array_merge([get_string('modulename', 'mod_exammanagement'), $concept . " ({$exammanagement->id})"]);
 
-            // If we've moved to a new glossary, then write the last glossary data and reinit the glossary data array.
-            if (!is_null($lastid)) {
-                if ($lastid != $exammanagement->id) {
-                    if (!empty($exammanagementdata)) {
-                        $context = \context_module::instance($lastid);
-                        self::export_exammanagement_data_for_user($exammanagementdata, $context, [], $user);
-                        //self::export_participants_data_for_user($participantsdata, $context, [], $user);
-                        $exammanagementdata = [];
-                    }
-                }
-            }
-            $lastid = $exammanagement->id;
-            $context = \context_module::instance($lastid);
+            if ($exammanagement) {
+                $context = \context_module::instance($exammanagement->cmid);
 
-            $exammanagementdata['exammanagement'][] = [
-                'id'       => $exammanagement->id,
-                'name'    => $exammanagement->name,
-                'timecreated'   => \core_privacy\local\request\transform::datetime($exammanagement->timecreated),
-                'timemodified'  => \core_privacy\local\request\transform::datetime($exammanagement->timemodified)
-            ];
+                if($exammanagement->timemodified == 0){
+                    $exammanagement->timemodified = null;
+                } else {
+                    $exammanagement->timemodified = \core_privacy\local\request\transform::datetime($exammanagement->timemodified);
+                }
+
+                $exammanagementdata = [
+                    'id'       => $exammanagement->id,
+                    'timecreated'   => \core_privacy\local\request\transform::datetime($exammanagement->timecreated),
+                    'timemodified' => $exammanagement->timemodified,
+                ];
+
+                if($exammanagement->timeresultsentered !== null){
+                    $exammanagement->timeresultsentered = \core_privacy\local\request\transform::datetime($exammanagement->timeresultsentered);
+                }
+
+                if($exammanagement->exampoints !== null){
+                    $exammanagement->exampoints = json_encode($exammanagement->exampoints);
+                }
+
+                if($exammanagement->examstate !== null){
+                    $exammanagement->examstate = json_encode($exammanagement->examstate);
+                }
+
+                $exammanagementdata['participant data:'] = [
+                    'userid' => $exammanagement->moodleuserid,
+                    'login' => $exammanagement->login,
+                    'firstname' => $exammanagement->firstname,
+                    'lastname' => $exammanagement->lastname,
+                    'email' => $exammanagement->email,
+                    'headerid' => $exammanagement->headerid,
+                    'roomid' => $exammanagement->roomid,
+                    'roomname' => $exammanagement->roomname,
+                    'place' => $exammanagement->place,
+                    'exampoints' => $exammanagement->exampoints,
+                    'examstate' => $exammanagement->examstate,
+                    'timeresultsentered' => $exammanagement->timeresultsentered,
+                    'bonus' => $exammanagement->bonus,
+                ];
+
+                self::export_exammanagement_data_for_user($exammanagementdata, $context, [], $user);
+            }
         }
 
         $exammanagements->close();
-
-        // The data for the last activity won't have been written yet, so make sure to write it now!
-        if (!empty($exammanagementdata)) {
-            $context = \context_module::instance($lastid);
-            self::export_exammanagement_data_for_user($exammanagementdata, $context, [], $user);
-        }
     }
 
     /**
-     * Export all data in the post.
+     * Export the supplied personal data for a single exammanagement activity, along with all generic data for the activity.
      *
-     * @param   int         $userid The userid of the user whose data is to be exported.
-     * @param   \context    $context The instance of the forum context.
-     * @param   array       $postarea The subcontext of the parent.
-     * @param   \stdClass   $post The post structure and all of its children
+     * @param array $exammanagementdata The personal data to export for the exammanagement activity.
+     * @param \context_module $context The context of the exammanagement activity.
+     * @param array $subcontext The location within the current context that this data belongs.
+     * @param \stdClass $user the user record
      */
-    protected static function export_exammanagement_data_for_user(array $glossarydata, \context_module $context,array $subcontext, \stdClass $user) {
-        // Fetch the generic module data for the glossary.
+    protected static function export_exammanagement_data_for_user(array $exammanagementdata, \context_module $context, array $subcontext, \stdClass $user) {
+        // Fetch the generic module data for the exammanagement activity.
         $contextdata = helper::get_context_data($context, $user);
-        // Merge with glossary data and write it.
-        $contextdata = (object)array_merge((array)$contextdata, $glossarydata);
+        // Merge with exammanagement data and write it.
+        $contextdata = (object)array_merge((array)$contextdata, $exammanagementdata);
         writer::with_context($context)->export_data($subcontext, $contextdata);
         // Write generic module intro files.
         helper::export_context_files($context, $user);
     }
-
-    /**
-     * Export all data in the post.
-     *
-     * @param   int         $userid The userid of the user whose data is to be exported.
-     * @param   \context    $context The instance of the forum context.
-     * @param   array       $postarea The subcontext of the parent.
-     * @param   \stdClass   $post The post structure and all of its children
-     */
-    protected static function export_participants_data_for_user(int $userid, \context $context, $postarea, $post) {
-        
-    }
-
-
 
     /**
      * Delete all data for all users in the specified context.
@@ -307,47 +311,15 @@ class provider implements
         }
 
         // Get the course module.
-        if (!$cm = get_coursemodule_from_id('forum', $context->instanceid)) {
+        if (!$cm = get_coursemodule_from_id('exammanagement', $context->instanceid)) {
             return;
         }
 
-        $forumid = $cm->instance;
+        $exammanagementid = $cm->instance;
 
-        $DB->delete_records('forum_track_prefs', ['forumid' => $forumid]);
-        $DB->delete_records('forum_subscriptions', ['forum' => $forumid]);
-        $DB->delete_records('forum_read', ['forumid' => $forumid]);
-        $DB->delete_records('forum_digests', ['forum' => $forumid]);
-
-        // Delete all discussion items.
-        $DB->delete_records_select(
-            'forum_queue',
-            "discussionid IN (SELECT id FROM {forum_discussions} WHERE forum = :forum)",
-            [
-                'forum' => $forumid,
-            ]
-        );
-
-        $DB->delete_records_select(
-            'forum_posts',
-            "discussion IN (SELECT id FROM {forum_discussions} WHERE forum = :forum)",
-            [
-                'forum' => $forumid,
-            ]
-        );
-
-        $DB->delete_records('forum_discussion_subs', ['forum' => $forumid]);
-        $DB->delete_records('forum_discussions', ['forum' => $forumid]);
-
-        // Delete all files from the posts.
-        $fs = get_file_storage();
-        $fs->delete_area_files($context->id, 'mod_forum', 'post');
-        $fs->delete_area_files($context->id, 'mod_forum', 'attachment');
-
-        // Delete all ratings in the context.
-        \core_rating\privacy\provider::delete_ratings($context, 'mod_forum', 'post');
-
-        // Delete all Tags.
-        \core_tag\privacy\provider::delete_item_tags($context, 'mod_forum', 'forum_posts');
+        // Delete all records.
+        $DB->delete_records('exammanagement_participants', ['exammanagement' => $exammanagementid]);
+        $DB->delete_records('exammanagement_temp_part', ['exammanagement' => $exammanagementid]);
     }
 
     /**
@@ -356,80 +328,20 @@ class provider implements
      * @param   approved_contextlist    $contextlist    The approved contexts and user information to delete information for.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
+        
         global $DB;
+        
         $user = $contextlist->get_user();
         $userid = $user->id;
+        
         foreach ($contextlist as $context) {
             // Get the course module.
             $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-            $forum = $DB->get_record('forum', ['id' => $cm->instance]);
 
-            $DB->delete_records('forum_track_prefs', [
-                'forumid' => $forum->id,
+            $DB->delete_records('exammanagement_participants', [
+                'exammanagement' => $cm->instance,
                 'userid' => $userid,
             ]);
-            $DB->delete_records('forum_subscriptions', [
-                'forum' => $forum->id,
-                'userid' => $userid,
-            ]);
-            $DB->delete_records('forum_read', [
-                'forumid' => $forum->id,
-                'userid' => $userid,
-            ]);
-
-            $DB->delete_records('forum_digests', [
-                'forum' => $forum->id,
-                'userid' => $userid,
-            ]);
-
-            // Delete all discussion items.
-            $DB->delete_records_select(
-                'forum_queue',
-                "userid = :userid AND discussionid IN (SELECT id FROM {forum_discussions} WHERE forum = :forum)",
-                [
-                    'userid' => $userid,
-                    'forum' => $forum->id,
-                ]
-            );
-
-            $DB->delete_records('forum_discussion_subs', [
-                'forum' => $forum->id,
-                'userid' => $userid,
-            ]);
-
-            // Do not delete discussion or forum posts.
-            // Instead update them to reflect that the content has been deleted.
-            $postsql = "userid = :userid AND discussion IN (SELECT id FROM {forum_discussions} WHERE forum = :forum)";
-            $postidsql = "SELECT fp.id FROM {forum_posts} fp WHERE {$postsql}";
-            $postparams = [
-                'forum' => $forum->id,
-                'userid' => $userid,
-            ];
-
-            // Update the subject.
-            $DB->set_field_select('forum_posts', 'subject', '', $postsql, $postparams);
-
-            // Update the message and its format.
-            $DB->set_field_select('forum_posts', 'message', '', $postsql, $postparams);
-            $DB->set_field_select('forum_posts', 'messageformat', FORMAT_PLAIN, $postsql, $postparams);
-
-            // Mark the post as deleted.
-            $DB->set_field_select('forum_posts', 'deleted', 1, $postsql, $postparams);
-
-            // Note: Do _not_ delete ratings of other users. Only delete ratings on the users own posts.
-            // Ratings are aggregate fields and deleting the rating of this post will have an effect on the rating
-            // of any post.
-            \core_rating\privacy\provider::delete_ratings_select($context, 'mod_forum', 'post',
-                    "IN ($postidsql)", $postparams);
-
-            // Delete all Tags.
-            \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_forum', 'forum_posts',
-                    "IN ($postidsql)", $postparams);
-
-            // Delete all files from the posts.
-            $fs = get_file_storage();
-            $fs->delete_area_files_select($context->id, 'mod_forum', 'post', "IN ($postidsql)", $postparams);
-            $fs->delete_area_files_select($context->id, 'mod_forum', 'attachment', "IN ($postidsql)", $postparams);
         }
     }
 
@@ -443,47 +355,11 @@ class provider implements
 
         $context = $userlist->get_context();
         $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-        $forum = $DB->get_record('forum', ['id' => $cm->instance]);
 
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
-        $params = array_merge(['forumid' => $forum->id], $userinparams);
+        $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        $DB->delete_records_select('forum_track_prefs', "forumid = :forumid AND userid {$userinsql}", $params);
-        $DB->delete_records_select('forum_subscriptions', "forum = :forumid AND userid {$userinsql}", $params);
-        $DB->delete_records_select('forum_read', "forumid = :forumid AND userid {$userinsql}", $params);
-        $DB->delete_records_select(
-            'forum_queue',
-            "userid {$userinsql} AND discussionid IN (SELECT id FROM {forum_discussions} WHERE forum = :forumid)",
-            $params
-        );
-        $DB->delete_records_select('forum_discussion_subs', "forum = :forumid AND userid {$userinsql}", $params);
+        $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND userid {$userinsql}", $params);
 
-        // Do not delete discussion or forum posts.
-        // Instead update them to reflect that the content has been deleted.
-        $postsql = "userid {$userinsql} AND discussion IN (SELECT id FROM {forum_discussions} WHERE forum = :forumid)";
-        $postidsql = "SELECT fp.id FROM {forum_posts} fp WHERE {$postsql}";
-
-        // Update the subject.
-        $DB->set_field_select('forum_posts', 'subject', '', $postsql, $params);
-
-        // Update the subject and its format.
-        $DB->set_field_select('forum_posts', 'message', '', $postsql, $params);
-        $DB->set_field_select('forum_posts', 'messageformat', FORMAT_PLAIN, $postsql, $params);
-
-        // Mark the post as deleted.
-        $DB->set_field_select('forum_posts', 'deleted', 1, $postsql, $params);
-
-        // Note: Do _not_ delete ratings of other users. Only delete ratings on the users own posts.
-        // Ratings are aggregate fields and deleting the rating of this post will have an effect on the rating
-        // of any post.
-        \core_rating\privacy\provider::delete_ratings_select($context, 'mod_forum', 'post', "IN ($postidsql)", $params);
-
-        // Delete all Tags.
-        \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_forum', 'forum_posts', "IN ($postidsql)", $params);
-
-        // Delete all files from the posts.
-        $fs = get_file_storage();
-        $fs->delete_area_files_select($context->id, 'mod_forum', 'post', "IN ($postidsql)", $params);
-        $fs->delete_area_files_select($context->id, 'mod_forum', 'attachment', "IN ($postidsql)", $params);
     }
 }
