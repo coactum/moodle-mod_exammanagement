@@ -82,7 +82,7 @@ class provider implements
             'bonus' => 'privacy:metadata:exammanagement_participants:bonus',
         ], 'privacy:metadata:exammanagement_participants');
 
-        // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved. This potential participants can not always be mapped to a moodle user and will be deleted once a day via a sheduled task, so no export is possible and no further deletion is needed.
+        // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved. This potential participants can not directly be mapped to a moodle user in moodle, so no export is possible.
         $items->add_database_table('exammanagement_temp_part', [
             'exammanagement' => 'privacy:metadata:exammanagement_participants:exammanagement',
             'courseid' => 'privacy:metadata:exammanagement_participants:courseid',
@@ -103,7 +103,7 @@ class provider implements
             'misc' => 'privacy:metadata:exammanagement_rooms:misc',
         ], 'privacy:metadata:exammanagement_rooms');
 
-        // The exammanagement uses the messages subsystem that saves personal data
+        // The exammanagement uses the messages subsystem that saves personal data.
         $items->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
 
         // There are no user preferences in the exammanagement.
@@ -224,6 +224,28 @@ class provider implements
         $params['userid'] = $userid;
         $exammanagements = $DB->get_recordset_sql($sql, $params);
 
+        // custom rooms
+        $sql = "SELECT
+                    r.moodleuserid AS moodleuserid,
+                    r.id,
+                    r.roomid AS roomid,
+                    r.name,
+                    r.description,
+                    r.seatingplan,
+                    r.places,
+                    r.type,
+                    r.misc
+                  FROM {exammanagement_rooms} r
+                 WHERE (
+                    r.moodleuserid = :userid AND
+                    r.type = 'customroom'
+                )
+        ";
+
+        $params = $contextparams;
+        $params['userid'] = $userid;
+        $customrooms = $DB->get_recordset_sql($sql, $params);
+
         foreach ($exammanagements as $exammanagement) {
 
             $concept = format_string($exammanagement->name);
@@ -272,10 +294,41 @@ class provider implements
                     'bonus' => $exammanagement->bonus,
                 ];
 
+                // foreach ($customrooms as $customroom) { <- an anderer Stelle separat exportieren nur für Benutzer die Lehrender einer PO sind
+
+                //     if($customroom->misc !== null){
+                //         $customroom->misc = json_encode($customroom->misc);
+                //     }
+
+                //     if($customroom->seatingplan !== null){
+                //         $customroom->seatingplan = 'Yes';
+                //     }
+
+                //     if($customroom->places !== null){
+                //         $customroom->places = json_encode($customroom->places);
+                //     }
+
+                //     $exammanagementdata['custom room (global):'][$customroom->roomid] = [
+                //         'roomid' => $customroom->roomid,
+                //         'name' => $customroom->name,
+                //         'description' => $customroom->description,
+                //         'seatingplan' => $customroom->seatingplan,
+                //         'places' => $customroom->places,
+                //         'type' => $customroom->type,
+                //         'misc' => $customroom->misc,
+                //     ];
+
+                // }
+
+                var_dump($exammanagementdata);
+
                 self::export_exammanagement_data_for_user($exammanagementdata, $context, [], $user);
             }
         }
 
+        var_dump($exammanagementdata);
+
+        $customrooms->close();
         $exammanagements->close();
     }
 
@@ -340,7 +393,12 @@ class provider implements
 
             $DB->delete_records('exammanagement_participants', [
                 'exammanagement' => $cm->instance,
-                'userid' => $userid,
+                'moodleuserid' => $userid,
+            ]);
+
+            $DB->delete_records('exammanagement_rooms', [
+                'moodleuserid' => $userid,
+                'type' => 'customroom',
             ]);
         }
     }
@@ -359,7 +417,9 @@ class provider implements
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND userid {$userinsql}", $params);
+        $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
+
+        $DB->delete_records_select('exammanagement_rooms', "type = customroom AND moodleuserid {$userinsql}", $params);
 
     }
 }

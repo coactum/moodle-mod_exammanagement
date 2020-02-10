@@ -49,7 +49,7 @@ class chooseRoomsForm extends moodleform {
     global $PAGE, $OUTPUT;
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-    $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+    $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
     $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleDBObj = MoodleDB::getInstance();
 

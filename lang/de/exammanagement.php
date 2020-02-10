@@ -669,6 +669,7 @@ $string['err_password_incorrect'] = 'Passwort nicht identisch. Bitte erneut eing
 $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID';
+$string['err_novalidplacescount'] = 'Die eingegebene Zahl ist keine gültige Sitzplatzzahl.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
@@ -785,4 +786,8 @@ $string['warningmailsubjectthree'] = '[Prüfungsorganisation] Letzte Warnung: Di
 $string['warningmailcontent'] = 'Alle Prüfungsinformationen der Prüfung "{$a->examname}" im Kurs "{$a->coursename}" werden am {$a->datadeletiondate} gelöscht. Bitte stellen Sie sicher, dass Sie alle relevanten Prüfungsdaten zur weiteren Verwendung exportiert haben. Sie können dafür die Exportfunktionen der {$a->systemname} Prüfungsorganisation nutzen. Am angegebenen Datum werden sämtliche Prüfungsdaten endgültig gelöscht, eine nachrägliche Wiederherstellung der Daten ist ab diesem Zeitpunkt nicht mehr möglich!';
 $string['warningmailcontentenglish'] = '<strong>English version</strong>: All information on the exam "{$a->examname}" in course "{$a->coursename}" will be deleted on {$a->datadeletiondate}. Please make sure that you have exported all relevant exam data for further use. To do this, you can use the export functions of the {$a->systemname} exam organization. On the specified date, all exam data will be finally deleted, a later recovery of the data is then no longer possible!';
 
+//delete_unassigned_custom_rooms.php - task
+$string['delete_unassigned_custom_rooms'] = 'Verwaiste benutzerdefinierte Prüfungsräume löschen';
+
+//upb_migrate_plugininstanceid_to_exammanagement.php - task
 $string['upb_migrate_plugininstanceid_to_exammanagement'] = 'DB-Feld plugininstance zu exammanagement migrieren (UPB)'; // only for upb migration to pluginversion XXX

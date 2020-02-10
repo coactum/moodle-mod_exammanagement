@@ -103,6 +103,10 @@ class addCustomRoomForm extends moodleform {
        $errors['placescount'] = get_string('err_novalidinteger', 'mod_exammanagement');
     }
 
+    if($data['placescount'] && $data['placescount'] > 10000){
+      $errors['placescount'] = get_string('err_novalidplacescount', 'mod_exammanagement');
+   }
+
     return $errors;
   }
 }
