@@ -76,7 +76,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
                     foreach ($fileContentArr as $key => $roomstr){
 
-                        $roomParameters = explode('+', $roomstr);
+                        $roomParameters = explode('*', $roomstr);
 
                         $roomObj = new stdClass();
                         $roomObj->roomid = $roomParameters[0];
@@ -120,7 +120,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
             redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-        }   
+        }
     }
 } else {
 

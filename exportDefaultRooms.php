@@ -37,11 +37,11 @@ $e  = optional_param('e', 0, PARAM_INT);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
-define( "SEPARATOR", chr(43) ); //comma
+define( "SEPARATOR", chr(42) ); //comma
 define( "NEWLINE", "\r\n" );
 
 if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page    
+    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
         $allDefaultRooms = $ExammanagementInstanceObj->getRooms('defaultrooms');
 
@@ -52,20 +52,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
         global $CFG;
 
         $textfile = '';
-        
+
         foreach($allDefaultRooms as $roomObj){
 
             $textfile .= $roomObj->roomid . SEPARATOR . $roomObj->name . SEPARATOR . $roomObj->description . SEPARATOR . $roomObj->places . SEPARATOR;
-            
+
             if(isset($roomObj->seatingplan) && $roomObj->seatingplan !== ''){
-                $textfile .= base64_decode($roomObj->seatingplan);
+                $textfile .= str_replace(array("\r\n","\r","\n"), '', base64_decode($roomObj->seatingplan));
             }
-            
+
             if($roomObj !== end($allDefaultRooms)){
                 $textfile .= NEWLINE;
             }
         }
-        
+
         //generate filename without umlaute
         $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
         $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
