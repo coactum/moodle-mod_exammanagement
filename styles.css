@@ -34,97 +34,97 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }*/
 
 /* exammanagement_overview.mustache - timeline */
-.exammanagement_overview *::before{
-    box-sizing: border-box;
-
+.exammanagement_overview *::before {
+  box-sizing: border-box;
 }
 
-.exammanagement_overview .exmammanagement-summary{
-    position:relative;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    overflow-wrap: break-word;
+.exammanagement_overview .exmammanagement-summary {
+  position: relative;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  overflow-wrap: break-word;
 }
 
-.exammanagement_overview .exmammanagement-summary > li{
-      position: relative;
-      margin-bottom: 15px;
+.exammanagement_overview .exmammanagement-summary > li {
+  position: relative;
+  margin-bottom: 15px;
 }
 
-.exammanagement_overview .exmammanagement-summary > li::after{
-	clear:both;
+.exammanagement_overview .exmammanagement-summary > li::after {
+  clear: both;
 }
 
-.exammanagement_overview .exmammanagement-summary > li > .fa{
-      width: 30px;
-      height: 30px;
-      font-size: 15px;
-      line-height: 30px;
-      position: absolute;
-      color: #666;
-      background-color: #fff;
-      border-radius: 50%;
-      border: 2px solid #d2d6de;
-      text-align: center;
-      left: 18px;
-      top: 0;
+.exammanagement_overview .exmammanagement-summary > li > .fa {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  line-height: 30px;
+  position: absolute;
+  color: #666;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid #d2d6de;
+  text-align: center;
+  left: 18px;
+  top: 0;
 }
 
-.exammanagement_overview .exmammanagement-summary > li > .panel{
-      margin-left: 60px;
+.exammanagement_overview .exmammanagement-summary > li > .panel {
+  margin-left: 60px;
 }
 
-.exammanagement_overview .exmammanagement-summary::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #ddd;
-    left: 31px;
-    margin: 0;
-    border-radius: 2px;
+.exammanagement_overview .exmammanagement-summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #ddd;
+  left: 31px;
+  margin: 0;
+  border-radius: 2px;
 }
 
-.exammanagement_overview .exmammanagement-summary li:target{
-    padding-top: 0px !important;
-    margin-top: 0px !important;
+.exammanagement_overview .exmammanagement-summary li:target {
+  padding-top: 0px !important;
+  margin-top: 0px !important;
 }
 
-.exammanagement_overview .exmammanagement-summary a{
-    cursor: pointer;
+.exammanagement_overview .exmammanagement-summary a {
+  cursor: pointer;
 }
 
-.exammanagement_overview .helptext-button{
-    cursor: pointer;
+.exammanagement_overview .helptext-button {
+  cursor: pointer;
 }
 
 .exammanagement_overview .exmammanagement-summary :target::before {
-    height: 0px !important;
-    margin-top: 0px !important;
+  height: 0px !important;
+  margin-top: 0px !important;
 }
 
 .exammanagement_overview .mainpanel::before {
-    position: absolute;
-    display: block;
-    top: 8px;
-    left: 36px;
-    content: '';
-    width: 0px;
-    height: 0px;
-    border: inherit;
-    border-width: 12px;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
+  position: absolute;
+  display: block;
+  top: 8px;
+  left: 36px;
+  content: '';
+  width: 0px;
+  height: 0px;
+  border: inherit;
+  border-width: 12px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
 }
 
-.exammanagement_overview .mainpanel > .panel-heading span { /* minimize/maximize buttons */
-    background: rgba(0, 0, 0, 0.15);
-    display: inline;
-    margin-top: -30px;
-    padding: 6px 12px;
-    border-radius: 4px
+.exammanagement_overview .mainpanel > .panel-heading span {
+  /* minimize/maximize buttons */
+  background: rgba(0, 0, 0, 0.15);
+  display: inline;
+  margin-top: -30px;
+  padding: 6px 12px;
+  border-radius: 4px;
 }
 
 .exammanagement_overview .mainpanel > .panel-heading span.collapse {
@@ -132,13 +132,14 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* row-equal-height */
-.exammanagement_overview .row-eq-height, .row-eq-height > div[class*='col-'] {
+.exammanagement_overview .row-eq-height,
+.row-eq-height > div[class*='col-'] {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  flex:1 0 auto;
+  flex: 1 0 auto;
 }
 
 .exammanagement_overview .row-eq-height .panel {
@@ -150,13 +151,13 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_overview .row-eq-height .panel-body {
   display: flex;
-  flex-grow:1;
+  flex-grow: 1;
 }
 
 /* show information switches*/
 
- /* The switch - the box around the slider */
- .exammanagement_overview .exammanagement-switch {
+/* The switch - the box around the slider */
+.exammanagement_overview .exammanagement-switch {
   position: relative;
   display: inline-block;
   width: 30px;
@@ -168,7 +169,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   display: none;
 }
 
-
 /* The slider */
 .exammanagement_overview .exammanagement-slider {
   position: absolute;
@@ -178,20 +178,20 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .exammanagement_overview .exammanagement-slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 13px;
   width: 13px;
   left: 2px;
   bottom: 2px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .exammanagement_overview input:checked + .exammanagement-slider {
@@ -236,63 +236,64 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-.path-mod-exammanagement .popover{
+.path-mod-exammanagement .popover {
   max-width: 50%;
 }
 
 /* chooseRooms.php - SVG Overlay */
-.exammanagement_rooms_svg{
-	position:fixed;
-	top: 40%;
-	left: 40%;
-	width:350px;
-	height:350px;
-	background:white;
-	overflow: hidden;
-	z-index:1000;
-	display:none;
-	border: 2px solid black;
-
+.exammanagement_rooms_svg {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: white;
+  overflow: hidden;
+  z-index: 1000;
+  display: none;
+  border: 2px solid black;
 }
 
-#show:active + .exammanagement_rooms_svg{
- 	display:block;
+.exammanagement_table .pointer {
+  cursor: pointer;
+}
+
+#show:active + .exammanagement_rooms_svg {
+  display: block;
 }
 
 /* editDefaultRoomForm.php */
 
-.exammanagement_editdefaultroom_placespreview{
-	position:relative;
-	width:500px;
-	overflow: hidden;
-	z-index:1000;
-	display:block;
+.exammanagement_editdefaultroom_placespreview {
+  position: relative;
+  width: 500px;
+  overflow: hidden;
+  z-index: 1000;
+  display: block;
 }
 
-.exammanagement_editdefaultroom_svg{
-	position:relative;
-	width:300px;
-	height:300px;
-	background:white;
-	overflow: hidden;
-	z-index:1000;
-	display:block;
-	border: 2px solid black;
+.exammanagement_editdefaultroom_svg {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background: white;
+  overflow: hidden;
+  z-index: 1000;
+  display: block;
+  border: 2px solid black;
 }
 
 /* addParticipantsForm.php & addCourseParticipantsForm.php */
-.exammanagement_panel a{
+.exammanagement_panel a {
   cursor: pointer;
 }
 
-.exammanagement_panel > .panel-heading span { /* minimize/maximize buttons */
+.exammanagement_panel > .panel-heading span {
+  /* minimize/maximize buttons */
   background: rgba(0, 0, 0, 0.15);
   display: inline;
   margin-top: -27px;
   padding: 6px 12px;
-  border-radius: 4px
+  border-radius: 4px;
 }
-
 
 .exammanagement_panel > .panel-heading span.collapse {
   display: none;
@@ -300,60 +301,59 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /* configureTasksForm.php - spacing between task numbers */
 
-.exammanagement_task_spacing{
+.exammanagement_task_spacing {
   padding-left: 32px;
   padding-right: 32px;
 }
 
 /* inputResultsForm.php - spacing between max points */
 
-.exammanagement_task_spacing_2{
+.exammanagement_task_spacing_2 {
   padding-left: 29px;
   padding-right: 29px;
 }
 
 /* participantsOverviewForm.php - color of table borders */
 
-.exammanagement_table{
+.exammanagement_table {
   border: 1px solid #00205b;
 }
 
-.exammanagement_tableheader{
+.exammanagement_tableheader {
   color: white;
 }
 
-.exammanagement_table_whiteborder_left{
+.exammanagement_table_whiteborder_left {
   border-left: 1px solid white;
 }
 
-.exammanagement_brand_bordercolor_left{
+.exammanagement_brand_bordercolor_left {
   border-left: 1px solid #00205b;
-
 }
 
-.exammanagement_brand_backgroundcolor{
+.exammanagement_brand_backgroundcolor {
   background-color: #00205b !important;
 }
 
-.exammanagement_brand_bordercolor{
+.exammanagement_brand_bordercolor {
   border-color: #00205b;
 }
 
-.exammanagement_table_width_room{
+.exammanagement_table_width_room {
   width: 125px !important;
 }
 
-.exammanagement_table_width_place{
+.exammanagement_table_width_place {
   width: 145px !important;
 }
 
-.exammanagement_table_width_points{
+.exammanagement_table_width_points {
   width: 75px !important;
 }
 
-.exammanagement_position_existing_places_column{
-  position: relative; 
-  left: -10px; 
+.exammanagement_position_existing_places_column {
+  position: relative;
+  left: -10px;
 }
 
 /* exammanagement_overview.mustache - panels (copied from bootstrap) */
@@ -365,8 +365,8 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .exammanagement_overview .panel-body {
   padding: 15px;
@@ -405,23 +405,46 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: 0;
 }
 .exammanagement_overview .panel > .list-group .list-group-item,
-.exammanagement_overview .panel > .panel-collapse > .list-group .list-group-item {
+.exammanagement_overview
+  .panel
+  > .panel-collapse
+  > .list-group
+  .list-group-item {
   border-width: 1px 0;
   border-radius: 0;
 }
-.exammanagement_overview .panel > .list-group:first-child .list-group-item:first-child,
-.exammanagement_overview .panel > .panel-collapse > .list-group:first-child .list-group-item:first-child {
+.exammanagement_overview
+  .panel
+  > .list-group:first-child
+  .list-group-item:first-child,
+.exammanagement_overview
+  .panel
+  > .panel-collapse
+  > .list-group:first-child
+  .list-group-item:first-child {
   border-top: 0;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-.exammanagement_overview .panel> .list-group:last-child .list-group-item:last-child,
-.exammanagement_overview .panel> .panel-collapse > .list-group:last-child .list-group-item:last-child {
+.exammanagement_overview
+  .panel
+  > .list-group:last-child
+  .list-group-item:last-child,
+.exammanagement_overview
+  .panel
+  > .panel-collapse
+  > .list-group:last-child
+  .list-group-item:last-child {
   border-bottom: 0;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-.exammanagement_overview .panel> .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {
+.exammanagement_overview
+  .panel
+  > .panel-heading
+  + .panel-collapse
+  > .list-group
+  .list-group-item:first-child {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -431,144 +454,492 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 .list-group + .panel-footer {
   border-top-width: 0;
 }
-.exammanagement_overview .panel> .table,
-.exammanagement_overview .panel> .table-responsive > .table,
-.exammanagement_overview .panel> .panel-collapse > .table {
+.exammanagement_overview .panel > .table,
+.exammanagement_overview .panel > .table-responsive > .table,
+.exammanagement_overview .panel > .panel-collapse > .table {
   margin-bottom: 0;
 }
-.exammanagement_overview .panel> .table caption,
-.exammanagement_overview .panel> .table-responsive > .table caption,
-.exammanagement_overview .panel> .panel-collapse > .table caption {
+.exammanagement_overview .panel > .table caption,
+.exammanagement_overview .panel > .table-responsive > .table caption,
+.exammanagement_overview .panel > .panel-collapse > .table caption {
   padding-right: 15px;
   padding-left: 15px;
 }
-.exammanagement_overview .panel> .table:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child {
+.exammanagement_overview .panel > .table:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-.exammanagement_overview .panel> .table:first-child > thead:first-child > tr:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,
-.exammanagement_overview .panel> .table:first-child > tbody:first-child > tr:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child {
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-.exammanagement_overview .panel> .table:first-child > thead:first-child > tr:first-child td:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,
-.exammanagement_overview .panel> .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.exammanagement_overview .panel> .table:first-child > thead:first-child > tr:first-child th:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
-.exammanagement_overview .panel> .table:first-child > tbody:first-child > tr:first-child th:first-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  th:first-child {
   border-top-left-radius: 3px;
 }
-.exammanagement_overview .panel> .table:first-child > thead:first-child > tr:first-child td:last-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,
-.exammanagement_overview .panel> .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.exammanagement_overview .panel> .table:first-child > thead:first-child > tr:first-child th:last-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
-.exammanagement_overview .panel> .table:first-child > tbody:first-child > tr:first-child th:last-child,
-.exammanagement_overview .panel> .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > thead:first-child
+  > tr:first-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:first-child
+  > .table:first-child
+  > tbody:first-child
+  > tr:first-child
+  th:last-child {
   border-top-right-radius: 3px;
 }
-.exammanagement_overview .panel> .table:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child {
+.exammanagement_overview .panel > .table:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-.exammanagement_overview .panel> .table:last-child > tbody:last-child > tr:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,
-.exammanagement_overview .panel> .table:last-child > tfoot:last-child > tr:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child {
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-.exammanagement_overview .panel> .table:last-child > tbody:last-child > tr:last-child td:first-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,
-.exammanagement_overview .panel> .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.exammanagement_overview .panel> .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.exammanagement_overview .panel> .table:last-child > tfoot:last-child > tr:last-child th:first-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  td:first-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  th:first-child {
   border-bottom-left-radius: 3px;
 }
-.exammanagement_overview .panel> .table:last-child > tbody:last-child > tr:last-child td:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,
-.exammanagement_overview .panel> .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.exammanagement_overview .panel> .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.exammanagement_overview .panel> .table:last-child > tfoot:last-child > tr:last-child th:last-child,
-.exammanagement_overview .panel> .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  td:last-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tbody:last-child
+  > tr:last-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive:last-child
+  > .table:last-child
+  > tfoot:last-child
+  > tr:last-child
+  th:last-child {
   border-bottom-right-radius: 3px;
 }
-.exammanagement_overview .panel> .panel-body + .table,
-.exammanagement_overview .panel> .panel-body + .table-responsive,
-.exammanagement_overview .panel> .table + .panel-body,
-.exammanagement_overview .panel> .table-responsive + .panel-body {
+.exammanagement_overview .panel > .panel-body + .table,
+.exammanagement_overview .panel > .panel-body + .table-responsive,
+.exammanagement_overview .panel > .table + .panel-body,
+.exammanagement_overview .panel > .table-responsive + .panel-body {
   border-top: 1px solid #ddd;
 }
-.exammanagement_overview .panel> .table > tbody:first-child > tr:first-child th,
-.exammanagement_overview .panel> .table > tbody:first-child > tr:first-child td {
+.exammanagement_overview
+  .panel
+  > .table
+  > tbody:first-child
+  > tr:first-child
+  th,
+.exammanagement_overview
+  .panel
+  > .table
+  > tbody:first-child
+  > tr:first-child
+  td {
   border-top: 0;
 }
-.exammanagement_overview .panel> .table-bordered,
-.exammanagement_overview .panel> .table-responsive > .table-bordered {
+.exammanagement_overview .panel > .table-bordered,
+.exammanagement_overview .panel > .table-responsive > .table-bordered {
   border: 0;
 }
-.exammanagement_overview .panel> .table-bordered > thead > tr > th:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr > th:first-child,
-.exammanagement_overview .panel> .table-bordered > tbody > tr > th:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr > th:first-child,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr > th:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr > th:first-child,
-.exammanagement_overview .panel> .table-bordered > thead > tr > td:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr > td:first-child,
-.exammanagement_overview .panel> .table-bordered > tbody > tr > td:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr > td:first-child,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr > td:first-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+.exammanagement_overview .panel > .table-bordered > thead > tr > th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr
+  > th:first-child,
+.exammanagement_overview .panel > .table-bordered > tbody > tr > th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr
+  > th:first-child,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr > th:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr
+  > th:first-child,
+.exammanagement_overview .panel > .table-bordered > thead > tr > td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr
+  > td:first-child,
+.exammanagement_overview .panel > .table-bordered > tbody > tr > td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr
+  > td:first-child,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr > td:first-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr
+  > td:first-child {
   border-left: 0;
 }
-.exammanagement_overview .panel> .table-bordered > thead > tr > th:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr > th:last-child,
-.exammanagement_overview .panel> .table-bordered > tbody > tr > th:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr > th:last-child,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr > th:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr > th:last-child,
-.exammanagement_overview .panel> .table-bordered > thead > tr > td:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr > td:last-child,
-.exammanagement_overview .panel> .table-bordered > tbody > tr > td:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr > td:last-child,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr > td:last-child,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+.exammanagement_overview .panel > .table-bordered > thead > tr > th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr
+  > th:last-child,
+.exammanagement_overview .panel > .table-bordered > tbody > tr > th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr
+  > th:last-child,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr > th:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr
+  > th:last-child,
+.exammanagement_overview .panel > .table-bordered > thead > tr > td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr
+  > td:last-child,
+.exammanagement_overview .panel > .table-bordered > tbody > tr > td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr
+  > td:last-child,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr > td:last-child,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr
+  > td:last-child {
   border-right: 0;
 }
-.exammanagement_overview .panel> .table-bordered > thead > tr:first-child > td,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr:first-child > td,
-.exammanagement_overview .panel> .table-bordered > tbody > tr:first-child > td,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr:first-child > td,
-.exammanagement_overview .panel> .table-bordered > thead > tr:first-child > th,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > thead > tr:first-child > th,
-.exammanagement_overview .panel> .table-bordered > tbody > tr:first-child > th,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr:first-child > th {
+.exammanagement_overview .panel > .table-bordered > thead > tr:first-child > td,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr:first-child
+  > td,
+.exammanagement_overview .panel > .table-bordered > tbody > tr:first-child > td,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr:first-child
+  > td,
+.exammanagement_overview .panel > .table-bordered > thead > tr:first-child > th,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > thead
+  > tr:first-child
+  > th,
+.exammanagement_overview .panel > .table-bordered > tbody > tr:first-child > th,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr:first-child
+  > th {
   border-bottom: 0;
 }
-.exammanagement_overview .panel> .table-bordered > tbody > tr:last-child > td,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr:last-child > td,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr:last-child > td,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr:last-child > td,
-.exammanagement_overview .panel> .table-bordered > tbody > tr:last-child > th,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tbody > tr:last-child > th,
-.exammanagement_overview .panel> .table-bordered > tfoot > tr:last-child > th,
-.exammanagement_overview .panel> .table-responsive > .table-bordered > tfoot > tr:last-child > th {
+.exammanagement_overview .panel > .table-bordered > tbody > tr:last-child > td,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr:last-child
+  > td,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr:last-child > td,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr:last-child
+  > td,
+.exammanagement_overview .panel > .table-bordered > tbody > tr:last-child > th,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tbody
+  > tr:last-child
+  > th,
+.exammanagement_overview .panel > .table-bordered > tfoot > tr:last-child > th,
+.exammanagement_overview
+  .panel
+  > .table-responsive
+  > .table-bordered
+  > tfoot
+  > tr:last-child
+  > th {
   border-bottom: 0;
 }
-.exammanagement_overview .panel> .table-responsive {
+.exammanagement_overview .panel > .table-responsive {
   margin-bottom: 0;
   border: 0;
 }
@@ -585,14 +956,26 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 .exammanagement_overview .panel-group .panel-heading {
   border-bottom: 0;
 }
-.exammanagement_overview .panel-group .panel-heading + .panel-collapse > .panel-body,
-.exammanagement_overview .panel-group .panel-heading + .panel-collapse > .list-group {
+.exammanagement_overview
+  .panel-group
+  .panel-heading
+  + .panel-collapse
+  > .panel-body,
+.exammanagement_overview
+  .panel-group
+  .panel-heading
+  + .panel-collapse
+  > .list-group {
   border-top: 1px solid #ddd;
 }
 .exammanagement_overview .panel-group .panel-footer {
   border-top: 0;
 }
-.exammanagement_overview .panel-group .panel-footer + .panel-collapse .panel-body {
+.exammanagement_overview
+  .panel-group
+  .panel-footer
+  + .panel-collapse
+  .panel-body {
   border-bottom: 1px solid #ddd;
 }
 .exammanagement_overview .panel-default {
@@ -603,14 +986,22 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #f5f5f5;
   border-color: #ddd;
 }
-.exammanagement_overview .panel-default > .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-default
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #ddd;
 }
 .exammanagement_overview .panel-default > .panel-heading .badge {
   color: #f5f5f5;
   background-color: #333;
 }
-.exammanagement_overview .panel-default > .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-default
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #ddd;
 }
 .exammanagement_overview .panel-primary {
@@ -621,32 +1012,48 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #00205b;
   border-color: #00205b;
 }
-.exammanagement_overview .panel-primary > .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-primary
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #00205b;
 }
 .exammanagement_overview .panel-primary > .panel-heading .badge {
   color: #00205b;
   background-color: #fff;
 }
-.exammanagement_overview .panel-primary > .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-primary
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #00205b;
 }
-.exammanagement_overview .panel-success{
+.exammanagement_overview .panel-success {
   border-color: #d6e9c6;
 }
-.exammanagement_overview .panel-success> .panel-heading {
+.exammanagement_overview .panel-success > .panel-heading {
   color: #3c763d;
   background-color: #dff0d8;
   border-color: #d6e9c6;
 }
-.exammanagement_overview .panel-success> .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-success
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #d6e9c6;
 }
-.exammanagement_overview .panel-success> .panel-heading .badge {
+.exammanagement_overview .panel-success > .panel-heading .badge {
   color: #dff0d8;
   background-color: #3c763d;
 }
-.exammanagement_overview .panel-success> .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-success
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #d6e9c6;
 }
 .exammanagement_overview .panel-info {
@@ -657,14 +1064,22 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #d9edf7;
   border-color: #bce8f1;
 }
-.exammanagement_overview .panel-info > .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-info
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #bce8f1;
 }
 .exammanagement_overview .panel-info > .panel-heading .badge {
   color: #d9edf7;
   background-color: #31708f;
 }
-.exammanagement_overview .panel-info > .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-info
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #bce8f1;
 }
 .exammanagement_overview .panel-warning {
@@ -675,14 +1090,22 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #fcf8e3;
   border-color: #faebcc;
 }
-.exammanagement_overview .panel-warning > .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-warning
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #faebcc;
 }
 .exammanagement_overview .panel-warning > .panel-heading .badge {
   color: #fcf8e3;
   background-color: #8a6d3b;
 }
-.exammanagement_overview .panel-warning > .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-warning
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #faebcc;
 }
 .exammanagement_overview .panel-danger {
@@ -693,19 +1116,27 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   background-color: #f2dede;
   border-color: #ebccd1;
 }
-.exammanagement_overview .panel-danger > .panel-heading + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-danger
+  > .panel-heading
+  + .panel-collapse
+  > .panel-body {
   border-top-color: #ebccd1;
 }
 .exammanagement_overview .panel-danger > .panel-heading .badge {
   color: #f2dede;
   background-color: #a94442;
 }
-.exammanagement_overview .panel-danger > .panel-footer + .panel-collapse > .panel-body {
+.exammanagement_overview
+  .panel-danger
+  > .panel-footer
+  + .panel-collapse
+  > .panel-body {
   border-bottom-color: #ebccd1;
 }
 
 /* label-danger */
 
-.exammanagement_overview .label-danger{
+.exammanagement_overview .label-danger {
   background-color: #d9534f !important;
 }

@@ -216,7 +216,7 @@ $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsr
 $string['export_default_rooms'] = 'Standardräume exportieren';
 $string['import_default_rooms'] = 'Standardräume importieren';
 $string['add_custom_room'] = 'Eigenen Prüfungsraum anlegen';
-$string['add_default_room'] = 'Neuen Standardraum anlegen';
+$string['add_default_room'] = 'Standardraum anlegen';
 $string['roomid'] = 'Raum ID';
 $string['exam_room'] = 'Raum';
 $string['description'] = 'Beschreibung';
@@ -543,7 +543,7 @@ Falls auf der Seite der Raumauswahl hingegen ein bestehender eigener Prüfungsra
 $string['addCustomRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addDefaultRooms_help']= 'Hier können Sie als '. get_config('mod_exammanagement', 'moodlesystemname').'-Administrator eine Reihe an <strong>Standardräumen</strong> importieren, die nach dem Einlesen allen Dozenten bei der Auswahl der Prüfungsräume als mögliche Räume zur Verfügung stehen. <br><br>
 Um die Standardräume zu importieren muss zunächst eine korrekt aufgebaute Textdatei im unteren Bereich ausgewählt und dann durch einen Klick auf den entsprechenden Button eingelesen werden. <br><br>
-Die einzulesende Textdatei muss dabei die folgenden Informationen zu jedem Prüfungsraum enthalten, wobei jede Zeile für einen Prüfungsraum steht: 
+Die einzulesende Textdatei muss dabei die folgenden Informationen zu jedem Prüfungsraum enthalten, wobei jede Zeile für einen Prüfungsraum steht:
 <ul><li>Erste Spalte: Die systeminterne Raumid nach dem Muster <i>Raumname_Variante</i>, also zum Beispiel <i>Audimax_2</i></li>
 <li>Zweite Spalte: Der benutzersichtbare Raumname, also zum Beispiel <i>Audimax</i></li>
 <li>Dritte Spalte: Die benutzersichtbare Raumbeschreibung inklusive der Anzahl der freigelassenen sowie der gesamten Plätze, also zum Beispiel <i>2 Plätze frei, 56 Plätze insgesamt</i></li>
@@ -622,7 +622,7 @@ Der Notenschlüssel kann jederzeit (auch nach dem Eintragen der Prüfungsergebni
 $string['configureGradingscale_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['inputResults_help']= 'Auf dieser Seite können die <strong>Prüfungsergebnisse</strong> der TeilnehmerInnen <strong>eingetragen</strong> werden. <br><br>
 Dazu muss zunächst die Matrikelnummer des oder der Teilnehmenden, deren Ergebnisse eingetragen werden sollen, eingegeben werden. Dazu gibt es zwei Möglichkeiten:<br>
-1. Sie können die Matrikelnummer des oder der Teilnehmenden manuell eingeben. Klicken Sie dazu in das Feld "Matrikelnummer oder Barcode", tippen Sie die Matrikelnummer ein und bestätigen Sie diese durch ein Drücken der Enter- (bzw. Return-) oder der Tabulator-Taste oder des Buttons "Matrikelnummer validieren". <br> 
+1. Sie können die Matrikelnummer des oder der Teilnehmenden manuell eingeben. Klicken Sie dazu in das Feld "Matrikelnummer oder Barcode", tippen Sie die Matrikelnummer ein und bestätigen Sie diese durch ein Drücken der Enter- (bzw. Return-) oder der Tabulator-Taste oder des Buttons "Matrikelnummer validieren". <br>
 2. Alternativ können Sie, falls Sie in Ihrer Prüfung Prüfungsetiketten benutzt haben, auch einen Barcode-Scanner zum schnelleren Eintragen der Prüfungsergebnisse nutzen. Dazu brauchen Sie einen Barcode-Scanner oder alternativ ein Smartphone mit einer entsprechenden App. Mit diesem müssen Sie dann den Barcode auf dem Prüfungsetikett eines Prüflings einscannen, wodurch dessen Matrikelnummer automatisch in das Feld "Matrikelnummer oder Barcode" eingetragen und sofort bestätigt wird. Klappt das automatische Eintragen nicht sofort müssen Sie gegebebenfalls einmal manuell in das Feld "Matrikelnummer oder Barcode" klicken und den Scan dann wiederholen.<br><br>
 Sobald eine Matrikelnummer eingetragen und bestätigt wurde wird sie vom System geprüft. Ist sie die gültige Matrikelnummer eines zur Prüfung hinzugefügten Teilnehmers wird nun die Seite zum Eintragen der Prüfungspunkte geöffnet, andernfalls gibt es eine entsprechende Fehlermeldung und es wird wieder die vorige Seite geöffnet, wo eine neue Matrikelnummer eingetragen oder das Eintragen der fehlerhaften Matrikelnummer wiederholt werden kann.<br><br>
 Im Fall einer gültigen Matrikelnummer können auf der daraufhin geöffneten Seite nun die Prüfungsergebnisse eingetragen werden. Im Abschnitt "Prüfungsteilnehmer/in" sieht man zunächst die Matrikelnummer und den Namen des oder der gewählten Prüfungsteilnehmerin. Durch einen Klick auf den darunter befindlichen Button "Matrikelnummer ändern" kann man an dieser Stelle wieder auf die vorherige Seite gelangen, um (zum Beispiel im Falle eines Fehlers) dort eine andere Matrikelnummer einzugeben. Im darunter befindlichen Abschnitt "Prüfungspunkte" können für den gewählten Prüfling die in jeder Prüfungsaufgabe errungenen Punkte eingetragen werden. Dazu können direkt im Punkte-Feld der ersten Aufgabe die entsprechenden Punkte eingetragen werden und dann nach einem Drücken der Tabulator-Taste im Feld der nächsten Aufgabe weiter gemacht werden. Als Punktzahl kann dabei eine Zahl zwischen Null und der angezeigten Maximalpunktzahl der jeweiligen Aufgabe eingetragen werden, wobei auch Kommazahlen mit bis zu zwei Nachkommastellen erlaubt sind. Unterliegt der Prüfling einem besonderen Prüfungsstatus (hat er etwa "Nicht Teilgenommen" ("NT"), einen "Betrugsversuch" begangen oder war er "Krank") kann dieser Status im letzten Abschnitt "Prüfungsstatus" durch das Setzen des Hakens in der entsprechenden Checkbox ausgewählt werden. Dadurch werden die Punkte der Aufgaben auf Null gesetzt, das Eintragen der Punkte wird deaktiviert und der gewählte Status wird in allen späteren Dokumenten (zum Beispiel für den Export) statt des Ergebnisses angezeigt. Das Entfernen des Hakens beim jeweiligen Prüfungsstatus aktiviert die Möglichkeit zum Punkteeintragen wieder. Wurden für den Prüfling bereits früher Ergebnisse eingetragen sind sowohl der Abschnitt zu den Prüfungspunkten als auch dem Prüfungsstatus möglicherweise bereits vorausgefüllt. In diesem Fall können diese Angaben nun geändert und die Änderungen dann gespeichert werden.<br><br>
@@ -647,9 +647,9 @@ $string['ldapnotconfigured'] = 'Kein gültiges LDAP konfiguriert.';
 $string['ldapconfigmissing'] = 'LDAP nicht vollständig konfiguriert. Die folgenden vom Plugin benötigten Elemente müssen noch in den globalen Plugineinstellungen spezifiziert werden:';
 $string['ldapconnectionfailed'] = 'Verbindung zum LDAP fehlgeschlagen. Bitte versuchen Sie es erneut oder kontaktieren Sie Ihren System-Administrator.';
 $string['nomatrnravailable'] = 'Keine Matrikelnummern verfügbar da';
-$string['not_possible_no_matrnr'] = 'Nicht möglich weil keine Matrikelnummern verfügbar sind da';
-$string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich da';
-$string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich da';
+$string['not_possible_no_matrnr'] = 'Nicht möglich weil keine Matrikelnummern verfügbar sind -';
+$string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich -';
+$string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich -';
 $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
