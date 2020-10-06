@@ -45,13 +45,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
+	} else if(empty($UserObj->getCourseParticipantsIDs())){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_nocourseparticipants', 'mod_exammanagement'), 'error');
+    } else {
 
         if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             $MoodleObj->setPage('addCourseParticipants');
             $MoodleObj->outputPageHeader();
-                
+
             //Instantiate form
             $mform = new addCourseParticipantsForm(null, array('id'=>$id, 'e'=>$e));
 
@@ -79,7 +81,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                             if($UserObj->checkIfAlreadyParticipant($participantId) == false){
                                 $user = new stdClass();
-                                $user->exammanagement = $id;
+                                $user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
                                 $user->courseid = $courseid;
                                 $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                 $user->moodleuserid = $participantId;

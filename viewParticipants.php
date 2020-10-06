@@ -75,11 +75,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             echo ('</div><div class="col-xs-8">');
 
-            echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-b-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-lg-none" aria-hidden="true"></i></a><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right m-r-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a></div></div>');
+            if(!empty($UserObj->getCourseParticipantsIDs())){
+                echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-b-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-lg-none" aria-hidden="true"></i></a>');
+            }
+
+            if(get_config('mod_exammanagement', 'enableldap')){
+                echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right m-r-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
+            }
+
+            echo ('</div></div>');
 
             echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 
-            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));        
+            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
 
             $noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
@@ -92,13 +100,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if(count($courseGroups) > 0){
                     $courseGroups = true;
                 } else {
-                    $courseGroups = false;                    
+                    $courseGroups = false;
                 }
 
                 echo('<div class="table-responsive">');
                 echo('<table class="table table-striped exammanagement_table">');
                 echo('<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("participants", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th>');
-                
+
                 if($courseGroups){
                     echo('<th scope="col">'.get_string("course_groups", "mod_exammanagement").'</th>');
                 }
@@ -134,14 +142,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     if(!$moodleParticipants){
                         if($courseGroups){
-                            echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');                        
+                            echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
                         } else {
                             echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
                         }
                     }
 
                     echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_without_moodle_account", "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</strong></td></tr>');
-                    
+
                     foreach ($noneMoodleParticipants as $key => $participant) {
 
                         echo('<tr>');
@@ -157,14 +165,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmatrnr', $participant->login).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
                         echo('<a class="pull-right" href="#end" title="'.get_string("jump_to_end", "mod_exammanagement").'"><i class="fa fa-2x fa-lg fa-arrow-down" aria-hidden="true"></i></a></td>');
                         echo('</tr>');
-                    
+
                         $i++;
 
                     }
 
                 }
                 echo('</tbody></table></div>');
-        
+
             } else {
                     echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
             }

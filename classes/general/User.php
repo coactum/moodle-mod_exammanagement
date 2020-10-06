@@ -114,13 +114,13 @@ class User{
 						$record->lastname = $moodleUser->lastname;
 						if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
 							global $OUTPUT;
-							
+
 							$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-							
+
 							$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
 
 							$record->profile = $image.' '.$link;
-							
+
 						}
 
 						if(in_array('groups', $requestedAttributes)){ 			// add group if it is requested
@@ -158,7 +158,7 @@ class User{
 				array_push($allParticipants, $record);
 			}
 
-			$rs->close();			
+			$rs->close();
 
 			// add matrnr if it is requested
 			if(in_array('matrnr', $requestedAttributes)){
@@ -173,7 +173,7 @@ class User{
 				foreach($allParticipants as $key => $participant){ // set logins array for ldap method
 					array_push($allLogins, $participant->login);
 				}
-	
+
 				$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
 
 				if(!empty($matriculationNumbers)){
@@ -182,7 +182,7 @@ class User{
 							$participant->matrnr = $matriculationNumbers[$participant->login];
 						} else {
 							$participant->matrnr = '-';
-						} 
+						}
 					}
 				} else {
 					foreach($allParticipants as $key => $participant){
@@ -190,29 +190,29 @@ class User{
 					}
 				}
 			}
-			
+
 			// sort all participant sarray
 			if($sortOrder == 'name'){
 				usort($allParticipants, function($a, $b){ //sort participants array by name through custom user function
 
 					$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
 					$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
-		
+
 					if (str_replace($searchArr, $replaceArr, $a->lastname) == str_replace($searchArr, $replaceArr, $b->lastname)) { //if lastnames are even sort by first name
 						return strcmp($a->firstname, $b->firstname);
 					} else{
 						return strcmp(str_replace($searchArr, $replaceArr, $a->lastname) , str_replace($searchArr, $replaceArr, $b->lastname)); // else sort by last name
 					}
-		
-				});		
+
+				});
 			} else if($sortOrder == 'matrnr'){
 				usort($allParticipants, function($a, $b){ //sort participants array by matrnr through custom user function
-	  
+
 					return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
-		  
+
 				});
 			}
-			
+
 			return $allParticipants;
 
         } else {
@@ -235,7 +235,7 @@ class User{
 				$CourseParticipantsIDsArray[$key] = $temp['id'];
 			}
 
-			if($CourseParticipantsIDsArray){
+			if(isset($CourseParticipantsIDsArray)){
 					return $CourseParticipantsIDsArray;
 			} else {
 					return false;
@@ -380,7 +380,7 @@ class User{
 			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement));
 		}
 	}
-	
+
 	public function deleteTempParticipants(){
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 			$MoodleDBObj = MoodleDB::getInstance();
@@ -499,20 +499,20 @@ class User{
 					$bonus = 0;
 					break;
 			}
-	
+
 			if(isset($grade) && $grade !== "-"){
 				$resultWithBonus = $grade-$bonus;
-	
+
 				$test = round($resultWithBonus-floor($resultWithBonus),1);
-	
+
 				if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
 				if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
-	
+
 				if($bonus == 0) return $grade;
 				if( $grade == 5.0 ) return 5.0;
 				if( $state !== 'normal' ) return get_string($state, "mod_exammanagement");
 				if( $resultWithBonus<=1.0) return '1.0';
-	
+
 				return (str_pad (strval($resultWithBonus), 3, '.0'));
 			} else {
 				return '-';
@@ -520,13 +520,13 @@ class User{
 		} else {
 			return '-';
 		}
-		
+
 	}
 
 	#### checks  ####
 
 	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
-			
+
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		if($potentialParticipantId){
@@ -540,9 +540,9 @@ class User{
 		if (!preg_match("/^\d+$/", $mnr)) {
 			return false;
 		}
-		
+
 		$first = substr($mnr, 0, 1);
-		
+
 		if ($first==7 && strlen($mnr)==7) {
 			return true;
 		} else {
@@ -565,7 +565,7 @@ class User{
 		} else if($mode =='room' && $id){
 			$select .= " AND roomid = '" . $id . "'";
 		}
-		
+
 		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if ($participantsCount){
@@ -581,7 +581,7 @@ class User{
 
 		$select = "exammanagement =".$this->exammanagement;
 		$select .= " AND bonus IS NOT NULL";
-		
+
 		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if ($enteredBonusCount){
@@ -594,7 +594,7 @@ class User{
 	public function getEnteredResultsCount($timestamp = false){
 
 		$MoodleDBObj = MoodleDB::getInstance();
-		
+
 		$select = "exammanagement =".$this->exammanagement;
 		$select .= " AND exampoints IS NOT NULL";
 		$select .= " AND examstate IS NOT NULL";
@@ -603,7 +603,7 @@ class User{
 			$select .= " AND timeresultsentered IS NOT NULL";
 			$select .= " AND timeresultsentered >=" . $timestamp;
 		}
-		
+
 		$enteredResultsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if($enteredResultsCount){

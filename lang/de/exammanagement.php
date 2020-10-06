@@ -670,6 +670,7 @@ $string['err_novalidpassword'] = 'Kein gültiges Passwort.';
 $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. Eine Nutzung der Prüfungsorganisation ist nicht mehr möglich.';
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID';
 $string['err_novalidplacescount'] = 'Die eingegebene Zahl ist keine gültige Sitzplatzzahl.';
+$string['err_nocourseparticipants'] = 'Noch keine Kursteilnehmer vorhanden.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

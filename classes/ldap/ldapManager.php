@@ -141,7 +141,7 @@ class ldapManager{
 	public function isLDAPconfigured(){
 		$config = get_config('auth_ldap');
 
-		if(($config->host_url && $config->bind_dn && $config->bind_pw){
+		if($config->host_url && $config->bind_dn && $config->bind_pw){
 			return true;
 		} else {
 			return false;

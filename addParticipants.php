@@ -67,7 +67,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			}
 
 			# define participants for form #
-			$tempParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $id)); // get all participants that are already readed in and saved as temnp participants
+			$tempParticipants = $MoodleDBObj->getRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance)); // get all participants that are already readed in and saved as temnp participants
 
 			if($tempParticipants){
 
@@ -154,7 +154,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$tempUserObj->state = 'state_existingmatrnr';
 							array_push($existingParticipants, $tempUserObj);
 							array_push($tempIDs, $data['moodleuserid']); 						//for finding deleted users
-						} else if (!in_array($data['moodleuserid'], $courseParticipantsIDs)){ 	// if user is not in course
+						} else if (!$courseParticipantsIDs || !in_array($data['moodleuserid'], $courseParticipantsIDs)){ 	// if user is not in course
 							$tempUserObj->state = 'state_no_courseparticipant';
 							array_push($oddParticipants, $tempUserObj);
 							array_push($tempIDs, $data['moodleuserid']); 						//for finding deleted users
@@ -345,7 +345,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 								if($temp[0]== 'mid'){ // if participant is moodle user
 									$user = new stdClass();
-									$user->exammanagement = $id;
+									$user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
 									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
 									$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 									$user->moodleuserid = $temp[1];
@@ -364,50 +364,52 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								}
 							}
 
-							$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($noneMoodleParticipantsMatrNrArr, 'all_attributes');
+							if(!empty($noneMoodleParticipantsMatrNrArr)){
+								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($noneMoodleParticipantsMatrNrArr, 'all_attributes');
 
-							foreach($participantsIdsArr as $key => $identifier){ // now only contains participants that have no moodle account
-								$temp = explode('_', $identifier);
+								foreach($participantsIdsArr as $key => $identifier){ // now only contains participants that have no moodle account
+									$temp = explode('_', $identifier);
 
-								$matrnr = $temp[1];
+									$matrnr = $temp[1];
 
-								$user = new stdClass();
-								$user->exammanagement = $id;
-								$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
-								$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
-								$user->moodleuserid = null;
+									$user = new stdClass();
+									$user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
+									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+									$user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
+									$user->moodleuserid = null;
 
-								$login = $noneMoodleParticipantsArr[$matrnr]['login'];
-								if($login){
-									$user->login = $login;
-								} else {
-									$user->login = null;
+									$login = $noneMoodleParticipantsArr[$matrnr]['login'];
+									if($login){
+										$user->login = $login;
+									} else {
+										$user->login = null;
+									}
+
+									$firstname = $noneMoodleParticipantsArr[$matrnr]['firstname'];
+									if($firstname){
+										$user->firstname = $firstname;
+									} else {
+										$user->firstname = null;
+									}
+
+									$lastname = $noneMoodleParticipantsArr[$matrnr]['lastname'];
+									if($lastname){
+										$user->lastname = $lastname;
+									} else {
+										$user->lastname = null;
+									}
+
+									$email = $noneMoodleParticipantsArr[$matrnr]['email'];
+									if($email){
+										$user->email = $email;
+									} else {
+										$user->email = null;
+									}
+
+									$user->headerid = $newheaderid;
+
+									array_push($userObjArr, $user);
 								}
-
-								$firstname = $noneMoodleParticipantsArr[$matrnr]['firstname'];
-								if($firstname){
-									$user->firstname = $firstname;
-								} else {
-									$user->firstname = null;
-								}
-
-								$lastname = $noneMoodleParticipantsArr[$matrnr]['lastname'];
-								if($lastname){
-									$user->lastname = $lastname;
-								} else {
-									$user->lastname = null;
-								}
-
-								$email = $noneMoodleParticipantsArr[$matrnr]['email'];
-								if($email){
-									$user->email = $email;
-								} else {
-									$user->email = null;
-								}
-
-								$user->headerid = $newheaderid;
-
-								array_push($userObjArr, $user);
 							}
 
 							## insert records of new participants ##
@@ -472,7 +474,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 										$identifier = str_replace('"', '', $pmatrnr);
 										if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
 											$tempUserObj = new stdclass;
-											$tempUserObj->exammanagement = $id;
+											$tempUserObj->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
 											$tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
 											$tempUserObj->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 											$tempUserObj->identifier = $identifier;
