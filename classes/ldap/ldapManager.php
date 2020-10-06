@@ -173,7 +173,7 @@ class ldapManager{
 						}
 
 						if($disabledfeature){
-							notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
+							notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . ' ' . $missingconfigstr, 'error');
 						} else {
 							notification::error(get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
 						}

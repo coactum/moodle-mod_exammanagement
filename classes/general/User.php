@@ -501,19 +501,23 @@ class User{
 			}
 
 			if(isset($grade) && $grade !== "-"){
-				$resultWithBonus = $grade-$bonus;
 
-				$test = round($resultWithBonus-floor($resultWithBonus),1);
+				if($state === 'normal'){
+					$resultWithBonus = $grade-$bonus;
 
-				if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
-				if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
+					$test = round($resultWithBonus-floor($resultWithBonus),1);
 
-				if($bonus == 0) return $grade;
-				if( $grade == 5.0 ) return 5.0;
-				if( $state !== 'normal' ) return get_string($state, "mod_exammanagement");
-				if( $resultWithBonus<=1.0) return '1.0';
+					if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
+					if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
 
-				return (str_pad (strval($resultWithBonus), 3, '.0'));
+					if($bonus == 0) return $grade;
+					if( $grade == 5.0 ) return 5.0;
+					if( $resultWithBonus<=1.0) return '1.0';
+
+					return (str_pad (strval($resultWithBonus), 3, '.0'));
+				} else {
+					return get_string($state, "mod_exammanagement");
+				}
 			} else {
 				return '-';
 			}

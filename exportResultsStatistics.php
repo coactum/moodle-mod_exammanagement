@@ -142,12 +142,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             if($examdate){
                 $date = date('d.m.Y', $examdate);
-                $start_time = date('H:i', $examdate);    
+                $start_time = date('H:i', $examdate);
             } else {
                 $date = '-';
                 $start_time = '-';
             }
-            
+
             $end_time = '';
             $rooms = $ExammanagementInstanceObj->getChoosenRoomNames();
 
@@ -166,7 +166,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B5', $rooms);
 
             // set data for table 1
-            
+
             $gradingscale = $ExammanagementInstanceObj->getGradingscale();
             $summaryTable = array();
             $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
@@ -175,9 +175,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             if($gradingscale){
                 foreach($gradingscale as $gradestep => $points){
                     $summaryTable[$gradestep] = array("countBonus" => 0, "countNoBonus" => 0, "from" => number_format($points, 2, ',', ''), "to" => number_format($laststeppoints, 2, ',', ''));
-        
+
                     $laststeppoints = $points-0.01;
-                }    
+                }
                 $summaryTable[5] = array("countBonus" => 0, "countNoBonus" => 0, "from" => 0, "to" => number_format($laststeppoints, 2, ',', ''));
             }
 
@@ -217,7 +217,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $notRated++;
                     } else if($gradingscale){
                         $summaryTable[strval($result)]["countNoBonus"]++;
-                        
+
                         if ($result == '5,0'){
                             $notPassed++;
                             $summaryTable[strval($resultWithBonus)]["countBonus"]++;
@@ -244,7 +244,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $bonusstepnotset++;
                         break;
                 }
-                        
+
             }
 
             // output table 1
@@ -296,9 +296,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // output table 3
             $passed = $numberParticipants - $notPassed - $notRated;
-            $passedPercent = number_format($passed / $numberParticipants * 100, 2);
-            $notPassedPercent = number_format($notPassed / $numberParticipants * 100 ,2);
-            $notRatedPercent = number_format($notRated / $numberParticipants * 100 , 2);
+
+            if($numberParticipants > 0){
+                $passedPercent = number_format($passed / $numberParticipants * 100, 2);
+                $notPassedPercent = number_format($notPassed / $numberParticipants * 100 ,2);
+                $notRatedPercent = number_format($notRated / $numberParticipants * 100 , 2);
+            } else {
+                $passedPercent = 0;
+                $notPassedPercent = 0;
+                $notRatedPercent = 0;
+            }
 
             $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B31', get_string('count', 'mod_exammanagement'));
             $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('C31', get_string('inpercent', 'mod_exammanagement'));
@@ -335,7 +342,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $tasks = $ExammanagementInstanceObj->getTasks();
             $taskcount = count($tasks);
-            
+
             // fortmatting for sheet 2
 
             //table 1
@@ -346,7 +353,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('A')->setWidth(13);
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('B')->setWidth(20);
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('C')->setWidth(20);
-            
+
             $PHPExcelObj->setActiveSheetIndex(1)->getStyle("A1:A".($taskcount + 1))->applyFromArray($borderStyleArray);
 
             // Table 2
@@ -356,13 +363,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('G')->setWidth(13);
 
             $PHPExcelObj->setActiveSheetIndex(1)->getStyle("G1:G6")->applyFromArray($borderStyleArray);
-                
-            // outpout table 1 
+
+            // outpout table 1
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('A1', get_string('task', 'mod_exammanagement'));
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('B1', get_string('max_points', 'mod_exammanagement'));
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('C1', get_string('mean', 'mod_exammanagement'));
 
-            foreach ($tasks as $tasknumber => $points){        
+            foreach ($tasks as $tasknumber => $points){
                 $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(0 , $tasknumber + 1, $tasknumber);
                 $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(1 , $tasknumber + 1, $points);
             }
@@ -460,14 +467,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
 
                 $result = $UserObj->calculateResultGrade($participant);
-                
+
                 if($participant->bonus){
                     $bonus = $participant->bonus;
                 } else {
                     $bonus = 0;
                 }
-            
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonus);    
+
+                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonus);
 
                 if($participant->exampoints){
                     foreach (json_decode($participant->exampoints) as $key => $points){
@@ -478,8 +485,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, $rowCounter, '-');
                     }
                 }
-                
-                
+
+
                 $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, $rowCounter, $totalpoints);
 
                 if($gradingscale){
@@ -518,7 +525,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Cache-Control: max-age=0');
-            
+
             // write excel file
             $PHPExcelWriterObj = PHPExcel_IOFactory::createWriter($PHPExcelObj, "Excel2007");
             $PHPExcelWriterObj->save('php://output');

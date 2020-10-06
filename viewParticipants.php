@@ -105,7 +105,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 echo('<div class="table-responsive">');
                 echo('<table class="table table-striped exammanagement_table">');
-                echo('<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("participants", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th>');
+                echo('<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("participant", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th>');
 
                 if($courseGroups){
                     echo('<th scope="col">'.get_string("course_groups", "mod_exammanagement").'</th>');
