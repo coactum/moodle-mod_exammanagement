@@ -50,7 +50,7 @@ class configureGradingscaleForm extends moodleform {
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'.get_string("configureGradingscale", "mod_exammanagement"));
-        
+
         if($helptextsenabled){
             $mform->addElement('html', $OUTPUT->help_icon('configureGradingscale', 'mod_exammanagement', ''));
         }
@@ -87,22 +87,22 @@ class configureGradingscaleForm extends moodleform {
         }
 
         //add labels for grading steps
-        $mform->addElement('html', '<div class="row"><p class="col-xs-1"></p>');
+        $mform->addElement('html', '<div class="row"><p class="col-1"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<strong class="col-xs-1">'.str_replace('.', ',',$key).'</strong>');
+            $mform->addElement('html', '<strong class="col-1">'.str_replace('.', ',',$key).'</strong>');
         }
 
         $mform->addElement('html', '</div>');
 
         //add input fields with points
-        $mform->addElement('html', '<div class="row remove_col"><p class="col-xs-1"></p>');
+        $mform->addElement('html', '<div class="row remove_col"><p class="col-1"></p>');
 
         foreach($gradingscale as $key => $points){
 
             $key_2 = str_replace('.', '', $key);
 
-            $mform->addElement('html', '<span class="col-xs-1">');
+            $mform->addElement('html', '<span class="col-1">');
             $mform->addElement('text', 'gradingsteppoints['.$key.']', '', $attributes);
             $mform->addElement('html', '</span>');
             $mform->setType('gradingsteppoints['.$key.']', PARAM_FLOAT);

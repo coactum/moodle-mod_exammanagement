@@ -27,10 +27,10 @@
       <h4 class = "m-y-1">{{#str}}examinformation, mod_exammanagement{{/str}}</h4>
 
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}state, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#isparticipant}}<p>{{#str}}added_to_exam, mod_exammanagement{{/str}}</p>{{/isparticipant}}
             {{^isparticipant}}<p>{{#str}}no_participant, mod_exammanagement{{/str}}</p>{{/isparticipant}}
           </div>
@@ -38,46 +38,46 @@
       {{^deleted}}
       {{#isparticipant}}
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}date, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#examdate}}<p>{{examdate}} <i class="fa fa-calendar" aria-hidden="true"></i></p>{{/examdate}}
             {{^examdate}}<p>{{#str}}no_date_entered, mod_exammanagement{{/str}}</p>{{/examdate}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}time, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#examtime}}<p>{{examtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/examtime}}
             {{^examtime}}<p>{{#str}}no_time_entered, mod_exammanagement{{/str}}</p>{{/examtime}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}room, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#room}}<p>{{room}} <i class="fa fa-building-o" aria-hidden="true"></i></p>{{/room}}
             {{^room}}<p>{{#str}}no_room_assigned, mod_exammanagement{{/str}}</p>{{/room}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}seat, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#place}}<p>{{place}}</p>{{/place}}
             {{^place}}<p>{{#str}}no_seat_assigned, mod_exammanagement{{/str}}</p>{{/place}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}hint, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#textfield}}
                 {{{textfield}}}
             {{/textfield}}
@@ -86,10 +86,10 @@
       </div>
       <hr />
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}bonus_for_exam, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">
+          <div class="col-6">
             {{#bonus}}
                 {{#str}}bonus_for_exam_added, mod_exammanagement, {{{bonus}}}{{/str}}
             {{/bonus}}
@@ -99,10 +99,10 @@
       {{#examreviewtime}}
       <hr />
       <div class = "row">
-          <p class = "col-xs-6">
+          <p class = "col-6">
               <strong>{{#str}}exam_review, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-xs-6">            
+          <div class="col-6">
               {{#str}}exam_review_added, mod_exammanagement, { "examreviewtime":  {{# quote }}{{ examreviewtime }}{{/ quote }}, "examreviewroom": {{# quote }}{{ examreviewroom }}{{/ quote }} }{{/str}}
           </div>
       </div>
@@ -112,5 +112,5 @@
       {{#isparticipant}}{{#deleted}}
             <p>{{#str}}examdata_deleted, mod_exammanagement, {{examdate}}{{/str}}</p>
       {{/deleted}}{{/isparticipant}}
-      
+
 </div>

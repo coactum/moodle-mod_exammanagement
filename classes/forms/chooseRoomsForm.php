@@ -59,13 +59,13 @@ class chooseRoomsForm extends moodleform {
 
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-    $mform->addElement('html', '<div class="row"><div class="col-xs-6"><h3>'. get_string('chooseRooms', 'mod_exammanagement'));
+    $mform->addElement('html', '<div class="row"><div class="col-6"><h3>'. get_string('chooseRooms', 'mod_exammanagement'));
 
     if($helptextsenabled){
       $mform->addElement('html', $OUTPUT->help_icon('chooseRooms', 'mod_exammanagement', ''));
     }
 
-    $mform->addElement('html', '</h3></div><div class="col-xs-6">');
+    $mform->addElement('html', '</h3></div><div class="col-6">');
 
     $allRooms = $ExammanagementInstanceObj->getRooms('all');
     $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');

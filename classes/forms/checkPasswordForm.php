@@ -49,7 +49,7 @@ class checkPasswordForm extends moodleform {
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<div class="row"><div class="col-xs-6"><h3>'.get_string('checkPassword', 'mod_exammanagement'));
+        $mform->addElement('html', '<div class="row"><div class="col-6"><h3>'.get_string('checkPassword', 'mod_exammanagement'));
 
         if($helptextsenabled){
             if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
@@ -59,7 +59,7 @@ class checkPasswordForm extends moodleform {
             }
         }
 
-        $mform->addElement('html', '</h3></div><div class="col-xs-6">');
+        $mform->addElement('html', '</h3></div><div class="col-6">');
 
         if($MoodleObj->checkCapability('mod/exammanagement:resetpassword')){
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/checkPassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password_admin", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password_admin", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
@@ -73,7 +73,7 @@ class checkPasswordForm extends moodleform {
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
-         
+
         $attributes=array('size'=>'20');
 
  		$mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
@@ -81,7 +81,7 @@ class checkPasswordForm extends moodleform {
         $mform->addRule('password', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
         $this->add_action_buttons(true, get_string("confirm_password", "mod_exammanagement"));
-    
+
     }
 
     //Custom validation should be added here

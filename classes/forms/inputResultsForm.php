@@ -49,7 +49,7 @@ class inputResultsForm extends moodleform {
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'.get_string("inputResults", "mod_exammanagement"));
-        
+
         if($helptextsenabled){
             $mform->addElement('html', $OUTPUT->help_icon('inputResults', 'mod_exammanagement', ''));
         }
@@ -87,7 +87,7 @@ class inputResultsForm extends moodleform {
         }
 
         if($this->_customdata['matrnr']){
-            $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-xs-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
+            $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
 
         }
 
@@ -163,7 +163,7 @@ class inputResultsForm extends moodleform {
 
         end($tasks);
         $lastkey = key($tasks);
-        
+
         $mform->addElement('hidden', 'lastkeypoints', $lastkey);
         $mform->setType('lastkeypoints', PARAM_INT);
 

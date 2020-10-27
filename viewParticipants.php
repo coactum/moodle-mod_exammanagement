@@ -70,10 +70,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             ###### list of participants ... ######
 
-            echo('<div class="row"><div class="col-xs-4">');
+            echo('<div class="row"><div class="col-4">');
             echo('<h3>'.get_string("viewParticipants", "mod_exammanagement"). $OUTPUT->help_icon('viewParticipants', 'mod_exammanagement', '') . '</h3>');
 
-            echo ('</div><div class="col-xs-8">');
+            echo ('</div><div class="col-8">');
 
             if(!empty($UserObj->getCourseParticipantsIDs())){
                 echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-b-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-lg-none" aria-hidden="true"></i></a>');
@@ -174,7 +174,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 echo('</tbody></table></div>');
 
             } else {
-                    echo('<div class="row"><p class="col-xs-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
+                    echo('<div class="row"><p class="col-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
             }
 
             echo('<div class="row" id="end"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');

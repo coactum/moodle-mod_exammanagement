@@ -49,22 +49,22 @@ class configurePasswordForm extends moodleform {
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<div class="row"><div class="col-xs-6"><h3>'.get_string('configurePassword', 'mod_exammanagement'));
+        $mform->addElement('html', '<div class="row"><div class="col-6"><h3>'.get_string('configurePassword', 'mod_exammanagement'));
 
         if($helptextsenabled){
             $mform->addElement('html', $OUTPUT->help_icon('configurePassword', 'mod_exammanagement', ''));
         }
 
-        $mform->addElement('html', '</h3></div><div class="col-xs-6">');
-        
+        $mform->addElement('html', '</h3></div><div class="col-6">');
+
         if($ExammanagementInstanceObj->getModuleinstance()->password){
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/configurePassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
-        
+
         $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', '<p>'.get_string('configure_password', 'mod_exammanagement').'</p>');
-         
+
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
@@ -85,16 +85,16 @@ class configurePasswordForm extends moodleform {
     //Custom validation should be added here
     function validation($data, $files) {
         $errors= array();
-  
+
         if($data['password'] === '' || $data['password'] === ' ' || $data['password'] === '0' || $data['password'] === 0){
-            $errors['password'] = get_string('err_novalidpassword', 'mod_exammanagement');                
+            $errors['password'] = get_string('err_novalidpassword', 'mod_exammanagement');
         } else if($data['password'] && $data['confirm_password']){
             if(strcmp($data['password'], $data['confirm_password']) !== 0){
                 $errors['password'] = get_string('err_password_incorrect', 'mod_exammanagement');
                 $errors['confirm_password'] = get_string('err_password_incorrect', 'mod_exammanagement');
-            } 
+            }
         }
-  
-        return $errors;   
+
+        return $errors;
     }
 }

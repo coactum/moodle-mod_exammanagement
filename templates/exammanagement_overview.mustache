@@ -133,8 +133,8 @@ ajaxsetcorrectioncompletion = function(value){
 {{/js}}
    <div class="container-fluid exammanagement_overview">
 			<div class="row">
-				<h3 class="m-y-1 col-xs-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3> 
-				<span class="m-y-1 col-xs-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
+				<h3 class="m-y-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
+				<span class="m-y-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
 			</div>
 
 			{{#deleted}}
@@ -160,7 +160,7 @@ ajaxsetcorrectioncompletion = function(value){
                 <div class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}} {{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one">
                     <div class="panel-body">
                       <div class="row row-eq-height">
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -179,7 +179,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -200,7 +200,7 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
 											</div>
 											<div class="row row-eq-height">
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -219,7 +219,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -240,7 +240,7 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
 											</div>
 											<div class="row row-eq-height">
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-info{{/textfield}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -259,7 +259,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -297,7 +297,7 @@ ajaxsetcorrectioncompletion = function(value){
                 <div class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}} {{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two">
                     <div class="panel-body">
                     	<div class="row row-eq-height">
-                        <div class="col-xs-6">
+                        <div class="col-6">
 														<div class="panel {{#allplacesassigned}}panel-success{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}">
 															<div class="panel-heading">
 																	<span class="statebar pull-right">
@@ -318,7 +318,7 @@ ajaxsetcorrectioncompletion = function(value){
 															</div>
 														</div>
                         							</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -337,7 +337,7 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
                     </div>
                     <div class="row row-eq-height">
-											<div class="col-xs-6">
+											<div class="col-6">
 												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -354,7 +354,7 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 												</div>
 											</div>
-											<div class="col-xs-6">
+											<div class="col-6">
 												<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -375,7 +375,7 @@ ajaxsetcorrectioncompletion = function(value){
 											</div>
                     </div>
                     <div class="row row-eq-height">
-											<div class="col-xs-6">
+											<div class="col-6">
 												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -397,7 +397,7 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 												</div>
 											</div>
-											<div class="col-xs-6">
+											<div class="col-6">
 												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -407,7 +407,7 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 													<div class="panel-body">
 														<div class="row">
-																<div class="col-xs-6">
+																<div class="col-6">
 																		<span class="pull-right">
 																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
 																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
@@ -422,7 +422,7 @@ ajaxsetcorrectioncompletion = function(value){
 																				<p class="roomVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
 																		{{/roomvisible}}
 																</div>
-																<div class="col-xs-6">
+																<div class="col-6">
 																		<span class="pull-right">
 																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
 																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
@@ -489,7 +489,7 @@ ajaxsetcorrectioncompletion = function(value){
                 <div class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}} {{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three">
                   <div class="panel-body">
                     <div class="row row-eq-height">
-                        <div class="col-xs-6">
+                        <div class="col-6">
 														<div class="panel {{^bonuscount}}{{#allplacesassigned}}panel-info{{/allplacesassigned}}{{/bonuscount}}{{^bonuscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
 															<div class="panel-heading">
 																	<span class="statebar pull-right">
@@ -508,7 +508,7 @@ ajaxsetcorrectioncompletion = function(value){
 															</div>
 														</div>
 											</div>
-											<div class="col-xs-6">
+											<div class="col-6">
 													<div class="panel {{^gradingscale}}{{#taskcount}}panel-info{{/taskcount}}{{/gradingscale}}{{^gradingscale}}{{^taskcount}}panel-danger{{/taskcount}}{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -530,7 +530,7 @@ ajaxsetcorrectioncompletion = function(value){
                         </div>
                     </div>
 										<div class="row row-eq-height">
-                        <div class="col-xs-6">
+                        <div class="col-6">
 														<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{#taskcount}}panel-warning{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{#taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}">
 															<div class="panel-heading">
 																	<span class="statebar pull-right">
@@ -551,7 +551,7 @@ ajaxsetcorrectioncompletion = function(value){
 															</div>
 														</div>
 											</div>
-											<div class="col-xs-6">
+											<div class="col-6">
 													<div class="panel {{#allplacesassigned}}{{#resultscount}}panel-info{{/resultscount}}{{/allplacesassigned}}{{^resultscount}}{{#allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}{{#resultscount}}{{^allplacesassigned}}panel-success{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -606,7 +606,7 @@ ajaxsetcorrectioncompletion = function(value){
                 <div class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}} {{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four">
                 <div class="panel-body">
                   <div class="row row-eq-height">
-                      <div class="col-xs-6">
+                      <div class="col-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -624,7 +624,7 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 												</div>
                       </div>
-                      <div class="col-xs-6">
+                      <div class="col-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -645,7 +645,7 @@ ajaxsetcorrectioncompletion = function(value){
                       </div>
                   </div>
                   <div class="row row-eq-height">
-                      <div class="col-xs-6">
+                      <div class="col-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -663,7 +663,7 @@ ajaxsetcorrectioncompletion = function(value){
 													</div>
 												</div>
                       </div>
-                      <div class="col-xs-6">
+                      <div class="col-6">
 												<div class="panel {{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-info{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}">
 													<div class="panel-heading">
 															<span class="statebar pull-right">
@@ -714,7 +714,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<div class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}} {{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five">
 										<div class="panel-body">
 											<div class="row row-eq-height">
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -738,7 +738,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -766,7 +766,7 @@ ajaxsetcorrectioncompletion = function(value){
 												</div>
 											</div>
 											<div class="row row-eq-height">
-												<div class="col-xs-6">
+												<div class="col-6">
 														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}{{#examreviewtime}}panel-warning{{/examreviewtime}}{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}{{#examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
@@ -791,7 +791,7 @@ ajaxsetcorrectioncompletion = function(value){
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-6">
 													<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
 														<div class="panel-heading">
 																<span class="statebar pull-right">
