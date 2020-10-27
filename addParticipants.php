@@ -26,12 +26,10 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\addParticipantsForm;
 use mod_exammanagement\ldap\ldapManager;
-use PHPExcel_IOFactory;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once("$CFG->libdir/phpexcel/PHPExcel.php");
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);

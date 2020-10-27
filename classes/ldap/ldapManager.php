@@ -185,12 +185,17 @@ class ldapManager{
 					$filter = "(&(objectclass=" . $this->ldapobjectclassstudent . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
 
 					$search = ldap_search($ldapConnection, $dn, $filter, array($this->ldapfieldusername));
-					$entry = ldap_first_entry($ldapConnection, $search);
 
-					$result = @ldap_get_values($ldapConnection, $entry, $this->ldapfieldusername);
-					ldap_free_result($search);
+					if($search){
+						$entry = ldap_first_entry($ldapConnection, $search);
 
-					return $result[ 0 ];
+						$result = @ldap_get_values($ldapConnection, $entry, $this->ldapfieldusername);
+						ldap_free_result($search);
+
+						return $result[ 0 ];
+					} else {
+						return false;
+					}
 				} else {
 					if($disabledfeature){
 						notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
@@ -260,19 +265,23 @@ class ldapManager{
 						$dn = $this->dn;
 						$search = ldap_search( $ldapConnection, $dn, $filterString, array($this->ldapfieldusername, $this->ldapfieldmatriculationnumber));
 
-						//get ldap attributes
-						for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection, $entryID)){
+						if($search){
+							//get ldap attributes
+							for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection, $entryID)){
 
-							$login = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldusername);
-							$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber);
+								$login = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldusername);
+								$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber);
 
-							$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
-						}
+								$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
+							}
 
-						ldap_free_result($search);
+							ldap_free_result($search);
 
-						if(isset($resultArr)){
-							return $resultArr;
+							if(isset($resultArr)){
+								return $resultArr;
+							} else {
+								return false;
+							}
 						} else {
 							return false;
 						}
@@ -369,52 +378,57 @@ class ldapManager{
 						}
 
 						$dn	=	$this->dn;
+
 						$search = ldap_search( $ldapConnection, $dn, $filterString, $attributes);
 
-						//get ldap attributes
-						for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection,$entryID)){
-							foreach( $attributes as $attribute ){
-								$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
+						if($search){
+							//get ldap attributes
+							for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection,$entryID)){
+								foreach( $attributes as $attribute ){
+									$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
 
-								switch ($attribute){
+									switch ($attribute){
 
-									case $this->ldapfieldusername:
-										$result['login'] = $value[ 0 ];
-										break;
-									case $this->ldapfieldlastname:
-										$result['lastname'] = $value[ 0 ];
-										break;
-									case $this->ldapfieldfirstname:
-										$result['firstname'] = $value[ 0 ];
-										break;
-									case $this->ldapfieldemailadress:
-										$result['email'] = $value[ 0 ];
-										break;
+										case $this->ldapfieldusername:
+											$result['login'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldlastname:
+											$result['lastname'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldfirstname:
+											$result['firstname'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldemailadress:
+											$result['email'] = $value[ 0 ];
+											break;
+									}
 								}
+
+								$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber)[0];
+
+								if(!isset($externalIdentifier) || !$externalIdentifier){
+									$resultArr[$matrnr] = $result;
+								} else {
+									$result['matrnr'] = $matrnr;
+
+									$resultArr[$externalIdentifier[array_search($matrnr, $matrNrsArray)]] = $result;
+								}
+
+								$i++;
 							}
 
-							$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber)[0];
+							// results at the end of ldap method
+							ldap_free_result($search);
 
-							if(!isset($externalIdentifier) || !$externalIdentifier){
-								$resultArr[$matrnr] = $result;
+							if(isset($resultArr)){
+								return $resultArr;
 							} else {
-								$result['matrnr'] = $matrnr;
-
-								$resultArr[$externalIdentifier[array_search($matrnr, $matrNrsArray)]] = $result;
+								return false;
 							}
-
-							$i++;
-						}
-
-						// results at the end of ldap method
-
-						ldap_free_result($search);
-
-						if(isset($resultArr)){
-							return $resultArr;
 						} else {
 							return false;
 						}
+
 					}
 				} else {
 					notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
