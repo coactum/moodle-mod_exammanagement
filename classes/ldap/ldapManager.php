@@ -175,15 +175,13 @@ class ldapManager{
 						return false;
 					}
 
-					$dn	=	$this->dn;
-
-					$filter = "(&";
+					$dn	= $this->dn;
 
 					if($this->ldapobjectclassstudent){
-						$filter = "(objectclass=" . $this->ldapobjectclassstudent . ")";
+						$filter = "(&(objectclass=" . $this->ldapobjectclassstudent . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
+					} else {
+						$filter = "(" . $this->ldapfieldmatriculationnumber . "=" . $username . ")";
 					}
-
-					$filter .= "(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
 
 					$search = ldap_search($ldapConnection, $dn, $filter, array($this->ldapfieldusername));
 
