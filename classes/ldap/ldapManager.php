@@ -61,8 +61,6 @@ class ldapManager{
 
 		if($pluginconfig->ldap_objectclass_student){
 			$this->ldapobjectclassstudent = $pluginconfig->ldap_objectclass_student;
-		} else {
-			array_push($this->missingconfig, 'ldap_objectclass_student');
 		}
 
 		if($pluginconfig->ldap_field_map_matriculationnumber){
@@ -160,10 +158,6 @@ class ldapManager{
 					if(in_array('ldap_objectclass_student', $this->missingconfig) || in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
 						$missingconfigstr = '';
 
-						if(in_array('ldap_objectclass_student', $this->missingconfig)){
-							$missingconfigstr .= 'ldap_objectclass_student, ';
-						}
-
 						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
 							$missingconfigstr .= 'ldap_field_map_matriculationnumber, ';
 						}
@@ -182,7 +176,14 @@ class ldapManager{
 					}
 
 					$dn	=	$this->dn;
-					$filter = "(&(objectclass=" . $this->ldapobjectclassstudent . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
+
+					$filter = "(&";
+
+					if($this->ldapobjectclassstudent){
+						$filter = "(objectclass=" . $this->ldapobjectclassstudent . ")";
+					}
+
+					$filter .= "(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
 
 					$search = ldap_search($ldapConnection, $dn, $filter, array($this->ldapfieldusername));
 
