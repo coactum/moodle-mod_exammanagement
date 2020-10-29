@@ -33,7 +33,7 @@ use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once("$CFG->libdir/phpexcel/PHPExcel.php");
+require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -58,7 +58,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 			$MoodleObj->setPage('importBonus');
-			
+
 			if(!$ExammanagementInstanceObj->allPlacesAssigned()){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
 			} else if (!$UserObj->getParticipantsCount()) {
@@ -77,18 +77,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
 			} else if ($fromform = $mform->get_data()) {
-			//In this case you process validated data. $mform->get_data() returns data posted in form.	
+			//In this case you process validated data. $mform->get_data() returns data posted in form.
 
 				if ($fromform->bonuspoints_list){
 
 					if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
 						redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 					}
-				
+
 					// retrieve Files from form
 					$file = $mform->get_file_content('bonuspoints_list');
 					$filename = $mform->get_new_filename('bonuspoints_list');
-					
+
 					$tempfile = tempnam(sys_get_temp_dir(), 'bonuslist_');
 					rename($tempfile, $tempfile .= $filename);
 
@@ -110,7 +110,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						private $columns = array();
 
 						public function __construct($toColumn) {
-							
+
 							foreach (excelColumnRange('A', $toColumn) as $value) {
 								array_push($this->columns, $value);
 							}
@@ -123,13 +123,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 								return true;
 							}
-							
+
 							return false;
 						}
 					}
 
 					$ExcelReaderWrapper->setReadFilter( new MyReadFilter($fromform->pointsfield) );
-					
+
 					$ExcelReaderWrapper->setReadDataOnly(true);
 
 					$readerObj = $ExcelReaderWrapper->load($tempfile);
@@ -154,7 +154,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							array_push($linesArr, $key);
 						}
 					}
-					
+
 					if(!empty($matrNrsArr)){
 						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
 					}
@@ -163,13 +163,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						foreach($loginsArray as $key => $data){
 
 							$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
-	
+
 							if($moodleuserid){
 								$dataArr[$key] = array('login' => false, 'moodleuserid' => $moodleuserid, 'points' =>$pointsArr[$key][0]);
 							} else {
 								$dataArr[$key] = array('login' => $data['login'], 'moodleuserid' => false, 'points' =>$pointsArr[$key][0]);
 							}
-	
+
 						}
 					}
 
@@ -185,11 +185,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						if($participantObj){
 
 							$participantObj->bonus = 0;
-							
+
 							if(isset($data['points']) && $data['points']){
 
 								foreach($fromform->bonussteppoints as $step => $points){
-									
+
 									if(floatval($data['points']) >= $points){
 										$participantObj->bonus = $step; // change to detect bonus step
 									} else {
@@ -199,12 +199,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							}
 
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-						
+
 						}
 					}
 
 					fclose($handle);
-					unlink($tempfile);	
+					unlink($tempfile);
 
 					if($update){
 						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
