@@ -24,17 +24,17 @@
 
 namespace mod_exammanagement\general;
 
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Alignment;
-use PHPExcel_Style_Border;
-use PHPExcel_Style_Color;
-use PHPExcel_Style_NumberFormat;
-use PHPExcel_Cell;
+use \PhpOffice\PhpSpreadsheet\Spreadsheet;
+use \PhpOffice\PhpSpreadsheet\IOFactory;
+use \PhpOffice\PhpSpreadsheet\Style\Alignment;
+use \PhpOffice\PhpSpreadsheet\Style\Border;
+use \PhpOffice\PhpSpreadsheet\Style\Color;
+use \PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use \PhpOffice\PhpSpreadsheet\Cell\Cell;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
-require_once("$CFG->libdir/phpexcel/PHPExcel.php");
+require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -60,9 +60,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
             }
+            require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
 
-            // Create new PHPExcel object
-            $PHPExcelObj = new PHPExcel();
+            // Create new \PhpOffice\PhpSpreadsheet\Spreadsheet object
+            $PHPExcelObj = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
             // Set properties for document
             $PHPExcelObj->getProperties()->setCreator($ExammanagementInstanceObj->getMoodleSystemName())
@@ -83,7 +84,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     'bold' => true,
                 ),
                 'alignment' => array(
-                    'center' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'center' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 ),
             );
 
@@ -92,11 +93,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     'bold' => true,
                 ),
                 'alignment' => array(
-                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 ),
                 'borders' => array(
                     'bottom' => array(
-                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'borderstyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => array('argb' => '00000000'),
                     ),
                 ),
@@ -105,7 +106,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $borderStyleArray = array(
                 'borders' => array(
                     'right' => array(
-                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'borderstyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => array('argb' => '00000000'),
                     ),
                 ),
@@ -122,19 +123,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // Table 1
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A9:D9')->applyFromArray($headerStyle);
-            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A10:D20')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A10:D20')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // Table 2
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A23:C23')->applyFromArray($headerStyle);
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A23:A28')->applyFromArray($borderStyleArray);
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A24:A28')->getFont()->setBold(true);
-            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B24:C28')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B24:C28')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // Table 3
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A31:C31')->applyFromArray($headerStyle);
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A31:A34')->applyFromArray($borderStyleArray);
             $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A32:A34')->getFont()->setBold(true);
-            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B32:C34')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B32:C34')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // set general exam information
             $semester = $ExammanagementInstanceObj->getCleanCourseCategoryName();
@@ -329,8 +330,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A35')->applyFromArray($borderStyleArray);
                 $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A35:C35')->getFont()->setBold(true);
-                $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A35:C35')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
-                $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B35:C35')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $PHPExcelObj->setActiveSheetIndex(0)->getStyle('A35:C35')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
+                $PHPExcelObj->setActiveSheetIndex(0)->getStyle('B35:C35')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
 
             ///////////////////////////////////////////
@@ -348,7 +349,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             //table 1
             $PHPExcelObj->setActiveSheetIndex(1)->getStyle('A1:C1')->applyFromArray($headerStyle);
             $range = "A2:C" . ($taskcount + 1);
-            $PHPExcelObj->setActiveSheetIndex(1)->getStyle($range)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(1)->getStyle($range)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('A')->setWidth(13);
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('B')->setWidth(20);
@@ -358,7 +359,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // Table 2
             $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H1')->applyFromArray($headerStyle);
-            $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(1)->getStyle('G1:H6')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             $PHPExcelObj->setActiveSheetIndex(1)->getColumnDimension('G')->setWidth(13);
 
@@ -418,7 +419,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $range = "A1:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . "1";
             $PHPExcelObj->setActiveSheetIndex(2)->getStyle($range)->applyFromArray($headerStyle);
             $range = "A2:" . $ExammanagementInstanceObj->calculateCellAddress(9 + $n) . ( count($participants) + 1 );
-            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($range)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $PHPExcelObj->setActiveSheetIndex(2)->getStyle($range)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // border lines
             $PHPExcelObj->setActiveSheetIndex(2)->getStyle('C1:C' . (count($participants) + 1))->applyFromArray($borderStyleArray);
@@ -511,7 +512,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(
                     '2',
                     1+$n,
-                    '=MITTELWERT('.get_string("details", "mod_exammanagement").'!'.PHPExcel_Cell::stringFromColumnIndex(4+$n).'2:'.PHPExcel_Cell::stringFromColumnIndex(4+$n).$participantscount.')'
+                    '=MITTELWERT('.get_string("details", "mod_exammanagement").'!'.\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4+$n).'2:'.\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4+$n).$participantscount.')'
                 );
             }
 
@@ -527,7 +528,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             header('Cache-Control: max-age=0');
 
             // write excel file
-            $PHPExcelWriterObj = PHPExcel_IOFactory::createWriter($PHPExcelObj, "Excel2007");
+            $PHPExcelWriterObj = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($PHPExcelObj, "Xlsx");
             $PHPExcelWriterObj->save('php://output');
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage

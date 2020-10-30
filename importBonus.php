@@ -26,8 +26,8 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\importBonusForm;
 use mod_exammanagement\ldap\ldapManager;
-use PHPExcel_IOFactory;
-use PHPExcel_Reader_IReadFilter;
+use \PhpOffice\PhpSpreadsheet\IOFactory;
+use \PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 use stdclass;
 use core\output\notification;
 
@@ -95,7 +95,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$handle = fopen($tempfile, "w");
 					fwrite($handle, $file);
 
-					$ExcelReaderWrapper = PHPExcel_IOFactory::createReaderForFile($tempfile);
+					$ExcelReaderWrapper = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($tempfile);
 					$ExcelReaderWrapper->setReadDataOnly(true);
 
 					function excelColumnRange($lower, $upper) {
@@ -105,7 +105,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 					}
 
-					class MyReadFilter implements PHPExcel_Reader_IReadFilter { // not working in the way intended (read only cells with relevant data)
+					class MyReadFilter implements \PhpOffice\PhpSpreadsheet\Reader\IReadFilter { // not working in the way intended (read only cells with relevant data)
 
 						private $columns = array();
 
