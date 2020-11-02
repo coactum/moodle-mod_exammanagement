@@ -258,10 +258,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 foreach($summaryTable as $gradestep => $options){
 
-                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('A' . $rowCounter, str_replace('.', ',', strval($gradestep)));
-                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('B' . $rowCounter, $options["from"] . " - " . $options["to"]);
-                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('C' . $rowCounter, $options["countNoBonus"]);
-                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue('D' . $rowCounter, $options["countBonus"]);
+                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue("A".$rowCounter, str_replace('.', ',', strval($gradestep)));
+                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue("B".$rowCounter, $options["from"] . " - " . $options["to"]);
+                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue("C".$rowCounter, $options["countNoBonus"]);
+                    $PHPExcelObj->setActiveSheetIndex(0)->setCellValue("D".$rowCounter, $options["countBonus"]);
                     $rowCounter++;
                 }
             }
@@ -371,28 +371,28 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('C1', get_string('mean', 'mod_exammanagement'));
 
             foreach ($tasks as $tasknumber => $points){
-                $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(0 , $tasknumber + 1, $tasknumber);
-                $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(1 , $tasknumber + 1, $points);
+                $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(1 , $tasknumber + 1, $tasknumber);
+                $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(2 , $tasknumber + 1, $points);
             }
 
             // outpout table 2
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('G1', get_string('bonussteps', 'mod_exammanagement'));
             $PHPExcelObj->setActiveSheetIndex(1)->setCellValue('H1', get_string('count', 'mod_exammanagement'));
 
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 2, '-');
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 2, $bonusstepnotset);
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 3, 0);
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 3, $bonusstepzero);
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 4, 1 .' (= 0,3)');
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 4, $bonusstepone);
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 5, 2 .' (= 0,7)');
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 5, $bonussteptwo);
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(6 , 6, 3 .' (= 1,0)');
-            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 6, $bonusstepthree);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 2, '-');
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(8 , 2, $bonusstepnotset);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 3, 0);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(8 , 3, $bonusstepzero);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 4, 1 .' (= 0,3)');
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(8 , 4, $bonusstepone);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 5, 2 .' (= 0,7)');
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(8 , 5, $bonussteptwo);
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(7 , 6, 3 .' (= 1,0)');
+            $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(8 , 6, $bonusstepthree);
 
-            ////////////////////////////////////////
-            ////////// SHEET 3 - details ///////////
-            ////////////////////////////////////////
+            // ////////////////////////////////////////
+            // ////////// SHEET 3 - details ///////////
+            // ////////////////////////////////////////
 
             $PHPExcelObj->createSheet();
             $PHPExcelObj->setActiveSheetIndex(2)->setTitle(get_string('details', 'mod_exammanagement'));
@@ -435,13 +435,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $PHPExcelObj->setActiveSheetIndex(2)->setCellValue('E1', get_string('place', 'mod_exammanagement'));
 
             for ($n = 1 ; $n <= $taskcount; $n++){
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, 1, 'A' . $n);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, 1, 'A' . $n);
             }
 
-            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, 1, get_string('points', 'mod_exammanagement'));
-            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, 1, get_string('result', 'mod_exammanagement'));
-            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, 1, get_string('bonussteps', 'mod_exammanagement'));
-            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(7 + $n, 1, get_string('resultwithbonus', 'mod_exammanagement'));
+            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, 1, get_string('points', 'mod_exammanagement'));
+            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, 1, get_string('result', 'mod_exammanagement'));
+            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(7 + $n, 1, get_string('bonussteps', 'mod_exammanagement'));
+            $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(8 + $n, 1, get_string('resultwithbonus', 'mod_exammanagement'));
 
             $rowCounter=2;
 
@@ -449,11 +449,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $state = $UserObj->getExamState($participant);
 
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("A$rowCounter", $participant->matrnr);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("B$rowCounter", $participant->lastname);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("C$rowCounter", $participant->firstname);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("D$rowCounter", $participant->roomname);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("E$rowCounter", $participant->place);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("A".$rowCounter, $participant->matrnr);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("B".$rowCounter, $participant->lastname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("C".$rowCounter, $participant->firstname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("D".$rowCounter, $participant->roomname);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValue("E".$rowCounter, $participant->place);
 
                 if($state == 'normal'){
                     $temp = $UserObj->calculateTotalPoints($participant);
@@ -479,25 +479,25 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($participant->exampoints){
                     foreach (json_decode($participant->exampoints) as $key => $points){
-                        $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $key, $rowCounter, $points);
+                        $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $key, $rowCounter, $points);
                     }
                 } else {
                     for ($n = 1 ; $n <= $taskcount; $n++){
-                        $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, $rowCounter, '-');
+                        $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, $rowCounter, '-');
                     }
                 }
 
 
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(4 + $n, $rowCounter, $totalpoints);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, $rowCounter, $totalpoints);
 
                 if($gradingscale){
-                    $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, $rowCounter, $result);
+                    $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, $rowCounter, $result);
                 } else {
-                    $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(5 + $n, $rowCounter, '-');
+                    $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, $rowCounter, '-');
                 }
 
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(6 + $n, $rowCounter, $bonus);
-                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(7 + $n, $rowCounter, $resultWithBonus);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(7 + $n, $rowCounter, $bonus);
+                $PHPExcelObj->setActiveSheetIndex(2)->setCellValueByColumnAndRow(8 + $n, $rowCounter, $resultWithBonus);
                 $rowCounter++;
             }
 
@@ -510,7 +510,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             for ($n = 1 ; $n <= $taskcount; $n++){
 
                 $PHPExcelObj->setActiveSheetIndex(1)->setCellValueByColumnAndRow(
-                    '2',
+                    '3',
                     1+$n,
                     '=MITTELWERT('.get_string("details", "mod_exammanagement").'!'.\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4+$n).'2:'.\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4+$n).$participantscount.')'
                 );
