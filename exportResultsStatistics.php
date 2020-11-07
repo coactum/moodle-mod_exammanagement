@@ -18,7 +18,7 @@
  * Outputs exam results statistics as excel file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   coactum GmbH 2020
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -62,11 +62,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
             require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
 
-            // Create new \PhpOffice\PhpSpreadsheet\Spreadsheet object
-            $PHPExcelObj = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            // Create new Spreadsheet object
+            $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
             // Set properties for document
-            $PHPExcelObj->getProperties()->setCreator($ExammanagementInstanceObj->getMoodleSystemName())
+            $spreadsheet->getProperties()->setCreator($ExammanagementInstanceObj->getMoodleSystemName())
                                         ->setLastModifiedBy($ExammanagementInstanceObj->getMoodleSystemName())
                                         ->setTitle(get_string('examresults_statistics', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name)
                                         ->setSubject(get_string('examresults_statistics', 'mod_exammanagement'))
@@ -97,7 +97,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 ),
                 'borders' => array(
                     'bottom' => array(
-                        'borderstyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => array('argb' => '00000000'),
                     ),
                 ),
@@ -106,13 +106,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $borderStyleArray = array(
                 'borders' => array(
                     'right' => array(
-                        'borderstyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => array('argb' => '00000000'),
                     ),
                 ),
             );
 
-            $worksheet = $PHPExcelObj->setActiveSheetIndex(0);
+            $worksheet = $spreadsheet->setActiveSheetIndex(0);
 
             // Col-Width
             $worksheet->getColumnDimension('A')->setWidth(15);
@@ -340,8 +340,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             ////////// SHEET 2 - assignments //////////
             ///////////////////////////////////////////
 
-            $PHPExcelObj->createSheet();
-            $worksheet = $PHPExcelObj->setActiveSheetIndex(1);
+            $spreadsheet->createSheet();
+            $worksheet = $spreadsheet->setActiveSheetIndex(1);
 
             $worksheet->setTitle(get_string('tasks_and_boni', 'mod_exammanagement'));
 
@@ -398,8 +398,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             // ////////// SHEET 3 - details ///////////
             // ////////////////////////////////////////
 
-            $PHPExcelObj->createSheet();
-            $worksheet = $PHPExcelObj->setActiveSheetIndex(2);
+            $spreadsheet->createSheet();
+            $worksheet = $spreadsheet->setActiveSheetIndex(2);
 
             $worksheet->setTitle(get_string('details', 'mod_exammanagement'));
 
@@ -508,7 +508,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             //table 2 sheet 1 formular mean
-            $worksheet = $PHPExcelObj->setActiveSheetIndex(1);
+            $worksheet = $spreadsheet->setActiveSheetIndex(1);
 
             $participantscount = count($participants);
 
@@ -521,7 +521,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $mean = 0;
 
-                foreach($PHPExcelObj->setActiveSheetIndex(2)->rangeToArray($start.':'.$end) as $val){
+                foreach($spreadsheet->setActiveSheetIndex(2)->rangeToArray($start.':'.$end) as $val){
                     if(is_numeric($val[0])){
                         $mean += $val[0];
                     }
@@ -536,7 +536,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 );
             }
 
-            $PHPExcelObj->setActiveSheetIndex(0);
+            $spreadsheet->setActiveSheetIndex(0);
 
             //generate filename without umlaute
             $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
@@ -548,8 +548,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             header('Cache-Control: max-age=0');
 
             // write excel file
-            $PHPExcelWriterObj = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($PHPExcelObj, "Xlsx");
-            $PHPExcelWriterObj->save('php://output');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, "Xlsx");
+            $writer->save('php://output');
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
             redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);

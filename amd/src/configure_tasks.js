@@ -89,8 +89,8 @@ define(['jquery'], function ($) {
           temp += 'margin: 0px; width: 70px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
           temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
-          $("div[data-groupname='tasknumbers_array'] .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
-          $("div[data-groupname='tasks_array'] .col-md-9").append(temp);
+          $("div[data-groupname='tasknumbers_array'] .col-md-9 fieldset div.d-flex").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
+          $("div[data-groupname='tasks_array'] .col-md-9 fieldset div.d-flex").append(temp);
 
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
@@ -107,8 +107,8 @@ define(['jquery'], function ($) {
         var taskcount = getTaskCount();
 
         if (taskcount > 1) {
-          $("div[data-groupname='tasknumbers_array'] .col-md-9 span:last").remove();
-          $("div[data-groupname='tasks_array'] .col-md-9 .form-group:last").remove();
+          $("div[data-groupname='tasknumbers_array'] .col-md-9 fieldset div.d-flex span:last").remove();
+          $("div[data-groupname='tasks_array'] .col-md-9 fieldset div.d-flex .form-group:last").remove();
 
           var totalpoints = getTotalpoints();
           $("#totalpoints").text(totalpoints);
