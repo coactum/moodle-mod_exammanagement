@@ -25,7 +25,6 @@ define(['jquery', 'core/notification'], function ($) {
 
   var getInputId = function (element) {
     var id = element.attr('id').split('_').pop();
-
     return id;
   };
 
@@ -75,11 +74,11 @@ define(['jquery', 'core/notification'], function ($) {
         "width": "70px"
       };
 
-      $("input[type=number]:not(#id_matrnr)").css(styles);
-      $("input[type=number]:not(#id_matrnr)").attr("step", "0.01");
-      $("input[type=number]:not(#id_matrnr)").attr("min", "0");
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").css(styles);
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").attr("step", "0.01");
+      $("#fgroup_id_points_array nput[type=number]:not(#id_matrnr)").attr("min", "0");
 
-      $("input[type=number]:not(#id_matrnr)").each(function () {
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").each(function () {
         $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text().replace(/,/g, '.')));
       });
 
@@ -185,7 +184,8 @@ define(['jquery', 'core/notification'], function ($) {
       $('input[name="points[' + lastpointsfield + ']"]').keydown(function (e) {
         if (e.which == 9 || e.which == 13 || e.which == 3) {
           $("#id_matrnr").prop("disabled", false);
-          $('form#mform1').submit();
+          $('form.mform').submit();
+
           return false;
         }
       });
