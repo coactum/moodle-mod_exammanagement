@@ -42,7 +42,6 @@ $string['hint'] = 'Notice';
 $string['no_exam_hint'] = 'No exam notice is available.';
 $string['bonus_for_exam'] = 'Bonus grade steps for the exam';
 $string['bonus_for_exam_added'] = 'For the exam you have gained <strong>{$a}</strong> bonus grade step(s).';
-$string['bonus_for_exam_not_added'] = 'No bonus grade steps have been entered for you so far.';
 $string['exam_review'] = 'Exam review';
 $string['exam_review_added'] = 'The correction of the exam has now been completed. On <strong>{$a->examreviewdate}</strong> there will be the exam review in room <strong>{$a->examreviewroom}</strong>.';
 $string['examdata_deleted'] = 'The exam that has taken place on <strong>{$a}</strong> is now completed.';

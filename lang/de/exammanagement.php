@@ -42,7 +42,6 @@ $string['hint'] = 'Hinweis';
 $string['no_exam_hint'] = 'Es ist kein Prüfungshinweis verfügbar.';
 $string['bonus_for_exam'] = 'Bonusnotenschritte für die Klausur';
 $string['bonus_for_exam_added'] = 'Für die Klausur haben Sie <strong>{$a}</strong> Bonusnotenschritt(e) erreicht.';
-$string['bonus_for_exam_not_added'] = 'Es wurden bisher keine Bonusnotenschritte für Sie eingetragen.';
 $string['exam_review'] = 'Klausureinsicht';
 $string['exam_review_added'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am <strong>{$a->examreviewtime}</strong> findet die Klausureinsicht in Raum <strong>{$a->examreviewroom}</strong> statt.';
 $string['examdata_deleted'] = 'Die am <strong>{$a}</strong> durchgeführte Prüfung ist nun abgeschlossen.';

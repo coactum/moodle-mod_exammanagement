@@ -84,18 +84,17 @@
             {{^textfield}}{{#str}}no_exam_hint, mod_exammanagement{{/str}}{{/textfield}}
           </div>
       </div>
+      {{#bonus}}
       <hr />
       <div class = "row">
           <p class = "col-6">
               <strong>{{#str}}bonus_for_exam, mod_exammanagement{{/str}}:</strong>
           </p>
           <div class="col-6">
-            {{#bonus}}
-                {{#str}}bonus_for_exam_added, mod_exammanagement, {{{bonus}}}{{/str}}
-            {{/bonus}}
-            {{^bonus}}{{#str}}bonus_for_exam_not_added, mod_exammanagement{{/str}}{{/bonus}}
+            {{#str}}bonus_for_exam_added, mod_exammanagement, {{{bonus}}}{{/str}}
           </div>
       </div>
+      {{/bonus}}
       {{#examreviewtime}}
       <hr />
       <div class = "row">
