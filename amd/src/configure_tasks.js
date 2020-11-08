@@ -42,7 +42,7 @@ define(['jquery'], function ($) {
   var getTaskCount = function () {
     var taskcount = 0;
 
-    $(".form-group input.form-control").each(function () {
+    $("form.mform .form-group input.form-control").each(function () {
       taskcount += 1;
     });
 
@@ -53,7 +53,7 @@ define(['jquery'], function ($) {
     init: function () {
 
       // create input type number elements
-      $("input[type=text]").attr("type", "number");
+      $("form.mform input[type=text]").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -62,11 +62,11 @@ define(['jquery'], function ($) {
         "width": "70px"
       };
 
-      $("input[type=number]").css(styles);
-      $("input[type=number]").attr("step", "0.01");
-      $("input[type=number]").attr("min", "0");
+      $("form.mform input[type=number]").css(styles);
+      $("form.mform input[type=number]").attr("step", "0.01");
+      $("form.mform input[type=number]").attr("min", "0");
 
-      $(".form-group").on("change", "input", function () { // update totalpoints if some field changes
+      $("form.mform .form-group").on("change", "input", function () { // update totalpoints if some field changes
 
         var totalpoints = getTotalpoints();
         $("#totalpoints").text(totalpoints);

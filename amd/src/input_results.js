@@ -31,7 +31,7 @@ define(['jquery', 'core/notification'], function ($) {
   var getTotalpoints = function () {
     var totalpoints = 0;
 
-    $(".form-group input.form-control").each(function () {
+    $("form.mform .form-group input.form-control").each(function () {
       if (getInputId($(this)) != "matrnr" && $(this).val()) {
         totalpoints += parseFloat($(this).val().replace(',', '.'));
       }
@@ -65,7 +65,7 @@ define(['jquery', 'core/notification'], function ($) {
       }
 
       // create input type number elements
-      $("input[type=text]:not(#id_matrnr)").attr("type", "number");
+      $("form.mform input[type=text]:not(#id_matrnr)").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -82,9 +82,9 @@ define(['jquery', 'core/notification'], function ($) {
         $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text().replace(/,/g, '.')));
       });
 
-      $(".form-group input.checkboxgroup1").each(function () { // initial disabling point fields if some checkbox is already checked
+      $("form.mform .form-group input.checkboxgroup1").each(function () { // initial disabling point fields if some checkbox is already checked
         if ($(this).prop('checked')) {
-          $(".form-group input.form-control").each(function () {
+          $("form.mform .form-group input.form-control").each(function () {
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", true);
             }
@@ -94,11 +94,11 @@ define(['jquery', 'core/notification'], function ($) {
 
       $("#totalpoints").text(getTotalpoints()); // initial set totalpoints
 
-      $(":checkbox").change(function () { //if some checkbox is checked/unchecked
+      $("form.mform :checkbox").change(function () { //if some checkbox is checked/unchecked
         var checked = false;
         var changedId = $(this).prop('id'); // get id of changed checkbox
 
-        $(".form-group input.checkboxgroup1").each(function () { // check if some checkbox is now checked
+        $("form.mform .form-group input.checkboxgroup1").each(function () { // check if some checkbox is now checked
           if ($(this).prop('checked')) {
             checked = true;
           }
@@ -116,7 +116,7 @@ define(['jquery', 'core/notification'], function ($) {
             $('#id_state_fa').prop('checked', false);
           }
 
-          $(".form-group input.form-control").each(function () { // disable all point-fields and set their value to 0
+          $("form.mform .form-group input.form-control").each(function () { // disable all point-fields and set their value to 0
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", true);
               $(this).val(0);
@@ -124,7 +124,7 @@ define(['jquery', 'core/notification'], function ($) {
             }
           });
         } else {  // if no checkbix is now checked
-          $(".form-group input.form-control").each(function () { // enable all point-fields
+          $("form.mform .form-group input.form-control").each(function () { // enable all point-fields
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", false);
             }
@@ -132,7 +132,7 @@ define(['jquery', 'core/notification'], function ($) {
         }
       });
 
-      $(".form-group").on("change", "input", function () { // if some input field changes
+      $("form.mform .form-group").on("change", "input", function () { // if some input field changes
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
       });
 
@@ -168,7 +168,7 @@ define(['jquery', 'core/notification'], function ($) {
 
       var lastpointsfield = $('input[name="lastkeypoints"]').val();
 
-      $('input[name^="points["]').keypress(function (e) {
+      $('form.mform input[name^="points["]').keypress(function (e) {
 
         if (e.which == 13 || e.which == 3) {
 

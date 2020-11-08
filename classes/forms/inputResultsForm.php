@@ -87,7 +87,7 @@ class inputResultsForm extends moodleform {
         }
 
         if($this->_customdata['matrnr']){
-            $mform->addElement('html', '<div class="row"><span class="col-md-3"></span><span class="col-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
+            $mform->addElement('html', '<div class="form-group row fitem"><span class="col-md-3"></span><span class="col-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
 
         }
 
@@ -137,7 +137,7 @@ class inputResultsForm extends moodleform {
         $mform->hideIf('points_array', 'matrval', 'eq', 1);
 
         if($this->_customdata['matrnr']){
-            $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
         }
 
         //create checkboxes for exams state
