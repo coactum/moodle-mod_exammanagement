@@ -423,6 +423,7 @@ $string['matriculation_number_short'] = 'Matr. Nr.';
 $string['totalpoints'] = 'Gesamtpunkte';
 $string['result'] = 'Ergebnis';
 $string['bonussteps'] = 'Bonusschritte';
+$string['no_bonus_earned'] = 'keine';
 $string['resultwithbonus'] = 'Ergebnis inklusive Bonus';
 $string['edit_user'] = 'Benutzer bearbeiten';
 $string['save_changes'] = 'Änderungen speichern';

@@ -320,8 +320,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     //bonus
     if($participantObj){
-        if($participantObj->bonus == 0){ // allows mustache template to render 0
-            $bonus = ' 0 ';
+        if($participantObj->bonus === '0'){ // allows mustache template to render 0
+            $bonus = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
             $bonus = $participantObj->bonus;
         }
