@@ -82,6 +82,34 @@ ajaxtoggleInformation = function(command, value){
               alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
+    } else if(command=='bonus'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformbonus': true, 'bonusvisible': Number(value)},
+            success: function(response) {
+							$('.placeVisible').toggle();
+							$('.placeNotVisible').toggle();
+							$('.loadable').toggle();
+            },
+            error: function(response) {
+							$('.loadable').toggle();
+							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
+            }
+        });
+    } else if(command=='result'){
+        jQuery.ajax ({
+            url: './view.php',
+            data: {'id': {{cmid}},'calledfromformresult': true, 'resultvisible': Number(value)},
+            success: function(response) {
+							$('.placeVisible').toggle();
+							$('.placeNotVisible').toggle();
+							$('.loadable').toggle();
+            },
+            error: function(response) {
+							$('.loadable').toggle();
+							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
+            }
+        });
     } else if(command=='examreview'){
         jQuery.ajax ({
             url: './view.php',
@@ -131,691 +159,739 @@ ajaxsetcorrectioncompletion = function(value){
 }
 
 {{/js}}
-   <div class="container-fluid exammanagement_overview">
-			<div class="row">
-				<h3 class="m-y-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
-				<span class="m-y-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
-			</div>
-
-			{{#deleted}}
-			<div class="alert alert-danger alert-block">
-    		{{#str}}data_deleted, mod_exammanagement{{/str}}
-			</div>
-			{{/deleted}}
-
-      <ul class="exmammanagement-summary list-unstyled">
-          {{!before_exam}}
-		  <span id="beforeexam"></span>
-          <li class="item">
-            {{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
-            {{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
-            <div class="panel panel-primary mainpanel">
-              <div class="panel-heading">
-								<a aria-expanded="false" onclick="togglePhase('.phase_one'); return true;">
-		                <h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
-		                <span class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}}{{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-								</a>
-							</div>
-                <div class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}} {{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one">
-                    <div class="panel-body">
-                      <div class="row row-eq-height">
-												<div class="col-6">
-													<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																		{{#rooms}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		{{^rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
-																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}exam_rooms, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																{{#rooms}}<p> {{#str}}exam_rooms_set, mod_exammanagement, { "roomscount":  {{# quote }}{{ rooms }}{{/ quote }}, "totalseatscount":  {{# quote }}{{totalseats}}{{/ quote }} }{{/str}} <strong>{{roomnames}}</strong></p>{{/rooms}}
-																{{^rooms}}<p> {{#str}}exam_rooms_not_set, mod_exammanagement{{/str}}</p>{{/rooms}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-														</div>
-													</div>
-												</div>
-												<div class="col-6">
-													<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																		{{#hrexamtime}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		{{^hrexamtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															{{#hrexamtime}}<p> {{#str}}exam_date_set, mod_exammanagement, {{hrexamtime}}{{/str}}</p>{{/hrexamtime}}
-															{{^hrexamtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/hrexamtime}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="setDateTime.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row row-eq-height">
-												<div class="col-6">
-													<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{#participants}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	{{^participants}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
-																	<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																{{#participants}}<p> {{#str}}exam_participants_set, mod_exammanagement, {{participants}}{{/str}} </p>{{/participants}}
-																{{^participants}}<p> {{#str}}exam_participants_not_set, mod_exammanagement{{/str}}</p>{{/participants}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="viewParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-														</div>
-													</div>
-												</div>
-												<div class="col-6">
-													<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{#taskcount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	{{^taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
-																	<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}exam_tasks, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															{{#taskcount}}<p> {{#str}}exam_tasks_set, mod_exammanagement, { "taskcount":  {{# quote }}{{taskcount}}{{/ quote }}, "totalpoints":  {{# quote }}{{tasktotalpoints}}{{/ quote }} }{{/str}}</p>{{/taskcount}}
-															{{^taskcount}}<p> {{#str}}exam_tasks_not_set, mod_exammanagement{{/str}}</p>{{/taskcount}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row row-eq-height">
-												<div class="col-6">
-													<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-info{{/textfield}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{#textfield}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
-																	{{^textfield}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}freetext_field, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																{{#textfield}}<p> {{#str}}textfield_set, mod_exammanagement{{/str}} {{#shortentext}} 50, {{textfield}} {{/shortentext}}</p>{{/textfield}}
-																{{^textfield}}<p> {{#str}}textfield_not_set, mod_exammanagement{{/str}}</p>{{/textfield}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="setTextfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-														</div>
-													</div>
-												</div>
-												<div class="col-6">
-													<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															<p>{{#str}}message_to_participants_str, mod_exammanagement{{/str}}</p>
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="sendGroupmessage.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
-														</div>
-													</div>
-												</div>
-											</div>
-                    </div>
-                </div>
-            </div>
-          </li>
-          {{!for_exam}}
-		  <span id="forexam"></span>
-          <li class="item">
-            {{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
-            {{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
-						<div class="panel panel-primary mainpanel">
-								<div class="panel-heading">
-									<a aria-expanded="false" onclick="togglePhase('.phase_two'); return true;">
-											<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
-											<span class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}}{{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-											<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-									</a>
-								</div>
-                <div class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}} {{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two">
-                    <div class="panel-body">
-                    	<div class="row row-eq-height">
-                        <div class="col-6">
-														<div class="panel {{#allplacesassigned}}panel-success{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}">
-															<div class="panel-heading">
-																	<span class="statebar pull-right">
-																			{{#allplacesassigned}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/allplacesassigned}}
-																			{{^allplacesassigned}}{{#participants}}{{#rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/allplacesassigned}}
-																			{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-																			{{^rooms}}<a href="chooseRooms.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span></a>{{/rooms}}
-																			<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																	</span>
-																	<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
-															</div>
-															<div class="panel-body">
-																<p>{{#str}}places_assigned, mod_exammanagement, { "assignedplacescount":  {{# quote }}{{assignedplacescount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}} {{#allplacesassigned}} {{#str}}all_places_assigned, mod_exammanagement{{/str}}{{/allplacesassigned}}{{^allplacesassigned}} {{#str}}not_all_places_assigned_yet, mod_exammanagement{{/str}}{{/allplacesassigned}} <br /><br />
-																<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}places_assigned_note, mod_exammanagement{{/str}}</p>
-															</div>
-															<div class="panel-footer">
-																{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}}" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a><a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}} pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places_manually, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places_manually, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
-															</div>
-														</div>
-                        							</div>
-												<div class="col-6">
-													<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															<p>{{#str}}export_seatingplan_str, mod_exammanagement{{/str}}</p>
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#allplacesassigned}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
-														</div>
-													</div>
-												</div>
-                    </div>
-                    <div class="row row-eq-height">
-											<div class="col-6">
-												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																	{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-															</span>
-															<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-															<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#allplacesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
-													</div>
-												</div>
-											</div>
-											<div class="col-6">
-												<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^participants}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-															</span>
-															<h3 class="panel-title">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-														<p>{{#str}}export_examlabels_str, mod_exammanagement{{/str}}<br /><br />
-														<strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_examlabels_note, mod_exammanagement{{/str}}</p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
-													</div>
-												</div>
-											</div>
-                    </div>
-                    <div class="row row-eq-height">
-											<div class="col-6">
-												<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
-																<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-																{{^hrexamtime}}<a href="setDateTime.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
-															</span>
-															<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-														{{#datetimevisible}}
-																<p class="datetimeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																<p class="datetimeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-														{{/datetimevisible}}
-														{{^datetimevisible}}
-																<p class="datetimeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																<p class="datetimeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-														{{/datetimevisible}}
-													</div>
-												</div>
-											</div>
-											<div class="col-6">
-												<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-															</span>
-															<h3 class="panel-title">{{#str}}set_visibility_of_examrooms_and_places, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-														<div class="row">
-																<div class="col-6">
-																		<span class="pull-right">
-																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
-																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-																		</span>
-																		<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
-																		{{#roomvisible}}
-																				<p class="roomVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																				<p class="roomNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-																		{{/roomvisible}}
-																		{{^roomvisible}}
-																				<p class="roomNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-																				<p class="roomVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																		{{/roomvisible}}
-																</div>
-																<div class="col-6">
-																		<span class="pull-right">
-																				{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
-																				<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-																		</span>
-																		<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
-																		{{#placevisible}}
-																				<p class="placeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																				<p class="placeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-																		{{/placevisible}}
-																		{{^placevisible}}
-																				<p class="placeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-																				<p class="placeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																		{{/placevisible}}
-																</div>
-														</div>
-													</div>
-												</div>
-											</div>
-                    </div>
-                  </div>
-              </div>
-            </div>
-          </li>
-          {{!exam}}
-          <li class="item">
-            <i class="fa fa-fw" aria-hidden="true"></i>
-						{{#examphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/examphasecompleted}}
-            {{^examphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/examphasecompleted}}
-						<div class="panel panel-primary mainpanel">
-							<div class="panel-heading">
-								<a aria-expanded="false" onclick="togglePhase('.examappointment'); return true;">
-										<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
-										<span class="{{#examphaseactive}}collapse.show{{/examphaseactive}}{{^examphaseactive}}collapse{{/examphaseactive}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-								</a>
-							</div>
-								<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
-		              <div class="panel-body">
-											<span>
-													{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
-													{{^hrexamtime}}{{#roomnames}} - {{/roomnames}}{{/hrexamtime}}
-											</span>
-											<span class="pull-right">
-														{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
-											</span>
-											{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/hrexamtime}}
-		              </div>
-							</div>
-            </div>
-          </li>
-          {{!after_grading}}
-		  <span id="aftercorrection"></span>
-          <li class="item">
-            {{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
-            {{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
-						<div class="panel panel-primary mainpanel">
-								<div class="panel-heading">
-									<a aria-expanded="false" onclick="togglePhase('.phase_three'); return true;">
-											<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
-											<span class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}}{{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-											<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
-									</a>
-								</div>
-                <div class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}} {{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three">
-                  <div class="panel-body">
-                    <div class="row row-eq-height">
-                        <div class="col-6">
-														<div class="panel {{^bonuscount}}{{#allplacesassigned}}panel-info{{/allplacesassigned}}{{/bonuscount}}{{^bonuscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
-															<div class="panel-heading">
-																	<span class="statebar pull-right">
-																		{{#bonuscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuscount}}
-																		{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																	</span>
-																	<h3 class="panel-title">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
-															</div>
-															<div class="panel-body">
-																	{{#bonuscount}}<p>{{#str}}bonussteps_set, mod_exammanagement, { "bonuscount":  {{# quote }}{{bonuscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuscount}}
-																	{{^bonuscount}}<p>{{#str}}bonussteps_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
-															</div>
-															<div class="panel-footer">
-																{{^deleted}}{{#allplacesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
-															</div>
-														</div>
-											</div>
-											<div class="col-6">
-													<div class="panel {{^gradingscale}}{{#taskcount}}panel-info{{/taskcount}}{{/gradingscale}}{{^gradingscale}}{{^taskcount}}panel-danger{{/taskcount}}{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-																	{{^gradingscale}}{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}{{/gradingscale}}
-																	{{^gradingscale}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/gradingscale}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																{{#gradingscale}}<p>{{#str}}gradingscale_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
-																{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/deleted}}
-														</div>
-													</div>
-                        </div>
-                    </div>
-										<div class="row row-eq-height">
-                        <div class="col-6">
-														<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{#taskcount}}panel-warning{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{#taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}">
-															<div class="panel-heading">
-																	<span class="statebar pull-right">
-																		{{#resultscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
-																		{{^resultscount}}{{#allplacesassigned}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}
-																		{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																		{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
-																		<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-																	</span>
-																	<h3 class="panel-title">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
-															</div>
-															<div class="panel-body">
-																{{#resultscount}}<p>{{#str}}results_set, mod_exammanagement, { "resultscount":  {{# quote }}{{resultscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/resultscount}}
-																{{^resultscount}}<p>{{#str}}results_not_set, mod_exammanagement{{/str}}</p>{{/resultscount}}
-															</div>
-															<div class="panel-footer">
-																{{^deleted}}{{#allplacesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/allplacesassigned}}{{/deleted}}
-															</div>
-														</div>
-											</div>
-											<div class="col-6">
-													<div class="panel {{#allplacesassigned}}{{#resultscount}}panel-info{{/resultscount}}{{/allplacesassigned}}{{^resultscount}}{{#allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}{{#resultscount}}{{^allplacesassigned}}panel-success{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																			{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
-																			{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-																	 		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																	</span>
-																</span>
-																<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																<p> {{#str}}exam_results_overview_str, mod_exammanagement{{/str}}</p>
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#allplacesassigned}}{{#resultscount}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/allplacesassigned}}{{/deleted}}
-														</div>
-													</div>
-                        </div>
-                    </div>
-										<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
-											<div class="panel-heading">
-													<span class="statebar pull-right">
-														{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
-														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-														{{^datadeletiondate}}{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
-													</span>
-													<h3 class="panel-title">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
-											</div>
-											<div class="panel-body">
-												<p>{{#str}}complete_correction_str, mod_exammanagement{{/str}}</p>
-											</div>
-											<div class="panel-footer text-xs-center">
-											</div>
-										</div>
-                  </div>
-              </div>
-            </div>
-          </li>
-          {{!after_exam}}
-		  <span id="afterexam"></span>
-          <li class="item">
-            {{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
-            {{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
-						<div class="panel panel-primary mainpanel">
-							<div class="panel-heading">
-								<a aria-expanded="false" onclick="togglePhase('.phase_four'); return true;">
-										<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
-										<span class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}}{{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-										<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-								</a>
-							</div>
-                <div class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}} {{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four">
-                <div class="panel-body">
-                  <div class="row row-eq-height">
-                      <div class="col-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-															</span>
-															<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-														<p>{{#str}}export_points_examreview_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
-													</div>
-												</div>
-                      </div>
-                      <div class="col-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																	{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																	{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-															</span>
-															<h3 class="panel-title">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-														<p>{{#str}}export_results_percentages_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
-													</div>
-												</div>
-                      </div>
-                  </div>
-                  <div class="row row-eq-height">
-                      <div class="col-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-															</span>
-															<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-															<p>{{#str}}export_results_statistics_str, mod_exammanagement{{/str}}</p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
-													</div>
-												</div>
-                      </div>
-                      <div class="col-6">
-												<div class="panel {{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-info{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}">
-													<div class="panel-heading">
-															<span class="statebar pull-right">
-																{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-																{{^gradingscale}}<a href="configureGradingscale.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}</span></span></a>{{/gradingscale}}
-																<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-															</span>
-															<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
-													</div>
-													<div class="panel-body">
-															<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
-													</div>
-													<div class="panel-footer">
-														{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
-													</div>
-												</div>
-                      						</div>
-                						</div>
-									{{#datadeletiondate}}<div class="panel panel-info">
-										<div class="panel-heading">
-											<h3 class="panel-title text-xs-center">{{#str}}delete_exam_data, mod_exammanagement{{/str}}</h3>
-											<span class="statebar">
-											</span>
-										</div>
-										<div class="panel-body">
-											<p> {{#str}}data_deletion_date_set, mod_exammanagement, {{datadeletiondate}}{{/str}}</p>
-										</div>
-										<div class="panel-footer text-xs-center">
-										</div>
-									</div>{{/datadeletiondate}}
-								</div>
-							</div>
-					</li>
-					{{!exam_review}}
-					<span id="examreview"></span>
-							<li class="item">
-								{{#fifthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fifthphasecompleted}}
-								{{^fifthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fifthphasecompleted}}
-								<div class="panel panel-primary mainpanel">
+<div class="container-fluid exammanagement_overview">
+	<div class="row">
+		<h3 class="m-y-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
+		<span class="m-y-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
+	</div>
+	
+	{{#deleted}}
+	<div class="alert alert-danger alert-block">
+		{{#str}}data_deleted, mod_exammanagement{{/str}}
+	</div>
+	{{/deleted}}
+	
+	<ul class="exmammanagement-summary list-unstyled">
+		{{!before_exam}}
+		<span id="beforeexam"></span>
+		<li class="item">
+			{{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
+			{{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
+			<div class="panel panel-primary mainpanel">
+				<div class="panel-heading">
+					<a aria-expanded="false" onclick="togglePhase('.phase_one'); return true;">
+						<h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
+						<span class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}}{{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+					</a>
+				</div>
+				<div class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}} {{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one">
+					<div class="panel-body">
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
 									<div class="panel-heading">
-										<a aria-expanded="false" onclick="togglePhase('.phase_five'); return true;">
-												<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
-												<span class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}}{{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-												<span class="{{#fifthphaseactive}}collapse{{/fifthphaseactive}}{{^fifthphaseactive}}collapse.show{{/fifthphaseactive}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-										</a>
+										<span class="statebar pull-right">
+											{{#rooms}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+											{{^rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
+											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_rooms, mod_exammanagement{{/str}}</h3>
 									</div>
-										<div class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}} {{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five">
+									<div class="panel-body">
+										{{#rooms}}<p> {{#str}}exam_rooms_set, mod_exammanagement, { "roomscount":  {{# quote }}{{ rooms }}{{/ quote }}, "totalseatscount":  {{# quote }}{{totalseats}}{{/ quote }} }{{/str}} <strong>{{roomnames}}</strong></p>{{/rooms}}
+										{{^rooms}}<p> {{#str}}exam_rooms_not_set, mod_exammanagement{{/str}}</p>{{/rooms}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#hrexamtime}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+											{{^hrexamtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#hrexamtime}}<p> {{#str}}exam_date_set, mod_exammanagement, {{hrexamtime}}{{/str}}</p>{{/hrexamtime}}
+										{{^hrexamtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/hrexamtime}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="setDateTime.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#participants}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+											{{^participants}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#participants}}<p> {{#str}}exam_participants_set, mod_exammanagement, {{participants}}{{/str}} </p>{{/participants}}
+										{{^participants}}<p> {{#str}}exam_participants_not_set, mod_exammanagement{{/str}}</p>{{/participants}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="viewParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#taskcount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+											{{^taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
+											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_tasks, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#taskcount}}<p> {{#str}}exam_tasks_set, mod_exammanagement, { "taskcount":  {{# quote }}{{taskcount}}{{/ quote }}, "totalpoints":  {{# quote }}{{tasktotalpoints}}{{/ quote }} }{{/str}}</p>{{/taskcount}}
+										{{^taskcount}}<p> {{#str}}exam_tasks_not_set, mod_exammanagement{{/str}}</p>{{/taskcount}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-info{{/textfield}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#textfield}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+											{{^textfield}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}freetext_field, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#textfield}}<p> {{#str}}textfield_set, mod_exammanagement{{/str}} {{#shortentext}} 50, {{textfield}} {{/shortentext}}</p>{{/textfield}}
+										{{^textfield}}<p> {{#str}}textfield_not_set, mod_exammanagement{{/str}}</p>{{/textfield}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="setTextfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}message_to_participants_str, mod_exammanagement{{/str}}</p>
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="sendGroupmessage.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+		{{!for_exam}}
+		<span id="forexam"></span>
+		<li class="item">
+			{{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
+			{{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
+			<div class="panel panel-primary mainpanel">
+				<div class="panel-heading">
+					<a aria-expanded="false" onclick="togglePhase('.phase_two'); return true;">
+						<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
+						<span class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}}{{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+					</a>
+				</div>
+				<div class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}} {{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two">
+					<div class="panel-body">
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#allplacesassigned}}panel-success{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}{{^allplacesassigned}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/allplacesassigned}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#allplacesassigned}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/allplacesassigned}}
+											{{^allplacesassigned}}{{#participants}}{{#rooms}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/allplacesassigned}}
+											{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											{{^rooms}}<a href="chooseRooms.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span></a>{{/rooms}}
+											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}places_assigned, mod_exammanagement, { "assignedplacescount":  {{# quote }}{{assignedplacescount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}} {{#allplacesassigned}} {{#str}}all_places_assigned, mod_exammanagement{{/str}}{{/allplacesassigned}}{{^allplacesassigned}} {{#str}}not_all_places_assigned_yet, mod_exammanagement{{/str}}{{/allplacesassigned}} <br /><br />
+											<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}places_assigned_note, mod_exammanagement{{/str}}</p>
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}}" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a><a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}} pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places_manually, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places_manually, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+											<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
+										</div>
 										<div class="panel-body">
-											<div class="row row-eq-height">
+											<p>{{#str}}export_seatingplan_str, mod_exammanagement{{/str}}</p>
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#allplacesassigned}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row row-eq-height">
+								<div class="col-6">
+									<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+											<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#allplacesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^participants}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_labels, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}export_examlabels_str, mod_exammanagement{{/str}}<br /><br />
+											<strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_examlabels_note, mod_exammanagement{{/str}}</p>
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row row-eq-height">
+								<div class="col-6">
+									<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+												{{^hrexamtime}}<a href="setDateTime.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
+											</span>
+											<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											{{#datetimevisible}}
+											<p class="datetimeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+											<p class="datetimeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+											{{/datetimevisible}}
+											{{^datetimevisible}}
+											<p class="datetimeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+											<p class="datetimeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+											{{/datetimevisible}}
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="panel {{#allplacesassigned}}panel-info{{/allplacesassigned}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+											</span>
+											<h3 class="panel-title">{{#str}}set_visibility_of_examrooms_and_places, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											<div class="row">
 												<div class="col-6">
-													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																		{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																		{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																		<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}date_and_room_exam_review, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															{{#examreviewtime}}{{#examreviewroom}}<p> {{#str}}date_room_examreview_set, mod_exammanagement, { "examreviewdate":  {{# quote }}{{examreviewtime}}{{/ quote }}, "examreviewroom":  {{# quote }}{{examreviewroom}}{{/ quote }} }{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{^examreviewtime}}{{#examreviewroom}}<p> {{#str}}room_examreview_set, mod_exammanagement, {{examreviewroom}}{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{#examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_examreview_set, mod_exammanagement, {{examreviewtime}}{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
-															{{^examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_room_examreview_not_set, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}{{/deleted}}
-														</div>
-													</div>
+													<span class="pull-right">
+														{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
+														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+													</span>
+													<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
+													{{#roomvisible}}
+													<p class="roomVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+													<p class="roomNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+													{{/roomvisible}}
+													{{^roomvisible}}
+													<p class="roomNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+													<p class="roomVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+													{{/roomvisible}}
 												</div>
 												<div class="col-6">
-													<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="Informationen sichtbar schalten"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
-																	<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-																	{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^examreviewtime}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^examreviewroom}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewroom}}{{/datadeletiondate}}
-																</span>
-																<h3 class="panel-title">{{#str}}set_visibility_of_exam_review_information, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															{{#examreviewvisible}}
-																	<p class="examReviewVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-																	<p class="examReviewVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-															{{/examreviewvisible}}
-															{{^examreviewvisible}}
-																	<p class="examReviewVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
-																	<p class="examReviewVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
-															{{/examreviewvisible}}
-														</div>
-														<div class="panel-footer text-xs-center">
-														</div>
-													</div>
+													<span class="pull-right">
+														{{^deleted}}{{#allplacesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/allplacesassigned}}
+														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+													</span>
+													<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
+													{{#placevisible}}
+													<p class="placeVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+													<p class="placeNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+													{{/placevisible}}
+													{{^placevisible}}
+													<p class="placeNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+													<p class="placeVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+													{{/placevisible}}
 												</div>
 											</div>
-											<div class="row row-eq-height">
-												<div class="col-6">
-														<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}{{#examreviewtime}}panel-warning{{/examreviewtime}}{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}{{#examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}{{#examreviewtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																	{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
-																	{{^examreviewtime}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-															<p>
-																{{#resultsenteredafterexamreview}}{{#str}}exam_results_altered, mod_exammanagement, {{resultsenteredafterexamreview}}{{/str}}{{/resultsenteredafterexamreview}}
-																{{^resultsenteredafterexamreview}}{{#str}}no_examresults_altered, mod_exammanagement{{/str}}{{/resultsenteredafterexamreview}}
-																<br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}exam_results_altered_note, mod_exammanagement{{/str}}
-															</p>
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
-														</div>
-													</div>
-												</div>
-												<div class="col-6">
-													<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
-														<div class="panel-heading">
-																<span class="statebar pull-right">
-																	{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-																	{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
-																	<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-																</span>
-																<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
-														</div>
-														<div class="panel-body">
-																<p>{{#str}}export_altered_examresults_str, mod_exammanagement{{/str}} <br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_altered_examresults_note, mod_exammanagement{{/str}}</p>
-														</div>
-														<div class="panel-footer">
-															{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsTextFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
-														</div>
-													</div>
-	                      </div>
-										  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="item" id="endpoint">
-            <i class="fa fa-flag" aria-hidden="true"></i>
-          </li>
-      </ul>
-   </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			{{!exam}}
+			<li class="item">
+				<i class="fa fa-fw" aria-hidden="true"></i>
+				{{#examphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/examphasecompleted}}
+				{{^examphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/examphasecompleted}}
+				<div class="panel panel-primary mainpanel">
+					<div class="panel-heading">
+						<a aria-expanded="false" onclick="togglePhase('.examappointment'); return true;">
+							<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
+							<span class="{{#examphaseactive}}collapse.show{{/examphaseactive}}{{^examphaseactive}}collapse{{/examphaseactive}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						</a>
+					</div>
+					<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
+						<div class="panel-body">
+							<span>
+								{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
+								{{^hrexamtime}}{{#roomnames}} - {{/roomnames}}{{/hrexamtime}}
+							</span>
+							<span class="pull-right">
+								{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
+							</span>
+							{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/hrexamtime}}
+						</div>
+					</div>
+				</div>
+			</li>
+			{{!after_grading}}
+			<span id="aftercorrection"></span>
+			<li class="item">
+				{{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
+				{{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
+				<div class="panel panel-primary mainpanel">
+					<div class="panel-heading">
+						<a aria-expanded="false" onclick="togglePhase('.phase_three'); return true;">
+							<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
+							<span class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}}{{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						</a>
+					</div>
+					<div class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}} {{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three">
+						<div class="panel-body">
+							<div class="row row-eq-height">
+								<div class="col-6">
+									<div class="panel {{^bonuscount}}{{#allplacesassigned}}panel-info{{/allplacesassigned}}{{/bonuscount}}{{^bonuscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{#bonuscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuscount}}
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+											<h3 class="panel-title">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											{{#bonuscount}}<p>{{#str}}bonussteps_set, mod_exammanagement, { "bonuscount":  {{# quote }}{{bonuscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuscount}}
+											{{^bonuscount}}<p>{{#str}}bonussteps_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#allplacesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="panel {{^gradingscale}}{{#taskcount}}panel-info{{/taskcount}}{{/gradingscale}}{{^gradingscale}}{{^taskcount}}panel-danger{{/taskcount}}{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+												{{^gradingscale}}{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}{{/gradingscale}}
+												{{^gradingscale}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/gradingscale}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+											<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											{{#gradingscale}}<p>{{#str}}gradingscale_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
+											{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row row-eq-height">
+								<div class="col-6">
+									<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{#taskcount}}panel-warning{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{#allplacesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}{{#taskcount}}panel-danger{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{#resultscount}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
+												{{^resultscount}}{{#allplacesassigned}}{{#taskcount}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/allplacesassigned}}{{/resultscount}}
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+												{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
+												<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+											</span>
+											<h3 class="panel-title">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
+										</div>
+										<div class="panel-body">
+											{{#resultscount}}<p>{{#str}}results_set, mod_exammanagement, { "resultscount":  {{# quote }}{{resultscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/resultscount}}
+											{{^resultscount}}<p>{{#str}}results_not_set, mod_exammanagement{{/str}}</p>{{/resultscount}}
+										</div>
+										<div class="panel-footer">
+											{{^deleted}}{{#allplacesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/allplacesassigned}}{{/deleted}}
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="panel {{#allplacesassigned}}{{#resultscount}}panel-info{{/resultscount}}{{/allplacesassigned}}{{^resultscount}}{{#allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}{{#resultscount}}{{^allplacesassigned}}panel-success{{/allplacesassigned}}{{/resultscount}}{{^resultscount}}{{^allplacesassigned}}panel-danger{{/allplacesassigned}}{{/resultscount}}">
+										<div class="panel-heading">
+											<span class="statebar pull-right">
+												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
+												{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											</span>
+										</span>
+										<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p> {{#str}}exam_results_overview_str, mod_exammanagement{{/str}}</p>
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#allplacesassigned}}{{#resultscount}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/allplacesassigned}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row row-eq-height">
+							<div class="col-6">	
+								<div class="panel {{#resultscount}}panel-info{{/resultscount}}{{^resultscount}}panel-danger{{/resultscount}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+										</span>
+										<h3 class="panel-title">{{#str}}set_visibility_of_bonus_and_results, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-6">
+												<span class="pull-right">
+													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+												</span>
+												<strong>{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</strong>
+												{{#bonusvisible}}
+												<p class="bonusVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+												<p class="bonusNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+												{{/bonusvisible}}
+												{{^bonusvisible}}
+												<p class="bonusNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+												<p class="bonusVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+												{{/bonusvisible}}
+											</div>
+											<div class="col-6">
+												<span class="pull-right">
+													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', jQuery(this).prop('checked')); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+												</span>
+												<strong>{{#str}}result, mod_exammanagement{{/str}}</strong>
+												{{#resultvisible}}
+												<p class="resultVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+												<p class="resultNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+												{{/resultvisible}}
+												{{^resultvisible}}
+												<p class="resultNotVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+												<p class="resultVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+												{{/resultvisible}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
+											{{^datadeletiondate}}{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+										</span>
+										<h3 class="panel-title">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}complete_correction_str, mod_exammanagement{{/str}}</p>
+									</div>
+									<div class="panel-footer text-xs-center">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+		{{!after_exam}}
+		<span id="afterexam"></span>
+		<li class="item">
+			{{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
+			{{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
+			<div class="panel panel-primary mainpanel">
+				<div class="panel-heading">
+					<a aria-expanded="false" onclick="togglePhase('.phase_four'); return true;">
+						<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
+						<span class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}}{{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+					</a>
+				</div>
+				<div class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}} {{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four">
+					<div class="panel-body">
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}export_points_examreview_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+									</span>
+									<h3 class="panel-title">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
+								</div>
+								<div class="panel-body">
+									<p>{{#str}}export_results_percentages_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
+								</div>
+								<div class="panel-footer">
+									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row row-eq-height">
+						<div class="col-6">
+							<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+								<div class="panel-heading">
+									<span class="statebar pull-right">
+										{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+										{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+										<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+									</span>
+									<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
+								</div>
+								<div class="panel-body">
+									<p>{{#str}}export_results_statistics_str, mod_exammanagement{{/str}}</p>
+								</div>
+								<div class="panel-footer">
+									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="panel {{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-info{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}">
+								<div class="panel-heading">
+									<span class="statebar pull-right">
+										{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+										{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+										{{^gradingscale}}<a href="configureGradingscale.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}</span></span></a>{{/gradingscale}}
+										<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+									</span>
+									<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
+								</div>
+								<div class="panel-body">
+									<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
+								</div>
+								<div class="panel-footer">
+									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+								</div>
+							</div>
+						</div>
+					</div>
+					{{#datadeletiondate}}<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title text-xs-center">{{#str}}delete_exam_data, mod_exammanagement{{/str}}</h3>
+							<span class="statebar">
+							</span>
+						</div>
+						<div class="panel-body">
+							<p> {{#str}}data_deletion_date_set, mod_exammanagement, {{datadeletiondate}}{{/str}}</p>
+						</div>
+						<div class="panel-footer text-xs-center">
+						</div>
+					</div>{{/datadeletiondate}}
+				</div>
+			</div>
+		</li>
+		{{!exam_review}}
+		<span id="examreview"></span>
+		<li class="item">
+			{{#fifthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fifthphasecompleted}}
+			{{^fifthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fifthphasecompleted}}
+			<div class="panel panel-primary mainpanel">
+				<div class="panel-heading">
+					<a aria-expanded="false" onclick="togglePhase('.phase_five'); return true;">
+						<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
+						<span class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}}{{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#fifthphaseactive}}collapse{{/fifthphaseactive}}{{^fifthphaseactive}}collapse.show{{/fifthphaseactive}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+					</a>
+				</div>
+				<div class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}} {{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five">
+					<div class="panel-body">
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+											{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}date_and_room_exam_review, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#examreviewtime}}{{#examreviewroom}}<p> {{#str}}date_room_examreview_set, mod_exammanagement, { "examreviewdate":  {{# quote }}{{examreviewtime}}{{/ quote }}, "examreviewroom":  {{# quote }}{{examreviewroom}}{{/ quote }} }{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+										{{^examreviewtime}}{{#examreviewroom}}<p> {{#str}}room_examreview_set, mod_exammanagement, {{examreviewroom}}{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+										{{#examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_examreview_set, mod_exammanagement, {{examreviewtime}}{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+										{{^examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_room_examreview_not_set, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examReviewDateRoom.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^examreviewtime}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^examreviewroom}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewroom_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewroom}}{{/datadeletiondate}}
+										</span>
+										<h3 class="panel-title">{{#str}}set_visibility_of_exam_review_information, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#examreviewvisible}}
+										<p class="examReviewVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+										<p class="examReviewVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+										{{/examreviewvisible}}
+										{{^examreviewvisible}}
+										<p class="examReviewVisible collapse.show">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>
+										<p class="examReviewVisible collapse">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
+										{{/examreviewvisible}}
+									</div>
+									<div class="panel-footer text-xs-center">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row row-eq-height">
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}{{#examreviewtime}}panel-warning{{/examreviewtime}}{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}{{#examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}{{#examreviewtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
+											{{^examreviewtime}}<a href="examReviewDateRoom.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}altering_exam_results, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>
+											{{#resultsenteredafterexamreview}}{{#str}}exam_results_altered, mod_exammanagement, {{resultsenteredafterexamreview}}{{/str}}{{/resultsenteredafterexamreview}}
+											{{^resultsenteredafterexamreview}}{{#str}}no_examresults_altered, mod_exammanagement{{/str}}{{/resultsenteredafterexamreview}}
+											<br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}exam_results_altered_note, mod_exammanagement{{/str}}
+										</p>
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
+									<div class="panel-heading">
+										<span class="statebar pull-right">
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										<p>{{#str}}export_altered_examresults_str, mod_exammanagement{{/str}} <br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_altered_examresults_note, mod_exammanagement{{/str}}</p>
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsTextFile.php?id={{cmid}}&afterexamreview=true" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="item" id="endpoint">
+			<i class="fa fa-flag" aria-hidden="true"></i>
+		</li>
+	</ul>
+</div>

@@ -47,6 +47,12 @@ $roomvisible = optional_param('roomvisible', 0, PARAM_RAW);
 $calledfromformplace = optional_param('calledfromformplace', 0, PARAM_RAW);
 $placevisible = optional_param('placevisible', 0, PARAM_RAW);
 
+$calledfromformbonus = optional_param('calledfromformbonus', 0, PARAM_RAW);
+$bonusvisible = optional_param('bonusvisible', 0, PARAM_RAW);
+
+$calledfromformresult = optional_param('calledfromformresult', 0, PARAM_RAW);
+$resultvisible = optional_param('resultvisible', 0, PARAM_RAW);
+
 $calledfromformcorrection = optional_param('calledfromformcorrection', 0, PARAM_RAW);
 $correctioncompleted = optional_param('correctioncompleted', 0, PARAM_RAW);
 
@@ -110,6 +116,34 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                     $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
                 } else {
                     $MoodleObj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformbonus) { // saveBonusVisible
+
+                if ($bonusvisible) {
+                    $ExammanagementInstanceObj->moduleinstance->bonusvisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->bonusvisible = false;
+                }
+
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
+            } elseif ($calledfromformresult) { // saveResultVisible
+
+                if ($resultvisible) {
+                    $ExammanagementInstanceObj->moduleinstance->resultvisible = true;
+                } else {
+                    $ExammanagementInstanceObj->moduleinstance->resultvisible = false;
+                }
+
+                $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                if ($update) {
+                    $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
                 }
             } elseif ($calledfromformcorrection) { // save correction as completed
 
@@ -244,7 +278,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
         $taskcount = $ExammanagementInstanceObj->getTaskCount();
         $taskpoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
-        $textfieldcontent = format_string($ExammanagementInstanceObj->getTextFromTextfield());
+        $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
+
+        if($textfieldcontent){
+            if(format_string($textfieldcontent)){
+                $textfielcontent = format_string($textfieldcontent);
+            } else {
+                $textfieldcontent = get_string('mediacontent', 'mod_exammanagement');
+            }
+        }
+
         $participantscount = $UserObj->getParticipantsCount();
         $roomscount = $ExammanagementInstanceObj->getRoomsCount();
         $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
@@ -255,8 +298,10 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
         $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
         $bonuscount = $UserObj->getEnteredBonusCount();
+        $bonusvisible = $ExammanagementInstanceObj->isBonusVisible();
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
         $resultscount = $UserObj->getEnteredResultsCount();
+        $resultvisible = $ExammanagementInstanceObj->isResultVisible();
         $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
         $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
@@ -269,7 +314,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $resultsenteredafterexamreview = false;
         }
 
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $gradingscale, $resultscount, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
+        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
         echo $output->render($page);
 
         $MoodleObj->outputFooter();
@@ -319,7 +364,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
     //bonus
-    if($participantObj){
+    if($ExammanagementInstanceObj->isBonusVisible() && $participantObj){
         if($participantObj->bonus === '0'){ // allows mustache template to render 0
             $bonus = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
@@ -327,6 +372,32 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         }
     } else {
         $bonus = false;
+    }
+
+    //totalpoints
+    if($ExammanagementInstanceObj->isResultVisible() && $participantObj){
+
+        if($participantObj->examstate){
+            $examstate = $UserObj->getExamState($participantObj);
+        } else {
+            $examstate = false;
+        }
+
+        if($examstate === 'normal'){
+            $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participantObj));
+            $examstate = false;
+
+            if($totalpoints === '0'){
+                $totalpoints = get_string('no_bonus_earned', 'mod_exammanagement');
+            }
+
+        } else {
+            $examstate = get_string($examstate, 'mod_exammanagement');
+            $totalpoints = false;
+        }
+    } else {
+        $examstate = false;
+        $totalpoints = false;
     }
 
     //examreview date and room
@@ -343,7 +414,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     //rendering and displaying content
     $output = $PAGE->get_renderer('mod_exammanagement');
 
-    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonus, $examreviewtime, $examreviewroom, $deleted);
+    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonus, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted);
     echo $output->render($page);
 
     $MoodleObj->outputFooter();

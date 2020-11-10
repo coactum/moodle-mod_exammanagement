@@ -27,10 +27,10 @@
       <h4 class = "m-y-1">{{#str}}examinformation, mod_exammanagement{{/str}}</h4>
 
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}state, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
             {{#isparticipant}}<p>{{#str}}added_to_exam, mod_exammanagement{{/str}}</p>{{/isparticipant}}
             {{^isparticipant}}<p>{{#str}}no_participant, mod_exammanagement{{/str}}</p>{{/isparticipant}}
           </div>
@@ -38,70 +38,96 @@
       {{^deleted}}
       {{#isparticipant}}
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}date, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
             {{#examdate}}<p>{{examdate}} <i class="fa fa-calendar" aria-hidden="true"></i></p>{{/examdate}}
             {{^examdate}}<p>{{#str}}no_date_entered, mod_exammanagement{{/str}}</p>{{/examdate}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}time, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
             {{#examtime}}<p>{{examtime}} <i class="fa fa-clock-o" aria-hidden="true"></i></p>{{/examtime}}
             {{^examtime}}<p>{{#str}}no_time_entered, mod_exammanagement{{/str}}</p>{{/examtime}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}room, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
             {{#room}}<p>{{room}} <i class="fa fa-building-o" aria-hidden="true"></i></p>{{/room}}
             {{^room}}<p>{{#str}}no_room_assigned, mod_exammanagement{{/str}}</p>{{/room}}
           </div>
       </div>
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}seat, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
             {{#place}}<p>{{place}}</p>{{/place}}
             {{^place}}<p>{{#str}}no_seat_assigned, mod_exammanagement{{/str}}</p>{{/place}}
           </div>
       </div>
+      {{#textfield}}
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}hint, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
-            {{#textfield}}
+          <div class="col-9">
                 {{{textfield}}}
-            {{/textfield}}
-            {{^textfield}}{{#str}}no_exam_hint, mod_exammanagement{{/str}}{{/textfield}}
           </div>
       </div>
+      {{/textfield}}
       {{#bonus}}
       <hr />
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}bonus_for_exam, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
-            {{#str}}bonus_for_exam_added, mod_exammanagement, {{{bonus}}}{{/str}}
+          <div class="col-9">
+            {{#str}}bonus_for_exam_added, mod_exammanagement, {{bonus}}{{/str}}
           </div>
       </div>
       {{/bonus}}
+      {{#examstate}}
+      <hr />
+      <div class = "row">
+          <p class = "col-3">
+              <strong>{{#str}}result, mod_exammanagement{{/str}}:</strong>
+          </p>
+          <div class="col-9">
+            {{{examstate}}}
+          </div>
+      {{/examstate}}
+      {{#totalpoints}}
+      <hr />
+      <div class = "row">
+          <p class = "col-3">
+              <strong>{{#str}}result, mod_exammanagement{{/str}}:</strong>
+          </p>
+          <div class="col-9">
+            {{#str}}totalpoints_achieved, mod_exammanagement, {{totalpoints}}{{/str}}
+          </div>
+          {{/totalpoints}}
+      </div>
+      {{#totalpoints}}
+      <br>
+      <div class="alert alert-danger alert-block">
+        {{#str}}legal_hint_totalpoints, mod_exammanagement{{/str}}
+	  </div>
+      {{/totalpoints}}
       {{#examreviewtime}}
       <hr />
       <div class = "row">
-          <p class = "col-6">
+          <p class = "col-3">
               <strong>{{#str}}exam_review, mod_exammanagement{{/str}}:</strong>
           </p>
-          <div class="col-6">
+          <div class="col-9">
               {{#str}}exam_review_added, mod_exammanagement, { "examreviewtime":  {{# quote }}{{ examreviewtime }}{{/ quote }}, "examreviewroom": {{# quote }}{{ examreviewroom }}{{/ quote }} }{{/str}}
           </div>
       </div>

@@ -126,7 +126,7 @@ class exammanagementInstance{
 
  		return $url;
 	}
-	 
+
 	public function getCleanCourseCategoryName(){
 
 		global $PAGE;
@@ -193,13 +193,13 @@ class exammanagementInstance{
 			foreach($rooms as $room){
 
 				$places = json_decode($room->places);
-		  
+
 				if(isset($places)){
 					$placesCount = count($places);	//get Places of this Room
 				} else {
-					$placesCount = 0;	//get Places of this Room					
+					$placesCount = 0;	//get Places of this Room
 				}
-	
+
 				$totalSeats += $placesCount;
 			}
 		}
@@ -246,7 +246,7 @@ class exammanagementInstance{
 			return false;
 		}
 	}
-	 
+
 	public function getTaskCount(){ // get count of tasks
 
 		$tasks = $this->getTasks();
@@ -288,24 +288,25 @@ class exammanagementInstance{
 
  	public function getTextFromTextfield(){
 
- 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
-		if ($textfield){
-				$text = $textfield->text;
-				return $text;
-			} else {
-				return false;
-			}
+		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+
+		if($textfield){
+			$text = $textfield->text;
+			return $text;
+		} else {
+			return false;
+		}
 	}
 
 	public function getFormatFromTextfield(){
 
  		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 		if ($textfield){
-				$format = $textfield->format;
-				return $format;
-			} else {
-				return false;
-			}
+			$format = $textfield->format;
+			return $format;
+		} else {
+			return false;
+		}
 	}
 
 	public function allPlacesAssigned(){
@@ -330,7 +331,7 @@ class exammanagementInstance{
 
 		$select = "exammanagement =".$this->getCm()->instance;
 		$select .= " AND place IS NOT NULL";
-		
+
 		$assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
 		if (isset($assignedPlacesCount)){
@@ -371,6 +372,30 @@ class exammanagementInstance{
 		$isPlaceVisible = $this->moduleinstance->placevisible;
 
 		if($isPlaceVisible){
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function isBonusVisible(){
+
+		$isBonusVisible = $this->moduleinstance->bonusvisible;
+
+		if($isBonusVisible){
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public function isResultVisible(){
+
+		$isResultVisible = $this->moduleinstance->resultvisible;
+
+		if($isResultVisible){
 			return true;
 		} else {
 			return false;
@@ -566,9 +591,9 @@ class exammanagementInstance{
 
 			if($roomIDs){
 				$roomIDs = implode("', '", $roomIDs);
-	
+
 				$select = "roomid IN ('" . $roomIDs . "')";
-	
+
 				if($sortorder == 'name'){
 					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC');
 				} else {
@@ -577,7 +602,7 @@ class exammanagementInstance{
 			} else {
 				return false;
 			}
-			
+
 		} else if($mode === 'defaultrooms'){
 
 			$select = "type = 'defaultroom'";
@@ -608,16 +633,16 @@ class exammanagementInstance{
 
 					$aPlaces = count(json_decode($a->places));
 					$bPlaces = count(json_decode($b->places));
-			
+
 					return strnatcmp($aPlaces, $bPlaces); // sort by places count
-			
+
 				  });
-			
+
 				  if($sortorder == 'places_bigtosmall'){
 					$rooms = array_reverse($rooms); // reverse array: now big to small rooms
 				  }
 			}
-			
+
 			return $rooms;
 
         } else {
@@ -740,7 +765,7 @@ class exammanagementInstance{
 		if(count($rightCol) > 0){
 			$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
 			$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";	
+			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
 		} else {
 			$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
 		}

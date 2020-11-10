@@ -21,6 +21,8 @@
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if date and time is set user visible"/>
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if room is set user visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if place is set user visible"/>
+          <FIELD NAME="bonusvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if bonus is set user visible"/>
+          <FIELD NAME="resultvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if result is set user visible"/>
           <FIELD NAME="gradingscale" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Gradingscale for the exam as array in json syntax"/>
           <FIELD NAME="datadeletion" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of the date of correction completion"/>
           <FIELD NAME="deletionwarningmailids" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Arrays with the ids of send mails with deletion warnings in json syntax"/>
@@ -71,7 +73,7 @@
               <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course of the exam management activity the potential participant belongs to"/>
               <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the potential participant belongs to"/>
               <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Identifier of the potential participant"/>
-              <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Line number of the potential participant in the imported participants list"/>              
+              <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Line number of the potential participant in the imported participants list"/>
     	    </FIELDS>
           <KEYS>
               <KEY NAME="primary" TYPE="primary" FIELDS="id" />
