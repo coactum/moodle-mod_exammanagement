@@ -357,7 +357,9 @@ class ldapManager{
 					}
 
 					$matrNrsArray = array_values($matrNrsArray);
-					$externalIdentifier = array_values($externalIdentifier);
+					if($externalIdentifier){
+						$externalIdentifier = array_values($externalIdentifier);
+					}
 
 					$resultArr = array();
 					$i = 0;

@@ -23,6 +23,25 @@
 
 define(['jquery', 'core/notification'], function ($) {
 
+  var invalidMatrnrFormatStr = false;
+
+  require(['core/str'], function (str) {
+    var localizedStrings = [
+    {
+        key: 'invalid_matrnr_format',
+        component: 'mod_exammanagement'
+    },
+    {
+      key: 'cancel',
+      component: 'mod_exammanagement'
+    },
+    ];
+    str.get_strings(localizedStrings).then(function (results) {
+      invalidMatrnrFormatStr = results[0];
+      $("#id_cancel").val(results[1]);
+    });
+  });
+
   var getInputId = function (element) {
     var id = element.attr('id').split('_').pop();
     return id;
@@ -147,7 +166,7 @@ define(['jquery', 'core/notification'], function ($) {
           $(this).val('');
           require(['core/notification'], function (notification) {
             notification.addNotification({
-              message: "Keine gültiges Matrikelnummernformat",
+              message: invalidMatrnrFormatStr,
               type: "error"
             });
           });
@@ -163,8 +182,6 @@ define(['jquery', 'core/notification'], function ($) {
       $('#id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
         $("#id_matrnr").prop("disabled", false);
       });
-
-      $('#id_cancel').val('Zurück zur Prüfungsorganisation');
 
       var lastpointsfield = $('input[name="lastkeypoints"]').val();
 

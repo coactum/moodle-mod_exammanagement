@@ -43,7 +43,7 @@ $string['bonus_for_exam'] = 'Bonus grade steps for the exam';
 $string['bonus_for_exam_added'] = 'For the exam you have gained <strong>{$a}</strong> bonus grade step(s).';
 $string['no_bonus_earned'] = 'no';
 $string['totalpoints_achieved'] = 'You have taken the exam and scored <strong>{$a}</strong> points.';
-$string['legal_hint_totalpoints'] = '<strong>Please note:</strong> This is only a preliminary indication of points which may change, for example during the exam review. The final grade of the exam will be displayed in PAUL after its completion and can only be viewed there. There is no legal claim to the result shown here.';
+$string['legal_hint_totalpoints'] = '<strong>Please note:</strong> This is only a preliminary indication of points which may change, for example during the exam review. There is no legal claim to the result shown here.';
 $string['exam_review'] = 'Exam review';
 $string['exam_review_added'] = 'The correction of the exam has now been completed. On <strong>{$a->examreviewdate}</strong> there will be the exam review in room <strong>{$a->examreviewroom}</strong>.';
 $string['examdata_deleted'] = 'The exam that has taken place on <strong>{$a}</strong> is now completed.';
@@ -419,6 +419,7 @@ $string['validate_matrnr'] = 'Validate matriculation number';
 $string['input_other_matrnr'] = 'Change matriculation number';
 $string['noparticipant'] = 'No valid participant';
 $string['invalid_matrnr'] = 'Invalid matriculation number';
+$string['invalid_matrnr_format'] = 'Invalid format for matriculation number';
 $string['invalid_barcode'] = 'Invalid barcode';
 
 //participantsOverviewForm.php

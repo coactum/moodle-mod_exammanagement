@@ -43,7 +43,7 @@ $string['bonus_for_exam'] = 'Bonusnotenschritte für die Klausur';
 $string['bonus_for_exam_added'] = 'Für die Klausur haben Sie <strong>{$a}</strong> Bonusnotenschritt(e) erreicht.';
 $string['no_bonus_earned'] = 'keine';
 $string['totalpoints_achieved'] = 'Sie haben an der Prüfung teilgenommen und <strong>{$a}</strong> Punkte erzielt.';
-$string['legal_hint_totalpoints'] = '<strong>Wichtiger Hinweis:</strong> Dies ist lediglich eine vorläufige Punkteangabe welche sich zum Beispiel im Rahmen der Klausureinsicht noch ändern kann. Die finale Note der Prüfung wird nach deren Abschluss in PAUL angezeigt und kann lediglich dort angesehen werden. Ein Rechtsanspruch auf das hier angezeigte Ergebnis existiert nicht.';
+$string['legal_hint_totalpoints'] = '<strong>Wichtiger Hinweis:</strong> Dies ist lediglich eine vorläufige Punkteangabe welche sich zum Beispiel im Rahmen der Klausureinsicht noch ändern kann. Ein Rechtsanspruch auf das hier angezeigte Ergebnis existiert nicht.';
 $string['exam_review'] = 'Klausureinsicht';
 $string['exam_review_added'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am <strong>{$a->examreviewtime}</strong> findet die Klausureinsicht in Raum <strong>{$a->examreviewroom}</strong> statt.';
 $string['examdata_deleted'] = 'Die am <strong>{$a}</strong> durchgeführte Prüfung ist nun abgeschlossen.';
@@ -419,6 +419,7 @@ $string['validate_matrnr'] = 'Matrikelnummer validieren';
 $string['input_other_matrnr'] = 'Matrikelnummer ändern';
 $string['noparticipant'] = 'Kein gültiger Teilnehmer';
 $string['invalid_matrnr'] = 'Ungültige Matrikelnummer';
+$string['invalid_matrnr_format'] = 'Ungültiges Matrikelnummerformat';
 $string['invalid_barcode'] = 'Ungültiger Barcode';
 
 //participantsOverviewForm.php

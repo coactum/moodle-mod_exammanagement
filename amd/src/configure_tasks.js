@@ -64,7 +64,7 @@ define(['jquery'], function ($) {
 
       $("form.mform input[type=number]").css(styles);
       $("form.mform input[type=number]").attr("step", "0.01");
-      $("form.mform input[type=number]").attr("min", "0");
+      $("form.mform input[type=number]").attr("min", "0.01");
 
       $("form.mform .form-group").on("change", "input", function () { // update totalpoints if some field changes
 
