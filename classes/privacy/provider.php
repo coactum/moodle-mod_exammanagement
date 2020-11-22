@@ -61,7 +61,7 @@ class provider implements
         // The table 'exammanagement' does not store any specific user data. It only stores general information about the exam like exam time, rooms, gradingscale and so on.
         $items->add_database_table('exammanagement', [
         ], 'privacy:metadata:exammanagement');
-        
+
         // The table 'exammanagement_participants' stores the personal data of all participants added to any exam.
         $items->add_database_table('exammanagement_participants', [
             'exammanagement' => 'privacy:metadata:exammanagement_participants:exammanagement',
@@ -79,7 +79,7 @@ class provider implements
             'exampoints' => 'privacy:metadata:exammanagement_participants:exampoints',
             'examstate' => 'privacy:metadata:exammanagement_participants:examstate',
             'timeresultsentered' => 'privacy:metadata:exammanagement_participants:timeresultsentered',
-            'bonus' => 'privacy:metadata:exammanagement_participants:bonus',
+            'bonussteps' => 'privacy:metadata:exammanagement_participants:bonussteps',
         ], 'privacy:metadata:exammanagement_participants');
 
         // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved. This potential participants can not directly be mapped to a moodle user in moodle, so no export is possible.
@@ -90,7 +90,7 @@ class provider implements
             'identifier' => 'privacy:metadata:exammanagement_temp_part:identifier',
             'line' => 'privacy:metadata:exammanagement_temp_part:line',
         ], 'privacy:metadata:exammanagement_temp_part');
-        
+
         // The table 'exammanagement_rooms' stores all available exam rooms. If a user has created a custom exam room it is stored here.
         $items->add_database_table('exammanagement_rooms', [
             'roomid' => 'privacy:metadata:exammanagement_rooms:roomid',
@@ -209,7 +209,7 @@ class provider implements
                     p.exampoints,
                     p.examstate,
                     p.timeresultsentered,
-                    p.bonus
+                    p.bonussteps
                   FROM {context} c
                   JOIN {course_modules} cm ON cm.id = c.instanceid
                   JOIN {exammanagement} e ON e.id = cm.instance
@@ -291,7 +291,7 @@ class provider implements
                     'exampoints' => $exammanagement->exampoints,
                     'examstate' => $exammanagement->examstate,
                     'timeresultsentered' => $exammanagement->timeresultsentered,
-                    'bonus' => $exammanagement->bonus,
+                    'bonussteps' => $exammanagement->bonussteps,
                 ];
 
                 // foreach ($customrooms as $customroom) { <- an anderer Stelle separat exportieren nur für Benutzer die Lehrender einer PO sind
@@ -381,12 +381,12 @@ class provider implements
      * @param   approved_contextlist    $contextlist    The approved contexts and user information to delete information for.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        
+
         global $DB;
-        
+
         $user = $contextlist->get_user();
         $userid = $user->id;
-        
+
         foreach ($contextlist as $context) {
             // Get the course module.
             $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);

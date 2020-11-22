@@ -57,7 +57,8 @@
           <FIELD NAME="exampoints" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Exam results of the participant as object in json syntax"/>
           <FIELD NAME="examstate" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Exam state of the participant as object in json syntax"/>
           <FIELD NAME="timeresultsentered" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of the date when the results where entered"/>
-          <FIELD NAME="bonus" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Bonusstep of the participant"/>
+          <FIELD NAME="bonussteps" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Bonusstep of the participant"/>
+          <FIELD NAME="bonuspoints" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Bonuspoints of the participant"/>
     	</FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />

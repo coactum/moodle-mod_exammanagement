@@ -487,30 +487,30 @@ class User{
 		if($gradingscale){
 			switch ($bonussteps){
 				case '1':
-					$bonus = 0.3;
+					$bonussteps = 0.3;
 					break;
 				case '2':
-					$bonus = 0.7;
+					$bonussteps = 0.7;
 					break;
 				case '3':
-					$bonus = 1.0;
+					$bonussteps = 1.0;
 					break;
 				default:
-					$bonus = 0;
+					$bonussteps = 0;
 					break;
 			}
 
 			if(isset($grade) && $grade !== "-"){
 
 				if($state === 'normal'){
-					$resultWithBonus = $grade-$bonus;
+					$resultWithBonus = $grade-$bonussteps;
 
 					$test = round($resultWithBonus-floor($resultWithBonus),1);
 
 					if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
 					if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
 
-					if($bonus == 0) return $grade;
+					if($bonussteps == 0) return $grade;
 					if( $grade == 5.0 ) return 5.0;
 					if( $resultWithBonus<=1.0) return '1.0';
 
@@ -584,7 +584,7 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "exammanagement =".$this->exammanagement;
-		$select .= " AND bonus IS NOT NULL";
+		$select .= " AND bonussteps IS NOT NULL";
 
 		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 

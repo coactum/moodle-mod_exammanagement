@@ -47,7 +47,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page    
+        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             if(!$UserObj->getEnteredResultsCount()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
@@ -85,7 +85,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $resultState = $UserObj->getExamState($participant);
 
                     if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
                     } else {
                         $resultWithBonus = get_string($resultState, "mod_exammanagement");
                     }
@@ -134,26 +134,26 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $examdate = $ExammanagementInstanceObj->getHrExamtime();
 
                     $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
-                    $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';    
+                    $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
                     $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
                     $examNumber = '""';
 
                     foreach($participantsFromCourse as $participant){
-            
+
                             $resultWithBonus = "";
                             $resultState = $UserObj->getExamState($participant);
-            
+
                             if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
                             } else {
                                 $resultWithBonus = get_string($resultState, "mod_exammanagement");
                             }
-            
+
                             $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
-            
+
                             $resultWithBonus = '"' . $resultWithBonus . '"';
-            
+
                             $textfile .= $examNumber . SEPARATOR . '"' . $participant->matrnr . '"' . SEPARATOR . '"' . $participant->firstname . '"' . SEPARATOR . '""' . SEPARATOR . '"' . $participant->lastname . '"' . SEPARATOR . $resultWithBonus . NEWLINE;
                     }
 
@@ -179,22 +179,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $textfile = $TextFileHeader . NEWLINE;
 
                         $examNumber = '""';
-                        
+
                         foreach($participants as $participant){
-            
+
                             $resultWithBonus = "";
                             $resultState = $UserObj->getExamState($participant);
-            
+
                             if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonus);
+                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
                             } else {
                                 $resultWithBonus = get_string($resultState, "mod_exammanagement");
                             }
-            
-                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );                        
-                            
+
+                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+
                             $resultWithBonus = '"' . $resultWithBonus . '"';
-                                
+
                             $textfile .= $examNumber . SEPARATOR . '"' . $participant->matrnr . '"' . SEPARATOR . '"' . $participant->firstname . '"' . SEPARATOR . '""' . SEPARATOR . '"' . $participant->lastname . '"' . SEPARATOR . $resultWithBonus . NEWLINE;
                         }
                     }
@@ -226,7 +226,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     readfile($tempfile);
                     unlink($tempfile);
                 } else {
-                    $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');            
+                    $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');
                 }
             }
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage

@@ -49,6 +49,19 @@ define(['jquery'], function ($) {
       $("form.mform input[type=number]").css(styles);
       $("form.mform input[type=number]").attr("step", "0.01");
       $("form.mform input[type=number]").attr("min", "0");
+
+      $("#import_bonuspoints_text").hide();
+
+      $('#id_bonusmode').change(function(){
+        if (this.value == 'points'){
+          $("#set_bonussteps").hide();
+          $("#import_bonuspoints_text").show();
+        } else if(this.value == 'steps'){
+          $("#set_bonussteps").show();
+          $("#import_bonuspoints_text").hide();
+        }
+      });
+
     },
     addbonusstep: function () { //add new tasks
 

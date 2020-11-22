@@ -363,15 +363,15 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     //textfield
     $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
-    //bonus
+    //bonussteps
     if($ExammanagementInstanceObj->isBonusVisible() && $participantObj){
-        if($participantObj->bonus === '0'){ // allows mustache template to render 0
-            $bonus = get_string('no_bonus_earned', 'mod_exammanagement');
+        if($participantObj->bonussteps === '0'){ // allows mustache template to render 0
+            $bonussteps = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
-            $bonus = $participantObj->bonus;
+            $bonussteps = $participantObj->bonussteps;
         }
     } else {
-        $bonus = false;
+        $bonussteps = false;
     }
 
     //totalpoints
@@ -414,7 +414,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     //rendering and displaying content
     $output = $PAGE->get_renderer('mod_exammanagement');
 
-    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonus, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted);
+    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted);
     echo $output->render($page);
 
     $MoodleObj->outputFooter();

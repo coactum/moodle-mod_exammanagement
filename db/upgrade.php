@@ -237,5 +237,27 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020110100, 'exammanagement');
     }
 
+    if ($oldversion < 2020110500) { // add new fields for setting bonus and result user visibility
+
+        $table = new xmldb_table('exammanagement_participants');
+        $field = new xmldb_field('bonus', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'bonussteps');
+        }
+
+        // Define field resultvisible to be added to exammanagement.
+        $table = new xmldb_table('exammanagement_participants');
+        $field = new xmldb_field('bonuspoints', XMLDB_TYPE_CHAR, '25', null, null, null, null);
+
+        // Conditionally launch add field for exammanagement.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Exammanagement savepoint reached.
+        upgrade_mod_savepoint(true, 2020110500, 'exammanagement');
+    }
+
     return true;
 }

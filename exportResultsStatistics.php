@@ -214,7 +214,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $countSICK++;
                 } else {
                     $result = $UserObj->calculateResultGrade($participant);
-                    $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $resultState, $participant->bonus);
+                    $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $resultState, $participant->bonussteps);
 
                     if ($result == '-'){
                         $notRated++;
@@ -230,7 +230,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
                 }
 
-                switch ($participant->bonus) { // for table 2 sheet 2
+                switch ($participant->bonussteps) { // for table 2 sheet 2
                     case '0':
                         $bonusstepzero++;
                         break;
@@ -475,13 +475,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $result = $UserObj->calculateResultGrade($participant);
 
-                if($participant->bonus){
-                    $bonus = $participant->bonus;
+                if($participant->bonussteps){
+                    $bonussteps = $participant->bonussteps;
                 } else {
-                    $bonus = 0;
+                    $bonussteps = 0;
                 }
 
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonus);
+                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonussteps);
 
                 if($participant->exampoints){
                     foreach (json_decode($participant->exampoints) as $key => $points){
@@ -502,7 +502,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $worksheet->setCellValueByColumnAndRow(6 + $n, $rowCounter, '-');
                 }
 
-                $worksheet->setCellValueByColumnAndRow(7 + $n, $rowCounter, $bonus);
+                $worksheet->setCellValueByColumnAndRow(7 + $n, $rowCounter, $bonussteps);
                 $worksheet->setCellValueByColumnAndRow(8 + $n, $rowCounter, $resultWithBonus);
                 $rowCounter++;
             }

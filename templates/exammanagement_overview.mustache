@@ -164,13 +164,13 @@ ajaxsetcorrectioncompletion = function(value){
 		<h3 class="m-y-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
 		<span class="m-y-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right m-b-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right m-r-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
 	</div>
-	
+
 	{{#deleted}}
 	<div class="alert alert-danger alert-block">
 		{{#str}}data_deleted, mod_exammanagement{{/str}}
 	</div>
 	{{/deleted}}
-	
+
 	<ul class="exmammanagement-summary list-unstyled">
 		{{!before_exam}}
 		<span id="beforeexam"></span>
@@ -600,11 +600,12 @@ ajaxsetcorrectioncompletion = function(value){
 							</div>
 						</div>
 						<div class="row row-eq-height">
-							<div class="col-6">	
-								<div class="panel {{#resultscount}}panel-info{{/resultscount}}{{^resultscount}}panel-danger{{/resultscount}}">
+							<div class="col-6">
+								<div class="panel {{#resultscount}}panel-info{{/resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{^resultscount}}{{^bonuscount}}panel-danger{{/bonuscount}}{{/resultscount}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
 											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											{{^bonuscount}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuscount}}
 										</span>
 										<h3 class="panel-title">{{#str}}set_visibility_of_bonus_and_results, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -612,7 +613,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<div class="row">
 											<div class="col-6">
 												<span class="pull-right">
-													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</strong>

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Allows teacher to import bonus points for mod_exammanagement.
+ * Allows teacher to import bonus points or grade steps for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   coactum GmbH 2019
@@ -184,18 +184,31 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						if($participantObj){
 
-							$participantObj->bonus = 0;
+							var_dump($fromform);
 
-							if(isset($data['points']) && $data['points']){
+							if($fromform->bonusmode === "steps" && isset($data['points']) && $data['points']){
+								$participantObj->bonussteps = 0;
+
+								var_dump('i should set bonussteps');
 
 								foreach($fromform->bonussteppoints as $step => $points){
 
 									if(floatval($data['points']) >= $points){
-										$participantObj->bonus = $step; // change to detect bonus step
+										$participantObj->bonussteps = $step; // change to detect bonus step
+										$participantObj->bonuspoints = false;
+										var_dump($step);
+
 									} else {
 										break;
 									}
 								}
+							} else if($fromform->bonusmode === "points" && isset($data['points']) && $data['points']){
+
+								var_dump('i should set bonuspoints');
+								var_dump($data['points']);
+
+								$participantObj->bonussteps = false;
+								$participantObj->bonuspoints = $data['points'];
 							}
 
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);

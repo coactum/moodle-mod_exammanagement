@@ -45,7 +45,7 @@ class exammanagement_participantsview implements renderable, templatable{
     protected $room;
     protected $place;
     protected $textfield;
-    protected $bonus;
+    protected $bonussteps;
     protected $examstate;
     protected $totalpoints;
     protected $examreviewtime;
@@ -56,7 +56,7 @@ class exammanagement_participantsview implements renderable, templatable{
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield, $bonus, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted){
+    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield, $bonussteps, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted){
         $this->cmid = $cmid;
         $this->isparticipant = $isparticipant;
         $this->examdate = $examdate;
@@ -64,7 +64,7 @@ class exammanagement_participantsview implements renderable, templatable{
         $this->room = $room;
         $this->place = $place;
         $this->textfield = $textfield;
-        $this->bonus = $bonus;
+        $this->bonussteps = $bonussteps;
         $this->examstate = $examstate;
         $this->totalpoints = $totalpoints;
         $this->examreviewtime = $examreviewtime;
@@ -87,7 +87,7 @@ class exammanagement_participantsview implements renderable, templatable{
         $data->room = $this->room;
         $data->place = $this->place;
         $data->textfield = $this->textfield;
-        $data->bonus = $this->bonus;
+        $data->bonussteps = $this->bonussteps;
         $data->examstate = $this->examstate;
         $data->totalpoints = $this->totalpoints;
         $data->examreviewtime = $this->examreviewtime;

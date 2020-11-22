@@ -88,7 +88,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
 
                 $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
-            
+
                 if(isset($fromform->room)){
                     $participantObj->roomid = $fromform->room;
                     $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
@@ -136,21 +136,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             $examstate->ill = "0";
                             break;
                     }
-        
-        
-                    $participantObj->examstate = json_encode($examstate);   
+
+
+                    $participantObj->examstate = json_encode($examstate);
                 }
 
                 $participantObj->timeresultsentered = time();
 
-                if($fromform->bonus !== '-'){
-                    $participantObj->bonus = $fromform->bonus;
+                if($fromform->bonussteps !== '-'){
+                    $participantObj->bonussteps = $fromform->bonussteps;
                 } else {
-                    $participantObj->bonus = NULL;
+                    $participantObj->bonussteps = NULL;
                 }
-            
+
                 $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-                
+
                 if($update){
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {

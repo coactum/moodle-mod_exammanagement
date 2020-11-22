@@ -34,7 +34,7 @@ require_once($CFG->libdir.'/ldaplib.php');
 class ldapManager{
 
 	protected $dn;
-	protected $ldapobjectclassstudent;
+	protected $ldapobjectclass;
 	protected $ldapfieldmatriculationnumber;
 	protected $ldapfieldusername;
 	protected $ldapfieldfirstname;
@@ -60,7 +60,7 @@ class ldapManager{
 		}
 
 		if($pluginconfig->ldap_objectclass_student){
-			$this->ldapobjectclassstudent = $pluginconfig->ldap_objectclass_student;
+			$this->ldapobjectclass = $pluginconfig->ldap_objectclass;
 		}
 
 		if($pluginconfig->ldap_field_map_matriculationnumber){
@@ -155,7 +155,7 @@ class ldapManager{
 				if($ldapConnection){
 
 					// if some required config is missing display error message and end method
-					if(in_array('ldap_objectclass_student', $this->missingconfig) || in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
+					if(in_array('ldap_objectclass', $this->missingconfig) || in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
 						$missingconfigstr = '';
 
 						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
@@ -177,8 +177,8 @@ class ldapManager{
 
 					$dn	= $this->dn;
 
-					if($this->ldapobjectclassstudent){
-						$filter = "(&(objectclass=" . $this->ldapobjectclassstudent . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
+					if($this->ldapobjectclass){
+						$filter = "(&(objectclass=" . $this->ldapobjectclass . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
 					} else {
 						$filter = "(" . $this->ldapfieldmatriculationnumber . "=" . $username . ")";
 					}
