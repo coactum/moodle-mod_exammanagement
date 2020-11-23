@@ -48,9 +48,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       // reset all exiting places for participants
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $id));
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $id));
-      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $id));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+      $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 
       $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array()); // get all exam participants sorted by name
 
@@ -72,28 +72,28 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $places = json_decode($room->places);	// get places of this room
 
           foreach($participants as $key => $participant){
-    
+
             if($key >= $participantsCount){
-              
+
               $participant->roomid = $room->roomid;
               $participant->roomname = $room->name;
               $participant->place = array_shift($places);
-    
+
               // set room and place
               $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
-    
+
               $participantsCount +=1;
-    
+
               if($places == NULL){  // if all places of room are assigned
                 break;
               }
-    
+
             } else if($participantsCount == count($participants)){ // if all users have a place
               break 2;
             }
           }
         }
-        
+
       }
 
       if($participantsCount < count($participants)){	// if users are left without a room

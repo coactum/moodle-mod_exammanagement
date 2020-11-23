@@ -198,19 +198,18 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
             // update participants categoryids
-            $MoodleDBObj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('exammanagement' => $id));
-            $MoodleDBObj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('exammanagement' => $id));
+            $MoodleDBObj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+            $MoodleDBObj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 
         }
 
         // delete temp participants and headers if exist
-
-        if ($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $id))) {
+        if ($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance))) {
             $ExammanagementInstanceObj->moduleinstance->tempimportfileheader = null;
 
             $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-            $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $id));
+            $MoodleDBObj->DeleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
         }
 
         // reset phase information if participants are deleted

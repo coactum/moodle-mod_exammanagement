@@ -81,7 +81,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				if ($fromform->bonuspoints_list){
 
-					if((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3])){
+					if($fromform->bonusmode==='steps' && ($fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2] || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3]))){
 						redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 					}
 
@@ -214,6 +214,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 
 						}
+					}
+
+					if($fromform->bonusmode === "steps"){
+						$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonuspoints', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+					} else if($fromform->bonusmode === "points"){
+						$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonussteps', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 					}
 
 					fclose($handle);

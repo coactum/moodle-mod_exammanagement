@@ -106,6 +106,7 @@ $string['state_notpossible_rooms_missing'] = 'No rooms';
 $string['state_notpossible_examtime_missing'] = 'No date';
 $string['state_notpossible_assignedplaces_missing'] = 'No seats assigned';
 $string['state_notpossible_tasks_missing'] = 'No tasks';
+$string['state_notpossible_bonus_missing'] = 'No bonus';
 $string['state_notpossible_results_missing'] = 'No results';
 $string['state_notpossible_correctioncompleted_missing'] = 'Correction not completed';
 $string['state_notpossible_examreviewtime_missing'] = 'No time for exam review';
