@@ -26,13 +26,23 @@ define(['jquery'], function ($) {
   var getTotalpoints = function () {
     var totalpoints = 0;
 
-    $("form.mform .form-group input.form-control").not("#id_place").each(function () {
+    $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
       if ($(this).val() != '-') {
         totalpoints += parseFloat($(this).val().replace(',', '.'));
       }
     });
 
     return String(totalpoints.toFixed(2)).replace('.', ',');
+  };
+
+  var getTotalpointsWithBonus = function () {
+    var totalpointsWithBonus = 0;
+
+    if($("#id_bonuspoints").val() != '-' && getTotalpoints() != 0){
+      totalpointsWithBonus = Number(getTotalpoints().replace(',', '.')) + parseFloat($("#id_bonuspoints").val().replace(',', '.'));
+    }
+
+    return String(totalpointsWithBonus.toFixed(2)).replace('.', ',');
   };
 
   return {
@@ -54,7 +64,7 @@ define(['jquery'], function ($) {
 
       // initial disabling point fields if examstate is not normal
       if ($("#id_state").val() !== 'normal') {
-        $("form.mform .form-group input.form-control").not("#id_place").each(function () {
+        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
           $(this).prop("disabled", true);
         });
       }
@@ -88,25 +98,32 @@ define(['jquery'], function ($) {
 
         if ($("#id_state").val() !== 'normal') { // if examstate is now not normal: disable all point-fields and set their value to 0
 
-          $("form.mform .form-group input.form-control").not("#id_place").each(function () {
+          $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
             $(this).prop("disabled", true);
             $(this).val(0);
             $("#totalpoints").text($("#id_state option:selected").text()); // change totalpoints
+            $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
 
           });
         } else {  // if examstate is now normal
-          $("form.mform .form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
+          $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // enable all point-fields
             $(this).prop("disabled", false);
           });
           $("#totalpoints").text(getTotalpoints()); // change totalpoints
+          $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
         }
       });
 
       $("form.mform .form-group").not("#fitem_id_place").on("change", "input", function () { // if some input field changes
         $("#totalpoints").text(getTotalpoints()); // change totalpoints
+        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
       });
 
-      $("form.mform #fitem_id_room").on("change", "select", function () { // change avilable places pattern if other room is choosen
+      $("#id_bonuspoints").on("change", "input", function () { // if bonus points input field changes
+        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
+      });
+
+      $("form.mform #fitem_id_room").on("change", "select", function () { // change available places pattern if other room is choosen
         id = $(this).children(":selected").attr("value");
 
         $(".hideablepattern").each(function () {

@@ -145,8 +145,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($fromform->bonussteps !== '-'){
                     $participantObj->bonussteps = $fromform->bonussteps;
+                    $participantObj->bonuspoints = NULL;
                 } else {
                     $participantObj->bonussteps = NULL;
+                    $participantObj->bonuspoints = NULL;
+                }
+
+                if($fromform->bonuspoints){
+                    $participantObj->bonussteps = NULL;
+                    $participantObj->bonuspoints = $fromform->bonuspoints;
                 }
 
                 $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);

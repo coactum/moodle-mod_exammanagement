@@ -71,7 +71,18 @@ class participantsOverviewForm extends moodleform {
 
         $mform->addElement('html', '<div class="table-responsive">');
         $mform->addElement('html', '<table class="table table-striped exammanagement_table" id="0">');
-        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("room", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_place">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th><th scope="col">'.get_string("result", "mod_exammanagement").'</th><th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("options", "mod_exammanagement").'</th></thead>');
+        $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><th scope="col">#</th><th scope="col">'.get_string("firstname", "mod_exammanagement").'</th><th scope="col">'.get_string("lastname", "mod_exammanagement").'</th><th scope="col">'.get_string("matriculation_number", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_room">'.get_string("room", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_place">'.get_string("place", "mod_exammanagement").'</th><th scope="col">'.get_string("points", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints", "mod_exammanagement").'</th>');
+        //if($UserObj->getEnteredBonusCount('points')){
+            $mform->addElement('html', '<th scope="col">'.get_string("bonuspoints", "mod_exammanagement").'</th><th scope="col">'.get_string("totalpoints_with_bonuspoints", "mod_exammanagement").'</th>');
+        //}
+        $mform->addElement('html', '<th scope="col">'.get_string("result", "mod_exammanagement").'</th>');
+
+        //if($UserObj->getEnteredBonusCount('steps')){
+            $mform->addElement('html', '<th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th>');
+        //}
+
+        $mform->addElement('html', '<th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("options", "mod_exammanagement").'</th></thead>');
+
         $mform->addElement('html', '<tbody>');
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
@@ -154,8 +165,35 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '</td>');
 
+                    # totalpoints
                     $mform->addElement('html', '<td>'.$totalpoints.'</td>');
 
+                    # bonuspoints
+                    if($UserObj->getEnteredBonusCount('points')){
+                        if(isset($participant->bonuspoints)){
+                            $mform->addElement('html', '<td>'.str_replace('.', ',', $participant->bonuspoints).'</td>');
+                        } else {
+                            $mform->addElement('html', '<td>-</td>');
+                        }
+                    } else {
+                        $mform->addElement('html', '<td>-</td>');
+                    }
+
+                    # totalpoints with bonuspoints
+                    if($UserObj->getEnteredBonusCount('points')){
+                        if(isset($participant->bonuspoints) && is_numeric(str_replace(',', '.', $totalpoints))){
+                            $sum = (float) str_replace(',', '.', $totalpoints) + (float) $participant->bonuspoints;
+                            $mform->addElement('html', '<td>'. str_replace('.', ',', $sum) .'</td>');
+                        } else if(isset($participant->bonuspoints)){
+                            $mform->addElement('html', '<td>'.str_replace('.', ',', $participant->bonuspoints).'</td>');
+                        } else {
+                            $mform->addElement('html', '<td>-</td>');
+                        }
+                    } else {
+                        $mform->addElement('html', '<td>-</td>');
+                    }
+
+                    # result
                     if($gradingscale){
                         $result = $UserObj->calculateResultGrade($participant);
                         $mform->addElement('html', '<td>'.str_replace('.', ',', $result).'</td>');
@@ -163,7 +201,7 @@ class participantsOverviewForm extends moodleform {
                       $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
 
-                    if($UserObj->getEnteredBonusCount()){
+                    if($UserObj->getEnteredBonusCount('steps')){
                         if(isset($participant->bonussteps)){
                             $mform->addElement('html', '<td>'.$participant->bonussteps);
 
@@ -269,7 +307,7 @@ class participantsOverviewForm extends moodleform {
                             $mform->setType('place', PARAM_TEXT);
                             $mform->setDefault('place', $place);
 
-                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">'.get_string('available', 'mod_exammanagement').': <br>');
+                            $mform->addElement('html', '<span class="exammanagement_position_existing_places_column"><strong>'.get_string('available', 'mod_exammanagement').'</strong>: <br>');
                             if ($roomPlacesPatternsArr){
                                 foreach($roomPlacesPatternsArr as $roomid => $placesPattern){
                                     if($roomid == $participant->roomid){
@@ -312,7 +350,7 @@ class participantsOverviewForm extends moodleform {
                                     $mform->setDefault('points['.$tasknumber.']', $exampoints[$tasknumber-1]);
                                 }
 
-                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column">Max: '.number_format( $taskmaxpoints, 2, "," , "." ).'<br>');
+                                $mform->addElement('html', '<span class="exammanagement_position_existing_places_column"><strong>Max:</strong> '.number_format( $taskmaxpoints, 2, "," , "." ).'<br>');
 
                                 $mform->addElement('html', '</td>');
                             }
@@ -333,24 +371,46 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '</td></tr></table>');
 
+                    if(isset($participant->bonuspoints)){
+                        $mform->addElement('html', '<td>');
+                        $mform->addElement('text', 'bonuspoints', '', $attributes);
+                        $mform->setType('bonuspoints', PARAM_FLOAT);
+                        $mform->setDefault('bonuspoints', $participant->bonuspoints);
+                        $mform->addElement('html', '</td>');
+
+                        if(is_numeric(str_replace(',', '.', $totalpoints))){
+                            $sum = (float) str_replace(',', '.', $totalpoints) + (float) $participant->bonuspoints;
+                            $mform->addElement('html', '<td><span id="totalpoints_with_bonus">'. str_replace('.', ',', $sum). '</span></td>');
+                        } else {
+                            $mform->addElement('html', '<td><span id="totalpoints_with_bonus">'. str_replace('.', ',', $participant->bonuspoints). '</span></td>');
+                        }
+
+                    } else {
+                        $mform->addElement('html', '<td>');
+                        $mform->addElement('text', 'bonuspoints', '', $attributes);
+                        $mform->setType('bonuspoints', PARAM_FLOAT);
+                        $mform->setDefault('bonuspoints', 0);
+                        $mform->addElement('html', '</td>');
+
+                        if(is_numeric(str_replace(',', '.', $totalpoints))){
+                            $mform->addElement('html', '<td><span id="totalpoints_with_bonus">'. str_replace('.', ',', $totalpoints) . '</span></td>');
+                        } else {
+                            $mform->addElement('html', '<td><span id="totalpoints_with_bonus">-</span></td>');
+                        }
+                    }
+
+
                     if($gradingscale){
                         $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');
                     } else {
                       $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_tasks", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }
 
-                    if($UserObj->getEnteredBonusCount()){
-                        if(isset($participant->bonussteps)){
-                            $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonussteps', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3));
-                            $select->setSelected($participant->bonussteps);
-                            $mform->addElement('html', '</td>');
-                        } else {
-                            $mform->addElement('html', '<td>');
-                            $select = $mform->addElement('select', 'bonussteps', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3));
-                            $select->setSelected('-');
-                            $mform->addElement('html', '</td>');
-                        }
+                    if(isset($participant->bonussteps)){
+                        $mform->addElement('html', '<td>');
+                        $select = $mform->addElement('select', 'bonussteps', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3));
+                        $select->setSelected($participant->bonussteps);
+                        $mform->addElement('html', '</td>');
                     } else {
                         $mform->addElement('html', '<td>');
                         $select = $mform->addElement('select', 'bonussteps', '', array('-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3));

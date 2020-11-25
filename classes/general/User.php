@@ -579,12 +579,28 @@ class User{
 		}
 	}
 
-	public function getEnteredBonusCount(){
+	public function getEnteredBonusCount($mode = 'both'){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "exammanagement =".$this->exammanagement;
-		$select .= " AND bonussteps IS NOT NULL";
+
+		switch ($mode) {
+			case 'both':
+				$select .= " AND bonussteps IS NOT NULL";
+				$select .= " OR bonuspoints IS NOT NULL";
+				break;
+			case 'steps':
+				$select .= " AND bonussteps IS NOT NULL";
+				break;
+			case 'points':
+			$select .= " AND bonuspoints IS NOT NULL";
+				break;
+			default:
+				$select .= " AND bonussteps IS NOT NULL";
+				$select .= " OR bonuspoints IS NOT NULL";
+				break;
+		}
 
 		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
