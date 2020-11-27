@@ -117,7 +117,7 @@ class inputResultsForm extends moodleform {
               array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$tasknumber.'</strong></span>'));
 
               //points of task
-              array_push($taskspoints_array, $mform->createElement('html', '<span id="max_points_'.$tasknumber.'" class="exammanagement_task_spacing_2">'.str_replace('.', ',', $points).'</span>'));
+              array_push($taskspoints_array, $mform->createElement('html', '<span id="max_points_'.$tasknumber.'" class="exammanagement_task_spacing_2">'.$ExammanagementInstanceObj->formatNumberForDisplay($points).'</span>'));
 
               //input field with exam result points
               array_push($points_array, $mform->createElement('text', 'points['.$tasknumber.']', '', $attributes));
@@ -137,7 +137,7 @@ class inputResultsForm extends moodleform {
         $mform->hideIf('points_array', 'matrval', 'eq', 1);
 
         if($this->_customdata['matrnr']){
-            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$totalpoints.'</span></strong></div>');
+            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
         }
 
         //create checkboxes for exams state

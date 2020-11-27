@@ -272,7 +272,7 @@ class exammanagementInstance{
 			return $totalpoints;
 
 		} else {
-			return false;
+			return $totalpoints;
 		}
 
 	}
@@ -491,7 +491,7 @@ class exammanagementInstance{
  		switch ($phase){
 
 			case 1:
-				if ($this->getRoomsCount() && $this->getExamtime() && $UserObj->getParticipantsCount() && $this->getTaskTotalPoints()){
+				if ($this->getRoomsCount() && $this->getExamtime() && $UserObj->getParticipantsCount() && $this->getTaskCount()){
 					return true;
 				} else {
 						return false;
@@ -555,7 +555,26 @@ class exammanagementInstance{
 			} else if($phaseFour && $examReviewDate < $date){
 					return '5';
 		}
- 	}
+	 }
+
+	 #### general helper method for formating numbers depending on language
+
+	 public function formatNumberForDisplay($number){
+		if($number !== false){
+			if(is_numeric($number)){
+				$lang = current_language();
+
+				if($lang==="de"){
+					$number = str_replace('.', ',', $number);
+				} else {
+					$number = str_replace(',', '.', $number);
+				}
+			}
+			return $number;
+		} else {
+			return '-';
+		}
+	}
 
  	#### events ####
 

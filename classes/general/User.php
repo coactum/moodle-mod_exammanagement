@@ -410,7 +410,7 @@ class User{
 
 		$stateArr = json_decode($participantObj->examstate);
 
-		if($stateArr){
+		if($stateArr !== NULL){
 			foreach($stateArr as $key => $value){
 				if($key == 'nt' && $value == "1"){
 						return 'nt';
@@ -420,23 +420,40 @@ class User{
 						return 'ill';
 				}
 			}
-		}
 
-		return 'normal';
+			return 'normal';
+		} else {
+			return false;
+		}
 	}
 
-	public function calculateTotalPoints($participantObj){
+	public function calculatePoints($participantObj, $withBonus=false){
 		$points = 0;
 
 		$pointsArr = json_decode($participantObj->exampoints);
 
 		if($pointsArr != Null){
-			foreach($pointsArr as $key => $taskpoints){
-				$points += floatval($taskpoints);
+
+			$examstate = $this->getExamState($participantObj);
+
+			if($examstate === 'normal'){
+				foreach($pointsArr as $key => $taskpoints){
+					$points += floatval($taskpoints);
+				}
+
+				if($withBonus && $participantObj->bonuspoints){
+					$points += floatval($participantObj->bonuspoints);
+				}
+
+				return floatval($points);
+			} else if($examstate) {
+				return get_string($examstate, "mod_exammanagement");
+			} else {
+				return false;
 			}
-			return floatval($points);
+
 		} else {
-			return '-';
+			return false;
 		}
 	}
 
@@ -448,7 +465,7 @@ class User{
 
 		$state = $this->getExamState($participantObj);
 
-		$totalpoints = $this->calculateTotalPoints($participantObj);
+		$totalpoints = $this->calculatePoints($participantObj, true);
 		$lastpoints = 0;
 
 		$result = false;
@@ -457,8 +474,6 @@ class User{
 		    $result = '-';
 		} else if($state == "nt" || $state == "fa" || $state == "ill"){
 			$result = get_string($state, "mod_exammanagement");
-		} else if($totalpoints <= 0){
-			$result = 5;
 		} else if($totalpoints && $gradingscale){
 			foreach($gradingscale as $key => $step){
 
@@ -515,7 +530,7 @@ class User{
 					if( $resultWithBonus<=1.0) return '1.0';
 
 					return (str_pad (strval($resultWithBonus), 3, '.0'));
-				} else {
+				} else if($state){
 					return get_string($state, "mod_exammanagement");
 				}
 			} else {

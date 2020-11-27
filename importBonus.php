@@ -184,29 +184,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						if($participantObj){
 
-							var_dump($fromform);
-
 							if($fromform->bonusmode === "steps" && isset($data['points']) && $data['points']){
 								$participantObj->bonussteps = 0;
-
-								var_dump('i should set bonussteps');
 
 								foreach($fromform->bonussteppoints as $step => $points){
 
 									if(floatval($data['points']) >= $points){
 										$participantObj->bonussteps = $step; // change to detect bonus step
 										$participantObj->bonuspoints = false;
-										var_dump($step);
-
 									} else {
 										break;
 									}
 								}
 							} else if($fromform->bonusmode === "points" && isset($data['points']) && $data['points']){
-
-								var_dump('i should set bonuspoints');
-								var_dump($data['points']);
-
 								$participantObj->bonussteps = false;
 								$participantObj->bonuspoints = $data['points'];
 							}

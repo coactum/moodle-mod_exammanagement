@@ -601,7 +601,7 @@ ajaxsetcorrectioncompletion = function(value){
 						</div>
 						<div class="row row-eq-height">
 							<div class="col-6">
-								<div class="panel {{#resultscount}}panel-info{{/resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{^resultscount}}{{^bonuscount}}panel-danger{{/bonuscount}}{{/resultscount}}">
+								<div class="panel {{#resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{#resultscount}}{{^bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{^resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{^resultscount}}{{^bonuscount}}panel-danger{{/bonuscount}}{{/resultscount}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
 											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}

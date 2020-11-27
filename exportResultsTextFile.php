@@ -81,16 +81,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 foreach($participants as $participant){ // construct lines for each participant
 
-                    $resultWithBonus = "";
                     $resultState = $UserObj->getExamState($participant);
 
-                    if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                        $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
-                    } else {
-                        $resultWithBonus = get_string($resultState, "mod_exammanagement");
-                    }
-
-                    $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
 
                     $resultWithBonus = '"' . $resultWithBonus . '"';
 
@@ -141,20 +134,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     foreach($participantsFromCourse as $participant){
 
-                            $resultWithBonus = "";
-                            $resultState = $UserObj->getExamState($participant);
+                        $resultState = $UserObj->getExamState($participant);
 
-                            if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
-                            } else {
-                                $resultWithBonus = get_string($resultState, "mod_exammanagement");
-                            }
+                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
 
-                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+                        $resultWithBonus = '"' . $resultWithBonus . '"';
 
-                            $resultWithBonus = '"' . $resultWithBonus . '"';
-
-                            $textfile .= $examNumber . SEPARATOR . '"' . $participant->matrnr . '"' . SEPARATOR . '"' . $participant->firstname . '"' . SEPARATOR . '""' . SEPARATOR . '"' . $participant->lastname . '"' . SEPARATOR . $resultWithBonus . NEWLINE;
+                        $textfile .= $examNumber . SEPARATOR . '"' . $participant->matrnr . '"' . SEPARATOR . '"' . $participant->firstname . '"' . SEPARATOR . '""' . SEPARATOR . '"' . $participant->lastname . '"' . SEPARATOR . $resultWithBonus . NEWLINE;
                     }
 
                     $filecount += 1;
@@ -182,16 +168,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                         foreach($participants as $participant){
 
-                            $resultWithBonus = "";
                             $resultState = $UserObj->getExamState($participant);
 
-                            if (!($resultState == "nt") && !($resultState == "fa") && !($resultState == "ill")) {
-                                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps);
-                            } else {
-                                $resultWithBonus = get_string($resultState, "mod_exammanagement");
-                            }
-
-                            $resultWithBonus = str_replace( '.', ',', $resultWithBonus );
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
 
                             $resultWithBonus = '"' . $resultWithBonus . '"';
 

@@ -276,7 +276,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
         $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
         $taskcount = $ExammanagementInstanceObj->getTaskCount();
-        $taskpoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
+        $taskpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
         $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
 
         if($textfieldcontent){
@@ -373,30 +373,47 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $bonussteps = false;
     }
 
+    //bonuspoints
+    if($ExammanagementInstanceObj->isBonusVisible() && $participantObj){
+        if($participantObj->bonuspoints === '0'){ // allows mustache template to render 0
+            $bonuspoints = get_string('no_bonus_earned', 'mod_exammanagement');
+        } else {
+            $bonuspoints = $ExammanagementInstanceObj->formatNumberForDisplay($participantObj->bonuspoints);
+        }
+    } else {
+        $bonuspoints = false;
+    }
+
     //totalpoints
     if($ExammanagementInstanceObj->isResultVisible() && $participantObj){
 
-        if($participantObj->examstate){
-            $examstate = $UserObj->getExamState($participantObj);
-        } else {
-            $examstate = false;
-        }
+        $examstate = $UserObj->getExamState($participantObj);
 
         if($examstate === 'normal'){
-            $totalpoints = str_replace('.', ',', $UserObj->calculateTotalPoints($participantObj));
             $examstate = false;
+            $totalpoints = $UserObj->calculatePoints($participantObj);
+
+            $tasktotalpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
+
+            $totalpointswithbonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participantObj, true));
 
             if($totalpoints === '0'){
-                $totalpoints = get_string('no_bonus_earned', 'mod_exammanagement');
+                $totalpoints = get_string('no_points_earned', 'mod_exammanagement');
+            } else {
+                $totalpoints = $ExammanagementInstanceObj->formatNumberForDisplay($totalpoints);
             }
-
         } else {
             $examstate = get_string($examstate, 'mod_exammanagement');
             $totalpoints = false;
+            $totalpointswithbonus = false;
+            $tasktotalpoints = false;
         }
+
     } else {
         $examstate = false;
         $totalpoints = false;
+        $totalpointswithbonus = false;
+        $tasktotalpoints = false;
     }
 
     //examreview date and room
@@ -413,7 +430,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     //rendering and displaying content
     $output = $PAGE->get_renderer('mod_exammanagement');
 
-    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $examstate, $totalpoints, $examreviewtime, $examreviewroom, $deleted);
+    $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);
     echo $output->render($page);
 
     $MoodleObj->outputFooter();

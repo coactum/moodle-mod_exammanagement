@@ -54,7 +54,7 @@ class configureTasksForm extends moodleform {
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'.get_string("configureTasks", "mod_exammanagement"));
-        
+
         if($helptextsenabled){
             $mform->addElement('html', $OUTPUT->help_icon('configureTasks', 'mod_exammanagement', ''));
         }
@@ -66,7 +66,7 @@ class configureTasksForm extends moodleform {
         if($UserObj->getEnteredResultsCount()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
         }
-        
+
         if($ExammanagementInstanceObj->getGradingscale()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("gradingscale_already_entered", "mod_exammanagement").'</div>');
         }
@@ -83,10 +83,6 @@ class configureTasksForm extends moodleform {
         //create list of tasks
         $tasks = $ExammanagementInstanceObj->getTasks();
         $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
-
-        if (!$totalpoints){
-          $totalpoints = 0;
-        }
 
         $tasknumbers_array = array();
         $tasks_array = array();
@@ -133,7 +129,7 @@ class configureTasksForm extends moodleform {
             $mform->setDefault('task['.$newtaskcount.']', $temptaskpoints);
 
             $totalpoints += $temptaskpoints;
-            
+
             }
         }
 
@@ -151,7 +147,7 @@ class configureTasksForm extends moodleform {
         $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
         $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
-        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.str_replace('.', ',', $totalpoints).'</span></strong></div>');
+        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
 
         if(!$tasks && !$temptaskcount) {
             $mform->addElement('hidden', 'newtaskcount', 1);

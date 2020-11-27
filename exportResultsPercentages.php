@@ -44,7 +44,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   if($ExammanagementInstanceObj->isExamDataDeleted()){
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
-    
+
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       global $CFG;
@@ -109,7 +109,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $pdf->SetFont('helvetica', '', 16);
       $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 17);
-      
+
       $pdf->SetFont('helvetica', 'B', 16);
       $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name, 0, 'C', 0, 0, 50, 25);
       $pdf->SetFont('helvetica', '', 16);
@@ -135,7 +135,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $totalPoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
-      $maxPoints = str_replace( '.', ',', $totalPoints);
+      $maxPoints = $ExammanagementInstanceObj->formatNumberForDisplay($totalPoints);
 
       $fill = false;
 
@@ -154,27 +154,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       foreach ($participants as $participant){
 
-        $points = 0;
         $percentages = '-';
 
-        $state = $UserObj->getExamState($participant);
+        $points = $UserObj->calculatePoints($participant);
 
-        if ($state == "nt") {
-          $points = get_string('nt', 'mod_exammanagement');
-        } else if ($state == "fa") {
-          $points = get_string('fa', 'mod_exammanagement');
-        } else if ($state == "ill") {
-          $points = get_string('ill', 'mod_exammanagement');
-        } else {
-
-            $points = $UserObj->calculateTotalPoints($participant);
-
-            if($points != "-"){
-                $percentages = number_format( ( $points / $totalPoints ) * 100, 2, "," , "." ).' %';
-            }
-              
-            $points = str_replace( '.', ',', $points);
+        if(is_numeric($points)){
+            $percentages = number_format( ( $points / $totalPoints ) * 100, 2, "," , "." ).' %';
         }
+
+        $points = $ExammanagementInstanceObj->formatNumberForDisplay($points);
 
         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
         $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";

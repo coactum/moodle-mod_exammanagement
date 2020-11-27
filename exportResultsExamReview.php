@@ -133,7 +133,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $pdf->Line(20, 62, 190, 62);
         $pdf->SetXY(20, 65);
 
-        $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
+        $maxPoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
 
         $fill = false;
 
@@ -151,20 +151,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         foreach ($participants as $participant){
 
-          $totalPoints = 0;
+          $totalPoints = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participant));
 
-          $state = $UserObj->getExamState($participant);
-
-          if ($state == "nt") {
-            $totalPoints = get_string('nt', 'mod_exammanagement');
-          } else if ($state == "fa") {
-            $totalPoints = get_string('fa', 'mod_exammanagement');
-          } else if ($state == "ill") {
-            $totalPoints = get_string('ill', 'mod_exammanagement');
-          } else {
-            $totalPoints = str_replace( '.', ',', $UserObj->calculateTotalPoints($participant));
-          }
-          
           $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
           $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
           $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";

@@ -62,12 +62,6 @@ class configureGradingscaleForm extends moodleform {
         $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
         $attributes = array('size'=>'1'); // length of input field
 
-        if (!$totalpoints){
-          $totalpoints = 0;
-        }
-
-        $mform->addElement('html', get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').' <span id="totalpoints"><strong>'.str_replace( '.', ',', $totalpoints).'</strong></span>');
-
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
@@ -90,7 +84,7 @@ class configureGradingscaleForm extends moodleform {
         $mform->addElement('html', '<div class="row"><p class="col-1"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<strong class="col-1">'.str_replace('.', ',',$key).'</strong>');
+            $mform->addElement('html', '<strong class="col-1">'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong>');
         }
 
         $mform->addElement('html', '</div>');
@@ -110,6 +104,8 @@ class configureGradingscaleForm extends moodleform {
           }
 
         $mform->addElement('html', '</div>');
+
+        $mform->addElement('html', get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').' <span id="totalpoints"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</strong></span>');
 
         $this->add_action_buttons();
 

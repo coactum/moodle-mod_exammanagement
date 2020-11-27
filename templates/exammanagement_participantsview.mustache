@@ -83,17 +83,28 @@
           </div>
       </div>
       {{/textfield}}
-      {{#bonus}}
+      {{#bonussteps}}
       <hr />
       <div class = "row">
           <p class = "col-3">
-              <strong>{{#str}}bonus_for_exam, mod_exammanagement{{/str}}:</strong>
+              <strong>{{#str}}bonussteps_for_exam, mod_exammanagement{{/str}}:</strong>
           </p>
           <div class="col-9">
-            {{#str}}bonus_for_exam_added, mod_exammanagement, {{bonus}}{{/str}}
+            {{#str}}bonussteps_for_exam_added, mod_exammanagement, {{bonussteps}}{{/str}}
           </div>
       </div>
-      {{/bonus}}
+      {{/bonussteps}}
+      {{#bonuspoints}}
+      <hr />
+      <div class = "row">
+          <p class = "col-3">
+              <strong>{{#str}}bonuspoints_for_exam, mod_exammanagement{{/str}}:</strong>
+          </p>
+          <div class="col-9">
+            {{#str}}bonuspoints_for_exam_added, mod_exammanagement, {{bonuspoints}}{{/str}}
+          </div>
+      </div>
+      {{/bonuspoints}}
       {{#examstate}}
       <hr />
       <div class = "row">
@@ -111,7 +122,7 @@
               <strong>{{#str}}result, mod_exammanagement{{/str}}:</strong>
           </p>
           <div class="col-9">
-            {{#str}}totalpoints_achieved, mod_exammanagement, {{totalpoints}}{{/str}}
+            {{#str}}totalpoints_achieved, mod_exammanagement, {{totalpoints}}/{{tasktotalpoints}}{{/str}}{{^examstate}}{{#bonuspoints}} {{#str}}totalpoints_achieved_with_bonus, mod_exammanagement, {{totalpointswithbonus}}{{/str}}{{/bonuspoints}}{{/examstate}}
           </div>
           {{/totalpoints}}
       </div>
