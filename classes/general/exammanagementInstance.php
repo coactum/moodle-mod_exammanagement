@@ -561,6 +561,7 @@ class exammanagementInstance{
 
 	 public function formatNumberForDisplay($number){
 		if($number !== false){
+
 			if(is_numeric($number)){
 				$lang = current_language();
 
@@ -570,6 +571,7 @@ class exammanagementInstance{
 					$number = str_replace(',', '.', $number);
 				}
 			}
+
 			return $number;
 		} else {
 			return '-';

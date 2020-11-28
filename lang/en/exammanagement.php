@@ -492,8 +492,8 @@ $string['examdate'] = 'Date of exam';
 $string['examtime'] = 'Time of exam';
 $string['examrooms'] = 'Rooms of exam';
 $string['grade'] = 'Grade';
-$string['nobonus'] = 'No bonus';
-$string['withbonus'] = 'With bonus';
+$string['nobonus'] = 'Without bonus';
+$string['withbonus'] = 'With bonus grade steps';
 $string['inpercent'] = 'in %';
 $string['registered'] = 'Registered';
 $string['passed'] = 'Passed';
@@ -503,6 +503,7 @@ $string['tasks_and_boni'] = 'Tasks and boni';
 $string['mean'] = 'Mean';
 $string['count'] = 'Count';
 $string['details'] = 'Details';
+$string['points_with_bonus'] = 'Points with bonus';
 
 // exportResultsTextFile.php
 $string['results'] = 'Results';

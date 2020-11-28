@@ -493,7 +493,7 @@ $string['examtime'] = 'Prüfungsbeginn';
 $string['examrooms'] = 'Prüfungsräume';
 $string['grade'] = 'Note';
 $string['nobonus'] = 'Ohne Bonus';
-$string['withbonus'] = 'Mit Bonus';
+$string['withbonus'] = 'Mit Bonusnotenschritte';
 $string['inpercent'] = 'in %';
 $string['registered'] = 'Angemeldet';
 $string['passed'] = 'Bestanden';
@@ -503,6 +503,7 @@ $string['tasks_and_boni'] = 'Aufgaben und Bonuspunkte';
 $string['mean'] = 'Mittelwert';
 $string['count'] = 'Anzahl';
 $string['details'] = 'Details';
+$string['points_with_bonus'] = 'Punkte inkl. Bonus';
 
 // exportResultsTextFile.php
 $string['results'] = 'Prüfungsergebnisse';

@@ -470,19 +470,19 @@ class User{
 
 		$result = false;
 
-		if($totalpoints === '-'){
+		if($totalpoints === false){
 		    $result = '-';
 		} else if($state == "nt" || $state == "fa" || $state == "ill"){
 			$result = get_string($state, "mod_exammanagement");
-		} else if($totalpoints && $gradingscale){
+		} else if(isset($totalpoints) && $gradingscale){
 			foreach($gradingscale as $key => $step){
 
 				if($key == '1.0' && $totalpoints >= floatval($step)){
-						$result = $key;
+					$result = $key;
 				} else if($totalpoints < $lastpoints && $totalpoints >= floatval($step)){
-						$result = $key;
+					$result = $key;
 				} else if($key == '4.0' && $totalpoints < floatval($step)){
-						$result = 5;
+					$result = 5;
 				}
 
 				$lastpoints = floatval($step);
