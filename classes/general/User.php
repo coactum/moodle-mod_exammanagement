@@ -457,89 +457,88 @@ class User{
 		}
 	}
 
-	public function calculateResultGrade($participantObj){
+	/**
+	 * Calculates result grade of participant based on points
+	 *
+	 * @param Points   $points  Points (or special exam state) that should be converted to result grade
+	 * @param Bonus    $bonussteps  Bonus grade steps if grade should be calculated with bonus (default: false)
+	 *
+	 * @return Result  $result
+	 */
+
+	public function calculateResultGrade($points, $bonussteps = false){
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-		$state = $this->getExamState($participantObj);
-
-		$totalpoints = $this->calculatePoints($participantObj, true);
 		$lastpoints = 0;
 
 		$result = false;
 
-		if($totalpoints === false){
-		    $result = '-';
-		} else if($state == "nt" || $state == "fa" || $state == "ill"){
-			$result = get_string($state, "mod_exammanagement");
-		} else if(isset($totalpoints) && $gradingscale){
+		if($points === false || !isset($points)){ // if points are false or not set
+
+			$result = '-';
+
+		}else if(!is_numeric($points)){ // else if points indicate special exam state
+			$result = $points;
+
+		} else if($gradingscale){ // else if points and gradingscale are set and should be converted into grade
+
 			foreach($gradingscale as $key => $step){
 
-				if($key == '1.0' && $totalpoints >= floatval($step)){
+				if($key == '1.0' && $points >= floatval($step)){
 					$result = $key;
-				} else if($totalpoints < $lastpoints && $totalpoints >= floatval($step)){
+				} else if($points < $lastpoints && $points >= floatval($step)){
 					$result = $key;
-				} else if($key == '4.0' && $totalpoints < floatval($step)){
+				} else if($key == '4.0' && $points < floatval($step)){
 					$result = 5;
 				}
 
 				$lastpoints = floatval($step);
 
 			}
+
+			if($bonussteps){ // if grade should
+				switch ($bonussteps){
+					case '0':
+						$bonussteps = 0.3;
+						break;
+					case '1':
+						$bonussteps = 0.3;
+						break;
+					case '2':
+						$bonussteps = 0.7;
+						break;
+					case '3':
+						$bonussteps = 1.0;
+						break;
+					default: // if bonus grade steps are not entered and null
+						$bonussteps = 0;
+						break;
+				}
+
+				if( $result === 5) {
+					return $result;
+				} else if ( $bonussteps == 0) {
+					return $result;
+				} else {
+					$resultWithBonus = $result-$bonussteps;
+
+					if( $resultWithBonus<=1.0) return '1.0';
+					$peculiarity = round($resultWithBonus-floor($resultWithBonus),1);
+
+					if( 0.4==$peculiarity ) {$resultWithBonus=$resultWithBonus-0.1;}
+					if( 0.6==$peculiarity ) {$resultWithBonus=$resultWithBonus+0.1;}
+
+					return (str_pad (strval($resultWithBonus), 3, '.0'));
+				}
+			}
+		} else { // if should be converted to grade but gradingscale is not set
+			$result = '-';
 		}
 
 		return $result;
-	}
-
-	public function calculateResultGradeWithBonus($grade, $state, $bonussteps){
-
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
-
-		if($gradingscale){
-			switch ($bonussteps){
-				case '1':
-					$bonussteps = 0.3;
-					break;
-				case '2':
-					$bonussteps = 0.7;
-					break;
-				case '3':
-					$bonussteps = 1.0;
-					break;
-				default:
-					$bonussteps = 0;
-					break;
-			}
-
-			if(isset($grade) && $grade !== "-"){
-
-				if($state === 'normal'){
-					$resultWithBonus = $grade-$bonussteps;
-
-					$test = round($resultWithBonus-floor($resultWithBonus),1);
-
-					if( 0.4==$test ) {$resultWithBonus=$resultWithBonus-0.1;}
-					if( 0.6==$test ) {$resultWithBonus=$resultWithBonus+0.1;}
-
-					if($bonussteps == 0) return $grade;
-					if( $grade == 5.0 ) return 5.0;
-					if( $resultWithBonus<=1.0) return '1.0';
-
-					return (str_pad (strval($resultWithBonus), 3, '.0'));
-				} else if($state){
-					return get_string($state, "mod_exammanagement");
-				}
-			} else {
-				return '-';
-			}
-		} else {
-			return '-';
-		}
-
 	}
 
 	#### checks  ####

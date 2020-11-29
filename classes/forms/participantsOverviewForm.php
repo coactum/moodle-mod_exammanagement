@@ -188,7 +188,7 @@ class participantsOverviewForm extends moodleform {
 
                     # result
                     if($gradingscale){
-                        $result = $UserObj->calculateResultGrade($participant);
+                        $result = $UserObj->calculateResultGrade($totalpointsWithBonus);
                         $mform->addElement('html', '<td>'.$ExammanagementInstanceObj->formatNumberForDisplay($result).'</td>');
                     } else {
                       $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
@@ -228,7 +228,7 @@ class participantsOverviewForm extends moodleform {
                     }
 
                     if($gradingscale){
-                        $mform->addElement('html', '<td>'.$ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($result, $state, $participant->bonussteps)).'</td>');
+                        $mform->addElement('html', '<td>'.$ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($totalpointsWithBonus, $participant->bonussteps)).'</td>');
                     } else {
                         $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                     }

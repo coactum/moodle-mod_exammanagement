@@ -81,9 +81,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 foreach($participants as $participant){ // construct lines for each participant
 
-                    $resultState = $UserObj->getExamState($participant);
-
-                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
+                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
 
                     $resultWithBonus = '"' . $resultWithBonus . '"';
 
@@ -134,9 +132,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     foreach($participantsFromCourse as $participant){
 
-                        $resultState = $UserObj->getExamState($participant);
-
-                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
+                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
 
                         $resultWithBonus = '"' . $resultWithBonus . '"';
 
@@ -168,9 +164,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                         foreach($participants as $participant){
 
-                            $resultState = $UserObj->getExamState($participant);
-
-                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGradeWithBonus($UserObj->calculateResultGrade($participant), $resultState, $participant->bonussteps));
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
 
                             $resultWithBonus = '"' . $resultWithBonus . '"';
 

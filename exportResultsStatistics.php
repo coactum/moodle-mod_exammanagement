@@ -216,8 +216,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 } else if ($resultState == "ill") {
                     $countSICK++;
                 } else {
-                    $result = $UserObj->calculateResultGrade($participant);
-                    $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $resultState, $participant->bonussteps);
+                    $pointsWithBonus = $UserObj->calculatePoints($participant, true);
+                    $result = $UserObj->calculateResultGrade($pointsWithBonus);
+                    $resultWithBonus = $UserObj->calculateResultGrade($pointsWithBonus, $participant->bonussteps);
 
                     if ($result == '-'){
                         $notRated++;
@@ -519,7 +520,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $totalpoints = $UserObj->calculatePoints($participant);
                 $totalpointsWithBonus = $UserObj->calculatePoints($participant, true);
 
-                $result = $UserObj->calculateResultGrade($participant);
+                $result = $UserObj->calculateResultGrade($totalpointsWithBonus);
 
                 if(isset($participant->bonussteps)){
                     $bonussteps = $participant->bonussteps;
@@ -533,7 +534,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $bonuspoints = '-';
                 }
 
-                $resultWithBonus = $UserObj->calculateResultGradeWithBonus($result, $state, $bonussteps);
+                $resultWithBonus = $UserObj->calculateResultGrade($totalpointsWithBonus, $participant->bonussteps);
 
                 if($participant->exampoints){
                     foreach (json_decode($participant->exampoints) as $key => $points){
