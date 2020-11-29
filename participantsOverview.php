@@ -41,6 +41,7 @@ $edit  = optional_param('edit', 0, PARAM_INT);
 $editline  = optional_param('editline', 0, PARAM_INT);
 
 $pne  = optional_param('pne', 1, PARAM_INT);
+$bpne  = optional_param('bpne', 1, PARAM_INT);
 
 $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
@@ -84,7 +85,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $moodleuserid = NULL;
                     $userlogin = NULL;
 
-                    $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->edit);
+                    $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->edit, 'enterresultsmatrnr');
                 }
 
                 $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
@@ -102,7 +103,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $participantObj->exampoints = json_encode($fromform->points);
                 }
 
-                if(isset($fromform->state)){
+                if(isset($fromform->state) && $pne == false){
                     switch ($fromform->state){
 
                         case 'normal':
@@ -139,6 +140,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 
                     $participantObj->examstate = json_encode($examstate);
+                } else {
+                    $participantObj->examstate = NULL;
                 }
 
                 $participantObj->timeresultsentered = time();
@@ -151,7 +154,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $participantObj->bonuspoints = NULL;
                 }
 
-                if($fromform->bonuspoints){
+                if($bpne == false){
                     $participantObj->bonussteps = NULL;
                     $participantObj->bonuspoints = $fromform->bonuspoints;
                 }

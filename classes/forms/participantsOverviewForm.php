@@ -264,6 +264,9 @@ class participantsOverviewForm extends moodleform {
                     $mform->addElement('hidden', 'pne', true);
                     $mform->setType('pne', PARAM_INT);
 
+                    $mform->addElement('hidden', 'bpne', true);
+                    $mform->setType('bpne', PARAM_INT);
+
                     $mform->addElement('html', '<tr class="table-info">');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$participant->firstname.'</td>');

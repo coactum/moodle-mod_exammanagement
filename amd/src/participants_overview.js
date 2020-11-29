@@ -148,15 +148,19 @@ define(['jquery'], function ($) {
 
       $('form.mform #id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
 
-        $("form.mform .form-group input.form-control").not("#id_place").each(function () { // enable all point-fields
+        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // enable all point-fields
           $(this).prop("disabled", false);
         });
 
-        $("form.mform .form-group input.form-control").not("#id_place").each(function () { // if some input point field has values
+        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // if some input point field has values
           if ($(this).val()) {
             $("form.mform input[name='pne']").val(false); // set points not entered param to false
           }
         });
+
+        if($('#id_bonuspoints').val()){
+          $("form.mform input[name='bpne']").val(false); // set bonus points not entered param to false
+        }
 
       });
     }

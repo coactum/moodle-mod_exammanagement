@@ -54,6 +54,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array()); // get all exam participants sorted by name
 
+      var_dump($participants);
+
       $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall'); // get the ids of all used exam rooms
 
       if(!$examRooms){
@@ -74,6 +76,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           foreach($participants as $key => $participant){
 
             if($key >= $participantsCount){
+
+              if(isset($participant->moodleuserid) && $participant->login === NULL){
+                $participant->firstname = NULL;
+                $participant->lastname = NULL;
+              }
 
               $participant->roomid = $room->roomid;
               $participant->roomname = $room->name;
