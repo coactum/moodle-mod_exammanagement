@@ -195,10 +195,9 @@ class chooseRoomsForm extends moodleform {
         }
         $i++;
       }
+      $mform->addElement('html', '<div id="end"></div>');
 
       $mform->addElement('html', '</tbody></table></div>');
-
-      $mform->addElement('html', '<div id="end"></div>');
 
       $this->add_action_buttons(true,get_string('choose_rooms', 'mod_exammanagement'));
 

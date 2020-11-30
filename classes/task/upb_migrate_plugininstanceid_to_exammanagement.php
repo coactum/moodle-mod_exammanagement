@@ -27,7 +27,7 @@ use mod_exammanagement\general\MoodleDB;
 
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class upb_migrate_plugininstanceid_to_exammanagement extends \core\task\scheduled_task { 
+class upb_migrate_plugininstanceid_to_exammanagement extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
      *
@@ -36,36 +36,70 @@ class upb_migrate_plugininstanceid_to_exammanagement extends \core\task\schedule
     public function get_name() {
         return get_string('upb_migrate_plugininstanceid_to_exammanagement', 'mod_exammanagement');
     }
- 
+
     /**
      * Execute the task.
      */
     public function execute() {
 
+        mtrace('Starting scheduled task ' . get_string('upb_migrate_plugininstanceid_to_exammanagement', 'mod_exammanagement'));
+
         $MoodleDBObj = MoodleDB::getInstance();
 
         if ($rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => '0'))) {
-            
+
+            mtrace('Participants without value for exammanagement found');
+
+            $count = 0;
+
             if($rs->valid()){
+
+                mtrace('Migrating field plugininstanceid to exammanagement ...');
 
                 foreach ($rs as $record) {
 
-                    $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
-                    
-                    $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
+                    if(isset($record->plugininstanceid) && $record->plugininstanceid !== 0){
+                        $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
 
-                    $record->exammanagement = $exammanagement->id;
+                        $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
 
-                    $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $record);
+                        $record->exammanagement = $exammanagement->id;
 
+                        $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $record);
+
+                        $count += 1;
+                    } else {
+                        mtrace('Error: Invalid field plugininstanceid for ' . $record);
+                    }
                 }
 
                 $rs->close();
-            
+
+            } else {
+                mtrace('Error: Invalid record set');
             }
 
+            mtrace($count . ' participants successfully migrated');
+
+            // delete whole temp_part table
+            if($MoodleDBObj->checkIfRecordExists("exammanagement_temp_part", array())){
+
+                mtrace('Deleting temp_participants ...');
+
+                $MoodleDBObj->setFieldInDB('exammanagement', 'tempimportfileheader', NULL, array());
+
+                $MoodleDBObj->DeleteRecordsFromDB("exammanagement_temp_part", array());
+
+                mtrace('Deletion finished');
+
+            }
+
+        } else {
+            mtrace('No participants without value for exammanagement found');
         }
-        
+
+        mtrace('Task finished');
+
         \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
     }
 }
