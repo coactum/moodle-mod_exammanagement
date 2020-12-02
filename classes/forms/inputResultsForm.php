@@ -42,7 +42,9 @@ class inputResultsForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init'); ////call jquery for tracking input value change events
+        $jsArgs = array('lang'=>current_language());
+
+        $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init', $jsArgs); ////call jquery for tracking input value change events
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -55,6 +57,10 @@ class inputResultsForm extends moodleform {
         }
 
         $mform->addElement('html', '</h3>');
+
+        if($this->_customdata['firstname'] && $this->_customdata['lastname']){
+            $mform->addElement('html', '<a class="btn btn-primary pull-right" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
+        }
 
         $mform->addElement('html', '<p>'.get_string("input_results_text", "mod_exammanagement").'</p>');
 
@@ -86,11 +92,6 @@ class inputResultsForm extends moodleform {
           $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname']);
         }
 
-        if($this->_customdata['matrnr']){
-            $mform->addElement('html', '<div class="form-group row fitem"><span class="col-md-3"></span><span class="col-9"><a class="btn btn-primary" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a></span></div>');
-
-        }
-
         //create list of tasks
         if($this->_customdata['matrnr']){
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
@@ -117,7 +118,7 @@ class inputResultsForm extends moodleform {
               array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$tasknumber.'</strong></span>'));
 
               //points of task
-              array_push($taskspoints_array, $mform->createElement('html', '<span id="max_points_'.$tasknumber.'" class="exammanagement_task_spacing_2">'.$ExammanagementInstanceObj->formatNumberForDisplay($points).'</span>'));
+              array_push($taskspoints_array, $mform->createElement('html', '<span class="exammanagement_task_spacing">'.$ExammanagementInstanceObj->formatNumberForDisplay($points).'</span>'));
 
               //input field with exam result points
               array_push($points_array, $mform->createElement('text', 'points['.$tasknumber.']', '', $attributes));

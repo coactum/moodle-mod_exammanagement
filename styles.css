@@ -302,15 +302,17 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /* configureTasksForm.php - spacing between task numbers */
 
 .exammanagement_task_spacing {
-  padding-left: 32px;
-  padding-right: 32px;
+  width: 70px;
+  text-align: center;
+  margin-right: 4px;
 }
 
-/* inputResultsForm.php - spacing between max points */
+/* configureGradingscaleForm.php - spacing between gradingscale steps */
 
-.exammanagement_task_spacing_2 {
-  padding-left: 29px;
-  padding-right: 29px;
+.exammanagement_gradingscale_spacing {
+  width: 100px;
+  text-align: center;
+  margin-left: 2px;
 }
 
 /* participantsOverviewForm.php - color of table borders */

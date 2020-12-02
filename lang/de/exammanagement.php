@@ -407,6 +407,7 @@ $string['points_bonussteps_invalid'] = 'Punkte für Bonusschritte ungültig';
 
 //configureGradingscaleForm.php
 $string['configureGradingscale'] = 'Notenschlüssel konfigurieren';
+$string['configure_gradingscale_text'] = 'Hier kann ein Notenschlüssel für die Prüfung konfiguriert werden.';
 $string['configure_gradingscale_totalpoints'] = 'Die maximal erreichbare Anzahl an Punkten ist:';
 
 //inputResultsForm.php
@@ -669,6 +670,7 @@ $string['not_possible_no_matrnr'] = 'Nicht möglich weil keine Matrikelnummern v
 $string['importmatrnrnotpossible'] = 'Import nach Matrikelnummer nicht möglich -';
 $string['enterresultsmatrnr'] = 'Eintragen der Ergebnisse nach Matrikelnummer nicht möglich -';
 $string['err_underzero'] = 'Die eingegebene Zahl darf nicht kleiner als Null sein.';
+$string['err_toohigh'] = 'Der eingegebene Wert ist zu hoch.';
 $string['err_novalidinteger'] = 'Der eingegebene Wert ist keine gültige Zahl.';
 $string['err_overmaxpoints'] = 'Die eingegebene Zahl überschreitet die Maximalpunktzahl.';
 $string['err_bonusstepsnotcorrect'] = 'Mindestens einer der Bonusnotenschritte passt nicht zu den anderen.';

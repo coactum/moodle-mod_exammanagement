@@ -42,8 +42,9 @@ class configureGradingscaleForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init'); //creating input type number fields
+        $jsArgs = array('lang'=>current_language());
+
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init', $jsArgs); //creating input type number fields
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -57,9 +58,14 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('html', '</h3>');
 
+        $mform->addElement('html', '<p>'.get_string("configure_gradingscale_text", "mod_exammanagement").'</p>');
+
+        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+
+        $mform->addElement('html', '<div class="form-group row fitem"><strong class="col-md-3">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span class="col-md-9" id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
+
         //create gradingscale input list
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
         $attributes = array('size'=>'1'); // length of input field
 
         $mform->addElement('hidden', 'id', 'dummy');
@@ -81,22 +87,22 @@ class configureGradingscaleForm extends moodleform {
         }
 
         //add labels for grading steps
-        $mform->addElement('html', '<div class="row"><p class="col-1"></p>');
+        $mform->addElement('html', '<div class="form-group row fitem"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<strong class="col-1">'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong>');
+            $mform->addElement('html', '<span class="exammanagement_gradingscale_spacing"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong></span>');
         }
 
         $mform->addElement('html', '</div>');
 
         //add input fields with points
-        $mform->addElement('html', '<div class="row remove_col"><p class="col-1"></p>');
+        $mform->addElement('html', '<div class="form-group row fitem">');
 
         foreach($gradingscale as $key => $points){
 
             $key_2 = str_replace('.', '', $key);
 
-            $mform->addElement('html', '<span class="col-1">');
+            $mform->addElement('html', '<span>');
             $mform->addElement('text', 'gradingsteppoints['.$key.']', '', $attributes);
             $mform->addElement('html', '</span>');
             $mform->setType('gradingsteppoints['.$key.']', PARAM_FLOAT);
@@ -104,8 +110,6 @@ class configureGradingscaleForm extends moodleform {
           }
 
         $mform->addElement('html', '</div>');
-
-        $mform->addElement('html', get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').' <span id="totalpoints"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</strong></span>');
 
         $this->add_action_buttons();
 

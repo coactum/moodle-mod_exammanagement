@@ -47,16 +47,18 @@ define(['jquery', 'core/notification'], function ($) {
     return id;
   };
 
-  var getTotalpoints = function () {
+  var getTotalpoints = function (lang) {
     var totalpoints = 0;
 
     $("form.mform .form-group input.form-control").each(function () {
       if (getInputId($(this)) != "matrnr" && $(this).val()) {
-        totalpoints += parseFloat($(this).val().replace(',', '.'));
+        totalpoints += parseFloat($(this).val());
       }
     });
 
-    return String(totalpoints.toFixed(2)).replace('.', ',');
+    totalpoints = totalpoints.toLocaleString(lang);
+
+    return totalpoints;
   };
 
   var getUrlParameter = function getUrlParameter(sParam) {
@@ -75,7 +77,7 @@ define(['jquery', 'core/notification'], function ($) {
   };
 
   return {
-    init: function () {
+    init: function (lang) {
 
       var matrnr = $('#id_matrnr').val();
 
@@ -111,7 +113,7 @@ define(['jquery', 'core/notification'], function ($) {
         }
       });
 
-      $("#totalpoints").text(getTotalpoints()); // initial set totalpoints
+      $("#totalpoints").text(getTotalpoints(lang)); // initial set totalpoints
 
       $("form.mform :checkbox").change(function () { //if some checkbox is checked/unchecked
         var checked = false;
@@ -152,7 +154,7 @@ define(['jquery', 'core/notification'], function ($) {
       });
 
       $("form.mform .form-group").on("change", "input", function () { // if some input field changes
-        $("#totalpoints").text(getTotalpoints()); // change totalpoints
+        $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
       });
 
       $('#id_matrnr').change(function () { // reload page if matrnr is entered

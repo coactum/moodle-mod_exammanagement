@@ -45,9 +45,11 @@ class configureTasksForm extends moodleform {
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init'); //call jquery for tracking input value change events and creating input type number fields
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask'); //call jquery for adding tasks
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask'); //call jquery for removing tasks
+        $jsArgs = array('lang'=>current_language());
+
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init', $jsArgs); //call jquery for tracking input value change events and creating input type number fields
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask', $jsArgs); //call jquery for adding tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask', $jsArgs); //call jquery for removing tasks
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -147,7 +149,7 @@ class configureTasksForm extends moodleform {
         $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
         $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
-        $mform->addelement('html', '<div class="row"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
+        $mform->addelement('html', '<div class="form-group row  fitem"><span class="col-md-3"><strong>'.get_string('total', 'mod_exammanagement').':</strong></span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
 
         if(!$tasks && !$temptaskcount) {
             $mform->addElement('hidden', 'newtaskcount', 1);
@@ -174,6 +176,8 @@ class configureTasksForm extends moodleform {
                 $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
             } else if($taskval<=0) {
                 $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
+            } else if($taskval>=100) {
+                $errors['task['.$key.']'] = get_string('err_toohigh', 'mod_exammanagement');
             }
         }
 

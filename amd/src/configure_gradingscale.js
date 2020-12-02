@@ -24,9 +24,9 @@
 define(['jquery', 'core/notification'], function ($) {
 
   return {
-    init: function () {
+    init: function (lang) {
 
-      var max_points = parseFloat($("#totalpoints strong").text().replace(/,/g, '.'));
+      var max_points = parseFloat($("#totalpoints strong").text()).toLocaleString(lang);
 
       // create input type number elements
       $("form.mform input[type=text]").attr("type", "number");

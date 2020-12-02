@@ -407,6 +407,7 @@ $string['points_bonussteps_invalid'] = 'Points for bonus steps invalid';
 
 //configureGradingscaleForm.php
 $string['configureGradingscale'] = 'Configure gradingscale';
+$string['configure_gradingscale_text'] = 'A gradingscale for the exam can be configured here.';
 $string['configure_gradingscale_totalpoints'] = 'Number of total points:';
 
 //inputResultsForm.php
@@ -632,7 +633,7 @@ To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesys
 2. Individual: If you have not managed your bonus points via the '. get_config('mod_exammanagement', 'moodlesystemname').' assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in '. get_config('mod_exammanagement', 'moodlesystemname').' or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
 Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported bonus grade steps are immediately displayed to the participants in their view.';
 $string['importBonus_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['configureGradingscale_help']= 'Here a <strong>gradingscale</strong> can be configured for the exam.<br><br>
+$string['configureGradingscale_help']= 'A <strong>gradingscale</strong> for the exam can be configured here.<br><br>
 As soon as the exam results have been entered, the gradingscale is used to automatically calculate the exam grades for all participants. If no gradingscale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
 The minimum number of points required to reach a step must be specified individually for each single grade. A 70 in the field below 1.0 would therefore mean that a participant has to reach at least 70 points in order to get the grade 1.0.<br><br>
 The number of points to be achieved for a grade step can be between 0 and the stated total number of points for all exam tasks, but it must be higher than the number of points required for the previous grade step. For example, more points must be required for achieving the grade 1.0 than for achieving a 1.3. In addition, it is also possible to use desimals as points. If a participant achieves fewer points than which are necessary for 4.0, he or she will receive the grade 5 instead.<br><br>
@@ -669,6 +670,7 @@ $string['not_possible_no_matrnr'] = 'Not possible because no matriculation numbe
 $string['importmatrnrnotpossible'] = 'Import by matriculation number not possible because';
 $string['enterresultsmatrnr'] = 'Entering results by matriculation number not possible because';
 $string['err_underzero'] = 'Entered number ca not be lower than zero.';
+$string['err_toohigh'] = 'Entered value is too high.';
 $string['err_novalidinteger'] = 'Entered number has to be a valid.';
 $string['err_overmaxpoints'] = 'Entered number exceeds maximal points.';
 $string['err_bonusstepsnotcorrect'] = 'One or more bonus steps are invalid.';
