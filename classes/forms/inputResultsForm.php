@@ -58,10 +58,6 @@ class inputResultsForm extends moodleform {
 
         $mform->addElement('html', '</h3>');
 
-        if($this->_customdata['firstname'] && $this->_customdata['lastname']){
-            $mform->addElement('html', '<a class="btn btn-primary pull-right" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
-        }
-
         $mform->addElement('html', '<p>'.get_string("input_results_text", "mod_exammanagement").'</p>');
 
         //create hidden id field
@@ -72,104 +68,96 @@ class inputResultsForm extends moodleform {
         $mform->addElement('hidden', 'matrval', 1);
         $mform->setType('matrval', PARAM_INT);
 
-        if(!$this->_customdata['matrnr']){
+        if($this->_customdata['matrnr']){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("confirm_matrnr", "mod_exammanagement").'</div>');
-        }
 
-        if($this->_customdata['matrnr']){
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_participant', 'mod_exammanagement').'</p></strong>');
-        }
 
-        //create input field for matrnr
-        if($this->_customdata['matrnr']){
-            $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'), '');
-        } else {
-            $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
-        }
-        $mform->setType('matrnr', PARAM_RAW);
+            //create input field for matrnr
 
-        if ($this->_customdata['firstname'] && $this->_customdata['lastname']){
-          $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname']);
-        }
+            $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'), 'test');
 
-        //create list of tasks
-        if($this->_customdata['matrnr']){
+            $mform->setType('matrnr', PARAM_RAW);
+
+            if($this->_customdata['firstname'] && $this->_customdata['lastname']){
+                $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname'] . ' <a class="btn btn-primary ml-5" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
+            }
+
+            //create list of tasks
+
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_points', 'mod_exammanagement').'</p></strong>');
-        }
 
-        $tasks = $ExammanagementInstanceObj->getTasks();
-        $totalpoints = 0;
+            $tasks = $ExammanagementInstanceObj->getTasks();
+            $totalpoints = 0;
 
-        $tasknumbers_array = array();
-        $taskspoints_array = array();
-        $points_array = array();
-        $attributes = array('size'=>'1'); // length of input field
+            $tasknumbers_array = array();
+            $taskspoints_array = array();
+            $points_array = array();
+            $attributes = array('size'=>'1'); // length of input field
 
-        $tasknumber = 0;
+            $tasknumber = 0;
 
-        //add tasks from DB
-        if ($tasks){
+            //add tasks from DB
+            if ($tasks){
 
-          foreach($tasks as $key => $points){
+            foreach($tasks as $key => $points){
 
-              $tasknumber += 1;
+                $tasknumber += 1;
 
-              //number of task
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$tasknumber.'</strong></span>'));
+                //number of task
+                array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$tasknumber.'</strong></span>'));
 
-              //points of task
-              array_push($taskspoints_array, $mform->createElement('html', '<span class="exammanagement_task_spacing">'.$ExammanagementInstanceObj->formatNumberForDisplay($points).'</span>'));
+                //points of task
+                array_push($taskspoints_array, $mform->createElement('html', '<span class="exammanagement_task_spacing">'.$ExammanagementInstanceObj->formatNumberForDisplay($points).'</span>'));
 
-              //input field with exam result points
-              array_push($points_array, $mform->createElement('text', 'points['.$tasknumber.']', '', $attributes));
-              $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
-              $mform->setDefault('points['.$tasknumber.']', '');
+                //input field with exam result points
+                array_push($points_array, $mform->createElement('text', 'points['.$tasknumber.']', '', $attributes));
+                $mform->setType('points['.$tasknumber.']', PARAM_FLOAT);
+                $mform->setDefault('points['.$tasknumber.']', '');
 
-          }
+            }
 
-        }
+            }
 
-        $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
-        $mform->addGroup($taskspoints_array, 'tasks_array', get_string('max_points', 'mod_exammanagement'), ' ', false);
-        $mform->addGroup($points_array, 'points_array', get_string('points', 'mod_exammanagement'), ' ', false);
+            $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
+            $mform->addGroup($taskspoints_array, 'tasks_array', get_string('max_points', 'mod_exammanagement'), ' ', false);
+            $mform->addGroup($points_array, 'points_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
-        $mform->hideIf('tasknumbers_array', 'matrval', 'eq', 1);
-        $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
-        $mform->hideIf('points_array', 'matrval', 'eq', 1);
+            $mform->hideIf('tasknumbers_array', 'matrval', 'eq', 1);
+            $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
+            $mform->hideIf('points_array', 'matrval', 'eq', 1);
 
-        if($this->_customdata['matrnr']){
             $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
-        }
 
-        //create checkboxes for exams state
-        if($this->_customdata['matrnr']){
+            //create checkboxes for exams state
+
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_state', 'mod_exammanagement').'</p></strong>');
-        }
 
-        $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null, array('group' => 1));
-        $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
-        $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
+            $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null, array('group' => 1));
+            $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
+            $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
 
-        $mform->hideIf('state[nt]', 'matrval', 'eq', 1);
-        $mform->hideIf('state[fa]', 'matrval', 'eq', 1);
-        $mform->hideIf('state[ill]', 'matrval', 'eq', 1);
+            $mform->hideIf('state[nt]', 'matrval', 'eq', 1);
+            $mform->hideIf('state[fa]', 'matrval', 'eq', 1);
+            $mform->hideIf('state[ill]', 'matrval', 'eq', 1);
 
-        if($this->_customdata['matrnr']){
+            end($tasks);
+            $lastkey = key($tasks);
+
+            $mform->addElement('hidden', 'lastkeypoints', $lastkey);
+            $mform->setType('lastkeypoints', PARAM_INT);
+
             $mform->addElement('html', '<hr />');
             $this->add_action_buttons(true, get_string("save_and_next", "mod_exammanagement"));
 
         } else {
+            $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
+            $mform->setType('matrnr', PARAM_RAW);
+
             $this->add_action_buttons(true, get_string("validate_matrnr", "mod_exammanagement"));
         }
 
-        end($tasks);
-        $lastkey = key($tasks);
-
-        $mform->addElement('hidden', 'lastkeypoints', $lastkey);
-        $mform->setType('lastkeypoints', PARAM_INT);
-
         $mform->disable_form_change_checker();
-
     }
 
     //Custom validation should be added here

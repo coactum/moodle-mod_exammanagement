@@ -23,30 +23,31 @@
 
 define(['jquery'], function ($) {
 
-  var getTotalpoints = function () {
+  var getTotalpoints = function (lang) {
     var totalpoints = 0;
 
     $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
-      if ($(this).val() != '-') {
-        totalpoints += parseFloat($(this).val().replace(',', '.'));
+      if (!isNaN(parseFloat($(this).val()))){
+        totalpoints += parseFloat($(this).val());
       }
     });
 
-    return String(totalpoints.toFixed(2)).replace('.', ',');
+    return totalpoints.toLocaleString(lang);
   };
 
-  var getTotalpointsWithBonus = function () {
-    var totalpointsWithBonus = 0;
+  var getTotalpointsWithBonus = function (lang) {
 
-    if($("#id_bonuspoints").val() != '-' && getTotalpoints() != 0){
-      totalpointsWithBonus = Number(getTotalpoints().replace(',', '.')) + parseFloat($("#id_bonuspoints").val().replace(',', '.'));
+    var totalpointsWithBonus = parseFloat(getTotalpoints('en'));
+
+    if(!isNaN(parseFloat($("#id_bonuspoints").val()))){
+      totalpointsWithBonus +=  parseFloat($("#id_bonuspoints").val());
     }
 
-    return String(totalpointsWithBonus.toFixed(2)).replace('.', ',');
+    return totalpointsWithBonus.toLocaleString(lang);
   };
 
   return {
-    init: function () {
+    init: function (lang, tasks) {
 
       // create input type number elements
       $("form.mform input[type=text]").not('#id_room, #id_place').attr("type", "number");
@@ -62,12 +63,15 @@ define(['jquery'], function ($) {
       $("form.mform input[type=number]").attr("step", "0.01");
       $("form.mform input[type=number]").attr("min", "0");
 
-      // initial disabling point fields if examstate is not normal
-      if ($("#id_state").val() !== 'normal') {
-        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
-          $(this).prop("disabled", true);
-        });
-      }
+      var count = 1;
+      $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
+        $(this).attr("max", tasks[count]); // set maximum points for tasks
+        count += 1;
+
+        if ($("#id_state").val() !== 'normal') {
+          $(this).prop("disabled", true); //initial disabling point fields if examstate is not normal
+        }
+      });
 
       var id;
       var posPoint;
@@ -93,6 +97,23 @@ define(['jquery'], function ($) {
         $('#' + id).show(); // make correct pattern for places visible
       }
 
+      // if exam bonus steps change
+      $("#id_bonussteps").change(function () {
+        if ($("#id_bonussteps").val() !== '-'){
+          $("#id_bonuspoints").val('-');  // reset bonus points
+          $("#id_bonuspoints").prop("disabled", true); // disable bonuspoints
+        } else {
+          $("#id_bonuspoints").prop("disabled", false); // enable bonuspoints
+        }
+      });
+
+      // if exam bonus points change
+      $("#id_bonuspoints").change(function () {
+        if ($("#id_bonuspoints").val()){
+          $("#id_bonussteps").val('-'); // reset bonus steps
+        }
+      });
+
       //if examstate changes
       $("#id_state").change(function () {
 
@@ -102,25 +123,25 @@ define(['jquery'], function ($) {
             $(this).prop("disabled", true);
             $(this).val(0);
             $("#totalpoints").text($("#id_state option:selected").text()); // change totalpoints
-            $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
+            $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
 
           });
         } else {  // if examstate is now normal
           $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // enable all point-fields
             $(this).prop("disabled", false);
           });
-          $("#totalpoints").text(getTotalpoints()); // change totalpoints
-          $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
+          $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
+          $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
         }
       });
 
       $("form.mform .form-group").not("#fitem_id_place").on("change", "input", function () { // if some input field changes
-        $("#totalpoints").text(getTotalpoints()); // change totalpoints
-        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
+        $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
+        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
       });
 
       $("#id_bonuspoints").on("change", "input", function () { // if bonus points input field changes
-        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus()); // change totalpoints with bonus
+        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
       });
 
       $("form.mform #fitem_id_room").on("change", "select", function () { // change available places pattern if other room is choosen

@@ -80,6 +80,7 @@ class provider implements
             'examstate' => 'privacy:metadata:exammanagement_participants:examstate',
             'timeresultsentered' => 'privacy:metadata:exammanagement_participants:timeresultsentered',
             'bonussteps' => 'privacy:metadata:exammanagement_participants:bonussteps',
+            'bonuspoints' => 'privacy:metadata:exammanagement_participants:bonuspoints',
         ], 'privacy:metadata:exammanagement_participants');
 
         // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved. This potential participants can not directly be mapped to a moodle user in moodle, so no export is possible.
@@ -181,6 +182,8 @@ class provider implements
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
+        var_dump('i should export data');
+
         if (empty($contextlist)) {
             return;
         }
@@ -210,6 +213,7 @@ class provider implements
                     p.examstate,
                     p.timeresultsentered,
                     p.bonussteps
+                    p.bonuspoints
                   FROM {context} c
                   JOIN {course_modules} cm ON cm.id = c.instanceid
                   JOIN {exammanagement} e ON e.id = cm.instance
@@ -292,6 +296,7 @@ class provider implements
                     'examstate' => $exammanagement->examstate,
                     'timeresultsentered' => $exammanagement->timeresultsentered,
                     'bonussteps' => $exammanagement->bonussteps,
+                    'bonuspoints' => $exammanagement->bonuspoints,
                 ];
 
                 // foreach ($customrooms as $customroom) { <- an anderer Stelle separat exportieren nur für Benutzer die Lehrender einer PO sind

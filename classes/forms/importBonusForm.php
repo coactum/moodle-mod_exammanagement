@@ -26,6 +26,7 @@ namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
+use mod_exammanagement\general\Moodle;
 use moodleform;
 use stdclass;
 
@@ -37,6 +38,7 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/Moodle.php');
 
 class importBonusForm extends moodleform{
 
@@ -46,6 +48,7 @@ class importBonusForm extends moodleform{
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
+        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'init'); //call jquery for tracking input value change events and creating input type number fields
         $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'addbonusstep'); //call jquery for adding tasks
@@ -55,20 +58,27 @@ class importBonusForm extends moodleform{
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<h3>'.get_string("importBonus", "mod_exammanagement"));
+        $mform->addElement('html', '<div class="row"><h3 class="col-md-8">'.get_string("importBonus", "mod_exammanagement"));
 
         if($helptextsenabled){
             $mform->addElement('html', $OUTPUT->help_icon('importBonus', 'mod_exammanagement', ''));
         }
 
-        $mform->addElement('html', '</h3>');
+        $mform->addElement('html', '</h3><div class="col-md-4">');
+
+        $bonuscount = $UserObj->getEnteredBonusCount();
+
+        if($bonuscount){
+            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/importBonus.php', $this->_customdata['id'], 'dbp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("revert_bonus", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_bonus", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+        }
+
+        $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
 
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
 
-        $bonuscount = $UserObj->getEnteredBonusCount();
         if($bonuscount){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("bonus_already_entered", "mod_exammanagement", ['bonuscount' => $bonuscount]).'</div>');
         }

@@ -48,9 +48,17 @@ class participantsOverviewForm extends moodleform {
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init'); //call jquery for tracking input value change events and creating input type number fields
+        if($ExammanagementInstanceObj->getTaskCount()){
+            $tasks = $ExammanagementInstanceObj->getTasks();
+        } else {
+            $tasks = false;
+        }
+
+        $jsArgs = array('lang'=>current_language(), 'tasks'=>(array) $tasks);
+
+        $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init', $jsArgs); //call jquery for tracking input value change events and creating input type number fields
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -90,12 +98,6 @@ class participantsOverviewForm extends moodleform {
         $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
         $examrooms = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-
-        if($ExammanagementInstanceObj->getTaskCount()){
-            $tasks = $ExammanagementInstanceObj->getTasks();
-        } else {
-            $tasks = false;
-        }
 
         if($participants){
 
@@ -391,7 +393,6 @@ class participantsOverviewForm extends moodleform {
 
                         $mform->addElement('html', '<td><span id="totalpoints_with_bonus">'. $totalpointsDisplay . '</span></td>');
                     }
-
 
                     if($gradingscale){
                         $mform->addElement('html', '<td> <strong><i class="fa fa-2x fa-spinner fa-pulse fa-fw"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span></strong> </td>');

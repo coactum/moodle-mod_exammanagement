@@ -525,14 +525,14 @@ ajaxsetcorrectioncompletion = function(value){
 												{{^allplacesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/allplacesassigned}}
 												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
-											<h3 class="panel-title">{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</h3>
+											<h3 class="panel-title">{{#str}}bonus, mod_exammanagement{{/str}}</h3>
 										</div>
 										<div class="panel-body">
-											{{#bonuscount}}<p>{{#str}}bonussteps_set, mod_exammanagement, { "bonuscount":  {{# quote }}{{bonuscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuscount}}
-											{{^bonuscount}}<p>{{#str}}bonussteps_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
+											{{#bonuscount}}<p>{{#str}}bonus_set, mod_exammanagement, { "bonuscount":  {{# quote }}{{bonuscount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuscount}}
+											{{^bonuscount}}<p>{{#str}}bonus_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#allplacesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonuspoints, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonuspoints, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
+											{{^deleted}}{{#allplacesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonus, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonus, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -616,7 +616,7 @@ ajaxsetcorrectioncompletion = function(value){
 													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
-												<strong>{{#str}}bonus_gradesteps, mod_exammanagement{{/str}}</strong>
+												<strong>{{#str}}bonus, mod_exammanagement{{/str}}</strong>
 												{{#bonusvisible}}
 												<p class="bonusVisible collapse.show">{{#str}}information_visible, mod_exammanagement{{/str}}</p>
 												<p class="bonusNotVisible collapse">{{#str}}information_not_visible, mod_exammanagement{{/str}}</p>

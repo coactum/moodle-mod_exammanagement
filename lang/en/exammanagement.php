@@ -81,11 +81,11 @@ $string['exam_labels'] = 'Exam labels';
 $string['set_visibility_of_examrooms_and_places'] = 'Show exam rooms and places';
 $string['places'] = 'Places';
 $string['participants_lists'] = 'Participants lists';
-$string['bonus_gradesteps'] = 'Bonus grade steps';
+$string['bonus'] = 'Bonus';
 $string['gradingscale'] = 'Gradingscale';
 $string['exam_results'] = 'Exam results';
 $string['exam_results_overview'] = 'Exam results overview';
-$string['set_visibility_of_bonus_and_results'] = 'Show bonus grade steps and exam results';
+$string['set_visibility_of_bonus_and_results'] = 'Show bonus and exam results';
 $string['complete_correction'] = 'Grading completion';
 $string['toggle_grading_completion'] = 'Toggle grading completion';
 $string['points_for_exam_review'] = 'Points for exam review';
@@ -145,8 +145,8 @@ $string['export_examlabels_note'] = 'Seats only appear on the exam labels if sea
 $string['export_participantslists_str'] = 'Here you can export participant lists sorted by last name or seats as a PDF document.';
 $string['export_participantslists_note'] = 'These lists are only intended for internal use by the lecturers and should not be published because of data protection reasons!';
 $string['no_exam_date_set_str'] = 'No exam date and no exam rooms have been set yet.';
-$string['bonussteps_set'] = 'Bonus grade steps for <strong>{$a->bonuscount} / {$a->participantscount}</strong> participants have been imported yet.';
-$string['bonussteps_not_set'] = 'No bonus grade steps have been imported yet.';
+$string['bonus_set'] = 'Bonus points or grade steps for <strong>{$a->bonuscount} / {$a->participantscount}</strong> participants have been imported yet.';
+$string['bonus_not_set'] = 'No bonus points or grade steps have been imported yet.';
 $string['gradingscale_set'] = 'A gradingscale has already been configured.';
 $string['gradingscale_not_set'] = 'No gradingscale has been configured yet.';
 $string['results_set'] = '<strong>{$a->resultscount} / {$a->participantscount}</strong> exam results have been entered yet.';
@@ -184,7 +184,7 @@ $string['export_seatingplan_matrnr'] = 'Sorted by matriculation number';
 $string['export_barcodes'] = 'Export barcodes';
 $string['export_participantslist_names'] = 'Sorted by names';
 $string['export_participantslist_places'] = 'Sorted by places';
-$string['import_bonuspoints'] = 'Import bonuspoints';
+$string['import_bonus'] = 'Import bonus';
 $string['configure_gradingscale'] = 'Configure gradingscale';
 $string['add_examresults'] = 'Add results';
 $string['check_results'] = 'Check results';
@@ -384,6 +384,7 @@ $string['participants_missing_places'] = 'Some participants have not been assign
 //importBonusForm.php
 $string['importBonus'] = 'Import bonus points';
 $string['import_bonus_text'] = 'Bonus points achieved by the participants can either be imported directly or converted into bonus grade steps for the exam.';
+$string['revert_bonus'] = 'Revert all bonus';
 $string['choose_bonus_import_mode'] = 'Select import mode';
 $string['bonus_import_mode'] = 'Import mode';
 $string['mode_bonussteps'] = 'Bonus grade steps';
@@ -400,7 +401,7 @@ $string['individual'] = 'Other';
 $string['idfield'] = 'Column containing user id (e.g. A, B, C ... ; preselected for exported grades from {$a->systemname})';
 $string['pointsfield'] = 'Column containing bonus points (e.g. A, B, C ...)';
 $string['import_bonus_from_file'] = 'Import bonus points from excel file; Identificator ({$a->systemname} email adress or matriculation number) and bonus points must fit the chosen column';
-$string['bonus_already_entered'] = '<strong>Warning:</strong> Bonus points for {$a->bonuscount} participants have already been entered. If new points are now imported for these participants the old values will be replaced through this import.';
+$string['bonus_already_entered'] = '<strong>Warning:</strong> Bonus points or bonus grade steps for {$a->bonuscount} participants have already been entered. If new points are now imported for these participants the old values will be replaced through this import.';
 
 //importBonus.php
 $string['points_bonussteps_invalid'] = 'Points for bonus steps invalid';
@@ -426,7 +427,7 @@ $string['ill'] = 'Sick';
 $string['max_points'] = 'Maximum points';
 $string['save_and_next'] = 'Save and next';
 $string['validate_matrnr'] = 'Validate matriculation number';
-$string['input_other_matrnr'] = 'Change matriculation number';
+$string['input_other_matrnr'] = 'Change';
 $string['noparticipant'] = 'No valid participant';
 $string['invalid_matrnr'] = 'Invalid matriculation number';
 $string['invalid_matrnr_format'] = 'Invalid format for matriculation number';
@@ -438,11 +439,11 @@ $string['edit'] = 'Edit';
 $string['participantsOverview'] = 'Participants and results list';
 $string['matriculation_number_short'] = 'Matr. no.';
 $string['bonuspoints'] = 'Bonus points';
-$string['totalpoints_with_bonuspoints'] = 'Total points with bonus points';
+$string['totalpoints_with_bonuspoints'] = 'Total and bonus points';
 $string['totalpoints'] = 'Total points';
 $string['result'] = 'Result';
 $string['bonussteps'] = 'Bonus steps';
-$string['resultwithbonus'] = 'Result with bonus grade steps';
+$string['resultwithbonus'] = 'Result with bonus steps';
 $string['edit_user'] = 'Edit user';
 $string['save_changes'] = 'Save changes';
 $string['cancel'] = 'Back to exam organization';
@@ -625,13 +626,13 @@ If you have added participants to the exam who do not yet have a '. get_config('
 The whole notification function is purely optional, you do not have to use it to send a message to the participants.
 <strong>Note:</strong> In order to give the participants more detailed information about the auxiliary means permitted in the exam, for example, the free textfield accessible via the overview page can also be used.';
 $string['sendGroupmessage_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['importBonus_help']= 'Here you can import the participants bonus points and convert them into <strong>bonus grade steps</strong> for the exam. In this way, for example, bonus points earned by students while completing exercises can be directly converted into bonus grade steps for the exam. <br><br>
-To do this, the number of possible bonus grade steps for the exam must first be specified in the upper section. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
+$string['importBonus_help']= '<strong>Bonus points</strong> (for example earned from exercises) can either be directly imported or converted to <strong>bonus grade steps</strong> for the exam. The directly imported bonus points are later added to the points earned in the exam, while bonus grade steps are added to the final exam grade.
+To do this, you must first select the import mode in the upper section. If the mode "Bonus grade steps" is selected here, the number of possible bonus grade steps for the exam must also be defined. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>
 1. Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': If your students have submitted their exercise sheets via the '. get_config('mod_exammanagement', 'moodlesystemname').' assignment activity and these have been corrected and graded there, the exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').' should be selected here, since in this way all bonus points for the complete '. get_config('mod_exammanagement', 'moodlesystemname').' course can be easily read in. <br>
 To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
 2. Individual: If you have not managed your bonus points via the '. get_config('mod_exammanagement', 'moodlesystemname').' assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in '. get_config('mod_exammanagement', 'moodlesystemname').' or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
-Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported bonus grade steps are immediately displayed to the participants in their view.';
+Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported number of bonus grade steps or bonus points will be shown to the participants in their view as soon as this has been activated in the corresponding step of the overview page.';
 $string['importBonus_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['configureGradingscale_help']= 'A <strong>gradingscale</strong> for the exam can be configured here.<br><br>
 As soon as the exam results have been entered, the gradingscale is used to automatically calculate the exam grades for all participants. If no gradingscale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
@@ -648,8 +649,8 @@ In the case of a valid matriculation number, the exam results can now be entered
 After a click on the button "Save and next" or after pressing the Enter or Return key, the entered results are then saved and the page is automatically reloaded so that the matriculation number of the next exam participant can be read in (either manually or by barcode scanner).';
 $string['inputResults_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['participantsOverview_help']= 'In this <strong>participants and results overview</strong> the information of all imported exam participants and their results can be viewed and edited. <br><br>
-The first name, surname and matriculation number of each exam participant will be displayed here in alphabetical order. If a place has already been assigned to a participant, this place and the corresponding room are also displayed in the correspondingly named columns. If exam tasks have already been created and exam results have already been entered for a participant, these are also displayed. In the "Points" column you can see how many points the participant has earned in each individual task, while in the "Total points" column the total number of points is displayed. If no exam tasks have been created yet, a click on the symbol displayed instead in the "Points" column allows you to do this directly. If no gradingscale has been entered yet, this can be done by clicking on the corresponding symbol in the "Result" column, otherwise the exam grade calculated using the gradingscale will be displayed in this column (if results have already been entered for the participant). If the participant has a special state (e.g. if he was ill during the exam or if he was trying to cheat) this will be displayed instead of the exam result. In addition, the "Bonus steps" column shows the bonus grade steps already achieved by the participant for the exam, while the "Result with bonus" column shows the final grade, taking the bonus grade steps into account. <br><br>
-In order to edit the information on a participant, simply click on the icon on the right in the line of the respective participant. Then you can edit all information for the participant. For example, the participant can be assigned one of the rooms already selected for the exam and any place in it. Below the field for entering the place, the available places in the selected room are displayed. In the "Points" column, on the other hand, the points achieved by the participant can be entered for each task. Alternatively, if necessary, a special exam state such as "Ill", "Not participated" or "Fraud attempt" can be selected from a dropdown menu, which automatically sets the points to zero and disables the possibility to enter points. Resetting the status to "Normal" allows you to enter points again. It is also possible to manually select the bonus steps achieved by a participant. After saving the changes by clicking on the corresponding button, the result and the result taking into account all the bonus steps achieved are calculated (if a gradingscale has already been entered). <br><br>
+The first name, surname and matriculation number of each exam participant will be displayed here in alphabetical order. If a place has already been assigned to a participant, this place and the corresponding room are also displayed in the correspondingly named columns. If exam tasks have already been created and exam results have already been entered for a participant, these are also displayed. In the "Points" column you can see how many points the participant has earned in each individual task, while in the "Total points" column the total number of points is displayed. If no exam tasks have been created yet, a click on the symbol displayed instead in the "Points" column allows you to do this directly. If no gradingscale has been entered yet, this can be done by clicking on the corresponding symbol in the "Result" column, otherwise the exam grade calculated using the gradingscale will be displayed in this column (if results have already been entered for the participant). If the participant has a special state (e.g. if he was ill during the exam or if he was trying to cheat) this will be displayed instead of the exam result. In addition, the columns "Bonus steps" and "Bonus points" show the bonus grade steps and bonus points already achieved by the participant for the exam, while the columns "Total and bonus points" and "Result with bonus steps" show the total number of points and the final score, taking into account the bonus points and bonus steps. <br><br>
+In order to edit the information on a participant, simply click on the icon on the right in the line of the respective participant. Then you can edit all information for the participant. For example, the participant can be assigned one of the rooms already selected for the exam and any place in it. Below the field for entering the place, the available places in the selected room are displayed. In the "Points" column, on the other hand, the points achieved by the participant can be entered for each task. Alternatively, if necessary, a special exam state such as "Ill", "Not participated" or "Fraud attempt" can be selected from a dropdown menu, which automatically sets the points to zero and disables the possibility to enter points. Resetting the status to "Normal" allows you to enter points again. You can also manually enter either the bonus points achieved by a participant or his bonus steps. After saving the changes by clicking on the corresponding button, the total score and (if a gradingscale has already been entered) the result will be calculated considering the achieved bonus. <br><br>
 For a participants, all these details can be entered or edited at the same time or individually. In this way, this page can not only be used to correct incorrectly entered information, but also to manually enter results for exam participants or to manually assign the desired places to them. In this way, exam results can also be entered for participants without a matriculation number.';
 $string['participantsOverview_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['examReviewDateRoom_help']=  'If you are planning an <strong>exam review</strong>, you can select the date and the room for it here. <br><br>
@@ -754,7 +755,8 @@ $string['privacy:metadata:exammanagement_participants:place'] = 'Place assigned 
 $string['privacy:metadata:exammanagement_participants:exampoints'] = 'Exam results of the participant as object in json syntax';
 $string['privacy:metadata:exammanagement_participants:examstate'] = 'Exam state of the participant as object in json syntax';
 $string['privacy:metadata:exammanagement_participants:timeresultsentered'] = 'Timestamp of the date when the results where entered';
-$string['privacy:metadata:exammanagement_participants:bonus'] = 'Bonusstep of the participant';
+$string['privacy:metadata:exammanagement_participants:bonussteps'] = 'Bonusstep of the participant';
+$string['privacy:metadata:exammanagement_participants:bonuspoints'] = 'Bonuspoints of the participant';
 $string['privacy:metadata:exammanagement_temp_part:identifier'] = 'Identifier of the potential participant';
 $string['privacy:metadata:exammanagement_temp_part:line'] = 'Line number of the potential participant in the imported participants list';
 $string['privacy:metadata:exammanagement_rooms:roomid'] = 'Room id (internal)';

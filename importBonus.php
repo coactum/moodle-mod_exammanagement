@@ -43,6 +43,8 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $bonusstepcount  = optional_param('bonusstepcount', 0, PARAM_INT);
 
+$dbp  = optional_param('dbp', 0, PARAM_INT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
@@ -66,6 +68,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			}
 
 			$MoodleObj->outputPageHeader();
+
+			if($dbp){
+				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonuspoints', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonussteps', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+			}
 
 			//Instantiate form
 			$mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e, 'bonusstepcount'=>$bonusstepcount));
