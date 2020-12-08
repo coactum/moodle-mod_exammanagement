@@ -27,7 +27,7 @@ use mod_exammanagement\general\MoodleDB;
 
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class delete_unassigned_custom_rooms extends \core\task\scheduled_task { 
+class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
      *
@@ -36,7 +36,7 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
     public function get_name() {
         return get_string('delete_unassigned_custom_rooms', 'mod_exammanagement');
     }
- 
+
     /**
      * Execute the task.
      */
@@ -45,16 +45,13 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
         $MoodleDBObj = MoodleDB::getInstance();
 
         if ($rs = $MoodleDBObj->getRecordsetSelect("exammanagement_rooms", "type = 'customroom'")) {
-            
+
             if($rs->valid()){
 
                 foreach ($rs as $record) {
 
-                    var_dump($record);
-
                     if(!$MoodleDBObj->checkIfRecordExists('user', array('id' => $record->moodleuserid))){
                         $MoodleDBObj->DeleteRecordsFromDB("exammanagement_rooms", array('id' => $record->id));
-                        var_dump('should be deleted');
                     }
 
                 }
@@ -63,7 +60,7 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
             }
 
         }
-        
+
         \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
     }
 }
