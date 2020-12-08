@@ -86,6 +86,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                 $user->moodleuserid = $participantId;
                                 $user->headerid = 0;
+                                $user->plugininstanceid = 0; // for deprecated old version db version, should be removed for ms 3
 
                                 array_push($userObjArr, $user);
                             }

@@ -352,6 +352,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$user->lastname = null;
 									$user->email = null;
 									$user->headerid = $newheaderid;
+									$user->plugininstanceid = 0; // for deprecated old version db version, should be removed for ms 3
 
 									array_push($userObjArr, $user);
 
@@ -405,6 +406,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									}
 
 									$user->headerid = $newheaderid;
+									$user->plugininstanceid = 0; // for deprecated old version db version, should be removed for ms 3
 
 									array_push($userObjArr, $user);
 								}
@@ -477,6 +479,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 											$tempUserObj->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
 											$tempUserObj->identifier = $identifier;
 											$tempUserObj->line = $key+1;
+											$tempUserObj->plugininstanceid = 0; // for deprecated old version db version, should be removed for ms 3
 
 											array_push($usersObjArr, $tempUserObj);
 
