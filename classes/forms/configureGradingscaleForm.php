@@ -42,7 +42,9 @@ class configureGradingscaleForm extends moodleform {
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $jsArgs = array('lang'=>current_language());
+        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+
+        $jsArgs = array('totalpoints'=>$totalpoints);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init', $jsArgs); //creating input type number fields
 
@@ -60,9 +62,7 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string("configure_gradingscale_text", "mod_exammanagement").'</p>');
 
-        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
-
-        $mform->addElement('html', '<div class="form-group row fitem"><strong class="col-md-3">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span class="col-md-9" id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
+        $mform->addElement('html', '<div class="m-b-1"><strong class="exammanagement_gradingscale_totalpoints m-r-2">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
 
         //create gradingscale input list
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
@@ -90,24 +90,21 @@ class configureGradingscaleForm extends moodleform {
         $mform->addElement('html', '<div class="form-group row fitem"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<span class="exammanagement_gradingscale_spacing"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong></span>');
+            $mform->addElement('html', '<span class="exammanagement_gradingscale_steps_spacing"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong></span>');
         }
 
         $mform->addElement('html', '</div>');
 
         //add input fields with points
-        $mform->addElement('html', '<div class="form-group row fitem">');
+        $mform->addElement('html', '<div class="form-group row fitem exammanagement_gradingscale_textfield">');
 
         foreach($gradingscale as $key => $points){
-
-            $key_2 = str_replace('.', '', $key);
-
             $mform->addElement('html', '<span>');
             $mform->addElement('text', 'gradingsteppoints['.$key.']', '', $attributes);
             $mform->addElement('html', '</span>');
             $mform->setType('gradingsteppoints['.$key.']', PARAM_FLOAT);
             $mform->setDefault('gradingsteppoints['.$key.']', $points);
-          }
+        }
 
         $mform->addElement('html', '</div>');
 

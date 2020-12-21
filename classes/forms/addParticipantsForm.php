@@ -53,7 +53,7 @@ class addParticipantsForm extends moodleform{
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleDBObj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
+        $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); //remove col-md classes for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
@@ -167,7 +167,7 @@ class addParticipantsForm extends moodleform{
 
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.' remove_col">');
+                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.'">');
                 $mform->addElement('advcheckbox', 'checkall_odds', get_string("select_deselect_all", "mod_exammanagement"), null, array('group' => 1, 'id' => 'checkboxgroup1'));
                 $mform->addElement('html', '</div><div class="col-'.$littlecol.'"></div><div class="col-'.$col.'"></div><div class="col-'.$col.'"></div></div>');
 
@@ -175,7 +175,7 @@ class addParticipantsForm extends moodleform{
 
                     $mform->addElement('html', '<div class="row text-warning">');
                     $mform->addElement('html', '<div class="col-1"> # '.$oddUser->line);
-                    $mform->addElement('html', '</div><div class="col-'.$col.' remove_col">');
+                    $mform->addElement('html', '</div><div class="col-'.$col.'">');
 
                     if($oddUser->state == 'state_no_courseparticipant'){
 
@@ -225,14 +225,14 @@ class addParticipantsForm extends moodleform{
 
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.' remove_col pl-4">');
+                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.' pl-4">');
                 $mform->addElement('advcheckbox', 'checkall_deleted', get_string("select_deselect_all", "mod_exammanagement"), null, array('group' => 2, 'id' => 'checkboxgroup2'));
                 $mform->setDefault('checkall_deleted', true);
                 $mform->addElement('html', '</div><div class="col-'.$littlecol.'"></div><div class="col-'.$col.'"></div><div class="col-'.$col.'"></div></div>');
 
                 foreach ($allParticipants['deletedParticipants'] as $deletedUser) {
 
-                    $mform->addElement('html', '<div class="row text-danger"><div class="col-1"></div><div class="col-'.$col.' remove_col pl-4">');
+                    $mform->addElement('html', '<div class="row text-danger"><div class="col-1"></div><div class="col-'.$col.' pl-4">');
 
                     if($deletedUser->moodleuserid){
                         global $OUTPUT;
@@ -394,7 +394,7 @@ class addParticipantsForm extends moodleform{
 
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("import_state", "mod_exammanagement").'</h4></div></div>');
 
-                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.' remove_col">');
+                $mform->addElement('html', '<div class="row"><div class="col-1"></div><div class="col-'.$col.'">');
                 $mform->addElement('advcheckbox', 'checkall_new', get_string("select_deselect_all", "mod_exammanagement"), null, array('group' => 3, 'id' => 'checkboxgroup3'));
                 $mform->setDefault('checkall_new', true);
                 $mform->addElement('html', '</div><div class="col-'.$littlecol.'"></div><div class="col-'.$col.'"></div><div class="col-'.$col.'"></div></div>');
@@ -403,7 +403,7 @@ class addParticipantsForm extends moodleform{
 
                     $mform->addElement('html', '<div class="row text-success">');
                     $mform->addElement('html', '<div class="col-1"> # '.$newMoodleUser->line);
-                    $mform->addElement('html', '</div><div class="col-'.$col.' remove_col">');
+                    $mform->addElement('html', '</div><div class="col-'.$col.'">');
 
                     global $OUTPUT;
 

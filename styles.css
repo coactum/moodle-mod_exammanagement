@@ -308,11 +308,15 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* configureGradingscaleForm.php - spacing between gradingscale steps */
-
-.exammanagement_gradingscale_spacing {
-  width: 100px;
+.exammanagement_gradingscale_steps_spacing {
+  width: 115px;
   text-align: center;
   margin-left: 2px;
+}
+
+.exammanagement_gradingscale_textfield .col-md-9{
+  max-width: 103.5px;
+  margin-left: 15px;
 }
 
 /* participantsOverviewForm.php - color of table borders */

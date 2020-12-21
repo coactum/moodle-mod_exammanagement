@@ -53,7 +53,7 @@ class chooseRoomsForm extends moodleform {
     $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
     $MoodleDBObj = MoodleDB::getInstance();
 
-    $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
+    $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); //remove col-md classes for better layout
 
     $mform = $this->_form; // Don't forget the underscore!
 
@@ -68,6 +68,7 @@ class chooseRoomsForm extends moodleform {
     $mform->addElement('html', '</h3></div><div class="col-6">');
 
     $allRooms = $ExammanagementInstanceObj->getRooms('all');
+
     $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
     $i = 1;
 
@@ -195,9 +196,8 @@ class chooseRoomsForm extends moodleform {
         }
         $i++;
       }
-      $mform->addElement('html', '<div id="end"></div>');
 
-      $mform->addElement('html', '</tbody></table></div>');
+      $mform->addElement('html', '<tr id="end"></tr></tbody></table></div>');
 
       $this->add_action_buttons(true,get_string('choose_rooms', 'mod_exammanagement'));
 

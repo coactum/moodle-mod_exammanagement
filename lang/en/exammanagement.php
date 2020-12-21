@@ -154,8 +154,10 @@ $string['results_not_set'] = 'No exam results have yet been entered.';
 $string['exam_results_overview_str'] = 'All exam results that have been already entered can be viewed and manually modified here.';
 $string['complete_correction_str'] = 'The data entered in this exam organization tool are very sensitive and must therefore be deleted for data protection reasons as soon as they are no longer needed. After confirming grading completion by moving the switch, you have three months to export the exam results for further use. After that they will be automatically deleted.';
 $string['export_points_examreview_str'] = 'Here you can export the achieved exam points as a PDF document.';
+$string['export_points_examreview_str_points'] = 'Here you can export the achieved exam points <strong>(without prior achieved bonus points)</strong> as a PDF document.';
 $string['export_results_lists_note'] = 'This list of points is only intended for internal use by the lecturers and should not be published because of data protection reasons!';
 $string['export_results_percentages_str'] = 'Export the results with percentages as a PDF document.';
+$string['export_results_percentages_str_points'] = 'Export the results with percentages <strong>(without prior achieved bonus points)</strong> as a PDF document.';
 $string['export_results_statistics_str'] = 'Export the results and statistics as an Excel document.';
 $string['export_results_text_str'] = 'The results for the exam office can be exported here as a text document.';
 $string['data_deletion_date_set'] = 'On <strong>{$a}</strong> all data stored in this instance such as participants, exam information and exam results will be automatically deleted. Therefore, make sure you have exported all important data, such as exam results, for further use via the document export functions.';
@@ -318,6 +320,15 @@ $string['delete_all_participants'] = 'Delete all participants';
 $string['all_participants_deletion_warning'] = 'This action deletes all exam participants and all entered results.';
 $string['deleted_user'] = 'User deleted from {$a->systemname}';
 
+//convertToGroup.php
+$string['convert_to_group'] = 'Convert to group';
+$string['convertToGroup'] = 'Convert to group';
+$string['convert_to_group_str'] = 'Here selected or all imported exam participants can be converted into an {$a->systemname} group.';
+$string['participants_convertable'] = 'exam participants will be added to the group.';
+$string['participants_not_convertable'] = 'exam participants cannot be added to the group.';
+$string['groupname'] = 'Groupname';
+$string['groupdescription'] = 'Description of the group';
+
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';
 $string['import_from_text_file'] = 'Import participants from file (entries separated by tabs; first two lines with exam information) and add them to course.';
@@ -341,6 +352,9 @@ $string['state_no_courseparticipant'] = 'No course participant';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_to_be_deleted'] = 'Will be deleted';
 $string['state_not_in_file_anymore'] = 'Not in file anymore';
+$string['state_convertable_group'] = 'Assignable to group';
+$string['state_not_convertable_group_moodle'] = 'Not assignable (without {$a->systemname} account)';
+$string['state_not_convertable_group_course'] = 'Not assignable (no course participant)';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Import participants from course';
@@ -587,8 +601,14 @@ New participants can also be added to the exam here. There are two ways to do th
 2. It is also possible to import participants of the '. get_config('mod_exammanagement', 'moodlesystemname').' course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple reimport of the exam results is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a list with exam participants. To do this, the participant must first be completely deleted.<br><br>
 Adding participants is one of the most important steps in the exam organization. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the '. get_config('mod_exammanagement', 'moodlesystemname').' course) also do not have access to the participant view with the exam information and do not receive any notifications send with the messaging function on the overview page of the exam organization.<br /> <br />
 If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in '. get_config('mod_exammanagement', 'moodlesystemname').'. Although these can also be imported from a file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
-It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.';
+It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.<br><br>
+Finally, the button "Convert to group" can be used to convert individual or all participants listed here into a '. get_config('mod_exammanagement', 'moodlesystemname').' group.';
 $string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['convertToGroup_help']= 'Here selected or all imported exam participants can be converted into an '. get_config('mod_exammanagement', 'moodlesystemname'). ' group. <br /> <br />
+To do this, the name and optionally a description of the '.get_config('mod_exammanagement', 'moodlesystemname').' group to be created must be entered in the corresponding form fields. Then all desired participants can be selected in the lower section and then converted to a group by clicking the "Convert to group" button.<br /> <br />
+Exam participants who are no course participants or do not have a '.get_config('mod_exammanagement', 'moodlesystemname').' user account are displayed in a separate section and cannot be added to the group. <br /> <br />
+Groups created here can be used throughout the course and all it`s activities just like normal groups. After clicking on a group, for example in the participant overview, it can be edited or changed.';
+$string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addParticipants_help']= 'On this page you can add <strong>participants</strong> from exam lists to the exam. In this way their results can be exported later again and then can be simply reimported. <br /> <br />
 To do this, you first need the list of your exam participants. You can then select this file in the selection area and import it by clicking on the corresponding button. <br><br>
 On the following page you will see all matriculation numbers read from the file. The state of a matriculation number and whether the corresponding student can be added to the exam are displayed in different sections. <br><br>

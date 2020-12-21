@@ -16,20 +16,26 @@
 /**
  * Removes form classes col-md 3 and 9 for better layout
  *
- * @module      mod_exammanagement/remove_form_classes_col
- * @copyright   coactum GmbH 2019
+ * @module      mod_exammanagement/remove_cols
+ * @copyright   coactum GmbH 2020
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 define(['jquery'], function ($) {
 
     return {
-        remove_form_classes_col: function () {
-            $('div').removeClass('col-md-3');
-            $('div').removeClass('col-md-9');
+        remove_cols: function () {
+            $(".checkboxgroup1 > div").removeClass('col-md-3');
+            $(".checkboxgroup1 > div").removeClass('col-md-9');
+            $(".checkboxgroup1").removeClass('row');
 
-            $('form > .form-group > div:first-child').addClass('col-md-3');
-            $('form > .form-group > div:last-child').addClass('col-md-9');
+            $(".checkboxgroup2 > div").removeClass('col-md-3');
+            $(".checkboxgroup2 > div").removeClass('col-md-9');
+            $(".checkboxgroup2").removeClass('row');
+
+            $(".checkboxgroup3 > div").removeClass('col-md-3');
+            $(".checkboxgroup3 > div").removeClass('col-md-9');
+            $(".checkboxgroup3").removeClass('row');
         }
     };
 

@@ -36,10 +36,6 @@ define(['jquery'], function ($) {
         $('input.checkboxgroup3').not(this).prop('checked', this.checked);
       });
     },
-    remove_form_classes_col: function () {
-      $('div.remove_col > div > div').removeClass('col-md-3');
-      $('div.remove_col > div > div').removeClass('col-md-9');
-    },
     togglesection: function () {
       $('.toggable').click(function () {
         $('.' + $(this).attr('id') + '_body').slideToggle("slow");

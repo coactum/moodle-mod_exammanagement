@@ -601,18 +601,18 @@ class User{
 
 		switch ($mode) {
 			case 'both':
-				$select .= " AND bonussteps IS NOT NULL";
-				$select .= " OR bonuspoints IS NOT NULL";
+				$select .= " AND (bonussteps IS NOT NULL";
+				$select .= " OR bonuspoints IS NOT NULL)";
 				break;
 			case 'steps':
 				$select .= " AND bonussteps IS NOT NULL";
 				break;
 			case 'points':
-			$select .= " AND bonuspoints IS NOT NULL";
+				$select .= " AND bonuspoints IS NOT NULL";
 				break;
 			default:
-				$select .= " AND bonussteps IS NOT NULL";
-				$select .= " OR bonuspoints IS NOT NULL";
+				$select .= " AND (bonussteps IS NOT NULL";
+				$select .= " OR bonuspoints IS NOT NULL)";
 				break;
 		}
 

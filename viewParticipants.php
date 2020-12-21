@@ -24,6 +24,8 @@
 
 namespace mod_exammanagement\general;
 
+use stdclass;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
@@ -70,6 +72,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             ###### list of participants ... ######
 
+            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
+
+            $noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
+
             echo('<div class="row"><div class="col-4">');
             echo('<h3>'.get_string("viewParticipants", "mod_exammanagement"). $OUTPUT->help_icon('viewParticipants', 'mod_exammanagement', '') . '</h3>');
 
@@ -80,16 +86,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             if(get_config('mod_exammanagement', 'enableldap')){
-                echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary pull-right m-r-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
+                echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addParticipants", $id).'" role="button" class="btn btn-primary m-r-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
+            }
+
+            if($moodleParticipants){
+                echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("convertToGroup", $id).'" role="button" class="btn btn-primary pull-right m-r-1" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
             }
 
             echo ('</div></div>');
 
             echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
-
-            $moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
-
-            $noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
             $i = 1;
 
@@ -171,17 +177,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
 
                 }
-                echo('</tbody></table></div>');
+                echo('<tr id="end"></tr></tbody></table></div>');
 
             } else {
                     echo('<div class="row"><p class="col-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
             }
 
-            echo('<div class="row" id="end"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+            echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
             if($moodleParticipants || $noneMoodleParticipants){
             echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-default m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
             }
+
+            echo('</span>');
 
             $MoodleObj->outputFooter();
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage

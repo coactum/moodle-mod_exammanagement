@@ -359,7 +359,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<p>{{#str}}export_seatingplan_str, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#allplacesassigned}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a><a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
+											{{^deleted}}{{#allplacesassigned}}{{#ldapavailable}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/ldapavailable}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a>{{/allplacesassigned}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -694,7 +694,9 @@ ajaxsetcorrectioncompletion = function(value){
 										<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
 									</div>
 									<div class="panel-body">
-										<p>{{#str}}export_points_examreview_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
+										<p>{{^bonuspointsentered}}{{#str}}export_points_examreview_str, mod_exammanagement{{/str}} {{/bonuspointsentered}}
+										{{#bonuspointsentered}}{{#str}}export_points_examreview_str_points, mod_exammanagement{{/str}} {{/bonuspointsentered}}
+										<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
 										{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
@@ -713,7 +715,9 @@ ajaxsetcorrectioncompletion = function(value){
 									<h3 class="panel-title">{{#str}}results_with_percentages, mod_exammanagement{{/str}}</h3>
 								</div>
 								<div class="panel-body">
-									<p>{{#str}}export_results_percentages_str, mod_exammanagement{{/str}}  <br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
+									<p>{{^bonuspointsentered}}{{#str}}export_results_percentages_str, mod_exammanagement{{/str}} {{/bonuspointsentered}}
+										{{#bonuspointsentered}}{{#str}}export_results_percentages_str_points, mod_exammanagement{{/str}} {{/bonuspointsentered}}
+										<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
 									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}

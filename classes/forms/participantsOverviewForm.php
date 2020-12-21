@@ -429,14 +429,12 @@ class participantsOverviewForm extends moodleform {
             $mform->addElement('html', get_string("no_participants_added", "mod_exammanagement"));
         }
 
-        $mform->addElement('html', '<div id="end"></div>');
-
-        $mform->addElement('html', '</tbody></table></div>');
+        $mform->addElement('html', '<tr id="end"></tr></tbody></table></div>');
 
         if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0)|| (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0)){
             $this->add_action_buttons(true, get_string("save_changes", "mod_exammanagement"));
         } else {
-            $mform->addElement('html', '<div id="end" class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+            $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
         }
 
     }

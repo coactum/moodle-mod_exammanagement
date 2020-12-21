@@ -18,16 +18,15 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   coactum GmbH 2020
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_exammanagement'; // Full name of the plugin (used for diagnostics)
-$plugin->release = '1.4.0';
-$plugin->version =  2020120504;	// The current module version (Date: YYYYMMDDXX)
+$plugin->release = '1.4.1';
+$plugin->version =  2020121600;	// The current module version (Date: YYYYMMDDXX)
 $plugin->requires = 2017051500; // Requires this Moodle version
 //$plugin->requires = 2020061500; // Requires this Moodle version
-$plugin->maturity = MATURITY_BETA;
-//$plugin->maturity = MATURITY_STABLE;
+$plugin->maturity = MATURITY_STABLE;

@@ -559,10 +559,10 @@ class exammanagementInstance{
 
 	 #### general helper method for formating numbers depending on language
 
-	 public function formatNumberForDisplay($number){
+	 public function formatNumberForDisplay($number, $format='string'){
 		if($number !== false){
 
-			if(is_numeric($number)){
+			if($format === 'string' && is_numeric($number)){
 				$lang = current_language();
 
 				if($lang==="de"){
@@ -620,6 +620,7 @@ class exammanagementInstance{
 				} else {
 					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select);
 				}
+
 			} else {
 				return false;
 			}

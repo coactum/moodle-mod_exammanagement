@@ -70,7 +70,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
-                    $insert;
                     $userObjArr = array();
 
                     if($participantsIdsArr){

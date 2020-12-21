@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\output\exammanagement_overview;
 use mod_exammanagement\output\exammanagement_participantsview;
+use mod_exammanagement\ldap\ldapManager;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
@@ -68,6 +69,8 @@ $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->insta
 $MoodleObj = Moodle::getInstance($id, $e);
 
 $MoodleDBObj = MoodleDB::getInstance();
+
+$LdapManagerObj = ldapManager::getInstance();
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teacher
 
@@ -297,6 +300,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
         $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
         $bonuscount = $UserObj->getEnteredBonusCount();
+        $bonuspointsentered = $UserObj->getEnteredBonusCount('points');
         $bonusvisible = $ExammanagementInstanceObj->isBonusVisible();
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
         $resultscount = $UserObj->getEnteredResultsCount();
@@ -307,13 +311,19 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
         $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
 
+        if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
+            $ldapavailable = true;
+        } else {
+            $ldapavailable = false;
+        }
+
         if($ExammanagementInstanceObj->getExamReviewTime()){
             $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
         } else {
             $resultsenteredafterexamreview = false;
         }
 
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted);
+        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
         echo $output->render($page);
 
         $MoodleObj->outputFooter();
@@ -440,28 +450,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 }
 
 $ExammanagementInstanceObj->startEvent('view');
-
-// if ($rs = $MoodleDBObj->getRecordset('exammanagement_participants', array())) {
-
-//     if($rs->valid()){
-
-//         foreach ($rs as $record) {
-
-//             $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
-
-//             $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance));
-
-//             $record->exammanagement = '0';
-
-//             $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $record);
-
-//         }
-
-//         $rs->close();
-
-//     }
-
-// }
 
 // $event = \mod_exammanagement\event\log_variable::create(['other' => 'export_user_data:' .  'exammanagements' . json_encode($exammanagements)]);
 // $event->trigger();

@@ -154,8 +154,10 @@ $string['results_not_set'] = 'Es wurden noch keine Prüfungsergebnisse eingetrag
 $string['exam_results_overview_str'] = 'Hier können alle bereits eingegebenen Prüfungsergebnisse angesehen und manuell geändert werden.';
 $string['complete_correction_str'] = 'Die in dieser Prüfungsorganisation eingetragenen Daten sind sehr sensibel und müssen deshalb aus Datenschutzgründen gelöscht werden, sobald sie nicht mehr benötigt werden. Nachdem Sie durch Umlegen des Schalters den Abschluss der Korrektur bestätigt haben haben Sie deshalb drei Monate Zeit, die Prüfungsergebnisse für eine weitere Verwendung zu exportieren, bevor diese automatisch gelöscht werden.';
 $string['export_points_examreview_str'] = 'Hier können die erreichten Punkte als PDF-Dokument exportiert werden.';
+$string['export_points_examreview_str_points'] = 'Hier können die erreichten Klausurpunkte <strong>(ohne ggf. vorher errungene Bonuspunkte)</strong> als PDF-Dokument exportiert werden.';
 $string['export_results_lists_note'] = 'Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!';
 $string['export_results_percentages_str'] = 'Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.';
+$string['export_results_percentages_str_points'] = 'Hier können die Klausurergebnisse <strong>(ohne ggf. vorher errungene Bonuspunkte)</strong> mit Prozentangaben als PDF-Dokument exportiert werden.';
 $string['export_results_statistics_str'] = 'Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.';
 $string['export_results_text_str'] = 'Hier können die Ergebnisse für das Prüfungsamt als Text-Dokument exportiert werden.';
 $string['data_deletion_date_set'] = 'Am <strong>{$a}</strong> werden alle in dieser Instanz gespeicherten Daten wie etwa Teilnehmerinnen, Prüfungsdetails und Prüfungsergebnisse automatisch gelöscht. Stellen Sie deshalb sicher, dass Sie bis dahin alle wichtigen Daten wie etwa Prüfungsergebnisse für eine weitere Verwendung über die Dokumentenexportfunktionen exportiert haben.';
@@ -318,6 +320,15 @@ $string['delete_all_participants'] = 'Alle Teilnehmer löschen';
 $string['all_participants_deletion_warning'] = 'Durch diese Aktion werden sämtliche Prüfungsteilnehmenden sowie alle für diese eingetragenen Ergebnisse gelöscht.';
 $string['deleted_user'] = 'Aus {$a->systemname} gelöschter Teilnehmer';
 
+//convertToGroup.php
+$string['convert_to_group'] = 'Zu Gruppe konvertieren';
+$string['convertToGroup'] = 'Zu Gruppe konvertieren';
+$string['convert_to_group_str'] = 'Hier können ausgewählte oder alle importierten Prüfungsteilnehmer in eine {$a->systemname} Gruppe umgewandelt werden.';
+$string['participants_convertable'] = 'Prüfungsteilnehmer werden zur Gruppe hinzugefügt.';
+$string['participants_not_convertable'] = 'Prüfungsteilnehmer können nicht zur Gruppe hinzugefügt werden.';
+$string['groupname'] = 'Gruppenname';
+$string['groupdescription'] = 'Beschreibung der Gruppe';
+
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
 $string['import_from_text_file'] = 'Externe Teilnehmer aus Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
@@ -341,6 +352,9 @@ $string['state_no_courseparticipant'] = 'Kein Kursteilnehmer';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_to_be_deleted'] = 'Wird gelöscht';
 $string['state_not_in_file_anymore'] = 'Nicht mehr in Datei';
+$string['state_convertable_group'] = 'Zu Gruppe hinzufügbar';
+$string['state_not_convertable_group_moodle'] = 'Nicht zuweisbar (ohne {$a->systemname} Benutzerkonto)';
+$string['state_not_convertable_group_course'] = 'Nicht zuweisbar (kein Kursteilnehmer)';
 
 //addCourseParticipantsForm.php
 $string['addCourseParticipants'] = 'Kursteilnehmer hinzufügen';
@@ -587,8 +601,14 @@ Es können hier zudem neue Teilnehmerinnen zur Prüfung hinzugefügt werden. Daz
 2. Es besteht außerdem die Möglichkeit, nach einem Klick auf den Button "Kursteilnehmer importieren" Teilnehmer des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses als Prüfungsteilnehmer zu importieren. Wird diese Variante gewählt können die Prüfungsergebnisse später allerdings nur in einer einzigen Ergebnisliste exportiert werden, ein listenweiser Export und deren einfacher anschließender Reimport ist dann gegebenenfalls nicht möglich. Es besteht zudem auch nicht die Möglichkeit, einmal als Kursteilnehmer importierte Teilnehmer später durch nachträgliches Einlesen einer Liste "umzuschreiben". Dafür muss der oder die Teilnehmerin zunächst komplett gelöscht werden.<br><br>
 Das Hinzufügen von TeilnehmerInnen ist einer der wichtigsten Arbeitsschritte in der Prüfungsorganisation. Nur wenn Sie hier mindestens einen hinzugefügten Teilnehmemenden sehen können Sie später Sitzplätze zuweisen, Prüfungspunkte eintragen oder Ergebnisdokumente exportieren. Nicht als PrüfungsteilnehmerInnen hinzugefügte Studierende haben (selbst wenn sie bereits im '. get_config('mod_exammanagement', 'moodlesystemname').' Kurs eingeschrieben sind) außerdem keinen Zugriff auf die Teilnehmeransicht mit den Prüfungsinformationen und erhalten auch keine Benachrichtigungen über die Nachrichtenfunktion auf der Übersichtsseite der Prüfungsorganisation. <br /> <br />
 Falls Sie einen durch eine Zwischenüberschrift abgetrennten unteren Teil der Tabelle sehen, dann haben Sie Prüfungsteilnehmer importiert, die keinen Benutzeraccount in '. get_config('mod_exammanagement', 'moodlesystemname').' haben. Diese können zwar auch aus einer Datei importiert werden, einige Arbeitsschritte wie etwa das Schreiben einer Benachrichtigung müssen für diese Teilnehmer jedoch manuell durchgeführt werden und andere (etwa das Ansehen der Studentenansicht für die Teilnehmer selbst) sind gänzlich unmöglich.<br><br>
-Es besteht auf dieser Seite außerdem die Möglichkeit, einzelne oder alle bereits importierte Prüfungsteilnehmer wieder zu löschen. Um einzelne Teilnehmer zu löschen genügt ein Klick auf den Mülleimer in der Zeile des jeweiligen Teilnehmenden, um alle Teilnehmer zu löschen muss hingegen der rote Button unter der Tabelle gedrückt werden. Beachten Sie jedoch, dass durch das Löschen eines oder aller Teilnehmer automatisch alle für diese hinterlegten Informationen wie etwa Sitzplätze oder eingetragene Prüfungspunkte gelöscht werden und dass diese Informationen danach nicht wieder hergestellt werden können.';
+Es besteht auf dieser Seite außerdem die Möglichkeit, einzelne oder alle bereits importierten Prüfungsteilnehmer wieder zu löschen. Um einzelne Teilnehmer zu löschen genügt ein Klick auf den Mülleimer in der Zeile des jeweiligen Teilnehmenden, um alle Teilnehmer zu löschen muss hingegen der rote Button unter der Tabelle gedrückt werden. Beachten Sie jedoch, dass durch das Löschen eines oder aller Teilnehmer automatisch alle für diese hinterlegten Informationen wie etwa Sitzplätze oder eingetragene Prüfungspunkte gelöscht werden und dass diese Informationen danach nicht wieder hergestellt werden können.<br><br>
+Durch den Button "Zu Gruppe konvertieren" können schließlich einzelne oder alle hier aufgeführten Teilnehmer in eine '. get_config('mod_exammanagement', 'moodlesystemname').' Gruppe umgewandelt werden.';
 $string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['convertToGroup_help']= 'Hier können ausgewählte oder alle importierten PrüfungsteilnehmerInnen in eine '.get_config('mod_exammanagement', 'moodlesystemname').' Gruppe umgewandelt werden. <br /> <br />
+Dazu muss zunächst in den entsprechenden Formularfeldern der Name und optional eine Beschreibung der zu erstellenden '.get_config('mod_exammanagement', 'moodlesystemname').' Gruppe eingetragen werden. Dann können im unteren Abschnitt alle gewünschten Teilnehmer ausgewählt und dann durch einen Klick auf den Button "Zu Gruppe konvertieren" zu einer Gruppe umgewandelt werden.<br /> <br />
+PrüfungsteilnehmerInnen, die nicht zum Kurs gehören oder kein '.get_config('mod_exammanagement', 'moodlesystemname').' Benutzerkonto haben werden falls vorhanden in einem separaten Abschnitt angezeigt und können nicht zur Gruppe hinzugefügt werden. <br /> <br />
+Die hier erstellten Gruppen können im gesamten Kurs und allen dortigen Aktivitäten genau wie normale Gruppen verwendet werden. Nach dem Anklicken einer Gruppe etwa in der Teilnehmerübersicht kann diese bearbeitet oder verändert werden.';
+$string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addParticipants_help']= 'Auf dieser Seite können <strong>TeilnehmerInnen</strong> aus Prüfungslisten zur Prüfung hinzugefügt werden. Auf diese Weise können deren Ergebnisse später wieder listenweise exportiert und dann einfach reimportiert werden. <br /> <br />
 Dazu benötigen Sie zunächst die Liste ihrer Prüfungsteilnehmer. Diese Datei können Sie dann im Auswahlbereich auswählen und durch einen Klick auf den entsprechenden Button einlesen lassen. <br><br>
 Auf der nun folgenden Seite sehen Sie alle aus der Datei eingelesenen Matrikelnummern. Dabei wird in verschiedenen Bereichen genau aufgeschlüsselt, welchen Status eine Matrikelnummer hat und ob der dazugehörige Studierende zur Prüfung hinzugefügt werden kann. <br><br>
