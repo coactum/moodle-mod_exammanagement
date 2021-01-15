@@ -48,7 +48,7 @@ $string['totalpoints_achieved'] = 'You have taken the exam and scored <strong>{$
 $string['totalpoints_achieved_with_bonus'] = 'Together with the bonus points mentioned above, the exam result is <strong>{$a}</strong> points.';
 $string['legal_hint_totalpoints'] = '<strong>Please note:</strong> This is only a preliminary indication of points which may change, for example during the exam review. There is no legal claim to the result shown here.';
 $string['exam_review'] = 'Exam review';
-$string['exam_review_added'] = 'The correction of the exam has now been completed. On <strong>{$a->examreviewdate}</strong> there will be the exam review in room <strong>{$a->examreviewroom}</strong>.';
+$string['exam_review_added'] = 'The correction of the exam has now been completed. On <strong>{$a->examreviewtime}</strong> there will be the exam review in room <strong>{$a->examreviewroom}</strong>.';
 $string['examdata_deleted'] = 'The exam that has taken place on <strong>{$a}</strong> is now completed.';
 
 //exammanagement_overview.mustache - can be seen on /view.php as lecturer
