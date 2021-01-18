@@ -127,10 +127,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             if($bonusstepsEntered){
                 $worksheet->getStyle('A9:D9')->applyFromArray($headerStyle);
-                $worksheet->getStyle('A10:D20')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $worksheet->getStyle('A10:D20')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             } else {
                 $worksheet->getStyle('A9:C9')->applyFromArray($headerStyle);
-                $worksheet->getStyle('A10:C20')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $worksheet->getStyle('A10:C20')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
 
             // Table 2

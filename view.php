@@ -413,7 +413,10 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 $totalpoints = $ExammanagementInstanceObj->formatNumberForDisplay($totalpoints);
             }
         } else {
-            $examstate = get_string($examstate, 'mod_exammanagement');
+            if($examstate){
+                $examstate = get_string($examstate, 'mod_exammanagement');
+            }
+
             $totalpoints = false;
             $totalpointswithbonus = false;
             $tasktotalpoints = false;
