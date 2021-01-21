@@ -87,7 +87,7 @@ class participantsOverviewForm extends moodleform {
 
         $mform->addElement('html', '<th scope="col">'.get_string("bonussteps", "mod_exammanagement").'</th><th scope="col">'.get_string("resultwithbonus", "mod_exammanagement").'</th>');
 
-        if(!((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0))){
+        if(!isset($this->_customdata['editline'])){
             $mform->addElement('html', '<th scope="col" class="exammanagement_table_whiteborder_left">'.get_string("options", "mod_exammanagement").'</th>');
         }
 
@@ -132,7 +132,7 @@ class participantsOverviewForm extends moodleform {
                 $totalpointsWithBonus = $UserObj->calculatePoints($participant, true);
                 $totalpointsWithBonusDisplay = $ExammanagementInstanceObj->formatNumberForDisplay($totalpointsWithBonus);
 
-                if((!isset($this->_customdata['edit']) || $this->_customdata['edit'] === 0) && (!isset($this->_customdata['editline']) || $this->_customdata['editline'] === 0 )){ // if user is non editable
+                if(!isset($this->_customdata['editline']) || $this->_customdata['editline'] === 0 ){ // if user is non editable
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
@@ -239,29 +239,21 @@ class participantsOverviewForm extends moodleform {
 
                     $mform->addElement('html', '<td class="exammanagement_brand_bordercolor_left">');
 
-                    if($participant->matrnr !== '-'){
-                        $mform->addElement('html', '<a href="participantsOverview.php?id='.$this->_customdata['id'].'&edit='.$participant->matrnr.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1 pull-left"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a>');
-                    } else {
-                        $mform->addElement('html', '<a href="participantsOverview.php?id='.$this->_customdata['id'].'&editline='.$i.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1 pull-left"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a>');
-                    }
+                    $mform->addElement('html', '<a href="participantsOverview.php?id='.$this->_customdata['id'].'&editline='.$i.'#'.$anchorid.'" title="'.get_string("edit_user", "mod_exammanagement").'" class="m-b-1 pull-left"><i class="fa fa-2x fa-lg fa-pencil-square-o" aria-hidden="true"></i></a>');
 
                     $mform->addElement('html', '<a href="#end" title="'.get_string("jump_to_end", "mod_exammanagement").'"><i class="fa fa-2x fa-lg fa-arrow-down" aria-hidden="true"></i></a>');
 
                     $mform->addElement('html', '</td>');
 
-                } else if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0 && ($this->_customdata['edit']== $participant->matrnr)) || (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i)){ // if user is editable
+                } else if(isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0 && $this->_customdata['editline']==$i){ // if user is editable
 
-                    if(isset($this->_customdata['edit'])){
-                        $mform->addElement('hidden', 'edit', $this->_customdata['edit']);
-                        $mform->setType('edit', PARAM_INT);
-                    }
-                    if(isset($this->_customdata['editline'])){
-                        $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
-                        $mform->setType('editline', PARAM_INT);
-                    }
+                    $mform->addElement('hidden', 'editline', $this->_customdata['editline']);
+                    $mform->setType('editline', PARAM_INT);
 
-                    $mform->addElement('hidden', 'editmoodleuserid', $participant->moodleuserid);
-                    $mform->setType('editmoodleuserid', PARAM_INT);
+                    if($participant->id){
+                        $mform->addElement('hidden', 'editid', $participant->id);
+                        $mform->setType('editid', PARAM_INT);
+                    }
 
                     $mform->addElement('hidden', 'pne', true);
                     $mform->setType('pne', PARAM_INT);
@@ -431,7 +423,7 @@ class participantsOverviewForm extends moodleform {
 
         $mform->addElement('html', '<tr id="end"></tr></tbody></table></div>');
 
-        if((isset($this->_customdata['edit']) && $this->_customdata['edit'] != 0)|| (isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0)){
+        if(isset($this->_customdata['editline']) && $this->_customdata['editline'] != 0){
             $this->add_action_buttons(true, get_string("save_changes", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');

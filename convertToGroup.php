@@ -25,7 +25,6 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\convertToGroupForm;
-use mod_exammanagement\ldap\ldapManager;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
@@ -39,7 +38,6 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance();
 $MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 

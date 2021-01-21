@@ -144,6 +144,8 @@ class User{
 							$record->groups = $groupnames;
 						}
 					} else {
+						$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
 						$record->firstname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
 						$record->lastname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
 						if(in_array('profile', $requestedAttributes)){
@@ -245,14 +247,16 @@ class User{
 
 	#### get single exam participant #####
 
-	public function getExamParticipantObj($userid, $userlogin = false){
+	public function getExamParticipantObj($moodleuserid, $userlogin = false, $id = false){
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
-		if($userid !== false && $userid !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid));
+		if($moodleuserid !== false && $moodleuserid !== null){
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $moodleuserid));
 		} else if($userlogin !== false && $userlogin !== null){
 			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $userlogin));
+		} else if($id !== false && $id !== null){
+			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'id' => $id));
 		}
 
 		if($participantsObj){

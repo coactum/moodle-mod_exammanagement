@@ -37,7 +37,6 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$edit  = optional_param('edit', 0, PARAM_INT);
 $editline  = optional_param('editline', 0, PARAM_INT);
 
 $pne  = optional_param('pne', 1, PARAM_INT);
@@ -67,7 +66,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             if($editline){
                 $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'editline'=>$editline));
             } else {
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'edit'=>$edit));
+                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
             }
 
             //Form processing and displaying is done here
@@ -78,17 +77,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else if ($fromform = $mform->get_data()) {
                 //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                if(isset($fromform->editmoodleuserid) && $fromform->editmoodleuserid !== 0){
-                    $moodleuserid = $fromform->editmoodleuserid;
-                    $userlogin = NULL;
-                } else {
-                    $moodleuserid = NULL;
-                    $userlogin = NULL;
-
-                    $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->edit, 'enterresultsmatrnr');
+                if($fromform->editid){
+                    $participantObj = $UserObj->getExamParticipantObj(false, false, $fromform->editid);
                 }
-
-                $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
 
                 if(isset($fromform->room)){
                     $participantObj->roomid = $fromform->room;
