@@ -77,9 +77,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
             echo('<div class="row"><div class="col-4">');
-            echo('<h3>'.get_string("viewParticipants", "mod_exammanagement"). $OUTPUT->help_icon('viewParticipants', 'mod_exammanagement', '') . '</h3>');
 
-            echo ('</div><div class="col-8">');
+            $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+            echo('<h3>'.get_string("viewParticipants", "mod_exammanagement"));
+
+            if($helptextsenabled){
+                echo($OUTPUT->help_icon('viewParticipants', 'mod_exammanagement', ''));
+            }
+            echo('</h3>');
+
+            echo('</div><div class="col-8">');
 
             if(!empty($UserObj->getCourseParticipantsIDs())){
                 echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("addCourseParticipants", $id).'" class="btn btn-primary pull-right m-r-1 m-b-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
@@ -93,7 +101,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 echo('<a href="'.$ExammanagementInstanceObj->getExammanagementUrl("convertToGroup", $id).'" role="button" class="btn btn-primary m-r-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
             }
 
-            echo ('</div></div>');
+            echo('</div></div>');
 
             echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 

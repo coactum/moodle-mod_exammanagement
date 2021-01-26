@@ -33,6 +33,13 @@ if ($ADMIN->fulltree) {
       $settings->add(new admin_setting_configtext('mod_exammanagement/moodlesystemname', get_string('moodlesystemname', 'mod_exammanagement'),
       get_string('moodlesystemname_help', 'mod_exammanagement'), 'Moodle', PARAM_TEXT));
 
+      // enable and set additional global admin message
+      $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enableglobalmessage', get_string('enableglobalmessage', 'mod_exammanagement'),
+      get_string('enableglobalmessage_help', 'mod_exammanagement'), 0));
+
+      $settings->add(new admin_setting_configtext('mod_exammanagement/globalmessage', get_string('globalmessage', 'mod_exammanagement'),
+      get_string('globalmessage_help', 'mod_exammanagement'),'', PARAM_TEXT));
+
       // enable additional help texts in plugin and configure link to additional ressources
       $settings->add(new admin_setting_configcheckbox('mod_exammanagement/enablehelptexts', get_string('enablehelptexts', 'mod_exammanagement'),
       get_string('enablehelptexts_help', 'mod_exammanagement'), 0));
@@ -56,7 +63,7 @@ if ($ADMIN->fulltree) {
 
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_username', get_string('ldap_field_map_username', 'mod_exammanagement'),
       get_string('ldap_field_map_username_help', 'mod_exammanagement'),'', PARAM_TEXT));
-      
+
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_matriculationnumber', get_string('ldap_field_map_matriculationnumber', 'mod_exammanagement'),
       get_string('ldap_field_map_matriculationnumber_help', 'mod_exammanagement'),'', PARAM_TEXT));
 

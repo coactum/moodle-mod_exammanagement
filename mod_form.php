@@ -46,6 +46,10 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
+        if(get_config('mod_exammanagement', 'enableglobalmessage')){
+            \core\notification::info(get_config('mod_exammanagement', 'globalmessage'));
+        }
+
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('exammanagement_name', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"));
         $mform->addHelpButton('name', 'exammanagement_name', 'mod_exammanagement');
@@ -98,7 +102,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
     //Custom validation should be added here
     function validation($data, $files) {
         $errors= array();
-  
+
         if($data['newpassword']){
             if ($data['confirmnewpassword'] == Null){
                 $errors['confirmnewpassword'] = get_string('err_filloutfield', 'mod_exammanagement');
@@ -107,7 +111,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
                 $errors['confirmnewpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
             }
         }
-  
-        return $errors;   
+
+        return $errors;
     }
 }
