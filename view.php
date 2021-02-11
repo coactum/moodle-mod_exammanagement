@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\output\exammanagement_overview;
+use mod_exammanagement\output\exammanagement_overview_export_grades;
 use mod_exammanagement\output\exammanagement_participantsview;
 use mod_exammanagement\ldap\ldapManager;
 use stdclass;
@@ -75,6 +76,14 @@ $LdapManagerObj = ldapManager::getInstance();
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teacher
 
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
+        $mode = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+
+        if($mode){
+            $mode = 'export_grades';
+        } else {
+            $mode = 'normal';
+        }
 
         if(!$ExammanagementInstanceObj->isExamDataDeleted()){
 
@@ -227,104 +236,136 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
         }
 
-        //rendering and displaying content
-        $output = $PAGE->get_renderer('mod_exammanagement');
+        if($mode === 'normal'){
+            //rendering and displaying content
+            $output = $PAGE->get_renderer('mod_exammanagement');
 
-        $cmid = $ExammanagementInstanceObj->getCm()->id;
-        $statePhaseOne = $ExammanagementInstanceObj->checkPhaseCompletion(1);
-        $statePhaseTwo = $ExammanagementInstanceObj->checkPhaseCompletion(2);
-        $statePhaseExam = $ExammanagementInstanceObj->checkPhaseCompletion("Exam");
-        $statePhaseThree = $ExammanagementInstanceObj->checkPhaseCompletion(3);
-        $statePhaseFour = $ExammanagementInstanceObj->checkPhaseCompletion(4);
-        $statePhaseFive = $ExammanagementInstanceObj->checkPhaseCompletion(5);
+            $cmid = $ExammanagementInstanceObj->getCm()->id;
+            $statePhaseOne = $ExammanagementInstanceObj->checkPhaseCompletion(1);
+            $statePhaseTwo = $ExammanagementInstanceObj->checkPhaseCompletion(2);
+            $statePhaseExam = $ExammanagementInstanceObj->checkPhaseCompletion("Exam");
+            $statePhaseThree = $ExammanagementInstanceObj->checkPhaseCompletion(3);
+            $statePhaseFour = $ExammanagementInstanceObj->checkPhaseCompletion(4);
+            $statePhaseFive = $ExammanagementInstanceObj->checkPhaseCompletion(5);
 
-        $currentPhaseOne = false;
-        $currentPhaseTwo = false;
-        $currentPhaseExam = false;
-        $currentPhaseThree = false;
-        $currentPhaseFour = false;
-        $currentPhaseFive = false;
+            $currentPhaseOne = false;
+            $currentPhaseTwo = false;
+            $currentPhaseExam = false;
+            $currentPhaseThree = false;
+            $currentPhaseFour = false;
+            $currentPhaseFive = false;
 
-        $currentPhase = $ExammanagementInstanceObj->determineCurrentPhase();
-        switch ($currentPhase) {
-        case '1':
-            $currentPhaseOne = true;
-            break;
-        case '2':
-            $currentPhaseTwo = true;
-            break;
-        case 'exam':
-            $currentPhaseExam = true;
-            break;
-        case '3':
-            $currentPhaseThree = true;
-            break;
-        case '4':
-            $currentPhaseFour = true;
-            break;
-        case '5':
-            $currentPhaseFive = true;
-            break;
-        default:
-            break;
-        }
-
-        if(get_config('mod_exammanagement', 'enablehelptexts')){
-            $helptexticon = $OUTPUT->help_icon('overview', 'mod_exammanagement', '');
-            $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
-        } else {
-            $helptexticon = false;
-            $additionalressourceslink = false;
-        }
-
-        $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
-        $taskcount = $ExammanagementInstanceObj->getTaskCount();
-        $taskpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
-        $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
-
-        if($textfieldcontent){
-            if(format_string($textfieldcontent)){
-                $textfielcontent = format_string($textfieldcontent);
-            } else {
-                $textfieldcontent = get_string('mediacontent', 'mod_exammanagement');
+            $currentPhase = $ExammanagementInstanceObj->determineCurrentPhase();
+            switch ($currentPhase) {
+            case '1':
+                $currentPhaseOne = true;
+                break;
+            case '2':
+                $currentPhaseTwo = true;
+                break;
+            case 'exam':
+                $currentPhaseExam = true;
+                break;
+            case '3':
+                $currentPhaseThree = true;
+                break;
+            case '4':
+                $currentPhaseFour = true;
+                break;
+            case '5':
+                $currentPhaseFive = true;
+                break;
+            default:
+                break;
             }
+
+            if(get_config('mod_exammanagement', 'enablehelptexts')){
+                $helptexticon = $OUTPUT->help_icon('overview', 'mod_exammanagement', '');
+                $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
+            } else {
+                $helptexticon = false;
+                $additionalressourceslink = false;
+            }
+
+            $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
+            $taskcount = $ExammanagementInstanceObj->getTaskCount();
+            $taskpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
+            $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
+
+            if($textfieldcontent){
+                if(format_string($textfieldcontent)){
+                    $textfielcontent = format_string($textfieldcontent);
+                } else {
+                    $textfieldcontent = get_string('mediacontent', 'mod_exammanagement');
+                }
+            }
+
+            $participantscount = $UserObj->getParticipantsCount();
+            $roomscount = $ExammanagementInstanceObj->getRoomsCount();
+            $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
+            $totalseats = $ExammanagementInstanceObj->getTotalNumberOfSeats();
+            $allplacesassigned = $ExammanagementInstanceObj->allPlacesAssigned();
+            $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
+            $datetimevisible = $ExammanagementInstanceObj->isDateTimeVisible();
+            $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
+            $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
+            $bonuscount = $UserObj->getEnteredBonusCount();
+            $bonuspointsentered = $UserObj->getEnteredBonusCount('points');
+            $bonusvisible = $ExammanagementInstanceObj->isBonusVisible();
+            $gradingscale = $ExammanagementInstanceObj->getGradingscale();
+            $resultscount = $UserObj->getEnteredResultsCount();
+            $resultvisible = $ExammanagementInstanceObj->isResultVisible();
+            $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
+            $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
+            $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
+            $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
+            $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
+
+            if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
+                $ldapavailable = true;
+            } else {
+                $ldapavailable = false;
+            }
+
+            if($ExammanagementInstanceObj->getExamReviewTime()){
+                $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
+            } else {
+                $resultsenteredafterexamreview = false;
+            }
+
+            $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
+            echo $output->render($page);
+        } else if($mode === 'export_grades'){
+            //rendering and displaying content
+            $output = $PAGE->get_renderer('mod_exammanagement');
+
+            $cmid = $ExammanagementInstanceObj->getCm()->id;
+
+            if(get_config('mod_exammanagement', 'enablehelptexts')){
+                $helptexticon = $OUTPUT->help_icon('export_grades', 'mod_exammanagement', '');
+                $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
+            } else {
+                $helptexticon = false;
+                $additionalressourceslink = false;
+            }
+
+            if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
+                $ldapavailable = true;
+            } else {
+                $ldapavailable = false;
+            }
+
+            $participantscount = $UserObj->getParticipantsCount();
+            $bonuspointsentered = $UserObj->getEnteredBonusCount('points');
+            $gradingscale = $ExammanagementInstanceObj->getGradingscale();
+            $resultscount = $UserObj->getEnteredResultsCount();
+
+            $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
+            $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
+
+            $page = new exammanagement_overview_export_grades($cmid, $helptexticon, $additionalressourceslink, $participantscount, $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable);
+            echo $output->render($page);
         }
-
-        $participantscount = $UserObj->getParticipantsCount();
-        $roomscount = $ExammanagementInstanceObj->getRoomsCount();
-        $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
-        $totalseats = $ExammanagementInstanceObj->getTotalNumberOfSeats();
-        $allplacesassigned = $ExammanagementInstanceObj->allPlacesAssigned();
-        $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
-        $datetimevisible = $ExammanagementInstanceObj->isDateTimeVisible();
-        $roomvisible = $ExammanagementInstanceObj->isRoomVisible();
-        $placevisible = $ExammanagementInstanceObj->isPlaceVisible();
-        $bonuscount = $UserObj->getEnteredBonusCount();
-        $bonuspointsentered = $UserObj->getEnteredBonusCount('points');
-        $bonusvisible = $ExammanagementInstanceObj->isBonusVisible();
-        $gradingscale = $ExammanagementInstanceObj->getGradingscale();
-        $resultscount = $UserObj->getEnteredResultsCount();
-        $resultvisible = $ExammanagementInstanceObj->isResultVisible();
-        $datadeletiondate = $ExammanagementInstanceObj->getDataDeletionDate();
-        $examreviewtime = $ExammanagementInstanceObj->getHrExamReviewTime();
-        $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
-        $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
-        $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
-
-        if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
-            $ldapavailable = true;
-        } else {
-            $ldapavailable = false;
-        }
-
-        if($ExammanagementInstanceObj->getExamReviewTime()){
-            $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
-        } else {
-            $resultsenteredafterexamreview = false;
-        }
-
-        $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
-        echo $output->render($page);
 
         $MoodleObj->outputFooter();
 

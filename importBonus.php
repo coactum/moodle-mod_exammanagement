@@ -61,7 +61,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$MoodleObj->setPage('importBonus');
 
-			if(!$ExammanagementInstanceObj->allPlacesAssigned()){
+			if($ExammanagementInstanceObj->moduleinstance->misc === NULL && !$ExammanagementInstanceObj->allPlacesAssigned()){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
 			} else if (!$UserObj->getParticipantsCount()) {
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
@@ -191,7 +191,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						if($participantObj){
 
-							if($fromform->bonusmode === "steps" && isset($data['points']) && $data['points']){
+							if($fromform->bonusmode === "steps" && isset($data['points']) && $data['points'] && is_numeric($data['points'])){
 								$participantObj->bonussteps = 0;
 
 								foreach($fromform->bonussteppoints as $step => $points){
@@ -203,9 +203,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 										break;
 									}
 								}
-							} else if($fromform->bonusmode === "points" && isset($data['points']) && $data['points']){
+							} else if($fromform->bonusmode === "points" && isset($data['points']) && $data['points']&& is_numeric($data['points'])){
 								$participantObj->bonussteps = false;
 								$participantObj->bonuspoints = $data['points'];
+
+								if($ExammanagementInstanceObj->moduleinstance->misc !== NULL ){ // if mode is export_gradings
+									$participantObj->exampoints = '{"1":0}'; // add 0 points as exam result
+									$participantObj->examstate = '{"nt":"0","fa":"0","ill":"0"}';
+								}
 							}
 
 							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);

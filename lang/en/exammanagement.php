@@ -58,8 +58,8 @@ $string['js_confirm_correction_completion'] = 'This action completes the correct
 $string['data_deleted'] = 'For data protection reasons, the exam data of all participants in this exam organization were deleted three months after completion of the correction phase. This exam organization can therefore no longer be used; only the basic data of the exam can still be viewed.';
 
 //exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
-$string['phase_one'] = 'Pre-exam organisation';
-$string['phase_two'] = 'Exam organisation';
+$string['phase_one'] = 'Pre-exam organization';
+$string['phase_two'] = 'Exam organization';
 $string['phase_three'] = 'Exam results';
 $string['phase_four'] = 'Post exam';
 $string['phase_five'] = 'Exam review (optional)';
@@ -98,6 +98,30 @@ $string['set_visibility_of_exam_review_information'] = 'Show exam review informa
 $string['altering_exam_results'] = 'Changing exam results';
 $string['export_altered_exam_results'] = 'Export of altered exam results';
 $string['toggle_information'] = 'Toggle information';
+
+//exammanagement_overview.mustache - mode export_grades
+$string['export_grades'] = 'Export grades';
+$string['export_grades_help'] = 'Here, the grading points earned by the course participants can first be imported, converted into grades, and then exported as a text file for the exam office (assigned to the respective matriculation numbers). <br><br>
+For this purpose ... <br><br>
+1. all affected course participants have to be added <br>
+2. a gradingscale must be configured <br>
+3. the course grades must first be exported and then imported into the exam organization. <br><br>
+Then, after the results have been checked and the preparations completed, the grades assigned to the participants can be exported as a text file along with their matriculation numbers.';
+$string['import_grades'] = 'Import grades';
+$string['grades'] = 'Course grades';
+$string['grades_set'] = 'Grades for <strong>{$a->gradescount} / {$a->participantscount}</strong> participants have been imported yet.';
+$string['grades_not_set'] = 'No grades have been imported yet.';
+$string['grading_points'] = 'Grades (points)';
+$string['revert_grades'] = 'Revert all grades';
+$string['import_grades_text'] = 'Grading points achieved by the course participants can be imported here.';
+$string['exam_results_overview_grades'] = 'Here the already imported grading points and the grades calculated from them can be viewed.';
+$string['complete_preparations'] = 'Complete preparations';
+$string['participantsOverview_grades_help'] = 'In this <strong>participant and result overview</strong> all imported participants as well as their grading points and the grades calculated from them can be viewed.';
+$string['participantsOverview_grades'] = 'Participants and results list';
+$string['importBonus_grades_help']= '<strong>Grading points</strong> (for example earned from exercises) can be imported here.
+Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+Finally you have to select the file with the grading points you want to import and then click on the "Import file" button to import the points.';
+$string['importBonus_grades'] = 'Import grades';
 
 //exammanagement_overview.mustache states - can be seen on /view.php as lecturer
 $string['state_optional'] = 'Optional';
@@ -744,6 +768,9 @@ $string['confirm_new_password_help'] = 'For setting a new password it has to be 
 $string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
 $string['old_password_help'] = 'If an already existing password should be changed you need to enter it here.';
 $string['incorrect_password_change'] = 'Incorrect password. Terminated password change';
+$string['export_grades_as_exam_results'] = 'Export course grades as exam results';
+$string['activate_mode'] = 'Activate grade export mode';
+$string['export_grades_as_exam_results_help'] = 'If this option is activated, the course gradings of all participants can easily be exported in a text document with the exam organization. Each grading is assigned to the matriculation number of the respective participant.';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';

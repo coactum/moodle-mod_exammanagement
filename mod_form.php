@@ -89,6 +89,12 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
 
+        $mform->addElement('header', get_string('export_grades_as_exam_results', 'mod_exammanagement'), get_string('export_grades_as_exam_results', 'mod_exammanagement'));
+
+        $mform->addElement('advcheckbox', 'exportgrades', get_string('activate_mode', 'mod_exammanagement'));
+        $mform->addHelpButton('exportgrades', 'export_grades_as_exam_results', 'mod_exammanagement');
+        $mform->setDefault('exportgrades', 0);
+
         // Add standard grading elements.
         //$this->standard_grading_coursemodule_elements();
 

@@ -49,7 +49,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$MoodleObj->setPage('configureGradingscale');
 
-			if(!$ExammanagementInstanceObj->getTaskCount()){
+			if($ExammanagementInstanceObj->moduleinstance->misc === NULL && !$ExammanagementInstanceObj->getTaskCount()){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
 			}
 

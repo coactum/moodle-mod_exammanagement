@@ -449,7 +449,7 @@ class User{
 					$points += floatval($participantObj->bonuspoints);
 				}
 
-				return floatval($points);
+				return number_format(floatval($points),2);
 			} else if($examstate) {
 				return get_string($examstate, "mod_exammanagement");
 			} else {

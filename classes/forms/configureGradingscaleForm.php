@@ -44,7 +44,11 @@ class configureGradingscaleForm extends moodleform {
 
         $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
-        $jsArgs = array('totalpoints'=>$totalpoints);
+        if($totalpoints){
+            $jsArgs = array('totalpoints'=>$totalpoints);
+        } else {
+            $jsArgs = array('totalpoints'=>10000);
+        }
 
         $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init', $jsArgs); //creating input type number fields
 
@@ -62,7 +66,9 @@ class configureGradingscaleForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string("configure_gradingscale_text", "mod_exammanagement").'</p>');
 
-        $mform->addElement('html', '<div class="m-b-1"><strong class="exammanagement_gradingscale_totalpoints m-r-2">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
+        if($totalpoints){
+            $mform->addElement('html', '<div class="m-b-1"><strong class="exammanagement_gradingscale_totalpoints m-r-2">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
+        }
 
         //create gradingscale input list
         $gradingscale = $ExammanagementInstanceObj->getGradingscale();
@@ -120,6 +126,7 @@ class configureGradingscaleForm extends moodleform {
       $errors= array();
 
       $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
       $maxpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
       foreach($data['gradingsteppoints'] as $key => $gradingsteppoints){
@@ -131,7 +138,7 @@ class configureGradingscaleForm extends moodleform {
               $errors['gradingsteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
           } else if($gradingsteppoints<0) {
               $errors['gradingsteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
-          } else if($gradingsteppoints > $maxpoints){
+          } else if($maxpoints && $gradingsteppoints > $maxpoints){
               $errors['gradingsteppoints['.$key.']'] = get_string('err_overmaxpoints', 'mod_exammanagement');
           } else if($key!=='1.0' && !array_key_exists('gradingsteppoints['.$lastgradingstepkey.']', $errors) && ($lastgradingsteppoints <= $gradingsteppoints)){
               $errors['gradingsteppoints['.$key.']'] = get_string('err_gradingstepsnotcorrect', 'mod_exammanagement');
