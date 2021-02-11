@@ -348,6 +348,8 @@ $string['participants_convertable'] = 'Prüfungsteilnehmer werden zur Gruppe hin
 $string['participants_not_convertable'] = 'Prüfungsteilnehmer können nicht zur Gruppe hinzugefügt werden.';
 $string['groupname'] = 'Gruppenname';
 $string['groupdescription'] = 'Beschreibung der Gruppe';
+$string['group'] = 'Gruppe';
+$string['new_group'] = 'Neue Gruppe';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';

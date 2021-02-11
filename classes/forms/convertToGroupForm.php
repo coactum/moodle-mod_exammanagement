@@ -111,13 +111,14 @@ class convertToGroupForm extends moodleform{
         if($moodleParticipants){
 
             # determine if course groups are set #
-            $courseGroups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id);
+            $groups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id);
 
-            if(count($courseGroups) > 0){
+            if(count($groups) > 0){
                 $courseGroups = true;
                 $bigcol = 4;
                 $col = 3;
                 $littlecol = 2;
+                $selectOptions = array('new_group' => get_string('new_group', 'mod_exammanagement'));
             } else {
                 $courseGroups = false;
                 $bigcol = 5;
@@ -130,14 +131,25 @@ class convertToGroupForm extends moodleform{
             $mform->addElement('html', '<div class="exammanagement_overview">');
 
             if($moodleParticipants){
+
+                if($courseGroups){
+                    foreach ($groups as $group){
+                        $selectOptions[$group->id] = $group->name;
+                    }
+                }
+
+                $select = $mform->addElement('select', 'groups', get_string('group', 'mod_exammanagement'), $selectOptions);
+                $select->setSelected('new_group');
+
                 $attributes = array('size'=>'25');
                 $mform->addElement('text', 'groupname', get_string('groupname', 'mod_exammanagement'), $attributes);
                 $mform->setType('groupname', PARAM_TEXT);
-                $mform->addRule('groupname', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
+                $mform->hideIf('groupname', 'groups', 'neq', 'new_group');
 
                 $attributes = array('size'=>'40');
                 $mform->addElement('text', 'groupdescription', get_string('groupdescription', 'mod_exammanagement'), $attributes);
                 $mform->setType('groupdescription', PARAM_TEXT);
+                $mform->hideIf('groupdescription', 'groups', 'neq', 'new_group');
 
                 $mform->addElement('html', '<div class="panel panel-success exammanagement_panel">');
                 $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="new">');
@@ -308,6 +320,10 @@ class convertToGroupForm extends moodleform{
                     $errors['participants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
                 }
             }
+        }
+
+        if($data['groups'] === 'new_group' && !$data['groupname']){
+            $errors['groupname'] = get_string('err_filloutfield', 'mod_exammanagement');
         }
 
         return $errors;

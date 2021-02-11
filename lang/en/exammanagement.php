@@ -352,6 +352,8 @@ $string['participants_convertable'] = 'exam participants will be added to the gr
 $string['participants_not_convertable'] = 'exam participants cannot be added to the group.';
 $string['groupname'] = 'Groupname';
 $string['groupdescription'] = 'Description of the group';
+$string['group'] = 'Group';
+$string['new_group'] = 'New group';
 
 //addParticipantsForm.php
 $string['import_participants_from_file'] = 'Import participants from file';

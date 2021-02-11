@@ -180,7 +180,7 @@ class User{
 
 				if(!empty($matriculationNumbers)){
 					foreach($allParticipants as $key => $participant){
-						if(isset($participant->login) && $participant->login && array_key_exists($participant->login, $matriculationNumbers)){
+						if(isset($participant->login) && $participant->login && array_key_exists($participant->login, $matriculationNumbers) && isset($matriculationNumbers[$participant->login]) && is_numeric($matriculationNumbers[$participant->login])){
 							$participant->matrnr = $matriculationNumbers[$participant->login];
 						} else {
 							$participant->matrnr = '-';

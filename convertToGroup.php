@@ -79,25 +79,37 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				if(!empty($participantsIds)){
 					require_once($CFG->dirroot.'/group/lib.php');
 
-					$data = new stdClass();
-					$data->courseid = $ExammanagementInstanceObj->getCourse()->id;
-					$data->name = $fromform->groupname;
-					$data->description = $fromform->groupdescription;
-					$data->descriptionformat = FORMAT_HTML;
+					if($fromform->groups === 'new_group'){
 
-					$newgroupid = groups_create_group($data);
+						$data = new stdClass();
+						$data->courseid = $ExammanagementInstanceObj->getCourse()->id;
+						$data->name = $fromform->groupname;
+						$data->description = $fromform->groupdescription;
+						$data->descriptionformat = FORMAT_HTML;
 
-					foreach($participantsIds as $moodleuserid){
-						if(groups_add_member($newgroupid, $moodleuserid)){
-						$countSuccess +=1;
-						} else {
-							$countFailed +=1;
+						$newgroupid = groups_create_group($data);
+
+						foreach($participantsIds as $moodleuserid){
+							if(groups_add_member($newgroupid, $moodleuserid)){
+							$countSuccess +=1;
+							} else {
+								$countFailed +=1;
+							}
+						}
+					} else {
+						foreach($participantsIds as $moodleuserid){
+							if(groups_add_member($fromform->groups, $moodleuserid)){
+							$countSuccess +=1;
+							} else {
+								$countFailed +=1;
+							}
 						}
 					}
+
 				}
 
 				# redirect #
-				if($newgroupid && $countFailed ===0 && $countSuccess>0){
+				if((($fromform->groups === 'new_group' && $newgroupid) || $fromform->groups !== 'new_group') && $countFailed ===0 && $countSuccess>0){
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 				} else {
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');

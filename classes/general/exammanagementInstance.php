@@ -737,12 +737,12 @@ class exammanagementInstance{
 		$message->replyto = "";
 
 		$header = '';
-		$url = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
+		$url = '<a href="'.$MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id) . '" target="_blank">'.$MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id).'</a>';
 
 		if($this->cron == false){
-			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'coursecategory' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
+			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
 		} else {
-			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'coursecategory' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
+			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
 		}
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
