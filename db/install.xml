@@ -74,6 +74,7 @@
               <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course of the exam management activity the potential participant belongs to"/>
               <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the potential participant belongs to"/>
               <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Identifier of the potential participant"/>
+              <FIELD NAME="headerid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Header id of tempimportfileheader"/>
               <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Line number of the potential participant in the imported participants list"/>
     	    </FIELDS>
           <KEYS>

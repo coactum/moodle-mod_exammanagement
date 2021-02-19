@@ -474,8 +474,10 @@ class addParticipantsForm extends moodleform{
 
             $maxbytes=$CFG->maxbytes;
 
-            $mform->addElement('filepicker', 'participantslist_text', get_string("import_from_text_file", "mod_exammanagement"), null, array('maxbytes' => $maxbytes, 'accepted_types' => '.txt'));
-            $mform->addRule('participantslist_text', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
+            $mform->addElement('filemanager', 'participantslists', get_string('import_from_text_file', 'mod_exammanagement'), null,
+                    array('subdirs' => 0, 'maxbytes' => $maxbytes, 'areamaxbytes' => 10485760, 'maxfiles' => 10,
+                          'accepted_types' => '.txt', 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL));
+            $mform->addRule('participantslists', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
             $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
         }
