@@ -244,10 +244,10 @@ class addParticipantsForm extends moodleform{
                         $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
                         $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $deletedUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
 
-                        $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$deletedUser->moodleuserid.'-'.$deletedUser->headerid.']', $image.' '.$link, null, array('group' => 2));
+                        $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$deletedUser->moodleuserid.']', $image.' '.$link, null, array('group' => 2));
 
                     } else if ($deletedUser->matrnr){
-                        $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$deletedUser->matrnr.'-'.$deletedUser->headerid.']', ' '. $deletedUser->firstname .' '.$deletedUser->lastname, null, array('group' => 2));
+                        $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$deletedUser->matrnr.']', ' '. $deletedUser->firstname .' '.$deletedUser->lastname, null, array('group' => 2));
                     }
 
                     //$mform->setDefault('deletedparticipants[mid_'.$deletedUser->moodleuserid.']', true); // use of setData in form definition is the better solution because setDefault takes more time to handle large amounts of participants
