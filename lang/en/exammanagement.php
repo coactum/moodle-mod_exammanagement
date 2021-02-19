@@ -738,6 +738,7 @@ $string['err_examdata_deleted'] = 'The exam data has already been deleted. It is
 $string['err_already_defaultroom'] = 'Already default room. Try instead room ID';
 $string['err_novalidplacescount'] = 'Entered number is no valid places count';
 $string['err_nocourseparticipants'] = 'No course participants available yet.';
+$string['err_groupname_taken'] = 'Group name already taken.';
 
 //universal
 $string['modulename'] = 'Exam management';

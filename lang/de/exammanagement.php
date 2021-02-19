@@ -734,6 +734,7 @@ $string['err_examdata_deleted'] = 'Die Prüfungsdaten wurden bereits gelöscht. 
 $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattdessen Raum-ID';
 $string['err_novalidplacescount'] = 'Die eingegebene Zahl ist keine gültige Sitzplatzzahl.';
 $string['err_nocourseparticipants'] = 'Noch keine Kursteilnehmer vorhanden.';
+$string['err_groupname_taken'] = 'Gruppenname bereits vergeben.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';

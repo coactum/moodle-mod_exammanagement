@@ -118,13 +118,13 @@ class convertToGroupForm extends moodleform{
                 $bigcol = 4;
                 $col = 3;
                 $littlecol = 2;
-                $selectOptions = array('new_group' => get_string('new_group', 'mod_exammanagement'));
             } else {
                 $courseGroups = false;
                 $bigcol = 5;
                 $col = 4;
                 $littlecol = 3;
             }
+            $selectOptions = array('new_group' => get_string('new_group', 'mod_exammanagement'));
 
             # output participants #
 
@@ -324,6 +324,21 @@ class convertToGroupForm extends moodleform{
 
         if($data['groups'] === 'new_group' && !$data['groupname']){
             $errors['groupname'] = get_string('err_filloutfield', 'mod_exammanagement');
+        }
+
+        if($data['groups'] === 'new_group'){
+            $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
+            if($courseGroups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id)){
+
+                $groupname_taken = array_filter($courseGroups, function($group) use ($data){
+                    return $group->name == $data['groupname'];
+                });
+
+                if($groupname_taken){
+                    $errors['groupname'] = get_string('err_groupname_taken', 'mod_exammanagement');
+                }
+            }
         }
 
         return $errors;
