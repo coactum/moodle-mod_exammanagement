@@ -95,11 +95,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->matrnr = $participant->identifier;
 						$tempUserObj->state = 'state_badmatrnr';
 
-						// var_dump('first check invalid matrnr');
-						// var_dump($participant->identifier);
-						// var_dump('<br>');
-						// var_dump('<br>');
-
 						array_push($badMatriculationnumbers, $tempUserObj);
 						unset($tempParticipants[$key]);
 					} else if(in_array($participant->identifier, $allPotentialIdentifiers)){
@@ -107,11 +102,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->line = $participant->line;
 						$tempUserObj->matrnr = $participant->identifier;
 						$tempUserObj->state = 'state_doubled';
-
-						// var_dump('first check doubled matrnr');
-						// var_dump($participant->identifier);
-						// var_dump('<br>');
-						// var_dump('<br>');
 
 						array_push($badMatriculationnumbers, $tempUserObj);
 						unset($tempParticipants[$key]);
@@ -136,41 +126,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				}
 
 				if($savedFileHeadersArr && $tempfileheaders){ // if headers are already saved
-					// var_dump('savedFileHeadersArr');
-					// var_dump($savedFileHeadersArr);
-					// var_dump('<br>');
-					// var_dump('<br>');
-
-					// var_dump('tempfileheaders');
-					// var_dump($tempfileheaders);
-					// var_dump('<br>');
-					// var_dump('<br>');
-
 
 					foreach($tempfileheaders as $tempheaderkey => $tempfileheader){
 
 						$saved = false;
 
 						foreach($savedFileHeadersArr as $savedheaderkey => $header){ // if new header is already saved
-							// var_dump('savedheader');
-							// var_dump($header);
-							// var_dump('<br>');
-							// var_dump('<br>');
-
-							// var_dump('tempfileheader');
-							// var_dump($tempfileheader);
-							// var_dump('<br>');
-							// var_dump('<br>');
 
 							if($tempfileheader == $header){
 								$saved = $savedheaderkey;
-								// var_dump('header already existent');
-								// var_dump('<br>');
-								// var_dump('<br>');
 							}
-
-							// var_dump('checking for existing headers completed');
-							// var_dump('<br>');
 
 							if(!$saved){
 								$convertTempHeaders[$tempheaderkey+1] = $saved+1;
@@ -178,10 +143,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						}
 					}
 				}
-				var_dump('$convertTempHeaders');
-				var_dump($convertTempHeaders);
-				var_dump('<br>');
-				var_dump('<br>');
+
 				// temp participants from stored in db that should get ldap attributes
 
 				foreach($tempParticipants as $key => $participant){ // construct helper arrays needed for ldap method
@@ -205,23 +167,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						$headerid = reset($temp)->headerid;
 
-						var_dump('$headerid befor converting header');
-						var_dump($headerid);
-						var_dump('<br>');
-						var_dump('<br>');
 						if($convertTempHeaders && array_key_exists($headerid, $convertTempHeaders)){
 							$headerid = $convertTempHeaders[$headerid];
-							var_dump('headerid should be converted to saved header');
-							var_dump($convertTempHeaders[$headerid]);
-							var_dump('<br>');
-							var_dump('<br>');
 						} else {
 							$headerid += $savedHeadersCount;
-							var_dump('headerid should be incremented for new headers');
-							var_dump($headerid);
-							var_dump('<br>');
-							var_dump('<br>');
-							var_dump('<br>');
 						}
 
 						if($moodleuserid){ // if moodle user
@@ -235,9 +184,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				## check moodle users and classify them to array according to case ##
 
 				foreach($moodleUsers as $line => $data){
-					// var_dump('moodleUser check for nexisting usw.');
-					// var_dump($data);
-					// var_dump('<br>');
 
 					if (isset($data['moodleuserid']) && $data['moodleuserid']){
 						$tempUserObj = new stdclass;
@@ -247,14 +193,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$tempUserObj->login = $data['login'];
 						$tempUserObj->headerid = $data['headerid'];
 
-						// var_dump($data['moodleuserid']);
-						// var_dump('<br>');
-
 						if($UserObj->checkIfAlreadyParticipant($data['moodleuserid'])){ 	// if user is already saved for instance
-							// var_dump('existing participant');
-							// var_dump($data['moodleuserid']);
-							// var_dump('<br>');
-
 							if($courseParticipantsIDs && !in_array($data['moodleuserid'], $courseParticipantsIDs)){
 								$tempUserObj->state = 'state_existingmatrnrnocourse';
 							} else {
@@ -332,35 +271,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$oldParticipants = array();
 
 				foreach($tempfileheaders as $tempfileheaderkey => $tempfileheader){
-					var_dump('$tempfileheaderkey');
-					var_dump($tempfileheaderkey);
 
 					$tempfileheaderkey_increased = $tempfileheaderkey+1;
 
-					var_dump('$tempfileheaderkey_increased');
-					var_dump($tempfileheaderkey_increased);
-
 					$oldparticipants_temp = $UserObj->getExamParticipants(array('mode'=>'header', 'id' =>$tempfileheaderkey_increased), array('matrnr'));
 
-					var_dump('$oldparticipants_temp');
-					var_dump($oldparticipants_temp);
-
 					if(!empty($oldparticipants_temp)){
-						var_dump('i should merge');
-
 						$oldParticipants = $oldParticipants + $oldparticipants_temp;
 					}
 				}
 
-				var_dump($oldParticipants);
-
 				if($oldParticipants){
 
 					foreach($oldParticipants as $key => $participant){
-
-						// var_dump('$tempIDs');
-						// var_dump($tempIDs);
-
 						if($participant->moodleuserid && !in_array($participant->moodleuserid, $tempIDs)){ // moodle participant that is not readed in again and should therefore be deleted
 
 							$deletedMatrNrObj = new stdclass;
@@ -381,24 +304,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							$deletedMatrNrObj->line = '';
 
 							array_push($deletedParticipants, $deletedMatrNrObj);
-
-							//var_dump('nonemoodle should be deleted');
-
 						}
 					}
 				}
-
-				// var_dump('$deletedParticipants');
-				// var_dump($deletedParticipants);
 
 				$allParticipants['badMatriculationNumbers'] = $badMatriculationnumbers;
 				$allParticipants['deletedParticipants'] = $deletedParticipants;
 				$allParticipants['oddParticipants'] = $oddParticipants;
 				$allParticipants['existingParticipants'] = $existingParticipants;
 				$allParticipants['newMoodleParticipants'] = $newMoodleParticipants;
-
-				var_dump('$allParticipants');
-				var_dump($allParticipants);
 
 				# Instantiate form #
 				$mform = new addParticipantsForm(null, array('id'=>$id, 'e'=>$e, 'allParticipants' => $allParticipants));
@@ -417,62 +331,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			// In this case you process validated data. $mform->get_data() returns data posted in form.
 
-				//var_dump($fromform);
-				//var_dump($mform);
-
-				// retrieve Files from form
-				//$text_file = $mform->get_file_content('participantslist_text');
-				//$lists = $mform->get_file_content('participantslists');
-
 				$draftid = file_get_submitted_draft_itemid('participantslists');
-				// var_dump($draftid);
-				// var_dump('<br>');
-				// var_dump('<br>');
-
-				// var_dump(file_get_all_files_in_draftarea(file_get_submitted_draft_itemid('participantslists')));
-				// var_dump('<br>');
-				// var_dump('<br>');
-
-				//var_dump($mform->get_file_content('Teilnehmerliste_Entwicklungsumgebung.txt'));
-
-				// $file = reset($files);
-
-				//var_dump($file->get_content());
-
-				// $fs = get_file_storage();
-				// $fs->get_area_files($context->id, 'user', 'draft', $draftid, 'id DESC', false);
-
-				//var_dump(get_new_filename('participantslists'));
-				// if (empty($entry->id)) {
-				// 	$entry = new stdClass;
-				// 	$entry->id = null;
-				// }
-
-				// $draftitemid = file_get_submitted_draft_itemid('participantslists');
-
-				//  file_prepare_draft_area($draftitemid, $context->id, 'mod_exammanagement', 'attachment', $entry->id,
-				//  						array('subdirs' => 0, 'maxbytes' => $maxbytes, 'maxfiles' => 50));
-
-				// $fileoptions = array(
-				// 	'maxbytes' => 0,
-				// 	'maxfiles' => '1',
-				// 	'subdirs' => 0,
-				// 	'context' => context_system::instance()
-				// );
-
-				// $filesdataprepare = file_prepare_standard_filemanager($data, 'participantslists',
-				// 	$fileoptions, context_system::instance(), 'mod_exammanagement', 'participantslists', 0);
-				// var_dump($filesdataprepare);
-
-				// $filesdatapostupdate = file_postupdate_standard_filemanager($data, 'participantslists',
-				// 	$fileoptions, context_system::instance(), 'mod_exammanagement', 'participantslists', 0);
-				// var_dump($filesdatapostupdate);
-
-				// $entry->attachments = $draftitemid;
-
-				// $mform->set_data($entry);
-
-
 
 				if (!$draftid){ // if no import file and exam participants should be saved in db
 
@@ -491,52 +350,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						if(!$savedFileHeadersArr && $tempfileheaders){ // if there are no saved headers by now
 							# save new file header #
 							$savedFileHeadersArr = $tempfileheaders;
-							// var_dump('new headers should be saved for first time');
-							// var_dump('<br>');
-							// var_dump('<br>');
 						} else if($savedFileHeadersArr && $tempfileheaders){
-							// var_dump('savedFileHeadersArr');
-							// var_dump($savedFileHeadersArr);
-							// var_dump('<br>');
-							// var_dump('<br>');
-
-							// var_dump('tempfileheaders');
-							// var_dump($tempfileheaders);
-							// var_dump('<br>');
-							// var_dump('<br>');
-
-
 							foreach($tempfileheaders as $tempheaderkey => $tempfileheader){
 
 								$saved = false;
 
 								foreach($savedFileHeadersArr as $savedheaderkey => $header){ // if new header is already saved
-									 var_dump('savedheader');
-									 var_dump($header);
-									 var_dump('<br>');
-									// var_dump('<br>');
-
-									 var_dump('tempfileheader');
-									 var_dump($tempfileheader);
-									 var_dump('<br>');
-									// var_dump('<br>');
 
 									if($tempfileheader == $header){
 										$saved = true;
-										// var_dump('header already existent');
-										// var_dump('<br>');
-										// var_dump('<br>');
 									}
 								}
 
-								// var_dump('checking for existing headers completed');
-								// var_dump('<br>');
-								// var_dump('<br>');
-
 								if(!$saved){
-									// var_dump('header should be saved');
-									// var_dump('<br>');
-									// var_dump('<br>');
 									array_push($savedFileHeadersArr, $tempfileheader);
 								}
 							}
@@ -553,9 +379,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								$tempheaderid = explode('-', $tempidentifier)[1];
 
 								$identifier = explode('_', explode('-', $tempidentifier)[0]);
-
-								// var_dump('$identifier');
-								// var_dump($identifier);
 
 								if($identifier[0]== 'mid'){ // if participant is moodle user
 									$user = new stdClass();
@@ -584,14 +407,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 								$noneMoodleParticipantsArr = $LdapManagerObj->getLDAPAttributesForMatrNrs($noneMoodleParticipantsMatrNrArr, 'all_attributes');
 
 								foreach($participantsIdsArr as $key => $identifier){ // now only contains participants that have no moodle account
-									// var_dump('$identifier nonemoodle');
-									// var_dump($identifier);
 
 									$tempheaderid = explode('-', $identifier)[1];
 
 									$matrnr = explode('_', explode('-', $identifier)[0])[1];
-									// var_dump('$matrnr nonemoodle');
-									// var_dump($matrnr);
+
 									$user = new stdClass();
 									$user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
 									$user->courseid = $ExammanagementInstanceObj->getCourse()->id;
@@ -660,8 +480,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							}
 						}
 
-						//var_dump($userObjArr);
-
 						# delete temp file header and update saved file headers #
 						$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
 
@@ -671,7 +489,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						$UserObj->deleteTempParticipants();
 
 						# redirect #
-						//redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 
 					} else {
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -688,16 +506,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$tempfileheaders = array();
 					$usersObjArr = array();
 
-					//var_dump($files);
-					// var_dump('<br>');
-					// var_dump('<br>');
-
 					$filecounter = 1;
 
 					foreach($files as $file){
-
-						// var_dump('<br>');
-						// var_dump('<br>');
 
 						# get matriculation numbers from text file as an array #
 						$fileContentArr = explode(PHP_EOL, $file->get_content()); // separate lines
@@ -715,7 +526,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 										foreach ($potentialMatriculationnumbersArr as $key2 => $pmatrnr) { // create temp user obj
 
 											$identifier = str_replace('"', '', $pmatrnr);
-											if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 10){ //if identifier contains numbers and only alpha numerical signs and is not to long
+											if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 20){ //if identifier contains numbers and only alpha numerical signs and is not to long
 												$tempUserObj = new stdclass;
 												$tempUserObj->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
 												$tempUserObj->courseid = $ExammanagementInstanceObj->getCourse()->id;
