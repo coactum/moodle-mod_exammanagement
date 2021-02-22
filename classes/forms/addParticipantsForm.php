@@ -109,6 +109,8 @@ class addParticipantsForm extends moodleform{
                 $littlecol = 3;
             }
 
+            $systemname = $ExammanagementInstanceObj->getMoodleSystemName();
+
             # output participants #
 
             $mform->addElement('html', '<div class="exammanagement_overview">');
@@ -185,10 +187,9 @@ class addParticipantsForm extends moodleform{
 
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                        $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $oddUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
 
-                        $mform->addElement('advcheckbox', 'participants[mid_'.$oddUser->moodleuserid.'-'.$oddUser->headerid.']', $image.' '.$link, null, array('group' => 1));
+                        $mform->addElement('advcheckbox', 'participants[mid_'.$oddUser->moodleuserid.'-'.$oddUser->headerid.']', $image.' '.$moodleUser->firstname.' '.$moodleUser->lastname, null, array('group' => 1));
                     } else if($oddUser->state == 'state_nonmoodle'){
                         $mform->addElement('advcheckbox', 'participants[matrnr_'.$oddUser->matrnr.'-'.$oddUser->headerid.']', '', null, array('group' => 1));
                     }
@@ -198,7 +199,7 @@ class addParticipantsForm extends moodleform{
                     if($courseGroups){
                         $mform->addElement('html', '<div class="col-'.$col.'"> - </div>');
                     }
-                    $mform->addElement('html', '<div class="col-'.$col.'">'.get_string($oddUser->state, "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</div></div>');
+                    $mform->addElement('html', '<div class="col-'.$col.'">'.get_string($oddUser->state, "mod_exammanagement",['systemname' => $systemname]).'</div></div>');
                 }
 
                 $mform->addElement('html', '</div></div>');
@@ -329,13 +330,18 @@ class addParticipantsForm extends moodleform{
 
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                        $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $existingUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                        if($existingUser->state === 'state_existingmatrnr'){
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
+                            $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $existingUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                            $mform->addElement('html', '</div><div class="col-'.$col.'"> '. $image.' '.$link.' </div>');
+                        } else {
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
+                            $mform->addElement('html', '</div><div class="col-'.$col.'"> '. $image.' '.$moodleUser->firstname.' '.$moodleUser->lastname.' </div>');
+                        }
 
-                        $mform->addElement('html', '</div><div class="col-'.$col.'"> '. $image.' '.$link.' </div>');
 
                     } else if($existingUser->matrnr){
-                        $mform->addElement('html', '</div><div class="col-'.$col.'"></div>');
+                        $mform->addElement('html', '</div><div class="col-'.$col.'">'.$existingUser->firstname.' '.$existingUser->lastname.'</div>');
                     }
 
                     $mform->addElement('html', '<div class="col-'.$littlecol.'">'.$existingUser->matrnr.'</div>');
@@ -370,7 +376,7 @@ class addParticipantsForm extends moodleform{
 
                     }
 
-                    $mform->addElement('html', '<div class="col-'.$col.'">'.get_string($existingUser->state, "mod_exammanagement").'</div></div>');
+                    $mform->addElement('html', '<div class="col-'.$col.'">'.get_string($existingUser->state, "mod_exammanagement",['systemname' => $systemname]).'</div></div>');
                 }
 
                 $mform->addElement('html', '</div></div>');
