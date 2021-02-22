@@ -59,13 +59,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
       } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
-      }  
+      }
 
       if($sortmode == 'matrnr'){
         if(!$LDAPManagerObj->isLDAPenabled()){ // cancel export if no matrnrs are availiable because ldap is not enabled or configured
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
         } else if(!$LDAPManagerObj->isLDAPconfigured()){
-          $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');        
+          $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
         }
       }
 
@@ -114,9 +114,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       // get users and construct user tables for document
       $roomIDs = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
-      
+
       $roomsCount = 0;
-      
+
       foreach ($roomIDs as $roomID){
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
@@ -127,13 +127,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             usort($participants, function($a, $b){ //sort array by custom user function
 
               return strnatcmp($a->place, $b->place); // sort by place
-    
+
             });
           } else if($sortmode == 'matrnr'){
             usort($participants, function($a, $b){ //sort array by custom user function
 
               return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
-    
+
             });
           }
 
@@ -153,7 +153,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else {
               $rightCol[] = array("matrnr" => $matrnr, "roomname" => $participant->roomname, "place" => $participant->place);
             }
-          
+
             if ($key % 70 == 69 && isset($participants[$key+1])) {
               $tbl = $ExammanagementInstanceObj->getSeatingPlanTable($leftCol, $rightCol);
               $pdf->AddPage();
@@ -165,7 +165,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           }
 
           $tbl = $ExammanagementInstanceObj->getSeatingPlanTable($leftCol, $rightCol);
-          
+
           // Print text using writeHTMLCell()
           $pdf->AddPage();
           $pdf->writeHTML($tbl, true, false, false, false, '');
@@ -181,17 +181,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
           if($roomObj){
             $roomName = $roomObj->name;
-    
+
             // ---------------------------------------------------------
             if ($key < $roomsCount){
-  
+
                 $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
-  
+
                 if(isset($svgFile) && $svgFile !== ''){
-  
+
                     $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
                     $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
-              
+
                     $pdf->setPrintHeader(false);
                     $pdf->AddPage('L', 'A4');
                     $pdf->SetFont('freeserif', '', 20);
@@ -206,8 +206,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $pdf->setTextColor(204, 0, 0);
                     $pdf->Text(15, 185, get_string('numbered_seats_usable_seats', 'mod_exammanagement'), false, false, true, 0, 0, 'R');
                     $pdf->setTextColor(0, 0, 0);
-              
-                    $pdf->ImageSVG('@'.$svgFile, $x = '40', $y = '30', $w = '1000', $h = '1000', $link = '', $border=1, $fitonpage=false);
+
+                    @$pdf->ImageSVG('@'.$svgFile, $x = '40', $y = '30', $w = '1000', $h = '1000', $link = '', $border=1, $fitonpage=false); // @ to supress php7 tempnam notice inside tcpdf lib that prevent pdf output
                 }
             }
           }
@@ -228,7 +228,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       //============================================================+
       // END OF FILE
       //============================================================+
-    
+
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
       redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
