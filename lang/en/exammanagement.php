@@ -180,6 +180,7 @@ $string['complete_correction_str'] = 'The data entered in this exam organization
 $string['export_points_examreview_str'] = 'Here you can export the achieved exam points as a PDF document.';
 $string['export_points_examreview_str_points'] = 'Here you can export the achieved exam points <strong>(without prior achieved bonus points)</strong> as a PDF document.';
 $string['export_results_lists_note'] = 'This list of points is only intended for internal use by the lecturers and should not be published because of data protection reasons!';
+$string['export_results_statistics_note'] = 'This file contains all exam information and results, is only intended for internal use by the lecturers and should not be published because of data protection reasons!';
 $string['export_results_percentages_str'] = 'Export the results with percentages as a PDF document.';
 $string['export_results_percentages_str_points'] = 'Export the results with percentages <strong>(without prior achieved bonus points)</strong> as a PDF document.';
 $string['export_results_statistics_str'] = 'Export the results and statistics as an Excel document.';

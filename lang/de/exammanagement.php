@@ -176,6 +176,7 @@ $string['complete_correction_str'] = 'Die in dieser Prüfungsorganisation einget
 $string['export_points_examreview_str'] = 'Hier können die erreichten Punkte als PDF-Dokument exportiert werden.';
 $string['export_points_examreview_str_points'] = 'Hier können die erreichten Klausurpunkte <strong>(ohne ggf. vorher errungene Bonuspunkte)</strong> als PDF-Dokument exportiert werden.';
 $string['export_results_lists_note'] = 'Diese Punkteliste ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!';
+$string['export_results_statistics_note'] = 'Diese Datei enthält alle Prüfungsdaten und - ergebnisse, ist nur für den internen Gebrauch durch die Lehrenden bestimmt und darf aus Datenschutzgründen nicht veröffentlicht werden!';
 $string['export_results_percentages_str'] = 'Hier können die Ergebnisse mit Prozentangaben als PDF-Dokument exportiert werden.';
 $string['export_results_percentages_str_points'] = 'Hier können die Klausurergebnisse <strong>(ohne ggf. vorher errungene Bonuspunkte)</strong> mit Prozentangaben als PDF-Dokument exportiert werden.';
 $string['export_results_statistics_str'] = 'Hier können die Ergebnisse und Statistiken als Excel-Dokument exportiert werden.';

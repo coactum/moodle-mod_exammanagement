@@ -727,20 +727,20 @@ ajaxsetcorrectioncompletion = function(value){
 					</div>
 					<div class="row row-eq-height">
 						<div class="col-6">
-							<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+							<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 								<div class="panel-heading">
 									<span class="statebar pull-right">
-										{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-										{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+										{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger" title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 										<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 									</span>
 									<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
 								</div>
 								<div class="panel-body">
-									<p>{{#str}}export_results_statistics_str, mod_exammanagement{{/str}}</p>
+									<p>{{#str}}export_results_statistics_str, mod_exammanagement{{/str}}
+									<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_statistics_note, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
-									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+									{{#participants}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/participants}}
 								</div>
 							</div>
 						</div>
