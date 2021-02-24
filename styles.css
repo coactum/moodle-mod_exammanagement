@@ -286,7 +286,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   cursor: pointer;
 }
 
-.exammanagement_panel > .panel-heading span {
+.exammanagement_panel > .panel-heading span:not(.exammanagement_pure){
   /* minimize/maximize buttons */
   background: rgba(0, 0, 0, 0.15);
   display: inline;

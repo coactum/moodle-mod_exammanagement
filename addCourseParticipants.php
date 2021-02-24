@@ -117,8 +117,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
-                //Set default data (if any)
-                $mform->set_data(array('id'=>$id));
+                # set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants) #
+                $default_values = array('id'=>$id);
+                $courseParticipantsIDs = $UserObj->getCourseParticipantsIDs();
+
+				if(isset($courseParticipantsIDs)){
+					foreach($courseParticipantsIDs as $id){
+						$default_values['participants['.$id.']'] = true;
+					}
+				}
+
+				//Set default data (if any)
+				$mform->set_data($default_values);
 
                 //displays the form
                 $mform->display();

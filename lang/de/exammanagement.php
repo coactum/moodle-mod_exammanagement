@@ -332,8 +332,11 @@ $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
 $string['import_state'] = 'Status';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
-$string['participants_without_moodle_account'] = 'Prüfungsteilnehmer ohne {$a->systemname} Benutzerkonto';
+$string['participants_with_special_state'] = 'Prüfungsteilnehmer mit Sonderstatus';
 $string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne {$a->systemname} Benutzerkonto)';
+$string['state_added_to_exam_no_moodle_help'] = 'Dieser Teilnehmer muss sich mindestens einmal im System anmelden um die Prüfungsinformationen in seiner Teilnehmeransicht einsehen zu können. Er kann zudem über die Prüfungsorganisation versendete Gruppennachrichten nicht empfangen und kann auch nicht in Kursgruppen hinzugefügt werden.';
+$string['state_added_to_exam_no_course'] = 'Prüfungsteilnehmer (kein Kursteilnehmer)';
+$string['state_added_to_exam_no_course_help'] = 'Dieser Teilnehmer muss erst zum Kurs hinzugefügt werden bevor er die Prüfungsinformationen in seiner Teilnehmeransicht einsehen oder in Kursgruppen hinzugefügt werden kann.';
 $string['delete_participant'] = 'Teilnehmer löschen';
 $string['participant_deletion_warning'] = 'Durch diese Aktion werden der gewählte Prüfungsteilnehmende sowie alle für diesen eingetragenen Ergebnisse gelöscht.';
 $string['delete_all_participants'] = 'Alle Teilnehmer löschen';
@@ -352,15 +355,15 @@ $string['group'] = 'Gruppe';
 $string['new_group'] = 'Neue Gruppe';
 
 //addParticipantsForm.php
-$string['import_participants_from_file'] = 'Teilnehmer aus Datei hinzufügen';
-$string['import_from_text_file'] = 'Externe Teilnehmer aus Datei importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen enthalten Prüfungsinformationen) und zur Prüfung hinzufügen.';
-$string['read_file'] = 'Datei einlesen';
+$string['import_participants_from_file'] = 'Teilnehmer aus Dateien hinzufügen';
+$string['import_from_text_file'] = 'Prüfungsteilnehmer aus einer oder mehreren Dateien importieren (Einträge mit Tabulator getrennt; die ersten zwei Zeilen sind für Informationen wie den Prüfungsnamen vorgesehen und werden nicht ausgewertet).';
+$string['read_file'] = 'Dateien einlesen';
 $string['addParticipants'] = 'Teilnehmer hinzufügen';
 $string['import_new_participants'] = 'Andere Teilnehmer hinzufügen';
 $string['places_already_assigned_participants'] = '<strong>Achtung:</strong> Es wurden bereits Sitzplätze zugewiesen. Falls nun neue Prüfungsteilnehmende hinzugefügt werden müssen diesen noch Sitzplätze zugewiesen werden.';
 $string['newmatrnr'] = 'Benutzer werden zur Prüfung hinzugefügt.';
 $string['badmatrnr'] = 'Zeilen mit ungültigen Matrikelnummern (Benutzer können nicht zur Prüfung hinzugefügt werden).';
-$string['oddmatrnr'] = 'Benutzer mit Warnungen (können trotzdem hinzugefügt werden).';
+$string['oddmatrnr'] = 'Benutzer mit Warnungen werden zur Prüfung hinzugefügt.';
 $string['existingmatrnr'] = 'Benutzer sind bereits Prüfungsteilnehmer (keine Änderungen).';
 $string['deletedmatrnr'] = 'Prüfungsteilnehmer werden entfernt.';
 $string['select_deselect_all'] = 'Alle aus-/abwählen';
@@ -368,9 +371,11 @@ $string['add_to_exam'] = 'Zur Prüfung hinzufügen';
 $string['no_participants_added_page'] = 'Bisher wurden keine Teilnehmer zur Prüfung hinzugefügt.';
 $string['state_newmatrnr'] = 'Neu eingelesen';
 $string['state_nonmoodle'] = 'Ohne {$a->systemname} Benutzerkonto';
+$string['state_nonmoodle_help'] = 'Dieser Teilnehmer muss sich nach dem Import erst noch mindestens einmal im System anmelden, um die Prüfungsinformationen in seiner Teilnehmeransicht einsehen zu können. Er kann sonst zudem über die Prüfungsorganisation versendete Gruppennachrichten nicht empfangen und kann auch nicht in Kursgruppen hinzugefügt werden.';
 $string['state_badmatrnr'] = 'Ungültige Matrikelnummer';
 $string['state_doubled'] = 'Doppelte Matrikelnummer';
 $string['state_no_courseparticipant'] = 'Kein Kursteilnehmer';
+$string['state_no_courseparticipant_help'] = 'Dieser Teilnehmer muss nach dem Import erst noch zum Kurs hinzugefügt werden, bevor er die Prüfungsinformationen in seiner Teilnehmeransicht einsehen oder in Kursgruppen hinzugefügt werden kann.';
 $string['state_existingmatrnr'] = 'Bereits Prüfungsteilnehmer';
 $string['state_existingmatrnrnocourse'] = 'Bereits Prüfungsteilnehmer (kein Kursteilnehmer)';
 $string['state_existingmatrnrnomoodle'] = 'Bereits Prüfungsteilnehmer (ohne {$a->systemname} Benutzerkonto)';
@@ -634,20 +639,19 @@ PrüfungsteilnehmerInnen, die nicht zum Kurs gehören oder kein '.get_config('mo
 Die hier erstellten Gruppen können im gesamten Kurs und allen dortigen Aktivitäten genau wie normale Gruppen verwendet werden. Nach dem Anklicken einer Gruppe etwa in der Teilnehmerübersicht kann diese bearbeitet oder verändert werden.';
 $string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addParticipants_help']= 'Auf dieser Seite können <strong>TeilnehmerInnen</strong> aus Prüfungslisten zur Prüfung hinzugefügt werden. Auf diese Weise können deren Ergebnisse später wieder listenweise exportiert und dann einfach reimportiert werden. <br /> <br />
-Dazu benötigen Sie zunächst die Liste ihrer Prüfungsteilnehmer. Diese Datei können Sie dann im Auswahlbereich auswählen und durch einen Klick auf den entsprechenden Button einlesen lassen. <br><br>
-Auf der nun folgenden Seite sehen Sie alle aus der Datei eingelesenen Matrikelnummern. Dabei wird in verschiedenen Bereichen genau aufgeschlüsselt, welchen Status eine Matrikelnummer hat und ob der dazugehörige Studierende zur Prüfung hinzugefügt werden kann. <br><br>
+Dazu benötigen Sie zunächst eine oder mehrere Listen mit den Matrikelnummern der Prüfungsteilnehmer. Diese Dateien können in den Auswahlbereich gezogen und dann durch einen Klick auf den entsprechenden Button eingelesen werden. <br><br>
+Auf der nun folgenden Seite sehen Sie alle aus der oder den Dateien eingelesenen Matrikelnummern. Dabei wird in verschiedenen Bereichen genau aufgeschlüsselt, welchen Status eine Matrikelnummer hat und ob der dazugehörige Studierende zur Prüfung hinzugefügt werden kann. <br><br>
 Im Folgenden werden die verschiedenen Stati kurz erklärt:<br>
-<ul><li><strong>Ungültige Matrikelnummer</strong>: Die eingegebene Matrikelnummer ist ungültig, weil sie zum Beispiel nicht erlaubte Zeichen wie etwa Buchstaben enthält. Sie kann deshalb auch nicht als Teilnehmer eingelesen werden. Die ganz links in der Zeile stehende Zahl gibt die Nummer der Zeile an, in der die defekte Matrikelnummer in der eingelesenen Datei steht und wo sie gegebenenfalls kontrolliert werden kann. </li>
-<li><strong>Doppelte Matrikelnummer</strong>: Die Matrikelnummer kommt in der Datei mehrfach vor. Als Prüfungsteilnehmer kann Sie jedoch im entsprechenden Abschnitt nur einmal eingelesen werden.</li>
+<ul><li><strong>Ungültige Matrikelnummer</strong>: Die eingegebene Matrikelnummer ist ungültig, weil sie zum Beispiel nicht erlaubte Zeichen wie etwa Buchstaben enthält. Sie kann deshalb auch nicht als Teilnehmer eingelesen werden. Die ganz links in der Zeile stehende Zahl gibt die Nummer der Zeile und der Datei an, in der die defekte Matrikelnummer gefunden werden kann. </li>
+<li><strong>Doppelte Matrikelnummer</strong>: Die Matrikelnummer kommt in der oder den Dateien mehrfach vor. Als Prüfungsteilnehmer kann Sie jedoch im entsprechenden Abschnitt nur einmal eingelesen werden.</li>
 <li><strong>Neu eingelesen (kein Kursteilnehmer)</strong>: Der zu dieser Matrikelnummer gehörende Studierende ist nicht Teil des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses. Er kann problemlos als Prüfungsteilnehmer importiert werden. Da er jedoch nicht die Teilnehmeransicht des Plugins ansehen kann muss er, um auszuschliessen dass hier ein Fehler vorliegt, durch Setzen des Hakens manuell ausgewählt werden.</li>
 <li><strong>Neu eingelesen (ohne '. get_config('mod_exammanagement', 'moodlesystemname').' Benutzerkonto)</strong>: Der zu dieser Matrikelnummer gehörende Studierende hat noch keinen Account in '. get_config('mod_exammanagement', 'moodlesystemname').'. Dies kann etwa geschehen, wenn er sich noch nie in '. get_config('mod_exammanagement', 'moodlesystemname').' angemeldet hat. Der oder die Studierende kann zwar als Prüfungsteilnehmer importiert werden, jedoch kann er dann nicht die Teilnehmeransicht der Prüfungsorganisation betrachten und Sie können ihn auch nicht über die Benachrichtigungssfunktion der Prüfungsorganisation erreichen. Deshalb müssen Sie diesen Studierenden hier manuell anhaken.</li>
-<li><strong>Werden gelöscht</strong>: Dieser Teilnehmer wurde in einer früheren Version der verwendeten Liste bereits als Prüfungsteilnehmer importiert, ist in der aktuellen jedoch nicht mehr enthalten (weil er sich zum Beispiel in der Zwischenzeit von der Prüfung abgemeldet hat). Durch Auswählen können Sie nun bestimmen, dass dieser Teilnehmer von der aktuellen Prüfung entfernt werden soll.</li>
-<li><strong>Bereits Prüfungsteilnehmer</strong>: Dieser Teilnehmer wurde bereits als Prüfungsteilnehmer importiert und wird durch den aktuellen Import nicht verändert.</li>
+<li><strong>Werden gelöscht</strong>: Dieser Teilnehmer wurde bereits als Prüfungsteilnehmer importiert, ist in den aktuell eingelesenen Dateien jedoch nicht mehr enthalten (weil er sich zum Beispiel in der Zwischenzeit von der Prüfung abgemeldet hat). Durch Auswählen können Sie nun bestimmen, dass dieser Teilnehmer von der aktuellen Prüfung entfernt werden soll.</li>
+<li><strong>Bereits Prüfungsteilnehmer</strong>: Dieser Teilnehmende wurde bereits als Prüfungsteilnehmer importiert und wird durch den aktuellen Import nicht verändert.</li>
 <li><strong>Neu eingelesen</strong>: Dies ist ein gültiger Teilnehmer, der ohne Probleme zur Prüfung hinzugefügt werden kann. Alle Teilnehmer in diesem Abschnitt sind für das Hinzufügen zur Prüfung vorausgewählt.</li>
 </ul>
 Alle Teilnehmer, die zur Prüfung hinzugefügt (oder von dieser wieder entfernt) werden sollen können nun ausgewählt werden, indem entweder der Haken in die Box neben dem Namen oder aber im Feld "Alle aus-/abwählen" des jeweiligen Bereiches gesetzt wird. Ein anschließendes Drücken des Buttons "Zur Prüfung hinzufügen" fügt die ausgewählten Teilnehmer dann zur Prüfung hinzu.<br><br>
-Falls Sie die falsche Datei eingelesen haben können Sie mit einem Klick auf den Button "Andere Teilnehmer hinzufügen" sofort eine neue Datei einlesen. Die aktuell eingelesenen Teilnehmer werden dabei nicht importiert sondern wieder verworfen.<br><br>
-Für den Import von Teilnehmern aus mehreren Listen können Sie diesen Vorgang mehrfach durchführen.';
+Falls Sie eine falsche Datei eingelesen haben können Sie mit einem Klick auf den Button "Andere Teilnehmer hinzufügen" das Einlesen wiederholen. Die aktuell eingelesenen Teilnehmer werden dabei nicht importiert sondern wieder verworfen.';
 $string['addParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addCourseParticipants_help']= 'Hier können alle im '. get_config('mod_exammanagement', 'moodlesystemname').' Kurs eingeschriebenen <strong>Kursteilnehmerinnen</strong> als Prüfungsteilnehmer importiert werden. <br><br>
 Dazu müssen im unteren Abschnitt all jene Teilnehmerinnen ausgewählt werden, die zur Prüfung hinzugefügt werden sollen. Einzelne Teilnehmer können dabei durch einen Klick in das Kästchen neben ihrem Namen ausgewählt werden, zum Aus- (oder ab)wählen aller Kursteilnehmer genügt hingegen ein Klick in das entsprechende Kästchen "Alle aus-/abwählen". Es können zudem im entsprechenden Abschnitt gegebenenfalls bereits vorhandene Prüfungsteilnehmer die keine Kursteilnehmer sind ausgewählt werden. Diese werden dann bei einem Klick auf den ganz unten befindlichen Button "Zur Prüfung hinzufügen" von der Prüfung entfernt, während die ausgewählten Kursteilnehmer zur Prüfung hinzugefügt werden. Für alle Teilnehmer mit dem Status "Bereits Prüfungsteilnehmer" ändert sich hingegen nichts. <br><br>

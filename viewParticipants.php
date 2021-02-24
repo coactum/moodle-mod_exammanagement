@@ -130,31 +130,55 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 // show participants with moodle account
                 if($moodleParticipants){
+
+                    $courseParticipants = $UserObj->getCourseParticipantsIDs();
+                    $noneCourseParticipants = array();
+
                     foreach ($moodleParticipants as $key => $participant) {
 
-                        echo('<tr>');
-                        echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
-                        echo('<td>'.$participant->profile.'</td>');
-                        echo('<td>'.$participant->matrnr.'</td>');
+                        if($courseParticipants && in_array($participant->moodleuserid, $courseParticipants)){
+                            echo('<tr>');
+                            echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
+                            echo('<td>'.$participant->profile.'</td>');
+                            echo('<td>'.$participant->matrnr.'</td>');
 
-                        if($courseGroups){
-                            echo('<td>'.$participant->groups.'</td>');
+                            if($courseGroups){
+                                echo('<td>'.$participant->groups.'</td>');
+                            }
+
+                            echo('<td>'.get_string("state_added_to_exam", "mod_exammanagement").'</td>');
+                            echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmid', $participant->moodleuserid).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
+                            echo('<a class="pull-right" href="#end" title="'.get_string("jump_to_end", "mod_exammanagement").'"><i class="fa fa-2x fa-lg fa-arrow-down" aria-hidden="true"></i></a></td>');
+                            echo('</tr>');
+
+                            $i++;
+                        } else {
+                            $participant->state = 'state_added_to_exam_no_course';
+                            array_push($noneCourseParticipants, $participant);
                         }
-
-                        echo('<td>'.get_string("state_added_to_exam", "mod_exammanagement").'</td>');
-                        echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmid', $participant->moodleuserid).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
-                        echo('<a class="pull-right" href="#end" title="'.get_string("jump_to_end", "mod_exammanagement").'"><i class="fa fa-2x fa-lg fa-arrow-down" aria-hidden="true"></i></a></td>');
-                        echo('</tr>');
-
-                        $i++;
                     }
                 }
 
                 // show participants withouth moodle account
 
-                if($noneMoodleParticipants){
+                if($noneMoodleParticipants && !empty($noneCourseParticipants)){
 
-                    if(!$moodleParticipants){
+                    $courseid = $ExammanagementInstanceObj->getCourse()->id;
+                    $participants_specialstate = array_merge($noneMoodleParticipants, $noneCourseParticipants);
+
+                    usort($participants_specialstate, function($a, $b){
+                        return strnatcmp($a->lastname, $b->lastname); // sort by lastname
+                    });
+                } else if(!empty($noneCourseParticipants)){
+                    $courseid = $ExammanagementInstanceObj->getCourse()->id;
+                    $participants_specialstate = $noneCourseParticipants;
+                } else {
+                    $participants_specialstate = $noneMoodleParticipants;
+                }
+
+                if($participants_specialstate){
+
+                    if(!$moodleParticipants || $i ==1){
                         if($courseGroups){
                             echo('<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>');
                         } else {
@@ -162,21 +186,35 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         }
                     }
 
-                    echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_without_moodle_account", "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</strong></td></tr>');
+                    echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_with_special_state", "mod_exammanagement").'</strong></td></tr>');
 
-                    foreach ($noneMoodleParticipants as $key => $participant) {
+
+                    foreach ($participants_specialstate as $key => $participant) {
 
                         echo('<tr>');
                         echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
-                        echo('<td>'.$participant->firstname.' '.$participant->lastname.'</td>');
+
+                        if(isset($participant->state) && $participant->state === 'state_added_to_exam_no_course'){
+                            $moodleUser = $UserObj->getMoodleUser($participant->moodleuserid);
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
+                            echo('<td>'.$image . ' ' . $participant->firstname.' '.$participant->lastname.'</td>');
+                        } else {
+                            echo('<td>'.$participant->firstname.' '.$participant->lastname.'</td>');
+                        }
+
                         echo('<td>'.$participant->matrnr.'</td>');
 
                         if($courseGroups){
                             echo('<td> - </td>');
                         }
 
-                        echo('<td>'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</td>');
-                        echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmatrnr', $participant->login).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
+                        if(isset($participant->state) && $participant->state === 'state_added_to_exam_no_course'){
+                            echo('<td>'.get_string("state_added_to_exam_no_course", "mod_exammanagement") . ' ' . $OUTPUT->help_icon('state_added_to_exam_no_course', 'mod_exammanagement', '').'</td>');
+                            echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmid', $participant->moodleuserid).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
+                        } else {
+                            echo('<td>'.get_string("state_added_to_exam_no_moodle", "mod_exammanagement",['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]). ' ' . $OUTPUT->help_icon('state_added_to_exam_no_moodle', 'mod_exammanagement', '').'</td>');
+                            echo('<td class="exammanagement_brand_bordercolor_left"><a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dpmatrnr', $participant->login).'" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
+                        }
                         echo('<a class="pull-right" href="#end" title="'.get_string("jump_to_end", "mod_exammanagement").'"><i class="fa fa-2x fa-lg fa-arrow-down" aria-hidden="true"></i></a></td>');
                         echo('</tr>');
 
@@ -188,13 +226,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 echo('<tr id="end"></tr></tbody></table></div>');
 
             } else {
-                    echo('<div class="row"><p class="col-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
+                echo('<div class="row"><p class="col-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
             }
 
             echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
-            if($moodleParticipants || $noneMoodleParticipants){
-            echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-default m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+            if($moodleParticipants || $noneMoodleParticipants || isset($participants_specialstate)){
+                echo ('<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/viewParticipants.php', $id, 'dap', true).'" class="btn btn-default m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
             }
 
             echo('</span>');

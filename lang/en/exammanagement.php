@@ -336,8 +336,11 @@ $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
 $string['state_added_to_exam'] = 'Participant of exam';
-$string['participants_without_moodle_account'] = 'Participants of exam without {$a->systemname} account';
+$string['participants_with_special_state'] = 'Participants with special state';
 $string['state_added_to_exam_no_moodle'] = 'Participant of exam (without {$a->systemname} account)';
+$string['state_added_to_exam_no_moodle_help'] = 'This participant must log in to the system at least once to view the exam information in his participant view. He also cannot receive group messages sent via the exam organization and cannot be added to course groups.';
+$string['state_added_to_exam_no_course'] = 'Participant of exam (no course participant)';
+$string['state_added_to_exam_no_course_help'] = 'This participant must be added to the course before he or she can view the exam information in his or her participant view or be added to course groups.';
 $string['delete_participant'] = 'Delete participant';
 $string['participant_deletion_warning'] = 'This action deletes the selected exam participant and all results entered for him.';
 $string['delete_all_participants'] = 'Delete all participants';
@@ -356,15 +359,15 @@ $string['group'] = 'Group';
 $string['new_group'] = 'New group';
 
 //addParticipantsForm.php
-$string['import_participants_from_file'] = 'Import participants from file';
-$string['import_from_text_file'] = 'Import participants from file (entries separated by tabs; first two lines with exam information) and add them to course.';
-$string['read_file'] = 'Read file';
+$string['import_participants_from_file'] = 'Import participants from files';
+$string['import_from_text_file'] = 'Import participants from files (entries separated by tabs; first two lines are reserved for exam information and will not be used).';
+$string['read_file'] = 'Read files';
 $string['addParticipants'] = 'Import participants';
 $string['import_new_participants'] = 'Import other participants';
 $string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
 $string['newmatrnr'] = 'Users will be added to exam.';
 $string['badmatrnr'] = 'Users can not be added to exam (invalid matriculation numbers)!';
-$string['oddmatrnr'] = 'Users with warnings (can still be added as participants).';
+$string['oddmatrnr'] = 'Users with warnings will be added to exam.';
 $string['existingmatrnr'] = 'Users are already exam participants (no changes)';
 $string['deletedmatrnr'] = 'Participants will be deleted.';
 $string['add_to_exam'] = 'Add to exam';
@@ -372,9 +375,11 @@ $string['select_deselect_all'] = 'Select/deselect all';
 $string['no_participants_added_page'] = 'No participants added.';
 $string['state_newmatrnr'] = 'New';
 $string['state_nonmoodle'] = 'Without {$a->systemname} account';
+$string['state_nonmoodle_help'] = 'After his import this participant must log in to the system at least once before he can view the exam information in his participant view. He also cannot receive group messages sent via the exam organization and cannot be added to course groups before.';
 $string['state_badmatrnr'] = 'Invalid matriculation number';
 $string['state_doubled'] = 'Duplicated matriculation number';
 $string['state_no_courseparticipant'] = 'No course participant';
+$string['state_no_courseparticipant_help'] = 'After his import this participant must be added to the course first before he or she can view the exam information in his or her participant view or be added to course groups.';
 $string['state_existingmatrnr'] = 'Already exam participant';
 $string['state_existingmatrnrnocourse'] = 'Already exam participant (no course participant)';
 $string['state_existingmatrnrnomoodle'] = 'Already exam participant (without {$a->systemname} account)';
@@ -638,20 +643,19 @@ Exam participants who are no course participants or do not have a '.get_config('
 Groups created here can be used throughout the course and all it`s activities just like normal groups. After clicking on a group, for example in the participant overview, it can be edited or changed.';
 $string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addParticipants_help']= 'On this page you can add <strong>participants</strong> from exam lists to the exam. In this way their results can be exported later again and then can be simply reimported. <br /> <br />
-To do this, you first need the list of your exam participants. You can then select this file in the selection area and import it by clicking on the corresponding button. <br><br>
-On the following page you will see all matriculation numbers read from the file. The state of a matriculation number and whether the corresponding student can be added to the exam are displayed in different sections. <br><br>
+To do this, you first need one or multiple lists with the matriculation numbers of your exam participants. These files can be dragged into the selection area and then be read in by clicking on the corresponding button. <br><br>
+On the following page you will see all matriculation numbers read from the files. The state of a matriculation number and whether the corresponding student can be added to the exam are displayed in different sections. <br><br>
 In the following the different states are briefly explained:<br>
-<ul><li><strong>Bad matriculation number</strong>: The entered matriculation number is invalid because, for example, it contains illegal characters such as letters. It cannot therefore be read in as a participant. The number on the far left of the line indicates the number of the line in which the invalid matriculation number is located in the read in file and where it can be checked if necessary.</li>
+<ul><li><strong>Bad matriculation number</strong>: The entered matriculation number is invalid because, for example, it contains illegal characters such as letters. It cannot therefore be read in as a participant. The number on the far left of the line indicates the number of the line and the file in which the invalid matriculation number can be found.</li>
 <li><strong>Duplicated matriculation number</strong>: The matriculation number occurs several times in the file. However, it can only be read in once as a exam participant in the corresponding section.</li>
 <li><strong>New (no course participant)</strong>: The student belonging to this matriculation number is not part of the '. get_config('mod_exammanagement', 'moodlesystemname').' course. He can easily be imported as an exam participant. However, since he cannot view the participant view of the plugin, he must be selected manually by ticking the checkbox in order to exclude the possibility of an error here.</li>
 <li><strong>New (without '. get_config('mod_exammanagement', 'moodlesystemname').' account)</strong>: The student belonging to this matriculation number does not yet have an account in '. get_config('mod_exammanagement', 'moodlesystemname').'. This can happen, for example, if the student has never registered in '. get_config('mod_exammanagement', 'moodlesystemname').' before. Although the student can be imported as an exam participant, he or she cannot view the participant view of the exam organization and you cannot reach him or her via the notification function of the exam organization. Therefore you have to check this student here manually.</li>
-<li><strong>Will be deleted</strong>: This participant was already imported as an exam participant with an earlier version of the used participants list, but is no longer included in the current one (for example, because he has deregistered from the exam in the meantime). You can now select this participant to remove him from the current exam.</li>
+<li><strong>Will be deleted</strong>: This participant was already imported as an exam participant but is no longer included in the current import files (for example, because he has deregistered from the exam in the meantime). You can now select this participant to remove him from the current exam.</li>
 <li><strong>Already exam participant</strong>: This participant has already been imported as an exam participant and is not modified by the current import.</li>
 <li><strong>New</strong>: This is a valid participant that can be added to the exam without any problems. All participants in this section are preselected to be added to the exam.</li>
 </ul>
 All participants to be added to (or removed from) the exam can now be selected either by checking the box next to the name or by checking the "Select/deselect all" box of the respective area. Then press the "Add to exam" button to add the selected participants to the exam.<br><br>
-If you have read in the wrong file, you can immediately read in a new file by clicking on the button "Import other participants". The currently readed participants then will not be imported but discarded.<br><br>
-You can perform this procedure several times for the import of participants from several lists.';
+If you have read in a wrong file, you can repeat the import by clicking on the button "Import other participants". The currently loaded participants are not imported but discarded.';
 $string['addParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addCourseParticipants_help']= 'Here you can import all <strong>'. get_config('mod_exammanagement', 'moodlesystemname').'course participants</strong> as exam participants. <br><br>
 All course participants who should be added to the exam must be selected by checking the box next to their name. To select (or deselect) all course participants it is sufficient to click in the corresponding box "Select/deselect all". In the corresponding section, you can also select existing participants who are not course participants. These are then removed from the exam by clicking on the "Add to exam" button at the bottom, while the selected course participants are then added to the exam. For all participants with the state "Already exam participants" nothing changes. <br><br>
