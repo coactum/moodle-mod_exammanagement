@@ -259,11 +259,20 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020110500, 'exammanagement');
     }
 
-    if ($oldversion < 2021021900) { // add new fields for setting bonus and result user visibility
+    if ($oldversion < 2021022100) { // add new fields for setting bonus and result user visibility
 
-        // Define field resultvisible to be added to exammanagement.
+        // Define field headerid to be added to exammanagement.
         $table = new xmldb_table('exammanagement_temp_part');
         $field = new xmldb_field('headerid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+
+        // Conditionally launch add field for exammanagement.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field assignmentmode to be added to exammanagement.
+        $table = new xmldb_table('exammanagement');
+        $field = new xmldb_field('assignmentmode', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'textfield');
 
         // Conditionally launch add field for exammanagement.
         if (!$dbman->field_exists($table, $field)) {
@@ -279,7 +288,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
         }
 
         // Exammanagement savepoint reached.
-        upgrade_mod_savepoint(true, 2021021900, 'exammanagement');
+        upgrade_mod_savepoint(true, 2021022100, 'exammanagement');
     }
 
     return true;

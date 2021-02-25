@@ -423,6 +423,20 @@ $string['mailsubject'] = '[{$a->systemname} - Prüfungsorganisation] {$a->course
 $string['mailfooter'] = 'Diese Nachricht wurde über die Prüfungsorganisation in {$a->systemname} verschickt. Unter dem folgenden Link finden Sie alle weiteren Informationen. <br> {$a->categoryname} -> {$a->coursename} -> Prüfungsorganisation -> {$a->name} <br> {$a->url}';
 
 // assignPlaces.php
+$string['assignPlaces'] = 'Sitzplätze zuweisen';
+$string['assign_places_text'] = 'Hier können allen Prüfungsteilnehmern automatisch oder manuell Sitzplätze zugewiesen werden.';
+$string['revert_places_assignment'] = 'Sitzplatzzuweisung zurücksetzen';
+$string['choose_assignment_mode'] = 'Zuweisungsmodus für Räume und Sitzplätze wählen';
+$string['assignment_mode_places'] = 'Modus Platzzuweisung';
+$string['assignment_mode_rooms'] = 'Modus Raumzuweisung';
+$string['mode_places_lastname'] = 'Nachname (alphabetisch)';
+$string['mode_places_matrnr'] = 'Matrikelnummer (aufsteigend)';
+$string['mode_places_random'] = 'Zufällig';
+$string['mode_room_ascending'] = 'Aufsteigend (vom kleinsten zum größten Raum)';
+$string['mode_room_descending'] = 'Absteigend (vom größten zum kleinsten Raum)';
+$string['mode_room_equal'] = 'Gleichmäßig (alle Räume werden beginnend mit dem Größten gleichmäßig befüllt)';
+$string['revert_seat_assignment_left'] = 'Bestehende Zuweisung löschen';
+$string['revert_seat_assignment_right'] = 'Bereits bestehende Zuweisungen bei der Neuzuweisung entfernen';
 $string['participants_missing_places'] = 'Einigen Teilnehmerinnen und Teilnehmern konnte noch kein Sitzplatz zugewiesen werden. Fügen Sie ausreichend Räume zur Prüfung hinzu und wiederholen Sie die Zuweisung oder weisen Sie die noch fehlenden Sitzplätze manuell zu.';
 
 //importBonusForm.php
@@ -675,6 +689,8 @@ Falls Sie Teilnehmerinnen zur Prüfung hinzugefügt haben, die noch kein '. get_
 Die gesamte Benachrichtigungsfunktion ist rein optional, Sie müssen sie nicht nutzen, um eine Nachricht an die PrüfungsteilnehmerInnen zu senden. <br /> <br />
 <strong>Hinweis:</strong>  Um den PrüfungsteilnehmerInnen ausführlichere Hinweise etwa zu den in der Klausur erlaubten Hilfsmitteln zu geben kann auch das über die Übersichtsseite erreichbare Freitextfeld genutzt werden.';
 $string['sendGroupmessage_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['assignPlaces_help']= 'Hilfetext für assignPlaces';
+$string['assignPlaces_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['importBonus_help']= 'Hier können (beispielsweise bei der Bearbeitung von Übungsaufgaben errungene) <strong>Bonuspunkte</strong> der PrüfungsteilnehmerInnen entweder direkt importiert oder aber in <strong>Bonusnotenschritte</strong> für die Prüfung umgewandelt werden. Die direkt importierten Bonuspunkte werden später auf die in der Prüfung errungene Punktzahl addiert während Bonusnotenschritte am Ende mit der Prüfungsnote verrechnet werden. <br><br>
 Dazu muss zunächst im oberen Abschnitt der Importmodus gewählt werden. Wird hier der Modus "Bonusnotenschritte" gewählt kann zudem die Zahl der für die Klausur möglichen Bonusnotenschritte festgelegt werden. Es sind maximal drei Bonusnotenschritte (ein Notenschritt wäre etwa die Verbesserung von 1,7 auf 1,3) möglich, insgesamt können Prüfungsteilnehmende sich also um maximal eine Note verbessern. Für jeden Bonusnotenschritt muss danach zudem angegeben werden, wie viele Punkte die Prüflinge zum Erhalten dieses Schrittes mindestens erreicht haben müssen. <br><br>
 Im unteren Abschnitt muss als Nächstes die Art des Dateiimportes festgelegt werden. Dazu gibt es zwei Möglichkeiten:<br><br>

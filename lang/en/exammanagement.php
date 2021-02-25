@@ -204,8 +204,8 @@ $string['add_participants'] = 'Add participants';
 $string['configure_tasks'] = 'Configure tasks';
 $string['edit_textfield'] = 'Edit textfield';
 $string['send_groupmessage'] = 'Write message';
-$string['assign_places'] = 'Assign exam seats automatically';
-$string['assign_places_manually'] = 'Assign exam seats manually';
+$string['assign_places'] = 'Assign seats automatically';
+$string['assign_places_manually'] = 'Assign seats manually';
 $string['export_seatingplan_place'] = 'Sorted by place';
 $string['export_seatingplan_matrnr'] = 'Sorted by matriculation number';
 $string['export_barcodes'] = 'Export barcodes';
@@ -427,6 +427,20 @@ $string['mailsubject'] = '[{$a->systemname} - Exam management] {$a->coursename}:
 $string['mailfooter'] = 'This message was sent via the exam organization in {$a->systemname}. You can find all further information under the following link: <br> {$a->categoryname} -> {$a->coursename} -> Prüfungsorganisation -> {$a->name} <br> {$a->url}';
 
 //assignPlaces.php
+$string['assignPlaces'] = 'Assign seats';
+$string['assign_places_text'] = 'Here, seats can be assigned automatically or manually to all exam participants.';
+$string['revert_places_assignment'] = 'Reset seat assignment';
+$string['choose_assignment_mode'] = 'Select assignment mode for rooms and seats';
+$string['assignment_mode_places'] = 'Mode seat assignment';
+$string['assignment_mode_rooms'] = 'Mode room assignment';
+$string['mode_places_lastname'] = 'Lastname (alphabetical)';
+$string['mode_places_matrnr'] = 'Matriculation number (ascending)';
+$string['mode_places_random'] = 'Random';
+$string['mode_room_ascending'] = 'Ascending (from smallest to largest room)';
+$string['mode_room_descending'] = 'Descending (from largest to smallest room)';
+$string['mode_room_equal'] = 'Equal (all rooms are filled equally starting with the largest one)';
+$string['revert_seat_assignment_left'] = 'Delete existing assignment';
+$string['revert_seat_assignment_right'] = 'Remove already existing assignments during automatic reassignment';
 $string['participants_missing_places'] = 'Some participants have not been assigned a seat yet. Add enough rooms to the exam and repeat the assignment or assign the missing seats manually.';
 
 //importBonusForm.php
@@ -679,6 +693,8 @@ If you have added participants to the exam who do not yet have a '. get_config('
 The whole notification function is purely optional, you do not have to use it to send a message to the participants.
 <strong>Note:</strong> In order to give the participants more detailed information about the auxiliary means permitted in the exam, for example, the free textfield accessible via the overview page can also be used.';
 $string['sendGroupmessage_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['assignPlaces_help']= 'Help text for assign seats';
+$string['assignPlaces_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['importBonus_help']= '<strong>Bonus points</strong> (for example earned from exercises) can either be directly imported or converted to <strong>bonus grade steps</strong> for the exam. The directly imported bonus points are later added to the points earned in the exam, while bonus grade steps are added to the final exam grade.
 To do this, you must first select the import mode in the upper section. If the mode "Bonus grade steps" is selected here, the number of possible bonus grade steps for the exam must also be defined. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>

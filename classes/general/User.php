@@ -84,6 +84,16 @@ class User{
 
 			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select);
 
+		} else if($participantsMode['mode'] === 'no_seats_assigned'){
+			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+
+			$select = "exammanagement =".$this->exammanagement;
+			$select .= " AND roomid IS NULL";
+			$select .= " AND roomname IS NULL";
+			$select .= " AND place IS NULL";
+
+			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select);
+
 		} else {
 			return false;
 		}
@@ -209,10 +219,10 @@ class User{
 				});
 			} else if($sortOrder == 'matrnr'){
 				usort($allParticipants, function($a, $b){ //sort participants array by matrnr through custom user function
-
-					return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
-
+					return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr (ascending)
 				});
+			} else if($sortOrder == 'random'){
+				shuffle($allParticipants);
 			}
 
 			return $allParticipants;

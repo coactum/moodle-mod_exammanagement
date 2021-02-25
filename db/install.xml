@@ -18,6 +18,7 @@
           <FIELD NAME="tempimportfileheader" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Temporary saved header of last imported text file as string in json syntax"/>
           <FIELD NAME="tasks" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Exam tasks and related points as object in json syntax"/>
           <FIELD NAME="textfield" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Content and format of textfield as object in json syntax"/>
+          <FIELD NAME="assignmentmode" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="Mode of seat assignment"/>
           <FIELD NAME="datetimevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if date and time is set user visible"/>
           <FIELD NAME="roomvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if room is set user visible"/>
           <FIELD NAME="placevisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if place is set user visible"/>

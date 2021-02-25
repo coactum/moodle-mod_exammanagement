@@ -342,7 +342,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}places_assigned_note, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}}" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places, mod_exammanagement{{/str}}"></i></a><a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}} pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assign_places_manually, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assign_places_manually, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
+											{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#allplacesassigned}}btn-success{{/allplacesassigned}}{{^allplacesassigned}}btn-warning{{/allplacesassigned}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assignPlaces, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assignPlaces, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
 										</div>
 									</div>
 								</div>
