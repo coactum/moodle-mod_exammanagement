@@ -309,18 +309,27 @@ class exammanagementInstance{
 		}
 	}
 
-	public function allPlacesAssigned(){
+	public function placesAssigned(){
+		$assignmentmode = $this->moduleinstance->assignmentmode;
 
+		if(isset($assignmentmode)){
+			return true;
+		} else {
+			return false;
+
+		}
+
+	}
+
+	public function allPlacesAssigned(){
 		$UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
 
 		$assignedPlacesCount = $this->getAssignedPlacesCount();
 
 		if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getParticipantsCount()){
 			return true;
-
 		} else {
 			return false;
-
 		}
 
 	}
@@ -497,7 +506,7 @@ class exammanagementInstance{
 						return false;
 				}
 			case 2:
-				if ($this->allPlacesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))){
+				if ($this->placesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))){
 					return true;
 				} else {
 						return false;

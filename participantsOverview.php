@@ -84,10 +84,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if(isset($fromform->room)){
                     $participantObj->roomid = $fromform->room;
                     $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
+
+                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '0';
                 }
 
                 if(isset($fromform->place)){
                     $participantObj->place = $fromform->place;
+                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '0';
                 }
 
                 if($pne == false){ // if participants points were not empty
@@ -153,6 +156,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
 
                 if($update){
+                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);

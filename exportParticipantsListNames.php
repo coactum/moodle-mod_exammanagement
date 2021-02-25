@@ -53,9 +53,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
             } else if (!$UserObj->getParticipantsCount()) {
                 $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-            } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
-            }  
+            } else if(!$ExammanagementInstanceObj->placesAssigned()){
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
+            }
 
             //include pdf
             require_once(__DIR__.'/classes/pdfs/participantsList.php');
@@ -134,7 +134,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $fill = false;
                         $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
                     }
-                        
+
                     foreach ($participants as $participant){
 
                         $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
@@ -144,10 +144,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
                         $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
                         $tbl .= "</tr>";
-                
+
                         $fill = !$fill;
                     }
-            
+
                     $previousRoom = $currentRoom;
                 }
             }

@@ -79,7 +79,7 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("course_participant_import_preventing_text_export", "mod_exammanagement").'</div>');
 
-        if($ExammanagementInstanceObj->allPlacesAssigned()){
+        if($ExammanagementInstanceObj->placesAssigned()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
         }
 

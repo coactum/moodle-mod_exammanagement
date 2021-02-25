@@ -304,6 +304,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $roomscount = $ExammanagementInstanceObj->getRoomsCount();
             $roomnames = $ExammanagementInstanceObj->getChoosenRoomNames();
             $totalseats = $ExammanagementInstanceObj->getTotalNumberOfSeats();
+            $placesassigned = $ExammanagementInstanceObj->placesAssigned();
             $allplacesassigned = $ExammanagementInstanceObj->allPlacesAssigned();
             $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
             $datetimevisible = $ExammanagementInstanceObj->isDateTimeVisible();
@@ -333,7 +334,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 $resultsenteredafterexamreview = false;
             }
 
-            $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
+            $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $placesassigned, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
             echo $output->render($page);
         } else if($mode === 'export_grades'){
             //rendering and displaying content
