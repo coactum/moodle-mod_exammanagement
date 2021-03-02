@@ -339,6 +339,8 @@ class exammanagementInstance{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$select = "exammanagement =".$this->getCm()->instance;
+		$select .= " AND roomid IS NOT NULL";
+		$select .= " AND roomname IS NOT NULL";
 		$select .= " AND place IS NOT NULL";
 
 		$assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
