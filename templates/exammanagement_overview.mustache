@@ -87,8 +87,8 @@ ajaxtoggleInformation = function(command, value){
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformbonus': true, 'bonusvisible': Number(value)},
             success: function(response) {
-							$('.placeVisible').toggle();
-							$('.placeNotVisible').toggle();
+							$('.bonusVisible').toggle();
+							$('.bonusNotVisible').toggle();
 							$('.loadable').toggle();
             },
             error: function(response) {
@@ -101,8 +101,8 @@ ajaxtoggleInformation = function(command, value){
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformresult': true, 'resultvisible': Number(value)},
             success: function(response) {
-							$('.placeVisible').toggle();
-							$('.placeNotVisible').toggle();
+							$('.resultVisible').toggle();
+							$('.resultNotVisible').toggle();
 							$('.loadable').toggle();
             },
             error: function(response) {
@@ -338,7 +338,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
 									</div>
 									<div class="panel-body">
-										<p>{{#str}}places_assigned, mod_exammanagement, { "assignedplacescount":  {{# quote }}{{assignedplacescount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}{{#placesassigned}}{{#allplacesassigned}} {{#str}}all_places_assigned, mod_exammanagement{{/str}}{{/allplacesassigned}}{{/placesassigned}}
+										<p>{{^participants}}{{#str}}exam_participants_not_set, mod_exammanagement{{/str}}{{/participants}}{{#participants}}{{#str}}places_assigned, mod_exammanagement, { "assignedplacescount":  {{# quote }}{{assignedplacescount}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}{{#placesassigned}}{{#allplacesassigned}} {{#str}}all_places_assigned, mod_exammanagement{{/str}}{{/allplacesassigned}}{{/placesassigned}}{{/participants}}
 										<br><br>{{^allplacesassigned}}{{#placesassigned}}<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}not_all_places_assigned_yet, mod_exammanagement{{/str}}{{/placesassigned}}{{/allplacesassigned}}
 										</div>
 										<div class="panel-footer">
@@ -740,7 +740,7 @@ ajaxsetcorrectioncompletion = function(value){
 									<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_statistics_note, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
-									{{#participants}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/participants}}
+									{{^deleted}}{{#participants}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 								</div>
 							</div>
 						</div>

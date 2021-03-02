@@ -45,11 +45,11 @@ class MoodleDB{
 	public function countRecordsInDB($table, $select, $params=null, $countitem="COUNT('x')"){
 		global $DB;
 
-		$count = $DB->count_records_select($table, $select, $params, $countitem); 
-		
+		$count = $DB->count_records_select($table, $select, $params, $countitem);
+
 		return $count;
 	}
-	
+
 
 	 public function getFieldFromDB($table, $fieldname, $condition){
 	 	global $DB;
@@ -64,13 +64,13 @@ class MoodleDB{
 
 		$DB->set_field($table, $newfield, $newvalue, $conditions);
 	}
-	
+
 	public function setFieldInDBSelect($table, $newfield, $newvalue, $select, $params=null){
 		global $DB;
 
 		$DB->set_field_select($table, $newfield, $newvalue, $select, $params);
 	}
-	
+
 
 	public function getRecordFromDB($table, $condition){
 		global $DB;
@@ -96,10 +96,10 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function getFieldsetFromRecordsInDB($table, $field, $select){
+	public function getFieldsetFromRecordsInDB($table, $fields, $select){
 		global $DB;
 
-		$records = $DB->get_fieldset_select($table, $field, $select);
+		$records = $DB->get_fieldset_select($table, $fields, $select);
 
 		return $records;
 	}

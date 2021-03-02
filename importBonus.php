@@ -88,7 +88,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				if ($fromform->bonuspoints_list){
 
-					if($fromform->bonusmode==='steps' && ($fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2] || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3]))){
+					if($fromform->bonusmode==='steps' && ((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3]))){
 						redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 					}
 

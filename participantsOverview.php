@@ -85,12 +85,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $participantObj->roomid = $fromform->room;
                     $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
 
-                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '0';
+                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
                 }
 
                 if(isset($fromform->place)){
                     $participantObj->place = $fromform->place;
-                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '0';
+                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
                 }
 
                 if($pne == false){ // if participants points were not empty

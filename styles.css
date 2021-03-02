@@ -310,7 +310,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /* configureGradingscaleForm.php - spacing between gradingscale steps */
 
 .exammanagement_gradingscale_steps_spacing {
-  width: 115px;
+  width: 101px;
   text-align: center;
   margin-left: 2px;
 }

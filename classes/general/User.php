@@ -207,13 +207,13 @@ class User{
 			if($sortOrder == 'name'){
 				usort($allParticipants, function($a, $b){ //sort participants array by name through custom user function
 
-					$searchArr   = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ");
+					$searchArr = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ", "Von ");
 					$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
 
-					if (str_replace($searchArr, $replaceArr, $a->lastname) == str_replace($searchArr, $replaceArr, $b->lastname)) { //if lastnames are even sort by first name
-						return strcmp($a->firstname, $b->firstname);
+					if (str_replace($searchArr, $replaceArr, ucfirst($a->lastname)) == str_replace($searchArr, $replaceArr, ucfirst($b->lastname))) { //if lastnames are even sort by first name
+						return strcmp(ucfirst($a->firstname), ucfirst($b->firstname));
 					} else{
-						return strcmp(str_replace($searchArr, $replaceArr, $a->lastname) , str_replace($searchArr, $replaceArr, $b->lastname)); // else sort by last name
+						return strcmp(str_replace($searchArr, $replaceArr, ucfirst($a->lastname)) , str_replace($searchArr, $replaceArr, ucfirst($b->lastname))); // else sort by last name
 					}
 
 				});
@@ -388,6 +388,7 @@ class User{
 		$MoodleDBObj = MoodleDB::getInstance();
 
 		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
+		$ExammanagementInstanceObj->moduleinstance->assignmentmode = NULL;
 		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
 		if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement))){

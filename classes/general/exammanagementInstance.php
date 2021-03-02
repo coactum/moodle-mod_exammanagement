@@ -312,7 +312,7 @@ class exammanagementInstance{
 	public function placesAssigned(){
 		$assignmentmode = $this->moduleinstance->assignmentmode;
 
-		if(isset($assignmentmode)){
+		if(isset($assignmentmode) || $this->allPlacesAssigned()){
 			return true;
 		} else {
 			return false;

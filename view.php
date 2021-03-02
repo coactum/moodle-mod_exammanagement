@@ -227,6 +227,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         // reset phase information if participants are deleted
         if (!$ExammanagementInstanceObj->isExamDataDeleted() && !$UserObj->getParticipantsCount()) {
             $ExammanagementInstanceObj->moduleinstance->importfileheaders = null;
+            $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
             $ExammanagementInstanceObj->moduleinstance->datetimevisible = null;
             $ExammanagementInstanceObj->moduleinstance->roomvisible = null;
             $ExammanagementInstanceObj->moduleinstance->placevisible = null;
@@ -294,7 +295,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
             if($textfieldcontent){
                 if(format_string($textfieldcontent)){
-                    $textfielcontent = format_string($textfieldcontent);
+                    $textfieldcontent = format_string($textfieldcontent);
                 } else {
                     $textfieldcontent = get_string('mediacontent', 'mod_exammanagement');
                 }

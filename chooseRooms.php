@@ -126,6 +126,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             sort($checkedRooms); //sort checked rooms ids for saving in DB
 
             $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
+            $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
 
           $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
           if($update){
