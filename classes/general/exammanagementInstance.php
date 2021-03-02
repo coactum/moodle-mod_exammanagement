@@ -355,6 +355,49 @@ class exammanagementInstance{
 
 	}
 
+	public function getAssignedPlaces(){
+
+		$MoodleDBObj = MoodleDB::getInstance();
+
+		$select = "exammanagement =".$this->getCm()->instance;
+		$select .= " AND roomid IS NOT NULL";
+		$select .= " AND roomname IS NOT NULL";
+		$select .= " AND place IS NOT NULL";
+
+		$assignedPlaces = array();
+
+		$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select, null, '', 'roomid, place');
+
+		if($rs->valid()){
+
+            foreach ($rs as $record) {
+				if(!isset($assignedPlaces[$record->roomid])){
+					$assignedPlaces[$record->roomid] = array($record->place);
+				} else {
+					array_push($assignedPlaces[$record->roomid], $record->place);
+				}
+			}
+
+			$rs->close();
+		}
+
+		if (isset($assignedPlaces) && !empty($assignedPlaces)){
+			return $assignedPlaces;
+		} else {
+			return false;
+		}
+	}
+
+	public function getAssignmentMode(){
+		$assignmentmode = $this->moduleinstance->assignmentmode;
+
+		if(isset($assignmentmode)){
+			return $assignmentmode;
+		} else {
+			return false;
+		}
+	}
+
 	public function isDateTimeVisible(){
 
 		$isDateTimeVisible = $this->moduleinstance->datetimevisible;
@@ -733,6 +776,7 @@ class exammanagementInstance{
 		$MoodleObj = Moodle::getInstance($this->id, $this->e);
 
 		$message = new message();
+		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
 		$message->name = 'groupmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
 		$message->userfrom = $USER; // user object
@@ -743,6 +787,7 @@ class exammanagementInstance{
 		$message->fullmessagehtml = $text; // html rendered version
 		$message->smallmessage = $text; // useful for plugins like sms or twitter
 		$message->notification = '0';
+		//$message->notification = 1;
 		$message->contexturl = '';
 		$message->contexturlname = '';
 		$message->replyto = "";
@@ -758,7 +803,6 @@ class exammanagementInstance{
 		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
 		$message->set_additional_content('email', $content);
-		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
 
 		$messageid = message_send($message);
 

@@ -82,7 +82,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-        if(isset($fromform->revert_seat_assignment) && $fromform->revert_seat_assignment){ // All existing seat assignments should be deleted
+        if(!(isset($fromform->keep_seat_assignment) && $fromform->keep_seat_assignment)){ // All existing seat assignments should be deleted
             $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
             $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
             $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
@@ -91,15 +91,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'), $fromform->assignment_mode_places); // get all exam participants sorted by sortmode
         } else {
+            $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
+            $assignedPlaces = $ExammanagementInstanceObj->getAssignedPlaces();
             $participants = $UserObj->getExamParticipants(array('mode'=>'no_seats_assigned'), array('matrnr'), $fromform->assignment_mode_places); // Todo: get only exam participants without places sorted by sortmode
         }
 
-        if($fromform->assignment_mode_rooms === '1'){
+        if(isset($fromform->assignment_mode_rooms) && $fromform->assignment_mode_rooms === '1'){
           $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_smalltobig');
-        } else if ($fromform->assignment_mode_rooms === '2'){
+          $roommode = '1';
+        } else if (isset($fromform->assignment_mode_rooms) && $fromform->assignment_mode_rooms === '2'){
           $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall');
+          $roommode = '2';
         } else {
           $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall');
+          $roommode = '';
         }
 
         if(!$participants){
@@ -108,7 +113,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $participantsCount = 0;
 
-				if($fromform->assignment_mode_rooms == 1 || $fromform->assignment_mode_rooms == 2){
+				if($examRooms){
 
           foreach($examRooms as $room){
 
@@ -155,13 +160,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         ## save sort modes in db
         switch ($fromform->assignment_mode_places) {
           case 'name':
-              $mode_ids = 1 . $fromform->assignment_mode_rooms;
+              $mode_ids = 1 . $roommode;
               break;
           case 'matrnr':
-              $mode_ids = 2 . $fromform->assignment_mode_rooms;
+              $mode_ids = 2 . $roommode;
               break;
           case 'random':
-              $mode_ids = 3 . $fromform->assignment_mode_rooms;
+              $mode_ids = 3 . $roommode;
               break;
           default:
               $mode_ids = false;

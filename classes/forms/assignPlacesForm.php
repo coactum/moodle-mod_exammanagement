@@ -79,15 +79,72 @@ class assignPlacesForm extends moodleform{
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('html', '<h4>'.get_string('choose_assignment_mode', 'mod_exammanagement').'</h4>');
-        $select = $mform->addElement('select', 'assignment_mode_places', get_string('assignment_mode_places', 'mod_exammanagement'), array('name' => get_string('mode_places_lastname', 'mod_exammanagement'), 'matrnr' => get_string('mode_places_matrnr', 'mod_exammanagement'), 'random' => get_string('mode_places_random', 'mod_exammanagement')));
-        $select->setSelected('1');
-        //$select = $mform->addElement('select', 'assignment_mode_rooms', get_string('assignment_mode_rooms', 'mod_exammanagement'), array('1' => get_string('mode_room_ascending', 'mod_exammanagement'), '2' => get_string('mode_room_descending', 'mod_exammanagement'), '3' => get_string('mode_room_equal', 'mod_exammanagement')));
-        $select = $mform->addElement('select', 'assignment_mode_rooms', get_string('assignment_mode_rooms', 'mod_exammanagement'), array('1' => get_string('mode_room_ascending', 'mod_exammanagement'), '2' => get_string('mode_room_descending', 'mod_exammanagement')));
-        $select->setSelected('2');
 
-        if($assignedplacescount){
-            $mform->addElement('advcheckbox', 'revert_seat_assignment', get_string('revert_seat_assignment_left', 'mod_exammanagement'), get_string('revert_seat_assignment_right', 'mod_exammanagement'), null, null);
-            $mform->setDefault('revert_seat_assignment', true);
+        $assignmentmode = $ExammanagementInstanceObj->getAssignmentMode();
+        if($assignmentmode){
+
+            $placesmode = substr($assignmentmode, 0, 1);
+            $roommode = substr($assignmentmode, 1, 2);
+
+            $mform->addElement('html', '<div class="form-group row  fitem">');
+            $mform->addElement('html', '<span class="col-md-3">' . get_string('current_assignment_mode', 'mod_exammanagement') .'</span><span class="col-md-9">');
+
+            switch ($placesmode) {
+                case '1':
+                    $mform->addElement('html', get_string('mode_places_lastname', 'mod_exammanagement'));
+                    $placesmode = 'name';
+                    break;
+                case '2':
+                    $mform->addElement('html', get_string('mode_places_matrnr', 'mod_exammanagement'));
+                    $placesmode = 'matrnr';
+                    break;
+                case '3':
+                    $mform->addElement('html', get_string('mode_places_random', 'mod_exammanagement'));
+                    $placesmode = 'random';
+                    break;
+                case '4':
+                    $mform->addElement('html', get_string('mode_places_manual', 'mod_exammanagement'));
+                    break;
+            }
+
+            switch ($roommode) {
+                case '1':
+                    $mform->addElement('html', ' - ');
+                    $mform->addElement('html', get_string('mode_room_ascending', 'mod_exammanagement'));
+                    break;
+                case '2':
+                    $mform->addElement('html', ' - ');
+                    $mform->addElement('html', get_string('mode_room_descending', 'mod_exammanagement'));
+                    break;
+                default:
+                break;
+            }
+
+            $mform->addElement('html', '</span></div>');
+
+        }
+
+        $select = $mform->addElement('select', 'assignment_mode_places', get_string('assignment_mode_places', 'mod_exammanagement'), array('name' => get_string('mode_places_lastname', 'mod_exammanagement'), 'matrnr' => get_string('mode_places_matrnr', 'mod_exammanagement'), 'random' => get_string('mode_places_random', 'mod_exammanagement')));
+        if(isset($placesmode)){
+            $select->setSelected($placesmode);
+        } else {
+            $select->setSelected('name');
+        }
+
+        if($ExammanagementInstanceObj->getRoomsCount() > 1){
+            $select = $mform->addElement('select', 'assignment_mode_rooms', get_string('assignment_mode_rooms', 'mod_exammanagement'), array('1' => get_string('mode_room_ascending', 'mod_exammanagement'), '2' => get_string('mode_room_descending', 'mod_exammanagement')));
+            if(isset($roommode) && $roommode !== ''){
+                $select->setSelected($roommode);
+            } else {
+                $select->setSelected('2');
+            }
+        }
+
+        if($assignedplacescount && !$ExammanagementInstanceObj->allPlacesAssigned()){
+            $mform->addElement('advcheckbox', 'keep_seat_assignment', get_string('keep_seat_assignment_left', 'mod_exammanagement'), get_string('keep_seat_assignment_right', 'mod_exammanagement'), null, null);
+            $mform->setDefault('keep_seat_assignment', true);
+        } else if($assignedplacescount && $ExammanagementInstanceObj->allPlacesAssigned()){
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("all_places_already_assigned", "mod_exammanagement").'</div>');
         }
 
         $this->add_action_buttons(true, get_string("assign_places", "mod_exammanagement"));
