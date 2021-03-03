@@ -239,7 +239,7 @@ $string['password_reset_request_failed'] = 'Beantragung des Passwort-Zurücksetz
 $string['password_reset_mailsubject'] = '[{$a->systemname}-Support] Zurücksetzen des Passwortes der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" erfolgreich';
 $string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angefordert das Passwort der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" zurückgesetzt. Sie können nun ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen und falls gewünscht ein neues Passwort für die Prüfungsorganisation festlegen. <br>Viele Grüße, <br>Ihr {$a->systemname}-Team <br><br> <b>English version:</b> The {$a->systemname} support has resetted the password of the exam organization "{$a->name}" in course "{$a->coursename}". You can now access the contents of the exam organization without entering a password and, if required, define a new password for the exam organization. <br>Greetings, <br>Your {$a->systemname} team';
 $string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
-$string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <a href="{$a->url}">Link</a> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
+$string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <b><a href="{$a->url}">Link</a></b> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Prüfungsräume auswählen';
@@ -782,8 +782,6 @@ $string['modulename_link'] = 'https://docs.moodle.org/de/mod/exammanagement';
 $string['exammanagement_name'] = 'Name der Prüfungsorganisation';
 $string['exammanagement_name_help'] = 'Der im Kurs angezeigte Name der Aktivität (z. B. "Klausur 1").';
 $string['exammanagement:enable exam management'] = 'Prüfungsorganisation aktivieren';
-$string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
-$string['messageprovider:groupmessage'] = 'Gruppennachrichten der Prüfungsorganisation';
 $string['pluginadministration'] = 'Administration der Prüfungsorganisation';
 $string['security_password'] = 'Passwortschutz';
 $string['new_password'] = 'Neues Passwort';
@@ -810,6 +808,13 @@ $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
 $string['exammanagement:importdefaultrooms'] = 'Standardräume importieren';
 $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
 $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
+
+//message providers
+//$string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';
+$string['messageprovider:groupmessage'] = 'Gruppennachrichten der Prüfungsorganisation';
+$string['messageprovider:passwordresetrequest'] = 'Anfragen zum Zurücksetzen des Passwortes von Prüfungsorganisationen';
+$string['messageprovider:passwordresetmessage'] = 'Bestätigungsnachrichten des Zurücksetzens des Passwortes von Prüfungsorganisation';
+$string['messageprovider:deletionwarningmessage'] = 'Warnnachrichten der Prüfungsorganisation zur baldigen Löschung von Prüfungsdaten';
 
 //privacy
 // $string['privacy:metadata:exammanagement'] = 'Enthält keine personenbezogenen Daten. Enthält stattdessen alle mit dem Plugin zur Prüfungsorganisation angelegten Prüfungen und deren allgemeine Prüfungsinformationen.';

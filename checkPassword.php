@@ -57,17 +57,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         	$courseid = $ExammanagementInstanceObj->getCourse()->id;
         	$coursecontext = context_course::instance($courseid);
 			$teachers = get_role_users($role->id, $coursecontext);
-			
+
 			$mailsubject = get_string('password_reset_mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
 			$text =  get_string('password_reset_mailtext', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
 
 			foreach($teachers as $user){
-				$ExammanagementInstanceObj->sendSingleMessage($user->id, $mailsubject, $text);
+				$ExammanagementInstanceObj->sendSingleMessage($user->id, $mailsubject, $text, 'passwordresetmessage');
 			}
 
 			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');
 		} else if($resetPW == true){
-			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_failed', 'mod_exammanagement'), 'error');			
+			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_failed', 'mod_exammanagement'), 'error');
 		}
 
 		// handle request of pw reset
@@ -80,19 +80,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			global $USER;
 
 			$mailsubject = get_string('password_reset_request_mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
-				
+
 			$profilelink = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $USER->id, 'course', $ExammanagementInstanceObj->getCourse()->id).'">'.$USER->firstname.' '.$USER->lastname.'</a></strong>';
 
 			$text = get_string('password_reset_request_mailtext', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'user' => $profilelink, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'url' => strval($MoodleObj->getMoodleUrl("/mod/exammanagement/checkPassword.php", $id, 'resetPW', true))]);
-			
+
 			foreach($supportusers as $user){
-				$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text);
+				$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text, 'passwordresetrequest');
 			}
 
+			var_dump($messageid);
+
 			if(isset($messageid)){
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');			
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');
 			} else {
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_failed', 'mod_exammanagement'), 'error');							
+				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_failed', 'mod_exammanagement'), 'error');
 			}
 		}
 
@@ -127,18 +129,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				// if so update saved password_hash
 				$hash = password_hash($password, PASSWORD_DEFAULT);
 				$ExammanagementInstanceObj->moduleinstance->password = $hash;
-				
+
 				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-			
+
 			}
 
 			// remember login and redirect
 			$SESSION->loggedInExamOrganizationId = $id;
 			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-			
+
 			} else{ // if password is not correct
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('wrong_password', 'mod_exammanagement'), 'error');
-				
+
 			}
 
 		} else {

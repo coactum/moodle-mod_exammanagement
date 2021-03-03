@@ -84,13 +84,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if(isset($fromform->room)){
                     $participantObj->roomid = $fromform->room;
                     $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
-
-                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
                 }
 
                 if(isset($fromform->place)){
                     $participantObj->place = $fromform->place;
-                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
                 }
 
                 if($pne == false){ // if participants points were not empty
@@ -136,6 +133,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $participantObj->examstate = json_encode($examstate);
                 } else {
                     $participantObj->examstate = NULL;
+                }
+
+                if($pne && isset($fromform->room) && isset($fromform->place)){
+                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
                 }
 
                 $participantObj->timeresultsentered = time();
