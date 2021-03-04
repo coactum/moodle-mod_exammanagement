@@ -243,7 +243,7 @@ $string['password_reset_request_failed'] = 'Password reset request failed. Pleas
 $string['password_reset_mailsubject'] = '[{$a->systemname}-Support] Zurücksetzen des Passwortes der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" erfolgreich';
 $string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angefordert das Passwort der Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}" zurückgesetzt. Sie können nun ohne Eingabe eines Passwortes auf die Inhalte der Prüfungsorganisation zugreifen und falls gewünscht ein neues Passwort für die Prüfungsorganisation festlegen. <br>Viele Grüße, <br>Ihr {$a->systemname}-Team <br><br> <b>English version:</b> The {$a->systemname} support has resetted the password of the exam organization "{$a->name}" in course "{$a->coursename}". You can now access the contents of the exam organization without entering a password and, if required, define a new password for the exam organization. <br>Greetings, <br>Your {$a->systemname} team';
 $string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
-$string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <a href="{$a->url}">Link</a> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
+$string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <b><a href="{$a->url}">Link</a></b> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
 //chooseRoomsForm.php
 $string['chooseRooms'] = 'Select exam rooms';
@@ -786,8 +786,6 @@ $string['modulename_link'] = 'https://docs.moodle.org/en/mod/exammanagement';
 $string['exammanagement_name'] = 'Name of the exam management';
 $string['exammanagement_name_help'] = 'The name of the activity displayed in the course (e.g. "Exam 1").';
 $string['exammanagement:enable exam management'] = 'enable exam management';
-$string['messageprovider:exam management messages'] = 'exam management messages';
-$string['messageprovider:groupmessage'] = 'Group messages for exam organization';
 $string['pluginadministration'] = 'Exam management administration';
 $string['security_password'] = 'Security password';
 $string['new_password'] = 'New password';
@@ -810,6 +808,13 @@ $string['exammanagement:sendgroupmessage'] = 'Send group message to participants
 $string['exammanagement:importdefaultrooms'] = 'Import default rooms';
 $string['exammanagement:resetpassword'] = 'Reset password';
 $string['exammanagement:requestpasswordreset'] = 'Request password reset';
+
+//message providers
+//$string['messageprovider:exam management messages'] = 'exam management messages';
+$string['messageprovider:groupmessage'] = 'Group messages for exam organization';
+$string['messageprovider:passwordresetrequest'] = 'Requests to reset the password of exam organizations';
+$string['messageprovider:passwordresetmessage'] = 'Confirmation messages of resetting the password of exam organization';
+$string['messageprovider:deletionwarningmessage'] = 'Warning messages of exam management for upcoming deletion of exam data';
 
 //privacy
 // $string['privacy:metadata:exammanagement'] = 'Contains no personal data. Contains all exams created with the exammanagement plugin and their general exam information instead.';

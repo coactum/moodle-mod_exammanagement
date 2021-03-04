@@ -769,7 +769,7 @@ class exammanagementInstance{
 
 	### send moodle message to user ###
 
-	public function sendSingleMessage($user, $subject, $text){
+	public function sendSingleMessage($user, $subject, $text, $type){
 
 		global $USER;
 
@@ -778,7 +778,7 @@ class exammanagementInstance{
 		$message = new message();
 		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
 		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
-		$message->name = 'groupmessage'; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
+		$message->name = $type; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
 		$message->userfrom = $USER; // user object
 		$message->userto = $user; // user object
 		$message->subject = $subject; // very short one-line subject
@@ -786,10 +786,9 @@ class exammanagementInstance{
 		$message->fullmessageformat = FORMAT_MARKDOWN; // text format
 		$message->fullmessagehtml = $text; // html rendered version
 		$message->smallmessage = $text; // useful for plugins like sms or twitter
-		$message->notification = '0';
-		//$message->notification = 1;
-		$message->contexturl = '';
-		$message->contexturlname = '';
+		$message->notification = 1;
+		$message->contexturl = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
+		$message->contexturlname = $this->moduleinstance->name . ' (' . get_string('modulename', 'mod_exammanagement') . ')';
 		$message->replyto = "";
 
 		$header = '';
