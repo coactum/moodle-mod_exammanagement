@@ -89,8 +89,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text, 'passwordresetrequest');
 			}
 
-			var_dump($messageid);
-
 			if(isset($messageid)){
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');
 			} else {
