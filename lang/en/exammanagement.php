@@ -695,7 +695,16 @@ If you have added participants to the exam who do not yet have a '. get_config('
 The whole notification function is purely optional, you do not have to use it to send a message to the participants.
 <strong>Note:</strong> In order to give the participants more detailed information about the auxiliary means permitted in the exam, for example, the free textfield accessible via the overview page can also be used.';
 $string['sendGroupmessage_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['assignPlaces_help']= 'Help text for assign seats';
+$string['assignPlaces_help']= 'On this page, all exam participants can be assigned <strong>seats</strong> for the exam. These can later be exported in corresponding documents such as the seating plans or exam labels.<br><br>
+Seats can be assigned either manually (after clicking on the appropriate button) or automatically.<br /> <br />
+For automated assignment, the assignment mode for the seats must first be selected. The following three alternatives are possible:<br />
+1. allocation based on the (alphabetically sorted) last name. This corresponds to the previous automatic assignment.<br />
+2. assignment based on the ascending sorted matriculation numbers.<br />
+3. random assignment. Repeating this assignment multiple times will always result in a different seating order.<br /><br />
+If several rooms have been selected as exam rooms, the assignment mode of the rooms can also be changed. Possible are:<br />
+1. ascending allocation - first the smallest room is filled completely and then the next larger room.<br />
+2. descending allocation - Here first the largest room is completely filled and then in each case the next smaller. This corresponds to the previous automatic allocation.<br /><br />
+After clicking on the button "Assign seats automatically" then the seats are assigned according to the selected settings. Already existing assignments will be overwritten. Already existing assignments can also be completely reset via the corresponding button.';
 $string['assignPlaces_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['importBonus_help']= '<strong>Bonus points</strong> (for example earned from exercises) can either be directly imported or converted to <strong>bonus grade steps</strong> for the exam. The directly imported bonus points are later added to the points earned in the exam, while bonus grade steps are added to the final exam grade.
 To do this, you must first select the import mode in the upper section. If the mode "Bonus grade steps" is selected here, the number of possible bonus grade steps for the exam must also be defined. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>

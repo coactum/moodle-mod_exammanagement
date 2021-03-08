@@ -118,14 +118,14 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                     // send mail & save send warningmailid
                     foreach($teachers as $user){
-                        $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user->id, $warningmailsubject, $warningmailcontent);
+                        $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user->id, $warningmailsubject, $warningmailcontent, 'deletionwarningmessage');
 
                         array_push($warningmailids, $warningmailid);
                     }
 
                     array_push($deletionwarningmailidsArray, $warningmailids);
 
-                    mtrace('Sending ' . count($warningmailids) .'warning mails for step' . $warningstep . ' to teachers of exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->id);
+                    mtrace('Sending ' . count($warningmailids) .' warning mails for step ' . $warningstep . ' to teachers of exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->id);
 
                     // update module instance
 
@@ -133,7 +133,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                         $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailidsArray);
                         $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-                        mtrace('Updating module instance for exammanagement id'.$ExammanagementInstanceObj->moduleinstance->id.' with new deletion warning mail ids.');
+                        mtrace('Updating module instance for exammanagement id '.$ExammanagementInstanceObj->moduleinstance->id.' with new deletion warning mail ids.');
                     }
                 }
 
@@ -159,12 +159,14 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                 $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-                mtrace('Deleting old exam data for exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->instance);
+                mtrace('Deleting old exam data for exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->id);
 
+                $select = 'exammanagement = ' . $ExammanagementInstanceObj->moduleinstance->id;
                 // delete participants data
-                if($count = $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $ExammanagementInstanceObj->moduleinstance->instance))){
-                    mtrace('Deleting ' . $count .' participants for exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->instance);
-                    $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $ExammanagementInstanceObj->moduleinstance->instance));
+                if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement_participants', $select)){
+                    $count = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+                    mtrace('Deleting ' . $count .' participants for exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->id);
+                    $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $ExammanagementInstanceObj->moduleinstance->id));
                 }
             }
         }
