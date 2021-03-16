@@ -208,7 +208,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $roomObj->places = json_encode($placesArr);
                     }
 
-                    if($placesmode == 'all_individual'){
+                    if($placesmode == 'all_individual' && $placesarray !== 0){
                         $placesarray = explode(',', $placesarray);
                         $placesarray = array_values(array_filter($placesarray, function($value) { return !is_null($value) && $value !== '' && $value !== ' ' && $value !== '  '; }));
                         $roomObj->places = json_encode($placesarray);

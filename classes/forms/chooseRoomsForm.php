@@ -137,7 +137,7 @@ class chooseRoomsForm extends moodleform {
 
         $mform->addElement('html', '</td><td> '.$room->description.' </td>');
 
-        $mform->addElement('html', '<td> '.count(json_decode($room->places)).' </td>');
+        $mform->addElement('html', '<td> '.count($room->places).' </td>');
 
         $mform->addElement('html', '<td>');
         if ($room->seatingplan){

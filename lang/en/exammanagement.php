@@ -773,6 +773,7 @@ $string['err_already_defaultroom'] = 'Already default room. Try instead room ID'
 $string['err_novalidplacescount'] = 'Entered number is no valid places count';
 $string['err_nocourseparticipants'] = 'No course participants available yet.';
 $string['err_groupname_taken'] = 'Group name already taken.';
+$string['err_too_long'] = 'Entered value is too long.';
 
 //universal
 $string['modulename'] = 'Exam management';
@@ -801,7 +802,7 @@ $string['new_password'] = 'New password';
 $string['security_password_help'] = 'Setting a security password allows you to restrict access to the exam organization. Other staff users like student tutors have to enter this passwort before they can access the contents of the exam organization.';
 $string['confirm_new_password'] = 'Repeat new password';
 $string['confirm_new_password_help'] = 'For setting a new password it has to be repeated here.';
-$string['old_password'] = 'Current password (only necessary if an already existing password should be changed)';
+$string['old_password'] = 'Current password';
 $string['old_password_help'] = 'If an already existing password should be changed you need to enter it here.';
 $string['incorrect_password_change'] = 'Incorrect password. Terminated password change';
 $string['export_grades_as_exam_results'] = 'Export course grades as exam results';

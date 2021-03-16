@@ -192,7 +192,7 @@ class exammanagementInstance{
 		if($rooms){
 			foreach($rooms as $room){
 
-				$places = json_decode($room->places);
+				$places = $room->places;
 
 				if(isset($places)){
 					$placesCount = count($places);	//get Places of this Room
@@ -655,7 +655,7 @@ class exammanagementInstance{
 
 	### rooms ###
 
-	public function getRooms($mode, $sortorder = 'name'){ // get array with rooms according to params
+	public function getRooms($mode, $sortorder = 'name', $withoutAssignedPlaces=false){ // get array with rooms according to params
 
 		$MoodleDBObj = MoodleDB::getInstance();
 
@@ -699,6 +699,7 @@ class exammanagementInstance{
         if($rs->valid()){
 
             foreach ($rs as $record) {
+				$record->places = json_decode($record->places);
 				array_push($rooms, $record);
 			}
 
@@ -707,8 +708,8 @@ class exammanagementInstance{
 			if($sortorder == 'places_bigtosmall' || $sortorder == 'places_smalltobig' ){
 				usort($rooms, function($a, $b){ // sort rooms by places count through custom user function (small to big rooms)
 
-					$aPlaces = count(json_decode($a->places));
-					$bPlaces = count(json_decode($b->places));
+					$aPlaces = count($a->places);
+					$bPlaces = count($b->places);
 
 					return strnatcmp($aPlaces, $bPlaces); // sort by places count
 
@@ -717,6 +718,25 @@ class exammanagementInstance{
 				  if($sortorder == 'places_bigtosmall'){
 					$rooms = array_reverse($rooms); // reverse array: now big to small rooms
 				  }
+			}
+
+			if($withoutAssignedPlaces){
+				$assignedPlaces = $this->getAssignedPlaces();
+
+				if(isset($assignedPlaces)){
+					foreach($rooms as $room){
+						if(isset($assignedPlaces[$room->roomid])){
+							foreach($room->places as $place){
+								if(in_array($place, $assignedPlaces[$room->roomid])){
+									if (($key = array_search($place, $room->places)) !== false) {
+										unset($room->places[$key]);
+									}
+								}
+							}
+						}
+					}
+				}
+				$room->seatingplan = NULL;
 			}
 
 			return $rooms;

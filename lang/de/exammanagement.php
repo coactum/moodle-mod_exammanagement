@@ -769,6 +769,7 @@ $string['err_already_defaultroom'] = 'Bereits Standardraum. Probieren Sie stattd
 $string['err_novalidplacescount'] = 'Die eingegebene Zahl ist keine gültige Sitzplatzzahl.';
 $string['err_nocourseparticipants'] = 'Noch keine Kursteilnehmer vorhanden.';
 $string['err_groupname_taken'] = 'Gruppenname bereits vergeben.';
+$string['err_too_long'] = 'Der eingegebene Wert ist zu lang.';
 
 //universal
 $string['modulename'] = 'Prüfungsorganisation';
@@ -797,7 +798,7 @@ $string['new_password'] = 'Neues Passwort';
 $string['security_password_help'] = 'Durch das Festlegen eines Sicherheitspasswortes können Sie den Zugang zu dieser Prüfungsorganisation gegenüber anderen '. get_config('mod_exammanagement', 'moodlesystemname').'-Benutzern (z. B. Ihren studentischen Tutoren) begrenzen. Diese müssen dann zunächst das Passwort eingeben, bevor sie Zugang zu den Inhalten der Prüfungsorganisation erhalten.';
 $string['confirm_new_password'] = 'Neues Passwort wiederholen';
 $string['confirm_new_password_help'] = 'Für das Setzen des neuen Passwortes muss dieses hier erneut eingegeben werden.';
-$string['old_password'] = 'Altes Passwort (nur benötigt falls ein bereits gesetztes Passwort geändert werden soll)';
+$string['old_password'] = 'Altes Passwort';
 $string['old_password_help'] = 'Falls ein bereits gesetztes Passwort geändert werden soll muss dieses hier eintragen werden.';
 $string['incorrect_password_change'] = 'Das alte Passwort ist falsch. Passwortänderung abgebrochen';
 $string['export_grades_as_exam_results'] = 'Kursbewertungen als Prüfungsergebnisse exportieren';

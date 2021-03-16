@@ -138,14 +138,10 @@ class assignPlacesForm extends moodleform{
             } else {
                 $select->setSelected('2');
             }
-        }
-
-        // if($assignedplacescount && !$ExammanagementInstanceObj->allPlacesAssigned()){
-        //     $mform->addElement('advcheckbox', 'keep_seat_assignment', get_string('keep_seat_assignment_left', 'mod_exammanagement'), get_string('keep_seat_assignment_right', 'mod_exammanagement'), null, null);
-        //     $mform->setDefault('keep_seat_assignment', true);
-        // } else
-
-        if($assignedplacescount && $ExammanagementInstanceObj->allPlacesAssigned()){
+        } if($assignedplacescount && !$ExammanagementInstanceObj->allPlacesAssigned()){
+             $mform->addElement('advcheckbox', 'keep_seat_assignment', get_string('keep_seat_assignment_left', 'mod_exammanagement'), get_string('keep_seat_assignment_right', 'mod_exammanagement'), null, null);
+             $mform->setDefault('keep_seat_assignment', true);
+        } else if($assignedplacescount && $ExammanagementInstanceObj->allPlacesAssigned()){
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("all_places_already_assigned", "mod_exammanagement").'</div>');
         }
 

@@ -150,6 +150,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             foreach ($participants as $participant){ // construct label
 
               if($participant->matrnr !== '-'){
+                $roomname_lines_offset_y = 0;
+                if($participant->roomname && strlen($participant->roomname) > 10){ // set offset
+                  $roomname_lines_offset_y = 5;
+                }
+                if($participant->roomname && strlen($participant->roomname) > 25){ // shorten long roomnames
+                  $participant->roomname = substr($participant->roomname, 0, 22) . '...';
+                }
+
                 if ($leftLabel) { //print left label
                   $pdf->SetFont('helvetica', '', 12);
                   $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X1, $y, true);
@@ -157,11 +165,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                   $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X1, $y + 13, true);
                   $pdf->SetFont('helvetica', '', 10);
                   $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X1 + 1, $y + 25, true);
-                  $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 36, true);
+                  $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 34, true);
                   $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' . $participant->roomname, 0, 'L', 0, 0, X1 + 61, $y + 25, true);
-                  $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $participant->place, 0, 'L', 0, 0, X1 + 61, $y + 30, true);
+                  $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $participant->place, 0, 'L', 0, 0, X1 + 61, $y + 30 + $roomname_lines_offset_y, true);
                   $pdf->SetFont('helvetica', 'B', 14);
-                  $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 36, true);
+                  $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X1 + 68, $y + 38, true);
 
                   $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $participant->matrnr);
                   $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 27, 37, 19, 0.4, $style, 'C');
@@ -173,11 +181,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X2, $y + 13, true);
                     $pdf->SetFont('helvetica', '', 10);
                     $pdf->MultiCell(21, 5, $date, 0, 'L', 0, 0, X2 + 1, $y + 25, true);
-                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 36, true);
+                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 34, true);
                     $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$participant->roomname, 0, 'L', 0, 0, X2 + 61, $y + 25, true);
-                    $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $participant->place, 0, 'L', 0, 0, X2 + 61, $y + 30, true);
+                    $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' . $participant->place, 0, 'L', 0, 0, X2 + 61, $y + 30 + $roomname_lines_offset_y, true);
                     $pdf->SetFont('helvetica', 'B', 14);
-                    $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 36, true);
+                    $pdf->MultiCell(18, 5, ++$IDcounter, 0, 'C', 0, 0, X2 + 68, $y + 38, true);
 
                     $checksum = $ExammanagementInstanceObj->buildChecksumExamLabels('00000' . $participant->matrnr);
                     $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 27, 37, 19, 0.4, $style, 'C');

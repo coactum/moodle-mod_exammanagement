@@ -29,7 +29,7 @@ $messageproviders = array (
 
     'groupmessage' => array(
         'defaults' => array(
-            'popup' => MESSAGE_FORCED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
         ),
     ),
@@ -37,7 +37,7 @@ $messageproviders = array (
     'passwordresetrequest' => array (
         'capability' => 'mod/exammanagement:requestpasswordreset',
         'defaults' => array(
-            'popup' => MESSAGE_FORCED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
         ),
     ),
@@ -45,7 +45,7 @@ $messageproviders = array (
     'passwordresetmessage' => array (
         'capability' => 'mod/exammanagement:requestpasswordreset',
         'defaults' => array(
-            'popup' => MESSAGE_FORCED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
         ),
     ),
@@ -53,7 +53,7 @@ $messageproviders = array (
     'deletionwarningmessage' => array (
         'capability' => 'mod/exammanagement:receivedeletionwarningmessages',
         'defaults' => array(
-            'popup' => MESSAGE_FORCED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
         ),
     ),

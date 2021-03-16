@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_exammanagement\general\exammanagementInstance;
+
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
@@ -41,13 +43,24 @@ class mod_exammanagement_mod_form extends moodleform_mod {
     public function definition() {
         global $CFG;
 
+        if(isset($_GET['update'])) {
+            $id = $_GET['update'];
+            $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, false);
+            $oldpw = $ExammanagementInstanceObj->getModuleinstance()->password;
+            $misc = json_decode($ExammanagementInstanceObj->getModuleinstance()->misc);
+        } else {
+            $oldpw = NULL;
+            $misc = NULL;
+        }
+
         $mform = $this->_form;
 
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         if(get_config('mod_exammanagement', 'enableglobalmessage')){
-            \core\notification::info(get_config('mod_exammanagement', 'globalmessage'));
+            $mform->addElement('html', '<div class="alert alert-info alert-block fade in " role="alert">'.get_config('mod_exammanagement', 'globalmessage').'</div>');
+            //$mform->addElement('html', \core\notification::info(get_config('mod_exammanagement', 'globalmessage')));
         }
 
         // Adding the standard "name" field.
@@ -84,16 +97,23 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('confirmnewpassword', 'confirm_new_password', 'mod_exammanagement');
 
-        $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
-        $mform->setType('oldpassword', PARAM_TEXT);
-        $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
-        $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
+        if(isset($oldpw) || (!isset($_GET['update']) && !isset($_GET['add']))){
+            $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+            $mform->setType('oldpassword', PARAM_TEXT);
+            $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+            $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
+        }
 
         $mform->addElement('header', get_string('export_grades_as_exam_results', 'mod_exammanagement'), get_string('export_grades_as_exam_results', 'mod_exammanagement'));
 
         $mform->addElement('advcheckbox', 'exportgrades', get_string('activate_mode', 'mod_exammanagement'));
         $mform->addHelpButton('exportgrades', 'export_grades_as_exam_results', 'mod_exammanagement');
-        $mform->setDefault('exportgrades', 0);
+
+        if(isset($misc) && isset($misc->mode) && $misc->mode === 'export_grades'){
+            $mform->setDefault('exportgrades', 1);
+        } else {
+            $mform->setDefault('exportgrades', 0);
+        }
 
         // Add standard grading elements.
         //$this->standard_grading_coursemodule_elements();
