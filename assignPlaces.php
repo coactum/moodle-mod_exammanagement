@@ -82,6 +82,28 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
+        if($fromform->assign_places_manually){
+            $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
+            $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
+
+            foreach($participants as $participant){
+              if($fromform->rooms[$participant->id] !== 'not_selected' && $fromform->places[$participant->id]){
+
+                if(isset($participant->moodleuserid)){
+                  $participant->login = NULL;
+                  $participant->firstname = NULL;
+                  $participant->lastname = NULL;
+                }
+
+                $participant->roomid = $fromform->rooms[$participant->id];
+                $participant->roomname = $examRooms[$fromform->rooms[$participant->id]]->name;
+                $participant->place = $fromform->places[$participant->id];
+
+                $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
+              }
+            }
+        }
+
         if(!(isset($fromform->keep_seat_assignment) && $fromform->keep_seat_assignment)){ // All existing seat assignments should be deleted
             $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
             $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));

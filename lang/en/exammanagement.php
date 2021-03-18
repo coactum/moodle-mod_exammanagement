@@ -219,6 +219,7 @@ $string['export_as_excel'] = 'Export excel file';
 $string['export_as_text'] = 'Export text file';
 $string['examreview_dateroom'] = 'Set date and room for exam review';
 $string['change_examresults'] = 'Change exam results';
+$string['available_places'] = 'Available places';
 
 //configurePasswordForm.php
 $string['configurePassword'] = 'Configure password';

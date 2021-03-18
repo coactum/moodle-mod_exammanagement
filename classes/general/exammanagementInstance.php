@@ -700,7 +700,7 @@ class exammanagementInstance{
 
             foreach ($rs as $record) {
 				$record->places = json_decode($record->places);
-				array_push($rooms, $record);
+				$rooms[$record->roomid] = $record;
 			}
 
 			$rs->close();

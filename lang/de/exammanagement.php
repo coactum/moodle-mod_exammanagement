@@ -215,6 +215,7 @@ $string['export_as_excel'] = 'Excel-Dokument exportieren';
 $string['export_as_text'] = 'Textdokument exportieren';
 $string['examreview_dateroom'] = 'Termin und Raum für Klausureinsicht festlegen';
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
+$string['available_places'] = 'Verfügbare Plätze';
 
 //configurePasswordForm.php
 $string['configurePassword'] = 'Passwort konfigurieren';
