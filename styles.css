@@ -252,11 +252,26 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   border: 2px solid black;
 }
 
+.exammanagement_available_places {
+  position: absolute;
+  left: 81%;
+  top: 520px;
+  width: 250px;
+  height: 250px;
+  background: white;
+  overflow: hidden;
+  z-index: 1000;
+  display: none;
+  border: 2px solid black;
+  padding: 2px;
+  overflow: scroll;
+}
+
 .exammanagement_table .pointer {
   cursor: pointer;
 }
 
-#show:active + .exammanagement_rooms_svg {
+#show:active + .exammanagement_rooms_svg, #show:active + .exammanagement_available_places {
   display: block;
 }
 

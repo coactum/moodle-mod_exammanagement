@@ -29,8 +29,12 @@ define(['jquery', 'core/ajax', 'core/fragment', 'core/notification'], function (
       $('#assign_places_manual .form-group div').removeClass('col-md-3');
       $('#assign_places_manual .form-group div').removeClass('col-md-9');
 
+      // listen to set id if places are assigned manually
       $('#toggle_manual_places_assignment').click(function (e) {
         e.preventDefault();
+
+        $('input[name="assign_places_manually"]').val = 1;
+
         $('#assign_places_manual').toggle();
 
         // var contextid = $('#assign_places_manual').attr('data-contextid');
@@ -40,5 +44,35 @@ define(['jquery', 'core/ajax', 'core/fragment', 'core/notification'], function (
         // }.bind(this)).fail(notification.exception);
       });
     },
+
+    toggleAvailablePlaces: function(){
+
+      $("form.mform .fitem").on("change", "select", function () { // change available places pattern if other room is choosen
+        var selectedPlacesId = $(this).children(":selected").attr("value");
+        var participantId = $(this).attr("id").split('_')[2];
+
+        // hide all placespatterns for participant
+        $("#available_places_" + participantId + " .hideablepattern").each(function () {
+          $(this).hide(); // hide old places pattern
+        });
+
+        var posPoint = selectedPlacesId.indexOf('.'); // make room ids with . working
+
+        if (posPoint !== -1) {
+          selectedPlacesId = selectedPlacesId.substr(0, posPoint) + '\\' + selectedPlacesId.substr(posPoint);
+        }
+
+        // show all placespatterns for participant
+        $('#available_places_' + participantId + ' #' + selectedPlacesId).show(); // make correct pattern for places visible
+
+        // reset places
+        $('#id_places_' + participantId).val('');
+
+        // change focus to places field
+        $('#id_places_' + participantId).focus();
+
+      });
+
+    }
   };
 });

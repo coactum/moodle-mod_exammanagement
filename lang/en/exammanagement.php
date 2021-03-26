@@ -445,6 +445,7 @@ $string['all_places_already_assigned'] = '<strong>Warning:</strong> All seats ha
 $string['keep_seat_assignment_left'] = 'Keep existing assignment';
 $string['keep_seat_assignment_right'] = 'Keep already existing assignments during automatic reassignment. If not checked these will be deleted.';
 $string['participants_missing_places'] = 'Some participants have not been assigned a seat yet. Add enough rooms to the exam and repeat the assignment or assign the missing seats manually.';
+$string['edited_manually'] = 'Edited manually';
 
 //importBonusForm.php
 $string['importBonus'] = 'Import bonus points';
@@ -819,6 +820,7 @@ $string['exammanagement:sendgroupmessage'] = 'Send group message to participants
 $string['exammanagement:importdefaultrooms'] = 'Import default rooms';
 $string['exammanagement:resetpassword'] = 'Reset password';
 $string['exammanagement:requestpasswordreset'] = 'Request password reset';
+$string['exammanagement:receivedeletionwarningmessages'] = 'Receive deletion warnings';
 
 //message providers
 //$string['messageprovider:exam management messages'] = 'exam management messages';

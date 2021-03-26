@@ -82,7 +82,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			} else if ($fromform = $mform->get_data()) {
 			  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
+        var_dump($fromform);
+
         if($fromform->assign_places_manually){
+
+            $assign_places_manually = 1;
             $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
             $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
 
@@ -102,6 +106,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
               }
             }
+        } else {
+          $assign_places_manually = 0;
         }
 
         if(!(isset($fromform->keep_seat_assignment) && $fromform->keep_seat_assignment)){ // All existing seat assignments should be deleted
@@ -177,13 +183,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         ## save sort modes in db
         switch ($fromform->assignment_mode_places) {
           case 'name':
-              $mode_ids = 1 . $roommode;
+              $mode_ids = 1 . $roommode . $assign_places_manually;
               break;
           case 'matrnr':
-              $mode_ids = 2 . $roommode;
+              $mode_ids = 2 . $roommode . $assign_places_manually;
               break;
           case 'random':
-              $mode_ids = 3 . $roommode;
+              $mode_ids = 3 . $roommode . $assign_places_manually;
               break;
           default:
               $mode_ids = false;

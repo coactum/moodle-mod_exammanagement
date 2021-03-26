@@ -52,6 +52,7 @@ class assignPlacesForm extends moodleform{
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); //remove col-md classes for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'init'); // call jquery
+        $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'toggleAvailablePlaces'); // call jquery to enable toggling of new available places
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -87,7 +88,13 @@ class assignPlacesForm extends moodleform{
         if($assignmentmode){
 
             $placesmode = substr($assignmentmode, 0, 1);
-            $roommode = substr($assignmentmode, 1, 2);
+            $roommode = substr($assignmentmode, 1, 1);
+            $manuallassignment = substr($assignmentmode, 2, 2);
+
+            var_dump($assignmentmode);
+            var_dump($placesmode);
+            var_dump($roommode);
+            var_dump($manuallassignment);
 
             $mform->addElement('html', '<div class="form-group row  fitem">');
             $mform->addElement('html', '<span class="col-md-3">' . get_string('current_assignment_mode', 'mod_exammanagement') .'</span><span class="col-md-9">');
@@ -120,7 +127,12 @@ class assignPlacesForm extends moodleform{
                     $mform->addElement('html', get_string('mode_room_descending', 'mod_exammanagement'));
                     break;
                 default:
-                break;
+                    break;
+            }
+
+            if(isset($manuallassignment) && $manuallassignment == '1'){
+                $mform->addElement('html', ' | ');
+                $mform->addElement('html', get_string('edited_manually', 'mod_exammanagement'));
             }
 
             $mform->addElement('html', '</span></div>');
@@ -169,13 +181,14 @@ class assignPlacesForm extends moodleform{
 
             $mform->addElement('html', '<tbody>');
 
-            $mform->addElement('hidden', 'assign_places_manually', true);
+            $mform->addElement('hidden', 'assign_places_manually', false);
             $mform->setType('assign_places_manually', PARAM_INT);
 
             $roomOptionsArr = array('not_selected' => '-');
 
-            $roomPlacesPatternsArr = array();
             $i = 1;
+
+            $roomPlacesPatternsArr = array('not_selected' => '-');
 
             foreach($examrooms as $id => $roomid){
 
@@ -185,7 +198,7 @@ class assignPlacesForm extends moodleform{
                     $roomOptionsArr[$roomid] = $roomObj->name;
 
                     $decodedPlaces = json_decode($roomObj->places);
-                    $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces);
+                    $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces) . ' ' . '<a id="show" class="pointer"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_available_places collapse">'.implode(', ', json_decode($roomObj->places)).'</div>';
                 }
             }
 
@@ -213,12 +226,16 @@ class assignPlacesForm extends moodleform{
                     $mform->setDefault('places['.$participant->id.']', $participant->place);
                 }
 
-                $mform->addElement('html', '</td><td id="available_places">');
-                if($participant->roomid){
-                    $mform->addElement('html', $roomPlacesPatternsArr[$participant->roomid]);
-                } else {
-                    $mform->addElement('html', '-');
+                $mform->addElement('html', '</td><td id="available_places_'.$participant->id.'">');
+
+                foreach($roomPlacesPatternsArr as $roomid => $places){
+                    if($participant->roomid == $roomid){
+                        $mform->addElement('html', '<div id="'.$roomid.'" class="hideablepattern">' . $places . '</div>');
+                    } else {
+                        $mform->addElement('html', '<div id="'.$roomid.'" class="hideablepattern hidden">' . $places . '</div>');
+                    }
                 }
+
                 $mform->addElement('html', '</td></tr>');
 
                 $i++;
@@ -232,6 +249,9 @@ class assignPlacesForm extends moodleform{
         $mform->addElement('html', '</div>');
 
         $this->add_action_buttons(true, get_string("assign_places", "mod_exammanagement"));
+
+        $this->add_action_buttons(true, get_string("add_participants", "mod_exammanagement"));
+
         $mform->disable_form_change_checker();
     }
 

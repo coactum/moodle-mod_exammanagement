@@ -441,6 +441,7 @@ $string['all_places_already_assigned'] = '<strong>Achtung:</strong> Es wurden be
 $string['keep_seat_assignment_left'] = 'Bestehende Zuweisung behalten';
 $string['keep_seat_assignment_right'] = 'Bereits bestehende Zuweisungen bei der Neuzuweisung behalten. Wenn nicht angehakt werden diese entfernt.';
 $string['participants_missing_places'] = 'Einigen Teilnehmerinnen und Teilnehmern konnte noch kein Sitzplatz zugewiesen werden. Fügen Sie ausreichend Räume zur Prüfung hinzu und wiederholen Sie die Zuweisung oder weisen Sie die noch fehlenden Sitzplätze manuell zu.';
+$string['edited_manually'] = 'Manuell bearbeitet';
 
 //importBonusForm.php
 $string['importBonus'] = 'Bonuspunkte importieren';
@@ -819,6 +820,7 @@ $string['exammanagement:sendgroupmessage'] = 'Nachricht an Teilnehmer senden';
 $string['exammanagement:importdefaultrooms'] = 'Standardräume importieren';
 $string['exammanagement:resetpassword'] = 'Password zurücksetzen';
 $string['exammanagement:requestpasswordreset'] = 'Zurücksetzen des Passwortes beantragen';
+$string['exammanagement:receivedeletionwarningmessages'] = 'Löschwarnungen erhalten';
 
 //message providers
 //$string['messageprovider:exam management messages'] = 'Nachrichten zur Prüfungsorganisation';

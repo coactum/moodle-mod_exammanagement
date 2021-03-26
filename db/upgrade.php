@@ -291,5 +291,19 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021022100, 'exammanagement');
     }
 
+    if ($oldversion < 2021031300) { // add new fields for setting bonus and result user visibility
+
+        $table = new xmldb_table('exammanagement');
+        $field_old = new xmldb_field('assignmentmode', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'textfield');
+        $field_new = new xmldb_field('assignmentmode', XMLDB_TYPE_INTEGER, '3', null, null, null, null, 'textfield');
+
+        if ($dbman->field_exists($table, $field_old)) {
+            $dbman->change_field_type($table, $field_new);
+        }
+
+        // Exammanagement savepoint reached.
+        upgrade_mod_savepoint(true, 2021031300, 'exammanagement');
+    }
+
     return true;
 }
