@@ -21,28 +21,13 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/fragment', 'core/notification'], function ($, Ajax, fragment, notification) {
+define(['jquery'], function ($) {
 
   return {
     init: function(){
       // remove cols from form layout
-      $('#assign_places_manual .form-group div').removeClass('col-md-3');
-      $('#assign_places_manual .form-group div').removeClass('col-md-9');
-
-      // listen to set id if places are assigned manually
-      $('#toggle_manual_places_assignment').click(function (e) {
-        e.preventDefault();
-
-        $('input[name="assign_places_manually"]').val = 1;
-
-        $('#assign_places_manual').toggle();
-
-        // var contextid = $('#assign_places_manual').attr('data-contextid');
-        // var params = {id: 123};
-        // fragment.loadFragment('mod_exammanagement', 'placeslist', contextid, params).done(function(html, js) {
-        //   $('#assign_places_manual').append(html);
-        // }.bind(this)).fail(notification.exception);
-      });
+      $('.exammanagement_table .form-group div').removeClass('col-md-3');
+      $('.exammanagement_table .form-group div').removeClass('col-md-9');
     },
 
     toggleAvailablePlaces: function(){

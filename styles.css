@@ -255,9 +255,9 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 .exammanagement_available_places {
   position: absolute;
   left: 81%;
-  top: 520px;
-  width: 250px;
-  height: 250px;
+  top: 193px;
+  width: 16%;
+  height: 40vH;
   background: white;
   overflow: hidden;
   z-index: 1000;
@@ -336,6 +336,14 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* participantsOverviewForm.php - color of table borders */
+
+.exammanagement_tablewrapper {
+  overflow: scroll;
+  height: 40vH;
+  border-top: #00205b 1px solid;
+  border-bottom: #00205b 1px solid;
+  margin-bottom: 10px;
+}
 
 .exammanagement_table {
   border: 1px solid #00205b;

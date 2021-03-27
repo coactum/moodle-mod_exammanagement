@@ -114,6 +114,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               foreach($deselectedRoomsArr as $roomid){
 
                 if($UserObj->getParticipantsCount('room', $roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+                  $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
 
                   $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
                   $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
@@ -126,7 +127,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             sort($checkedRooms); //sort checked rooms ids for saving in DB
 
             $ExammanagementInstanceObj->moduleinstance->rooms = json_encode($checkedRooms);
-            $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
 
           $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
           if($update){
