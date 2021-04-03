@@ -515,6 +515,9 @@ $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 $string['available'] = 'Verfügbar';
 $string['jump_to_end'] = 'Zum Tabellenende springen';
+$string['edit_results_and_boni'] = 'Prüfungsergebnisse und Boni bearbeiten';
+$string['nr'] = 'Nr.';
+$string['max'] = 'Max:';
 
 //participant list
 $string['participantslist'] = 'Teilnehmerliste';

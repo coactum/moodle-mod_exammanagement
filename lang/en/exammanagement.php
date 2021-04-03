@@ -519,6 +519,9 @@ $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
 $string['available'] = 'Available';
 $string['jump_to_end'] = 'Jump to end of table';
+$string['edit_results_and_boni'] = 'Edit results and boni';
+$string['nr'] = 'Nb';
+$string['max'] = 'Max:';
 
 //participant list
 $string['participantslist'] = 'list of participants';

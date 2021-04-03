@@ -37,10 +37,10 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$editline  = optional_param('editline', 0, PARAM_INT);
-
 $pne  = optional_param('pne', 1, PARAM_INT);
 $bpne  = optional_param('bpne', 1, PARAM_INT);
+
+$epm = optional_param('epm', 0, PARAM_INT);
 
 $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
@@ -63,8 +63,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $MoodleObj->outputPageHeader();
 
             //Instantiate Form
-            if($editline){
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'editline'=>$editline));
+            if($epm){
+                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'epm'=>$epm));
             } else {
                 $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
             }

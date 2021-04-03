@@ -345,6 +345,14 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: 10px;
 }
 
+.exammanagement_tablewrapper_high {
+  overflow: scroll;
+  height: 55vH;
+  border-top: #00205b 1px solid;
+  border-bottom: #00205b 1px solid;
+  margin-bottom: 10px;
+}
+
 .exammanagement_table {
   border: 1px solid #00205b;
 }
@@ -377,8 +385,17 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   width: 145px !important;
 }
 
-.exammanagement_table_width_points {
+.exammanagement_table_edit_tasks th{
   width: 75px !important;
+  text-align: center;
+}
+
+.exammanagement_vertical_align_middle{
+  vertical-align: middle !important;
+}
+
+.exammanagement_table_edit_tasks .form-group{
+  margin-bottom: 0px;
 }
 
 .exammanagement_position_existing_places_column {
