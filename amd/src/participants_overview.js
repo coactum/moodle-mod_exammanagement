@@ -23,34 +23,11 @@
 
 define(['jquery'], function ($) {
 
-  var getTotalpoints = function (lang) {
-    var totalpoints = 0;
-
-    $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
-      if (!isNaN(parseFloat($(this).val()))){
-        totalpoints += parseFloat($(this).val());
-      }
-    });
-
-    return totalpoints.toLocaleString(lang);
-  };
-
-  var getTotalpointsWithBonus = function (lang) {
-
-    var totalpointsWithBonus = parseFloat(getTotalpoints('en'));
-
-    if(!isNaN(parseFloat($("#id_bonuspoints").val()))){
-      totalpointsWithBonus +=  parseFloat($("#id_bonuspoints").val());
-    }
-
-    return totalpointsWithBonus.toLocaleString(lang);
-  };
-
   return {
-    init: function (lang, tasks) {
+    init: function (tasks) {
 
       // create input type number elements
-      $("form.mform input[type=text]").not('#id_room, #id_place').attr("type", "number");
+      $("form.mform input[type=text]").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -63,126 +40,82 @@ define(['jquery'], function ($) {
       $("form.mform input[type=number]").attr("step", "0.01");
       $("form.mform input[type=number]").attr("min", "0");
 
-      var count = 1;
-      $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
+      $("[id^=id_points]").first().focus();
+
+      $("[id^=id_points]").each(function () {
+
+        var participantid = $(this).attr("id").split('_')[2];
+        var count = $(this).attr("id").split('_')[3];
+
         $(this).attr("max", tasks[count]); // set maximum points for tasks
-        count += 1;
 
-        if ($("#id_state").val() !== 'normal') {
-          $(this).prop("disabled", true); //initial disabling point fields if examstate is not normal
+        if ($("#id_state_"+participantid).val() !== 'normal' && $("#id_state_"+participantid).val() !== 'not_set') {
+          $(this).prop("disabled", true); //initial disabling point fields if examstate is not normal or not set
         }
       });
-
-      var id;
-      var posPoint;
-
-      // show available places pattern
-      id = $("#id_room").children(":selected").attr("value");
-
-      $(".hiddenpattern").each(function () { // for removing the initial set hidden class
-        $(this).prop("class", 'hideablepattern');
-      });
-
-      $(".hideablepattern").each(function () {
-        $(this).hide(); // hide old places pattern
-      });
-
-      if(id){
-        posPoint = id.indexOf('.'); // make room ids with . working
-
-        if (posPoint !== -1) {
-          id = id.substr(0, posPoint) + '\\' + id.substr(posPoint);
-        }
-
-        $('#' + id).show(); // make correct pattern for places visible
-      }
 
       // if exam bonus steps change
-      $("#id_bonussteps").change(function () {
-        if ($("#id_bonussteps").val() !== '-'){
-          $("#id_bonuspoints").val('-');  // reset bonus points
-          $("#id_bonuspoints").prop("disabled", true); // disable bonuspoints
+      $("[id^=id_bonussteps]").change(function () {
+        var participantid = $(this).attr("id").split('_')[2];
+
+        if ($(this).val() !== '-'){
+          $("#id_bonuspoints_"+participantid).val('-');  // reset bonus points
+          $("#id_bonuspoints_"+participantid).prop("disabled", true); // disable bonuspoints
         } else {
-          $("#id_bonuspoints").prop("disabled", false); // enable bonuspoints
+          $("#id_bonuspoints_"+participantid).prop("disabled", false); // enable bonuspoints
         }
+
+        $("#id_state_"+participantid).focus(); // move focus
       });
 
       // if exam bonus points change
-      $("#id_bonuspoints").change(function () {
-        if ($("#id_bonuspoints").val()){
-          $("#id_bonussteps").val('-'); // reset bonus steps
+      $("[id^=id_bonuspoints]").change(function () {
+        var participantid = $(this).attr("id").split('_')[2];
+
+        if ($(this).val()){
+          $("#id_bonussteps_"+participantid).val('-'); // reset bonus steps
+          $("#id_state_"+participantid).focus(); // move focus
         }
+      });
+
+      // if exam points are entered
+      $("[id^=id_points]").change(function () {
+        var participantid = $(this).attr("id").split('_')[2];
+        $("#id_state_"+participantid).val('normal');
       });
 
       //if examstate changes
-      $("#id_state").change(function () {
+      $("[id^=id_state]").change(function () {
+        var participantid = $(this).attr("id").split('_')[2];
 
-        if ($("#id_state").val() !== 'normal') { // if examstate is now not normal: disable all point-fields and set their value to 0
-
-          $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () {
+        if ($(this).val() !== 'normal' && $(this).val() !== 'not_set') { // if examstate is now not normal or not set: disable all point-fields and set their value to 0
+          $("[id^=id_points_"+participantid+"]").each(function () {
             $(this).prop("disabled", true);
             $(this).val(0);
-            $("#totalpoints").text($("#id_state option:selected").text()); // change totalpoints
-            $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
-
           });
-        } else {  // if examstate is now normal
-          $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // enable all point-fields
+        } else if($(this).val() === 'normal'){  // if examstate is now normal
+          $("[id^=id_points_"+participantid+"]").each(function () { // enable all point-fields
             $(this).prop("disabled", false);
+            $("[id^=id_points_"+participantid+"").first().focus();
           });
-          $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
-          $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
+        } else if($(this).val() == 'not_set'){
+          $("[id^=id_points_"+participantid+"]").each(function () { // enable all point-fields
+            $(this).val('');
+            $(this).prop("disabled", false);
+            $("[id^=id_points_"+participantid+"").first().focus();
+          });
         }
-      });
-
-      $("form.mform .form-group").not("#fitem_id_place").on("change", "input", function () { // if some input field changes
-        $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
-        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
-      });
-
-      $("#id_bonuspoints").on("change", "input", function () { // if bonus points input field changes
-        $("#totalpoints_with_bonus").text(getTotalpointsWithBonus(lang)); // change totalpoints with bonus
-      });
-
-      $("form.mform #fitem_id_room").on("change", "select", function () { // change available places pattern if other room is choosen
-        id = $(this).children(":selected").attr("value");
-
-        $(".hideablepattern").each(function () {
-          $(this).hide(); // hide old places pattern
-        });
-
-        posPoint = id.indexOf('.'); // make room ids with . working
-
-        if (posPoint !== -1) {
-          id = id.substr(0, posPoint) + '\\' + id.substr(posPoint);
-        }
-
-        $('#' + id).show(); // make correct pattern for places visible
       });
 
       // remove cols from form layout
-      $('form.mform div').removeClass('col-md-3');
-      $('form.mform div').removeClass('col-md-9');
+      $('.exammanagement_table div').removeClass('col-md-3');
+      $('.exammanagement_table div').removeClass('col-md-9');
 
-      $('form.mform > .form-group > div:first-child').addClass('col-md-3');
-      $('form.mform  > .form-group > div:last-child').addClass('col-md-9');
+      $('form.mform #id_submitbutton').click(function () {  // if submittbutton is pressed enable complete form (for moodle purposes)
 
-      $('form.mform #id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
-
-        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // enable all point-fields
+        $("form.mform .form-group input.form-control").not("[id^=id_bonuspoints]").each(function () { // enable all point-fields
           $(this).prop("disabled", false);
         });
-
-        $("form.mform .form-group input.form-control").not("#id_place, #id_bonuspoints").each(function () { // if some input point field has values
-          if ($(this).val()) {
-            $("form.mform input[name='pne']").val(false); // set points not entered param to false
-          }
-        });
-
-        if($('#id_bonuspoints').val()){
-          $("form.mform input[name='bpne']").val(false); // set bonus points not entered param to false
-        }
-
       });
     }
   };

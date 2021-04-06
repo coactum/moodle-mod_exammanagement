@@ -77,86 +77,72 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else if ($fromform = $mform->get_data()) {
                 //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                if($fromform->editid){
-                    $participantObj = $UserObj->getExamParticipantObj(false, false, $fromform->editid);
-                }
+                var_dump($fromform->bonuspoints);
 
-                if(isset($fromform->room)){
-                    $participantObj->roomid = $fromform->room;
-                    $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
-                }
+                $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
+                $updatedCount = 0;
 
-                if(isset($fromform->place)){
-                    $participantObj->place = $fromform->place;
-                }
+                foreach($participants as $participant){
+                    if(isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set'){
+                        switch ($fromform->state[$participant->id]){
+                            case 'normal':
+                                $examstate = new stdClass;
+                                $examstate->nt = "0";
+                                $examstate->fa = "0";
+                                $examstate->ill = "0";
+                                break;
+                            case 'nt':
+                                $examstate = new stdClass;
+                                $examstate->nt = "1";
+                                $examstate->fa = "0";
+                                $examstate->ill = "0";
+                                break;
+                            case 'fa':
+                                $examstate = new stdClass;
+                                $examstate->nt = "0";
+                                $examstate->fa = "1";
+                                $examstate->ill = "0";
+                                break;
+                            case 'ill':
+                                $examstate = new stdClass;
+                                $examstate->nt = "0";
+                                $examstate->fa = "0";
+                                $examstate->ill = "1";
+                                break;
+                            default:
+                                break;
+                        }
 
-                if($pne == false){ // if participants points were not empty
-                    $participantObj->exampoints = json_encode($fromform->points);
-                }
+                        $participant->examstate = json_encode($examstate);
 
-                if(isset($fromform->state) && $pne == false){
-                    switch ($fromform->state){
+                        if($fromform->points[$participant->id]){ // if participants points were not empty
+                            $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                        }
 
-                        case 'normal':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
-                        case 'nt':
-                            $examstate = new stdClass;
-                            $examstate->nt = "1";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
-                        case 'fa':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "1";
-                            $examstate->ill = "0";
-                            break;
-                        case 'ill':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "1";
-                            break;
-                        default:
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
+                    } else {
+                        $participant->examstate = NULL;
+                        $participant->exampoints = NULL;
                     }
 
+                    $participant->timeresultsentered = time();
 
-                    $participantObj->examstate = json_encode($examstate);
-                } else {
-                    $participantObj->examstate = NULL;
+                    if($fromform->bonussteps[$participant->id] !== '-'){
+                        $participant->bonussteps = $fromform->bonussteps[$participant->id];
+                        $participant->bonuspoints = NULL;
+                    } else if($fromform->bonuspoints[$participant->id] !== '-'){
+                        $participant->bonussteps = NULL;
+                        $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                    } else {
+                        $participant->bonussteps = NULL;
+                        $participant->bonuspoints = NULL;
+                    }
+
+                    if($MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant)){
+                        $updatedCount .= 1;
+                    }
                 }
 
-                if($pne && isset($fromform->room) && isset($fromform->place)){
-                    $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
-                }
-
-                $participantObj->timeresultsentered = time();
-
-                if($fromform->bonussteps !== '-'){
-                    $participantObj->bonussteps = $fromform->bonussteps;
-                    $participantObj->bonuspoints = NULL;
-                } else {
-                    $participantObj->bonussteps = NULL;
-                    $participantObj->bonuspoints = NULL;
-                }
-
-                if($bpne == false){
-                    $participantObj->bonussteps = NULL;
-                    $participantObj->bonuspoints = $fromform->bonuspoints;
-                }
-
-                $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-
-                if($update){
+                if($updatedCount){
                     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {

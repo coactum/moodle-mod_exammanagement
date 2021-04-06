@@ -339,7 +339,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_tablewrapper {
   overflow: scroll;
-  height: 40vH;
+  max-height: 40vH;
   border-top: #00205b 1px solid;
   border-bottom: #00205b 1px solid;
   margin-bottom: 10px;
@@ -347,7 +347,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_tablewrapper_high {
   overflow: scroll;
-  height: 55vH;
+  max-height: 55vH;
   border-top: #00205b 1px solid;
   border-bottom: #00205b 1px solid;
   margin-bottom: 10px;
@@ -401,6 +401,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 .exammanagement_position_existing_places_column {
   position: relative;
   left: -10px;
+}
+
+.exammanagement_table .custom-select {
+  max-width: 97% !important;
 }
 
 /* exammanagement_overview.mustache - panels (copied from bootstrap) */

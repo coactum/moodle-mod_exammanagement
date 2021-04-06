@@ -575,7 +575,7 @@ ajaxsetcorrectioncompletion = function(value){
 											{{^resultscount}}<p>{{#str}}results_not_set, mod_exammanagement{{/str}}</p>{{/resultscount}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/deleted}}
+											{{^deleted}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}}" href="participantsOverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}add_examresults_manually, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_manually, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/deleted}}{{^deleted}}{{#ldapavailable}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/ldapavailable}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -868,7 +868,7 @@ ajaxsetcorrectioncompletion = function(value){
 										</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
+										{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="participantsOverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
 									</div>
 								</div>
 							</div>

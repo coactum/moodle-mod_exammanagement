@@ -104,7 +104,7 @@ $string['export_grades'] = 'Export grades';
 $string['export_grades_help'] = 'Here, the grading points earned by the course participants can first be imported, converted into grades, and then exported as a text file for the exam office (assigned to the respective matriculation numbers). <br><br>
 For this purpose ... <br><br>
 1. all affected course participants have to be added <br>
-2. a gradingscale must be configured <br>
+2. a gradingscale must be configured <br>f
 3. the course grades must first be exported and then imported into the exam organization. <br><br>
 Then, after the results have been checked and the preparations completed, the grades assigned to the participants can be exported as a text file along with their matriculation numbers.';
 $string['import_grades'] = 'Import grades';
@@ -112,6 +112,7 @@ $string['grades'] = 'Course grades';
 $string['grades_set'] = 'Grades for <strong>{$a->gradescount} / {$a->participantscount}</strong> participants have been imported yet.';
 $string['grades_not_set'] = 'No grades have been imported yet.';
 $string['grading_points'] = 'Grades (points)';
+$string['result_based_on_grades'] = 'Grades (points)';
 $string['revert_grades'] = 'Revert all grades';
 $string['import_grades_text'] = 'Grading points achieved by the course participants can be imported here.';
 $string['exam_results_overview_grades'] = 'Here the already imported grading points and the grades calculated from them can be viewed.';
@@ -175,7 +176,7 @@ $string['gradingscale_not_set'] = 'No gradingscale has been configured yet.';
 $string['results_set'] = '<strong>{$a->resultscount} / {$a->participantscount}</strong> exam results have been entered yet.';
 $string['results_not_set'] = 'No exam results have yet been entered.';
 $string['exam_results_overview_str'] = 'All exam results that have been already entered can be viewed and manually modified here.';
-$string['complete_correction_str'] = 'The data entered in this exam organization tool are very sensitive and must therefore be deleted for data protection reasons as soon as they are no longer needed. After confirming grading completion by moving the switch, you have three months to export the exam results for further use. After that they will be automatically deleted.';
+$string['complete_correction_str'] = 'The data entered in this exam organization tool are very sensitive and must therefore be deleted for data protection reasons as soon as they are no longer needed. After confirming grading completion by moving the switch, you have <strong> three months </strong> to export the exam results for further use. After that they will be automatically deleted.';
 $string['export_points_examreview_str'] = 'Here you can export the achieved exam points as a PDF document.';
 $string['export_points_examreview_str_points'] = 'Here you can export the achieved exam points <strong>(without prior achieved bonus points)</strong> as a PDF document.';
 $string['export_results_lists_note'] = 'This list of points is only intended for internal use by the lecturers and should not be published because of data protection reasons!';
@@ -212,7 +213,8 @@ $string['export_participantslist_names'] = 'Sorted by names';
 $string['export_participantslist_places'] = 'Sorted by places';
 $string['import_bonus'] = 'Import bonus';
 $string['configure_gradingscale'] = 'Configure gradingscale';
-$string['add_examresults'] = 'Add results';
+$string['add_examresults_manually'] = 'Add results manually';
+$string['add_examresults_barcode'] = 'Add results with barcode scanner';
 $string['check_results'] = 'Check results';
 $string['export_as_pdf'] = 'Export PDF';
 $string['export_as_excel'] = 'Export excel file';
