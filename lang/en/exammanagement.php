@@ -112,7 +112,7 @@ $string['grades'] = 'Course grades';
 $string['grades_set'] = 'Grades for <strong>{$a->gradescount} / {$a->participantscount}</strong> participants have been imported yet.';
 $string['grades_not_set'] = 'No grades have been imported yet.';
 $string['grading_points'] = 'Grades (points)';
-$string['result_based_on_grades'] = 'Grades (points)';
+$string['result_based_of_grades'] = 'Grade (calculated from grading points)';
 $string['revert_grades'] = 'Revert all grades';
 $string['import_grades_text'] = 'Grading points achieved by the course participants can be imported here.';
 $string['exam_results_overview_grades'] = 'Here the already imported grading points and the grades calculated from them can be viewed.';
@@ -123,6 +123,7 @@ $string['importBonus_grades_help']= '<strong>Grading points</strong> (for exampl
 Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
 Finally you have to select the file with the grading points you want to import and then click on the "Import file" button to import the points.';
 $string['importBonus_grades'] = 'Import grades';
+$string['edit_grades'] = 'Edit grades';
 
 //exammanagement_overview.mustache states - can be seen on /view.php as lecturer
 $string['state_optional'] = 'Optional';

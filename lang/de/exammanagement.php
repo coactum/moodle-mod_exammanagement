@@ -111,13 +111,19 @@ $string['import_grades'] = 'Bewertungen importieren';
 $string['grades'] = 'Bewertungen';
 $string['grades_set'] = 'Es wurden bisher für <strong>{$a->gradescount} / {$a->participantscount}</strong> Teilnehmende Bewertungen importiert.';
 $string['grades_not_set'] = 'Es wurden noch keine Bewertungen importiert.';
-$string['grading_points'] = 'Bewertungspunkte';
+$string['grading_points'] = 'Bewertungen (Punkte oder Noten)';
+$string['result_based_of_grades'] = 'Note (errechnet aus Bewertungspunkten)';
 $string['revert_grades'] = 'Alle Bewertungen zurücksetzen';
 $string['import_grades_text'] = 'Hier können von den TeilnehmerInnen errungene Punkte der Kursbewertungen importiert werden.';
 $string['exam_results_overview_grades'] = 'Hier können die bereits importierten Bewertungspunkte und die daraus errechneten Noten angesehen werden.';
 $string['complete_preparations'] = 'Vorbereitungen abschließen';
 $string['participantsOverview_grades_help'] = 'In dieser <strong>Teilnehmer- und Ergebnisübersicht</strong> können sämtliche importierten TeilnehmerInnen sowie deren Bewertungspunkte und die daraus berechneten Noten angesehen werden.';
 $string['participantsOverview_grades'] = 'Teilnehmer- und Ergebnisübersicht';
+$string['importBonus_grades_help'] = 'Hier können (beispielsweise bei der Bearbeitung von Übungsaufgaben errungene) <strong>Bewertungspunkte</strong> der TeilnehmerInnen importiert werden. <br><br>
+Bewertungsexport aus '. get_config('mod_exammanagement', 'moodlesystemname').': Dazu müssen die Bewertungen aus dem '. get_config('mod_exammanagement', 'moodlesystemname').' Kurs zunächst wie <a href="https://docs.moodle.org/35/de/Bewertungen_exportieren" class="alert-link" target="_blank">hier</a> beschrieben exportiert werden. Danach müssen Sie die exportierte Datei einmal öffnen und nachsehen, in welcher Spalte die Punkte eingetragen sind. Die Bezeichnung der Spalte muss dann im dafür vorgesehenen Feld im unteren Abschnitt eingetragen werden.<br><br>
+Zum Abschluss muss nun noch die einzulesende Datei mit den Bewertungspunkten ausgewählt und dann durch einen Klick auf den Button "Datei einlesen" eingelesen werden, um den Bewertungspunkteimport durchzuführen.';
+$string['importBonus_grades'] = 'Bewertungen importieren';
+$string['edit_grades'] = 'Bewertungen bearbeiten';
 
 //exammanagement_overview.mustache states - can be seen on /view.php as lecturer
 $string['state_optional'] = 'Optional';
@@ -812,10 +818,6 @@ $string['incorrect_password_change'] = 'Das alte Passwort ist falsch. Passwortä
 $string['export_grades_as_exam_results'] = 'Kursbewertungen als Prüfungsergebnisse exportieren';
 $string['activate_mode'] = 'Bewertungsexport aktivieren';
 $string['export_grades_as_exam_results_help'] = 'Ist diese Option aktiviert können mit der Prüfungsorganisation die Kursbewertungen aller Teilnehmer einfach in einem Textdokument als Prüfungsergebnisse exportiert werden. Jede Bewertung ist dabei (falls diese vorhanden ist) der Matrikelnummer des jeweiligen Teilnehmenden zugeordnet.';
-$string['importBonus_grades_help'] = 'Hier können (beispielsweise bei der Bearbeitung von Übungsaufgaben errungene) <strong>Bewertungspunkte</strong> der TeilnehmerInnen importiert werden. <br><br>
-Bewertungsexport aus '. get_config('mod_exammanagement', 'moodlesystemname').': Dazu müssen die Bewertungen aus dem '. get_config('mod_exammanagement', 'moodlesystemname').' Kurs zunächst wie <a href="https://docs.moodle.org/35/de/Bewertungen_exportieren" class="alert-link" target="_blank">hier</a> beschrieben exportiert werden. Danach müssen Sie die exportierte Datei einmal öffnen und nachsehen, in welcher Spalte die Punkte eingetragen sind. Die Bezeichnung der Spalte muss dann im dafür vorgesehenen Feld im unteren Abschnitt eingetragen werden.<br><br>
-Zum Abschluss muss nun noch die einzulesende Datei mit den Bewertungspunkten ausgewählt und dann durch einen Klick auf den Button "Datei einlesen" eingelesen werden, um den Bewertungspunkteimport durchzuführen.';
-$string['importBonus_grades'] = 'Bewertungen importieren';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';

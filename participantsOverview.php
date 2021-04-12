@@ -83,64 +83,77 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $updatedCount = 0;
 
                 foreach($participants as $participant){
-                    if(isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set'){
-                        switch ($fromform->state[$participant->id]){
-                            case 'normal':
-                                $examstate = new stdClass;
-                                $examstate->nt = "0";
-                                $examstate->fa = "0";
-                                $examstate->ill = "0";
-                                break;
-                            case 'nt':
-                                $examstate = new stdClass;
-                                $examstate->nt = "1";
-                                $examstate->fa = "0";
-                                $examstate->ill = "0";
-                                break;
-                            case 'fa':
-                                $examstate = new stdClass;
-                                $examstate->nt = "0";
-                                $examstate->fa = "1";
-                                $examstate->ill = "0";
-                                break;
-                            case 'ill':
-                                $examstate = new stdClass;
-                                $examstate->nt = "0";
-                                $examstate->fa = "0";
-                                $examstate->ill = "1";
-                                break;
-                            default:
-                                break;
+                    if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
+                        if(isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set'){
+                            switch ($fromform->state[$participant->id]){
+                                case 'normal':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'nt':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "1";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'fa':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "1";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'ill':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "1";
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            $participant->examstate = json_encode($examstate);
+
+                            if($fromform->points[$participant->id]){ // if participants points were not empty
+                                $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                            }
+
+                        } else {
+                            $participant->examstate = NULL;
+                            $participant->exampoints = NULL;
                         }
 
-                        $participant->examstate = json_encode($examstate);
+                        $participant->timeresultsentered = time();
 
-                        if($fromform->points[$participant->id]){ // if participants points were not empty
-                            $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                        if($fromform->bonussteps[$participant->id] !== '-'){
+                            $participant->bonussteps = $fromform->bonussteps[$participant->id];
+                            $participant->bonuspoints = NULL;
+                        } else if($fromform->bonuspoints[$participant->id] !== '-' && $fromform->bonuspoints[$participant->id] !== 0){
+                            $participant->bonussteps = NULL;
+                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                        } else {
+                            $participant->bonussteps = NULL;
+                            $participant->bonuspoints = NULL;
                         }
 
                     } else {
-                        $participant->examstate = NULL;
-                        $participant->exampoints = NULL;
-                    }
-
-                    $participant->timeresultsentered = time();
-
-                    if($fromform->bonussteps[$participant->id] !== '-'){
-                        $participant->bonussteps = $fromform->bonussteps[$participant->id];
-                        $participant->bonuspoints = NULL;
-                    } else if($fromform->bonuspoints[$participant->id] !== '-'){
-                        $participant->bonussteps = NULL;
-                        $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
-                    } else {
-                        $participant->bonussteps = NULL;
-                        $participant->bonuspoints = NULL;
+                        if($fromform->bonuspoints[$participant->id] !== '-'){
+                            $participant->timeresultsentered = time();
+                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                        }
                     }
 
                     if($MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant)){
-                        $updatedCount .= 1;
+                        $updatedCount += 1;
                     }
+
                 }
+
+                var_dump($participants);
+
+                var_dump($updatedCount);
 
                 if($updatedCount){
                     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);

@@ -33,7 +33,7 @@ define(['jquery'], function ($) {
         "-webkit-appearance": "textfield",
         "-moz-appearance": "textfield",
         "margin-left": "10px",
-        "width": "65px"
+        "width": "70px"
       };
 
       $("form.mform input[type=number]").css(styles);

@@ -114,7 +114,7 @@ ajaxsetcorrectioncompletion = function(value){
 											<span class="statebar pull-right">
 												{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
 												{{^gradingscale}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
 										</div>
@@ -170,12 +170,12 @@ ajaxsetcorrectioncompletion = function(value){
 						</div>
 						<div class="row row-eq-height">
 							<div class="col-6">
-								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
+								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-warning{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
-											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+											{{^deleted}}{{#bonuspointsentered}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/bonuspointsentered}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-											{{^datadeletiondate}}{{^resultscount}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 										</span>
 										<h3 class="panel-title">{{#str}}complete_preparations, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -187,12 +187,11 @@ ajaxsetcorrectioncompletion = function(value){
 								</div>
 							</div>
 							<div class="col-6">
-								<div class="panel {{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-info{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}">
+								<div class="panel {{#datadeletiondate}}{{#bonuspointsentered}}panel-info{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{#datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
 											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-											{{^resultscount}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-											{{^gradingscale}}<a href="configureGradingscale.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}</span></span></a>{{/gradingscale}}
+											{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}
 											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
@@ -201,7 +200,7 @@ ajaxsetcorrectioncompletion = function(value){
 										<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+										{{^deleted}}{{#datadeletiondate}}{{#bonuspointsentered}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 									</div>
 								</div>
 							</div>

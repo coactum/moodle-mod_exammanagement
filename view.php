@@ -161,7 +161,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
                 $resultscount = $UserObj->getEnteredResultsCount();
 
-                if($resultscount){
+                $bonuscount = $UserObj->getEnteredBonusCount('points'); // if mode is export_grades
+
+                if(($mode === 'normal' && $resultscount) || $mode = 'export_grades' && $bonuscount){
                     if ($correctioncompleted) {
                         $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
                     } else {
