@@ -40,7 +40,11 @@ define(['jquery'], function ($) {
       $("form.mform input[type=number]").attr("step", "0.01");
       $("form.mform input[type=number]").attr("min", "0");
 
-      $("[id^=id_points]").first().focus();
+      if($("[id^=id_points]").length !== 0){
+        $("[id^=id_points]").first().focus();
+      } else {
+        $("[id^=id_bonuspoints]").first().focus();
+      }
 
       $("[id^=id_points]").each(function () {
 
@@ -51,6 +55,15 @@ define(['jquery'], function ($) {
 
         if ($("#id_state_"+participantid).val() !== 'normal' && $("#id_state_"+participantid).val() !== 'not_set') {
           $(this).prop("disabled", true); //initial disabling point fields if examstate is not normal or not set
+        }
+      });
+
+      $("[id^=id_bonuspoints]").each(function () {
+
+        var participantid = $(this).attr("id").split('_')[2];
+
+        if ($("#id_bonussteps_"+participantid).val() && $("#id_bonussteps_"+participantid).val() !== '-') {
+          $(this).prop("disabled", true); //initial disabling bonuspoint fields if bonusstep is set
         }
       });
 
@@ -66,6 +79,8 @@ define(['jquery'], function ($) {
         }
 
         $("#id_state_"+participantid).focus(); // move focus
+
+        $('input[name="bonuspoints_entered['+participantid+']"]').val(0);  // set bonuspoints entered to true
       });
 
       // if exam bonus points change
@@ -75,6 +90,7 @@ define(['jquery'], function ($) {
         if ($(this).val()){
           $("#id_bonussteps_"+participantid).val('-'); // reset bonus steps
           $("#id_state_"+participantid).focus(); // move focus
+          $('input[name="bonuspoints_entered['+participantid+']"]').val(1);  // set bonuspoints entered to true
         }
       });
 

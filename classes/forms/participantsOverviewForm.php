@@ -392,13 +392,24 @@ class participantsOverviewForm extends moodleform {
                             $select->setSelected($state);
                             $mform->addElement('html', '</td>');
                         } else {
-                            $mform->addElement('html', '-');
+                            $mform->addElement('html', '<td>-</td>');
                         }
                     } else {
                         $mform->addElement('html', '<td>');
                         $mform->addElement('text', 'bonuspoints['.$participant->id.']', '');
                         $mform->setType('bonuspoints['.$participant->id.']', PARAM_FLOAT);
                         $mform->addElement('html', '</td>');
+                    }
+
+                    $mform->addElement('hidden', 'bonuspoints_entered['.$participant->id.']', '');
+                    $mform->setType('bonuspoints_entered['.$participant->id.']', PARAM_INT);
+
+                    if(isset($participant->bonuspoints)){
+                        $mform->setDefault('bonuspoints['.$participant->id.']', $participant->bonuspoints);
+                        $mform->setDefault('bonuspoints_entered['.$participant->id.']', 1);
+                    } else {
+                        $mform->setDefault('bonuspoints['.$participant->id.']', NULL);
+                        $mform->setDefault('bonuspoints_entered['.$participant->id.']', 0);
                     }
                 }
 

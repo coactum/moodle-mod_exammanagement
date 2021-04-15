@@ -77,8 +77,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else if ($fromform = $mform->get_data()) {
                 //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                var_dump($fromform->bonuspoints);
-
                 $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
                 $updatedCount = 0;
 
@@ -130,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         if($fromform->bonussteps[$participant->id] !== '-'){
                             $participant->bonussteps = $fromform->bonussteps[$participant->id];
                             $participant->bonuspoints = NULL;
-                        } else if($fromform->bonuspoints[$participant->id] !== '-' && $fromform->bonuspoints[$participant->id] !== 0){
+                        } else if($fromform->bonuspoints_entered[$participant->id] === 1 && $fromform->bonuspoints[$participant->id] !== 0){
                             $participant->bonussteps = NULL;
                             $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
                         } else {
@@ -139,7 +137,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         }
 
                     } else {
-                        if($fromform->bonuspoints[$participant->id] !== '-'){
+                        if($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])){
                             $participant->timeresultsentered = time();
                             $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
                         }
@@ -150,10 +148,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
 
                 }
-
-                var_dump($participants);
-
-                var_dump($updatedCount);
 
                 if($updatedCount){
                     $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
