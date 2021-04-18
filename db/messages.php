@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $messageproviders = array (
 
     'groupmessage' => array(
+        'capability' => 'mod/exammanagement:receivegroupmessage',
         'defaults' => array(
             'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
