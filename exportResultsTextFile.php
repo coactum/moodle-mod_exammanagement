@@ -49,16 +49,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	} else {
         if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-            $mode = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+            $misc = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
             $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-            if($mode){
+            if(isset($misc->mode) && $misc->mode === 'export_grades'){
                 $mode = 'export_grades';
             } else {
                 $mode = 'normal';
             }
 
-            if(($mode === 'normal' && !$UserObj->getEnteredResultsCount()) || ($mode = 'export_grades' && !$UserObj->getEnteredBonusCount('points'))){
+            if(($mode === 'normal' && !$UserObj->getEnteredResultsCount()) || ($mode === 'export_grades' && !$UserObj->getEnteredBonusCount('points'))){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
             } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
@@ -90,14 +90,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 foreach($participants as $participant){ // construct lines for each participant
 
-                    if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
+                    if($mode === 'export_grades'){
                         if($gradingscale){
-                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                         } else {
                             $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                         }
                     } else {
-                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+
                     }
 
                     $resultWithBonus = '"' . $resultWithBonus . '"';
@@ -149,14 +150,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     foreach($participantsFromCourse as $participant){
 
-                        if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
+                        if($mode === 'export_grades'){
                             if($gradingscale){
-                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                             } else {
                                 $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                             }
                         } else {
-                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
                         }
 
                         $resultWithBonus = '"' . $resultWithBonus . '"';
@@ -189,14 +190,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                         foreach($participants as $participant){
 
-                            if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
+                            if($mode === 'export_grades'){
                                 if($gradingscale){
-                                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                                 } else {
                                     $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                                 }
                             } else {
-                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
                             }
 
                             $resultWithBonus = '"' . $resultWithBonus . '"';
