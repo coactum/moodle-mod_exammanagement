@@ -143,6 +143,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         }
                     }
 
+                    if(isset($participant->moodleuserid)){
+                        $participant->login = NULL;
+                        $participant->firstname = NULL;
+                        $participant->lastname = NULL;
+                    }
+
+                    unset($participant->matrnr);
+
                     if($MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant)){
                         $updatedCount += 1;
                     }
