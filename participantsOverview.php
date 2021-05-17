@@ -118,12 +118,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 $participant->exampoints = json_encode($fromform->points[$participant->id]);
                             }
 
+                            $participant->timeresultsentered = time();
+
                         } else {
                             $participant->examstate = NULL;
                             $participant->exampoints = NULL;
                         }
-
-                        $participant->timeresultsentered = time();
 
                         if($fromform->bonussteps[$participant->id] !== '-'){
                             $participant->bonussteps = $fromform->bonussteps[$participant->id];

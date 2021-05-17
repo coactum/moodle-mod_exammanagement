@@ -279,65 +279,6 @@ class provider implements
         }
 
         $exammanagements->close();
-
-        // // // custom rooms
-        // $sql = "SELECT
-        //             cm.id AS cmid,
-        //             r.id,
-        //             r.roomid,
-        //             r.name,
-        //             r.description,
-        //             r.seatingplan,
-        //             r.places,
-        //             r.type,
-        //             r.moodleuserid,
-        //             r.misc
-        //             FROM {context} c
-        //             JOIN {course_modules} cm ON cm.id = c.instanceid
-        //             JOIN {exammanagement_rooms} r
-        //             WHERE (
-        //             p.moodleuserid = :userid AND
-        //             r.type = 'customroom' AND
-        //             c.id {$contextsql}
-        //         )
-        // ";
-
-        // $params = $contextparams;
-        // $params['userid'] = $userid;
-        // $customrooms = $DB->get_recordset_sql($sql, $params);
-
-        // error_log(var_export($costumrooms, true));
-
-        // // if($customrooms->valid()){
-
-        // //     foreach ($customrooms as $customroom) {
-
-        // //         if($customroom->misc !== null){
-        // //             $customroom->misc = json_encode($customroom->misc);
-        // //         }
-
-        // //         if($customroom->seatingplan !== null){
-        // //             $customroom->seatingplan = 'Yes';
-        // //         }
-
-        // //         if($customroom->places !== null){
-        // //             $customroom->places = json_encode($customroom->places);
-        // //         }
-
-        // //         $exammanagementdata['custom room (global):'][$customroom->roomid] = [
-        // //             'roomid' => $customroom->roomid,
-        // //             'name' => $customroom->name,
-        // //             'description' => $customroom->description,
-        // //             'seatingplan' => $customroom->seatingplan,
-        // //             'places' => $customroom->places,
-        // //             'type' => $customroom->type,
-        // //             'misc' => $customroom->misc,
-        // //         ];
-
-        // //     }
-        // // }
-
-        // $customrooms->close();
     }
 
     /**
@@ -366,9 +307,6 @@ class provider implements
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
-        error_log('delete_data_for_all_users_in_context $cm');
-        error_log(var_export($cm, true));
-
         // Check that this is a context_module.
         if (!$context instanceof \context_module) {
             return;
@@ -379,21 +317,13 @@ class provider implements
             return;
         }
 
-        $exammanagementid = $cm->instance;
-
         // Delete all records.
-        if($DB->record_exists('exammanagement_participants', ['exammanagement' => $exammanagementid])){
-            error_log('i should delete all participants');
-            error_log(var_export($DB->get_records('exammanagement_participants', ['exammanagement' => $exammanagementid]), true));
-
-            $DB->delete_records('exammanagement_participants', ['exammanagement' => $exammanagementid]);
+        if($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance])){
+            $DB->delete_records('exammanagement_participants', ['exammanagement' => $cm->instance]);
         }
 
-        if($DB->record_exists('exammanagement_temp_part', ['exammanagement' => $exammanagementid])){
-            error_log('i should delete all temp_participants');
-            error_log(var_export($DB->get_records('exammanagement_temp_part', ['exammanagement' => $exammanagementid]), true));
-
-            $DB->delete_records('exammanagement_temp_part', ['exammanagement' => $exammanagementid]);
+        if($DB->record_exists('exammanagement_temp_part', ['exammanagement' => $cm->instance])){
+            $DB->delete_records('exammanagement_temp_part', ['exammanagement' => $cm->instance]);
         }
     }
 
@@ -435,19 +365,7 @@ class provider implements
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        error_log('delete_data_for_users $context');
-        error_log(var_export($context, true));
-
-        error_log('delete_data_for_users $cm');
-        error_log(var_export($cm, true));
-
-        error_log('delete_data_for_users $params');
-        error_log(var_export($params, true));
-
         if($DB->record_exists_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)){
-            error_log('i should delete all participants');
-            error_log(var_export($DB->get_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params), true));
-
             $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
         }
     }

@@ -284,7 +284,7 @@ $string['no_default_rooms'] = 'No default exam rooms available';
 $string['addDefaultRooms'] = 'Import default rooms';
 $string['import_default_rooms_str'] = 'Here, administrators can import the standard rooms available to all lecturers as possible exam rooms from a text file.';
 $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms have already been imported. These are overwritten by the new import.';
-$string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty)';
+$string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty). Room properties separated by the symbol * . <i>Example:</i> AudiMax_1*AudiMax*1 place free, 3 places total*["R/R01/P01","R/R02/P01","R/R02/P03"]*< svg>...< /svg>';
 
 //addCustomRoomForm.php
 $string['addCustomRoom'] = 'Change or add custom room';
@@ -637,12 +637,13 @@ If, on the other hand, an existing exam room has been selected for editing on th
 $string['addCustomRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addDefaultRooms_help']= 'As a '. get_config('mod_exammanagement', 'moodlesystemname').' administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
 In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
-The text file to be imported must contain the following information for each exam room, where each line stands for one exam room:
+The text file to be imported must contain the following information (separated by the char *) for each exam room, where each line stands for one exam room:
 <ul><li>First column: The system-internal room id according to the pattern <i>room_name_variant</i>, for example <i>Audimax_2</i></li>
 <li>Second column: The user-visible room name, e.g. <i>Audimax</i></li>
 <li>Third column: The user-visible room description including the number of free and total seats, for example <i>2 free seats, 56 total seats</i></li>
 <li>Fourth column: An array needed to calculate the number of seats in a room, which contains the name of each individual seat in the room. The array must be written in json syntax, e.g. look like this: <i>["R/R01/P07", "R/R01/P04", "R/R01/P01", ...] </i></li>
 <li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
+<strong>Example: </strong>AudiMax_1 * AudiMax * 1 place free, 3 places total * ["R/R01/P01","R/R02/P01","R/R02/P03"] * < svg>...< /svg><br><br>
 All existing default rooms are overwritten by a new import. The information on any deleted or changed rooms is retained in all exam organizations in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats. Changes to the names or seats of default rooms also become only effective in the individual exam organizations after a new assignment of seats.';
 $string['addDefaultRooms_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['editDefaultRoom_help']= 'Here, administrators can edit an existing <strong> default exam room </strong> or create a new one.<br><br>
@@ -665,8 +666,8 @@ It is also possible on this page to delete individual exam participants or all o
 Finally, the button "Convert to group" can be used to convert individual or all participants listed here into a '. get_config('mod_exammanagement', 'moodlesystemname').' group.';
 $string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['convertToGroup_help']= 'Here selected or all imported exam participants can be converted into an '. get_config('mod_exammanagement', 'moodlesystemname'). ' group. <br /> <br />
-To do this, the name and optionally a description of the '.get_config('mod_exammanagement', 'moodlesystemname').' group to be created must be entered in the corresponding form fields. Then all desired participants can be selected in the lower section and then converted to a group by clicking the "Convert to group" button.<br /> <br />
-Exam participants who are no course participants or do not have a '.get_config('mod_exammanagement', 'moodlesystemname').' user account are displayed in a separate section and cannot be added to the group. <br /> <br />
+To do this, either for the creation of a new '.get_config('mod_exammanagement', 'moodlesystemname').' group its name and optionally also description can be entered into the corresponding form fields or an already existing group can be selected. Then all desired participants can be selected in the lower section and afterwards converted into a group by clicking the button "Convert to group".<br /> <br />
+Exam participants who are no course participants or do not have a '.get_config('mod_exammanagement', 'moodlesystemname').' user account are displayed in a separate section and cannot be added to a group. <br /> <br />
 Groups created here can be used throughout the course and all it`s activities just like normal groups. After clicking on a group, for example in the participant overview, it can be edited or changed.';
 $string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['addParticipants_help']= 'On this page you can add <strong>participants</strong> from exam lists to the exam. In this way their results can be exported later again and then can be simply reimported. <br /> <br />
