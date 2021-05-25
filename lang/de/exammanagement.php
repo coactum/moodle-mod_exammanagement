@@ -865,6 +865,7 @@ $string['privacy:metadata:exammanagement_participants:bonussteps'] = 'Bonusnoten
 $string['privacy:metadata:exammanagement_participants:bonuspoints'] = 'Bonuspunkte des Teilnehmers für die Prüfung';
 $string['privacy:metadata:exammanagement_temp_part:identifier'] = 'Matrikelnummer des potenziellen Teilnehmers';
 $string['privacy:metadata:exammanagement_temp_part:line'] = 'Zeilennummer des potenziellen Teilnehmers in der importierten Teilnehmerliste';
+$string['privacy:metadata:exammanagement_temp_part:headerid'] = 'ID des Headers der Teilnehmerliste aus dem der potenzielle Teilnehmer eingelesen wurde';
 $string['privacy:metadata:exammanagement_rooms:roomid'] = 'Raum-ID (intern)';
 $string['privacy:metadata:exammanagement_rooms:name'] = 'Raumname';
 $string['privacy:metadata:exammanagement_rooms:description'] = 'Raumbeschreibung';

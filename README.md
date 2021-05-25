@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @package     mod_exammanagement
-@copyright   coactum GmbH 2019
+@copyright   coactum GmbH 2021
 @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 # Exam management #
@@ -33,15 +33,16 @@ The exam participants, on the other hand, can see all the relevant information a
 
 ## Quick installation instructions ##
 
-1) Be sure you have at least Moodle 3.5 installed.
+1) Be sure you have at least Moodle 3.9 installed.
 2) Be sure you have the latest version of the module.
 3) Be sure you have the latest version of all your used language packs.
 4) Move the plugin folder to your moodles /mod directory.
 5) Open the site admninistration to start plugin installation.
 6) Wait untill installation is finished.
-7) Create an exam management activity and add or import default exam rooms that can be used by all teachers.
-8) Optional: Enable the possibility for all teachers to request a passwort reset.
-9) Have fun organizing your exams!
+7) Set plugin settings.
+8) Create an exam management activity and add or import default exam rooms that can be used by all teachers.
+9) Optional: Enable the possibility for all teachers to request a passwort reset.
+10) Have fun organizing your exams!
 
 ## Dependencies ##
 

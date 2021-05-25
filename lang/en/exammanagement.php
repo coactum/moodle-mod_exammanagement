@@ -865,6 +865,7 @@ $string['privacy:metadata:exammanagement_participants:bonussteps'] = 'Bonusstep 
 $string['privacy:metadata:exammanagement_participants:bonuspoints'] = 'Bonuspoints of the participant';
 $string['privacy:metadata:exammanagement_temp_part:identifier'] = 'Identifier of the potential participant';
 $string['privacy:metadata:exammanagement_temp_part:line'] = 'Line number of the potential participant in the imported participants list';
+$string['privacy:metadata:exammanagement_temp_part:headerid'] = 'ID of the header of the participant list from which the potential participant was read in';
 $string['privacy:metadata:exammanagement_rooms:roomid'] = 'Room id (internal)';
 $string['privacy:metadata:exammanagement_rooms:name'] = 'Name of the room';
 $string['privacy:metadata:exammanagement_rooms:description'] = 'Description of the room';

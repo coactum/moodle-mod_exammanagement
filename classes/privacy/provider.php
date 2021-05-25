@@ -90,6 +90,7 @@ class provider implements
             'categoryid' => 'privacy:metadata:exammanagement_participants:categoryid',
             'identifier' => 'privacy:metadata:exammanagement_temp_part:identifier',
             'line' => 'privacy:metadata:exammanagement_temp_part:line',
+            'headerid' => 'privacy:metadata:exammanagement_temp_part:headerid',
         ], 'privacy:metadata:exammanagement_temp_part');
 
         // The table 'exammanagement_rooms' stores all available exam rooms. If a user has created a custom exam room it is stored here.
@@ -343,6 +344,7 @@ class provider implements
             $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
             if($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance, 'moodleuserid' => $userid])){
+
                 $DB->delete_records('exammanagement_participants', [
                     'exammanagement' => $cm->instance,
                     'moodleuserid' => $userid,
