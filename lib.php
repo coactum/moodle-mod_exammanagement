@@ -62,11 +62,20 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timecreated = time();
     $moduleinstance->categoryid = $PAGE->category->id; //set course category
-    
+
     if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
         $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
     } else {
         $moduleinstance->password = NULL;
+    }
+
+    $misc = new stdclass;
+    if($mform->get_data()->exportgrades){
+
+        $misc->mode = 'export_grades';
+        $moduleinstance->misc = json_encode($misc);
+    } else {
+        $moduleinstance->misc = NULL;
     }
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
@@ -95,12 +104,21 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 
         $existingPW = base64_decode($DB->get_record('exammanagement', array('id'=>$moduleinstance->instance))->password);
 
-        if (!isset($existingPW) || $existingPW =='' || (isset($existingPW) && password_verify($mform->get_data()->oldpassword, $existingPW))){
-            $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT)); 
-           
+        if (!isset($existingPW) || $existingPW =='' || (isset($existingPW) && isset($mform->get_data()->oldpassword) && password_verify($mform->get_data()->oldpassword, $existingPW))){
+            $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
+
         } else {
             throw new Exception(get_string('incorrect_password_change', 'mod_exammanagement'));
         }
+    }
+
+    $misc = new stdclass;
+    if($mform->get_data()->exportgrades){
+
+        $misc->mode = 'export_grades';
+        $moduleinstance->misc = json_encode($misc);
+    } else {
+        $moduleinstance->misc = NULL;
     }
 
     return $DB->update_record('exammanagement', $moduleinstance);
@@ -116,37 +134,23 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 function exammanagement_delete_instance($id) {
     global $DB;
 
-    $moduleinstance = $DB->get_record('exammanagement', array('id'=>$id));
-
-     if (!$moduleinstance){
-         return false;
-     }
-     if (!$cm = get_coursemodule_from_instance('exammanagement', $moduleinstance->id)) {
-         return false;
-     }
-
-     // delete participants
-     $exists = $DB->get_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
-     if($exists) {
-        $DB->delete_records('exammanagement_participants', array('plugininstanceid' => $cm->id));
-     }
-
+    // delete participants
+    if($DB->record_exists('exammanagement_participants', array('exammanagement' => $id))) {
+       $DB->delete_records('exammanagement_participants', array('exammanagement' => $id));
+    }
 
     // delete temporary participants
-    $exists = $DB->get_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
-    if ($exists) {
-        $DB->delete_records('exammanagement_temp_part', array('plugininstanceid' => $cm->id));
+    if ($DB->record_exists('exammanagement_temp_part', array('exammanagement' => $id))) {
+        $DB->delete_records('exammanagement_temp_part', array('exammanagement' => $id));
     }
 
     // delete plugin instance
-    $exists = $DB->get_record('exammanagement', array('id' => $id));
-    if (!$exists) {
+    if ($DB->record_exists('exammanagement', array('id' => $id))) {
+        $DB->delete_records('exammanagement', array('id' => $id));
+        return true;
+    } else {
         return false;
     }
-
-    $DB->delete_records('exammanagement', array('id' => $id));
-
-    return true;
 }
 
 /**

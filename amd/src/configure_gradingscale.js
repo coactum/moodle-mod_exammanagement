@@ -24,24 +24,22 @@
 define(['jquery', 'core/notification'], function ($) {
 
   return {
-    init: function () {
-
-      var max_points = parseFloat($("#totalpoints strong").text().replace(/,/g, '.'));
+    init: function (totalpoints) {
 
       // create input type number elements
-      $("input[type=text]").attr("type", "number");
+      $("form.mform input[type=text]").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
         "-moz-appearance": "textfield",
         "margin": "0px",
-        "width": "70px"
+        "width": "100px"
       };
 
-      $("input[type=number]").css(styles);
-      $("input[type=number]").attr("step", "0.01");
-      $("input[type=number]").attr("min", "0");
-      $("input[type=number]").attr("max", max_points);
+      $("form.mform input[type=number]").css(styles);
+      $("form.mform input[type=number]").attr("step", "0.01");
+      $("form.mform input[type=number]").attr("min", "0");
+      $("form.mform input[type=number]").attr("max", totalpoints);
 
     },
   };

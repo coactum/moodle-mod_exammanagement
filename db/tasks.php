@@ -53,4 +53,13 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+    [
+        'classname' => 'mod_exammanagement\task\delete_unassigned_custom_rooms',
+        'blocking' => 0,
+        'minute' => '48',
+        'hour' => '23',
+        'day' => '1',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
  ];

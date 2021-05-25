@@ -44,12 +44,22 @@ class participantsList extends TCPDF {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
 
-    $this->ImageEps(__DIR__.'/../../data/upb_logo_full.ai', 25, 12, 70);
-    $this->SetFont('freeserif', 'B', 22);
-    $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
-    $this->SetTextColor(255, 0, 0);
-    $this->SetFont('freeserif', 'B', 10);
-    $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
+    if(file_exists(__DIR__.'/../../data/logo_full.ai')){
+      $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
+      $this->SetFont('freeserif', 'B', 22);
+      $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
+      $this->SetTextColor(255, 0, 0);
+      $this->SetFont('freeserif', 'B', 10);
+      $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
+      
+    } else {
+      $this->SetFont('freeserif', 'B', 22);
+      $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 70, 17);
+      $this->SetTextColor(255, 0, 0);
+      $this->SetFont('freeserif', 'B', 10);
+      $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 65, 28);  
+    }
+    
     $this->SetTextColor(0, 0, 0);
     $this->SetFont('freeserif', '', 14);
     $this->MultiCell(130, 50, strtoupper($ExammanagementInstanceObj->getCleanCourseCategoryName()) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);

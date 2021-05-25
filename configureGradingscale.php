@@ -49,7 +49,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$MoodleObj->setPage('configureGradingscale');
 
-			if(!$ExammanagementInstanceObj->getTaskCount()){
+			if($ExammanagementInstanceObj->moduleinstance->misc === NULL && !$ExammanagementInstanceObj->getTaskCount()){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
 			}
 
@@ -81,7 +81,6 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			// or on the first display of the form.
 
 			//Set default data (if any)
-			//$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
 			$mform->set_data(array('id'=>$id));
 
 			//displays the form

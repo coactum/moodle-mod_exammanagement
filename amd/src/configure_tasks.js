@@ -23,7 +23,7 @@
 
 define(['jquery'], function ($) {
 
-  var getTotalpoints = function () {
+  var getTotalpoints = function (lang) {
     var totalpoints = 0;
     var newval;
 
@@ -34,7 +34,7 @@ define(['jquery'], function ($) {
       }
     });
 
-    totalpoints = String(totalpoints.toFixed(2)).replace('.', ',');
+    totalpoints = totalpoints.toLocaleString(lang);
 
     return totalpoints;
   };
@@ -42,7 +42,7 @@ define(['jquery'], function ($) {
   var getTaskCount = function () {
     var taskcount = 0;
 
-    $(".form-group input.form-control").each(function () {
+    $("form.mform .form-group input.form-control").each(function () {
       taskcount += 1;
     });
 
@@ -50,10 +50,10 @@ define(['jquery'], function ($) {
   };
 
   return {
-    init: function () {
+    init: function (lang) {
 
       // create input type number elements
-      $("input[type=text]").attr("type", "number");
+      $("form.mform input[type=text]").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -62,17 +62,18 @@ define(['jquery'], function ($) {
         "width": "70px"
       };
 
-      $("input[type=number]").css(styles);
-      $("input[type=number]").attr("step", "0.01");
-      $("input[type=number]").attr("min", "0");
+      $("form.mform input[type=number]").css(styles);
+      $("form.mform input[type=number]").attr("step", "0.01");
+      $("form.mform input[type=number]").attr("min", "0.01");
+      $("form.mform input[type=number]").attr("max", "100");
 
-      $(".form-group").on("change", "input", function () { // update totalpoints if some field changes
+      $("form.mform .form-group").on("change", "input", function () { // update totalpoints if some field changes
 
-        var totalpoints = getTotalpoints();
+        var totalpoints = getTotalpoints(lang);
         $("#totalpoints").text(totalpoints);
       });
     },
-    addtask: function () { //add new tasks
+    addtask: function (lang) { //add new tasks
 
       $("#id_add_task").click(function () {
 
@@ -80,19 +81,19 @@ define(['jquery'], function ($) {
         var newtaskcount = taskcount + 1;
         var pointsofnewtask = 10;
 
-        if (taskcount <= 19) {
+        if (taskcount <= 44) {
 
           var temp = '<div class="form-group  fitem  ">';
           temp += '<label class="col-form-label sr-only" for="id_task_' + newtaskcount + '"></label><span data-fieldtype="text">';
           temp += '<input class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" value="';
           temp += pointsofnewtask + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
-          temp += 'margin: 0px; width: 70px;" step="0.01" min="0"></span><div class="form-control-feedback" id="id_error_task[';
+          temp += 'margin: 0px; width: 70px;" step="0.01" min="0" max="100"></span><div class="form-control-feedback" id="id_error_task[';
           temp += newtaskcount + ']" style="display: none;"></div></div> ';
 
-          $("div[data-groupname='tasknumbers_array'] .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
-          $("div[data-groupname='tasks_array'] .col-md-9").append(temp);
+          $("div[data-groupname='tasknumbers_array'] .col-md-9 fieldset div.d-flex").append('<span class="exammanagement_task_spacing"><strong>' + newtaskcount + '</strong></span>');
+          $("div[data-groupname='tasks_array'] .col-md-9 fieldset div.d-flex").append(temp);
 
-          var totalpoints = getTotalpoints();
+          var totalpoints = getTotalpoints(lang);
           $("#totalpoints").text(totalpoints);
 
           $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val()) + 1);
@@ -100,17 +101,17 @@ define(['jquery'], function ($) {
 
       });
     },
-    removetask: function () { //remove task
+    removetask: function (lang) { //remove task
 
       $("#id_remove_task").click(function () {
 
         var taskcount = getTaskCount();
 
         if (taskcount > 1) {
-          $("div[data-groupname='tasknumbers_array'] .col-md-9 span:last").remove();
-          $("div[data-groupname='tasks_array'] .col-md-9 .form-group:last").remove();
+          $("div[data-groupname='tasknumbers_array'] .col-md-9 fieldset div.d-flex span:last").remove();
+          $("div[data-groupname='tasks_array'] .col-md-9 fieldset div.d-flex .form-group:last").remove();
 
-          var totalpoints = getTotalpoints();
+          var totalpoints = getTotalpoints(lang);
           $("#totalpoints").text(totalpoints);
 
           $("input[name=newtaskcount]").val(parseInt($("input[name=newtaskcount]").val() - 1));

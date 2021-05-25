@@ -40,24 +40,30 @@ class addCustomRoomForm extends moodleform {
   //Add elements to form
   public function definition() {
 
+    global $OUTPUT;
+
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
     $mform = $this->_form; // Don't forget the underscore!
 
+    $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+    $mform->addElement('html', '<h3>'.get_string("addCustomRoom", "mod_exammanagement"));
+        
+    if($helptextsenabled){
+        $mform->addElement('html', $OUTPUT->help_icon('addCustomRoom', 'mod_exammanagement', ''));
+    }
+
+    $mform->addElement('html', '</h3>');
+    
+    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("change_custom_room_name", "mod_exammanagement").'</div>');
+    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("custom_room_places", "mod_exammanagement").'</div>');
+    
     $mform->addElement('hidden', 'id', 'dummy');
     $mform->setType('id', PARAM_INT);
     $mform->addElement('hidden', 'existingroom', 0);
     $mform->setType('existingroom', PARAM_INT);
 
-    $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('addCustomRoom', 'mod_exammanagement').'</h3>');
-    $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-    $mform->addElement('html', '</div>');
-
-    $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('addCustomRoom'));
-    
-    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("change_custom_room_name", "mod_exammanagement").'</div>');
-    $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("custom_room_places", "mod_exammanagement").'</div>');
-    
     $attributes = array('size'=>'20');
 
     $mform->addElement('text', 'roomname', get_string('customroom_name', 'mod_exammanagement'), $attributes);
@@ -96,6 +102,10 @@ class addCustomRoomForm extends moodleform {
     if(!$data['placescount'] || $data['placescount'] <= 0){
        $errors['placescount'] = get_string('err_novalidinteger', 'mod_exammanagement');
     }
+
+    if($data['placescount'] && $data['placescount'] > 10000){
+      $errors['placescount'] = get_string('err_novalidplacescount', 'mod_exammanagement');
+   }
 
     return $errors;
   }

@@ -38,31 +38,44 @@ class configureGradingscaleForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        global $PAGE;
-
-        $PAGE->requires->js_call_amd('mod_exammanagement/remove_form_classes_col', 'remove_form_classes_col'); //call removing moodle form classes col-md for better layout
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init'); //creating input type number fields
-
-        $mform = $this->_form; // Don't forget the underscore!
+        global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        //create gradingscale input list
-        $gradingscale = $ExammanagementInstanceObj->getGradingscale();
         $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
-        $attributes = array('size'=>'1'); // length of input field
 
-        if (!$totalpoints){
-          $totalpoints = 0;
+        if($totalpoints){
+            $jsArgs = array('totalpoints'=>$totalpoints);
+        } else {
+            $jsArgs = array('totalpoints'=>10000);
         }
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('configureGradingscale', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_gradingscale', 'init', $jsArgs); //creating input type number fields
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('configureGradingscale'));
+        $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<div class="row"><span class="col-md-3">'.get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints"><strong>'.str_replace( '.', ',', $totalpoints).'</strong></span></div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
+
+        $mform->addElement('html', '<h3>'.get_string("configureGradingscale", "mod_exammanagement"));
+
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('configureGradingscale', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
+
+        $mform->addElement('html', '<p>'.get_string("configure_gradingscale_text", "mod_exammanagement").'</p>');
+
+        if($totalpoints){
+            $mform->addElement('html', '<div class="m-b-1"><strong class="exammanagement_gradingscale_totalpoints m-r-2">' . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span id="totalpoints"> '.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
+        }
+
+        //create gradingscale input list
+        $gradingscale = $ExammanagementInstanceObj->getGradingscale();
+        $attributes = array('size'=>'1'); // length of input field
+
+        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->setType('id', PARAM_INT);
 
         if (!$gradingscale){
           $gradingscale = array(
@@ -80,32 +93,26 @@ class configureGradingscaleForm extends moodleform {
         }
 
         //add labels for grading steps
-        $mform->addElement('html', '<div class="row"><p class="col-xs-1"></p>');
+        $mform->addElement('html', '<div class="form-group row fitem"></p>');
 
         foreach($gradingscale as $key => $points){
-            $mform->addElement('html', '<strong class="col-xs-1">'.str_replace('.', ',',$key).'</strong>');
+            $mform->addElement('html', '<span class="exammanagement_gradingscale_steps_spacing"><strong>'.$ExammanagementInstanceObj->formatNumberForDisplay($key).'</strong></span>');
         }
 
         $mform->addElement('html', '</div>');
 
         //add input fields with points
-        $mform->addElement('html', '<div class="row remove_col"><p class="col-xs-1"></p>');
+        $mform->addElement('html', '<div class="form-group row fitem exammanagement_gradingscale_textfield">');
 
         foreach($gradingscale as $key => $points){
-
-            $key_2 = str_replace('.', '', $key);
-
-            $mform->addElement('html', '<span class="col-xs-1">');
+            $mform->addElement('html', '<span>');
             $mform->addElement('text', 'gradingsteppoints['.$key.']', '', $attributes);
             $mform->addElement('html', '</span>');
             $mform->setType('gradingsteppoints['.$key.']', PARAM_FLOAT);
             $mform->setDefault('gradingsteppoints['.$key.']', $points);
-          }
+        }
 
         $mform->addElement('html', '</div>');
-
-        $mform->addElement('hidden', 'id', 'dummy');
-        $mform->setType('id', PARAM_INT);
 
         $this->add_action_buttons();
 
@@ -119,6 +126,7 @@ class configureGradingscaleForm extends moodleform {
       $errors= array();
 
       $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+
       $maxpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
 
       foreach($data['gradingsteppoints'] as $key => $gradingsteppoints){
@@ -130,7 +138,7 @@ class configureGradingscaleForm extends moodleform {
               $errors['gradingsteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
           } else if($gradingsteppoints<0) {
               $errors['gradingsteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
-          } else if($gradingsteppoints > $maxpoints){
+          } else if($maxpoints && $gradingsteppoints > $maxpoints){
               $errors['gradingsteppoints['.$key.']'] = get_string('err_overmaxpoints', 'mod_exammanagement');
           } else if($key!=='1.0' && !array_key_exists('gradingsteppoints['.$lastgradingstepkey.']', $errors) && ($lastgradingsteppoints <= $gradingsteppoints)){
               $errors['gradingsteppoints['.$key.']'] = get_string('err_gradingstepsnotcorrect', 'mod_exammanagement');

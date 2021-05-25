@@ -41,7 +41,7 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
+if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
     if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
@@ -68,7 +68,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
                 if($defaultRoomsFile){
 
-                    if($ExammanagementInstanceObj->getDefaultRooms()){
+                    if($ExammanagementInstanceObj->countDefaultRooms()){
                         $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
                     }
 
@@ -76,20 +76,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
                     foreach ($fileContentArr as $key => $roomstr){
 
-                        $roomParameters = explode('+', $roomstr);
+                        $roomParameters = explode('*', $roomstr);
 
                         $roomObj = new stdClass();
                         $roomObj->roomid = $roomParameters[0];
                         $roomObj->name = $roomParameters[1];
                         $roomObj->description = $roomParameters[2];
 
-                        $svgStr = base64_encode($roomParameters[4]);
+                        if(isset($roomParameters[4]) && $roomParameters[4] !== '' && json_encode($roomParameters[4]) !== '"\r"' && json_encode($roomParameters[4]) !== '"\n"' && json_encode($roomParameters[4]) !== '"\r\n"'){
+                            $svgStr = base64_encode($roomParameters[4]);
+                        } else {
+                            $svgStr = '';
+                        }
 
                         $roomObj->seatingplan = $svgStr;
                         $roomObj->places = $roomParameters[3];
                         $roomObj->type = 'defaultroom';
                         $roomObj->moodleuserid = NULL;
-                        $roomObj->misc = NULL;
+                        $roomObj->misc = json_encode(array('timelastmodified' => time()));
 
                         $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
                     }
@@ -116,7 +120,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:adddefaultrooms')){
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
             redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-        }   
+        }
     }
 } else {
 

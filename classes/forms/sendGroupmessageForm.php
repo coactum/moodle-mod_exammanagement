@@ -44,41 +44,40 @@ class sendGroupmessageForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        global $OUTPUT;
+
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('sendGroupmessage', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('sendGroupmessage'));
-
-        $MoodleParticipants = $UserObj->getAllMoodleExamParticipants();
-        $NoneMoodleParticipants = $UserObj->getAllNoneMoodleExamParticipants();
-
-        if($MoodleParticipants){
-            $MoodleParticipantsCount = count($MoodleParticipants);
+        $mform->addElement('html', '<h3>'.get_string("sendGroupmessage", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('sendGroupmessage', 'mod_exammanagement', ''));
         }
 
-        if($NoneMoodleParticipants){
-            $NoneMoodleParticipantsCount = count($NoneMoodleParticipants);
-        } else {
-            $NoneMoodleParticipantsCount = false;
-        }
+        $mform->addElement('html', '</h3>');
+
+		$mform->addElement('hidden', 'id', 'dummy');
+		$mform->setType('id', PARAM_INT);
+
+        $MoodleParticipantsCount = $UserObj->getParticipantsCount('moodle');
+        $NoneMoodleParticipantsCount = $UserObj->getParticipantsCount('nonmoodle');
 
  		if($MoodleParticipantsCount){
 
-			$mform->addElement('html', '<p>'.get_string('groupmessages_text_1', 'mod_exammanagement').'<strong>'.$MoodleParticipantsCount.'</strong>'.get_string('groupmessages_text_2', 'mod_exammanagement').'</p>');
+			$mform->addElement('html', '<p>'.get_string('groupmessages_text', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'participantscount'=>$MoodleParticipantsCount]).'</p>');
             
             if($NoneMoodleParticipantsCount){
                 $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
 
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>');
 
-                $mform->addElement('html', '<p><strong>'.get_string('groupmessages_warning_1', 'mod_exammanagement').'<br>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
+                $mform->addElement('html', '<p>'.get_string('groupmessages_warning', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'participantscount'=>$NoneMoodleParticipantsCount]).'</p>');
 
                 $mform->addElement('html', '<a href="mailto:?bcc=');
 
@@ -100,13 +99,26 @@ class sendGroupmessageForm extends moodleform {
             $mform->setType('groupmessages_content', PARAM_TEXT);
             $mform->addRule('groupmessages_content', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-			$mform->addElement('hidden', 'id', 'dummy');
-			$mform->setType('id', PARAM_INT);
 			$this->add_action_buttons(true,get_string('send_message', 'mod_exammanagement'));
-		    }
-		else {
+
+        } else if ($NoneMoodleParticipantsCount){
+            $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
+
+            $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
+
+            $mform->addElement('html', '<a href="mailto:?bcc=');
+
+            foreach($mailAdressArr as $adress){
+                $mform->addElement('html', $adress.';');
+            }
+
+            $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
+        
+            $mform->addElement('html', '<span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+
+        } else {
             $MoodleObj->redirectToOverviewPage('', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-	   	}
+        }
     }
 
     //Custom validation should be added here

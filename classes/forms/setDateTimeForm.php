@@ -41,21 +41,29 @@ class setDateTimeForm extends moodleform {
     //Add elements to form
     public function definition() {
 
+        global $OUTPUT;
+
         $mform = $this->_form; // Don't forget the underscore!
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-xs-10">'.get_string('setDateTime', 'mod_exammanagement').'</h3>');
-        $mform->addElement('html', '<div class="col-xs-2"><a class="pull-right helptext-button" role="button" aria-expanded="false" onclick="toogleHelptextPanel(); return true;" title="'.get_string("helptext_open", "mod_exammanagement").'"><span class="label label-info">'.get_string("help", "mod_exammanagement").' <i class="fa fa-plus helptextpanel-icon collapse.show"></i><i class="fa fa-minus helptextpanel-icon collapse"></i></span></a></div>');
-        $mform->addElement('html', '</div>');
+        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', $ExammanagementInstanceObj->ConcatHelptextStr('setDateTime'));
+        $mform->addElement('html', '<h3>'.get_string("setDateTime", "mod_exammanagement"));
+        
+        if($helptextsenabled){
+            $mform->addElement('html', $OUTPUT->help_icon('setDateTime', 'mod_exammanagement', ''));
+        }
+
+        $mform->addElement('html', '</h3>');
 
         $mform->addElement('html', '<p>'.get_string('set_date_time_str', 'mod_exammanagement').'</p>');
 
-        $mform->addElement('date_time_selector', 'examtime', '');
         $mform->addElement('hidden', 'id', 'dummy');
         $mform->setType('id', PARAM_INT);
+        
+        $mform->addElement('date_time_selector', 'examtime', '');
+        
         $this->add_action_buttons();
     }
 

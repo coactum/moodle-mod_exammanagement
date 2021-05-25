@@ -26,7 +26,7 @@ define(['jquery'], function ($) {
   var getBonusstepCount = function () {
     var bonusstepcount = 0;
 
-    $(".form-group input.form-control").not('#id_idfield, #id_pointsfield').each(function () {
+    $("form.mform .form-group input.form-control").not('#id_idfield, #id_pointsfield').each(function () {
       bonusstepcount += 1;
     });
 
@@ -37,7 +37,7 @@ define(['jquery'], function ($) {
     init: function () {
 
       // create input type number elements
-      $("input[type=text]").not('#id_idfield, #id_pointsfield').attr("type", "number");
+      $("form.mform input[type=text]").not('#id_idfield, #id_pointsfield').attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -46,9 +46,22 @@ define(['jquery'], function ($) {
         "width": "70px"
       };
 
-      $("input[type=number]").css(styles);
-      $("input[type=number]").attr("step", "0.01");
-      $("input[type=number]").attr("min", "0");
+      $("form.mform input[type=number]").css(styles);
+      $("form.mform input[type=number]").attr("step", "0.01");
+      $("form.mform input[type=number]").attr("min", "0");
+
+      $("#import_bonuspoints_text").hide();
+
+      $('#id_bonusmode').change(function(){
+        if (this.value == 'points'){
+          $("#set_bonussteps").hide();
+          $("#import_bonuspoints_text").show();
+        } else if(this.value == 'steps'){
+          $("#set_bonussteps").show();
+          $("#import_bonuspoints_text").hide();
+        }
+      });
+
     },
     addbonusstep: function () { //add new tasks
 
@@ -60,15 +73,15 @@ define(['jquery'], function ($) {
 
         if (bonusstepcount < 3) {
 
-          var temp = '<div class="form-group  fitem  ">';
+          var temp = '<div class="form-group fitem">';
           temp += '<label class="col-form-label sr-only" for="id_bonussteppoints_' + newbonusstepcount + '"></label><span data-fieldtype="text">';
           temp += '<input class="form-control" name="bonussteppoints[' + newbonusstepcount + ']" id="id_bonussteppoints_' + newbonusstepcount + '" value="';
           temp += pointsofnewbonusstep + '" size="1" type="number" style="-webkit-appearance: textfield; -moz-appearance:textfield; ';
           temp += 'margin: 0px; width: 70px;" min="0" step="0.01"></span><div class="form-control-feedback" id="id_error_bonussteppoints[';
           temp += newbonusstepcount + ']" style="display: none;"></div></div> ';
 
-          $("div[data-groupname='bonussstepnumbers_array'] .col-md-9").append('<span class="exammanagement_task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
-          $("div[data-groupname='bonussteppoints_array'] .col-md-9").append(temp);
+          $("div[data-groupname='bonussstepnumbers_array'] .col-md-9 fieldset div.d-flex").append('<span class="exammanagement_task_spacing"><strong>' + newbonusstepcount + '</strong></span>');
+          $("div[data-groupname='bonussteppoints_array']  .col-md-9 fieldset div.d-flex").append(temp);
 
           $("input[name=bonusstepcount]").val(parseInt($("input[name=bonusstepcount]").val()) + 1);
         }
@@ -82,8 +95,8 @@ define(['jquery'], function ($) {
         var bonusstepcount = getBonusstepCount();
 
         if (bonusstepcount > 1) {
-          $("div[data-groupname='bonussstepnumbers_array']  .col-md-9 span:last").remove();
-          $("div[data-groupname='bonussteppoints_array'] .col-md-9 .form-group:last").remove();
+          $("div[data-groupname='bonussstepnumbers_array'] .col-md-9 fieldset div.d-flex span:last").remove();
+          $("div[data-groupname='bonussteppoints_array'] .col-md-9 fieldset div.d-flex .form-group:last").remove();
 
           $("input[name=bonusstepcount]").val(parseInt($("input[name=bonusstepcount]").val() - 1));
         }

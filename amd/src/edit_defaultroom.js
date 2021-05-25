@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,23 +14,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_exammanagement set_date_time viewed event.
+ * functions for disabling roomid field when room is edited
  *
- * @package     mod_exammanagement
+ * @module      mod_exammanagement/edit_defaultroom
  * @copyright   coactum GmbH 2019
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\event;
+define(['jquery', 'core/notification'], function ($) {
 
-defined('MOODLE_INTERNAL') || die();
+  return {
+    init: function () {
 
-/**
- * The mod_nexammanagement set_date_time viewed event class.
- *
- * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class set_date_time_viewed extends \core\event\course_module_instance_list_viewed {
-}
+      var roomid = $('#id_roomid').val();
+      var existingroom = $('input[name=existingroom]').val();
+
+      if (roomid && existingroom == true) { // initial disabling of field roomid if room already exists
+        $('#id_roomid').prop("disabled", true);
+      }
+
+      $('#id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
+        $("#id_roomid").prop("disabled", false);
+      });
+    },
+  };
+});

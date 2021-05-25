@@ -24,49 +24,95 @@
 
 namespace mod_exammanagement\ldap;
 
-use mod_exammanagement\general\MoodleDB;
-use mod_exammanagement\general\User; // only for testing without real ldap!
-use Exception;
+use core\notification;
 
 defined('MOODLE_INTERNAL') || die();
-
-defined("LDAP_OU") or define("LDAP_OU", "ou=People");
-defined("LDAP_O") or define("LDAP_O", "o=upb");
-defined("LDAP_C") or define("LDAP_C", "c=de");
-defined("LDAP_OBJECTCLASS_STUDENT") or define("LDAP_OBJECTCLASS_STUDENT", "upbStudent");
-defined("LDAP_ATTRIBUTE_STUDID") or define("LDAP_ATTRIBUTE_STUDID", "upbStudentID");
-defined("LDAP_ATTRIBUTE_UID") or define("LDAP_ATTRIBUTE_UID", "uid");
 
 global $CFG;
 require_once($CFG->libdir.'/ldaplib.php');
 
 class ldapManager{
 
-	protected $id; // only for testing without real ldap!
-	protected $e; // only for testing without real ldap!
+	protected $dn;
+	protected $ldapobjectclass;
+	protected $ldapfieldmatriculationnumber;
+	protected $ldapfieldusername;
+	protected $ldapfieldfirstname;
+	protected $ldapfieldlastname;
+	protected $ldapfieldemailadress;
 
-	private static $instance = NULL;
+	protected $missingconfig;
 
-	private $markedForPreload = array();
+	private function __construct() {
 
-	private $preloadedValues = array();
+		$pluginconfig = get_config('mod_exammanagement');
+		$ldapconfig = get_config('auth_ldap');
 
-	private function __construct($id, $e) {
-		$this->id = $id; // only for testing without real ldap!
-		$this->e = $e;		 // only for testing without real ldap!
+		// check if all required config is set in plugin settings or moodle ldap settings and set save missing elements in property
+		$this->missingconfig = array();
+
+		if($pluginconfig->ldapdn){
+			$this->dn = $pluginconfig->ldapdn;
+		} else if ($ldapconfig->contexts){
+			$this->dn = $ldapconfig->contexts;
+		} else {
+			array_push($this->missingconfig, 'ldapdn');
+		}
+
+		if($pluginconfig->ldap_objectclass_student){
+			$this->ldapobjectclass = $pluginconfig->ldap_objectclass;
+		}
+
+		if($pluginconfig->ldap_field_map_matriculationnumber){
+			$this->ldapfieldmatriculationnumber = $pluginconfig->ldap_field_map_matriculationnumber;
+		} else {
+			array_push($this->missingconfig, 'ldap_field_map_matriculationnumber');
+		}
+
+		if($pluginconfig->ldap_field_map_username){
+			$this->ldapfieldusername = $pluginconfig->ldap_field_map_username;
+		} else if ($ldapconfig->field_map_idnumber){
+			$this->ldapfieldusername = $ldapconfig->field_map_idnumber;
+		} else {
+			array_push($this->missingconfig, 'ldap_field_map_username');
+		}
+
+		if($pluginconfig->ldap_field_map_firstname){
+			$this->ldapfieldfirstname = $pluginconfig->ldap_field_map_firstname;
+		} else if ($ldapconfig->field_map_firstname){
+			$this->ldapfieldfirstname = $ldapconfig->field_map_firstname;
+		} else {
+			array_push($this->missingconfig, 'ldap_field_map_firstname');
+		}
+
+		if($pluginconfig->ldap_field_map_lastname){
+			$this->ldapfieldlastname = $pluginconfig->ldap_field_map_lastname;
+		} else if ($ldapconfig->field_map_lastname){
+			$this->ldapfieldlastname = $ldapconfig->field_map_lastname;
+		} else {
+			array_push($this->missingconfig, 'ldap_field_map_lastname');
+		}
+
+		if($pluginconfig->ldap_field_map_mail){
+			$this->ldapfieldemailadress = $pluginconfig->ldap_field_map_mail;
+		} else if ($ldapconfig->field_map_email){
+			$this->ldapfieldemailadress = $ldapconfig->field_map_email;
+		} else {
+			array_push($this->missingconfig, 'ldap_field_map_mail');
+		}
 	}
 
-	public static function getInstance($id, $e){
+	public static function getInstance(){
 
 		static $inst = null;
 			if ($inst === null) {
-				$inst = new ldapManager($id, $e);
+				$inst = new ldapManager();
 			}
 			return $inst;
 
 	}
 
-	public function connect_ldap(){
+	private function connect_ldap(){
 		$config = get_config('auth_ldap');
 
 		return $connection = ldap_connect_moodle(
@@ -82,130 +128,320 @@ class ldapManager{
 
 	}
 
-	public function is_LDAP_config(){
-		$config = get_config('auth_ldap');
-
-		if($config->host_url){
+	public function isLDAPenabled(){
+		if(get_config('mod_exammanagement', 'enableldap')){
 			return true;
 		} else {
-			//throw new Exception('LDAP not configured');
-
 			return false;
 		}
 	}
 
-	public function getMatriculationNumber2ImtLoginTest($matrNr){ // only for testing without real ldap!
+	public function isLDAPconfigured(){
+		$config = get_config('auth_ldap');
 
-		$MoodleDBObj = MoodleDB::getInstance();
-
-			$temp = explode('_', $matrNr);
-
-			$imtlogin = substr($temp[0], -3);
-
-			$imtlogin = str_pad(intval($imtlogin)-2, 3, "0", STR_PAD_LEFT);
-
-			$moodleuserid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => 'tool_generator_000'.$imtlogin));
-			
-			if($moodleuserid){
-				return $moodleuserid;
-			} else {
-				return false;
-			}
-
-	}
-
-	public function getMatriculationNumber2ImtLoginNoneMoodleTest($matrNr){ // only for testing without real ldap!
-
-		$MoodleDBObj = MoodleDB::getInstance();
-
-			$temp = explode('_', $matrNr);
-
-			$imtlogin = 'tool_generator_000'.substr($temp[0], -3);
-
-			if($imtlogin){
-				return $imtlogin;
-			} else {
-				return false;
-			}
-
-	}
-
-	public function getIMTLogin2MatriculationNumberTest($userid, $login = false){ // only for testing without real ldap!
-			require_once(__DIR__.'/../general/User.php');
-
-			$UserObj = User::getInstance($this->id, $this->e);
-
-			if($userid !== NULL && $userid !== false){
-				$user = $UserObj->getMoodleUser($userid);
-				$matrNr = str_pad($user->id, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			} else if($login){
-				$login = explode('_', $login);
-				$imtlogin = substr($login[2], -3);
-				$matrNr = str_pad($imtlogin, 6, "0", STR_PAD_LEFT);
-				$matrNr = 7 . $matrNr;
-			}
-
-			if($matrNr == '7000057' || $matrNr == '7000082' || $matrNr == '7000088'){
-				return false;
-			}else if($matrNr){
-				return $matrNr;
-			} else {
-				return false;
-			}
-	}
-
-	public function studentid2uid($ldapConnection, $pStudentId){ // matrnr to imtlogin
-		if (empty($pStudentId)) {
-				throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
+		if($config->host_url && $config->bind_dn && $config->bind_pw){
+			return true;
+		} else {
+			return false;
 		}
-
-		$dn	=	LDAP_OU	.	", "	.	LDAP_O	.	", "	.	LDAP_C;
-		$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_STUDID . "=" . $pStudentId . "))";
-
-		$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_UID));
-		$entry = ldap_first_entry($ldapConnection, $search);
-
-		$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_UID);
-    ldap_free_result($search);
-
-		return $result[ 0 ];
 	}
 
-	public function uid2studentid($ldapConnection, $uid){ // imtlogin to matrnr
+	public function getLoginForMatrNr($username, $disabledfeature){ // matrnr to login
 
-			if (empty($uid)) {
-					throw new Exception(get_string('no_param_given', 'mod_exammanagement'));
-			}
+		if($this->isLDAPenabled()){
+			if($this->isLDAPconfigured()){
+				$ldapConnection = $this->connect_ldap();
 
-			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$filter = "(&(objectclass=" . LDAP_OBJECTCLASS_STUDENT . ")(" . LDAP_ATTRIBUTE_UID . "=" . $uid . "))";
+				if($ldapConnection){
 
-			$search = ldap_search($ldapConnection, $dn, $filter, array(LDAP_ATTRIBUTE_STUDID));
-			$entry = ldap_first_entry($ldapConnection, $search);
+					// if some required config is missing display error message and end method
+					if(in_array('ldap_objectclass', $this->missingconfig) || in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
+						$missingconfigstr = '';
 
-			$result = @ldap_get_values($ldapConnection, $entry, LDAP_ATTRIBUTE_STUDID);
-			ldap_free_result($search);
+						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
+							$missingconfigstr .= 'ldap_field_map_matriculationnumber, ';
+						}
 
-			return $result[ 0 ];
-	}
+						if(in_array('ldap_field_map_username', $this->missingconfig)){
+							$missingconfigstr .= 'ldap_field_map_username';
+						}
 
-	public function get_ldap_attribute($ldapConnection, $pAttributes, $pUid ){
-			if ( ! is_array( $pAttributes ) ){
-					throw new Exception( get_string('no_param_given', 'mod_exammanagement'));
-			}
-			
-			$dn = LDAP_OU . ", " . LDAP_O . ", " . LDAP_C;
-			$search = ldap_search( $ldapConnection, $dn, "uid=" . $pUid, $pAttributes );
-			$entry  = ldap_first_entry( $ldapConnection, $search );
+						if($disabledfeature){
+							notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . ' ' . $missingconfigstr, 'error');
+						} else {
+							notification::error(get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
+						}
 
-			$result = array();
-			if ($entry) {    // FALSE is uid not found
-					foreach( $pAttributes as $attribute ){
-							$value = ldap_get_values( $ldapConnection, $entry, $attribute );
-							$result[ $attribute ] = $value[ 0 ];
+						return false;
 					}
+
+					$dn	= $this->dn;
+
+					if($this->ldapobjectclass){
+						$filter = "(&(objectclass=" . $this->ldapobjectclass . ")(" . $this->ldapfieldmatriculationnumber . "=" . $username . "))";
+					} else {
+						$filter = "(" . $this->ldapfieldmatriculationnumber . "=" . $username . ")";
+					}
+
+					$search = ldap_search($ldapConnection, $dn, $filter, array($this->ldapfieldusername));
+
+					if($search){
+						$entry = ldap_first_entry($ldapConnection, $search);
+
+						$result = @ldap_get_values($ldapConnection, $entry, $this->ldapfieldusername);
+						ldap_free_result($search);
+
+						return $result[ 0 ];
+					} else {
+						return false;
+					}
+				} else {
+					if($disabledfeature){
+						notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
+					} else {
+						notification::error(get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
+					}
+					return false;
+				}
+			} else {
+				if($disabledfeature){
+					notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+				} else {
+					notification::error(get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+				}
+				return false;
 			}
-			return $result;
+		} else {
+			if($disabledfeature){
+				notification::error(get_string($disabledfeature, 'mod_exammanagement') . ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+			} else {
+				notification::error(get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+			}
+			return false;
+		}
+	}
+
+	public function getMatriculationNumbersForLogins($loginsArray){ // get matriculation numbers for array of user logins
+
+		if($this->isLDAPenabled()){
+			if($this->isLDAPconfigured()){
+				$ldapConnection = $this->connect_ldap();
+
+				if($ldapConnection){
+
+					// if some required config is missing display error message and end method
+					if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
+						$missingconfigstr = '';
+
+						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
+							$missingconfigstr .= 'ldap_field_map_matriculationnumber, ';
+						}
+
+						if(in_array('ldap_field_map_username', $this->missingconfig)){
+							$missingconfigstr .= 'ldap_field_map_username';
+						}
+
+						notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' .get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+						return false;
+					}
+
+					$resultArr = array();
+
+					// build ldap query string with all user logins
+					$filterString = "";
+					$filterStringFirst = true;
+
+					if(isset($loginsArray)){
+						foreach($loginsArray as $login){
+							if ($filterStringFirst){ // first participant
+									$filterString = "(".$this->ldapfieldusername."=".$login.")";
+							} else { // all other participants
+								$filterString = "(|".$filterString."(".$this->ldapfieldusername."=".$login."))";
+							}
+							$filterStringFirst = false;
+						}
+
+						$dn = $this->dn;
+						$search = ldap_search( $ldapConnection, $dn, $filterString, array($this->ldapfieldusername, $this->ldapfieldmatriculationnumber));
+
+						if($search){
+							//get ldap attributes
+							for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection, $entryID)){
+
+								$login = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldusername);
+								$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber);
+
+								$resultArr[$login[ 0 ]] = $matrnr[ 0 ];
+							}
+
+							ldap_free_result($search);
+
+							if(isset($resultArr)){
+								return $resultArr;
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+					}
+				} else {
+					notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
+					return false;
+				}
+			} else {
+				notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+				return false;
+			}
+		} else {
+			notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+			return false;
+		}
+	}
+
+	public function getLDAPAttributesForMatrNrs($matrNrsArray, $attributes, $externalIdentifier = false){ // get matriculation numbers for array of user logins
+
+		if($this->isLDAPenabled()){
+			if($this->isLDAPconfigured()){
+				$ldapConnection = $this->connect_ldap();
+
+				if($ldapConnection){
+
+					// if some required config is missing display error message and end method
+					if($attributes == 'usernames_and_matriculationnumbers'){ // if only matrnr and username is needed
+						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig)){
+							$missingconfigstr = '';
+
+							if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_matriculationnumber, ';
+							}
+
+							if(in_array('ldap_field_map_username', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_username';
+							}
+
+							notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+							return false;
+						} else {
+							$attributes = array($this->ldapfieldusername, $this->ldapfieldmatriculationnumber);
+						}
+					} else if($attributes == 'all_attributes'){ // if matrnr, username, firstname, lastname and email is needed
+						if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig) || in_array('ldap_field_map_username', $this->missingconfig) || in_array('ldap_field_map_firstname', $this->missingconfig) || in_array('ldap_field_map_lastname', $this->missingconfig) || in_array('ldap_field_map_mail', $this->missingconfig)){
+							$missingconfigstr = '';
+
+							if(in_array('ldap_field_map_matriculationnumber', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_matriculationnumber, ';
+							}
+
+							if(in_array('ldap_field_map_username', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_username';
+							}
+
+							if(in_array('ldap_field_map_firstname', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_firstname';
+							}
+
+							if(in_array('ldap_field_map_lastname', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_lastname';
+							}
+
+							if(in_array('ldap_field_map_mail', $this->missingconfig)){
+								$missingconfigstr .= 'ldap_field_map_mail';
+							}
+
+							notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+							return false;
+						} else {
+							$attributes = array($this->ldapfieldusername, $this->ldapfieldmatriculationnumber, $this->ldapfieldlastname, $this->ldapfieldfirstname, $this->ldapfieldemailadress);
+						}
+					}
+
+					$matrNrsArray = array_values($matrNrsArray);
+					if($externalIdentifier){
+						$externalIdentifier = array_values($externalIdentifier);
+					}
+
+					$resultArr = array();
+					$i = 0;
+
+					// build ldap query string with all user matrnrs
+					$filterString = "";
+					$filterStringFirst = true;
+
+					if(isset($matrNrsArray)){
+						foreach($matrNrsArray as $matrnr){
+							if ($filterStringFirst){ // first participant
+									$filterString = "(".$this->ldapfieldmatriculationnumber."=".$matrnr.")";
+							} else { // all other participants
+								$filterString = "(|".$filterString."(".$this->ldapfieldmatriculationnumber."=".$matrnr."))";
+							}
+							$filterStringFirst = false;
+						}
+
+						$dn	=	$this->dn;
+
+						$search = ldap_search( $ldapConnection, $dn, $filterString, $attributes);
+
+						if($search){
+							//get ldap attributes
+							for ($entryID = ldap_first_entry($ldapConnection, $search); $entryID != false; $entryID = ldap_next_entry($ldapConnection,$entryID)){
+								foreach( $attributes as $attribute ){
+									$value = ldap_get_values( $ldapConnection, $entryID, $attribute );
+
+									switch ($attribute){
+
+										case $this->ldapfieldusername:
+											$result['login'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldlastname:
+											$result['lastname'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldfirstname:
+											$result['firstname'] = $value[ 0 ];
+											break;
+										case $this->ldapfieldemailadress:
+											$result['email'] = $value[ 0 ];
+											break;
+									}
+								}
+
+								$matrnr = @ldap_get_values($ldapConnection, $entryID, $this->ldapfieldmatriculationnumber)[0];
+
+								if(!isset($externalIdentifier) || !$externalIdentifier){
+									$resultArr[$matrnr] = $result;
+								} else {
+									$result['matrnr'] = $matrnr;
+
+									$resultArr[$externalIdentifier[array_search($matrnr, $matrNrsArray)]] = $result;
+								}
+
+								$i++;
+							}
+
+							// results at the end of ldap method
+							ldap_free_result($search);
+
+							if(isset($resultArr)){
+								return $resultArr;
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+
+					}
+				} else {
+					notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' . get_string('ldapconnectionfailed', 'mod_exammanagement'), 'error');
+					return false;
+				}
+			} else {
+				notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+				return false;
+			}
+		} else {
+			notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
+			return false;
+		}
 	}
 }

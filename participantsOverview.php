@@ -37,16 +37,16 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$edit  = optional_param('edit', 0, PARAM_INT);
-$editline  = optional_param('editline', 0, PARAM_INT);
-
 $pne  = optional_param('pne', 1, PARAM_INT);
+$bpne  = optional_param('bpne', 1, PARAM_INT);
+
+$epm = optional_param('epm', 0, PARAM_INT);
 
 $MoodleDBObj = MoodleDB::getInstance();
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$LdapManagerObj = ldapManager::getInstance();
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -63,10 +63,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $MoodleObj->outputPageHeader();
 
             //Instantiate Form
-            if($editline){
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'editline'=>$editline));
+            if($epm){
+                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'epm'=>$epm));
             } else {
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'edit'=>$edit));
+                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
             }
 
             //Form processing and displaying is done here
@@ -77,89 +77,88 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             } else if ($fromform = $mform->get_data()) {
                 //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                if(isset($fromform->editmoodleuserid) && $fromform->editmoodleuserid !== 0){
-                    $moodleuserid = $fromform->editmoodleuserid;
-                    $userlogin = NULL;
-                } else {
-                    $moodleuserid = NULL;
-                    $userlogin = NULL;
+                $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
+                $updatedCount = 0;
 
-                    if($LdapManagerObj->is_LDAP_config()){
-                        $ldapConnection = $LdapManagerObj->connect_ldap();
+                foreach($participants as $participant){
+                    if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
+                        if(isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set'){
+                            switch ($fromform->state[$participant->id]){
+                                case 'normal':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'nt':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "1";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'fa':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "1";
+                                    $examstate->ill = "0";
+                                    break;
+                                case 'ill':
+                                    $examstate = new stdClass;
+                                    $examstate->nt = "0";
+                                    $examstate->fa = "0";
+                                    $examstate->ill = "1";
+                                    break;
+                                default:
+                                    break;
+                            }
 
-                        $userlogin = $LdapManagerObj->studentid2uid($ldapConnection, $fromform->edit);
+                            $participant->examstate = json_encode($examstate);
+
+                            if($fromform->points[$participant->id]){ // if participants points were not empty
+                                $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                            }
+
+                            $participant->timeresultsentered = time();
+
+                        } else {
+                            $participant->examstate = NULL;
+                            $participant->exampoints = NULL;
+                        }
+
+                        if($fromform->bonussteps[$participant->id] !== '-'){
+                            $participant->bonussteps = $fromform->bonussteps[$participant->id];
+                            $participant->bonuspoints = NULL;
+                        } else if($fromform->bonuspoints_entered[$participant->id] === 1 && $fromform->bonuspoints[$participant->id] !== 0){
+                            $participant->bonussteps = NULL;
+                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                        } else {
+                            $participant->bonussteps = NULL;
+                            $participant->bonuspoints = NULL;
+                        }
 
                     } else {
-                        $userlogin = $LdapManagerObj->getMatriculationNumber2ImtLoginNoneMoodleTest($fromform->edit);
-
+                        if($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])){
+                            $participant->timeresultsentered = time();
+                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                        }
                     }
-                }
 
-                $participantObj = $UserObj->getExamParticipantObj($moodleuserid, $userlogin);
-            
-                if(isset($fromform->room)){
-                    $participantObj->roomid = $fromform->room;
-                    $participantObj->roomname = $ExammanagementInstanceObj->getRoomObj($fromform->room)->name;
-                }
-
-                if(isset($fromform->place)){
-                    $participantObj->place = $fromform->place;
-                }
-
-                if($pne == false){ // if participants points were not empty
-                    $participantObj->exampoints = json_encode($fromform->points);
-                }
-
-                if(isset($fromform->state)){
-                    switch ($fromform->state){
-
-                        case 'normal':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
-                        case 'nt':
-                            $examstate = new stdClass;
-                            $examstate->nt = "1";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
-                        case 'fa':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "1";
-                            $examstate->ill = "0";
-                            break;
-                        case 'ill':
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "1";
-                            break;
-                        default:
-                            $examstate = new stdClass;
-                            $examstate->nt = "0";
-                            $examstate->fa = "0";
-                            $examstate->ill = "0";
-                            break;
+                    if(isset($participant->moodleuserid)){
+                        $participant->login = NULL;
+                        $participant->firstname = NULL;
+                        $participant->lastname = NULL;
                     }
-        
-        
-                    $participantObj->examstate = json_encode($examstate);   
+
+                    unset($participant->matrnr);
+
+                    if($MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant)){
+                        $updatedCount += 1;
+                    }
+
                 }
 
-                $participantObj->timeresultsentered = time();
-
-                if($fromform->bonus !== '-'){
-                    $participantObj->bonus = $fromform->bonus;
-                } else {
-                    $participantObj->bonus = NULL;
-                }
-            
-                $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-                
-                if($update){
+                if($updatedCount){
+                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
                     redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);

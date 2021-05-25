@@ -39,10 +39,12 @@ global $USER;
 
 $deletecustomroomid  = optional_param('deletecustomroomid', 0, PARAM_TEXT);
 
+$deletedefaultroomid  = optional_param('deletedefaultroomid', 0, PARAM_TEXT);
+
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -58,11 +60,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         if($deletecustomroomid){
 
           if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
-            if(!in_array($deletecustomroomid, $ExammanagementInstanceObj->getSavedRooms())){
+            if(!json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms) || !in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
               $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
             } else {
               redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
             }
+          }
+        }
+
+        if($deletedefaultroomid){
+          if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
+            if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))){
+              $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
+            }
+          } else {
+            redirect ('chooseRooms.php?id='.$id, get_string('nopermissions', 'mod_exammanagement'), null, 'error');
+
           }
         }
 
@@ -95,18 +108,19 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               $deselectedRoomsArr = array_diff($oldRooms, $checkedRooms); // checking if some old exam rooms are deselected
             } else {
               $deselectedRoomsArr = null;
-            }           
+            }
             if(isset($deselectedRoomsArr)){
 
               foreach($deselectedRoomsArr as $roomid){
 
-                if($UserObj->getAllExamParticipantsByRoom($roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+                if($UserObj->getParticipantsCount('room', $roomid)){ // if there are participants that have places in some deselected room: delete whole places assignment
+                  $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
 
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('plugininstanceid' => $id));
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('plugininstanceid' => $id));
-                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('plugininstanceid' => $id));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+                  $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
                   break;
-                }      
+                }
               }
             }
 

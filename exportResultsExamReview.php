@@ -36,7 +36,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -56,7 +56,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         define("WIDTH_COLUMN_MATNO", 70);
         define("WIDTH_COLUMN_POINTS", 80);
 
-        if(!$ExammanagementInstanceObj->getInputResultsCount()){
+        if(!$UserObj->getEnteredResultsCount()){
           $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
         } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
           $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
@@ -72,7 +72,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('PANDA');
+        $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
         $pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
         $pdf->SetSubject(get_string('pointslist_examreview', 'mod_exammanagement'));
         $pdf->SetKeywords(get_string('pointslist_examreview', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
@@ -100,9 +100,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $pdf->AddPage();
         $pdf->Line(20, 15, 190, 15);
-        $pdf->ImageEps('data/upb_logo.ai', 30, 25, 13);
+
+        if(file_exists(__DIR__.'/../../data/logo_full.ai')){
+            $pdf->ImageEps('data/logo.ai', 30, 25, 13);
+        }
+
         $pdf->SetFont('helvetica', '', 16);
-        $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 18);
+        $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 17);
+
         $pdf->SetFont('helvetica', 'B', 16);
         $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name, 0, 'C', 0, 0, 50, 25);
         $pdf->SetFont('helvetica', '', 16);
@@ -128,8 +133,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $pdf->Line(20, 62, 190, 62);
         $pdf->SetXY(20, 65);
 
-        $maxPoints = str_replace( '.', ',', $ExammanagementInstanceObj->getTaskTotalPoints());
-        $participantsArray = $UserObj->getAllExamParticipants();
+        $maxPoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
+
         $fill = false;
 
         $tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
@@ -142,64 +147,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $tbl .= "</tr>";
         $tbl .= "</thead>";
 
-        usort($participantsArray, function($a, $b){ //sort array by custom user function
-          global $UserObj;
-          if($a->moodleuserid){
-            $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-            $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-          } else {
-            $aFirstname = $a->firstname;
-            $aLastname = $a->lastname;
-          }
+        $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
 
-          if($b->moodleuserid){
-            $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-            $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-          } else {
-            $bFirstname = $b->firstname;
-            $bLastname = $b->lastname;
-          }
+        foreach ($participants as $participant){
 
-          if ($aLastname == $bLastname) { //if names are even sort by first name
-              return strcmp($aFirstname, $bFirstname);
-          } else{
-              return strcmp($aLastname, $bLastname); // else sort by last name
-          }
-
-        });
-
-        foreach ($participantsArray as $participant){
-
-          $totalPoints = 0;
-
-          $state = $UserObj->getExamState($participant);
-
-          if ($state == "nt") {
-            $totalPoints = get_string('nt', 'mod_exammanagement');
-          } else if ($state == "fa") {
-            $totalPoints = get_string('fa', 'mod_exammanagement');
-          } else if ($state == "ill") {
-            $totalPoints = get_string('ill', 'mod_exammanagement');
-          } else {
-            $totalPoints = str_replace( '.', ',', $UserObj->calculateTotalPoints($participant));
-          }
-
-          $user = $UserObj->getMoodleUser($participant->moodleuserid);
-      
-          if($user){
-              $name = $user->lastname;
-              $firstname = $user->firstname;
-          } else {
-              $name = $participant->lastname;
-              $firstname = $participant->firstname;
-          }
-
-          $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
+          $totalPoints = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participant));
 
           $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $firstname . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
+          $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+          $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";
+          $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
           $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
           $tbl .= "</tr>";
 

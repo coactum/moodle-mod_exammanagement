@@ -23,22 +23,42 @@
 
 define(['jquery', 'core/notification'], function ($) {
 
+  var invalidMatrnrFormatStr = false;
+
+  require(['core/str'], function (str) {
+    var localizedStrings = [
+    {
+        key: 'invalid_matrnr_format',
+        component: 'mod_exammanagement'
+    },
+    {
+      key: 'cancel',
+      component: 'mod_exammanagement'
+    },
+    ];
+    str.get_strings(localizedStrings).then(function (results) {
+      invalidMatrnrFormatStr = results[0];
+      $("#id_cancel").val(results[1]);
+    });
+  });
+
   var getInputId = function (element) {
     var id = element.attr('id').split('_').pop();
-
     return id;
   };
 
-  var getTotalpoints = function () {
+  var getTotalpoints = function (lang) {
     var totalpoints = 0;
 
-    $(".form-group input.form-control").each(function () {
+    $("form.mform .form-group input.form-control").each(function () {
       if (getInputId($(this)) != "matrnr" && $(this).val()) {
-        totalpoints += parseFloat($(this).val().replace(',', '.'));
+        totalpoints += parseFloat($(this).val());
       }
     });
 
-    return String(totalpoints.toFixed(2)).replace('.', ',');
+    totalpoints = totalpoints.toLocaleString(lang);
+
+    return totalpoints;
   };
 
   var getUrlParameter = function getUrlParameter(sParam) {
@@ -57,16 +77,16 @@ define(['jquery', 'core/notification'], function ($) {
   };
 
   return {
-    init: function () {
+    init: function (lang) {
 
       var matrnr = $('#id_matrnr').val();
 
-      if (matrnr) { // initial disabling of field matrnr if it already exists (ggf. entfernen wenn fokus klappt)
+      if (matrnr) { // initial disabling of field matrnr if it already exists
         $('#id_matrnr').prop("disabled", true);
       }
 
       // create input type number elements
-      $("input[type=text]:not(#id_matrnr)").attr("type", "number");
+      $("form.mform input[type=text]:not(#id_matrnr)").attr("type", "number");
 
       var styles = {
         "-webkit-appearance": "textfield",
@@ -75,17 +95,17 @@ define(['jquery', 'core/notification'], function ($) {
         "width": "70px"
       };
 
-      $("input[type=number]:not(#id_matrnr)").css(styles);
-      $("input[type=number]:not(#id_matrnr)").attr("step", "0.01");
-      $("input[type=number]:not(#id_matrnr)").attr("min", "0");
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").css(styles);
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").attr("step", "0.01");
+      $("#fgroup_id_points_array nput[type=number]:not(#id_matrnr)").attr("min", "0");
 
-      $("input[type=number]:not(#id_matrnr)").each(function () {
+      $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").each(function () {
         $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text().replace(/,/g, '.')));
       });
 
-      $(".form-group input.checkboxgroup1").each(function () { // initial disabling point fields if some checkbox is already checked
+      $("form.mform .form-group input.checkboxgroup1").each(function () { // initial disabling point fields if some checkbox is already checked
         if ($(this).prop('checked')) {
-          $(".form-group input.form-control").each(function () {
+          $("form.mform .form-group input.form-control").each(function () {
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", true);
             }
@@ -93,13 +113,13 @@ define(['jquery', 'core/notification'], function ($) {
         }
       });
 
-      $("#totalpoints").text(getTotalpoints()); // initial set totalpoints
+      $("#totalpoints").text(getTotalpoints(lang)); // initial set totalpoints
 
-      $(":checkbox").change(function () { //if some checkbox is checked/unchecked
+      $("form.mform :checkbox").change(function () { //if some checkbox is checked/unchecked
         var checked = false;
         var changedId = $(this).prop('id'); // get id of changed checkbox
 
-        $(".form-group input.checkboxgroup1").each(function () { // check if some checkbox is now checked
+        $("form.mform .form-group input.checkboxgroup1").each(function () { // check if some checkbox is now checked
           if ($(this).prop('checked')) {
             checked = true;
           }
@@ -117,7 +137,7 @@ define(['jquery', 'core/notification'], function ($) {
             $('#id_state_fa').prop('checked', false);
           }
 
-          $(".form-group input.form-control").each(function () { // disable all point-fields and set their value to 0
+          $("form.mform .form-group input.form-control").each(function () { // disable all point-fields and set their value to 0
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", true);
               $(this).val(0);
@@ -125,7 +145,7 @@ define(['jquery', 'core/notification'], function ($) {
             }
           });
         } else {  // if no checkbix is now checked
-          $(".form-group input.form-control").each(function () { // enable all point-fields
+          $("form.mform .form-group input.form-control").each(function () { // enable all point-fields
             if (getInputId($(this)) != "matrnr") {
               $(this).prop("disabled", false);
             }
@@ -133,8 +153,8 @@ define(['jquery', 'core/notification'], function ($) {
         }
       });
 
-      $(".form-group").on("change", "input", function () { // if some input field changes
-        $("#totalpoints").text(getTotalpoints()); // change totalpoints
+      $("form.mform .form-group").on("change", "input", function () { // if some input field changes
+        $("#totalpoints").text(getTotalpoints(lang)); // change totalpoints
       });
 
       $('#id_matrnr').change(function () { // reload page if matrnr is entered
@@ -148,7 +168,7 @@ define(['jquery', 'core/notification'], function ($) {
           $(this).val('');
           require(['core/notification'], function (notification) {
             notification.addNotification({
-              message: "Keine gültiges Matrikelnummernformat",
+              message: invalidMatrnrFormatStr,
               type: "error"
             });
           });
@@ -165,7 +185,30 @@ define(['jquery', 'core/notification'], function ($) {
         $("#id_matrnr").prop("disabled", false);
       });
 
-      $('#id_cancel').val('Zurück zur Prüfungsorganisation');
+      var lastpointsfield = $('input[name="lastkeypoints"]').val();
+
+      $('form.mform input[name^="points["]').keypress(function (e) {
+
+        if (e.which == 13 || e.which == 3) {
+
+          var name = $(this).attr('name');
+
+          var newfieldnumber = parseInt(name.match(/\d+/)) + 1;
+
+          e.preventDefault();
+          $('input[name="points[' + newfieldnumber + ']"]').focus();
+        }
+      });
+
+      $('input[name="points[' + lastpointsfield + ']"]').keydown(function (e) {
+        if (e.which == 9 || e.which == 13 || e.which == 3) {
+          $("#id_matrnr").prop("disabled", false);
+          $('form.mform').submit();
+
+          return false;
+        }
+      });
+
     },
   };
 });

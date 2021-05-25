@@ -54,12 +54,10 @@ $capabilities = [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
+            'teacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
         ],
     ],
 
@@ -68,12 +66,10 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
+            'teacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
         ],
     ],
 
@@ -82,12 +78,11 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
             'student' => CAP_ALLOW,
-            'guest' => CAP_PROHIBIT,
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
         ],
     ],
 
@@ -96,38 +91,24 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'manager' => CAP_PROHIBIT,
-            'coursecreator' => CAP_PROHIBIT,
-            'teacher' => CAP_PROHIBIT,
-            'editingteacher' => CAP_PROHIBIT,
             'student' => CAP_ALLOW,
-            'guest' => CAP_PROHIBIT,
         ],
     ],
-    'mod/exammanagement:sendgroupmessage'=> [
-        'riskbitmask' => RISK_SPAM,
-        'captype' => 'write',
+    'mod/exammanagement:receivegroupmessage'=> [
+        'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
+            'teacher' => CAP_ALLOW,
         ],
     ],
-	'mod/exammanagement:adddefaultrooms'=> [
+	'mod/exammanagement:importdefaultrooms'=> [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_PROHIBIT,
-            'teacher' => CAP_PROHIBIT,
-            'editingteacher' => CAP_PROHIBIT,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
         ],
     ],
     'mod/exammanagement:resetpassword'=> [
@@ -136,11 +117,6 @@ $capabilities = [
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_PROHIBIT,
-            'teacher' => CAP_PROHIBIT,
-            'editingteacher' => CAP_PROHIBIT,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
         ],
     ],
     'mod/exammanagement:requestpasswordreset'=> [
@@ -148,12 +124,21 @@ $capabilities = [
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'coursecreator' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'student' => CAP_PROHIBIT,
-            'guest' => CAP_PROHIBIT,
+            'teacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'mod/exammanagement:receivedeletionwarningmessages'=> [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
         ],
     ],
 ];

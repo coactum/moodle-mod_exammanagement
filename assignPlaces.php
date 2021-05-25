@@ -24,11 +24,12 @@
 
 namespace mod_exammanagement\general;
 
+use mod_exammanagement\forms\assignPlacesForm;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
 use mod_exammanagement;
-use stdClass;
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -36,10 +37,14 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
+$uap  = optional_param('uap', 0, PARAM_INT);
+
+$map = optional_param('map', 0, PARAM_INT);
+
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
@@ -48,73 +53,202 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      $savedRoomsArray = $ExammanagementInstanceObj->getSavedRooms();
-      $participantsArray = array_values($UserObj->getAllExamParticipants());
-      $assignmentArray = array();
-      $newAssignmentObj = '';
+      $MoodleObj->setPage('assignPlaces');
 
-      if(!$savedRoomsArray){
-        $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
+			if(!$ExammanagementInstanceObj->getRoomsCount()){
+				$MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
+			} else if (!$UserObj->getParticipantsCount()) {
+				$MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+			}
 
-      } elseif(!$participantsArray){
-        $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+			$MoodleObj->outputPageHeader();
 
+			if($uap){
+				// reset all exiting places for participants
+        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+        $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+        $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
+        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
       }
 
-      $participantsCount = 0;
+			//Instantiate form
+      if($map){
+        $mform = new assignPlacesForm(null, array('id'=>$id, 'e'=>$e, 'map'=>$map));
+      } else {
+        $mform = new assignPlacesForm(null, array('id'=>$id, 'e'=>$e, 'map'=>0));
+      }
 
-      usort($savedRoomsArray, function($a, $b){ //sort array by custom user function (big rooms to smnall rooms)
+			//Form processing and displaying is done here
+			if ($mform->is_cancelled()) {
+				//Handle form cancel operation, if cancel button is present on form
 
-        global $ExammanagementInstanceObj;
+				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
-        $aPlaces = $ExammanagementInstanceObj->getRoomObj($a)->places;
-        $bPlaces = $ExammanagementInstanceObj->getRoomObj($b)->places;
-        
-        if ($aPlaces == $bPlaces) { //if names are even sort by first name
-            return strcmp($aPlaces, $bPlaces);
-        } else{
-            return strcmp($aPlaces, $bPlaces); // else sort by last name
-        }
+			} else if ($fromform = $mform->get_data()) {
+			  //In this case you process validated data. $mform->get_data() returns data posted in form.
 
-      });
+        if(isset($map) && $map){
+            $examRooms = $ExammanagementInstanceObj->getRooms('examrooms');
+            $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
 
-      foreach($savedRoomsArray as $key => $roomID){
+            foreach($participants as $participant){
+              if($fromform->rooms[$participant->id] !== 'not_selected' && $fromform->places[$participant->id]){
 
-        $RoomObj = $ExammanagementInstanceObj->getRoomObj($roomID);		//get current Room Object
+                if(isset($participant->moodleuserid)){
+                  $participant->login = NULL;
+                  $participant->firstname = NULL;
+                  $participant->lastname = NULL;
+                }
 
-        if($RoomObj){
-          $places = json_decode($RoomObj->places);	//get Places of this Room
+                $participant->roomid = $fromform->rooms[$participant->id];
+                $participant->roomname = $examRooms[$fromform->rooms[$participant->id]]->name;
+                $participant->place = $fromform->places[$participant->id];
 
-          foreach($participantsArray as $key1 => $participantObj){
-    
-            if($key1 >= $participantsCount){
-              
-              $participantObj->roomid = $RoomObj->roomid;
-              $participantObj->roomname = $RoomObj->name;
-              $participantObj->place = array_shift($places);
-    
-              // set room and place
-              $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
-    
-              $participantsCount +=1;
-    
-              if($places == NULL){  // if all places of room are assigned
-                break;
+                $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
+              } else {
+                if(isset($participant->moodleuserid)){
+                  $participant->login = NULL;
+                  $participant->firstname = NULL;
+                  $participant->lastname = NULL;
+                }
+
+                $participant->roomid = NULL;
+                $participant->roomname = NULL;
+                $participant->place = NULL;
+
+                $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
               }
-    
-            } else if($participantsCount == count($participantsArray)){ //if all users have a place
-              break 2;
             }
-          }
+
+            $assignmentmode = $ExammanagementInstanceObj->getAssignmentMode();
+
+            if($assignmentmode){
+              if(strlen($assignmentmode) == 3){
+                $ExammanagementInstanceObj->moduleinstance->assignmentmode = substr($assignmentmode, 0, -1).'1';
+              } else if(strlen($assignmentmode) == 2){
+                $ExammanagementInstanceObj->moduleinstance->assignmentmode = $assignmentmode.'1';
+              } else if(strlen($assignmentmode) == 1){
+                $ExammanagementInstanceObj->moduleinstance->assignmentmode = $assignmentmode.'01';
+              }
+            } else {
+              $ExammanagementInstanceObj->moduleinstance->assignmentmode = '4';
+            }
+
+            $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+
+            $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+
+        } else {
+            if(!(isset($fromform->keep_seat_assignment) && $fromform->keep_seat_assignment)){ // All existing seat assignments should be deleted
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+              $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+              $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
+              $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+              $keep_seat_assignment = false;
+              $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'), $fromform->assignment_mode_places); // get all exam participants sorted by sortmode
+            } else {
+                $ExammanagementInstanceObj->moduleinstance->assignmentmode = null;
+                $keep_seat_assignment = true;
+                $participants = $UserObj->getExamParticipants(array('mode'=>'no_seats_assigned'), array('matrnr'), $fromform->assignment_mode_places); // Todo: get only exam participants without places sorted by sortmode
+            }
+
+            $roommode = '0';
+
+            if(isset($fromform->assignment_mode_rooms) && $fromform->assignment_mode_rooms === '1'){
+              $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_smalltobig', $keep_seat_assignment);
+              $roommode = '1';
+            } else if (isset($fromform->assignment_mode_rooms) && $fromform->assignment_mode_rooms === '2'){
+              $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall', $keep_seat_assignment);
+              $roommode = '2';
+            } else {
+              $examRooms = $ExammanagementInstanceObj->getRooms('examrooms', 'places_bigtosmall', $keep_seat_assignment);
+            }
+
+            if(!$participants){
+              $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            }
+
+            $participantsCount = 0;
+
+            if($examRooms){
+
+              foreach($examRooms as $room){
+
+                if($room){
+                  foreach($participants as $key => $participant){
+
+                    if($key >= $participantsCount){
+
+                      if(isset($participant->moodleuserid)){
+                        $participant->login = NULL;
+                        $participant->firstname = NULL;
+                        $participant->lastname = NULL;
+                      }
+
+                      unset($participant->matrnr);
+
+                      $participant->roomid = $room->roomid;
+                      $participant->roomname = $room->name;
+                      $participant->place = array_shift($room->places);
+
+                      // set room and place
+                      $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant);
+
+                      $participantsCount +=1;
+
+                      if($room->places == NULL){  // if all places of room are assigned
+                        break;
+                      }
+
+                    } else if($participantsCount == count($participants)){ // if all users have a place
+                      break 2;
+                    }
+                  }
+                }
+
+              }
+            }
+
+            ## save sort modes in db
+            switch ($fromform->assignment_mode_places) {
+              case 'name':
+                  $mode_ids = 1 . $roommode . $keep_seat_assignment;
+                  break;
+              case 'matrnr':
+                  $mode_ids = 2 . $roommode . $keep_seat_assignment;
+                  break;
+              case 'random':
+                  $mode_ids = 3 . $roommode . $keep_seat_assignment;
+                  break;
+              default:
+                  $mode_ids = false;
+            }
+
+            if($mode_ids){
+              $ExammanagementInstanceObj->moduleinstance->assignmentmode = $mode_ids;
+              $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+            }
+
+            if($participantsCount < count($participants)){	// if users are left without a room
+              $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
+            } else {
+              $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+            }
         }
-        
+			} else {
+        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+        // or on the first display of the form.
+
+        //Set default data (if any)
+        $mform->set_data(array('id'=>$id));
+
+        //displays the form
+        $mform->display();
       }
 
-      if($participantsCount < count($participantsArray)){	//if users are left without a room
-        $MoodleObj->redirectToOverviewPage('forexam', get_string('participants_missing_places', 'mod_exammanagement'), 'error');
-      }
-
-      $MoodleObj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+      $MoodleObj->outputFooter();
 
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
       redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);

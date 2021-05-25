@@ -37,7 +37,7 @@ $e  = optional_param('e', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 	if($ExammanagementInstanceObj->isExamDataDeleted()){
@@ -63,23 +63,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       } else if ($fromform = $mform->get_data()) {
         //In this case you process validated data. $mform->get_data() returns data posted in form.
-    
-        $mailsubject = "PANDA - Prüfungsorganisation: Kurs ".$ExammanagementInstanceObj->getCourse()->fullname.' Betreff: '. $fromform->groupmessages_subject;
+
+        $mailsubject = get_string('mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'subject' => $fromform->groupmessages_subject]);
         $mailtext = $fromform->groupmessages_content;
-        $participants = $UserObj->getAllMoodleExamParticipants();
-    
+
+        $participants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array());
+
         if($mailsubject && $mailtext && $participants){
           foreach ($participants as $key => $participantObj){
-    
+
             $user = $UserObj->getMoodleUser($participantObj->moodleuserid);
-      
-            $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $mailtext);
-      
+
+            $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $mailtext, 'groupmessage');
+
           }
-      
+
           $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
         } else {
-          $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');			
+          $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
         }
 
       } else {
@@ -94,7 +95,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       }
 
       $MoodleObj->outputFooter();
-    
+
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
       redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }

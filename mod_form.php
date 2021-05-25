@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_exammanagement\general\exammanagementInstance;
+
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
@@ -41,13 +43,29 @@ class mod_exammanagement_mod_form extends moodleform_mod {
     public function definition() {
         global $CFG;
 
+        if(isset($_GET['update'])) {
+            $id = $_GET['update'];
+            $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, false);
+            $oldpw = $ExammanagementInstanceObj->getModuleinstance()->password;
+            $misc = json_decode($ExammanagementInstanceObj->getModuleinstance()->misc);
+        } else {
+            $oldpw = NULL;
+            $misc = NULL;
+        }
+
         $mform = $this->_form;
 
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
+        if(get_config('mod_exammanagement', 'enableglobalmessage')){
+            $mform->addElement('html', '<div class="alert alert-info alert-block fade in " role="alert">'.get_config('mod_exammanagement', 'globalmessage').'</div>');
+            //$mform->addElement('html', \core\notification::info(get_config('mod_exammanagement', 'globalmessage')));
+        }
+
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('exammanagementname', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off", 'autocorrect' => "off", "spellcheck" => "false"));
+        $mform->addElement('text', 'name', get_string('exammanagement_name', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"));
+        $mform->addHelpButton('name', 'exammanagement_name', 'mod_exammanagement');
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -69,7 +87,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('header', get_string('security_password', 'mod_exammanagement'), get_string('security_password', 'mod_exammanagement'));
 
-        $mform->addElement('password', 'newpassword', get_string('new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->addElement('password', 'newpassword', get_string('new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope"));
         $mform->setType('newpassword', PARAM_TEXT);
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('newpassword', 'security_password', 'mod_exammanagement');
@@ -79,10 +97,23 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('confirmnewpassword', 'confirm_new_password', 'mod_exammanagement');
 
-        $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
-        $mform->setType('oldpassword', PARAM_TEXT);
-        $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
-        $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
+        if(isset($oldpw) || (!isset($_GET['update']) && !isset($_GET['add']))){
+            $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+            $mform->setType('oldpassword', PARAM_TEXT);
+            $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
+            $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
+        }
+
+        $mform->addElement('header', get_string('export_grades_as_exam_results', 'mod_exammanagement'), get_string('export_grades_as_exam_results', 'mod_exammanagement'));
+
+        $mform->addElement('advcheckbox', 'exportgrades', get_string('activate_mode', 'mod_exammanagement'));
+        $mform->addHelpButton('exportgrades', 'export_grades_as_exam_results', 'mod_exammanagement');
+
+        if(isset($misc) && isset($misc->mode) && $misc->mode === 'export_grades'){
+            $mform->setDefault('exportgrades', 1);
+        } else {
+            $mform->setDefault('exportgrades', 0);
+        }
 
         // Add standard grading elements.
         //$this->standard_grading_coursemodule_elements();
@@ -97,7 +128,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
     //Custom validation should be added here
     function validation($data, $files) {
         $errors= array();
-  
+
         if($data['newpassword']){
             if ($data['confirmnewpassword'] == Null){
                 $errors['confirmnewpassword'] = get_string('err_filloutfield', 'mod_exammanagement');
@@ -106,7 +137,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
                 $errors['confirmnewpassword'] = get_string('err_password_incorrect', 'mod_exammanagement');
             }
         }
-  
-        return $errors;   
+
+        return $errors;
     }
 }

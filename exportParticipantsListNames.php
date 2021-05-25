@@ -36,7 +36,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
@@ -53,9 +53,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
             } else if (!$UserObj->getParticipantsCount()) {
                 $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-            } else if(!$ExammanagementInstanceObj->allPlacesAssigned()){
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('not_all_places_assigned', 'mod_exammanagement'), 'error');
-            }  
+            } else if(!$ExammanagementInstanceObj->placesAssigned()){
+                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
+            }
 
             //include pdf
             require_once(__DIR__.'/classes/pdfs/participantsList.php');
@@ -75,7 +75,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('PANDA');
+            $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
             $pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
             $pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
             $pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
@@ -115,79 +115,41 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $pdf->AddPage();
 
             // get users and construct content for document
-            $roomsArr = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
+            $roomIDs = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
             $fill = false;
             $previousRoom;
             $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
 
-            foreach ($roomsArr as $roomID){
-            $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
+            foreach ($roomIDs as $roomID){
+                $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
 
-            $participantsArray = $UserObj->getAllExamParticipantsByRoom($roomID);
+                $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-            if($participantsArray){
-                if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-                    //new room -> finish and print current table and begin new page
-                    $tbl .= "</table>";
-                    $pdf->writeHTML($tbl, true, false, false, false, '');
-                    $pdf->AddPage();
-                    $fill = false;
-                    $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-                }
-        
-                usort($participantsArray, function($a, $b){ //sort array by custom user function
-                    global $UserObj;
-        
-                    if($a->moodleuserid){
-                    $aFirstname = $UserObj->getMoodleUser($a->moodleuserid)->firstname;
-                    $aLastname = $UserObj->getMoodleUser($a->moodleuserid)->lastname;  
-                    } else {
-                    $aFirstname = $a->firstname;
-                    $aLastname = $a->lastname;
+                if($participants){
+                    if (!empty($previousRoom) && $currentRoom != $previousRoom) {
+                        //new room -> finish and print current table and begin new page
+                        $tbl .= "</table>";
+                        $pdf->writeHTML($tbl, true, false, false, false, '');
+                        $pdf->AddPage();
+                        $fill = false;
+                        $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
                     }
-        
-                    if($b->moodleuserid){
-                    $bFirstname = $UserObj->getMoodleUser($b->moodleuserid)->firstname;
-                    $bLastname = $UserObj->getMoodleUser($b->moodleuserid)->lastname;
-                    } else {
-                    $bFirstname = $b->firstname;
-                    $bLastname = $b->lastname;
+
+                    foreach ($participants as $participant){
+
+                        $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $participant->firstname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
+                        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
+                        $tbl .= "</tr>";
+
+                        $fill = !$fill;
                     }
-        
-                    if ($aLastname == $bLastname) { //if names are even sort by first name
-                        return strcmp($aFirstname, $bFirstname);
-                    } else{
-                        return strcmp($aLastname, $bLastname); // else sort by last name
-                    }
-        
-                });
-            
-                foreach ($participantsArray as $participant){
-                $user = $UserObj->getMoodleUser($participant->moodleuserid);
-        
-                if($user){
-                    $name = $user->lastname;
-                    $firstname = $user->firstname;
-                } else {
-                    $name = $participant->lastname;
-                    $firstname = $participant->firstname;
+
+                    $previousRoom = $currentRoom;
                 }
-        
-                $matrnr = $UserObj->getUserMatrNr($participant->moodleuserid, $participant->imtlogin);
-        
-                $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $name . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $firstname . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $matrnr . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
-                $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
-                $tbl .= "</tr>";
-        
-                $fill = !$fill;
-                }
-        
-                $previousRoom = $currentRoom;
-            }
             }
 
             $tbl .= "</table>";

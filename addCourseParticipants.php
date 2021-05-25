@@ -39,19 +39,21 @@ $e  = optional_param('e', 0, PARAM_INT);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e);
+$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
     if($ExammanagementInstanceObj->isExamDataDeleted()){
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
+	} else if(empty($UserObj->getCourseParticipantsIDs())){
+        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_nocourseparticipants', 'mod_exammanagement'), 'error');
+    } else {
 
         if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             $MoodleObj->setPage('addCourseParticipants');
             $MoodleObj->outputPageHeader();
-                
+
             //Instantiate form
             $mform = new addCourseParticipantsForm(null, array('id'=>$id, 'e'=>$e));
 
@@ -68,22 +70,24 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
 
-                    $insert;
                     $userObjArr = array();
 
                     if($participantsIdsArr){
+
+                        $courseid = $ExammanagementInstanceObj->getCourse()->id;
+
                         foreach($participantsIdsArr as $participantId){
 
                             if($UserObj->checkIfAlreadyParticipant($participantId) == false){
                                 $user = new stdClass();
-                                $user->plugininstanceid = $id;
-                                $user->courseid = $ExammanagementInstanceObj->getCourse()->id;
+                                $user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
+                                $user->courseid = $courseid;
                                 $user->categoryid = $ExammanagementInstanceObj->moduleinstance->categoryid;
                                 $user->moodleuserid = $participantId;
                                 $user->headerid = 0;
+                                $user->plugininstanceid = 0; // for deprecated old version db version, should be removed for ms 3
 
                                 array_push($userObjArr, $user);
-
                             }
                         }
                     }
@@ -95,13 +99,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                                 if($temp[0]== 'mid'){
                                     $UserObj->deleteParticipant($temp[1], false);
                                 } else {
-
-                                    if($temp[1] && $temp[2]){ //for testing
-
-                                        $UserObj->deleteParticipant(false, $temp[1].'_'.$temp[2].'_'.$temp[3]);
-                                    } else {
-                                        $UserObj->deleteParticipant(false, $temp[1]);
-                                    }
+                                    $UserObj->deleteParticipant(false, $temp[1]);
                                 }
                         }
                     }
@@ -119,9 +117,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
-                //Set default data (if any)
-                //$mform->set_data(array('participants'=>$this->getCourseParticipantsIDs(), 'id'=>$this->id));
-                $mform->set_data(array('id'=>$id));
+                # set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants) #
+                $default_values = array('id'=>$id);
+                $courseParticipantsIDs = $UserObj->getCourseParticipantsIDs();
+
+				if(isset($courseParticipantsIDs)){
+					foreach($courseParticipantsIDs as $id){
+						$default_values['participants['.$id.']'] = true;
+					}
+				}
+
+				//Set default data (if any)
+				$mform->set_data($default_values);
 
                 //displays the form
                 $mform->display();
