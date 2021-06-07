@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <XMLDB PATH="mod/exammanagement/db" VERSION="20190617" COMMENT="XMLDB file for Moodle mod/exammanagement/db">
+  <XMLDB PATH="mod/exammanagement/db" VERSION="20210525" COMMENT="XMLDB file for Moodle mod/exammanagement/db"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+  >
     <TABLES>
       <TABLE NAME="exammanagement" COMMENT="contains all exam management instances and their general exam information">
         <FIELDS>
@@ -32,7 +35,7 @@
           <FIELD NAME="examreviewvisible" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Information if exam review time is set visible"/>
           <FIELD NAME="datadeleted" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Information if the exam data is deleted"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Other config values in json syntax (not used at the moment)"/>
-    	</FIELDS>
+    	  </FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
@@ -60,7 +63,7 @@
           <FIELD NAME="timeresultsentered" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of the date when the results where entered"/>
           <FIELD NAME="bonussteps" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Bonusstep of the participant"/>
           <FIELD NAME="bonuspoints" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Bonuspoints of the participant"/>
-    	</FIELDS>
+    	  </FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
@@ -76,7 +79,7 @@
               <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course category id of the exammanagement activity the potential participant belongs to"/>
               <FIELD NAME="identifier" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Identifier of the potential participant"/>
               <FIELD NAME="headerid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Header id of tempimportfileheader"/>
-              <FIELD NAME="line" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Line number of the potential participant in the imported participants list"/>
+              <FIELD NAME="line" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Line number of the potential participant in the imported participants list"/>
     	    </FIELDS>
           <KEYS>
               <KEY NAME="primary" TYPE="primary" FIELDS="id" />
@@ -96,7 +99,7 @@
           <FIELD NAME="type" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Room type (default or custom)"/>
           <FIELD NAME="moodleuserid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Moodle intern id of user who created custom room"/>
           <FIELD NAME="misc" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Other config values in json syntax (at the moment only timestamp default room is created)"/>
-    	</FIELDS>
+    	  </FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
         </KEYS>
