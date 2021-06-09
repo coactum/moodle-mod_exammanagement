@@ -55,7 +55,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
 
         foreach($allDefaultRooms as $roomObj){
 
-            $textfile .= $roomObj->roomid . SEPARATOR . $roomObj->name . SEPARATOR . $roomObj->description . SEPARATOR . $roomObj->places . SEPARATOR;
+            $textfile .= $roomObj->roomid . SEPARATOR . $roomObj->name . SEPARATOR . $roomObj->description . SEPARATOR . json_encode($roomObj->places) . SEPARATOR;
 
             if(isset($roomObj->seatingplan) && $roomObj->seatingplan !== ''){
                 $textfile .= str_replace(array("\r\n","\r","\n"), '', base64_decode($roomObj->seatingplan));
