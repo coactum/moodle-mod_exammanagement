@@ -18,13 +18,13 @@
  * Allows to set an exam date for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   coactum GmbH 2022
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\setDateTimeForm;
+use mod_exammanagement\forms\examdate_form;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -46,11 +46,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-        $MoodleObj->setPage('setDateTime');
-        $MoodleObj-> outputPageHeader();
-        
         //Instantiate form
-        $mform = new setDateTimeForm();
+        $mform = new examdate_form();
 
         //Form processing and displaying is done here
         if ($mform->is_cancelled()) {
@@ -61,7 +58,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           //In this case you process validated data. $mform->get_data() returns data posted in form.
 
           $ExammanagementInstanceObj->moduleinstance->examtime = $fromform->examtime;
-      
+
           $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
           if($update){
               $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
@@ -75,13 +72,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           //Set default data (if any)
           $mform->set_data(array('examtime'=>$ExammanagementInstanceObj->getExamtime(), 'id'=>$id));
 
-          //displays the form
+          $MoodleObj->setPage('examdate');
+          $MoodleObj->outputPageHeader();
+
           $mform->display();
+
+          $MoodleObj->outputFooter();
         }
 
-        $MoodleObj->outputFooter();
-    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+    } else { // If user has not entered correct password for this session redirect to checkpassword page.
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
   }
 } else {

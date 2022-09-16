@@ -18,7 +18,7 @@
  * Class containing data for exammanagement main page (mode export grades)
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_exammanagement\output;
@@ -33,7 +33,7 @@ use stdClass;
  * Class containing data for exammanagement_overview_export_grades
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_overview_export_grades implements renderable, templatable {

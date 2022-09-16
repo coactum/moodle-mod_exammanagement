@@ -153,9 +153,6 @@ class provider implements
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
 
-        $event = \mod_exammanagement\event\log_variable::create(['other' => 'get_users_in_context: ' . 'userlist' .json_encode($userlist) .'context' . json_encode($context)]);
-        $event->trigger();
-
         if (!is_a($context, \context_module::class)) {
             return;
         }

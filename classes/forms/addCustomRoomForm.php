@@ -18,7 +18,7 @@
  * class containing addCustomRoomForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -49,18 +49,19 @@ class addCustomRoomForm extends moodleform {
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
     $mform->addElement('html', '<h3>'.get_string("addCustomRoom", "mod_exammanagement"));
-        
+
     if($helptextsenabled){
         $mform->addElement('html', $OUTPUT->help_icon('addCustomRoom', 'mod_exammanagement', ''));
     }
 
     $mform->addElement('html', '</h3>');
-    
+
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("change_custom_room_name", "mod_exammanagement").'</div>');
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("custom_room_places", "mod_exammanagement").'</div>');
-    
-    $mform->addElement('hidden', 'id', 'dummy');
+
+    $mform->addElement('hidden', 'id');
     $mform->setType('id', PARAM_INT);
+
     $mform->addElement('hidden', 'existingroom', 0);
     $mform->setType('existingroom', PARAM_INT);
 

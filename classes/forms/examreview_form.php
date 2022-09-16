@@ -15,68 +15,65 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing examReviewDateRoomForm for exammanagement
+ * The form for setting the date and room for the exam review for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\forms;
-use mod_exammanagement\general\exammanagementInstance;
-
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
-require_once(__DIR__.'/../general/exammanagementInstance.php');
+/**
+ * The form for setting the date and room for the exam review for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class examreview_form extends moodleform {
 
-class examReviewDateRoomForm extends moodleform {
-
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition() {
 
-        global $OUTPUT;
-
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<h3>'.get_string("examReviewDateRoom", "mod_exammanagement"));
-        
-        if($helptextsenabled){
-            $mform->addElement('html', $OUTPUT->help_icon('examReviewDateRoom', 'mod_exammanagement', ''));
+        $mform->addElement('html', '<h3>'.get_string("examreview", "mod_exammanagement"));
+
+        if ($helptextsenabled) {
+            global $OUTPUT;
+
+            $mform->addElement('html', $OUTPUT->help_icon('examreview', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3>');
 
-        $mform->addElement('html', '<p>'.get_string('examreview_dateroom_str', 'mod_exammanagement').'</p>');
+        $mform->addElement('html', '<p>'.get_string('examreviewstr', 'mod_exammanagement').'</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreview_date', 'mod_exammanagement'));
+        $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreviewdate', 'mod_exammanagement'));
 
         $attributes = array('size'=>'20');
 
-        $mform->addElement('text', 'examreviewroom', get_string('examreview_room', 'mod_exammanagement'), $attributes);
+        $mform->addElement('text', 'examreviewroom', get_string('examreviewroom', 'mod_exammanagement'), $attributes);
         $mform->setType('examreviewroom', PARAM_TEXT);
         $mform->addRule('examreviewroom', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
-        
+
         $this->add_action_buttons();
 
         $mform->disable_form_change_checker();
 
-    }
-
-    //Custom validation should be added here
-    function validation($data, $files) {
-        return array();
     }
 }

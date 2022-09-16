@@ -18,7 +18,7 @@
  * class containing all wrapper functions for moodle methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -62,14 +62,16 @@ class Moodle{
 		require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
 
 		$url = $ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id);
-		
+
 		// Print the page header.
 		$PAGE->set_url($url);
-		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
+		$PAGE->set_title(get_string('modulename','mod_exammanagement').' - '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
 		$PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
 		$PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
 
-		$navbar = $PAGE->navbar->add(get_string($substring, 'mod_exammanagement'), $url);		
+		$PAGE->force_settings_menu();
+
+		$navbar = $PAGE->navbar->add(get_string($substring, 'mod_exammanagement'), $url);
 
 		/*
 		 * Other things you may want to set - remove if not needed.
@@ -88,7 +90,7 @@ class Moodle{
 		echo $OUTPUT->header();
 
 		// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
-		echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+		echo $OUTPUT->heading(get_string('modulename', 'mod_exammanagement') . ': ' . format_string($ExammanagementInstanceObj->getModuleinstance()->name));
 
 		// Conditions to show the intro can change to look for own settings or whatever.
  		if ($ExammanagementInstanceObj->getModuleinstance()->intro) {

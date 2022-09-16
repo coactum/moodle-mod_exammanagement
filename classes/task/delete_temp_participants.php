@@ -18,7 +18,7 @@
  * A cron_task class for deleting temporary saved participants to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,7 +27,7 @@ use mod_exammanagement\general\MoodleDB;
 
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class delete_temp_participants extends \core\task\scheduled_task { 
+class delete_temp_participants extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
      *
@@ -36,7 +36,7 @@ class delete_temp_participants extends \core\task\scheduled_task {
     public function get_name() {
         return get_string('delete_temp_participants', 'mod_exammanagement');
     }
- 
+
     /**
      * Execute the task.
      */
@@ -51,7 +51,7 @@ class delete_temp_participants extends \core\task\scheduled_task {
 
             $MoodleDBObj->DeleteRecordsFromDB("exammanagement_temp_part", array());
         }
-        
+
         \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
     }
 }

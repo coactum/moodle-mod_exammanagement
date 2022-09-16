@@ -18,13 +18,13 @@
  * Allows teacher to import bonus points or grade steps for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\importBonusForm;
+use mod_exammanagement\forms\importbonus_form;
 use mod_exammanagement\ldap\ldapManager;
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 use \PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
@@ -59,23 +59,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-			$MoodleObj->setPage('importBonus');
-
 			if($ExammanagementInstanceObj->moduleinstance->misc === NULL && !$ExammanagementInstanceObj->placesAssigned()){
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
 			} else if (!$UserObj->getParticipantsCount()) {
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 			}
 
-			$MoodleObj->outputPageHeader();
-
-			if($dbp){
+			if ($dbp) {
+				require_sesskey();
 				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonuspoints', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonussteps', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 			}
 
 			//Instantiate form
-			$mform = new importBonusForm(null, array('id'=>$id, 'e'=>$e, 'bonusstepcount'=>$bonusstepcount));
+			$mform = new importbonus_form(null, array('id' => $id, 'e' => $e, 'bonusstepcount' => $bonusstepcount));
 
 			//Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
@@ -234,20 +231,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					}
 				}
 			} else {
-			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-			// or on the first display of the form.
+				// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+				// or on the first display of the form.
 
-			//Set default data (if any)
-			$mform->set_data(array('id'=>$id));
+				//Set default data (if any).
+				$mform->set_data(array('id'=>$id));
 
-			//displays the form
-			$mform->display();
+				$MoodleObj->setPage('importBonus');
+				$MoodleObj->outputPageHeader();
+
+				$mform->display();
+
+				$MoodleObj->outputFooter();
 			}
 
-			$MoodleObj->outputFooter();
-
-		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+		} else { // If user has not entered correct password.
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

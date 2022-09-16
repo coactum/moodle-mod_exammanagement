@@ -18,7 +18,7 @@
  * Allows teacher to choose rooms for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -57,26 +57,28 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->setPage('chooseRooms');
         $MoodleObj->outputPageHeader();
 
-        if($deletecustomroomid){
+        if ($deletecustomroomid) {
+          require_sesskey();
 
           if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))){
-            if(!json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms) || !in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
-              $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
-            } else {
-              redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
-            }
+              if(!json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms) || !in_array($deletecustomroomid, json_decode($ExammanagementInstanceObj->getModuleinstance()->rooms))){
+                  $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
+              } else {
+                  redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
+              }
           }
         }
 
-        if($deletedefaultroomid){
-          if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
-            if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))){
-              $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
-            }
-          } else {
-            redirect ('chooseRooms.php?id='.$id, get_string('nopermissions', 'mod_exammanagement'), null, 'error');
+        if ($deletedefaultroomid) {
+            require_sesskey();
 
-          }
+            if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
+                if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))){
+                  $MoodleDBObj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
+                }
+            } else {
+                redirect ('chooseRooms.php?id='.$id, get_string('nopermissions', 'mod_exammanagement'), null, 'error');
+            }
         }
 
         //Instantiate form
@@ -148,7 +150,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $MoodleObj->outputFooter();
       } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+        redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
       }
     }
 } else {

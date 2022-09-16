@@ -17,7 +17,7 @@
  * functions for adding and removing bonus steps and creating input type number fields
  *
  * @module      mod_exammanagement/import_bonus
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

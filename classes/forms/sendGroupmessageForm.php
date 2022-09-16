@@ -18,7 +18,7 @@
  * class containing sendGroupmessagesForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,25 +44,24 @@ class sendGroupmessageForm extends moodleform {
     //Add elements to form
     public function definition() {
 
-        global $OUTPUT;
-
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'.get_string("sendGroupmessage", "mod_exammanagement"));
-        
+
         if($helptextsenabled){
+            global $OUTPUT;
             $mform->addElement('html', $OUTPUT->help_icon('sendGroupmessage', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3>');
 
-		$mform->addElement('hidden', 'id', 'dummy');
+		$mform->addElement('hidden', 'id');
 		$mform->setType('id', PARAM_INT);
 
         $MoodleParticipantsCount = $UserObj->getParticipantsCount('moodle');
@@ -71,7 +70,7 @@ class sendGroupmessageForm extends moodleform {
  		if($MoodleParticipantsCount){
 
 			$mform->addElement('html', '<p>'.get_string('groupmessages_text', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'participantscount'=>$MoodleParticipantsCount]).'</p>');
-            
+
             if($NoneMoodleParticipantsCount){
                 $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
 
@@ -86,9 +85,9 @@ class sendGroupmessageForm extends moodleform {
                 }
 
                 $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
-            }
 
-            $mform->addElement('html', '</div>');
+                $mform->addElement('html', '</div>');
+            }
 
             $mform->addElement('html', '<span class="m-t-1"><hr></span>');
 
@@ -113,7 +112,7 @@ class sendGroupmessageForm extends moodleform {
             }
 
             $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
-        
+
             $mform->addElement('html', '<span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
         } else {

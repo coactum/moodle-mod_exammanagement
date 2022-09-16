@@ -23,17 +23,19 @@
  * Moodle is performing actions across all modules.
 *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * Return if the plugin supports $feature.
+ * Indicates API features that the plugin supports.
  *
+ * @uses FEATURE_MOD_INTRO
+ * @uses FEATURE_SHOW_DESCRIPTION
+ * @uses FEATURE_COMPLETION_TRACKS_VIEWS
+ * @uses FEATURE__BACKUP_MOODLE2
  * @param string $feature Constant representing the feature.
- * @return true | null True if the feature is supported, null otherwise.
+ * @return mixed True if the feature is supported, null otherwise.
  */
 function exammanagement_supports($feature) {
     switch ($feature) {
@@ -41,6 +43,11 @@ function exammanagement_supports($feature) {
             return true;
     	case FEATURE_SHOW_DESCRIPTION:
             return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+
       default:
             return null;
     }
@@ -151,6 +158,111 @@ function exammanagement_delete_instance($id) {
     } else {
         return false;
     }
+}
+
+/**
+ * Implementation of the function for printing the form elements that control
+ * whether the course reset functionality affects the exammanagement.
+ *
+ * @param object $mform Form passed by reference.
+ */
+function exammanagement_reset_course_form_definition(&$mform) {
+    $mform->addElement('header', 'exammanagementheader', get_string('modulenameplural', 'exammanagement'));
+    $mform->addElement('checkbox', 'reset_exammanagement_data', get_string('deleteallexamdata', 'exammanagement'));
+    $mform->disabledIf('reset_exammanagement_data', 'reset_exammanagement_participantsdata', 'checked');
+
+    $mform->addElement('checkbox', 'reset_exammanagement_participantsdata', get_string('deleteexamparticipantsdata', 'exammanagement'));
+    $mform->disabledIf('reset_exammanagement_participantsdata', 'reset_exammanagement_data', 'checked');
+
+}
+
+/**
+ * Course reset form defaults.
+ *
+ * @param object $course
+ * @return array
+ */
+function exammanagement_reset_course_form_defaults($course) {
+    return array('reset_exammanagement_data' => 1, 'reset_exammanagement_participantsdata' => 0);
+}
+
+/**
+ * This function is used by the reset_course_userdata function in moodlelib.
+ * This function will remove all userdata from the specified exammanagement.
+ *
+ * @param object $data The data submitted from the reset course.
+ * @return array $status Status array.
+ */
+function exammanagement_reset_userdata($data) {
+    global $CFG, $DB;
+
+    require_once($CFG->libdir . '/filelib.php');
+
+    $modulename = get_string('modulenameplural', 'exammanagement');
+    $status = array();
+
+    // Get exammanagements in course that should be resetted.
+    $sql = "SELECT e.id
+                FROM {exammanagement} e
+                WHERE e.course = ?";
+
+    $params = array($data->courseid);
+
+    $exammanagements = $DB->get_records_sql($sql, $params);
+
+    // Delete all exammanagement data.
+    if (!empty($data->reset_exammanagement_data)) {
+
+        $DB->set_field_select('exammanagement', 'password', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'rooms', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examtime', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'importfileheaders', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'tempimportfileheader', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'tasks', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'textfield', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'assignmentmode', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datetimevisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'roomvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'placevisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'bonusvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'resultvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'gradingscale', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datadeletion', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'deletionwarningmailids', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewtime', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewroom', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datadeleted', null, 'course = ?', $params);
+
+        $status[] = array(
+            'component' => $modulename,
+            'item' => get_string('allexamdatadeleted', 'exammanagement'),
+            'error' => false
+        );
+    }
+
+    // Delete exam participants data.
+    if (!empty($data->reset_exammanagement_data) || !empty($data->reset_exammanagement_participantsdata) ) {
+        foreach ($exammanagements as $eid => $unused) {
+            if (!$cm = get_coursemodule_from_instance('exammanagement', $eid)) {
+                continue;
+            }
+
+            $DB->delete_records('exammanagement_participants', array('exammanagement' => $eid));
+        }
+
+        $status[] = array('component' => $modulename, 'item' => get_string('examparticipantsdatadeleted', 'exammanagement'), 'error' => false);
+    }
+
+    // Updating dates - shift may be negative too.
+    if ($data->timeshift) {
+        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
+        // See MDL-9367.
+        shift_course_mod_dates('exammanagement', array(), $data->timeshift, $data->courseid);
+        $status[] = array('component' => $modulename, 'item' => get_string('datechanged'), 'error' => false);
+    }
+
+    return $status;
 }
 
 /**

@@ -18,7 +18,7 @@
  * Class containing data for exammanagement main page
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_exammanagement\output;
@@ -33,7 +33,7 @@ use stdClass;
  * Class containing data for exammanagement_overview
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_overview implements renderable, templatable {
@@ -180,6 +180,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->resultsenteredafterexamreview = $this->resultsenteredafterexamreview;
         $data->deleted = $this->deleted;
         $data->ldapavailable = $this->ldapavailable;
+        $data->sesskey = sesskey();
         return $data;
     }
 }

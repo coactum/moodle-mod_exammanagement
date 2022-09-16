@@ -18,7 +18,7 @@
  * class containing all common functions for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -291,7 +291,7 @@ class exammanagementInstance{
 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 
 		if($textfield){
-			$text = $textfield->text;
+			$text = format_text($textfield->text, $textfield->format, array('para' => false));
 			return $text;
 		} else {
 			return false;
@@ -903,7 +903,7 @@ class exammanagementInstance{
 
 		$check = 0;
 		for ($i = 0; $i < 12; $i++) {
-			$check += (($i % 2) * 2 + 1) * $s{$i};
+			$check += (($i % 2) * 2 + 1) * $s[$i];
 		}
 
 		return (10 - ($check % 10)) % 10;

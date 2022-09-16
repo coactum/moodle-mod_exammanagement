@@ -18,7 +18,7 @@
  * class containing inputResultsForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -77,7 +77,7 @@ class inputResultsForm extends moodleform {
 
             $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'), 'test');
 
-            $mform->setType('matrnr', PARAM_RAW);
+            $mform->setType('matrnr', PARAM_TEXT);
 
             if($this->_customdata['firstname'] && $this->_customdata['lastname']){
                 $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname'] . ' <a class="btn btn-primary ml-5" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
@@ -152,7 +152,7 @@ class inputResultsForm extends moodleform {
 
         } else {
             $mform->addElement('text', 'matrnr', get_string('matrnr_barcode', 'mod_exammanagement'), '');
-            $mform->setType('matrnr', PARAM_RAW);
+            $mform->setType('matrnr', PARAM_TEXT);
 
             $this->add_action_buttons(true, get_string("validate_matrnr", "mod_exammanagement"));
         }

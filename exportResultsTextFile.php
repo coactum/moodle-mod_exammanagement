@@ -18,7 +18,7 @@
  * Outputs exam results as text file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +34,7 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$afterexamreview  = optional_param('afterexamreview', 0, PARAM_RAW);
+$afterexamreview  = optional_param('afterexamreview', 0, PARAM_BOOL);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
@@ -237,7 +237,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
             }
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
         }
     }
 } else {

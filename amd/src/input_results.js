@@ -17,7 +17,7 @@
  * functions for tracking changes of input fields, changing focus and checking matr_nr
  *
  * @module      mod_exammanagement/input_results
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

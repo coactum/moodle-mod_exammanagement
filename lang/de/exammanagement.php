@@ -19,7 +19,7 @@
  *
  * @package     tool_exammanagement
  * @category    string
- * @copyright   coactum Gmbh 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -52,7 +52,6 @@ $string['exam_review_added'] = 'Die Klausurkorrektur ist nun abgeschlossen. Am <
 $string['examdata_deleted'] = 'Die am <strong>{$a}</strong> durchgeführte Prüfung ist nun abgeschlossen.';
 
 //exammanagement_overview.mustache - can be seen on /view.php as lecturer
-$string['maintitle'] = 'Prüfungsorganisation';
 $string['view'] = 'Überblick';
 $string['js_confirm_correction_completion'] = 'Diese Aktion schließt die Korrekturphase ab. Danach haben Sie 3 Monate Zeit, alle Prüfungsergebnisse zu exportieren, bevor diese aus Datenschutzgründen unwiederbringlich gelöscht werden.';
 $string['data_deleted'] = 'Die Prüfungsdaten aller Teilnehmenden dieser Prüfungsorganisation wurden aus Datenschutzgründen drei Monate nach dem Abschluss der Korrekturphase gelöscht. Diese Prüfungsorganisation kann somit nicht mehr weiter genutzt werden, es können lediglich noch die Basisdaten der Prüfung eingesehen werden.';
@@ -226,21 +225,21 @@ $string['examreview_dateroom'] = 'Termin und Raum für Klausureinsicht festlegen
 $string['change_examresults'] = 'Prüfungsergebnisse ändern';
 $string['available_places'] = 'Verfügbare Plätze';
 
-//configurePasswordForm.php
+// configurepassword_form.php
 $string['configurePassword'] = 'Passwort konfigurieren';
 $string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['password'] = 'Passwort';
 $string['reset_password'] = 'Passwort zurücksetzen';
 
-//checkPasswordForm.php
-$string['checkPassword'] = 'Passwort eingeben';
-$string['checkPasswordAdmin'] = 'Passwort eingeben';
-$string['check_password'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
-$string['confirm_password'] = 'Passwort bestätigen';
-$string['reset_password_admin'] = 'Passwort zurücksetzen und alle Lehrenden benachrichtigen';
-$string['request_password_reset'] = 'Zurücksetzen des Passwortes beim Support beantragen';
+//checkpasswordForm.php
+$string['checkpassword'] = 'Passwort eingeben';
+$string['checkpasswordadmin'] = 'Passwort eingeben';
+$string['checkpasswordstr'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um Zugriff auf die Inhalte der Prüfungsorganisation zu erhalten.';
+$string['confirmpassword'] = 'Passwort bestätigen';
+$string['resetpasswordadmin'] = 'Passwort zurücksetzen und alle Lehrenden benachrichtigen';
+$string['requestpasswordreset'] = 'Zurücksetzen des Passwortes beim Support beantragen';
 
-//checkPassword.php
+//checkpassword.php
 $string['wrong_password'] = 'Passwort falsch. Bitte erneut versuchen.';
 $string['password_reset_successfull'] = 'Das Passwort der Prüfungsorganisation wurde erfolgreich zurückgesetzt und alle Lehrenden des {$a->systemname}-Kurses wurden darüber via {$a->systemname} Benachrichtigung informiert.';
 $string['password_reset_failed'] = 'Zurücksetzen des Passwortes aufgrund fehlender Berechtigungen fehlgeschlagen.';
@@ -328,9 +327,9 @@ $string['defaultroom_svg'] = 'Sitzplan (Textdatei (.txt) mit dem Quellcode einer
 //editDefaultRoom.php
 $string['no_editable_default_room'] = 'Kein bearbeitbarer Standardraum da durch Dozent angelegt';
 
-//setDateTimeForm.php
-$string['setDateTime'] = 'Prüfungstermin festlegen';
-$string['set_date_time_str'] = 'Hier können das Datum und die Uhrzeit der Prüfung ausgewählt werden.';
+// setexamdate.php
+$string['setexamdate'] = 'Prüfungstermin festlegen';
+$string['setexamdatestr'] = 'Hier können das Datum und die Uhrzeit der Prüfung ausgewählt werden.';
 
 //viewParticipants.php
 $string['viewParticipants'] = 'Teilnehmer ansehen';
@@ -413,10 +412,10 @@ $string['total'] = 'Summe';
 $string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.';
 $string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 
-//setTextfieldForm.php
-$string['setTextfield'] = 'Freitext hinzufügen';
-$string['content_of_textfield'] = 'Inhalt des Textfeldes';
-$string['add_text_text'] = 'Hier kann ein beliebiger prüfungsbezogener Inhalt eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird.';
+// textfield_form.php
+$string['settextfield'] = 'Freitext hinzufügen';
+$string['contentoftextfield'] = 'Inhalt des Textfeldes';
+$string['settextfieldstr'] = 'Hier kann ein beliebiger prüfungsbezogener Inhalt eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird.';
 
 //sendGroupmessageForm.php
 $string['sendGroupmessage'] = 'Gruppennachricht schreiben';
@@ -585,11 +584,11 @@ $string['points_with_bonus'] = 'Punkte inkl. Bonus';
 $string['results'] = 'Prüfungsergebnisse';
 $string['cannot_create_zip_archive'] = 'Fehler beim Erzeugen des zip-Archives';
 
-// examReviewDateRoomForm.php
-$string['examReviewDateRoom'] = 'Termin und Raum für Klausureinsicht festlegen';
-$string['examreview_dateroom_str'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden.';
-$string['examreview_date'] = 'Termin';
-$string['examreview_room'] = 'Raum (als Freitext eintragen)';
+// examreview_form.php
+$string['examreview'] = 'Termin und Raum für Klausureinsicht festlegen';
+$string['examreviewstr'] = 'Falls für die Prüfung eine Klausureinsicht stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden.';
+$string['examreviewdate'] = 'Termin';
+$string['examreviewroom'] = 'Raum (als Freitext eintragen)';
 
 // forms (common)
 $string['operation_canceled'] = 'Vorgang abgebrochen';
@@ -602,6 +601,12 @@ $string['no_tasks_configured'] = 'Noch keine Aufgaben konfiguriert. Arbeitsschri
 $string['no_results_entered'] = 'Noch keine Prüfungsergebnisse eingetragen. Arbeitsschritt nicht möglich';
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbeitsschritt nicht möglich';
 
+// course reset (lib.php)
+$string['deleteallexamdata'] = 'Alle Daten der Prüfung (z. B. Prüfungsräume und -Datum, Aufgabenpunkte, Notenschlüßel) und alle Prüfungsteilnehmenden löschen';
+$string['allexamdatadeleted'] = 'Prüfungsdaten gelöscht';
+$string['deleteexamparticipantsdata'] = 'Alle Prüfungsteilnehmenden löschen aber Prüfungsdaten behalten';
+$string['examparticipantsdatadeleted'] = 'Prüfungsteilnehmende gelöscht';
+
 // helptexts
 $string['overview_help']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen und Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
 Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können. Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />
@@ -609,11 +614,11 @@ Jeder Arbeitsschritt kann nach einem Klick auf den entsprechenden Button durchge
 Durch den Button "Passwort konfigurieren“ können Sie zudem ein Passwort festlegen (oder ändern), welches ab diesem Zeitpunkt für einen Zugriff auf die Prüfungsorganisation eingegeben werden muss. Auf diese Weise können Sie zum Beispiel Ihren studentischen MitarbeiterInnen, die Ihre Kurse betreuen, den Zugriff auf die sensiblen Inhalte der Prüfungsorganisation entziehen. <br /><br />
 <strong>Hinweis:</strong> Studierende haben keinen Zugriff auf diese Ansicht. Sie sehen stattdessen in einer eigenen Ansicht die für sie freigeschalteten Informationen zur Prüfung.';
 $string['overview_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['checkPassword_help'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br><br> Durch einen Klick auf den entsprechenden Button können Sie beim Support ein Zurücksetzen des Passwortes beantragen. Wurde das Passwort zurückgesetzt werden Sie und alle anderen Lehrenden des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses darüber via '. get_config('mod_exammanagement', 'moodlesystemname').'-Benachrichtigung informiert.';
-$string['checkPassword_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['checkPasswordAdmin_help'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br> <br>
+$string['checkpassword_help'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br><br> Durch einen Klick auf den entsprechenden Button können Sie beim Support ein Zurücksetzen des Passwortes beantragen. Wurde das Passwort zurückgesetzt werden Sie und alle anderen Lehrenden des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses darüber via '. get_config('mod_exammanagement', 'moodlesystemname').'-Benachrichtigung informiert.';
+$string['checkpassword_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['checkpasswordadmin_help'] = 'Der oder die Dozentin hat für diese Prüfungsorganisation ein Passwort festgelegt. Geben Sie es ein, um die Inhalte der Prüfungsorganisation ansehen zu können. <br> <br>
 Als Administrator können Sie hier auf Wunsch der oder des Lehrenden das Passwort der Prüfungsorganisation zurücksetzen. Alle Lehrenden des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses werden darüber per '. get_config('mod_exammanagement', 'moodlesystemname').'-Nachricht benachrichtigt.';
-$string['checkPasswordAdmin_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['checkpasswordadmin_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['configurePassword_help'] = 'Auf dieser Seite kann ein <strong>Passwort</strong> für die Prüfungsorganisation gesetzt oder geändert werden. Dieses muss ab dann von jeder oder jedem Lehrenden des '. get_config('mod_exammanagement', 'moodlesystemname').'-Kurses eingegeben werden, um auf die Inhalte der Prüfungsorganisation zugreifen zu können. <br><br>
 Um ein Passwort zu setzen muss dieses zunächst in das erste Feld eingegeben und dann im zweiten Feld bestätigt werden.<br><br>
 Denken Sie daran, ihr Passwort hinreichend sicher zu wählen und nehmen Sie vor allem kein Kennwort, dass Sie bereits anderswo als Passwort verwenden (vor allem nicht im Universitätskontext!).<br><br>
@@ -652,10 +657,10 @@ Falls bei einem bestehenden Raum Sitzplätze bearbeitet werden sollen ist dies m
 Als Letztes kann für einen Raum ein neuer Raumplan hinzufügt werden. Dieser muss außerhalb der Prüfungsorganisation erstellt werden und sollte sämtliche für den Standardraum angelegte Sitzplätze enthalten. Der Raumplan muss dazu als SVG in einer Textdatei (.txt) gespeichert sein, die dann im letzten Abschnitt dieser Seite hochgeladen werden kann. Dabei ist zu beachten, dass der Inhalt der Datei mit der SVG des Raumplans vor dem Upload sorgfältig geprüft werden muss, da das Plugin an dieser Stelle böswillige oder fehlerhafte Inhalte in der Datei nicht zuverlässig erkennen kann. Wurde eine Datei mit einem Raumplan ausgewählt wird dieser nach einem Klick auf "Raum speichern" zusammen mit den restlichen angegebenen Informationen gespeichert. <br><br>
 Der auf diese Weise angelegte oder geänderte Raum kann sofort von allen Lehrenden in ihren Prüfungsorganisationen als Prüfungsraum ausgewählt werden. Bei der Änderung des Namens oder der Anpassung von Sitzplätzen in einem bestehenden und bereits in Prüfungsorganisationen verwendeten Prüfungsraum bleiben der Name und die bisherigen Sitzplatzzuweisungen dort zunächst gespeichert. Die Lehrenden müssen somit die Sitzplätze einmal erneut zuweisen, bevor die Änderungen am Raum dort wirksam werden.';
 $string['editDefaultRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['setDateTime_help']= 'Hier können das <strong>Datum und die Uhrzeit der Prüfung</strong> ausgewählt werden. <br /> <br />
+$string['setexamdate_help']= 'Hier können das <strong>Datum und die Uhrzeit der Prüfung</strong> ausgewählt werden. <br /> <br />
 Der hier gewählte Prüfungstermin wird auf der Übersichtsseite der Prüfungsorganisation angezeigt und später in den erzeugten Dokumenten wie etwa der Teilnehmerliste oder den Klausuretiketten verwendet. Zudem wird er den PrüfungsteilnehmerInnen in deren Ansicht angezeigt, sobald Sie diese Informationen auf der Übersichtsseite für die Studierenden sichtbar geschaltet haben. <br /> <br />
 Das Datum und die Uhrzeit der Prüfung sollten hier also gesetzt werden, um die Prüfungsorganisation in '. get_config('mod_exammanagement', 'moodlesystemname').' sinnvoll nutzen zu können.';
-$string['setDateTime_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['setexamdate_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['viewParticipants_help']= 'Auf dieser Seite können alle zur Prüfung hinzugefügten <strong>Prüfungsteilnehmer</strong> und Informationen wie deren Profil, Matrikelnummer sowie die ihnen gegebenenfalls in '. get_config('mod_exammanagement', 'moodlesystemname').' zugewiesenen Gruppen angesehen werden. <br /> <br />
 Es können hier zudem neue Teilnehmerinnen zur Prüfung hinzugefügt werden. Dazu gibt es zwei Möglichkeiten: <br /> <br />
 1. Es können nach einem Klick auf den Button "Teilnehmer aus Datei hinzufügen" Teilnehmer aus einer oder mehreren Prüfungslisten importiert werden. Dies ist der empfohlene Weg des Teilnehmerimportes, da nur auf diese Weise später ein Export der Prüfungsergebnisse der Anzahl und dem Aufbau dieser eingelesenen Listen entsprechend möglich ist. Diese Variante sollte also gewählt werden, möchte man später die Prüfungsergebnisse direkt importieren (lassen).<br>
@@ -695,11 +700,11 @@ Durch Anklicken des "+" Button können neue Aufgaben zur Prüfung hinzugefügt w
 Die Aufgaben sind ein zentrales Element der Prüfungsorganisation. Sie entsprechen den Aufgaben, die nachher in der tatsächlichen Prüfung vorhanden sind und werden benötigt, um später die Prüfungsergebnisse für die Teilnehmerinnen eintragen zu können. Für jede Aufgabe können dann separat die von den Prüfungsteilnehmerinnen errungenen Punkte eingetragen werden, maximal jedoch die hier angegebene Höchstpunktzahl der jeweiligen Aufgabe. Die hier festgelegten Aufgaben und deren Maximalpunktzahlen werden außerdem für das Setzen des Notenschlüssels und für den Export der Prüfungsergebnisse benötigt.<br><br>
 Werden die Aufgaben nachträglich verändert, nachdem bereits Prüfungsergebnisse eingetragen oder der Notenschlüssel gesetzt wurde, müssen diese gegebenenfalls an die neue Anzahl beziehungsweise Maximalpunktzahl der Aufgaben angepasst werden.';
 $string['configureTasks_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['setTextfield_help']= 'Hier kann ein beliebiger Inhalt als <strong>Freitext</strong> für die Prüfung eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird. <br /> <br />
+$string['settextfield_help']= 'Hier kann ein beliebiger Inhalt als <strong>Freitext</strong> für die Prüfung eingetragen werden, welcher den PrüfungsteilnehmerInnen nach dem Speichern sofort in deren Teilnehmeransicht angezeigt wird. <br /> <br />
 Auf diese Weise können den PrüfungsteilnehmerInnen etwa unkompliziert Hinweise zu den in der Prüfung erlaubten Hilfsmitteln mitgeteilt werden. Neben einfachen Texten können dabei auch komplexere Elemente wie etwa Bilder oder gegebenenfalls sogar Formeln verwendet werden. <br /> <br />
 Diese Funktion ist rein optional. Wenn Sie also z.B. keine Hinweise für die PrüfungsteilnehmerInnen haben können Sie das unten stehende Feld auch einfach leer lassen und auf den Button „Abbrechen“ klicken. <br /> <br />
 <strong>Hinweis:</strong>  Diese Funktion ist vorwiegend für Mitteilungen gedacht, die nicht zeitkritisch sind. Möchten Sie die PrüfungsteilnehmerInnen jedoch etwa am Tag vor der Prüfung über einen kurzfristigen Wechsel der Prüfungsräume informieren, empfiehlt sich dafür stattdessen die Nutzung der Funktion „Nachricht an Teilnehmer schreiben“ auf der Übersichtsseite. Dadurch erhalten die PrüfungsteilnehmerInnen sofort eine E-Mail und können so die eingetragenen Informationen selbst dann mitbekommen, wenn sie nicht aktiv in '. get_config('mod_exammanagement', 'moodlesystemname').' nachsehen.';
-$string['setTextfield_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['settextfield_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['sendGroupmessage_help']= 'Auf dieser Seite kann der Betreff und der Inhalt einer <strong>Nachricht</strong> eingegeben werden, die nach einem Klick auf den Button „Mail abschicken“ <strong>an alle</strong> zur Prüfung als <strong>Teilnehmerinnen</strong> hinzugefügte Studierende gesendet wird. <br /> <br />
 Diese bekommen die Nachricht direkt nach dem Abschicken sowohl als '. get_config('mod_exammanagement', 'moodlesystemname').'-Benachrichtigung als auch als E-Mail an ihren universitären E-Mail-Account weitergeleitet und können so zum Beispiel einfach auf kurzfristige Änderungen (etwa der Prüfungszeiten oder -Räume) aufmerksam gemacht werden. <br /> <br />
 Falls Sie Teilnehmerinnen zur Prüfung hinzugefügt haben, die noch kein '. get_config('mod_exammanagement', 'moodlesystemname').'-Benutzerkonto haben, wird dies im Folgenden angezeigt. Da diese Teilnehmerinnen die hier geschriebene Nachricht nicht automatisch erhalten werden müssen Sie sie stattdessen manuell per E-Mail anschreiben. Dies können Sie zum Beispiel nach einem Klick auf den Button "Email schreiben", der ihren E-Mail-Client öffnet und die Mailadressen der entsprechenden Teilnehmer einträgt, tun. <br /> <br />
@@ -746,11 +751,11 @@ Für jede der alphabetisch sortiert angezeigten Prüfungsteilnehmerinnen werden 
 Um die Informationen zu einem Prüfungsteilnehmer zu bearbeiten reicht ein Klick auf den Button "Prüfungsergebnisse und Boni bearbeiten". Danach können in der Tabelle für jeden Teilnehmenden die Prüfungsergebnisse, Bonuspunkte und -Schritte sowie der Prüfungsstatus eingetragen beziehungsweise bearbeitet werden. In der Spalte "Punkte" können dabei aufgabenweise die vom Prüfling erreichten Punkte eingetragen werden. Falls nötig kann zudem aus einem Dropdown-Menü ein besonderer Prüfungsstatus wie etwa "Krank", "Nicht Teilgenommen" ("NT") oder aber "Betrugsversuch" ausgewählt werden, wodurch die Punkte für den betreffenden Teilnehmer automatisch auf Null gesetzt und die Möglichkeit zum Punkteeintragen deaktiviert wird. Das Zurücksetzen des Status auf "Normal" erlaubt das Punkteeintragen wieder, während der Status "-" die Punkte auf nicht gesetzt zurücksetzt. Es können außerdem entweder die von den Prüflingen erreichten Bonuspunkte oder aber Bonusnotenschritte eingetragen werden. Durch Drücken der Tabulator-Taste kann dabei zwischen den einzelnen Feldern und Teilnehmern gewechselt werden, während ein Klick auf den entsprechenden Button oder das Drücken der Eingabe-Taste sämtliche eingetragenen Änderungen speichert. <br><br>
 Für die Studierenden können dabei alle diese Angaben gleichzeitig oder einzeln eingetragen beziehungsweise bearbeitet werden. Auf diese Weise kann diese Seite nicht nur genutzt werden, um fehlerhaft eingetragene Angaben zu korrigieren sondern auch, um für Prüfungsteilnehmende insgesamt manuell Ergebnisse oder Boni einzutragen. Auch für TeilnehmerInnen ohne Matrikelnummer können auf diese Weise einfach Prüfungsergebnisse eingetragen werden. Die manuelle Zuweisung von Sitzplätzen ist hingegen nicht hier sondern im entsprechenden Arbeitsschritt möglich.';
 $string['participantsOverview_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['examReviewDateRoom_help']= 'Falls für die Prüfung eine <strong>Klausureinsicht</strong> stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden. <br><br>
+$string['examreview_help']= 'Falls für die Prüfung eine <strong>Klausureinsicht</strong> stattfinden soll können hier der Termin und der Raum dafür ausgewählt werden. <br><br>
 Die Bezeichnung des Raumes kann dabei frei als normaler Text in das untere Formularfeld eingegeben werden. Auf diese Weise können Sie auch nicht im System als Prüfungsraum hinterlegte Räume wie etwa ihr Büro als Klausureinsichtsraum auswählen. <br><br>
 Wenn Sie nach dem Zeitpunkt der Klausureinsicht Prüfungsergebnisse für die Teilnehmenden ändern können Sie diese danach einfach auf der Übersichtsseite gesondert für das Prüfungsamt exportieren. <br><br>
 Die hier festgelegten Informationen zum Termin und Raum der Klausureinsicht können später auf der Übersichtsseite wieder für die Studierenden sichtbar geschaltet werden.';
-$string['examReviewDateRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['examreview_link'] = get_config('mod_exammanagement', 'additionalressources');
 
 //errors and permissions
 $string['missingidandcmid'] = 'Ungültige Kursmodul-ID';

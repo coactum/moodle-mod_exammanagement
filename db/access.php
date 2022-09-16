@@ -41,7 +41,7 @@
  *
  * @package     mod_exammanagement
  * @category    access
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -73,8 +73,7 @@ $capabilities = [
         ],
     ],
 
-		'mod/exammanagement:viewparticipantspage' => [
-
+	'mod/exammanagement:viewparticipantspage' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -87,7 +86,6 @@ $capabilities = [
     ],
 
     'mod/exammanagement:takeexams'=> [
-
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [

@@ -18,13 +18,13 @@
  * Allows teacher to convert participants of mod_exammanagement to moodle group.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2020
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\convertToGroupForm;
+use mod_exammanagement\forms\converttogroup_form;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
@@ -51,15 +51,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-			$MoodleObj->setPage('convertToGroup');
-			$MoodleObj->outputPageHeader();
-
 			$moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
 
 			$noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
 			# Instantiate form #
-			$mform = new convertToGroupForm(null, array('id'=>$id, 'e'=>$e, 'moodleParticipants' => $moodleParticipants, 'noneMoodleParticipants' => $noneMoodleParticipants));
+			$mform = new converttogroup_form(null, array('id'=>$id, 'e'=>$e, 'moodleParticipants' => $moodleParticipants, 'noneMoodleParticipants' => $noneMoodleParticipants));
 
 			// Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
@@ -130,14 +127,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				//Set default data (if any)
 				$mform->set_data($default_values);
 
-				//displays the form
+				$MoodleObj->setPage('convertToGroup');
+				$MoodleObj->outputPageHeader();
+
 				$mform->display();
+
+				$MoodleObj->outputFooter();
+
 			}
 
-			$MoodleObj->outputFooter();
-
 		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

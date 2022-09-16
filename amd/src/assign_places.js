@@ -17,7 +17,7 @@
  * Saving assign places form and fetching table fragment via ajax.
  *
  * @module      mod_exammanagement/assign_places
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

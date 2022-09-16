@@ -18,7 +18,7 @@
  * Allows teacher to configure tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -50,7 +50,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 			$MoodleObj->setPage('configureTasks');
-			$MoodleObj-> outputPageHeader();
+			$MoodleObj->outputPageHeader();
 
 			//Instantiate form
 			$mform = new configureTasksForm(null, array('id'=>$id, 'e'=>$e, 'newtaskcount'=>$newtaskcount));
@@ -93,7 +93,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			$MoodleObj->outputFooter();
 		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

@@ -18,7 +18,7 @@
  * class containing addDefaultRoomsForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -53,7 +53,7 @@ class addDefaultRoomsForm extends moodleform {
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
     $mform->addElement('html', '<h3>'.get_string("addDefaultRooms", "mod_exammanagement"));
-        
+
     if($helptextsenabled){
         $mform->addElement('html', $OUTPUT->help_icon('addDefaultRooms', 'mod_exammanagement', ''));
     }

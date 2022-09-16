@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing assignPlacesForm for exammanagement
+ * The form for assigning places to participants for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,7 +32,6 @@ use stdclass;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
@@ -40,9 +39,18 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
-class assignPlacesForm extends moodleform{
+/**
+ * The form for assigning places to participants for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class assignplaces_form extends moodleform {
 
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition(){
         global $PAGE, $CFG, $OUTPUT;
 
@@ -50,23 +58,23 @@ class assignPlacesForm extends moodleform{
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); //remove col-md classes for better layout
+        $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // remove col-md classes for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'init'); // call jquery
         $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'toggleAvailablePlaces'); // call jquery to enable toggling of new available places
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<div class="row"><h3 class="col-md-4">'.get_string("assignPlaces", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('assignPlaces', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3><div class="col-md-8">');
 
-        if($this->_customdata['map']){
+        if ($this->_customdata['map']) {
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         } else {
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
@@ -74,15 +82,15 @@ class assignPlacesForm extends moodleform{
 
         $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
 
-        if($assignedplacescount){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'uap', true).'" role="button" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+        if ($assignedplacescount) {
+            $mform->addElement('html', '<a href="assignPlaces.php?id=' . $this->_customdata['id'] . '&uap=1&sesskey=' . sesskey() . '" role="button" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', '<p>'.get_string('assign_places_text', 'mod_exammanagement').'</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         $contextid = $ExammanagementInstanceObj->getModulecontext()->id;
@@ -253,12 +261,5 @@ class assignPlacesForm extends moodleform{
         }
 
         $mform->disable_form_change_checker();
-    }
-
-    //Custom validation should be added here
-    public function validation($data, $files){
-        $errors= array();
-
-        return $errors;
     }
 }

@@ -18,7 +18,7 @@
  * class for participantsListsNames PDF for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -51,15 +51,15 @@ class participantsList extends TCPDF {
       $this->SetTextColor(255, 0, 0);
       $this->SetFont('freeserif', 'B', 10);
       $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
-      
+
     } else {
       $this->SetFont('freeserif', 'B', 22);
       $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 70, 17);
       $this->SetTextColor(255, 0, 0);
       $this->SetFont('freeserif', 'B', 10);
-      $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 65, 28);  
+      $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 65, 28);
     }
-    
+
     $this->SetTextColor(0, 0, 0);
     $this->SetFont('freeserif', '', 14);
     $this->MultiCell(130, 50, strtoupper($ExammanagementInstanceObj->getCleanCourseCategoryName()) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);

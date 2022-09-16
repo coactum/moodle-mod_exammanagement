@@ -18,13 +18,13 @@
  * Allows to set a textfield for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\setTextfieldForm;
+use mod_exammanagement\forms\textfield_form;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -47,11 +47,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-			$MoodleObj->setPage('setTextfield');
-			$MoodleObj-> outputPageHeader();
-
 			//Instantiate form
-			$mform = new setTextfieldForm();
+			$mform = new textfield_form();
 
 			//Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
@@ -76,7 +73,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
 				// or on the first display of the form.
 
-				//Set default data (if any)
+				//Set default data.
 
 				$text = $ExammanagementInstanceObj->getTextFromTextfield();
 				$format = $ExammanagementInstanceObj->getFormatFromTextfield();
@@ -86,13 +83,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 					$mform->set_data(array('id'=>$id));
 				}
 
-				//displays the form
+				$MoodleObj->setPage('settextfield');
+				$MoodleObj->outputPageHeader();
+
 				$mform->display();
+
+				$MoodleObj->outputFooter();
 			}
 
-			$MoodleObj->outputFooter();
-		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+		} else { // If user has not entered correct password for this session redirect to checkpassword page.
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

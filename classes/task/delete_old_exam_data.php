@@ -18,7 +18,7 @@
  * A cron_task class for deleting old exam data to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

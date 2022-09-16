@@ -17,7 +17,7 @@
  * functions for disabling roomid field when room is edited
  *
  * @module      mod_exammanagement/edit_defaultroom
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

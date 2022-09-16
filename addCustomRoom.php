@@ -18,7 +18,7 @@
  * Allows teacher to add custom rooms to mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -73,13 +73,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomname.'_'.$USER->id.'c', 'moodleuserid' => $USER->id))){
 
                     $roomObj = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomname.'_'.$USER->id.'c', 'moodleuserid' => $USER->id));
-                    
+
                     if($description){
                         $roomObj->description = $description;
                     } else {
                         $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
                     }
-                    
+
                     $placesArr = array();
 
                     for ($i = 0; $i < $placesCount; $i++) {
@@ -87,9 +87,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
 
                     $roomObj->places = json_encode($placesArr);
-                    
+
                     $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_rooms', $roomObj);
-                    
+
                     if($update){
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
@@ -100,14 +100,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $roomObj = new stdClass();
                     $roomObj->roomid = $roomname.'_'.$USER->id.'c';
                     $roomObj->name = $roomname;
-                    
+
                     if($description){
                         $roomObj->description = $description;
                     } else {
                         $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
                     }
                     $roomObj->seatingplan = base64_encode('');
-                    
+
                     $placesArr = array();
 
                     for ($i = 0; $i < $placesCount; $i++) {
@@ -115,7 +115,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     }
 
                     $roomObj->places = json_encode($placesArr);
-                    
+
                     $roomObj->type = 'customroom';
                     $roomObj->moodleuserid = $USER->id;
                     $roomObj->misc = NULL;
@@ -128,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                     }
                 }
-                
+
             } else {
                 // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
@@ -144,7 +144,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $description = $roomObj->description;
                         $mform->set_data(array('id'=>$id, 'roomname'=>$roomname, 'placescount'=>$placescount, 'description'=>$description, 'existingroom'=>true));
                     } else {
-                        $mform->set_data(array('id'=>$id));                
+                        $mform->set_data(array('id'=>$id));
                     }
                 } else {
                     $mform->set_data(array('id'=>$id));
@@ -152,11 +152,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 //displays the form
                 $mform->display();
-            }    
+            }
 
             $MoodleObj->outputFooter();
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
         }
     }
 } else {

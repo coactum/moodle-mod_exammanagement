@@ -18,7 +18,7 @@
  * Display information about all the mod_exammanagement modules in the requested course.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -81,7 +81,7 @@ foreach ($exammanagements as $exammanagement) {
             format_string($exammanagement->name, true));
     }
 
-    if ($course->format == 'weeks' or $course->format == 'topics') {
+    if ($course->format == 'weeks' || $course->format == 'topics') {
         $table->data[] = array($exammanagement->section, $link);
     } else {
         $table->data[] = array($link);

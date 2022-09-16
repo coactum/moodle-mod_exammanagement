@@ -18,13 +18,13 @@
  * Allows teacher to assign places to participants for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\assignPlacesForm;
+use mod_exammanagement\forms\assignplaces_form;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -53,18 +53,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
   } else {
     if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      $MoodleObj->setPage('assignPlaces');
-
 			if(!$ExammanagementInstanceObj->getRoomsCount()){
 				$MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
 			} else if (!$UserObj->getParticipantsCount()) {
 				$MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 			}
 
-			$MoodleObj->outputPageHeader();
-
 			if($uap){
-				// reset all exiting places for participants
+        require_sesskey();
+
+				// Reset all exiting places for participants.
         $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomid', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
         $MoodleDBObj->setFieldInDB('exammanagement_participants', 'roomname', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
         $MoodleDBObj->setFieldInDB('exammanagement_participants', 'place', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
@@ -74,9 +72,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			//Instantiate form
       if($map){
-        $mform = new assignPlacesForm(null, array('id'=>$id, 'e'=>$e, 'map'=>$map));
+        $mform = new assignplaces_form(null, array('id'=>$id, 'e'=>$e, 'map'=>$map));
       } else {
-        $mform = new assignPlacesForm(null, array('id'=>$id, 'e'=>$e, 'map'=>0));
+        $mform = new assignplaces_form(null, array('id'=>$id, 'e'=>$e, 'map'=>0));
       }
 
 			//Form processing and displaying is done here
@@ -244,14 +242,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         //Set default data (if any)
         $mform->set_data(array('id'=>$id));
 
-        //displays the form
+        $MoodleObj->setPage('assignPlaces');
+        $MoodleObj->outputPageHeader();
+
         $mform->display();
+
+        $MoodleObj->outputFooter();
+
       }
 
-      $MoodleObj->outputFooter();
-
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
   }
 } else {

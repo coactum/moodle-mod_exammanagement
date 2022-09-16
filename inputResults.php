@@ -18,7 +18,7 @@
  * Allows teacher to input results to mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,7 +37,7 @@ $id = optional_param('id', 0, PARAM_INT);
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$input  = optional_param('matrnr', 0, PARAM_RAW);
+$input  = optional_param('matrnr', 0, PARAM_TEXT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
@@ -64,7 +64,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			}
 
 			$MoodleObj->setPage('inputResults');
-			$MoodleObj-> outputPageHeader();
+			$MoodleObj->outputPageHeader();
 
 			$matrnr = false;
 			$case='';
@@ -104,7 +104,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						} else {
 							$case = 'novalidbarcode';
 						}
-						
+
 					}
 
 					if($matrnr){
@@ -114,26 +114,26 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 							// convert matrnr to user
 							$userlogin = false;
 							$userid = false;
-		
+
 							$userlogin = $LdapManagerObj->getLoginForMatrNr($matrnr, 'enterresultsmatrnr');
-		
+
 							if($userlogin){
 								$userid = $MoodleDBObj->getFieldFromDB('user','id', array('username' => $userlogin));
 							}
-		
+
 							$participantObj = false;
-		
+
 							// getExamParticipantObj
 							if($userid !== false && $userid !== null){
 								$participantObj = $UserObj->getExamParticipantObj($userid);
 							} else if($userlogin !== false && $userlogin !== null){
 								$participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
 							}
-		
+
 							// if user is participant
 							if($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)){
 								$case = 'participant';
-		
+
 								if($userid !== false && $userid !== null){
 									$MoodleUserObj = $UserObj->getMoodleUser($userid);
 									$firstname = $MoodleUserObj->firstname;
@@ -142,9 +142,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 									$firstname = $participantObj->firstname;
 									$lastname = $participantObj->lastname;
 								}
-		
+
 								if($UserObj->participantHasResults($participantObj)){ // if participants has results
-									$case = 'participantwithresults';		
+									$case = 'participantwithresults';
 								}
 							} else {
 								$case = 'noparticipant';
@@ -164,7 +164,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			//Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
 				//Handle form cancel operation, if cancel button is present on form
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'success');
+				$MoodleObj->redirectToOverviewPage('beforeexam', null, 'success');
 
 			} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.
@@ -178,7 +178,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				if ($matrval){
 						redirect ('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
 				} else {
-					
+
 					$userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->matrnr, 'enterresultsmatrnr');
 
 					if($userlogin){
@@ -216,7 +216,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 						redirect ($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('noparticipant', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 
 					}
-					
+
 				}
 
 			} else {
@@ -262,7 +262,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$MoodleObj->outputFooter();
 
 		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

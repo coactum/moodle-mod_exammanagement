@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing convertToGroupForm for exammanagement
+ * The form for converting exam participants to a moodle group for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2020
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,6 @@ use stdclass;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
@@ -42,11 +41,20 @@ require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../general/Moodle.php');
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class convertToGroupForm extends moodleform{
+/**
+ * The form for converting exam participants to a moodle group for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class converttogroup_form extends moodleform {
 
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition(){
-        global $PAGE, $CFG, $OUTPUT;
+        global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
@@ -58,7 +66,7 @@ class convertToGroupForm extends moodleform{
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -72,7 +80,7 @@ class convertToGroupForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string('convert_to_group_str', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         if(isset($this->_customdata['moodleParticipants'])){
@@ -256,9 +264,9 @@ class convertToGroupForm extends moodleform{
                     $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->firstname.' '.$participant->lastname.'</div>');
 
                     if($participant->matrnr){
-                        $mform->addElement('html', '<div class="col-'.$littlecol.'">'.$participant->matrnr.'</div>');
+                        $mform->addElement('html', '<div class="col-' . $littlecol . '">'.$participant->matrnr.'</div>');
                     } else {
-                        $mform->addElement('html', '<div class="col-'.$littlecol.'">'-'</div>');
+                        $mform->addElement('html', '<div class="col-' . $littlecol . '">-</div>');
                     }
 
                     if($courseGroups){
@@ -314,7 +322,7 @@ class convertToGroupForm extends moodleform{
         }
     }
 
-    //Custom validation should be added here
+    // Custom validation should be added here.
     public function validation($data, $files){
 
         $errors = array();
