@@ -125,11 +125,9 @@ class User{
 						if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
 							global $OUTPUT;
 
-							$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
+							$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
 
-							$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
-
-							$record->profile = $image.' '.$link;
+							$record->profile = $image;
 
 						}
 

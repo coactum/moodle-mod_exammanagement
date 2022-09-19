@@ -153,8 +153,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $examdate = $ExammanagementInstanceObj->getExamtime();
 
             if($examdate){
-                $date = date('d.m.Y', $examdate);
-                $start_time = date('H:i', $examdate);
+                $date = userdate($examdate, get_string('strftimedatefullshort', 'core_langconfig'));
+                $start_time = userdate($examdate, get_string('strftimetime', 'core_langconfig'));
             } else {
                 $date = '-';
                 $start_time = '-';

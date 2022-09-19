@@ -149,7 +149,6 @@ $string['important_note'] = 'Please note:';
 $string['note'] = 'Note:';
 $string['exam_rooms_set'] = '<strong> {$a->roomscount} rooms</strong> with <strong> {$a->totalseatscount} places</strong> in total have been selected as exam rooms:';
 $string['exam_rooms_not_set'] = 'No rooms have been selected for the exam yet.';
-$string['at'] = 'at';
 $string['deleted_room'] = 'Deleted room';
 $string['exam_date_set'] = 'The exam takes place on <strong>{$a}</strong>.';
 $string['exam_date_not_set'] = 'No date and time have been set for the exam yet.';

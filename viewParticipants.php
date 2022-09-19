@@ -195,23 +195,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     foreach ($participants_specialstate as $key => $participant) {
 
                         echo('<tr>');
-                        echo('<th scope="row" id="'.$i.'">'.$i.'</th>');
+                        echo('<th scope="row" id="' . $i . '">' . $i . '</th>');
 
-                        if(isset($participant->state) && $participant->state === 'state_added_to_exam_no_course'){
+                        if (isset($participant->state) && $participant->state === 'state_added_to_exam_no_course') {
                             $moodleUser = $UserObj->getMoodleUser($participant->moodleuserid);
-                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
-                            echo('<td>'.$image . ' ' . $participant->firstname.' '.$participant->lastname.'</td>');
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false, 'includefullname' => true, 'size' => 25));
+                            echo('<td>' . $image . '</td>');
                         } else {
-                            echo('<td>'.$participant->firstname.' '.$participant->lastname.'</td>');
+                            echo('<td>' . $participant->firstname . ' ' . $participant->lastname . '</td>');
                         }
 
-                        echo('<td>'.$participant->matrnr.'</td>');
+                        echo('<td>' . $participant->matrnr . '</td>');
 
-                        if($courseGroups){
+                        if ($courseGroups) {
                             echo('<td> - </td>');
                         }
 
-                        if(isset($participant->state) && $participant->state === 'state_added_to_exam_no_course'){
+                        if (isset($participant->state) && $participant->state === 'state_added_to_exam_no_course') {
                             echo('<td>'.get_string("state_added_to_exam_no_course", "mod_exammanagement") . ' ' . $OUTPUT->help_icon('state_added_to_exam_no_course', 'mod_exammanagement', '').'</td>');
                             echo('<td class="exammanagement_brand_bordercolor_left"><a href="viewParticipants.php?id=' . $id . '&dpmid=' . $participant->moodleuserid . '&sesskey=' . sesskey() . '" onClick="javascript:return confirm(\''.get_string("participant_deletion_warning", "mod_exammanagement").'\');" title="'.get_string("delete_participant", "mod_exammanagement").'"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a>');
                         } else {

@@ -296,7 +296,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 $additionalressourceslink = false;
             }
 
-            $examtime = $ExammanagementInstanceObj->getHrExamtimeTemplate();
+            $examtime = $ExammanagementInstanceObj->getExamtime();
             $taskcount = $ExammanagementInstanceObj->getTaskCount();
             $taskpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
             $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
@@ -390,12 +390,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $MoodleObj->setPage('view');
     $MoodleObj->outputPageHeader();
 
-    //examtime
+    // Exam time.
     $examtime = $ExammanagementInstanceObj->getExamtime();
 
     if ($ExammanagementInstanceObj->isDateTimeVisible() && $examtime) {
-        $date = date('d.m.Y', $examtime);
-        $time = date('H:i', $examtime);
+        $date = userdate($examtime, get_string('strftimedatefullshort', 'core_langconfig'));
+        $time = userdate($examtime, get_string('strftimetime', 'core_langconfig'));
     } else {
         $date = false;
         $time = false;
@@ -434,9 +434,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $bonussteps = false;
     }
 
-    //bonuspoints
-    if($ExammanagementInstanceObj->isBonusVisible() && $participantObj){
-        if($participantObj->bonuspoints === '0'){ // allows mustache template to render 0
+    // Bonuspoints
+    if ($ExammanagementInstanceObj->isBonusVisible() && $participantObj) {
+        if ($participantObj->bonuspoints === '0') { // Allows mustache template to render 0.
             $bonuspoints = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
             $bonuspoints = $ExammanagementInstanceObj->formatNumberForDisplay($participantObj->bonuspoints);
@@ -445,8 +445,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $bonuspoints = false;
     }
 
-    //totalpoints
-    if($ExammanagementInstanceObj->isResultVisible() && $participantObj){
+    // Totalpoints
+    if ($ExammanagementInstanceObj->isResultVisible() && $participantObj) {
 
         $examstate = $UserObj->getExamState($participantObj);
 
@@ -458,13 +458,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
             $totalpointswithbonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participantObj, true));
 
-            if($totalpoints === '0'){
+            if ($totalpoints === '0') {
                 $totalpoints = get_string('no_points_earned', 'mod_exammanagement');
             } else {
                 $totalpoints = $ExammanagementInstanceObj->formatNumberForDisplay($totalpoints);
             }
         } else {
-            if($examstate){
+            if ($examstate) {
                 $examstate = get_string($examstate, 'mod_exammanagement');
             }
 
@@ -480,7 +480,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $tasktotalpoints = false;
     }
 
-    //examreview date and room
+    // Examreview date and room.
     $examreviewtime = false;
     $examreviewroom = false;
     if ($ExammanagementInstanceObj->isExamReviewVisible() && $ExammanagementInstanceObj->getHrExamReviewTime() && $ExammanagementInstanceObj->getExamReviewRoom()) {
@@ -488,10 +488,10 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
         $examreviewroom = $ExammanagementInstanceObj->getExamReviewRoom();
     }
 
-    //check if exam data is deleted
+    // Check if exam data is deleted.
     $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
 
-    //rendering and displaying content
+    // Rendering and displaying content.
     $output = $PAGE->get_renderer('mod_exammanagement');
 
     $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);

@@ -279,10 +279,9 @@ class addCourseParticipantsForm extends moodleform{
 
                 $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-			    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-			    $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $id, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+			    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
 
-                $courseParticipant->profile = $image.' '.$link;
+                $courseParticipant->profile = $image;
 
                 if($courseGroups){
                     $userGroups = groups_get_user_groups($courseid, $id);

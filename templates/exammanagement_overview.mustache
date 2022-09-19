@@ -206,21 +206,21 @@ ajaxsetcorrectioncompletion = function(value){
 								</div>
 							</div>
 							<div class="col-6">
-								<div class="panel {{#hrexamtime}}panel-success{{/hrexamtime}}{{^hrexamtime}}panel-warning{{/hrexamtime}}">
+								<div class="panel {{#examtime}}panel-success{{/examtime}}{{^examtime}}panel-warning{{/examtime}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
-											{{#hrexamtime}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
-											{{^hrexamtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/hrexamtime}}
+											{{#examtime}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examtime}}
+											{{^examtime}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examtime}}
 											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}exam_date, mod_exammanagement{{/str}}</h3>
 									</div>
 									<div class="panel-body">
-										{{#hrexamtime}}<p> {{#str}}exam_date_set, mod_exammanagement, {{hrexamtime}}{{/str}}</p>{{/hrexamtime}}
-										{{^hrexamtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/hrexamtime}}
+										{{#examtime}}<p> {{#str}}exam_date_set, mod_exammanagement, {{#userdate}}{{examtime}}, {{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdate}} {{/str}}</p>{{/examtime}}
+										{{^examtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/examtime}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#hrexamtime}}btn-success{{/hrexamtime}}{{^hrexamtime}}btn-warning{{/hrexamtime}} pull-right" href="setexamdate.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#examtime}}btn-success{{/examtime}}{{^examtime}}btn-warning{{/examtime}} pull-right" href="setexamdate.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -402,12 +402,12 @@ ajaxsetcorrectioncompletion = function(value){
 							</div>
 							<div class="row row-eq-height">
 								<div class="col-6">
-									<div class="panel {{#hrexamtime}}panel-info{{/hrexamtime}}{{^hrexamtime}}panel-danger{{/hrexamtime}}">
+									<div class="panel {{#examtime}}panel-info{{/examtime}}{{^examtime}}panel-danger{{/examtime}}">
 										<div class="panel-heading">
 											<span class="statebar pull-right">
-												{{^deleted}}{{#hrexamtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/hrexamtime}}
+												{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
 												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
-												{{^hrexamtime}}<a href="setexamdate.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/hrexamtime}}
+												{{^examtime}}<a href="setexamdate.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examtime}}
 											</span>
 											<h3 class="panel-title">{{#str}}set_visibility_of_examdate, mod_exammanagement{{/str}}</h3>
 										</div>
@@ -488,13 +488,13 @@ ajaxsetcorrectioncompletion = function(value){
 					<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
 						<div class="panel-body">
 							<span>
-								{{#hrexamtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{hrexamtime}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/hrexamtime}}
-								{{^hrexamtime}}{{#roomnames}} - {{/roomnames}}{{/hrexamtime}}
+								{{#examtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{#userdate}}{{examtime}}, {{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdate}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/examtime}}
+								{{^examtime}}{{#roomnames}} - {{/roomnames}}{{/examtime}}
 							</span>
 							<span class="pull-right">
 								{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
 							</span>
-							{{^hrexamtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/hrexamtime}}
+							{{^examtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/examtime}}
 						</div>
 					</div>
 				</div>

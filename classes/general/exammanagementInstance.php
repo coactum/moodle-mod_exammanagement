@@ -216,20 +216,10 @@ class exammanagementInstance{
 			}
 	}
 
-	public function getHrExamtimeTemplate() {	// convert examtime to human readable format for template
+	public function getHrExamtime() {	// Convert exam time to human readable format (used in exported documents)
 		$examtime = $this->getExamtime();
 		if($examtime){
-			$hrexamtimetemplate = date('d.m.Y', $examtime).' '.get_string('at', 'mod_exammanagement').' '.date('H:i', $examtime);
-			return $hrexamtimetemplate;
-		} else {
-			return false;
-		}
- 	}
-
-	public function getHrExamtime() {	// convert examtime to human readable format for template
-		$examtime = $this->getExamtime();
-		if($examtime){
-			$hrexamtime = date('d.m.Y', $examtime).' '.date('H:i', $examtime);
+			$hrexamtime = userdate($examtime, get_string('strftimedatetimeshort', 'core_langconfig'));
 			return $hrexamtime;
 		} else {
 			return false;
@@ -483,7 +473,7 @@ class exammanagementInstance{
 
 		$examReviewTime = $this->getExamReviewTime();
 		if($examReviewTime){
-			$hrexamReviewTime = date('d.m.Y', $examReviewTime).' '.get_string('at', 'mod_exammanagement').' '.date('H:i', $examReviewTime);
+			$hrexamReviewTime = userdate($examReviewTime, get_string('strftimedatetimeshort', 'core_langconfig'));;
 			return $hrexamReviewTime;
 		} else {
 			return false;
@@ -518,7 +508,7 @@ class exammanagementInstance{
 		$dataDeletionDate = $this->moduleinstance->datadeletion;
 
 		if($dataDeletionDate){
-				$dataDeletionDate = date('d.m.Y', $dataDeletionDate);
+				$dataDeletionDate = userdate($dataDeletionDate, get_string('strftimedatefullshort', 'core_langconfig'));
 		} else {
 			return false;
 		}

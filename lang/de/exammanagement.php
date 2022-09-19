@@ -149,7 +149,6 @@ $string['important_note'] = 'Wichtiger Hinweis:';
 $string['note'] = 'Hinweis:';
 $string['exam_rooms_set'] = 'Es wurden bereits die folgenden <strong> {$a->roomscount} Räume</strong> mit insgesamt <strong>{$a->totalseatscount} Sitzplätzen</strong> für die Prüfung ausgewählt:';
 $string['exam_rooms_not_set'] = 'Es wurden noch keine Räume für die Prüfung ausgewählt.';
-$string['at'] = 'um';
 $string['deleted_room'] = 'Gelöschter Raum';
 $string['exam_date_set'] = 'Die Prüfung findet am <strong>{$a}</strong> statt.';
 $string['exam_date_not_set'] = 'Es wurden noch kein Datum und keine Uhrzeit für die Prüfung festgelegt.';

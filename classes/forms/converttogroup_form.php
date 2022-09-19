@@ -197,10 +197,9 @@ class converttogroup_form extends moodleform {
 
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                    $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $participant->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
 
-                    $mform->addElement('advcheckbox', 'participants['.$participant->moodleuserid.']', $image.' '.$link, null, array('group' => 1));
+                    $mform->addElement('advcheckbox', 'participants[' . $participant->moodleuserid . ']', $image, null, array('group' => 1));
 
                     $mform->addElement('html', '</div><div class="col-'.$littlecol.'">'.$participant->matrnr.'</div>');
 

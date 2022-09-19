@@ -53,7 +53,7 @@ class exammanagement_overview implements renderable, templatable {
     protected $fifthphaseactive;
     protected $helptexticon;
     protected $additionalressourceslink;
-    protected $hrexamtime;
+    protected $examtime;
     protected $textfield;
     protected $taskcount;
     protected $tasktotalpoints;
@@ -85,7 +85,7 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $helptexticon, $additionalressourceslink, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $placesassigned, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable) {
+    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $placesassigned, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable) {
         $this->cmid = $cmid;
         $this->firstphasecompleted = $firstphasecompleted;
         $this->secondphasecompleted = $secondphasecompleted;
@@ -101,7 +101,7 @@ class exammanagement_overview implements renderable, templatable {
         $this->fifthphaseactive = $fifthphaseactive;
         $this->helptexticon = $helptexticon;
         $this->additionalressourceslink = $additionalressourceslink;
-        $this->hrexamtime = $hrexamtime;
+        $this->examtime = $examtime;
         $this->taskcount = $taskcount;
         $this->tasktotalpoints = $tasktotalpoints;
         $this->textfield = $textfield;
@@ -153,7 +153,7 @@ class exammanagement_overview implements renderable, templatable {
         $data->fifthphaseactive = $this->fifthphaseactive;
         $data->helptexticon = $this->helptexticon;
         $data->additionalressourceslink = $this->additionalressourceslink;
-        $data->hrexamtime = $this->hrexamtime;
+        $data->examtime = $this->examtime;
         $data->taskcount = $this->taskcount;
         $data->tasktotalpoints = $this->tasktotalpoints;
         $data->textfield = $this->textfield;

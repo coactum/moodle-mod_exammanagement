@@ -188,9 +188,9 @@ class addParticipantsForm extends moodleform{
 
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
+                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false, 'includefullname' => true, 'size' => 25));
 
-                        $mform->addElement('advcheckbox', 'participants[mid_'.$oddUser->moodleuserid.'-'.$oddUser->headerid.']', $image.' '.$moodleUser->firstname.' '.$moodleUser->lastname, null, array('group' => 1));
+                        $mform->addElement('advcheckbox', 'participants[mid_'.$oddUser->moodleuserid.'-'.$oddUser->headerid.']', $image, null, array('group' => 1));
                     } else if($oddUser->state == 'state_nonmoodle'){
                         $mform->addElement('advcheckbox', 'participants[matrnr_'.$oddUser->matrnr.'-'.$oddUser->headerid.']', '', null, array('group' => 1));
                     }
@@ -243,10 +243,9 @@ class addParticipantsForm extends moodleform{
 
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                        $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $deletedUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                        $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
 
-                        $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$deletedUser->moodleuserid.']', $image.' '.$link, null, array('group' => 2));
+                        $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$deletedUser->moodleuserid.']', $image, null, array('group' => 2));
 
                     } else if ($deletedUser->matrnr){
                         $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_'.$deletedUser->matrnr.']', ' '. $deletedUser->firstname .' '.$deletedUser->lastname, null, array('group' => 2));
@@ -332,12 +331,11 @@ class addParticipantsForm extends moodleform{
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
                         if($existingUser->state === 'state_existingmatrnr'){
-                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                            $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $existingUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
-                            $mform->addElement('html', '</div><div class="col-'.$col.'"> '. $image.' '.$link.' </div>');
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                            $mform->addElement('html', '</div><div class="col-'.$col.'">' . $image . ' </div>');
                         } else {
-                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => false));
-                            $mform->addElement('html', '</div><div class="col-'.$col.'"> '. $image.' '.$moodleUser->firstname.' '.$moodleUser->lastname.' </div>');
+                            $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                            $mform->addElement('html', '</div><div class="col-'.$col.'"> ' . $image . ' </div>');
                         }
 
 
@@ -418,10 +416,9 @@ class addParticipantsForm extends moodleform{
 
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                    $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $newMoodleUser->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
 
-                    $mform->addElement('advcheckbox', 'participants[mid_'.$newMoodleUser->moodleuserid.'-'.$newMoodleUser->headerid.']', $image.' '.$link, null, array('group' => 3));
+                    $mform->addElement('advcheckbox', 'participants[mid_' . $newMoodleUser->moodleuserid . '-' . $newMoodleUser->headerid.']', $image, null, array('group' => 3));
 
                     //$mform->setDefault('participants[mid_'.$moodleuserid.']', true); // use of setData in form definition is the better solution because setDefault takes more time to handle large amounts of participants
 
