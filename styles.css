@@ -254,17 +254,13 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_available_places {
   position: absolute;
-  left: 81%;
-  top: 193px;
-  width: 16%;
-  height: 40vH;
+  width: 350px;
   background: white;
   overflow: hidden;
   z-index: 1000;
-  display: none;
+  display: inline-block;
   border: 2px solid black;
-  padding: 2px;
-  overflow: scroll;
+  right: 10%;
 }
 
 .exammanagement_table .pointer {
@@ -301,7 +297,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
   cursor: pointer;
 }
 
-.exammanagement_panel > .panel-heading span:not(.exammanagement_pure){
+.exammanagement_panel > .panel-heading span:not(.exammanagement_pure) {
   /* minimize/maximize buttons */
   background: rgba(0, 0, 0, 0.15);
   display: inline;
@@ -336,22 +332,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* participantsOverviewForm.php - color of table borders */
-
-.exammanagement_tablewrapper {
-  overflow: scroll;
-  max-height: 40vH;
-  border-top: #00205b 1px solid;
-  border-bottom: #00205b 1px solid;
-  margin-bottom: 10px;
-}
-
-.exammanagement_tablewrapper_high {
-  overflow: scroll;
-  max-height: 55vH;
-  border-top: #00205b 1px solid;
-  border-bottom: #00205b 1px solid;
-  margin-bottom: 10px;
-}
 
 .exammanagement_table {
   border: 1px solid #00205b;
@@ -1190,4 +1170,15 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .exammanagement_overview .label-danger {
   background-color: #d9534f !important;
+}
+
+/* pagebar */
+.exammanagement-pagebar .pagination {
+  margin-bottom: 0px;
+  max-width: 75%;
+  overflow: scroll;
+}
+
+.exammanagement-pagebar .page-item {
+  min-width: 70px;
 }

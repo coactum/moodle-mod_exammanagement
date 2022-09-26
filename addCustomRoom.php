@@ -42,13 +42,13 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
 
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             global $USER;
 
@@ -70,11 +70,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $placesCount = $fromform->placescount;
                 $description = $fromform->description;
 
-                if($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomname.'_'.$USER->id.'c', 'moodleuserid' => $USER->id))){
+                if ($MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomname.'_'.$USER->id.'c', 'moodleuserid' => $USER->id))) {
 
                     $roomObj = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomname.'_'.$USER->id.'c', 'moodleuserid' => $USER->id));
 
-                    if($description){
+                    if ($description) {
                         $roomObj->description = $description;
                     } else {
                         $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
@@ -90,7 +90,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_rooms', $roomObj);
 
-                    if($update){
+                    if ($update) {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -101,7 +101,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $roomObj->roomid = $roomname.'_'.$USER->id.'c';
                     $roomObj->name = $roomname;
 
-                    if($description){
+                    if ($description) {
                         $roomObj->description = $description;
                     } else {
                         $roomObj->description = get_string('no_description_new_room', 'mod_exammanagement');
@@ -122,7 +122,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj);
 
-                    if($import){
+                    if ($import) {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -135,10 +135,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 //Set default data (if any)
 
-                if($roomid){
+                if ($roomid) {
                     $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
 
-                    if($roomObj->moodleuserid == $USER->id){
+                    if ($roomObj->moodleuserid == $USER->id) {
                         $roomname = $roomObj->name;
                         $placescount = count(json_decode($roomObj->places));
                         $description = $roomObj->description;

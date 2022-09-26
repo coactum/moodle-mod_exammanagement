@@ -75,17 +75,17 @@ $LdapManagerObj = ldapManager::getInstance();
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teacher
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
         $mode = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
 
-        if($mode){
+        if ($mode) {
             $mode = 'export_grades';
         } else {
             $mode = 'normal';
         }
 
-        if(!$ExammanagementInstanceObj->isExamDataDeleted()){
+        if (!$ExammanagementInstanceObj->isExamDataDeleted()) {
 
             if ($calledfromformdt) { // Set exam date visible.
                 require_sesskey();
@@ -169,7 +169,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
                 $bonuscount = $UserObj->getEnteredBonusCount('points'); // If mode is export_grades.
 
-                if(($mode === 'normal' && $resultscount) || $mode = 'export_grades' && $bonuscount){
+                if (($mode === 'normal' && $resultscount) || $mode = 'export_grades' && $bonuscount) {
                     if ($correctioncompleted) {
                         $ExammanagementInstanceObj->moduleinstance->datadeletion = strtotime("+3 months", time());
                     } else {
@@ -247,7 +247,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
         if ($mode === 'normal') {
             // Rendering and displaying content.
-            $output = $PAGE->get_renderer('mod_exammanagement');
 
             $cmid = $ExammanagementInstanceObj->getCm()->id;
             $statePhaseOne = $ExammanagementInstanceObj->checkPhaseCompletion(1);
@@ -288,7 +287,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 break;
             }
 
-            if(get_config('mod_exammanagement', 'enablehelptexts')){
+            if (get_config('mod_exammanagement', 'enablehelptexts')) {
                 $helptexticon = $OUTPUT->help_icon('overview', 'mod_exammanagement', '');
                 $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
             } else {
@@ -301,8 +300,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $taskpoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
             $textfieldcontent = $ExammanagementInstanceObj->getTextFromTextfield();
 
-            if($textfieldcontent){
-                if(format_string($textfieldcontent)){
+            if ($textfieldcontent) {
+                if (format_string($textfieldcontent)) {
                     $textfieldcontent = format_string($textfieldcontent);
                 } else {
                     $textfieldcontent = get_string('mediacontent', 'mod_exammanagement');
@@ -331,27 +330,26 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $examreviewvisible = $ExammanagementInstanceObj->isExamReviewVisible();
             $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
 
-            if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
+            if ($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()) {
                 $ldapavailable = true;
             } else {
                 $ldapavailable = false;
             }
 
-            if($ExammanagementInstanceObj->getExamReviewTime()){
+            if ($ExammanagementInstanceObj->getExamReviewTime()) {
                 $resultsenteredafterexamreview = $UserObj->getEnteredResultsCount($ExammanagementInstanceObj->getExamReviewTime());
             } else {
                 $resultsenteredafterexamreview = false;
             }
 
             $page = new exammanagement_overview($cmid, $statePhaseOne, $statePhaseTwo, $statePhaseExam, $statePhaseThree, $statePhaseFour, $statePhaseFive, $currentPhaseOne, $currentPhaseTwo, $currentPhaseExam, $currentPhaseThree, $currentPhaseFour, $currentPhaseFive, $helptexticon, $additionalressourceslink, $examtime, $taskcount, $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $placesassigned, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
-            echo $output->render($page);
-        } else if($mode === 'export_grades'){
-            //rendering and displaying content
-            $output = $PAGE->get_renderer('mod_exammanagement');
+            echo $OUTPUT->render($page);
+        } else if ($mode === 'export_grades') {
+            // Rendering and displaying content.
 
             $cmid = $ExammanagementInstanceObj->getCm()->id;
 
-            if(get_config('mod_exammanagement', 'enablehelptexts')){
+            if (get_config('mod_exammanagement', 'enablehelptexts')) {
                 $helptexticon = $OUTPUT->help_icon('export_grades', 'mod_exammanagement', '');
                 $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
             } else {
@@ -359,7 +357,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
                 $additionalressourceslink = false;
             }
 
-            if($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()){
+            if ($LdapManagerObj->isLDAPenabled() && $LdapManagerObj->isLDAPconfigured()) {
                 $ldapavailable = true;
             } else {
                 $ldapavailable = false;
@@ -374,7 +372,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
 
             $page = new exammanagement_overview_export_grades($cmid, $helptexticon, $additionalressourceslink, $participantscount, $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable);
-            echo $output->render($page);
+            echo $OUTPUT->render($page);
         }
 
         $MoodleObj->outputFooter();
@@ -424,8 +422,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $textfield = $ExammanagementInstanceObj->getTextFromTextfield();
 
     //bonussteps
-    if($ExammanagementInstanceObj->isBonusVisible() && $participantObj){
-        if($participantObj->bonussteps === '0'){ // allows mustache template to render 0
+    if ($ExammanagementInstanceObj->isBonusVisible() && $participantObj) {
+        if ($participantObj->bonussteps === '0') { // allows mustache template to render 0
             $bonussteps = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
             $bonussteps = $participantObj->bonussteps;
@@ -450,7 +448,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
         $examstate = $UserObj->getExamState($participantObj);
 
-        if($examstate === 'normal'){
+        if ($examstate === 'normal') {
             $examstate = false;
             $totalpoints = $UserObj->calculatePoints($participantObj);
 
@@ -492,10 +490,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
     $deleted = $ExammanagementInstanceObj->isExamDataDeleted();
 
     // Rendering and displaying content.
-    $output = $PAGE->get_renderer('mod_exammanagement');
 
     $page = new exammanagement_participantsview($ExammanagementInstanceObj->getCm()->id, $UserObj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);
-    echo $output->render($page);
+    echo $OUTPUT->render($page);
 
     $MoodleObj->outputFooter();
 

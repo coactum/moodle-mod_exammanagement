@@ -41,23 +41,23 @@ $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->insta
 $MoodleObj = Moodle::getInstance($id, $e);
 $LDAPManagerObj = LDAPManager::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-  if($ExammanagementInstanceObj->isExamDataDeleted()){
+  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
 
     global $CFG, $SESSION;
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       if (!$UserObj->getParticipantsCount()) {
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
       }
 
-      if(!$LDAPManagerObj->isLDAPenabled()){ // cancel export if no matrnrs are availiable because ldap is not enabled or configured
+      if (!$LDAPManagerObj->isLDAPenabled()) { // cancel export if no matrnrs are availiable because ldap is not enabled or configured
         $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
-      } else if(!$LDAPManagerObj->isLDAPconfigured()){
+      } else if (!$LDAPManagerObj->isLDAPconfigured()) {
         $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
       }
 
@@ -125,15 +125,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $date = $ExammanagementInstanceObj->getHrExamtime();
 
-      if($roomsArray && $ExammanagementInstanceObj->placesAssigned()){ // if rooms are already set and places are assigned
+      if ($roomsArray && $ExammanagementInstanceObj->placesAssigned()) { // if rooms are already set and places are assigned
 
-        foreach ($roomsArray as $roomID){
+        foreach ($roomsArray as $roomID) {
 
           $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-          if($participants){
+          if ($participants) {
 
-            usort($participants, function($a, $b){ //sort array by custom user function
+            usort($participants, function($a, $b) { //sort array by custom user function
 
               return strnatcmp($a->place, $b->place); // sort by place
 
@@ -147,14 +147,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
             $y = Y;
 
-            foreach ($participants as $participant){ // construct label
+            foreach ($participants as $participant) { // construct label
 
-              if($participant->matrnr !== '-'){
+              if ($participant->matrnr !== '-') {
                 $roomname_lines_offset_y = 0;
-                if($participant->roomname && strlen($participant->roomname) > 10){ // set offset
+                if ($participant->roomname && strlen($participant->roomname) > 10) { // set offset
                   $roomname_lines_offset_y = 5;
                 }
-                if($participant->roomname && strlen($participant->roomname) > 25){ // shorten long roomnames
+                if ($participant->roomname && strlen($participant->roomname) > 25) { // shorten long roomnames
                   $participant->roomname = substr($participant->roomname, 0, 22) . '...';
                 }
 
@@ -214,7 +214,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
           $participants = $UserObj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
 
-          if($participants){
+          if ($participants) {
 
             $counter = 0;
             $leftLabel = true;
@@ -224,13 +224,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
             $y = Y;
 
-            foreach ($participants as $participant){ // construct label
+            foreach ($participants as $participant) { // construct label
 
 
               $room = '';
               $place = '';
 
-              if($participant->matrnr !== '-'){
+              if ($participant->matrnr !== '-') {
                 if ($leftLabel) { //print left label
                   $pdf->SetFont('helvetica', '', 12);
                   $pdf->MultiCell(90, 5, $exam_name, 0, 'C', 0, 0, X1, $y, true);

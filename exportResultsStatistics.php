@@ -45,16 +45,16 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
 
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 
-            if(!$UserObj->getParticipantsCount()){
+            if (!$UserObj->getParticipantsCount()) {
                 $MoodleObj->redirectToOverviewPage('beforeexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
             }
 
@@ -126,8 +126,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $resultsCount = $UserObj->getEnteredResultsCount();
             $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-            if($resultsCount && $gradingscale){
-                if($bonusstepsEntered){
+            if ($resultsCount && $gradingscale) {
+                if ($bonusstepsEntered) {
                     $worksheet->getStyle('A9:D9')->applyFromArray($headerStyle);
                     $worksheet->getStyle('A10:D20')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 } else {
@@ -152,7 +152,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $semester = $ExammanagementInstanceObj->getCleanCourseCategoryName();
             $examdate = $ExammanagementInstanceObj->getExamtime();
 
-            if($examdate){
+            if ($examdate) {
                 $date = userdate($examdate, get_string('strftimedatefullshort', 'core_langconfig'));
                 $start_time = userdate($examdate, get_string('strftimetime', 'core_langconfig'));
             } else {
@@ -175,7 +175,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $worksheet->setCellValue('B2', $semester);
             $worksheet->setCellValue('B3', $date);
             $worksheet->setCellValue('B4', $start_time);
-            if($rooms){
+            if ($rooms) {
                 $worksheet->setCellValue('B5', $rooms);
             } else {
                 $worksheet->setCellValue('B5', '-');
@@ -187,8 +187,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
             $laststeppoints = $totalpoints;
 
-            if($gradingscale){
-                foreach($gradingscale as $gradestep => $points){
+            if ($gradingscale) {
+                foreach ($gradingscale as $gradestep => $points) {
                     $summaryTable[$gradestep] = array("countBonus" => 0, "countNoBonus" => 0, "from" => $points, "to" => $ExammanagementInstanceObj->formatNumberForDisplay($laststeppoints));
 
                     $laststeppoints = number_format($points-0.01,2);
@@ -216,13 +216,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $bonussteptwo = 0;
             $bonusstepthree = 0;
 
-            foreach($participants as $participant){
+            foreach ($participants as $participant) {
 
                 $resultState = $UserObj->getExamState($participant);
 
-                if ($resultState == "nt"){
+                if ($resultState == "nt") {
                     $countNT++;
-                } else if ($resultState == "fa"){
+                } else if ($resultState == "fa") {
                     $countFA++;
                 } else if ($resultState == "ill") {
                     $countSICK++;
@@ -231,20 +231,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $result = $UserObj->calculateResultGrade($pointsWithBonus);
                     $resultWithBonus = $UserObj->calculateResultGrade($pointsWithBonus, $participant->bonussteps);
 
-                    if ($result == '-'){
+                    if ($result == '-') {
                         $notRated++;
-                    } else if($result && $gradingscale){
+                    } else if ($result && $gradingscale) {
 
                         $summaryTable[strval($result)]["countNoBonus"]++;
 
-                        if ($result == '5,0'){
+                        if ($result == '5,0') {
                             $notPassed++;
 
-                            if($resultWithBonus){
+                            if ($resultWithBonus) {
                                 $summaryTable[strval($resultWithBonus)]["countBonus"]++;
                             }
                         } else {
-                            if($resultWithBonus){
+                            if ($resultWithBonus) {
                                 $summaryTable[str_pad (strval($resultWithBonus), 3, '.0')]["countBonus"]++;
                             }
                         }
@@ -272,26 +272,26 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             // output table 1
-            if($gradingscale && $resultsCount){
+            if ($gradingscale && $resultsCount) {
 
                 $worksheet->setCellValue('A9', get_string('grade', 'mod_exammanagement'));
                 $worksheet->setCellValue('B9', get_string('points', 'mod_exammanagement'));
 
-                if($bonusstepsEntered){
+                if ($bonusstepsEntered) {
                     $worksheet->setCellValue('C9', get_string('nobonus', 'mod_exammanagement'));
                     $worksheet->setCellValue('D9', get_string('withbonus', 'mod_exammanagement'));
                 } else {
                     $worksheet->setCellValue('C9', get_string('result', 'mod_exammanagement'));
                 }
 
-                foreach($summaryTable as $gradestep => $options){
+                foreach ($summaryTable as $gradestep => $options) {
 
                     $worksheet->setCellValue("A".$rowCounter, strval($gradestep));
                     $worksheet->setCellValue("B".$rowCounter, $options["from"] . " - " . $options["to"]);
 
                     $worksheet->setCellValue("C".$rowCounter, $options["countNoBonus"]);
 
-                    if($bonusstepsEntered){
+                    if ($bonusstepsEntered) {
                         $worksheet->setCellValue("D".$rowCounter, $options["countBonus"]);
                     }
 
@@ -331,7 +331,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             // output table 3
             $passed = $numberParticipants - $notPassed - $notRated;
 
-            if($numberParticipants > 0){
+            if ($numberParticipants > 0) {
                 $passedPercent = number_format($passed / $numberParticipants * 100, 2);
                 $notPassedPercent = number_format($notPassed / $numberParticipants * 100 ,2);
                 $notRatedPercent = number_format($notRated / $numberParticipants * 100 , 2);
@@ -356,7 +356,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $worksheet->setCellValue('C33', $passedPercent);
             $worksheet->setCellValue('C34', $notPassedPercent);
 
-            if ( $notRated > 0 ){
+            if ( $notRated > 0 ) {
                 $worksheet->setCellValue('A35', get_string('notrated', 'mod_exammanagement'));
                 $worksheet->setCellValue('B35', $notRated);
                 $worksheet->setCellValue('C35', $notRatedPercent);
@@ -372,13 +372,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             ///////////////////////////////////////////
             $tasks = $ExammanagementInstanceObj->getTasks();
 
-            if($tasks){
+            if ($tasks) {
                 $taskcount = count($tasks);
             } else {
                 $taskcount = 0;
             }
 
-            if($tasks || $bonusstepsEntered){
+            if ($tasks || $bonusstepsEntered) {
 
                 $spreadsheet->createSheet();
                 $worksheet = $spreadsheet->setActiveSheetIndex(1);
@@ -388,7 +388,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // fortmatting for sheet 2
 
                 // table 1
-                if($tasks){
+                if ($tasks) {
                     $worksheet->getStyle('A1:C1')->applyFromArray($headerStyle);
                     $range = "A2:C" . ($taskcount + 1);
                     $worksheet->getStyle($range)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -401,7 +401,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 }
 
                 // table 2
-                if($bonusstepsEntered){
+                if ($bonusstepsEntered) {
                     $worksheet->getStyle('G1:H1')->applyFromArray($headerStyle);
                     $worksheet->getStyle('G1:H6')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -410,21 +410,21 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $worksheet->getStyle("G1:G6")->applyFromArray($borderStyleArray);
                 }
 
-                if($tasks){
+                if ($tasks) {
                     // outpout table 1
                     $worksheet->setCellValue('A1', get_string('task', 'mod_exammanagement'));
                     $worksheet->setCellValue('B1', get_string('max_points', 'mod_exammanagement'));
                     $worksheet->setCellValue('C1', get_string('mean', 'mod_exammanagement'));
 
-                    foreach ($tasks as $tasknumber => $points){
+                    foreach ($tasks as $tasknumber => $points) {
                         $worksheet->setCellValueByColumnAndRow(1 , $tasknumber + 1, $tasknumber);
                         $worksheet->setCellValueByColumnAndRow(2 , $tasknumber + 1, $points);
                     }
                 }
 
                 // outpout table 2 - bonussteps
-                if($bonusstepsEntered){
-                    if(current_language() === 'de'){
+                if ($bonusstepsEntered) {
+                    if (current_language() === 'de') {
                         $separator = ',';
                     } else {
                         $separator = '.';
@@ -452,7 +452,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $spreadsheet->createSheet();
 
-            if($tasks || $bonusstepsEntered){ // if sheet 2 exists
+            if ($tasks || $bonusstepsEntered) { // if sheet 2 exists
                 $worksheet = $spreadsheet->setActiveSheetIndex(2);
             } else {
                 $worksheet = $spreadsheet->setActiveSheetIndex(1);
@@ -461,7 +461,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             // FORMATTING for sheet 3
 
-            if($bonuspointsEntered){
+            if ($bonuspointsEntered) {
                 $bc = 2;
             } else {
                 $bc = 0;
@@ -474,13 +474,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $worksheet->getColumnDimension('D')->setWidth(10);
             $worksheet->getColumnDimension('E')->setWidth(15);
 
-            for ($n = 1 ; $n <= $taskcount; $n++){
+            for ($n = 1 ; $n <= $taskcount; $n++) {
                 $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(5 + $n))->setWidth(8);
             }
 
             $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(5 + $n))->setWidth(15);
 
-            if($bonuspointsEntered){
+            if ($bonuspointsEntered) {
                 $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(6 + $n))->setWidth(15);
                 $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(7 + $n))->setWidth(18);
 
@@ -488,7 +488,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(6 + $n + $bc))->setWidth(15);
 
-            if($bonusstepsEntered){
+            if ($bonusstepsEntered) {
                 $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(7 + $n + $bc))->setWidth(12);
                 $worksheet->getColumnDimension($ExammanagementInstanceObj->calculateCellAddress(8 + $n + $bc))->setWidth(30);
                 $bs = 0;
@@ -508,7 +508,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $worksheet->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($participants) + 1))->applyFromArray($borderStyleArray);
             $worksheet->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n) . (count($participants) + 1))->applyFromArray($borderStyleArray);
 
-            if($bonuspointsEntered){
+            if ($bonuspointsEntered) {
                 $worksheet->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n + $bc) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(5 + $n + $bc) . (count($participants) + 1))->applyFromArray($borderStyleArray);
                 $worksheet->getStyle($ExammanagementInstanceObj->calculateCellAddress(5 + $n + $bc) . '1:' . $ExammanagementInstanceObj->calculateCellAddress(6 + $n + $bc) . (count($participants) + 1))->applyFromArray($borderStyleArray);
             }
@@ -523,25 +523,25 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             $worksheet->setCellValue('E1', get_string('place', 'mod_exammanagement'));
             $worksheet->setCellValueByColumnAndRow(5 + $n, 1, get_string('points', 'mod_exammanagement'));
 
-            for ($n = 1 ; $n <= $taskcount; $n++){
+            for ($n = 1 ; $n <= $taskcount; $n++) {
                 $worksheet->setCellValueByColumnAndRow(5 + $n, 1, 'A' . $n);
             }
 
-            if($bonuspointsEntered){
+            if ($bonuspointsEntered) {
                 $worksheet->setCellValueByColumnAndRow(6 + $n, 1, get_string('bonuspoints', 'mod_exammanagement'));
                 $worksheet->setCellValueByColumnAndRow(7 + $n, 1, get_string('points_with_bonus', 'mod_exammanagement'));
             }
 
             $worksheet->setCellValueByColumnAndRow(6 + $n + $bc, 1, get_string('result', 'mod_exammanagement'));
 
-            if($bonusstepsEntered){
+            if ($bonusstepsEntered) {
                 $worksheet->setCellValueByColumnAndRow(7 + $n + $bc, 1, get_string('bonussteps', 'mod_exammanagement'));
                 $worksheet->setCellValueByColumnAndRow(8 + $n + $bc, 1, get_string('resultwithbonus', 'mod_exammanagement'));
             }
 
             $rowCounter=2;
 
-            foreach($participants as $participant){
+            foreach ($participants as $participant) {
 
                 $state = $UserObj->getExamState($participant);
 
@@ -549,7 +549,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $worksheet->setCellValue("B".$rowCounter, $participant->lastname);
                 $worksheet->setCellValue("C".$rowCounter, $participant->firstname);
 
-                if($rooms && isset($participant->roomname) && isset($participant->place)){
+                if ($rooms && isset($participant->roomname) && isset($participant->place)) {
                     $worksheet->setCellValue("D".$rowCounter, $participant->roomname);
                     $worksheet->setCellValue("E".$rowCounter, $participant->place);
                 } else {
@@ -562,13 +562,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $result = $UserObj->calculateResultGrade($totalpointsWithBonus);
 
-                if(isset($participant->bonussteps)){
+                if (isset($participant->bonussteps)) {
                     $bonussteps = $participant->bonussteps;
                 } else {
                     $bonussteps = '-';
                 }
 
-                if(isset($participant->bonuspoints)){
+                if (isset($participant->bonuspoints)) {
                     $bonuspoints = $participant->bonuspoints;
                 } else {
                     $bonuspoints = '-';
@@ -576,30 +576,30 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $resultWithBonus = $UserObj->calculateResultGrade($totalpointsWithBonus, $participant->bonussteps);
 
-                if($participant->exampoints){
-                    foreach (json_decode($participant->exampoints) as $key => $points){
+                if ($participant->exampoints) {
+                    foreach (json_decode($participant->exampoints) as $key => $points) {
                         $worksheet->setCellValueByColumnAndRow(5 + $key, $rowCounter, $points);
                     }
                 } else {
-                    for ($n = 1 ; $n <= $taskcount; $n++){
+                    for ($n = 1 ; $n <= $taskcount; $n++) {
                         $worksheet->setCellValueByColumnAndRow(5 + $n, $rowCounter, '-');
                     }
                 }
 
                 $worksheet->setCellValueByColumnAndRow(5 + $n, $rowCounter, $ExammanagementInstanceObj->formatNumberForDisplay($totalpoints, 'number'));
 
-                if($bonuspointsEntered){
+                if ($bonuspointsEntered) {
                     $worksheet->setCellValueByColumnAndRow(6 + $n, $rowCounter, $bonuspoints);
                     $worksheet->setCellValueByColumnAndRow(7 + $n, $rowCounter, $ExammanagementInstanceObj->formatNumberForDisplay($totalpointsWithBonus, 'number'));
                 }
 
-                if($gradingscale){
+                if ($gradingscale) {
                     $worksheet->setCellValueByColumnAndRow(6 + $n + $bc, $rowCounter, $result);
                 } else {
                     $worksheet->setCellValueByColumnAndRow(6 + $n  + $bc, $rowCounter, '-');
                 }
 
-                if($bonusstepsEntered){
+                if ($bonusstepsEntered) {
                     $worksheet->setCellValueByColumnAndRow(7 + $n + $bc, $rowCounter, $bonussteps);
                     $worksheet->setCellValueByColumnAndRow(8 + $n + $bc, $rowCounter, $resultWithBonus);
                 }
@@ -608,22 +608,22 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             //table 2 sheet 1 formular mean
-            if($taskcount){
+            if ($taskcount) {
                 $worksheet = $spreadsheet->setActiveSheetIndex(1);
 
                 $participantscount = count($participants);
 
                 $worksheet->getStyle("C2:C".$n)->getNumberFormat()->setFormatCode('0.00');
 
-                for ($n = 1 ; $n <= $taskcount; $n++){
+                for ($n = 1 ; $n <= $taskcount; $n++) {
 
                     $start = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5+$n).'2';
                     $end = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5+$n). ($participantscount+1);
 
                     $mean = 0;
 
-                    foreach($spreadsheet->setActiveSheetIndex(2)->rangeToArray($start.':'.$end) as $val){
-                        if(is_numeric($val[0])){
+                    foreach ($spreadsheet->setActiveSheetIndex(2)->rangeToArray($start.':'.$end) as $val) {
+                        if (is_numeric($val[0])) {
                             $mean += $val[0];
                         }
                     }

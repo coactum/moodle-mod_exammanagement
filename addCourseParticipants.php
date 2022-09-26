@@ -41,15 +41,15 @@ $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else if(empty($UserObj->getCourseParticipantsIDs())){
+	} else if (empty($UserObj->getCourseParticipantsIDs())) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_nocourseparticipants', 'mod_exammanagement'), 'error');
     } else {
 
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             $MoodleObj->setPage('addCourseParticipants');
             $MoodleObj->outputPageHeader();
@@ -68,17 +68,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $participantsIdsArr = $UserObj->filterCheckedParticipants($fromform);
                 $deletedParticipantsIdsArr = $UserObj->filterCheckedDeletedParticipants($fromform);
 
-                if($participantsIdsArr != false || $deletedParticipantsIdsArr != false){
+                if ($participantsIdsArr != false || $deletedParticipantsIdsArr != false) {
 
                     $userObjArr = array();
 
-                    if($participantsIdsArr){
+                    if ($participantsIdsArr) {
 
                         $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                        foreach($participantsIdsArr as $participantId){
+                        foreach ($participantsIdsArr as $participantId) {
 
-                            if($UserObj->checkIfAlreadyParticipant($participantId) == false){
+                            if ($UserObj->checkIfAlreadyParticipant($participantId) == false) {
                                 $user = new stdClass();
                                 $user->exammanagement = $ExammanagementInstanceObj->getCm()->instance;
                                 $user->courseid = $courseid;
@@ -92,11 +92,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         }
                     }
 
-                    if($deletedParticipantsIdsArr){
-                        foreach($deletedParticipantsIdsArr as $identifier){
+                    if ($deletedParticipantsIdsArr) {
+                        foreach ($deletedParticipantsIdsArr as $identifier) {
                                 $temp = explode('_', $identifier);
 
-                                if($temp[0]== 'mid'){
+                                if ($temp[0]== 'mid') {
                                     $UserObj->deleteParticipant($temp[1], false);
                                 } else {
                                     $UserObj->deleteParticipant(false, $temp[1]);
@@ -121,8 +121,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $default_values = array('id'=>$id);
                 $courseParticipantsIDs = $UserObj->getCourseParticipantsIDs();
 
-				if(isset($courseParticipantsIDs)){
-					foreach($courseParticipantsIDs as $id){
+				if (isset($courseParticipantsIDs)) {
+					foreach ($courseParticipantsIDs as $id) {
 						$default_values['participants['.$id.']'] = true;
 					}
 				}

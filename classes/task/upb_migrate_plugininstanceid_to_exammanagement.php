@@ -52,13 +52,13 @@ class upb_migrate_plugininstanceid_to_exammanagement extends \core\task\schedule
 
             $count = 0;
 
-            if($rs->valid()){
+            if ($rs->valid()) {
 
                 mtrace('Migrating field plugininstanceid to exammanagement ...');
 
                 foreach ($rs as $record) {
 
-                    if(isset($record->plugininstanceid) && $record->plugininstanceid !== 0){
+                    if (isset($record->plugininstanceid) && $record->plugininstanceid !== 0) {
                         $cm = get_coursemodule_from_id('exammanagement', $record->plugininstanceid, 0, false, MUST_EXIST);
 
                         $exammanagement = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $cm->instance), '*', MUST_EXIST);
@@ -82,7 +82,7 @@ class upb_migrate_plugininstanceid_to_exammanagement extends \core\task\schedule
             mtrace($count . ' participants successfully migrated');
 
             // delete whole temp_part table
-            if($MoodleDBObj->checkIfRecordExists("exammanagement_temp_part", array())){
+            if ($MoodleDBObj->checkIfRecordExists("exammanagement_temp_part", array())) {
 
                 mtrace('Deleting temp_participants ...');
 

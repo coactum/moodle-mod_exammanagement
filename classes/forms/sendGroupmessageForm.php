@@ -54,7 +54,7 @@ class sendGroupmessageForm extends moodleform {
 
         $mform->addElement('html', '<h3>'.get_string("sendGroupmessage", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             global $OUTPUT;
             $mform->addElement('html', $OUTPUT->help_icon('sendGroupmessage', 'mod_exammanagement', ''));
         }
@@ -67,11 +67,11 @@ class sendGroupmessageForm extends moodleform {
         $MoodleParticipantsCount = $UserObj->getParticipantsCount('moodle');
         $NoneMoodleParticipantsCount = $UserObj->getParticipantsCount('nonmoodle');
 
- 		if($MoodleParticipantsCount){
+ 		if ($MoodleParticipantsCount) {
 
 			$mform->addElement('html', '<p>'.get_string('groupmessages_text', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'participantscount'=>$MoodleParticipantsCount]).'</p>');
 
-            if($NoneMoodleParticipantsCount){
+            if ($NoneMoodleParticipantsCount) {
                 $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
 
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>');
@@ -80,7 +80,7 @@ class sendGroupmessageForm extends moodleform {
 
                 $mform->addElement('html', '<a href="mailto:?bcc=');
 
-                foreach($mailAdressArr as $adress){
+                foreach ($mailAdressArr as $adress) {
                     $mform->addElement('html', $adress.';');
                 }
 
@@ -100,14 +100,14 @@ class sendGroupmessageForm extends moodleform {
 
 			$this->add_action_buttons(true,get_string('send_message', 'mod_exammanagement'));
 
-        } else if ($NoneMoodleParticipantsCount){
+        } else if ($NoneMoodleParticipantsCount) {
             $mailAdressArr = $UserObj->getNoneMoodleParticipantsEmailadresses();
 
             $mform->addElement('html', '<p><strong>'.$NoneMoodleParticipantsCount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
 
             $mform->addElement('html', '<a href="mailto:?bcc=');
 
-            foreach($mailAdressArr as $adress){
+            foreach ($mailAdressArr as $adress) {
                 $mform->addElement('html', $adress.';');
             }
 

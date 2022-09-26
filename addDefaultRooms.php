@@ -41,13 +41,13 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
+if ($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')) {
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
 
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             $MoodleObj->setPage('addDefaultRooms');
             $MoodleObj->outputPageHeader();
@@ -66,15 +66,15 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                 // retrieve file from form
                 $defaultRoomsFile = $mform->get_file_content('defaultrooms_list');
 
-                if($defaultRoomsFile){
+                if ($defaultRoomsFile) {
 
-                    if($ExammanagementInstanceObj->countDefaultRooms()){
+                    if ($ExammanagementInstanceObj->countDefaultRooms()) {
                         $MoodleDBObj->DeleteRecordsFromDBSelect("exammanagement_rooms", "type = 'defaultroom'");
                     }
 
                     $fileContentArr = explode(PHP_EOL, $defaultRoomsFile); // separate lines
 
-                    foreach ($fileContentArr as $key => $roomstr){
+                    foreach ($fileContentArr as $key => $roomstr) {
 
                         $roomParameters = explode('*', $roomstr);
 
@@ -83,7 +83,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                         $roomObj->name = $roomParameters[1];
                         $roomObj->description = $roomParameters[2];
 
-                        if(isset($roomParameters[4]) && $roomParameters[4] !== '' && json_encode($roomParameters[4]) !== '"\r"' && json_encode($roomParameters[4]) !== '"\n"' && json_encode($roomParameters[4]) !== '"\r\n"'){
+                        if (isset($roomParameters[4]) && $roomParameters[4] !== '' && json_encode($roomParameters[4]) !== '"\r"' && json_encode($roomParameters[4]) !== '"\n"' && json_encode($roomParameters[4]) !== '"\r\n"') {
                             $svgStr = base64_encode($roomParameters[4]);
                         } else {
                             $svgStr = '';
@@ -98,7 +98,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')){
                         $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj); // bulkrecord insert too big
                     }
 
-                    if($import){
+                    if ($import) {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, notification::NOTIFY_SUCCESS);
                     } else {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);

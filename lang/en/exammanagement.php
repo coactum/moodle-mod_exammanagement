@@ -249,7 +249,7 @@ $string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angef
 $string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
 $string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <b><a href="{$a->url}">Link</a></b> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
-//chooseRoomsForm.php
+// chooserooms_form.php
 $string['chooseRooms'] = 'Select exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['export_default_rooms'] = 'Export default rooms';
@@ -260,7 +260,6 @@ $string['roomid'] = 'Room ID';
 $string['exam_room'] = 'Room';
 $string['description'] = 'Description';
 $string['room_type'] = 'Room type';
-$string['options'] = 'Options';
 $string['no_seatingplan_available'] = 'No seating plan available';
 $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
@@ -332,8 +331,8 @@ $string['setexamdatestr'] = 'The date and time of the exam can be selected here.
 
 //viewParticipants.php
 $string['viewParticipants'] = 'View participants';
-$string['import_participants_from_file_recommended'] = 'Import participants from file (recommended)';
-$string['import_course_participants_optional'] = 'Import participants from course (optional)';
+$string['import_participants_from_file_recommended'] = 'Import participants from file';
+$string['import_course_participants_optional'] = 'Import participants from course';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
 $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
@@ -521,7 +520,6 @@ $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
 $string['available'] = 'Available';
-$string['jump_to_end'] = 'Jump to end of table';
 $string['edit_results_and_boni'] = 'Edit results and boni';
 $string['nr'] = 'Nb';
 $string['max'] = 'Max:';
@@ -589,7 +587,7 @@ $string['examreviewstr'] = 'If you are planning an exam review, you can select t
 $string['examreviewdate'] = 'Date';
 $string['examreviewroom'] = 'Room (enter as free text)';
 
-// forms (common)
+// Forms (common)
 $string['operation_canceled'] = 'Operation canceled';
 $string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
@@ -599,6 +597,7 @@ $string['no_places_assigned'] = 'No places assigned yet. Work step not possible'
 $string['no_tasks_configured'] = 'No tasks configured yet. Work step not possible';
 $string['no_results_entered'] = 'No exam results entered yet. Work step not possible';
 $string['correction_not_completed'] = 'Marking not completed. Work step not possible';
+$string['itemscount'] = 'Items per page';
 
 // course reset (lib.php)
 $string['deleteallexamdata'] = 'Delete all exam data (eg. exam rooms and time, task points, gradingscale) and all exam participants';

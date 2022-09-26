@@ -42,7 +42,7 @@ class Moodle{
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e){
+	public static function getInstance($id, $e) {
 
 		static $inst = null;
 			if ($inst === null) {
@@ -54,7 +54,7 @@ class Moodle{
 
 	#### wrapped general moodle functions #####
 
-	public function setPage($substring){
+	public function setPage($substring) {
 		global $PAGE;
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
@@ -82,7 +82,7 @@ class Moodle{
 
 	}
 
-	public function outputPageHeader(){
+	public function outputPageHeader() {
 		global $OUTPUT;
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
@@ -98,7 +98,7 @@ class Moodle{
  		}
  	}
 
- 	public function outputFooter(){
+ 	public function outputFooter() {
 
  		global $OUTPUT;
 
@@ -107,20 +107,20 @@ class Moodle{
 
  	}
 
-	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
+	public function getMoodleUrl($url, $id = '', $param = '', $value = '') {
 
  		$url = new moodle_url($url, array('id' => $id, $param => $value));
 
  		return $url;
  	}
 
- 	public function redirectToOverviewPage($anchor, $message, $type){
+ 	public function redirectToOverviewPage($anchor, $message, $type) {
 
 		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
 		$url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
 
-		if ($anchor){
+		if ($anchor) {
 				$url .= '#'.$anchor;
 		}
 
@@ -143,10 +143,10 @@ class Moodle{
 		}
 	}
 
-	public function checkCapability($capname){
+	public function checkCapability($capname) {
 			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-			if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())){
+			if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())) {
 					return true;
 			} else {
 					return false;

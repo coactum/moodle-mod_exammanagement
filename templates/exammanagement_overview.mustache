@@ -22,22 +22,22 @@
 }}
 
 {{#js}}
-toggleHelptextPanel = function(){
+toggleHelptextPanel = function() {
 		$('.helptextpanel').slideToggle("slow");
 		$('.helptextpanel-icon').toggle();
 };
 
-togglePhase = function(phase){
+togglePhase = function(phase) {
 		$(phase).slideToggle("slow");
 		$(phase+'_maximize').toggle();
 		$(phase+'_minimize').toggle();
 };
 
-ajaxtoggleInformation = function(command, value){
+ajaxtoggleInformation = function(command, value) {
 
 		$('.loadable').toggle();
 
-		if(command=='room'){
+		if (command=='room') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -51,7 +51,7 @@ ajaxtoggleInformation = function(command, value){
 							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
-    } else if(command=='place'){
+    } else if (command=='place') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -65,7 +65,7 @@ ajaxtoggleInformation = function(command, value){
 							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
-    } else if(command=='datetime'){
+    } else if (command=='datetime') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -79,7 +79,7 @@ ajaxtoggleInformation = function(command, value){
               alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
-    } else if(command=='bonus'){
+    } else if (command=='bonus') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformbonus': true, 'bonusvisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -93,7 +93,7 @@ ajaxtoggleInformation = function(command, value){
 							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
-    } else if(command=='result'){
+    } else if (command=='result') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformresult': true, 'resultvisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -107,7 +107,7 @@ ajaxtoggleInformation = function(command, value){
 							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
             }
         });
-    } else if(command=='examreview'){
+    } else if (command=='examreview') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformexamreview': true, 'examreviewvisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -124,19 +124,19 @@ ajaxtoggleInformation = function(command, value){
     }
 };
 
-ajaxsetcorrectioncompletion = function(value){
+ajaxsetcorrectioncompletion = function(value) {
 
 		$('.loadable').toggle();
 
 		var confirmed = false;
 
-		if(value == true){
+		if (value == true) {
 			confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}");
 		} else {
 			confirmed = true;
 		}
 
-		if(confirmed){
+		if (confirmed) {
 			jQuery.ajax ({
 					url: './view.php',
 					data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}' },

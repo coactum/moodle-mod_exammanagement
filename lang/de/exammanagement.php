@@ -249,7 +249,7 @@ $string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angef
 $string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
 $string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <b><a href="{$a->url}">Link</a></b> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
-//chooseRoomsForm.php
+// chooserooms_form.php
 $string['chooseRooms'] = 'Prüfungsräume auswählen';
 $string['choose_rooms_str'] = 'Die unten stehenden Räume können als Prüfungsräume gewählt werden.';
 $string['export_default_rooms'] = 'Standardräume exportieren';
@@ -260,7 +260,6 @@ $string['roomid'] = 'Raum ID';
 $string['exam_room'] = 'Raum';
 $string['description'] = 'Beschreibung';
 $string['room_type'] = 'Raumart';
-$string['options'] = 'Optionen';
 $string['no_seatingplan_available'] = 'Kein Sitzplan verfügbar';
 $string['default_room'] = 'Standardraum';
 $string['custom_room'] = 'Eigener Raum';
@@ -332,8 +331,8 @@ $string['setexamdatestr'] = 'Hier können das Datum und die Uhrzeit der Prüfung
 
 //viewParticipants.php
 $string['viewParticipants'] = 'Teilnehmer ansehen';
-$string['import_participants_from_file_recommended'] = 'Teilnehmer aus Datei hinzufügen (empfohlen)';
-$string['import_course_participants_optional'] = 'Kursteilnehmer importieren (optional)';
+$string['import_participants_from_file_recommended'] = 'Teilnehmer aus Datei hinzufügen';
+$string['import_course_participants_optional'] = 'Kursteilnehmer importieren';
 $string['view_added_partipicants'] = 'Liste aller zur Prüfung hinzugefügten Teilnehmerinnen und Teilnehmer.';
 $string['participants'] = 'Teilnehmer';
 $string['matriculation_number'] = 'Matrikelnummer';
@@ -521,7 +520,6 @@ $string['nt'] = 'NT';
 $string['fa'] = 'Betrugsversuch';
 $string['ill'] = 'Krank';
 $string['available'] = 'Verfügbar';
-$string['jump_to_end'] = 'Zum Tabellenende springen';
 $string['edit_results_and_boni'] = 'Prüfungsergebnisse und Boni bearbeiten';
 $string['nr'] = 'Nr.';
 $string['max'] = 'Max:';
@@ -589,7 +587,7 @@ $string['examreviewstr'] = 'Falls für die Prüfung eine Klausureinsicht stattfi
 $string['examreviewdate'] = 'Termin';
 $string['examreviewroom'] = 'Raum (als Freitext eintragen)';
 
-// forms (common)
+// Forms (common)
 $string['operation_canceled'] = 'Vorgang abgebrochen';
 $string['operation_successfull'] = 'Vorgang erfolgreich';
 $string['alteration_failed'] = 'Änderung fehlgeschlagen';
@@ -599,6 +597,7 @@ $string['no_places_assigned'] = 'Noch keine Sitzplätze zugewiesen. Arbeitsschri
 $string['no_tasks_configured'] = 'Noch keine Aufgaben konfiguriert. Arbeitsschritt nicht möglich';
 $string['no_results_entered'] = 'Noch keine Prüfungsergebnisse eingetragen. Arbeitsschritt nicht möglich';
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbeitsschritt nicht möglich';
+$string['itemscount'] = 'Objekte pro Seite';
 
 // course reset (lib.php)
 $string['deleteallexamdata'] = 'Alle Daten der Prüfung (z. B. Prüfungsräume und -Datum, Aufgabenpunkte, Notenschlüßel) und alle Prüfungsteilnehmenden löschen';

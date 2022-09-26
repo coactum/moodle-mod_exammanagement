@@ -52,7 +52,7 @@ class editDefaultRoomForm extends moodleform {
 
     $mform->addElement('html', '<h3>'.get_string("editDefaultRoom", "mod_exammanagement"));
 
-    if($helptextsenabled){
+    if ($helptextsenabled) {
         $mform->addElement('html', $OUTPUT->help_icon('editDefaultRoom', 'mod_exammanagement', ''));
     }
 
@@ -82,21 +82,21 @@ class editDefaultRoomForm extends moodleform {
     $mform->setType('description', PARAM_TEXT);
     $mform->addRule('description', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-    if(isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true){
+    if (isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true) {
 
-        if(isset($this->_customdata['placescount']) && $this->_customdata['placescount'] !== false){
+        if (isset($this->_customdata['placescount']) && $this->_customdata['placescount'] !== false) {
           $mform->addElement('static', 'placescount', get_string('defaultroom_placescount', 'mod_exammanagement'), $this->_customdata['placescount']);
         } else {
           $mform->addElement('static', 'placescount', get_string('defaultroom_placescount', 'mod_exammanagement'), '-');
         }
 
-        if(isset($this->_customdata['placespreview']) && $this->_customdata['placespreview'] !== false){
+        if (isset($this->_customdata['placespreview']) && $this->_customdata['placespreview'] !== false) {
           $mform->addElement('static', 'placespreview', get_string('placespreview', 'mod_exammanagement'), '<div class="exammanagement_editdefaultroom_placespreview">'.$this->_customdata['placespreview'].'</div>');
         } else {
           $mform->addElement('static', 'placespreview', get_string('placespreview', 'mod_exammanagement'), '-');
         }
 
-        if(isset($this->_customdata['roomplanavailable']) && $this->_customdata['roomplanavailable']!== ''){
+        if (isset($this->_customdata['roomplanavailable']) && $this->_customdata['roomplanavailable']!== '') {
           $mform->addElement('static', 'roomplanavailable', get_string('roomplan_available', 'mod_exammanagement'), '<div class="exammanagement_editdefaultroom_svg">'.$this->_customdata['roomplanavailable'].'</div>');
         } else {
           $mform->addElement('static', 'roomplanavailable', get_string('roomplan_available', 'mod_exammanagement'), '-');
@@ -109,11 +109,11 @@ class editDefaultRoomForm extends moodleform {
 
 
     $mform->addElement('selectyesno', 'editplaces', get_string('edit_places', 'mod_exammanagement'));
-    $mform->hideIf('editplaces', 'existingroom', 'neq', 1);
+    $mform->hideif ('editplaces', 'existingroom', 'neq', 1);
 
     $select = $mform->addElement('select', 'placesmode', get_string('places_mode', 'mod_exammanagement'), array('default' => get_string('placesmode_default', 'mod_exammanagement'), 'rows' => get_string('placesmode_rows', 'mod_exammanagement'), 'all_individual' => get_string('placesmode_all_individual', 'mod_exammanagement')));
 
-    if(isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true){
+    if (isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true) {
       $select->setSelected('all_individual');
     } else {
       $select->setSelected('default');
@@ -121,36 +121,36 @@ class editDefaultRoomForm extends moodleform {
 
     $mform->addElement('text', 'placesroom', get_string('placesroom', 'mod_exammanagement'), $attributes);
     $mform->setType('placesroom', PARAM_INT);
-    $mform->hideIf('placesroom', 'placesmode', 'neq', 'default');
+    $mform->hideif ('placesroom', 'placesmode', 'neq', 'default');
 
     $mform->addElement('text', 'rowscount', get_string('rowscount', 'mod_exammanagement'), $attributes);
     $mform->setType('rowscount', PARAM_INT);
-    $mform->hideIf('rowscount', 'placesmode', 'neq', 'rows');
+    $mform->hideif ('rowscount', 'placesmode', 'neq', 'rows');
 
     $mform->addElement('text', 'placesrow', get_string('placesrow', 'mod_exammanagement'), $attributes);
     $mform->setType('placesrow', PARAM_INT);
-    $mform->hideIf('placesrow', 'placesmode', 'neq', 'rows');
+    $mform->hideif ('placesrow', 'placesmode', 'neq', 'rows');
 
     $select = $mform->addElement('select', 'placesfree', get_string('placesfree', 'mod_exammanagement'), array(1 => get_string('one_place_free', 'mod_exammanagement'), 2 => get_string('two_places_free', 'mod_exammanagement')));
-    $mform->hideIf('placesfree', 'placesmode', 'eq', 'all_individual');
+    $mform->hideif ('placesfree', 'placesmode', 'eq', 'all_individual');
 
     $select = $mform->addElement('select', 'rowsfree', get_string('rowsfree', 'mod_exammanagement'), array(0 => get_string('no_row_free', 'mod_exammanagement'), 1 => get_string('one_row_free', 'mod_exammanagement')));
-    $mform->hideIf('rowsfree', 'placesmode', 'neq', 'rows');
+    $mform->hideif ('rowsfree', 'placesmode', 'neq', 'rows');
 
     $attributes = array('size'=>'200');
 
     $mform->addElement('text', 'placesarray', get_string('placesarray', 'mod_exammanagement'), $attributes);
     $mform->setType('placesarray', PARAM_TEXT);
-    $mform->hideIf('placesarray', 'placesmode', 'neq', 'all_individual');
+    $mform->hideif ('placesarray', 'placesmode', 'neq', 'all_individual');
 
-    if(isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true){
-      $mform->hideIf('placesmode', 'editplaces', 'eq', 0);
-      $mform->hideIf('placesroom', 'editplaces', 'eq', 0);
-      $mform->hideIf('placesrow', 'editplaces', 'eq', 0);
-      $mform->hideIf('placesfree', 'editplaces', 'eq', 0);
-      $mform->hideIf('rowsfree', 'editplaces', 'eq', 0);
-      $mform->hideIf('rowscount', 'editplaces', 'eq', 0);
-      $mform->hideIf('placesarray', 'editplaces', 'eq', 0);
+    if (isset($this->_customdata['existingroom']) && $this->_customdata['existingroom'] === true) {
+      $mform->hideif ('placesmode', 'editplaces', 'eq', 0);
+      $mform->hideif ('placesroom', 'editplaces', 'eq', 0);
+      $mform->hideif ('placesrow', 'editplaces', 'eq', 0);
+      $mform->hideif ('placesfree', 'editplaces', 'eq', 0);
+      $mform->hideif ('rowsfree', 'editplaces', 'eq', 0);
+      $mform->hideif ('rowscount', 'editplaces', 'eq', 0);
+      $mform->hideif ('placesarray', 'editplaces', 'eq', 0);
     }
 
     $mform->addElement('html', '<hr>');
@@ -175,18 +175,18 @@ class editDefaultRoomForm extends moodleform {
 
     $similiarroom = $ExammanagementInstanceObj->getRoomObj($data['roomid']);
 
-    if(isset($data['roomid']) && $data['roomid'] !== '' && $data['existingroom'] !== 1 && $similiarroom){ // if roomid is set and not empty and there is already a room with this id
+    if (isset($data['roomid']) && $data['roomid'] !== '' && $data['existingroom'] !== 1 && $similiarroom) { // if roomid is set and not empty and there is already a room with this id
 
         $roomid = $data['roomid'];
 
-        if(substr($roomid, -2, -1) !== '_'){
+        if (substr($roomid, -2, -1) !== '_') {
           $roomid .= '_1';
         }
 
-        for($i = 1; $i <= 9; $i++){
+        for ($i = 1; $i <= 9; $i++) {
           $roomid = substr_replace($roomid, '_'.$i, -2);
 
-          if($ExammanagementInstanceObj->getRoomObj($roomid) == false){
+          if ($ExammanagementInstanceObj->getRoomObj($roomid) == false) {
             $i = 9;
           }
         }
@@ -194,41 +194,41 @@ class editDefaultRoomForm extends moodleform {
         $errors['roomid'] = get_string('err_already_defaultroom', 'mod_exammanagement') . $roomid;
     }
 
-    if(isset($data['roomid']) && $data['roomid'] !== '' && !preg_match('/^[a-zA-Z0-9_.]+$/', $data['roomid'])){ // if roomid is set and not empty and contains non alphanumerical chars
+    if (isset($data['roomid']) && $data['roomid'] !== '' && !preg_match('/^[a-zA-Z0-9_.]+$/', $data['roomid'])) { // if roomid is set and not empty and contains non alphanumerical chars
         $errors['roomid'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(isset($data['roomname']) && $data['roomname'] !== '' && !preg_match('/^[a-zA-Z0-9. ]+$/', $data['roomname'])){ // if roomname is set and not empty and contains non alphanumerical chars
+    if (isset($data['roomname']) && $data['roomname'] !== '' && !preg_match('/^[a-zA-Z0-9. ]+$/', $data['roomname'])) { // if roomname is set and not empty and contains non alphanumerical chars
       $errors['roomname'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(isset($data['description']) && $data['description'] !== '' && !preg_match('/^[a-zA-Z0-9\-., äÄüÜöÖ]+$/', $data['description'])){ // if description is set and not empty and contains non alphanumerical chars
+    if (isset($data['description']) && $data['description'] !== '' && !preg_match('/^[a-zA-Z0-9\-., äÄüÜöÖ]+$/', $data['description'])) { // if description is set and not empty and contains non alphanumerical chars
       $errors['description'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'default' && ( !isset($data['placesroom'])|| $data['placesroom'] == '')){ // if existing room and places should be edited or new room and placesmode is rows and placesroom is not set or empty
+    if (((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'default' && ( !isset($data['placesroom'])|| $data['placesroom'] == '')) { // if existing room and places should be edited or new room and placesmode is rows and placesroom is not set or empty
       $errors['placesroom'] = get_string('err_filloutfield', 'mod_exammanagement');
     }
 
-    if(((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'rows' && ( !isset($data['placesrow'])|| $data['placesrow'] == '')){ // if existing room and places should be edited or new room and placesmode is rows and placesrow is not set or empty
+    if (((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'rows' && ( !isset($data['placesrow'])|| $data['placesrow'] == '')) { // if existing room and places should be edited or new room and placesmode is rows and placesrow is not set or empty
       $errors['placesrow'] = get_string('err_filloutfield', 'mod_exammanagement');
     }
 
-    if(((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'rows' && ( !isset($data['rowscount'])|| $data['rowscount'] == '')){ // if existing room and places should be edited or new room and placesmode is rows and rowscount is not set or empty
+    if (((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'rows' && ( !isset($data['rowscount'])|| $data['rowscount'] == '')) { // if existing room and places should be edited or new room and placesmode is rows and rowscount is not set or empty
       $errors['rowscount'] = get_string('err_filloutfield', 'mod_exammanagement');
     }
 
-    if(((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'all_individual' && ( !isset($data['placesarray'])|| $data['placesarray'] == '')){ // if existing room and places should be edited or new room and placesmode is all individual and placesarray is not set or empty
+    if (((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'all_individual' && ( !isset($data['placesarray'])|| $data['placesarray'] == '')) { // if existing room and places should be edited or new room and placesmode is all individual and placesarray is not set or empty
       $errors['placesarray'] = get_string('err_filloutfield', 'mod_exammanagement');
-    } else if(((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'all_individual' && !preg_match('/^[a-zA-Z0-9,\-.\/ ]+$/', $data['placesarray'])){ // if existing room and places should be edited or new room and placesmode is all individual and placesarray contains non alphanumerical chars
+    } else if (((isset($data['editplaces']) && $data['editplaces'] == 1) || !isset($data['editplaces'])) && $data['placesmode'] == 'all_individual' && !preg_match('/^[a-zA-Z0-9,\-.\/ ]+$/', $data['placesarray'])) { // if existing room and places should be edited or new room and placesmode is all individual and placesarray contains non alphanumerical chars
       $errors['placesarray'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(isset($data['roomid']) && strlen($data['roomid'])>25){
+    if (isset($data['roomid']) && strlen($data['roomid'])>25) {
       $errors['roomid'] = get_string('err_too_long', 'mod_exammanagement');
     }
 
-    if(isset($data['roomname']) && strlen($data['roomname'])>100){
+    if (isset($data['roomname']) && strlen($data['roomname'])>100) {
       $errors['roomname'] = get_string('err_too_long', 'mod_exammanagement');
     }
 

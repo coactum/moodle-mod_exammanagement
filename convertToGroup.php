@@ -41,15 +41,15 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
+	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else if (!$UserObj->getParticipantsCount()) {
 		$MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 	} else {
 
-		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 			$moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
 
@@ -73,10 +73,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$countFailed = 0;
 				$newgroupid = false;
 
-				if(!empty($participantsIds)){
+				if (!empty($participantsIds)) {
 					require_once($CFG->dirroot.'/group/lib.php');
 
-					if($fromform->groups === 'new_group'){
+					if ($fromform->groups === 'new_group') {
 
 						$data = new stdClass();
 						$data->courseid = $ExammanagementInstanceObj->getCourse()->id;
@@ -86,16 +86,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						$newgroupid = groups_create_group($data);
 
-						foreach($participantsIds as $moodleuserid){
-							if(groups_add_member($newgroupid, $moodleuserid)){
+						foreach ($participantsIds as $moodleuserid) {
+							if (groups_add_member($newgroupid, $moodleuserid)) {
 							$countSuccess +=1;
 							} else {
 								$countFailed +=1;
 							}
 						}
 					} else {
-						foreach($participantsIds as $moodleuserid){
-							if(groups_add_member($fromform->groups, $moodleuserid)){
+						foreach ($participantsIds as $moodleuserid) {
+							if (groups_add_member($fromform->groups, $moodleuserid)) {
 							$countSuccess +=1;
 							} else {
 								$countFailed +=1;
@@ -106,7 +106,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				}
 
 				# redirect #
-				if((($fromform->groups === 'new_group' && $newgroupid) || $fromform->groups !== 'new_group') && $countFailed ===0 && $countSuccess>0){
+				if ((($fromform->groups === 'new_group' && $newgroupid) || $fromform->groups !== 'new_group') && $countFailed ===0 && $countSuccess>0) {
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 				} else {
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -118,8 +118,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				# set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants) #
 				$default_values = array('id'=>$id);
 
-				if(isset($moodleParticipants)){
-					foreach($moodleParticipants as $participant){
+				if (isset($moodleParticipants)) {
+					foreach ($moodleParticipants as $participant) {
 						$default_values['participants['.$participant->moodleuserid.']'] = true;
 					}
 				}

@@ -24,13 +24,13 @@
 define(['jquery'], function ($) {
 
   return {
-    init: function(){
+    init: function() {
       // remove cols from form layout
       $('.exammanagement_table .form-group div').removeClass('col-md-3');
       $('.exammanagement_table .form-group div').removeClass('col-md-9');
     },
 
-    toggleAvailablePlaces: function(){
+    toggleAvailablePlaces: function() {
 
       $("form.mform .fitem").on("change", "select", function () { // change available places pattern if other room is choosen
         var selectedPlacesId = $(this).children(":selected").attr("value");

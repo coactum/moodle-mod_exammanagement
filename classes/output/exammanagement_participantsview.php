@@ -23,8 +23,6 @@
  */
 namespace mod_exammanagement\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use renderable;
 use renderer_base;
 use templatable;
@@ -37,7 +35,7 @@ use stdClass;
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class exammanagement_participantsview implements renderable, templatable{
+class exammanagement_participantsview implements renderable, templatable {
     protected $cmid;
     protected $isparticipant;
     protected $examdate;
@@ -59,7 +57,10 @@ class exammanagement_participantsview implements renderable, templatable{
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted){
+    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room,
+        $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints,
+        $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted) {
+
         $this->cmid = $cmid;
         $this->isparticipant = $isparticipant;
         $this->examdate = $examdate;
@@ -84,7 +85,7 @@ class exammanagement_participantsview implements renderable, templatable{
      * @param renderer_base $output Renderer base.
      * @return stdClass
      */
-    public function export_for_template(renderer_base $output){
+    public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
         $data->isparticipant = $this->isparticipant;

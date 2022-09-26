@@ -41,13 +41,13 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
+	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
 
-		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 			$MoodleObj->setPage('configureTasks');
 			$MoodleObj->outputPageHeader();
@@ -65,7 +65,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 				$tasks = $fromform->task;
 
-				if($fromform->newtaskcount < 0){
+				if ($fromform->newtaskcount < 0) {
 					$tasks = array_slice($tasks, 0, count($tasks)+$fromform->newtaskcount, true);
 				}
 
@@ -74,7 +74,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$ExammanagementInstanceObj->moduleinstance->tasks=$tasks;
 
 				$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-				if($update){
+				if ($update) {
 					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
 				} else {
 					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');

@@ -225,12 +225,12 @@ class provider implements
 
         $exammanagements = $DB->get_recordset_sql($sql, $params);
 
-        if($exammanagements->valid()){
+        if ($exammanagements->valid()) {
             foreach ($exammanagements as $exammanagement) {
                 if ($exammanagement) {
                     $context = \context_module::instance($exammanagement->cmid);
 
-                    if($exammanagement->timemodified == 0){
+                    if ($exammanagement->timemodified == 0) {
                         $exammanagement->timemodified = null;
                     } else {
                         $exammanagement->timemodified = \core_privacy\local\request\transform::datetime($exammanagement->timemodified);
@@ -242,15 +242,15 @@ class provider implements
                         'timemodified' => $exammanagement->timemodified,
                     ];
 
-                    if($exammanagement->timeresultsentered !== null){
+                    if ($exammanagement->timeresultsentered !== null) {
                         $exammanagement->timeresultsentered = \core_privacy\local\request\transform::datetime($exammanagement->timeresultsentered);
                     }
 
-                    if($exammanagement->exampoints !== null){
+                    if ($exammanagement->exampoints !== null) {
                         $exammanagement->exampoints = json_encode($exammanagement->exampoints);
                     }
 
-                    if($exammanagement->examstate !== null){
+                    if ($exammanagement->examstate !== null) {
                         $exammanagement->examstate = json_encode($exammanagement->examstate);
                     }
 
@@ -316,11 +316,11 @@ class provider implements
         }
 
         // Delete all records.
-        if($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance])){
+        if ($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance])) {
             $DB->delete_records('exammanagement_participants', ['exammanagement' => $cm->instance]);
         }
 
-        if($DB->record_exists('exammanagement_temp_part', ['exammanagement' => $cm->instance])){
+        if ($DB->record_exists('exammanagement_temp_part', ['exammanagement' => $cm->instance])) {
             $DB->delete_records('exammanagement_temp_part', ['exammanagement' => $cm->instance]);
         }
     }
@@ -340,7 +340,7 @@ class provider implements
             // Get the course module.
             $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
-            if($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance, 'moodleuserid' => $userid])){
+            if ($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance, 'moodleuserid' => $userid])) {
 
                 $DB->delete_records('exammanagement_participants', [
                     'exammanagement' => $cm->instance,
@@ -364,7 +364,7 @@ class provider implements
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        if($DB->record_exists_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)){
+        if ($DB->record_exists_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)) {
             $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
         }
     }

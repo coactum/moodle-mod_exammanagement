@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = [
-     [
+    [
          'classname' => 'mod_exammanagement\task\delete_temp_participants',
          'blocking' => 0,
          'minute' => '50',
@@ -34,8 +34,8 @@ $tasks = [
          'day' => '*',
          'month' => '*',
          'dayofweek' => '*',
-     ],
-     [
+    ],
+    [
         'classname' => 'mod_exammanagement\task\check_participants_without_moodle_account',
         'blocking' => 0,
         'minute' => '52',
@@ -62,4 +62,4 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
- ];
+];

@@ -50,7 +50,7 @@ class addCustomRoomForm extends moodleform {
 
     $mform->addElement('html', '<h3>'.get_string("addCustomRoom", "mod_exammanagement"));
 
-    if($helptextsenabled){
+    if ($helptextsenabled) {
         $mform->addElement('html', $OUTPUT->help_icon('addCustomRoom', 'mod_exammanagement', ''));
     }
 
@@ -94,17 +94,17 @@ class addCustomRoomForm extends moodleform {
 
     $similiarroom = $ExammanagementInstanceObj->getRoomObj($data['roomname'].'_'.$USER->id.'c');
 
-    if($data['existingroom'] !== 1 && $similiarroom){
+    if ($data['existingroom'] !== 1 && $similiarroom) {
        $errors['roomname'] = get_string('err_customroomname_taken', 'mod_exammanagement');
-    } else if(!preg_match('/^[a-zA-Z0-9_\-. ]+$/', $data['roomname'])){
+    } else if (!preg_match('/^[a-zA-Z0-9_\-. ]+$/', $data['roomname'])) {
       $errors['roomname'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(!$data['placescount'] || $data['placescount'] <= 0){
+    if (!$data['placescount'] || $data['placescount'] <= 0) {
        $errors['placescount'] = get_string('err_novalidinteger', 'mod_exammanagement');
     }
 
-    if($data['placescount'] && $data['placescount'] > 10000){
+    if ($data['placescount'] && $data['placescount'] > 10000) {
       $errors['placescount'] = get_string('err_novalidplacescount', 'mod_exammanagement');
    }
 

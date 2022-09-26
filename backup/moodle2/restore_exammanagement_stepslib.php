@@ -81,7 +81,7 @@ class restore_exammanagement_activity_structure_step extends restore_activity_st
         }
 
         $newitemid = $DB->insert_record('exammanagement_participants', $data);
-        $this->set_mapping('exammanagement_participant', $oldid, $newitemid, true);  // The true parameter is necessary for file handling.
+        $this->set_mapping('exammanagement_participant', $oldid, $newitemid, true);  // Parameter true necessary for file handling.
     }
 
     /**

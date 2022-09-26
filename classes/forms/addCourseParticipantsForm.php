@@ -49,7 +49,7 @@ require_once(__DIR__.'/../ldap/ldapManager.php');
 class addCourseParticipantsForm extends moodleform{
 
     //Add elements to form
-    public function definition(){
+    public function definition() {
         global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
@@ -69,7 +69,7 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<h3>'.get_string("addCourseParticipants", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('addCourseParticipants', 'mod_exammanagement', ''));
         }
 
@@ -79,7 +79,7 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("course_participant_import_preventing_text_export", "mod_exammanagement").'</div>');
 
-        if($ExammanagementInstanceObj->placesAssigned()){
+        if ($ExammanagementInstanceObj->placesAssigned()) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
         }
 
@@ -98,11 +98,11 @@ class addCourseParticipantsForm extends moodleform{
 
         $alreadyParticipants = array(); // will contain all moodle users that are already participants
 
-        if($moodleParticipants && $courseParticipantsIDs){ // handle participants that are course participants and already exam participants
+        if ($moodleParticipants && $courseParticipantsIDs) { // handle participants that are course participants and already exam participants
 
           foreach ($moodleParticipants as $key => $participant) {
-              if(in_array($participant->moodleuserid, $courseParticipantsIDs)){
-                  if(($removekey = array_search($participant->moodleuserid, $courseParticipantsIDs)) !== false){
+              if (in_array($participant->moodleuserid, $courseParticipantsIDs)) {
+                  if (($removekey = array_search($participant->moodleuserid, $courseParticipantsIDs)) !== false) {
                     unset($courseParticipantsIDs[$removekey]);
                     array_push($alreadyParticipants, $participant);
                     unset($moodleParticipants[$key]);
@@ -114,7 +114,7 @@ class addCourseParticipantsForm extends moodleform{
         # determine if course groups are set #
         $courseGroups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id);
 
-        if(count($courseGroups) > 0){
+        if (count($courseGroups) > 0) {
             $courseGroups = true;
             $col = 3;
         } else {
@@ -124,15 +124,15 @@ class addCourseParticipantsForm extends moodleform{
 
         $mform->addElement('html', '<div class="exammanagement_overview">');
 
-        if($moodleParticipants || $nonMoodleParticipants){
+        if ($moodleParticipants || $nonMoodleParticipants) {
 
             $deletedCount = 0;
 
-            if($moodleParticipants){
+            if ($moodleParticipants) {
                 $deletedCount += count($moodleParticipants);
             }
 
-            if($nonMoodleParticipants){
+            if ($nonMoodleParticipants) {
                 $deletedCount += count($nonMoodleParticipants);
             }
 
@@ -149,7 +149,7 @@ class addCourseParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-'.$col.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
 
-            if($courseGroups){
+            if ($courseGroups) {
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
             }
 
@@ -159,7 +159,7 @@ class addCourseParticipantsForm extends moodleform{
             $mform->addElement('html', '</div><div class="col-'.$col.'"></div><div class="col-'.$col.'"></div><div class="col-'.$col.'"></div></div>');
 
             ## with moodle account ##
-            if($moodleParticipants){ // now contains only moodle users that should be deleted
+            if ($moodleParticipants) { // now contains only moodle users that should be deleted
 
                 foreach ($moodleParticipants as $key => $participant) {
 
@@ -169,7 +169,7 @@ class addCourseParticipantsForm extends moodleform{
 
                     $mform->addElement('html', '</div><div class="col-'.$col.'">'.$participant->matrnr.'</div>');
 
-                    if($courseGroups){
+                    if ($courseGroups) {
 
                         $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->groups.'</div>');
                     }
@@ -181,7 +181,7 @@ class addCourseParticipantsForm extends moodleform{
 
             ## without moodle account  ##
 
-            if($nonMoodleParticipants){
+            if ($nonMoodleParticipants) {
 
                 foreach ($nonMoodleParticipants as $key => $participant) { // contains all nonmoodle users (that are marked to be deleted because they are no course participants)
 
@@ -191,7 +191,7 @@ class addCourseParticipantsForm extends moodleform{
 
                     $mform->addElement('html', '</div><div class="col-'.$col.'">'.$participant->matrnr.'</div>');
 
-                    if($courseGroups){
+                    if ($courseGroups) {
                         $mform->addElement('html', '<div class="col-'.$col.'">-</div>');
                     }
                     $mform->addElement('html', '<div class="col-'.$col.'">'. get_string("state_to_be_deleted", "mod_exammanagement"). ' (' .get_string("state_nonmoodle", "mod_exammanagement", ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).')</div></div>');
@@ -203,7 +203,7 @@ class addCourseParticipantsForm extends moodleform{
 
         # display course participants already added as exam participants #
 
-        if($alreadyParticipants){
+        if ($alreadyParticipants) {
 
             $mform->addElement('html', '<div class="panel panel-info exammanagement_panel">');
             $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="already">');
@@ -215,7 +215,7 @@ class addCourseParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-'.$col.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
 
-            if($courseGroups){
+            if ($courseGroups) {
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
             }
 
@@ -225,7 +225,7 @@ class addCourseParticipantsForm extends moodleform{
                 $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"> ' . $participant->profile. ' </div>');
                 $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->matrnr.'</div>');
 
-                if($courseGroups){
+                if ($courseGroups) {
                     $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->groups.'</div>');
                 }
 
@@ -237,7 +237,7 @@ class addCourseParticipantsForm extends moodleform{
 
         # display course participants not yet added as exam participants #
 
-        if($courseParticipantsIDs){
+        if ($courseParticipantsIDs) {
 
             $mform->addElement('html', '<div class="panel panel-success exammanagement_panel">');
             $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="course">');
@@ -249,7 +249,7 @@ class addCourseParticipantsForm extends moodleform{
 
             $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-'.$col.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
 
-            if($courseGroups){
+            if ($courseGroups) {
                 $mform->addElement('html', '<div class="col-'.$col.'"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
             }
 
@@ -283,14 +283,14 @@ class addCourseParticipantsForm extends moodleform{
 
                 $courseParticipant->profile = $image;
 
-                if($courseGroups){
+                if ($courseGroups) {
                     $userGroups = groups_get_user_groups($courseid, $id);
                     $groupnames = false;
 
-                    foreach ($userGroups as $groupskey => $value){
-                        if ($value){
-                            foreach ($value as $groupskey2 => $groupid){
-                                if(!$groupnames){
+                    foreach ($userGroups as $groupskey => $value) {
+                        if ($value) {
+                            foreach ($value as $groupskey2 => $groupid) {
+                                if (!$groupnames) {
                                     $groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
                                 } else {
                                     $groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
@@ -310,12 +310,12 @@ class addCourseParticipantsForm extends moodleform{
 
             $matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
 
-            if(!empty($courseParticipants)){
+            if (!empty($courseParticipants)) {
                 foreach ($courseParticipants as $key => $participant) {
 
-                    if(!empty($matriculationNumbers)){
+                    if (!empty($matriculationNumbers)) {
 
-                        if(isset($participant->login) && array_key_exists($participant->login, $matriculationNumbers) && $matriculationNumbers[$participant->login] !== false){
+                        if (isset($participant->login) && array_key_exists($participant->login, $matriculationNumbers) && $matriculationNumbers[$participant->login] !== false) {
                             $matrnr = $matriculationNumbers[$participant->login];
                         } else {
                             $matrnr = '-';
@@ -329,7 +329,7 @@ class addCourseParticipantsForm extends moodleform{
 
                     $mform->addElement('html', '</div><div class="col-'.$col.'">'.$matrnr.'</div>');
 
-                    if($courseGroups){
+                    if ($courseGroups) {
                         $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->groups.'</div>');
                     }
 
@@ -348,7 +348,7 @@ class addCourseParticipantsForm extends moodleform{
     }
 
     //Custom validation should be added here
-    public function validation($data, $files){
+    public function validation($data, $files) {
 
         $errors = array();
 
@@ -360,11 +360,11 @@ class addCourseParticipantsForm extends moodleform{
             }
         }
 
-        if(isset($data['deletedparticipants'])){
+        if (isset($data['deletedparticipants'])) {
 
-            foreach($data['deletedparticipants'] as $participantid => $checked){
+            foreach ($data['deletedparticipants'] as $participantid => $checked) {
 
-                if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
+                if (!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)) {
                     $errors['deletedparticipants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
                 }
             }

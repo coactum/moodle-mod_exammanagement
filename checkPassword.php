@@ -46,10 +46,10 @@ $MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 		// Reset password.
-		if($MoodleObj->checkCapability('mod/exammanagement:resetpassword') && $resetPW == true && isset($ExammanagementInstanceObj->moduleinstance->password)){
+		if ($MoodleObj->checkCapability('mod/exammanagement:resetpassword') && $resetPW == true && isset($ExammanagementInstanceObj->moduleinstance->password)) {
 
 			$ExammanagementInstanceObj->moduleinstance->password = NULL;
 			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
@@ -63,17 +63,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$mailsubject = get_string('password_reset_mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
 			$text =  get_string('password_reset_mailtext', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'name' => $ExammanagementInstanceObj->moduleinstance->name, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname]);
 
-			foreach($teachers as $user){
+			foreach ($teachers as $user) {
 				$ExammanagementInstanceObj->sendSingleMessage($user->id, $mailsubject, $text, 'passwordresetmessage');
 			}
 
 			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');
-		} else if($resetPW == true){
+		} else if ($resetPW == true) {
 			$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_failed', 'mod_exammanagement'), 'error');
 		}
 
 		// Handle password reset request.
-		if($MoodleObj->checkCapability('mod/exammanagement:requestpasswordreset') && $requestPWReset == true && get_config('mod_exammanagement', 'enablepasswordresetrequest')  === '1' && isset($ExammanagementInstanceObj->moduleinstance->password)){
+		if ($MoodleObj->checkCapability('mod/exammanagement:requestpasswordreset') && $requestPWReset == true && get_config('mod_exammanagement', 'enablepasswordresetrequest')  === '1' && isset($ExammanagementInstanceObj->moduleinstance->password)) {
 
 			require_sesskey();
 
@@ -91,11 +91,11 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 			$urlstr = strval(new moodle_url('/mod/exammanagement/checkpassword.php', array('id' => $id, 'resetPW' => true)));
 			$text = get_string('password_reset_request_mailtext', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'user' => $profilelink, 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'url' => $urlstr]);
 
-			foreach($supportusers as $user){
+			foreach ($supportusers as $user) {
 				$messageid = $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $text, 'passwordresetrequest');
 			}
 
-			if(isset($messageid)){
+			if (isset($messageid)) {
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_successfull', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'success');
 			} else {
 				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_failed', 'mod_exammanagement'), 'error');
@@ -122,7 +122,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 			if (password_verify($password, $password_hash)) { // Check if password is correct.
 
-				if (password_needs_rehash($password_hash, PASSWORD_DEFAULT)){ // Check if passwords needs rehash because of new hash algorithm.
+				if (password_needs_rehash($password_hash, PASSWORD_DEFAULT)) { // Check if passwords needs rehash because of new hash algorithm.
 
 					// If so update saved password hash.
 					$hash = password_hash($password, PASSWORD_DEFAULT);

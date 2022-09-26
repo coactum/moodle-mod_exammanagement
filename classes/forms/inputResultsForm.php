@@ -52,7 +52,7 @@ class inputResultsForm extends moodleform {
 
         $mform->addElement('html', '<h3>'.get_string("inputResults", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('inputResults', 'mod_exammanagement', ''));
         }
 
@@ -68,7 +68,7 @@ class inputResultsForm extends moodleform {
         $mform->addElement('hidden', 'matrval', 1);
         $mform->setType('matrval', PARAM_INT);
 
-        if($this->_customdata['matrnr']){
+        if ($this->_customdata['matrnr']) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("confirm_matrnr", "mod_exammanagement").'</div>');
 
             $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_participant', 'mod_exammanagement').'</p></strong>');
@@ -79,7 +79,7 @@ class inputResultsForm extends moodleform {
 
             $mform->setType('matrnr', PARAM_TEXT);
 
-            if($this->_customdata['firstname'] && $this->_customdata['lastname']){
+            if ($this->_customdata['firstname'] && $this->_customdata['lastname']) {
                 $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname'] . ' <a class="btn btn-primary ml-5" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
             }
 
@@ -98,9 +98,9 @@ class inputResultsForm extends moodleform {
             $tasknumber = 0;
 
             //add tasks from DB
-            if ($tasks){
+            if ($tasks) {
 
-            foreach($tasks as $key => $points){
+            foreach ($tasks as $key => $points) {
 
                 $tasknumber += 1;
 
@@ -123,9 +123,9 @@ class inputResultsForm extends moodleform {
             $mform->addGroup($taskspoints_array, 'tasks_array', get_string('max_points', 'mod_exammanagement'), ' ', false);
             $mform->addGroup($points_array, 'points_array', get_string('points', 'mod_exammanagement'), ' ', false);
 
-            $mform->hideIf('tasknumbers_array', 'matrval', 'eq', 1);
-            $mform->hideIf('tasks_array', 'matrval', 'eq', 1);
-            $mform->hideIf('points_array', 'matrval', 'eq', 1);
+            $mform->hideif ('tasknumbers_array', 'matrval', 'eq', 1);
+            $mform->hideif ('tasks_array', 'matrval', 'eq', 1);
+            $mform->hideif ('points_array', 'matrval', 'eq', 1);
 
             $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
 
@@ -137,9 +137,9 @@ class inputResultsForm extends moodleform {
             $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
             $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
 
-            $mform->hideIf('state[nt]', 'matrval', 'eq', 1);
-            $mform->hideIf('state[fa]', 'matrval', 'eq', 1);
-            $mform->hideIf('state[ill]', 'matrval', 'eq', 1);
+            $mform->hideif ('state[nt]', 'matrval', 'eq', 1);
+            $mform->hideif ('state[fa]', 'matrval', 'eq', 1);
+            $mform->hideif ('state[ill]', 'matrval', 'eq', 1);
 
             end($tasks);
             $lastkey = key($tasks);
@@ -167,17 +167,17 @@ class inputResultsForm extends moodleform {
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $savedTasksArr = array_values($ExammanagementInstanceObj->getTasks());
 
-        if($data['matrval']==0 && !$data['state']['nt'] && !$data['state']['ill'] && !$data['state']['fa']){
-            foreach($data['points'] as $task => $points){
+        if ($data['matrval']==0 && !$data['state']['nt'] && !$data['state']['ill'] && !$data['state']['fa']) {
+            foreach ($data['points'] as $task => $points) {
 
                 $floatval = floatval($points);
                 $isnumeric = is_numeric($points);
 
-                if(($points && !$floatval) || !$isnumeric){
+                if (($points && !$floatval) || !$isnumeric) {
                     $errors['points['. $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
-                } else if($points<0) {
+                } else if ($points<0) {
                     $errors['points['.$task.']'] = get_string('err_underzero', 'mod_exammanagement');
-                } else if($points > $savedTasksArr[$task-1]){
+                } else if ($points > $savedTasksArr[$task-1]) {
                      $errors['points['. $task .']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
                 }
             }

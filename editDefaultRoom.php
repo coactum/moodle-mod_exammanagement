@@ -42,32 +42,32 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
 
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             global $USER;
 
             $MoodleObj->setPage('editDefaultRoom');
             $MoodleObj->outputPageHeader();
 
-            if($roomid){
+            if ($roomid) {
 
                 $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
 
-                if($roomObj){
-                    if($roomObj->type == 'defaultroom'){
+                if ($roomObj) {
+                    if ($roomObj->type == 'defaultroom') {
                         $roomname = $roomObj->name;
                         $places = json_decode($roomObj->places);
                         $placescount = count($places);
                         $description = $roomObj->description;
                         $placesarray =  implode(',', $places);
 
-                        if(isset($places) && count($places) !== 0){
+                        if (isset($places) && count($places) !== 0) {
                             $placespreview = implode(',', $places);
                         } else {
                             $placespreview = false;
@@ -81,7 +81,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
             }
 
             //Instantiate form
-            if($roomid && $roomObj && $roomObj->type == 'defaultroom'){
+            if ($roomid && $roomObj && $roomObj->type == 'defaultroom') {
                 $mform = new editDefaultRoomForm(null, array('id'=>$id, 'e'=>$e, 'placescount'=>$placescount, 'placespreview'=>$placespreview, 'roomplanavailable'=>$roomplanavailable, 'existingroom'=>true));
             } else {
                 $mform = new editDefaultRoomForm(null, array('id'=>$id, 'e'=>$e, 'existingroom'=>false));
@@ -99,43 +99,43 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 $roomname = $fromform->roomname;
                 $description = $fromform->description;
 
-                if(isset($fromform->editplaces)){
+                if (isset($fromform->editplaces)) {
                     $editplaces = $fromform->editplaces;
                 } else {
                     $editplaces = 1;
                 }
                 $placesmode = $fromform->placesmode;
 
-                if($editplaces == 1){
-                    if($placesmode == 'default'){
+                if ($editplaces == 1) {
+                    if ($placesmode == 'default') {
                         $placesroom = $fromform->placesroom;
                         $placesfree = $fromform->placesfree;
                     }
 
-                    if($placesmode == 'rows'){
+                    if ($placesmode == 'rows') {
                         $rowscount = $fromform->rowscount;
                         $placesrow = $fromform->placesrow;
                         $placesfree = $fromform->placesfree;
                         $rowsfree = $fromform->rowsfree;
                     }
 
-                    if($placesmode == 'all_individual'){
+                    if ($placesmode == 'all_individual') {
                         $placesarray = $fromform->placesarray;
                     }
                 }
 
                 $defaultroom_svg = $mform->get_file_content('defaultroom_svg');
 
-                if($fromform->existingroom == true && $MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomid))){ // if default room exists and should be edited
+                if ($fromform->existingroom == true && $MoodleDBObj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomid))) { // if default room exists and should be edited
 
                     $roomObj = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomid));
 
                     $roomObj->name = $roomname;
                     $roomObj->description = $description;
 
-                    if($editplaces == 1){
+                    if ($editplaces == 1) {
 
-                        if($placesmode == 'default'){
+                        if ($placesmode == 'default') {
                             $placesArr = array();
 
                             for ($i = 1; $i <= $placesroom; $i+=$placesfree+1) {
@@ -146,10 +146,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             $roomObj->places = json_encode($placesArr);
                         }
 
-                        if($placesmode == 'rows'){
+                        if ($placesmode == 'rows') {
                             $placesArr = array();
 
-                            for($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree){
+                            for ($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree) {
                                 for ($j = 1; $j <= $placesrow; $j+=$placesfree+1) {
                                     array_push($placesArr, 'R'.str_pad ( strval($i), 2, '0', STR_PAD_LEFT ).'/P'.str_pad ( strval($j), 2, '0', STR_PAD_LEFT ));
                                 }
@@ -158,14 +158,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                             $roomObj->places = json_encode($placesArr);
                         }
 
-                        if($placesmode == 'all_individual'){
+                        if ($placesmode == 'all_individual') {
                             $placesarray = explode(',', $placesarray);
                             $placesarray = array_values(array_filter($placesarray, function($value) { return !is_null($value) && $value !== '' && $value !== ' ' && $value !== '  '; }));
                             $roomObj->places = json_encode($placesarray);
                         }
                     }
 
-                    if(isset($defaultroom_svg) && $defaultroom_svg !== false){
+                    if (isset($defaultroom_svg) && $defaultroom_svg !== false) {
                         $roomObj->seatingplan = base64_encode(str_replace(array("\r\n","\r","\n"), '', $defaultroom_svg));
                     }
 
@@ -173,7 +173,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_rooms', $roomObj);
 
-                    if($update){
+                    if ($update) {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -185,7 +185,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                     $roomObj->name = $roomname;
                     $roomObj->description = $description;
 
-                    if($placesmode == 'default'){
+                    if ($placesmode == 'default') {
                         $placesArr = array();
 
                         for ($i = 1; $i <= $placesroom; $i+=$placesfree+1) {
@@ -196,10 +196,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $roomObj->places = json_encode($placesArr);
                     }
 
-                    if($placesmode == 'rows'){
+                    if ($placesmode == 'rows') {
                         $placesArr = array();
 
-                        for($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree){
+                        for ($i = 1; $i <= $rowscount; $i = $i + 1 + $rowsfree) {
                             for ($j = 1; $j <= $placesrow; $j+=$placesfree+1) {
                                 array_push($placesArr, 'R'.str_pad ( strval($i), 2, '0', STR_PAD_LEFT ).'/P'.str_pad ( strval($j), 2, '0', STR_PAD_LEFT ));
                             }
@@ -208,13 +208,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                         $roomObj->places = json_encode($placesArr);
                     }
 
-                    if($placesmode == 'all_individual' && $placesarray !== 0){
+                    if ($placesmode == 'all_individual' && $placesarray !== 0) {
                         $placesarray = explode(',', $placesarray);
                         $placesarray = array_values(array_filter($placesarray, function($value) { return !is_null($value) && $value !== '' && $value !== ' ' && $value !== '  '; }));
                         $roomObj->places = json_encode($placesarray);
                     }
 
-                    if(isset($defaultroom_svg)){
+                    if (isset($defaultroom_svg)) {
                         $roomObj->seatingplan = base64_encode(str_replace(array("\r\n","\r","\n"), '', $defaultroom_svg));
                     }
 
@@ -224,7 +224,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $import = $MoodleDBObj->InsertRecordInDB('exammanagement_rooms', $roomObj);
 
-                    if($import){
+                    if ($import) {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
                         redirect ($ExammanagementInstanceObj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -236,9 +236,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
                 // or on the first display of the form.
 
                 //Set default data (if any)
-                if($roomid){
+                if ($roomid) {
 
-                    if(isset($roomObj) && $roomObj !== false && $roomObj->type == 'defaultroom'){
+                    if (isset($roomObj) && $roomObj !== false && $roomObj->type == 'defaultroom') {
                         $mform->set_data(array('id'=>$id, 'roomid'=>$roomid,'roomname'=>$roomname, 'placescount'=>$placescount, 'description'=>$description, 'placesarray'=>$placesarray, 'existingroom'=>true));
                     } else {
                         $mform->set_data(array('id'=>$id, 'existingroom'=>false));

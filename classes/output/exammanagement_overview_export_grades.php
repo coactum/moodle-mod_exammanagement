@@ -22,7 +22,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_exammanagement\output;
-defined('MOODLE_INTERNAL') || die();
 
 use renderable;
 use renderer_base;
@@ -53,7 +52,9 @@ class exammanagement_overview_export_grades implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $helptexticon, $additionalressourceslink, $participants, $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable) {
+    public function __construct($cmid, $helptexticon, $additionalressourceslink, $participants,
+        $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable) {
+
         $this->cmid = $cmid;
         $this->helptexticon = $helptexticon;
         $this->additionalressourceslink = $additionalressourceslink;

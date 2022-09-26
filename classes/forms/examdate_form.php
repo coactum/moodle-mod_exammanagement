@@ -50,7 +50,7 @@ class examdate_form extends moodleform {
 
         $mform->addElement('html', '<h3>'.get_string("setexamdate", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             global $OUTPUT;
 
             $mform->addElement('html', $OUTPUT->help_icon('setexamdate', 'mod_exammanagement', ''));

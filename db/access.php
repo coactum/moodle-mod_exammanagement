@@ -49,7 +49,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-	'mod/exammanagement:addinstance' => [
+    'mod/exammanagement:addinstance' => [
         'riskbitmask' => RISK_XSS | RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
@@ -73,7 +73,7 @@ $capabilities = [
         ],
     ],
 
-	'mod/exammanagement:viewparticipantspage' => [
+    'mod/exammanagement:viewparticipantspage' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -85,14 +85,14 @@ $capabilities = [
         ],
     ],
 
-    'mod/exammanagement:takeexams'=> [
+    'mod/exammanagement:takeexams' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'student' => CAP_ALLOW,
         ],
     ],
-    'mod/exammanagement:receivegroupmessage'=> [
+    'mod/exammanagement:receivegroupmessage' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -101,7 +101,7 @@ $capabilities = [
             'teacher' => CAP_ALLOW,
         ],
     ],
-	'mod/exammanagement:importdefaultrooms'=> [
+    'mod/exammanagement:importdefaultrooms' => [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -109,7 +109,7 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'mod/exammanagement:resetpassword'=> [
+    'mod/exammanagement:resetpassword' => [
         'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -117,7 +117,7 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'mod/exammanagement:requestpasswordreset'=> [
+    'mod/exammanagement:requestpasswordreset' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
@@ -128,7 +128,7 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'mod/exammanagement:receivedeletionwarningmessages'=> [
+    'mod/exammanagement:receivedeletionwarningmessages' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,

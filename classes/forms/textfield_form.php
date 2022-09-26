@@ -50,7 +50,7 @@ class textfield_form extends moodleform {
 
         $mform->addElement('html', '<h3>'.get_string("settextfield", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             global $OUTPUT;
 
             $mform->addElement('html', $OUTPUT->help_icon('settextfield', 'mod_exammanagement', ''));

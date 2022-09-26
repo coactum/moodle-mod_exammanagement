@@ -39,13 +39,13 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-  if($ExammanagementInstanceObj->isExamDataDeleted()){
+  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       global $CFG;
 
@@ -58,9 +58,9 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       define("WIDTH_COLUMN_POINTS", 80);
       define("WIDTH_COLUMN_PERCENT", 80);
 
-      if(!$UserObj->getEnteredResultsCount()){
+      if (!$UserObj->getEnteredResultsCount()) {
         $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
-      } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+      } else if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
         $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
       }
 
@@ -102,7 +102,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       $pdf->AddPage();
       $pdf->Line(20, 15, 190, 15);
 
-      if(file_exists(__DIR__.'/../../data/logo_full.ai')){
+      if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
         $pdf->ImageEps('data/logo.ai', 30, 25, 13);
 
       }
@@ -116,7 +116,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $date = $ExammanagementInstanceObj->getHrExamtime();
 
-      if($date){
+      if ($date) {
         $pdf->MultiCell(130, 3, $date . ', ' . $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
       } else {
         $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
@@ -152,13 +152,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
 
-      foreach ($participants as $participant){
+      foreach ($participants as $participant) {
 
         $percentages = '-';
 
         $points = $UserObj->calculatePoints($participant);
 
-        if(is_numeric($points)){
+        if (is_numeric($points)) {
             $percentages = number_format( ( $points / $totalPoints ) * 100, 2, "," , "." ).' %';
         }
 

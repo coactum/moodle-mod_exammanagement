@@ -40,7 +40,7 @@ define(['jquery'], function ($) {
       $("form.mform input[type=number]").attr("step", "0.01");
       $("form.mform input[type=number]").attr("min", "0");
 
-      if($("[id^=id_points]").length !== 0){
+      if ($("[id^=id_points]").length !== 0) {
         $("[id^=id_points]").first().focus();
       } else {
         $("[id^=id_bonuspoints]").first().focus();
@@ -71,7 +71,7 @@ define(['jquery'], function ($) {
       $("[id^=id_bonussteps]").change(function () {
         var participantid = $(this).attr("id").split('_')[2];
 
-        if ($(this).val() !== '-'){
+        if ($(this).val() !== '-') {
           $("#id_bonuspoints_"+participantid).val('-');  // reset bonus points
           $("#id_bonuspoints_"+participantid).prop("disabled", true); // disable bonuspoints
         } else {
@@ -87,7 +87,7 @@ define(['jquery'], function ($) {
       $("[id^=id_bonuspoints]").change(function () {
         var participantid = $(this).attr("id").split('_')[2];
 
-        if ($(this).val()){
+        if ($(this).val()) {
           $("#id_bonussteps_"+participantid).val('-'); // reset bonus steps
           $("#id_state_"+participantid).focus(); // move focus
           $('input[name="bonuspoints_entered['+participantid+']"]').val(1);  // set bonuspoints entered to true
@@ -109,12 +109,12 @@ define(['jquery'], function ($) {
             $(this).prop("disabled", true);
             $(this).val(0);
           });
-        } else if($(this).val() === 'normal'){  // if examstate is now normal
+        } else if ($(this).val() === 'normal') {  // if examstate is now normal
           $("[id^=id_points_"+participantid+"]").each(function () { // enable all point-fields
             $(this).prop("disabled", false);
             $("[id^=id_points_"+participantid+"").first().focus();
           });
-        } else if($(this).val() == 'not_set'){
+        } else if ($(this).val() == 'not_set') {
           $("[id^=id_points_"+participantid+"]").each(function () { // enable all point-fields
             $(this).val('');
             $(this).prop("disabled", false);

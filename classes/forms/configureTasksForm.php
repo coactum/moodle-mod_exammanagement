@@ -57,7 +57,7 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<h3>'.get_string("configureTasks", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('configureTasks', 'mod_exammanagement', ''));
         }
 
@@ -65,11 +65,11 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
-        if($UserObj->getEnteredResultsCount()){
+        if ($UserObj->getEnteredResultsCount()) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
         }
 
-        if($ExammanagementInstanceObj->getGradingscale()){
+        if ($ExammanagementInstanceObj->getGradingscale()) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("gradingscale_already_entered", "mod_exammanagement").'</div>');
         }
 
@@ -93,9 +93,9 @@ class configureTasksForm extends moodleform {
         $temptaskcount = $this->_customdata['newtaskcount'];
 
         //add tasks from DB
-        if ($tasks){
+        if ($tasks) {
 
-          foreach($tasks as $key => $points){
+          foreach ($tasks as $key => $points) {
 
               $oldtaskcount+=1;
 
@@ -113,7 +113,7 @@ class configureTasksForm extends moodleform {
         }
 
         // add temptasks
-        if($temptaskcount>0){
+        if ($temptaskcount>0) {
 
           $temptaskpoints = 10;
           //$temptaskpoints = $this->_customdata['newtaskpoints'];
@@ -135,7 +135,7 @@ class configureTasksForm extends moodleform {
             }
         }
 
-        if(!$tasks && !$temptaskcount) {
+        if (!$tasks && !$temptaskcount) {
             array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
             array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
 
@@ -151,7 +151,7 @@ class configureTasksForm extends moodleform {
 
         $mform->addelement('html', '<div class="form-group row  fitem"><span class="col-md-3"><strong>'.get_string('total', 'mod_exammanagement').':</strong></span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
 
-        if(!$tasks && !$temptaskcount) {
+        if (!$tasks && !$temptaskcount) {
             $mform->addElement('hidden', 'newtaskcount', 1);
             $mform->setType('newtaskcount', PARAM_INT);
         } else{
@@ -169,14 +169,14 @@ class configureTasksForm extends moodleform {
 
         $errors= array();
 
-        foreach($data['task'] as $key => $taskval){
+        foreach ($data['task'] as $key => $taskval) {
             $isnumeric = is_numeric($taskval);
 
-            if(!$isnumeric){
+            if (!$isnumeric) {
                 $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
-            } else if($taskval<=0) {
+            } else if ($taskval<=0) {
                 $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
-            } else if($taskval>=100) {
+            } else if ($taskval>=100) {
                 $errors['task['.$key.']'] = get_string('err_toohigh', 'mod_exammanagement');
             }
         }

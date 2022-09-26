@@ -39,17 +39,17 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-  if($ExammanagementInstanceObj->isExamDataDeleted()){
+  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
         $MoodleObj->setPage('examreview');
 
-        if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+        if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
           $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
         }
 
@@ -68,14 +68,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             $ExammanagementInstanceObj->moduleinstance->examreviewtime = $fromform->examreviewtime;
 
-            if($fromform->examreviewroom){
+            if ($fromform->examreviewroom) {
               $ExammanagementInstanceObj->moduleinstance->examreviewroom = json_encode($fromform->examreviewroom);
             } else {
               $ExammanagementInstanceObj->moduleinstance->examreviewroom = NULL;
             }
 
             $update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-            if($update){
+            if ($update) {
               $MoodleObj->redirectToOverviewPage('beforeexam',get_string('operation_successfull', 'mod_exammanagement'), 'success');
             } else {
               $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');

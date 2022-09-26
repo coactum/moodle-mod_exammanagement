@@ -23,12 +23,9 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Custom code to be run on installing the plugin.
  */
 function xmldb_exammanagement_install() {
-
-  return true;
+    return true;
 }

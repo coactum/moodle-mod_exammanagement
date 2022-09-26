@@ -25,7 +25,7 @@
 define(['jquery'], function ($) {
 
   return {
-    init: function(){
+    init: function() {
       $('.mform input[type="checkbox"]').click(function () {
         $('#selectedGroupOneCount').text($('input[type="checkbox"]:checked.checkboxgroup1').not("#checkboxgroup1").length);
         $('#selectedGroupTwoCount').text($('input[type="checkbox"]:checked.checkboxgroup2').not("#checkboxgroup2").length);

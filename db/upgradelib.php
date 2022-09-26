@@ -23,8 +23,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Helper function used by the upgrade.php file.
  */
@@ -35,5 +33,5 @@ function exammanagement_helper_function() {
     // level) database access exclusively, avoiding any use of the Moodle APIs.
     //
     // For more information please read the available Moodle documentation:
-    // https://docs.moodle.org/dev/Upgrade_API
+    // https://docs.moodle.org/dev/Upgrade_API.
 }

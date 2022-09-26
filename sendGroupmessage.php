@@ -39,14 +39,14 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
+	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-      if(!$UserObj->getParticipantsCount()){
+      if (!$UserObj->getParticipantsCount()) {
         $MoodleObj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
       }
 
@@ -69,8 +69,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array());
 
-        if($mailsubject && $mailtext && $participants){
-          foreach ($participants as $key => $participantObj){
+        if ($mailsubject && $mailtext && $participants) {
+          foreach ($participants as $key => $participantObj) {
 
             $user = $UserObj->getMoodleUser($participantObj->moodleuserid);
 

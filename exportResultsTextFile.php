@@ -43,24 +43,24 @@ $MoodleObj = Moodle::getInstance($id, $e);
 define( "SEPARATOR", chr(9) ); //Tabulator
 define( "NEWLINE", "\r\n" );
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
+	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else {
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
             $misc = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
             $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-            if(isset($misc->mode) && $misc->mode === 'export_grades'){
+            if (isset($misc->mode) && $misc->mode === 'export_grades') {
                 $mode = 'export_grades';
             } else {
                 $mode = 'normal';
             }
 
-            if(($mode === 'normal' && !$UserObj->getEnteredResultsCount()) || ($mode === 'export_grades' && !$UserObj->getEnteredBonusCount('points'))){
+            if (($mode === 'normal' && !$UserObj->getEnteredResultsCount()) || ($mode === 'export_grades' && !$UserObj->getEnteredBonusCount('points'))) {
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
-            } else if (!$ExammanagementInstanceObj->getDataDeletionDate()){
+            } else if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
                 $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
             }
 
@@ -73,14 +73,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
             # if no headers of import files are saved because all participants are imported from course #
 
-            if ( !$TextFileHeadersArr ){
+            if ( !$TextFileHeadersArr ) {
                 $examdate = $ExammanagementInstanceObj->getHrExamtime();
                 $header1 = '"' . $courseName . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
                 $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' . SEPARATOR . '"Name"' . SEPARATOR . '"Noten"';
 
                 $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
-                if($afterexamreview == false){
+                if ($afterexamreview == false) {
                     $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
                 } else {  // if export of changed results after exam review
                     $participants = $UserObj->getExamParticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
@@ -88,10 +88,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $examNumber = '""';
 
-                foreach($participants as $participant){ // construct lines for each participant
+                foreach ($participants as $participant) { // construct lines for each participant
 
-                    if($mode === 'export_grades'){
-                        if($gradingscale){
+                    if ($mode === 'export_grades') {
+                        if ($gradingscale) {
                             $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                         } else {
                             $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
@@ -128,7 +128,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $participantsFromCourse = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => 0), array('matrnr')); // get all participants that are imported from course (header id = 0)
 
-                if(count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)){ // if there are other participants that are read in from file
+                if (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) { // if there are other participants that are read in from file
 
                     // Prepare zip file
                     $tempfile = tempnam(sys_get_temp_dir(), "examresults.zip");
@@ -138,7 +138,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                 $filecount = 0;
 
-                if($participantsFromCourse && $afterexamreview == false){ // construct lines for participants from course (header id = 0)
+                if ($participantsFromCourse && $afterexamreview == false) { // construct lines for participants from course (header id = 0)
 
                     $examdate = $ExammanagementInstanceObj->getHrExamtime();
 
@@ -148,10 +148,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $examNumber = '""';
 
-                    foreach($participantsFromCourse as $participant){
+                    foreach ($participantsFromCourse as $participant) {
 
-                        if($mode === 'export_grades'){
-                            if($gradingscale){
+                        if ($mode === 'export_grades') {
+                            if ($gradingscale) {
                                 $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                             } else {
                                 $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
@@ -167,14 +167,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $filecount += 1;
 
-                    if($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){ // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
+                    if ($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive) { // if there are more files coming: add content to archive (else it will be send to browser at the end of the code)
                         $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
                     }
                 }
 
-                foreach($TextFileHeadersArr as $key => $TextFileHeader){ // iterate over all headers and create new file for archive
+                foreach ($TextFileHeadersArr as $key => $TextFileHeader) { // iterate over all headers and create new file for archive
 
-                    if($afterexamreview == false){
+                    if ($afterexamreview == false) {
                         $participants = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => $key+1), array('matrnr'));
                     } else {
                         $participants = $UserObj->getExamParticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
@@ -182,16 +182,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $textfile = false;
 
-                    if($participants){
+                    if ($participants) {
 
                         $textfile = $TextFileHeader . NEWLINE;
 
                         $examNumber = '""';
 
-                        foreach($participants as $participant){
+                        foreach ($participants as $participant) {
 
-                            if($mode === 'export_grades'){
-                                if($gradingscale){
+                            if ($mode === 'export_grades') {
+                                if ($gradingscale) {
                                     $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
                                 } else {
                                     $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
@@ -208,23 +208,23 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
                     $filecount += 1;
 
-                    if($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive){
+                    if ($textfile && (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) && $ResultFilesZipArchive) {
                     // add content
                     $ResultFilesZipArchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
 
                     }
 
-                    if($afterexamreview == true){
+                    if ($afterexamreview == true) {
                         break;
                     }
                 }
 
-                if($textfile && (count($TextFileHeadersArr) == 1 || (count($TextFileHeadersArr) == 0 && $participantsFromCourse) || $afterexamreview == true) && $ResultFilesZipArchive == false){
+                if ($textfile && (count($TextFileHeadersArr) == 1 || (count($TextFileHeadersArr) == 0 && $participantsFromCourse) || $afterexamreview == true) && $ResultFilesZipArchive == false) {
                     header( "Content-Type: application/force-download; charset=UTF-8"  );
                     header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt\"" );
                     header( "Content-Length: ". strlen( $textfile ) );
                     echo($textfile);
-                } else if($ResultFilesZipArchive){
+                } else if ($ResultFilesZipArchive) {
                 // Close and send to users
                     $ResultFilesZipArchive->close();
                     header('Content-Type: application/zip; charset=UTF-8');
