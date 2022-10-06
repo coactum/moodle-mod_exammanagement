@@ -18,7 +18,6 @@
  * All the steps to restore mod_exammanagement are defined here.
  *
  * @package     mod_exammanagement
- * @category    restore
  * @copyright   coactum GmbH 2017
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

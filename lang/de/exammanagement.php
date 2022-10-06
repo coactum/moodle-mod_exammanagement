@@ -17,7 +17,7 @@
 /**
  * Plugin strings are defined here.
  *
- * @package     tool_exammanagement
+ * @package     mod_exammanagement
  * @category    string
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

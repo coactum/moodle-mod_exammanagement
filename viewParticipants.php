@@ -172,7 +172,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 }
 
                 // Show participants withouth moodle account.
-
                 if ($nonemoodleparticipants && !empty($nonecourseparticipants)) {
 
                     $courseid = $exammanagementinstanceobj->getCourse()->id;
@@ -199,7 +198,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     }
 
                     echo('<tr class="exammanagement_tableheader exammanagement_brand_backgroundcolor"><td colspan="6" class="text-center"><strong>'.get_string("participants_with_special_state", "mod_exammanagement").'</strong></td></tr>');
-
 
                     foreach ($participantsspecialstate as $key => $participant) {
 

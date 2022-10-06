@@ -18,7 +18,6 @@
  * Tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @category    tasks
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

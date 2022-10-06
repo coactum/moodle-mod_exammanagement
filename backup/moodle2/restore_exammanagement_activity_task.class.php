@@ -18,7 +18,6 @@
  * The task that provides a complete restore of mod_exammanagement is defined here.
  *
  * @package     mod_exammanagement
- * @category    restore
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
