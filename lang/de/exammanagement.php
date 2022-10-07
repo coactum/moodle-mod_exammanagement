@@ -339,7 +339,6 @@ $string['matriculation_number'] = 'Matrikelnummer';
 $string['course_groups'] = 'Kursgruppen';
 $string['import_state'] = 'Status';
 $string['state_added_to_exam'] = 'Prüfungsteilnehmer';
-$string['participants_with_special_state'] = 'Prüfungsteilnehmer mit Sonderstatus';
 $string['state_added_to_exam_no_moodle'] = 'Prüfungsteilnehmer (ohne {$a->systemname} Benutzerkonto)';
 $string['state_added_to_exam_no_moodle_help'] = 'Dieser Teilnehmer muss sich mindestens einmal im System anmelden um die Prüfungsinformationen in seiner Teilnehmeransicht einsehen zu können. Er kann zudem über die Prüfungsorganisation versendete Gruppennachrichten nicht empfangen und kann auch nicht in Kursgruppen hinzugefügt werden.';
 $string['state_added_to_exam_no_course'] = 'Prüfungsteilnehmer (kein Kursteilnehmer)';

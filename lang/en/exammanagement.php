@@ -339,7 +339,6 @@ $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
 $string['state_added_to_exam'] = 'Participant of exam';
-$string['participants_with_special_state'] = 'Participants with special state';
 $string['state_added_to_exam_no_moodle'] = 'Participant of exam (without {$a->systemname} account)';
 $string['state_added_to_exam_no_moodle_help'] = 'This participant must log in to the system at least once to view the exam information in his participant view. He also cannot receive group messages sent via the exam organization and cannot be added to course groups.';
 $string['state_added_to_exam_no_course'] = 'Participant of exam (no course participant)';

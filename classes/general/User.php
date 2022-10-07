@@ -71,15 +71,15 @@ class User{
         }
 
         if ($participantsmode['mode'] === 'all') {
-            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement), '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement));
         } else if ($participantsmode['mode'] === 'moodle') {
-            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => null), '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => null));
         } else if ($participantsmode['mode'] === 'nonmoodle') {
-            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => null), '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => null));
         } else if ($participantsmode['mode'] === 'room') {
-            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'roomid' => $participantsmode['id']), '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'roomid' => $participantsmode['id']));
         } else if ($participantsmode['mode'] === 'header') {
-            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsmode['id']), '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsmode['id']));
         } else if ($participantsmode['mode'] === 'resultsafterexamreview') {
             $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
@@ -91,7 +91,7 @@ class User{
             $select .= " AND timeresultsentered IS NOT NULL";
             $select .= " AND timeresultsentered >=" . $examreviewtime;
 
-            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null, '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null);
 
         } else if ($participantsmode['mode'] === 'no_seats_assigned') {
             $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
@@ -101,7 +101,7 @@ class User{
             $select .= " AND roomname IS NULL";
             $select .= " AND place IS NULL";
 
-            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null, '', '*', $limitfrom, $limitnum);
+            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null);
 
         } else {
             return false;
@@ -231,7 +231,11 @@ class User{
                 shuffle($allparticipants);
             }
 
-            return $allparticipants;
+            if ($pagination && isset($activepage)) {
+                return array_slice($allparticipants, $limitfrom, $limitnum);
+            } else {
+                return $allparticipants;
+            }
 
         } else {
             $rs->close();

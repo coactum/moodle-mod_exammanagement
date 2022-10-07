@@ -83,6 +83,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 foreach ($participants as $participant) {
                     if (isset($fromform->state[$participant->id]) || isset($fromform->bonuspoints[$participant->id]) || isset($fromform->bonussteps[$participant->id]) || isset($fromform->bonuspoints_entered[$participant->id])) {
+                        $oldparticipant = clone $participant;
+
                         if ($exammanagementinstanceobj->moduleinstance->misc === null) {
                             if (isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set') {
                                 switch ($fromform->state[$participant->id]) {
@@ -120,8 +122,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $participant->exampoints = json_encode($fromform->points[$participant->id]);
                                 }
 
-                                $participant->timeresultsentered = time();
-
                             } else {
                                 $participant->examstate = null;
                                 $participant->exampoints = null;
@@ -138,6 +138,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 $participant->bonuspoints = null;
                             }
 
+                            $participant->timeresultsentered = time();
+
                         } else {
                             if ($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])) {
                                 $participant->timeresultsentered = time();
@@ -153,8 +155,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                         unset($participant->matrnr);
 
-                        if ($moodledbobj->UpdateRecordInDB('exammanagement_participants', $participant)) {
-                            $updatedcount += 1;
+                        if ($oldparticipant->examstate != $participant->examstate || $oldparticipant->exampoints != $participant->exampoints
+                        || $oldparticipant->bonuspoints != $participant->bonuspoints || $oldparticipant->bonussteps != $participant->bonussteps) {
+
+                            if ($moodledbobj->UpdateRecordInDB('exammanagement_participants', $participant)) {
+                                $updatedcount += 1;
+                            }
                         }
                     }
                 }

@@ -1173,10 +1173,19 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* pagebar */
+/* .exammanagement-pagebar {
+  overflow-y: auto;
+  height: 50px;
+} */
+
 .exammanagement-pagebar .pagination {
   margin-bottom: 0px;
   max-width: 75%;
   overflow: scroll;
+
+  /* border: 1px solid #dee2e6; */
+
+  flex-wrap: wrap;
 }
 
 .exammanagement-pagebar .page-item {
