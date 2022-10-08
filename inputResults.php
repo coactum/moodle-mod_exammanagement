@@ -60,9 +60,6 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
             }
 
-            $MoodleObj->setPage('inputResults');
-            $MoodleObj->outputPageHeader();
-
             $matrnr = false;
             $case='';
             $result;
@@ -238,11 +235,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                         break;
                 }
 
+                $MoodleObj->setPage('inputResults');
+                $MoodleObj->outputPageHeader();
+
                 //displays the form
                 $mform->display();
+
+                $MoodleObj->outputFooter();
+
             }
 
-            $MoodleObj->outputFooter();
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
             redirect($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
         }

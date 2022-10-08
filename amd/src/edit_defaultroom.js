@@ -14,28 +14,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * functions for disabling roomid field when room is edited
+ * Disabling roomid field when room is edited.
  *
  * @module      mod_exammanagement/edit_defaultroom
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/notification'], function ($) {
+import $ from 'jquery';
 
-  return {
-    init: function () {
+export const init = () => {
+  var roomid = $('#id_roomid').val();
+  var existingroom = $('input[name=existingroom]').val();
 
-      var roomid = $('#id_roomid').val();
-      var existingroom = $('input[name=existingroom]').val();
+  if (roomid && existingroom == true) { // Initial disabling of field roomid if room already exists.
+    $('#id_roomid').prop("disabled", true);
+  }
 
-      if (roomid && existingroom == true) { // initial disabling of field roomid if room already exists
-        $('#id_roomid').prop("disabled", true);
-      }
-
-      $('#id_submitbutton').click(function () {  // if submittbutton is presses enable complete form (for moodle purposes)
-        $("#id_roomid").prop("disabled", false);
-      });
-    },
-  };
-});
+  $('#id_submitbutton').click(function () {  // If submit button is pressed enable complete form.
+    $("#id_roomid").prop("disabled", false);
+  });
+};

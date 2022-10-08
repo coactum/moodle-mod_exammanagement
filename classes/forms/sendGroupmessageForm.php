@@ -89,7 +89,7 @@ class sendGroupmessageForm extends moodleform {
                 $mform->addElement('html', '</div>');
             }
 
-            $mform->addElement('html', '<span class="m-t-1"><hr></span>');
+            $mform->addElement('html', '<span class="mt-1"><hr></span>');
 
             $mform->addElement('textarea', 'groupmessages_subject', '<strong>'.get_string('subject', 'mod_exammanagement').'</strong>', 'wrap="virtual" rows="1" cols="50"');
             $mform->setType('groupmessages_subject', PARAM_TEXT);

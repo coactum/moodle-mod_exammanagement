@@ -22,18 +22,17 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function ($) {
+import $ from 'jquery';
 
-  return {
-    init: function() {
-      $('.mform input[type="checkbox"]').click(function () {
+export const init = () => {
+    $('.mform input[type="checkbox"]').click(function () {
         $('#selectedGroupOneCount').text($('input[type="checkbox"]:checked.checkboxgroup1').not("#checkboxgroup1").length);
         $('#selectedGroupTwoCount').text($('input[type="checkbox"]:checked.checkboxgroup2').not("#checkboxgroup2").length);
         $('#selectedGroupThreeCount').text($('input[type="checkbox"]:checked.checkboxgroup3').not("#checkboxgroup3").length);
-      });
+    });
+};
 
-    },
-    enable_cb: function () {
+export const enable_cb = () => {
       $("#checkboxgroup1").click(function () {
         $('input.checkboxgroup1').prop('checked', this.checked);
         $('#selectedGroupOneCount').text($('input[type="checkbox"]:checked.checkboxgroup1').not("#checkboxgroup1").length);
@@ -46,13 +45,12 @@ define(['jquery'], function ($) {
         $('input.checkboxgroup3').not(this).prop('checked', this.checked);
         $('#selectedGroupThreeCount').text($('input[type="checkbox"]:checked.checkboxgroup3').not("#checkboxgroup3").length);
       });
-    },
-    togglesection: function () {
-      $('.toggable').click(function () {
+};
+
+export const togglesection = () => {
+    $('.toggable').click(function () {
         $('.' + $(this).attr('id') + '_body').slideToggle("slow");
         $('.' + $(this).attr('id') + '_maximize').toggle();
         $('.' + $(this).attr('id') + '_minimize').toggle();
-      });
-    },
-  };
-});
+    });
+};

@@ -98,15 +98,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             echo('</div><div>');
 
             if (!empty($userobj->getCourseParticipantsIDs())) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCourseParticipants", $id) . '" class="btn btn-primary pull-right m-r-1 m-b-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCourseParticipants", $id) . '" class="btn btn-primary pull-right mr-1 mb-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
             }
 
             if (get_config('mod_exammanagement', 'enableldap')) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addParticipants", $id) . '" role="button" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addParticipants", $id) . '" role="button" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
             }
 
             if ($participants) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("convertToGroup", $id) . '" role="button" class="btn btn-primary m-r-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("convertToGroup", $id) . '" role="button" class="btn btn-primary mr-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
             }
 
             echo('</div></div>');
@@ -203,7 +203,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
             if ($participants) {
-                echo ('<a href="viewParticipants.php?id=' . $id . '&dap=1&sesskey=' . sesskey() . '" class="btn btn-default m-l-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+                echo ('<a href="viewParticipants.php?id=' . $id . '&dap=1&sesskey=' . sesskey() . '" class="btn btn-default ml-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
             }
 
             echo('</span>');

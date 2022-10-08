@@ -76,15 +76,15 @@ class assignplaces_form extends moodleform {
         $mform->addElement('html', '</h3><div>');
 
         if ($this->_customdata['map']) {
-            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         } else {
-            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $assignedplacescount = $exammanagementinstanceobj->getAssignedPlacesCount();
 
         if ($assignedplacescount) {
-            $mform->addElement('html', '<a href="assignPlaces.php?id=' . $this->_customdata['id'] . '&uap=1&sesskey=' . sesskey() . '" role="button" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="assignPlaces.php?id=' . $this->_customdata['id'] . '&uap=1&sesskey=' . sesskey() . '" role="button" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');

@@ -14,33 +14,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * functions for creating input type number fields
+ * Creating input type number elements
  *
  * @module      mod_exammanagement/configure_gradingscale
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/notification'], function ($) {
+import $ from 'jquery';
 
-  return {
-    init: function (totalpoints) {
+export const init = (totalpoints) => {
+    // Create input type number elements.
+    $("form.mform input[type=text]").attr("type", "number");
 
-      // create input type number elements
-      $("form.mform input[type=text]").attr("type", "number");
+    var styles = {
+      "-webkit-appearance": "textfield",
+      "-moz-appearance": "textfield",
+      "margin": "0px",
+      "width": "100px"
+    };
 
-      var styles = {
-        "-webkit-appearance": "textfield",
-        "-moz-appearance": "textfield",
-        "margin": "0px",
-        "width": "100px"
-      };
+    $("form.mform input[type=number]").css(styles);
+    $("form.mform input[type=number]").attr("step", "0.01");
+    $("form.mform input[type=number]").attr("min", "0");
+    $("form.mform input[type=number]").attr("max", totalpoints);
 
-      $("form.mform input[type=number]").css(styles);
-      $("form.mform input[type=number]").attr("step", "0.01");
-      $("form.mform input[type=number]").attr("min", "0");
-      $("form.mform input[type=number]").attr("max", totalpoints);
-
-    },
-  };
-});
+};
