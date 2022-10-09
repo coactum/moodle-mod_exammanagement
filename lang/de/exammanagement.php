@@ -604,6 +604,10 @@ $string['allexamdatadeleted'] = 'Prüfungsdaten gelöscht';
 $string['deleteexamparticipantsdata'] = 'Alle Prüfungsteilnehmenden löschen aber Prüfungsdaten behalten';
 $string['examparticipantsdatadeleted'] = 'Prüfungsteilnehmende gelöscht';
 
+// Calendar.
+$string['examtime'] = 'Prüfung "{$a}"';
+$string['examreviewtime'] = 'Klausureinsicht für die Prüfung "{$a}"';
+
 // helptexts
 $string['overview_help']= 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen und Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
 Diese sind übersichtlich in verschiedene Phasen unterteilt, welche entlang eines Zeitstrangs angeordnet sind. Für jeden einzelnen Arbeitsschritt ist der Bearbeitungsstatus durch entsprechende Symbole, Texte und Farben zu erkennen. Es gibt verpflichtende Arbeitsschritte und Optionale, die zwar hilfreich sind, aber auch weggelassen werden können. Sobald alle verpflichtenden Schritte einer Phase erledigt sind klappt diese automatisch zu und es öffnet sich die Nächste. Phasen können jedoch auch jederzeit manuell geöffnet und zugeklappt werden. <br /><br />

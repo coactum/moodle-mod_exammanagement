@@ -604,6 +604,10 @@ $string['allexamdatadeleted'] = 'Exam data deleted';
 $string['deleteexamparticipantsdata'] = 'Delete only exam participants and keep exam data';
 $string['examparticipantsdatadeleted'] = 'Exam participants deleted';
 
+// Calendar.
+$string['examtime'] = 'Exam "{$a}"';
+$string['examreviewtime'] = 'Exam review for the exam "{$a}"';
+
 //helptexts
 $string['overview_help']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
 These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing state is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
