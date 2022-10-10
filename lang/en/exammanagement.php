@@ -881,6 +881,15 @@ $string['privacy:metadata:exammanagement_rooms:type'] = 'Room type (default or c
 $string['privacy:metadata:exammanagement_rooms:moodleuserid'] = 'Moodle intern id of user who created custom room';
 $string['privacy:metadata:exammanagement_rooms:misc'] = 'Other config values in json syntax (at the moment only timestamp when default room is created)';
 $string['privacy:metadata:core_message'] = 'The exam management plugin sends messages to users and saves their content in the database. This can either be group messages to the participants with exam information, messages to the support if a teacher wants the support to reset the password of an exam management or a system message that informs the teacher about the upcoming deletion of the sensible exam data of an exam management.';
+$string['privacy:metadata:preference:exammanagement_phase_one'] = 'If the user has opened or closed the first phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_two'] = 'If the user has opened or closed the second phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_exam'] = 'If the user has opened or closed the exam phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_three'] = 'If the user has opened or closed the third phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_four'] = 'If the user has opened or closed the fourth phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_five'] = 'If the user has opened or closed the fifth phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phaseopenedorclosed'] = 'If the user has manually opened or closed the phase of the exam management';
+$string['opened'] = 'Open';
+$string['closed'] = 'Closed';
 
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Enable requesting password reset';

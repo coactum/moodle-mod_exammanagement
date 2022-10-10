@@ -535,37 +535,37 @@ class exammanagementInstance{
 
  		switch ($phase) {
 
-			case 1:
+			case "phase_one":
 				if ($this->getRoomsCount() && $this->getExamtime() && $UserObj->getParticipantsCount() && $this->getTaskCount()) {
 					return true;
 				} else {
 						return false;
 				}
-			case 2:
+			case "phase_two":
 				if ($this->placesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))) {
 					return true;
 				} else {
 						return false;
 				}
-			case "Exam":
+			case "phase_exam":
 				if ($this->getExamtime() && $this->getExamtime() < time()) {
 					return true;
 				} else {
 					return false;
 				}
-			case 3:
+			case "phase_three":
 				if ($this->getDataDeletionDate()) {
 					return true;
 				} else {
 					return false;
 				}
-			case 4:
+			case "phase_four":
 				if ($this->getExamReviewTime() && $this->getExamReviewRoom() && $this->isExamReviewVisible()) {
 					return true;
 				} else {
 					return false;
 				}
-			case 5:
+			case "phase_five":
 				if ($this->getExamReviewTime() && $this->getExamReviewTime() < time()) {
 					return true;
 				} else {
@@ -575,30 +575,30 @@ class exammanagementInstance{
 
  	}
 
-	public function determineCurrentPhase() {
+	public function determineactivePhase() {
 
-			$phaseOne = $this->checkPhaseCompletion(1);
-			$phaseTwo = $this->checkPhaseCompletion(2);
-			$phaseThree = $this->checkPhaseCompletion(3);
-			$phaseFour = $this->checkPhaseCompletion(4);
-			$phaseFive = $this->checkPhaseCompletion(5);
+			$phaseOne = $this->checkPhaseCompletion("phase_one");
+			$phaseTwo = $this->checkPhaseCompletion("phase_two");
+			$phaseThree = $this->checkPhaseCompletion("phase_three");
+			$phaseFour = $this->checkPhaseCompletion("phase_four");
+			$phaseFive = $this->checkPhaseCompletion("phase_five");
 
 			$examDate = $this->getExamtime();
 			$examReviewDate = $this->moduleinstance->examreviewtime;
 			$date = time();
 
  			if (!$phaseOne) {
-					return '1';
+				return 'phase_one';
 			} else if (!$phaseTwo) {
-					return '2';
+				return 'phase_two';
 			} else if ($phaseTwo && $examDate > $date) {
-					return 'exam';
+				return 'phase_exam';
 			} else if (!$phaseThree && $examDate < $date) {
-					return '3';
+				return 'phase_three';
 			} else if ($phaseThree && $examDate < $date) {
-					return '4';
+				return 'phase_four';
 			} else if ($phaseFour && $examReviewDate < $date) {
-					return '5';
+				return 'phase_four';
 		}
 	 }
 

@@ -881,6 +881,15 @@ $string['privacy:metadata:exammanagement_rooms:type'] = 'Raumtyp (Standard oder 
 $string['privacy:metadata:exammanagement_rooms:moodleuserid'] = 'Moodleinterne ID des Nutzers der den benutzerdefinierten Raum angelegt hat';
 $string['privacy:metadata:exammanagement_rooms:misc'] = 'Weitere Werte in JSON-Syntax (momentan nur Zeitstempel wann Standardraum erstellt wurde)';
 $string['privacy:metadata:core_message'] = 'Das Plugin zur Prüfungsorganisation sendet Nachrichten an Benutzer und speichert deren Inhalte in der Datenbank. Dies können Gruppennachrichten mit Prüfungsinformationen an Teilnehmer sein, Nachrichten an den Support wenn ein Lehrender diesen bittet das Passwort einer Prüfungsorganisation zurückzusetzen oder aber Systemnachrichten, die einen Lehrenden über die baldige Löschung der sensiblen Daten einer Prüfungsorganisation informieren.';
+$string['privacy:metadata:preference:exammanagement_phase_one'] = 'Ob der Benutzer die erste Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phase_two'] = 'Ob der Benutzer die zweite Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phase_exam'] = 'Ob der Benutzer die Prüfungsphase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phase_three'] = 'Ob der Benutzer die dritte Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phase_four'] = 'Ob der Benutzer die vierte Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phase_five'] = 'Ob der Benutzer die fünfte Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_phaseopenedorclosed'] = 'Ob der Benutzer die Phase der Prüfungsorganisation manuell geöffnet oder geschlossen hat';
+$string['opened'] = 'Offen';
+$string['closed'] = 'Geschlossen';
 
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Beantragen des Passwort-Zurücksetzens aktivieren';

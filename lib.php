@@ -90,6 +90,14 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
 
+    // Unset opening state of the exam phases saved in the user preferences.
+    unset_user_preference('exammanagement_phase_one');
+    unset_user_preference('exammanagement_phase_two');
+    unset_user_preference('exammanagement_phase_exam');
+    unset_user_preference('exammanagement_phase_three');
+    unset_user_preference('exammanagement_phase_four');
+    unset_user_preference('exammanagement_phase_five');
+
     return $moduleinstance->id;
 }
 

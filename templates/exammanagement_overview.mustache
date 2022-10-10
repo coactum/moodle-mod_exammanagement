@@ -28,16 +28,22 @@ toggleHelptextPanel = function() {
 };
 
 togglePhase = function(phase) {
-		$(phase).slideToggle("slow");
-		$(phase+'_maximize').toggle();
-		$(phase+'_minimize').toggle();
+	jQuery.ajax ({
+        url: './view.php',
+        data: {'id': {{cmid}},'togglephase': true, 'phase': phase, 'sesskey': '{{sesskey}}' },
+        complete: function(response) {
+			$('.' + phase).slideToggle("slow");
+			$('.' + phase + '_maximize').toggle();
+			$('.' + phase + '_minimize').toggle();
+        }
+    });
 };
 
 ajaxtoggleInformation = function(command, value) {
 
-		$('.loadable').toggle();
+	$('.loadable').toggle();
 
-		if (command=='room') {
+	if (command=='room') {
         jQuery.ajax ({
             url: './view.php',
             data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value), 'sesskey': '{{sesskey}}' },
@@ -173,17 +179,17 @@ ajaxsetcorrectioncompletion = function(value) {
 		{{!before_exam}}
 		<span id="beforeexam"></span>
 		<li class="item">
-			{{#firstphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/firstphasecompleted}}
-			{{^firstphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/firstphasecompleted}}
+			{{#phases.phase_one.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_one.completed}}
+			{{^phases.phase_one.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_one.completed}}
 			<div class="panel panel-primary mainpanel">
 				<div class="panel-heading">
-					<a aria-expanded="false" onclick="togglePhase('.phase_one'); return true;">
+					<a aria-expanded="false" onclick="togglePhase('phase_one'); return true;">
 						<h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
-						<span class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}}{{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#firstphaseactive}}collapse{{/firstphaseactive}}{{^firstphaseactive}}collapse.show{{/firstphaseactive}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_one.open}}collapse.show{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse{{/phases.phase_one.open}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_one.open}}collapse{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse.show{{/phases.phase_one.open}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
-				<div class="{{#firstphaseactive}}collapse.show{{/firstphaseactive}} {{^firstphaseactive}}collapse{{/firstphaseactive}} phase_one">
+				<div class="{{#phases.phase_one.open}}collapse.show{{/phases.phase_one.open}} {{^phases.phase_one.open}}collapse{{/phases.phase_one.open}} phase_one">
 					<div class="panel-body">
 						<div class="row row-eq-height">
 							<div class="col-6">
@@ -310,17 +316,17 @@ ajaxsetcorrectioncompletion = function(value) {
 		{{!for_exam}}
 		<span id="forexam"></span>
 		<li class="item">
-			{{#secondphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/secondphasecompleted}}
-			{{^secondphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/secondphasecompleted}}
+			{{#phases.phase_two.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_two.completed}}
+			{{^phases.phase_two.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_two.completed}}
 			<div class="panel panel-primary mainpanel">
 				<div class="panel-heading">
-					<a aria-expanded="false" onclick="togglePhase('.phase_two'); return true;">
+					<a aria-expanded="false" onclick="togglePhase('phase_two'); return true;">
 						<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
-						<span class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}}{{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#secondphaseactive}}collapse{{/secondphaseactive}}{{^secondphaseactive}}collapse.show{{/secondphaseactive}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_two.open}}collapse.show{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse{{/phases.phase_two.open}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_two.open}}collapse{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse.show{{/phases.phase_two.open}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
-				<div class="{{#secondphaseactive}}collapse.show{{/secondphaseactive}} {{^secondphaseactive}}collapse{{/secondphaseactive}} phase_two">
+				<div class="{{#phases.phase_two.open}}collapse.show{{/phases.phase_two.open}} {{^phases.phase_two.open}}collapse{{/phases.phase_two.open}} phase_two">
 					<div class="panel-body">
 						<div class="row row-eq-height">
 							<div class="col-6">
@@ -475,17 +481,17 @@ ajaxsetcorrectioncompletion = function(value) {
 			{{!exam}}
 			<li class="item">
 				<i class="fa fa-fw" aria-hidden="true"></i>
-				{{#examphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/examphasecompleted}}
-				{{^examphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/examphasecompleted}}
+				{{#phases.phase_exam.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_exam.completed}}
+				{{^phases.phase_exam.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_exam.completed}}
 				<div class="panel panel-primary mainpanel">
 					<div class="panel-heading">
-						<a aria-expanded="false" onclick="togglePhase('.examappointment'); return true;">
+						<a aria-expanded="false" onclick="togglePhase('phase_exam'); return true;">
 							<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
-							<span class="{{#examphaseactive}}collapse.show{{/examphaseactive}}{{^examphaseactive}}collapse{{/examphaseactive}} examappointment_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-							<span class="{{#examphaseactive}}collapse{{/examphaseactive}}{{^examphaseactive}}collapse.show{{/examphaseactive}} examappointment_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse{{/phases.phase_exam.open}} phase_exam_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_exam.open}}collapse{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}} phase_exam_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 						</a>
 					</div>
-					<div class="{{#examphaseactive}}collapse.show{{/examphaseactive}} {{^examphaseactive}}collapse{{/examphaseactive}} examappointment">
+					<div class="{{#phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}} {{^phases.phase_exam.open}}collapse{{/phases.phase_exam.open}} phase_exam">
 						<div class="panel-body">
 							<span>
 								{{#examtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{#userdate}}{{examtime}}, {{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdate}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/examtime}}
@@ -502,17 +508,17 @@ ajaxsetcorrectioncompletion = function(value) {
 			{{!after_grading}}
 			<span id="aftercorrection"></span>
 			<li class="item">
-				{{#thirdphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/thirdphasecompleted}}
-				{{^thirdphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/thirdphasecompleted}}
+				{{#phases.phase_third.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_third.completed}}
+				{{^phases.phase_third.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_third.completed}}
 				<div class="panel panel-primary mainpanel">
 					<div class="panel-heading">
-						<a aria-expanded="false" onclick="togglePhase('.phase_three'); return true;">
+						<a aria-expanded="false" onclick="togglePhase('phase_three'); return true;">
 							<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
-							<span class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}}{{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-							<span class="{{#thirdphaseactive}}collapse{{/thirdphaseactive}}{{^thirdphaseactive}}collapse.show{{/thirdphaseactive}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_three.open}}collapse{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 						</a>
 					</div>
-					<div class="{{#thirdphaseactive}}collapse.show{{/thirdphaseactive}} {{^thirdphaseactive}}collapse{{/thirdphaseactive}} phase_three">
+					<div class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} {{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three">
 						<div class="panel-body">
 							<div class="row row-eq-height">
 								<div class="col-6">
@@ -668,17 +674,17 @@ ajaxsetcorrectioncompletion = function(value) {
 		{{!after_exam}}
 		<span id="afterexam"></span>
 		<li class="item">
-			{{#fourthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fourthphasecompleted}}
-			{{^fourthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fourthphasecompleted}}
+			{{#phases.phase_four.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_four.completed}}
+			{{^phases.phase_four.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_four.completed}}
 			<div class="panel panel-primary mainpanel">
 				<div class="panel-heading">
-					<a aria-expanded="false" onclick="togglePhase('.phase_four'); return true;">
+					<a aria-expanded="false" onclick="togglePhase('phase_four'); return true;">
 						<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
-						<span class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}}{{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#fourthphaseactive}}collapse{{/fourthphaseactive}}{{^fourthphaseactive}}collapse.show{{/fourthphaseactive}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_four.open}}collapse.show{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse{{/phases.phase_four.open}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_four.open}}collapse{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse.show{{/phases.phase_four.open}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
-				<div class="{{#fourthphaseactive}}collapse.show{{/fourthphaseactive}} {{^fourthphaseactive}}collapse{{/fourthphaseactive}} phase_four">
+				<div class="{{#phases.phase_four.open}}collapse.show{{/phases.phase_four.open}} {{^phases.phase_four.open}}collapse{{/phases.phase_four.open}} phase_four">
 					<div class="panel-body">
 						<div class="row row-eq-height">
 							<div class="col-6">
@@ -780,17 +786,17 @@ ajaxsetcorrectioncompletion = function(value) {
 		{{!exam_review}}
 		<span id="examreview"></span>
 		<li class="item">
-			{{#fifthphasecompleted}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/fifthphasecompleted}}
-			{{^fifthphasecompleted}}<i class="fa fa-fw" aria-hidden="true"></i>{{/fifthphasecompleted}}
+			{{#phases.phase_five.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_five.completed}}
+			{{^phases.phase_five.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_five.completed}}
 			<div class="panel panel-primary mainpanel">
 				<div class="panel-heading">
-					<a aria-expanded="false" onclick="togglePhase('.phase_five'); return true;">
+					<a aria-expanded="false" onclick="togglePhase('phase_five'); return true;">
 						<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
-						<span class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}}{{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#fifthphaseactive}}collapse{{/fifthphaseactive}}{{^fifthphaseactive}}collapse.show{{/fifthphaseactive}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_five.open}}collapse.show{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse{{/phases.phase_five.open}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_five.open}}collapse{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse.show{{/phases.phase_five.open}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
-				<div class="{{#fifthphaseactive}}collapse.show{{/fifthphaseactive}} {{^fifthphaseactive}}collapse{{/fifthphaseactive}} phase_five">
+				<div class="{{#phases.phase_five.open}}collapse.show{{/phases.phase_five.open}} {{^phases.phase_five.open}}collapse{{/phases.phase_five.open}} phase_five">
 					<div class="panel-body">
 						<div class="row row-eq-height">
 							<div class="col-6">

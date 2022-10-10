@@ -18,7 +18,7 @@
  * Privacy subsystem implementation for mod_exammanagement.
  *
  * @package    mod_exammanagement
- * @copyright  coactum GmbH 2019
+ * @copyright  2022 coactum GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,12 +32,12 @@ use \core_privacy\local\request\helper;
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 
-defined('MOODLE_INTERNAL') || die();
+use core_privacy\local\request\user_preference_provider;
 
 /**
  * Implementation of the privacy subsystem plugin provider for the exammanagement activity module.
  *
- * @copyright  coactum GmbH 2019
+ * @copyright  2022 coactum GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
@@ -48,7 +48,10 @@ class provider implements
     \core_privacy\local\request\plugin\provider,
 
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\request\core_userlist_provider,
+
+    // This plugin saves user preferences.
+    \core_privacy\local\request\user_preference_provider {
 
     /**
      * Returns meta data about this system.
@@ -58,8 +61,9 @@ class provider implements
      */
     public static function get_metadata(collection $items) : collection {
 
-        // The table 'exammanagement' does not store any specific user data. It only stores general information about the exam like exam time, rooms, gradingscale and so on.
-        $items->add_database_table('exammanagement', ['-'=>'privacy:metadata:exammanagement:no_data'
+        // The table 'exammanagement' does not store any specific user data.
+        // It only stores general information about the exam like exam time, rooms, gradingscale and so on.
+        $items->add_database_table('exammanagement', ['-' => 'privacy:metadata:exammanagement:no_data'
         ], 'privacy:metadata:exammanagement');
 
         // The table 'exammanagement_participants' stores the personal data of all participants added to any exam.
@@ -83,7 +87,8 @@ class provider implements
             'bonuspoints' => 'privacy:metadata:exammanagement_participants:bonuspoints',
         ], 'privacy:metadata:exammanagement_participants');
 
-        // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved. This potential participants can not directly be mapped to a moodle user in moodle, so no export is possible.
+        // The table 'exammanagement_temp_part' stores data of all potential exam participants that are temporary saved.
+        // This potential participants can not directly be mapped to a moodle user in moodle, so no export is possible.
         $items->add_database_table('exammanagement_temp_part', [
             'exammanagement' => 'privacy:metadata:exammanagement_participants:exammanagement',
             'courseid' => 'privacy:metadata:exammanagement_participants:courseid',
@@ -108,7 +113,13 @@ class provider implements
         // The exammanagement uses the messages subsystem that saves personal data.
         $items->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
 
-        // There are no user preferences in the exammanagement.
+        // User preferences in the exammanagement.
+        $items->add_user_preference('exammanagement_phase_one', 'privacy:metadata:preference:exammanagement_phase_one');
+        $items->add_user_preference('exammanagement_phase_two', 'privacy:metadata:preference:exammanagement_phase_two');
+        $items->add_user_preference('exammanagement_phase_exam', 'privacy:metadata:preference:exammanagement_phase_exam');
+        $items->add_user_preference('exammanagement_phase_three', 'privacy:metadata:preference:exammanagement_phase_three');
+        $items->add_user_preference('exammanagement_phase_four', 'privacy:metadata:preference:exammanagement_phase_four');
+        $items->add_user_preference('exammanagement_phase_five', 'privacy:metadata:preference:exammanagement_phase_five');
 
         return $items;
     }
@@ -295,6 +306,93 @@ class provider implements
         writer::with_context($context)->export_data($subcontext, $contextdata);
         // Write generic module intro files.
         helper::export_context_files($context, $user);
+    }
+
+    /**
+     * Store all user preferences for the plugin.
+     *
+     * @param   int         $userid The userid of the user whose data is to be exported.
+     */
+    public static function export_user_preferences(int $userid) {
+        $user = \core_user::get_user($userid);
+
+        $phaseoneopen = get_user_preferences('exammanagement_phase_one', null, $userid);
+        if (isset($phaseoneopen)) {
+
+            if ($phaseoneopen == 1) {
+                $phaseoneopen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phaseoneopen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_one', $phaseoneopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $phasetwoopen = get_user_preferences('exammanagement_phase_two', null, $userid);
+        if (isset($phasetwoopen)) {
+
+            if ($phasetwoopen == 1) {
+                $phasetwoopen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phasetwoopen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_two', $phasetwoopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $phaseexamopen = get_user_preferences('exammanagement_phase_exam', null, $userid);
+        if (isset($phaseexamopen)) {
+
+            if ($phaseexamopen == 1) {
+                $phaseexamopen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phaseexamopen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_exam', $phaseexamopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $phasethreeopen = get_user_preferences('exammanagement_phase_three', null, $userid);
+        if (isset($phasethreeopen)) {
+
+            if ($phasethreeopen == 1) {
+                $phasethreeopen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phasethreeopen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_three', $phasethreeopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $phasefouropen = get_user_preferences('exammanagement_phase_four', null, $userid);
+        if (isset($phasefouropen)) {
+
+            if ($phasefouropen == 1) {
+                $phasefouropen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phasefouropen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_four', $phasefouropen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $phasefiveopen = get_user_preferences('exammanagement_phase_five', null, $userid);
+        if (isset($phasefiveopen)) {
+
+            if ($phasefiveopen == 1) {
+                $phasefiveopen = get_string('opened', 'mod_exammanagement');
+            } else {
+                $phasefiveopen = get_string('closed', 'mod_exammanagement');
+            }
+
+            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_five', $phasefiveopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
     }
 
     /**
