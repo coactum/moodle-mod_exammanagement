@@ -132,10 +132,18 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
         }
     }
 
+    // Check if mode export_grades.
     $misc = new stdclass;
     if ($mform->get_data()->exportgrades) {
-
         $misc->mode = 'export_grades';
+    }
+
+    // Set phase and steps deselections.
+    if ($mform->get_data()->deselectphaseexamreview) {
+        $misc->configoptions = array('noexamreview');
+    }
+
+    if (isset($misc->mode) || isset($misc->configoptions)) {
         $moduleinstance->misc = json_encode($misc);
     } else {
         $moduleinstance->misc = null;

@@ -827,6 +827,8 @@ $string['incorrect_password_change'] = 'Incorrect password. Terminated password 
 $string['export_grades_as_exam_results'] = 'Export course grades as exam results';
 $string['activate_mode'] = 'Activate grade export mode';
 $string['export_grades_as_exam_results_help'] = 'If this option is activated, the course gradings of all participants can easily be exported in a text document with the exam organization. Each grading is assigned to the matriculation number of the respective participant.';
+$string['deselectstepsandphases'] = 'Deselect worksteps and phases';
+$string['deselectphaseexamreview'] = 'Deselect phase exam review';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';

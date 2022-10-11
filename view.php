@@ -80,9 +80,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
     if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-        $mode = json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
 
-        if ($mode) {
+        if (isset($misc['mode']) && $misc['mode'] == 'export_grades') {
             $mode = 'export_grades';
         } else {
             $mode = 'normal';
@@ -356,15 +356,20 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
             $phases->phase_four = $phasefour;
 
             $phasefive = new stdclass();
-            $phasefive->completed = $exammanagementinstanceobj->checkPhaseCompletion('phase_five');
 
-            if (null !== get_user_preferences('exammanagement_phase_five')) {
-                $phasefive->open = get_user_preferences('exammanagement_phase_five');
+            if (isset($misc) && isset($misc['configoptions']) && in_array('noexamreview', $misc['configoptions'])) { // If exam review is disabled.
+                $phasefive = false;
             } else {
-                if ($activephase == 'phase_five') {
-                    $phasefive->open = true;
+                $phasefive->completed = $exammanagementinstanceobj->checkPhaseCompletion('phase_five');
+
+                if (null !== get_user_preferences('exammanagement_phase_five')) {
+                    $phasefive->open = get_user_preferences('exammanagement_phase_five');
                 } else {
-                    $phasefive->open = false;
+                    if ($activephase == 'phase_five') {
+                        $phasefive->open = true;
+                    } else {
+                        $phasefive->open = false;
+                    }
                 }
             }
 

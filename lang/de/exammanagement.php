@@ -827,6 +827,8 @@ $string['incorrect_password_change'] = 'Das alte Passwort ist falsch. Passwortä
 $string['export_grades_as_exam_results'] = 'Kursbewertungen als Prüfungsergebnisse exportieren';
 $string['activate_mode'] = 'Bewertungsexport aktivieren';
 $string['export_grades_as_exam_results_help'] = 'Ist diese Option aktiviert können mit der Prüfungsorganisation die Kursbewertungen aller Teilnehmer einfach in einem Textdokument als Prüfungsergebnisse exportiert werden. Jede Bewertung ist dabei (falls diese vorhanden ist) der Matrikelnummer des jeweiligen Teilnehmenden zugeordnet.';
+$string['deselectstepsandphases'] = 'Arbeitsschritte und Phasen abschalten';
+$string['deselectphaseexamreview'] = 'Phase Klausureinsicht abschalten';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Neue Prüfungsorganisation hinzufügen';
