@@ -57,7 +57,7 @@
     </library>
     <library>
         <location>thirdparty/vendor/symfony/property-access</location>
-        <name>Symfonfy Inflector</name>
+        <name>Symfonfy property-access</name>
         <version>v3.3.13</version>
         <license>MIT</license>
         <licenseversion>1</licenseversion>
