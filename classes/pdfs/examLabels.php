@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class for examlabels PDF for exammanagement
+ * Class for examlabels PDF for exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -29,15 +29,35 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
 
-// Extend the TCPDF class to create custom Header and Footer
+// Extend the TCPDF class to create custom Header and Footer.
 class examLabels extends TCPDF {
 
-  public function Footer() {
-    $this->SetFont('helvetica', 'BI', 10);
-		$this->SetXY(10, -15); // 1.5 cm from bottom
-		$this->Cell(0, 12, get_string("required_label_type", "mod_exammanagement") . " Avery Zweckform L4744", 0, 0, 'L');
-		$this->SetX(100);
-		$this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
-  }
+    protected $mode = 'barcode';
+
+    /**
+     * Set mode for footer
+     *
+     * @param string $mode The mode for the footer.
+     */
+    public function setmode($mode) {
+        $this->mode = $mode;
+    }
+
+    /**
+     * Override the footer of the base class.
+     */
+    public function footer() {
+        $this->SetFont('helvetica', 'BI', 10);
+        $this->SetXY(10, -15); // 1.5 cm from bottom.
+
+        if ($this->mode == 'barcode') {
+            $this->Cell(0, 12, get_string("required_label_type", "mod_exammanagement") . " Avery Zweckform L4744", 0, 0, 'L');
+            $this->SetX(200);
+        } else {
+            $this->SetX(40);
+        }
+
+        $this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
+    }
 
 }

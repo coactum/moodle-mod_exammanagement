@@ -55,7 +55,8 @@ class User{
 
     // Get array with all requested exam participants.
 
-    public function getexamparticipants($participantsmode, $requestedattributes, $sortorder = 'name', $pagination = false, $activepage = null, $countperpage = 10) {
+    public function getexamparticipants($participantsmode, $requestedattributes, $sortorder = 'name', $pagination = false, $activepage = null, $countperpage = 10,
+        $conditions = false) {
 
         $moodledbobj = MoodleDB::getInstance();
 
@@ -200,11 +201,19 @@ class User{
                             $participant->matrnr = $matriculationnumbers[$participant->login];
                         } else {
                             $participant->matrnr = '-';
+
+                            if ($conditions == 'withmatrnr') {
+                                unset($allparticipants[$key]);
+                            }
                         }
                     }
                 } else {
                     foreach ($allparticipants as $key => $participant) {
                         $participant->matrnr = '-';
+
+                        if ($conditions == 'withmatrnr') {
+                            unset($allparticipants[$key]);
+                        }
                     }
                 }
             }

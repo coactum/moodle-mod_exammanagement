@@ -401,7 +401,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											<strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_examlabels_note, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+											{{^deleted}}{{#participants}}<a class="btn btn-primary" href="exportExamLabels.php?id={{cmid}}&mode='qrcodes'"><span class="d-none d-lg-block">{{#str}}export_qrcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_qrcodes, mod_exammanagement{{/str}}"></i></a> <a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 										</div>
 									</div>
 								</div>
