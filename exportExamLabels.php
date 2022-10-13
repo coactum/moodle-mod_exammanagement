@@ -26,7 +26,6 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\ldap\ldapManager;
 use mod_exammanagement\pdfs\examLabels;
-use mod_exammanagement\qrcodes\exammanagement_qrcode;
 use moodle_url;
 
 require(__DIR__.'/../../config.php');
@@ -67,7 +66,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             // Include pdf.
             require_once(__DIR__.'/classes/pdfs/examLabels.php');
-            require_once(__DIR__.'/classes/qrcodes/qrcode.php');
 
             define('LABEL_HEIGHT', 55);
             define('X1', 7.7 + 2); // Plus Offset within Label.
@@ -129,6 +127,13 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 $lineoffset = -7;
             } else {
                 $lineoffset = -2;
+
+                $styleqr = array(
+                    'border' => false,
+                    'padding' => 0,
+                    'fgcolor' => array(0, 0, 0),
+                    'bgcolor' => false
+                );
             }
 
             $first = true;
@@ -190,9 +195,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     } else {
                                         $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                        $qrcode = new exammanagement_qrcode($url, $participant->matrnr, $exammanagementinstanceobj->moduleinstance);
-
-                                        $pdf->ImageSVG($qrcode->get_qrcode(), X1 + 22, $y + 17, '', 37, '', 'center', '', 0, false);
+                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                        $pdf->Text(20, 145, '');
                                     }
 
                                     if ($first == false) {
@@ -221,9 +225,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     } else {
                                         $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                        $qrcode = new exammanagement_qrcode($url, $participant->matrnr, $exammanagementinstanceobj->moduleinstance);
-
-                                        $pdf->ImageSVG($qrcode->get_qrcode(), X2 + 22, $y + 17, '', 37, '', 'center', '', 0, false);
+                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                        $pdf->Text(20, 145, '');
                                     }
 
                                     if ($first == false) {
@@ -289,9 +292,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 } else {
                                     $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                    $qrcode = new exammanagement_qrcode($url, $participant->matrnr, $exammanagementinstanceobj->moduleinstance);
-
-                                    $pdf->ImageSVG($qrcode->get_qrcode(), X1 + 22, $y + 17, '', 37, '', 'center', '', 0, false);
+                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                    $pdf->Text(20, 145, '');
                                 }
 
                                 if ($first == false) {
@@ -316,9 +318,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 } else {
                                     $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                    $qrcode = new exammanagement_qrcode($url, $participant->matrnr, $exammanagementinstanceobj->moduleinstance);
-
-                                    $pdf->ImageSVG($qrcode->get_qrcode(), X2 + 22, $y + 17, '', 37, '', 'center', '', 0, false);
+                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                    $pdf->Text(20, 145, '');
                                 }
 
                                 if ($first == false) {
