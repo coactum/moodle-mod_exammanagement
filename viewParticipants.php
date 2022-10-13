@@ -203,7 +203,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
             if ($participants) {
-                echo ('<a href="viewParticipants.php?id=' . $id . '&dap=1&sesskey=' . sesskey() . '" class="btn btn-default ml-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
+                echo ('<a href="viewParticipants.php?id=' . $id . '&dap=1&sesskey=' . sesskey() . '" class="btn btn-secondary ml-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
             }
 
             echo('</span>');
