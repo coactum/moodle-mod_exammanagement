@@ -48,7 +48,7 @@ class addDefaultRoomsForm extends moodleform {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-    $mform = $this->_form; // Don't forget the underscore!
+    $mform = $this->_form;
 
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -66,7 +66,7 @@ class addDefaultRoomsForm extends moodleform {
       $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("default_rooms_already_exists", "mod_exammanagement").'</div>');
     }
 
-    $mform->addElement('hidden', 'id', 'dummy');
+    $mform->addElement('hidden', 'id');
     $mform->setType('id', PARAM_INT);
 
     $mform->addElement('filepicker', 'defaultrooms_list', get_string("default_rooms_file_structure", "mod_exammanagement"), null, array('accepted_types' => '.txt'));

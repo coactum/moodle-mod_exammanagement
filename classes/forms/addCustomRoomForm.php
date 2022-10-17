@@ -44,7 +44,7 @@ class addCustomRoomForm extends moodleform {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-    $mform = $this->_form; // Don't forget the underscore!
+    $mform = $this->_form;
 
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 

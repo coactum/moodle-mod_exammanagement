@@ -24,8 +24,6 @@
 
 namespace mod_exammanagement\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_exammanagement course module viewed event class
  *

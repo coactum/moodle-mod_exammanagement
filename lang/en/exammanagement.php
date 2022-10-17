@@ -406,7 +406,7 @@ $string['configure_tasks_text'] = 'Define the quantity of tasks and their maximu
 $string['add_remove_tasks'] = 'Add or remove tasks';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
-$string['total'] = 'Total';
+$string['total'] = 'Total points';
 $string['results_already_entered'] = '<strong>Warning:</strong> Some exam results have already been entered. After changing the tasks, you should check whether they may need to be updated.';
 $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check if it needs to be updated.';
 

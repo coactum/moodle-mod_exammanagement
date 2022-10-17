@@ -63,7 +63,7 @@ class addCourseParticipantsForm extends moodleform{
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -83,7 +83,7 @@ class addCourseParticipantsForm extends moodleform{
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("places_already_assigned_participants", "mod_exammanagement").'</div>');
         }
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         # get all nedded user data #

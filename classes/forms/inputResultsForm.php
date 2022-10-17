@@ -46,7 +46,7 @@ class inputResultsForm extends moodleform {
 
         $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init', $jsArgs); ////call jquery for tracking input value change events
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -61,7 +61,7 @@ class inputResultsForm extends moodleform {
         $mform->addElement('html', '<p>'.get_string("input_results_text", "mod_exammanagement").'</p>');
 
         //create hidden id field
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         //create hidden field that indicates matr validation submit

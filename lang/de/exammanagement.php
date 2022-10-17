@@ -406,7 +406,7 @@ $string['configure_tasks_text'] = 'Hier können die Anzahl und die Maximalpunktz
 $string['add_remove_tasks'] = 'Aufgaben hinzufügen oder entfernen:';
 $string['task'] = 'Aufgabe';
 $string['points'] = 'Punkte';
-$string['total'] = 'Summe';
+$string['total'] = 'Gesamtpunktzahl';
 $string['results_already_entered'] = '<strong>Achtung:</strong> Es wurden bereits Prüfungsergebnisse eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob diese eventuell aktualisiert werden müssen.';
 $string['gradingscale_already_entered'] = '<strong>Achtung:</strong> Es wurde bereits ein Notenschlüssel eingetragen. Prüfen Sie bitte nach dem Ändern der Aufgaben, ob dieser eventuell angepasst werden muss.';
 

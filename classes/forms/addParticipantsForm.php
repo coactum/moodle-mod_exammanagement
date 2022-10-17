@@ -58,7 +58,7 @@ class addParticipantsForm extends moodleform{
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         if (isset($this->_customdata['allParticipants'])) {
             $allParticipants = $this->_customdata['allParticipants'];
@@ -88,7 +88,7 @@ class addParticipantsForm extends moodleform{
 
         $mform->addElement('html', '</div></div>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         if ($allParticipants) {

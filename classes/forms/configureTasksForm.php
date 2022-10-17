@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing configureTasksForm for exammanagement
+ * The form for configuring the tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -29,29 +29,37 @@ use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
 
+/**
+ * The form for configuring the tasks for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class configureTasksForm extends moodleform {
 
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition() {
 
         global $PAGE, $OUTPUT;
 
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
 
-        $jsArgs = array('lang'=>current_language());
+        $jsargs = array('lang' => current_language());
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init', $jsArgs); //call jquery for tracking input value change events and creating input type number fields
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask', $jsArgs); //call jquery for adding tasks
-        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask', $jsArgs); //call jquery for removing tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'init', $jsargs); // Call jquery for tracking input value change events and creating input number fields.
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'addtask', $jsargs); // call jquery for adding tasks.
+        $PAGE->requires->js_call_amd('mod_exammanagement/configure_tasks', 'removetask', $jsargs); // call jquery for removing tasks.
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -65,118 +73,121 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
-        if ($UserObj->getEnteredResultsCount()) {
-            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("results_already_entered", "mod_exammanagement").'</div>');
+        if ($userobj->getEnteredResultsCount()) {
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in"
+                role="alert"><button type="button" class="close" data-dismiss="alert">×</button>' . get_string("results_already_entered", "mod_exammanagement") . '</div>');
         }
 
-        if ($ExammanagementInstanceObj->getGradingscale()) {
-            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("gradingscale_already_entered", "mod_exammanagement").'</div>');
+        if ($exammanagementinstanceobj->getGradingscale()) {
+            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in"
+                role="alert"><button type="button" class="close" data-dismiss="alert">×</button>' . get_string("gradingscale_already_entered", "mod_exammanagement") . '</div>');
         }
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        //group for add and remove tasks buttons
-        $tasks_buttonarray = array();
-        array_push($tasks_buttonarray, $mform->createElement('button', 'add_task', '<i class="fa fa-plus" aria-hidden="true"></i>'));
-        array_push($tasks_buttonarray, $mform->createElement('button', 'remove_task', '<i class="fa fa-minus" aria-hidden="true"></i>'));
-        $mform->addGroup($tasks_buttonarray, 'tasks_buttonarray', get_string('add_remove_tasks', 'mod_exammanagement'), array(' '), false);
+        // Group for add and remove tasks buttons.
+        $tasksbuttonarray = array();
+        array_push($tasksbuttonarray, $mform->createElement('button', 'add_task', '<i class="fa fa-plus" aria-hidden="true"></i>'));
+        array_push($tasksbuttonarray, $mform->createElement('button', 'remove_task', '<i class="fa fa-minus" aria-hidden="true"></i>'));
+        $mform->addGroup($tasksbuttonarray, 'tasks_buttonarray', get_string('add_remove_tasks', 'mod_exammanagement'), array(' '), false);
 
-        //create list of tasks
-        $tasks = $ExammanagementInstanceObj->getTasks();
-        $totalpoints = $ExammanagementInstanceObj->getTaskTotalPoints();
+        // Create list of tasks.
+        $tasks = $exammanagementinstanceobj->getTasks();
 
-        $tasknumbers_array = array();
-        $tasks_array = array();
-        $attributes = array('size'=>'1'); // length of input field
-        $oldtaskcount = 0;
+        // Add temp tasks to task array (only needed when form is recreated for saving tasks).
         $temptaskcount = $this->_customdata['newtaskcount'];
 
-        //add tasks from DB
-        if ($tasks) {
+        // Modified stored tasks (only needed when form is recreated for saving tasks).
+        if ($temptaskcount > 0 && $tasks && $temptaskcount < count($tasks)) {
+            $tasks = array_slice($tasks, 0, $temptaskcount, true); // Remove deleted tasks.
+        } else if ($temptaskcount > 0) {
 
-          foreach ($tasks as $key => $points) {
+            $temptaskpoints = 10;
 
-              $oldtaskcount+=1;
+            if (!$tasks) {
+                $tasks = array();
+            }
 
-              //number of task
-
-              array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$oldtaskcount.'</strong></span>'));
-
-              //input field with points
-              array_push($tasks_array, $mform->createElement('text', 'task['.$oldtaskcount.']', '', $attributes));
-              $mform->setType('task['.$oldtaskcount.']', PARAM_FLOAT);
-              $mform->setDefault('task['.$oldtaskcount.']', $points);
-
-          }
-
-        }
-
-        // add temptasks
-        if ($temptaskcount>0) {
-
-          $temptaskpoints = 10;
-          //$temptaskpoints = $this->_customdata['newtaskpoints'];
-
-          for ($i = 0; $i < $temptaskcount; $i++) {
-
-            $newtaskcount = intval($oldtaskcount+1+$i);
-
-            //number of task
-            array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$newtaskcount.'</strong></span>'));
-
-            //input field with points
-            array_push($tasks_array, $mform->createElement('text', 'task['.$newtaskcount.']', '', $attributes));
-            $mform->setType('task['.$newtaskcount.']', PARAM_FLOAT);
-            $mform->setDefault('task['.$newtaskcount.']', $temptaskpoints);
-
-            $totalpoints += $temptaskpoints;
-
+            $lasttask = count($tasks);
+            $addtasks = $temptaskcount - $lasttask;
+            for ($i = 1; $i <= $addtasks; $i++) {
+                $tasks[$lasttask + $i] = $temptaskpoints; // Add new tasks.
             }
         }
 
-        if (!$tasks && !$temptaskcount) {
-            array_push($tasknumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
-            array_push($tasks_array, $mform->createElement('text', 'task[1]', '', $attributes));
+        // Add label.
+        $mform->addElement('html', '<div class="form-group row" style="margin-bottom:auto;"><div class="col-3">');
 
+        $mform->addElement('html', '<span><strong>' . get_string('task', 'mod_exammanagement') . '</strong></span>');
+        $mform->addElement('html', '<br><span style="position: relative; top: 15px;">' . get_string('points', 'mod_exammanagement') . '</span></span></div><div class="col-9">');
+
+        // Add tasks to form.
+        if (!$tasks) { // No tasks saved yet - add only one task field.
+            $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
+
+            $mform->addElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong>');
+
+            $mform->addElement('text', 'task[1]', '',  array());
             $mform->setType('task[1]', PARAM_FLOAT);
-            $mform->setDefault('task[1]', 0);
+            $mform->setDefault('task[1]', 10);
 
-            $oldtaskcount=1;
+            $mform->addElement('html', '</span>');
 
-        }
+            $mform->addElement('html', '</div>');
 
-        $mform->addGroup($tasknumbers_array, 'tasknumbers_array', get_string('task', 'mod_exammanagement'), '', false);
-        $mform->addGroup($tasks_array, 'tasks_array', get_string('points', 'mod_exammanagement'), ' ', false);
-
-        $mform->addelement('html', '<div class="form-group row  fitem"><span class="col-md-3"><strong>'.get_string('total', 'mod_exammanagement').':</strong></span><span class="col-md-9" id="totalpoints">'.$ExammanagementInstanceObj->formatNumberForDisplay($totalpoints).'</span></div>');
-
-        if (!$tasks && !$temptaskcount) {
             $mform->addElement('hidden', 'newtaskcount', 1);
             $mform->setType('newtaskcount', PARAM_INT);
-        } else{
-            $mform->addElement('hidden', 'newtaskcount', 0);
+
+            $totalpoints = 10;
+
+        } else {  // Already tasks saved.
+            $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
+
+            foreach ($tasks as $nr => $points) {
+                $mform->addElement('html', '<span class="exammanagement_task_spacing">
+                <strong>' . $nr . '</strong>');
+
+                $mform->addElement('text', 'task[' . $nr . ']', '', array());
+                $mform->setType('task[' . $nr . ']', PARAM_FLOAT);
+                $mform->setDefault('task[' . $nr . ']', $points);
+
+                $mform->addElement('html', '</span>');
+            }
+
+            $mform->addElement('html', '</div>');
+
+            $mform->addElement('hidden', 'newtaskcount', count($tasks));
             $mform->setType('newtaskcount', PARAM_INT);
+
+            $totalpoints = $exammanagementinstanceobj->getTaskTotalPoints();
         }
 
+        $mform->addElement('html', '</div></div>');
+
+        // Display total points.
+        $mform->addelement('html', '<div class="form-group row  fitem"><span class="col-md-3"><strong>' . get_string('total', 'mod_exammanagement') .
+            ':</strong></span><span class="col-md-9" id="totalpoints">'.$exammanagementinstanceobj->formatNumberForDisplay($totalpoints).'</span></div>');
+
+        // Action buttons.
         $this->add_action_buttons();
 
         $mform->disable_form_change_checker();
     }
 
-    //Custom validation should be added here
-    function validation($data, $files) {
+    // Custom validation should be added here.
+    public function validation($data, $files) {
 
-        $errors= array();
+        $errors = array();
 
         foreach ($data['task'] as $key => $taskval) {
             $isnumeric = is_numeric($taskval);
 
             if (!$isnumeric) {
                 $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
-            } else if ($taskval<=0) {
+            } else if ($taskval <= 0) {
                 $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
-            } else if ($taskval>=100) {
+            } else if ($taskval >= 100) {
                 $errors['task['.$key.']'] = get_string('err_toohigh', 'mod_exammanagement');
             }
         }

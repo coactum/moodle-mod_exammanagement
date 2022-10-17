@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Creating input type number elements
+ * Creating input type number elements and remove cols from moodle form group layout.
  *
  * @module      mod_exammanagement/configure_gradingscale
  * @copyright   2022 coactum GmbH
@@ -30,13 +30,17 @@ export const init = (totalpoints) => {
     var styles = {
       "-webkit-appearance": "textfield",
       "-moz-appearance": "textfield",
-      "margin": "0px",
-      "width": "100px"
+      "margin": "0px"
     };
 
     $("form.mform input[type=number]").css(styles);
     $("form.mform input[type=number]").attr("step", "0.01");
     $("form.mform input[type=number]").attr("min", "0");
     $("form.mform input[type=number]").attr("max", totalpoints);
+
+    // Remove cols from form layout.
+    $('.exammanagement_gradingscale_steps_spacing .form-group div').removeClass('col-md-3');
+    $('.exammanagement_gradingscale_steps_spacing .form-group div').removeClass('col-md-9');
+    $('.exammanagement_gradingscale_steps_spacing .form-group').removeClass('row');
 
 };

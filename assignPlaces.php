@@ -59,7 +59,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             if (!$exammanagementinstanceobj->getRoomsCount()) {
                 $moodleobj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
             } else if (!$userobj->getParticipantsCount()) {
-                 $moodleobj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+                $moodleobj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            } else if ($exammanagementinstanceobj->getTotalNumberOfSeats() == 0) {
+                $moodleobj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
             }
 
             if ($uap) {

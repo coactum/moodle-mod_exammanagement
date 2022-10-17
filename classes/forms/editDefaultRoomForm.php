@@ -46,7 +46,7 @@ class editDefaultRoomForm extends moodleform {
 
     $PAGE->requires->js_call_amd('mod_exammanagement/edit_defaultroom', 'init'); //call jquery for disabling roomid field if existing room is edited
 
-    $mform = $this->_form; // Don't forget the underscore!
+    $mform = $this->_form;
 
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
@@ -63,7 +63,7 @@ class editDefaultRoomForm extends moodleform {
     $mform->addElement('html', '<hr>');
     $mform->addElement('html', '<p><strong>'.get_string('general', 'mod_exammanagement').'</strong></p>');
 
-    $mform->addElement('hidden', 'id', 'dummy');
+    $mform->addElement('hidden', 'id');
     $mform->setType('id', PARAM_INT);
     $mform->addElement('hidden', 'existingroom', 0);
     $mform->setType('existingroom', PARAM_INT);
