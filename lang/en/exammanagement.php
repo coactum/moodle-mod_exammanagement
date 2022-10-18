@@ -278,8 +278,8 @@ $string['room_deselected_as_examroom'] = 'The room must first be deselected as a
 $string['default_exam_rooms'] = 'Default exam rooms';
 $string['no_default_rooms'] = 'No default exam rooms available';
 
-//addDefaultRoomsForm.php
-$string['addDefaultRooms'] = 'Import default rooms';
+// importdefaultrooms_form.php
+$string['importDefaultRooms'] = 'Import default rooms';
 $string['import_default_rooms_str'] = 'Here, administrators can import the standard rooms available to all lecturers as possible exam rooms from a text file.';
 $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms have already been imported. These are overwritten by the new import.';
 $string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty). Room properties separated by the symbol * . <i>Example:</i> AudiMax_1*AudiMax*1 place free, 3 places total*["R/R01/P01","R/R02/P01","R/R02/P03"]*< svg>...< /svg>';
@@ -361,7 +361,7 @@ $string['groupdescription'] = 'Description of the group';
 $string['group'] = 'Group';
 $string['new_group'] = 'New group';
 
-//addParticipantsForm.php
+// addparticipants_form.php
 $string['import_participants_from_file'] = 'Import participants from files';
 $string['import_from_text_file'] = 'Import participants from files (entries separated by tabs; first two lines are reserved for exam information and will not be used).';
 $string['read_file'] = 'Read files';
@@ -392,7 +392,7 @@ $string['state_convertable_group'] = 'Assignable to group';
 $string['state_not_convertable_group_moodle'] = 'Not assignable (without {$a->systemname} account)';
 $string['state_not_convertable_group_course'] = 'Not assignable (no course participant)';
 
-//addCourseParticipantsForm.php
+// addcourseparticipants_form.php
 $string['addCourseParticipants'] = 'Import participants from course';
 $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
@@ -415,7 +415,7 @@ $string['settextfield'] = 'Add textfield';
 $string['contentoftextfield'] = 'Content of textfield';
 $string['settextfieldstr'] = 'Any information for the exam can be entered here as <strong>free text</strong>, which is immediately displayed to the participants after saving.';
 
-//sendGroupmessageForm.php
+// sendgroupmessage_form.php
 $string['sendGroupmessage'] = 'Send groupmessage';
 $string['groupmessages_text'] = 'An email and {$a->systemname} notification with the text added below will be send to <strong>{$a->participantscount}</strong> participants of the exam.';
 $string['groupmessages_warning'] = '<strong>Warning: {$a->participantscount}</strong> exam participants have no {$a->systemname} account and will not recieve this message. Please contact them manually via email using the following button:';
@@ -641,7 +641,7 @@ To create a new room, first enter its name. Next, you must specify the number of
 A room created in this way can be selected from the list of available exam rooms and can be used like any other exam room.<br><br>
 If, on the other hand, an existing exam room has been selected for editing on the room selection page, it can now be modified here. In this case, the number of seats and the description of the selected room can now be altered and then saved by clicking on "Save room". If the number of seats is reduced, all exam participants still retain their previously assigned seats until you perform the automatic seat assignment again.';
 $string['addCustomRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['addDefaultRooms_help'] = 'As a '. get_config('mod_exammanagement', 'moodlesystemname').' administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
+$string['importDefaultRooms_help'] = 'As a '. get_config('mod_exammanagement', 'moodlesystemname').' administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
 In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
 The text file to be imported must contain the following information (separated by the char *) for each exam room, where each line stands for one exam room:
 <ul><li>First column: The system-internal room id according to the pattern <i>room_name_variant</i>, for example <i>Audimax_2</i></li>
@@ -651,7 +651,7 @@ The text file to be imported must contain the following information (separated b
 <li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
 <strong>Example: </strong>AudiMax_1 * AudiMax * 1 place free, 3 places total * ["R/R01/P01","R/R02/P01","R/R02/P03"] * < svg>...< /svg><br><br>
 All existing default rooms are overwritten by a new import. The information on any deleted or changed rooms is retained in all exam organizations in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats. Changes to the names or seats of default rooms also become only effective in the individual exam organizations after a new assignment of seats.';
-$string['addDefaultRooms_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['importDefaultRooms_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['editDefaultRoom_help'] = 'Here, administrators can edit an existing <strong> default exam room </strong> or create a new one.<br><br>
 First the basic information of the room is displayed, which also may be entered or edited. This is first the system-internal ID of the room, which is used internally by the plugin to identify the room and should be structured according to the following schema: The room name followed by an underscore followed by the variant of the room, which is particularly relevant for several models of the same room with a different number of free seats between the occupiable seats. For the part of the room name all letters, numbers and also dots are allowed, the room variant after the underscore may only consist of numbers. If an existing room is edited, the room ID cannot be changed. Next comes the name of the room, which is visible to all lecturers and may consist of letters, numbers, dots and spaces. The room description is also visible for the users, should contain information about the selected modelling (one or two free seats between two occupiable seats) and may contain the same characters as the room name. Under this information, if an existing room has been selected for editing, further information about the room is displayed, such as the previous number of available seats and an overview of their designations and (if available) the seating plan stored for the room. <br><br>
 If seats should be edited in an existing room, this is possible as soon as the option "Yes" has been selected in the next section under "Edit seats". This is not necessary when creating a new room, in this case you can continue directly with entering the new seats in the "New seats" section. For the filling of the room with seats there are three different modes, which should enable the simple replication of all important modelling types of exam rooms: In the " Default " mode, a number of assignable seats is automatically created for a room until the specified total number of seats in the room is reached, taking into account the specified number of free seats between two assignable seats. The naming of the seats starts with 1 and then counts upwards. If a room is to be filled with 100 total seats and one seat should remain unused between them it would receive a total of 50 seats with the designations 1, 3, 5, ..., 100 that can be assigned in the exam organization. With two places free there would be 34 places with the designations 1, 4, 7, ..., 100. The seat mode "Rows" works similarly, only the number of rows existing in a room as well as the available places per row must be specified here. Each row is then filled with the corresponding number of seats, whereby the specified number of free seats and the number of rows to be left free are taken into account. The seats are named with a combination of row and seat number, for example R01/P01, R01/P03, R01/P05, R02/P01 ... . For all room modelling that cannot be replicated using these two modes, there is a third mode with the name "Completely individual". In this mode, the names of all places can be entered completely free, whereby a comma must always be placed between two seat designations. All letters, numbers, dots, minus signs, slashes and spaces are allowed inside the seat names. This mode is very well suited for more complex seat modelling or for adapting models created with the first two modes. This is useful, for example, if the first or last row of a room has fewer seats than the others due to structural conditions, or if continuous numbered seats are still arranged in rows and every second row is to be left empty. When editing an already existing room, this mode is therefore already preselected, but can of course be replaced by any other mode at any time.<br><br>

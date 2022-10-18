@@ -207,9 +207,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // if teac
 
                 $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
                 if ($update) {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                    $moodleobj->redirectToOverviewPage('afterexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
                 } else {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                    $moodleobj->redirectToOverviewPage('afterexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
                 }
             } else if ($calledfromformexamreview) { // Set exam rewview visible.
                 require_sesskey();

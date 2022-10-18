@@ -260,7 +260,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     border: 2px solid black;
 }
 
-/* addParticipantsForm.php & addCourseParticipantsForm.php */
+/* addparticipants_form.php & addcourseparticipants_form.php */
 .path-mod-exammanagement .exammanagement_panel a {
     cursor: pointer;
 }

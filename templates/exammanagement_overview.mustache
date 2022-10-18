@@ -148,7 +148,7 @@ ajaxsetcorrectioncompletion = function(value) {
 					data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}' },
 					success: function(response) {
 								$('.loadable').toggle();
-								location.href = 'view.php?id='+{{cmid}};
+								location.reload();
 							},
 					error: function(response) {
 								$('.loadable').toggle();
@@ -157,7 +157,7 @@ ajaxsetcorrectioncompletion = function(value) {
 		    });
 		} else {
 			$('.loadable').toggle();
-			location.href = 'view.php?id='+{{cmid}};
+			location.reload();
 		}
 }
 
