@@ -70,7 +70,7 @@ class participantsoverview_form extends moodleform {
 
         $jsargs = array('tasks' => (array) $tasks);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init', $jsargs); // Call jquery for tracking input value change events and creating input type number fields
+        $PAGE->requires->js_call_amd('mod_exammanagement/participants_overview', 'init', $jsargs); // Call jquery for tracking input value changes and creating input type number
 
         $mform = $this->_form;
 
@@ -105,7 +105,7 @@ class participantsoverview_form extends moodleform {
         $examrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
         $gradingscale = $exammanagementinstanceobj->getGradingscale();
 
-        $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'participantsOverview.php?id=' . $this->_customdata['id'], sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, 10, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
+        $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'participantsOverview.php?id=' . $this->_customdata['id'], sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
         $mform->addElement('html', $OUTPUT->render($pagebar));
 
         $mform->addElement('html', '<table class="table table-striped exammanagement_table" id="0">');
@@ -173,7 +173,7 @@ class participantsoverview_form extends moodleform {
 
         if ($participants) {
 
-            $i = 10 * ($this->_customdata['pagenr'] - 1) + 1;
+            $i = $exammanagementinstanceobj->pagecount * ($this->_customdata['pagenr'] - 1) + 1;
 
             foreach ($participants as $key => $participant) {
 

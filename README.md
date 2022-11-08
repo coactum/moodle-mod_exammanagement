@@ -51,7 +51,3 @@ To ensure that the exam management plugin works as intended make sure that
 - you have configured the mail server for your moodle
 - sheduled tasks are performed automatically
 - the ldap authentication plugin is installed within your moodle and that you have configured it to connect to your own ldap server to fetch matriculation numbers for your participants
-
-Comments and suggestions are always welcome.
-
-D.

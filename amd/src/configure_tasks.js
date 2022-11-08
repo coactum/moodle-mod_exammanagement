@@ -34,8 +34,8 @@ export const init = (lang) => {
   };
 
   $("form.mform input[type=number]").css(styles);
-  $("form.mform input[type=number]").attr("step", "0.01");
-  $("form.mform input[type=number]").attr("min", "0.01");
+  $("form.mform input[type=number]").attr("step", "0.1");
+  $("form.mform input[type=number]").attr("min", "0.1");
   $("form.mform input[type=number]").attr("max", "100");
 
   // Remove cols from form layout.
@@ -57,7 +57,7 @@ export const addtask = (lang) => { // Add new tasks.
     var newtaskcount = taskcount + 1;
     var pointsofnewtask = 10;
 
-    if (taskcount <= 44) {
+    if (taskcount <= 99) {
 
       var temp = '<span class="exammanagement_task_spacing">';
       temp += '<strong>' + newtaskcount + '</strong><div id="fitem_id_task_1" class="form-group fitem femptylabel">';
@@ -65,7 +65,7 @@ export const addtask = (lang) => { // Add new tasks.
       temp += '<div class="ml-1 ml-md-auto d-flex align-items-center align-self-start"></div></div>';
       temp += '<div class="form-inline align-items-start felement" data-fieldtype="text">';
       temp += '<input type="number" class="form-control" name="task[' + newtaskcount + ']" id="id_task_' + newtaskcount + '" ';
-      temp += 'value="' + pointsofnewtask + '" style="appearance: textfield; margin: 0px;" step="0.01" min="0.01" max="100">';
+      temp += 'value="' + pointsofnewtask + '" style="appearance: textfield; margin: 0px;" step="0.1" min="0.1" max="100">';
       temp += '<div class="form-control-feedback invalid-feedback" id="id_error_task_' + newtaskcount + '">';
       temp += '</div></div></div></span>';
 

@@ -106,7 +106,7 @@ class assignplaces_form extends moodleform {
 
             if ($examrooms && $participants) {
 
-                $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'assignPlaces.php?id=' . $this->_customdata['id'] . '&map=1', sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, 10, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
+                $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'assignPlaces.php?id=' . $this->_customdata['id'] . '&map=1', sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
                 $mform->addElement('html', $OUTPUT->render($pagebar));
 
                 $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
@@ -128,7 +128,7 @@ class assignplaces_form extends moodleform {
 
                 $roomoptionsarr = array('not_selected' => '-');
 
-                $i = 10 * ($this->_customdata['pagenr'] - 1) + 1;
+                $i = $exammanagementinstanceobj->pagecount * ($this->_customdata['pagenr'] - 1) + 1;
 
                 $roomplacespatternsarr = array('not_selected' => '-');
 

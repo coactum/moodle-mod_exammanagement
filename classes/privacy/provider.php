@@ -121,6 +121,8 @@ class provider implements
         $items->add_user_preference('exammanagement_phase_four', 'privacy:metadata:preference:exammanagement_phase_four');
         $items->add_user_preference('exammanagement_phase_five', 'privacy:metadata:preference:exammanagement_phase_five');
 
+        $items->add_user_preference('exammanagement_pagecount', 'privacy:metadata:preference:exammanagement_pagecount');
+
         return $items;
     }
 
@@ -173,7 +175,7 @@ class provider implements
             'modulename'    => 'exammanagement',
         ];
 
-        // Participants
+        // Participants.
         $sql = "SELECT p.moodleuserid
                   FROM {course_modules} cm
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
@@ -200,7 +202,7 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        // exammanagement and participants exam data
+        // Exammanagement and participants exam data.
         $sql = "SELECT
                     cm.id AS cmid,
                     e.id AS exammanagement,
@@ -392,6 +394,12 @@ class provider implements
 
             writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_five', $phasefiveopen,
                 get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+        }
+
+        $pagecount = get_user_preferences('exammanagement_pagecount', null, $userid);
+        if (isset($pagecount)) {
+            writer::export_user_preference('mod_exammanagement', 'pagecount', $pagecount,
+                get_string('privacy:metadata:preference:exammanagement_pagecount', 'mod_exammanagement'));
         }
     }
 

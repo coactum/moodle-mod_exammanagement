@@ -113,7 +113,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             echo('<p>'.get_string("view_added_partipicants", "mod_exammanagement").'</p>');
 
-            $i = 10 * ($pagenr - 1) + 1;
+            $i = $exammanagementinstanceobj->pagecount * ($pagenr - 1) + 1;
 
             if ($participants) {
 
@@ -125,7 +125,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     $coursegroups = false;
                 }
 
-                $pagebar = new exammanagement_pagebar($id, 'viewParticipants.php?id=' . $id, sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, 10, $pagenr), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
+                $pagebar = new exammanagement_pagebar($id, 'viewParticipants.php?id=' . $id, sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, $pagenr), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
 
                 echo $OUTPUT->render($pagebar);
 

@@ -21,20 +21,26 @@
     Pagebar.
 }}
 
-{{#pagebar.0}}
-    <div class="exammanagement-pagebar mt-1 d-flex justify-content-between">
-        <ul class="pagination">
-            {{#pagebar}}
-                <li class="page-item text-center">
-                    <a class="page-link" href="{{url}}&page={{nr}}">{{{display}}}</a>
-                </li>
-            {{/pagebar}}
+<div class="exammanagement-pagebar mt-1 d-flex justify-content-between">
+    <ul class="pagination">
+        {{#pagebar}}
+            <li class="page-item text-center">
+                <a class="page-link" href="{{url}}&page={{nr}}">{{{display}}}</a>
+            </li>
+        {{/pagebar}}
+    </ul>
+
+    <div>
+        <strong>{{#str}}chooseitemsperpage, mod_exammanagement{{/str}}:</strong>
+        <ul class="pagination mw-100">
+            {{#pagecountoptions}}
+            <li class="page-item">
+                <a class="page-link" href="view.php?id={{cmid}}&pagecount={{nr}}&redirect={{url}}">{{{display}}}</a>
+            </li>
+            {{/pagecountoptions}}
         </ul>
-
-        <div class="align-self-center">
-            <strong>{{#str}}itemscount, mod_exammanagement{{/str}}:</strong>
-
-            <strong> {{itemscount}} / {{allitemscount}}</strong>
+        <div class="mt-2 mb-2">
+            <strong>{{#str}}itemscount, mod_exammanagement{{/str}}:</strong> {{itemscount}} / {{allitemscount}}
         </div>
     </div>
-{{/pagebar.0}}
+</div>

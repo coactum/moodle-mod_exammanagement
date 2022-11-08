@@ -597,6 +597,7 @@ $string['no_tasks_configured'] = 'Noch keine Aufgaben konfiguriert. Arbeitsschri
 $string['no_results_entered'] = 'Noch keine Prüfungsergebnisse eingetragen. Arbeitsschritt nicht möglich';
 $string['correction_not_completed'] = 'Korrektur noch nicht abgeschlossen. Arbeitsschritt nicht möglich';
 $string['itemscount'] = 'Objekte pro Seite';
+$string['chooseitemsperpage'] = 'Anzahl an Objekten pro Seite wählen';
 
 // course reset (lib.php)
 $string['deleteallexamdata'] = 'Alle Daten der Prüfung (z. B. Prüfungsräume und -Datum, Aufgabenpunkte, Notenschlüßel) und alle Prüfungsteilnehmenden löschen';
@@ -889,6 +890,7 @@ $string['privacy:metadata:preference:exammanagement_phase_three'] = 'Ob der Benu
 $string['privacy:metadata:preference:exammanagement_phase_four'] = 'Ob der Benutzer die vierte Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
 $string['privacy:metadata:preference:exammanagement_phase_five'] = 'Ob der Benutzer die fünfte Phase der Prüfungsorganisation geöffnet oder geschlossen hat';
 $string['privacy:metadata:preference:exammanagement_phaseopenedorclosed'] = 'Ob der Benutzer die Phase der Prüfungsorganisation manuell geöffnet oder geschlossen hat';
+$string['privacy:metadata:preference:exammanagement_pagecount'] = 'Wie viele Objekte der Benutzer pro Seite auf den paginierten Tabellen angezeigt bekommen möchte';
 $string['opened'] = 'Offen';
 $string['closed'] = 'Geschlossen';
 

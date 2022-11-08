@@ -597,6 +597,7 @@ $string['no_tasks_configured'] = 'No tasks configured yet. Work step not possibl
 $string['no_results_entered'] = 'No exam results entered yet. Work step not possible';
 $string['correction_not_completed'] = 'Marking not completed. Work step not possible';
 $string['itemscount'] = 'Items per page';
+$string['chooseitemsperpage'] = 'Choose count of objects per page';
 
 // course reset (lib.php)
 $string['deleteallexamdata'] = 'Delete all exam data (eg. exam rooms and time, task points, gradingscale) and all exam participants';
@@ -889,6 +890,7 @@ $string['privacy:metadata:preference:exammanagement_phase_three'] = 'If the user
 $string['privacy:metadata:preference:exammanagement_phase_four'] = 'If the user has opened or closed the fourth phase of the exam management';
 $string['privacy:metadata:preference:exammanagement_phase_five'] = 'If the user has opened or closed the fifth phase of the exam management';
 $string['privacy:metadata:preference:exammanagement_phaseopenedorclosed'] = 'If the user has manually opened or closed the phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_pagecount'] = 'How many objects the user wants to have displayed per page on the paginated tables';
 $string['opened'] = 'Open';
 $string['closed'] = 'Closed';
 

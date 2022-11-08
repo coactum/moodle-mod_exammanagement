@@ -81,11 +81,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 }
 
             } else {
-                // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
+                if (!$examreviewtime = $exammanagementinstanceobj->getExamReviewTime()) {
+                    $examreviewtime = strtotime("+14 days noon");
+                }
+
                 // Set default data (if any).
-                $mform->set_data(array('examreviewtime' => $exammanagementinstanceobj->getExamReviewTime(), 'examreviewroom' => $exammanagementinstanceobj->getExamReviewRoom(), 'id' => $id));
+                $mform->set_data(array('examreviewtime' => $examreviewtime,
+                    'examreviewroom' => $exammanagementinstanceobj->getExamReviewRoom(), 'id' => $id));
 
                 $moodleobj->setPage('examreview');
 

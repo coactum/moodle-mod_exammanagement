@@ -83,7 +83,7 @@ class chooserooms_form extends moodleform {
 
         $examrooms = $exammanagementinstanceobj->getRooms('examrooms');
 
-        $i = 10 * ($this->_customdata['pagenr'] - 1) + 1;
+        $i = $exammanagementinstanceobj->pagecount * ($this->_customdata['pagenr'] - 1) + 1;
 
         if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])) {
             if ($allrooms) {
@@ -110,7 +110,8 @@ class chooserooms_form extends moodleform {
         $mform->setDefault('page', $this->_customdata['pagenr']);
 
         if ($displayrooms) {
-            $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'chooseRooms.php?id=' . $this->_customdata['id'], sesskey(), $exammanagementinstanceobj->get_pagebar($allrooms, 10, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($displayrooms), count($allrooms));
+
+            $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'chooseRooms.php?id=' . $this->_customdata['id'], sesskey(), $exammanagementinstanceobj->get_pagebar($allrooms, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($displayrooms), count($allrooms));
             $mform->addElement('html', $OUTPUT->render($pagebar));
 
             $mform->addElement('html', '<div class="table-responsive">');

@@ -767,27 +767,18 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* label-danger */
-
 .path-mod-exammanagement .exammanagement_overview .label-danger {
     background-color: #d9534f !important;
 }
 
 /* pagebar */
-/* .exammanagement-pagebar {
-  overflow-y: auto;
-  height: 50px;
-} */
-
 .path-mod-exammanagement .exammanagement-pagebar .pagination {
     margin-bottom: 0;
     max-width: 75%;
     overflow: scroll;
-
-    /* border: 1px solid #dee2e6; */
-
     flex-wrap: wrap;
 }
 
-.path-mod-exammanagement .exammanagement-pagebar .page-item {
+.path-mod-exammanagement .exammanagement-pagebar .pagination .page-item {
     min-width: 70px;
 }

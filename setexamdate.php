@@ -71,10 +71,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
-                // Set default data.
-                $mform->set_data(array('examtime' => $exammanagementinstanceobj->getExamtime(), 'id' => $id));
+                if (!$examtime = $exammanagementinstanceobj->getExamtime()) {
+                    $examtime = strtotime("+14 days noon");
+                }
 
-                $moodleobj->setPage('examdate');
+                // Set default data.
+                $mform->set_data(array('examtime' => $examtime, 'id' => $id));
+
+                $moodleobj->setPage('setexamdate');
                 $moodleobj->outputPageHeader();
 
                 $mform->display();

@@ -34,7 +34,7 @@ export const init = (totalpoints) => {
     };
 
     $("form.mform input[type=number]").css(styles);
-    $("form.mform input[type=number]").attr("step", "0.01");
+    $("form.mform input[type=number]").attr("step", "0.1");
     $("form.mform input[type=number]").attr("min", "0");
     $("form.mform input[type=number]").attr("max", totalpoints);
 

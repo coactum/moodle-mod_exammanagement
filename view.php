@@ -64,6 +64,10 @@ $examreviewvisible = optional_param('examreviewvisible', 0, PARAM_BOOL);
 $togglephase = optional_param('togglephase', 0, PARAM_BOOL);
 $phase = optional_param('phase', 0, PARAM_TEXT);
 
+// Params containing the page count and redirect url for changing page count of paginated tables.
+$pagecount = optional_param('pagecount', 0, PARAM_INT);
+$redirect = optional_param('redirect', '', PARAM_TEXT);
+
 global $PAGE, $CFG, $USER, $SESSION;
 
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
@@ -76,9 +80,24 @@ $moodledbobj = MoodleDB::getInstance();
 
 $ldapmanagerobj = ldapManager::getInstance();
 
-if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // if teacher
+if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teacher.
 
     if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId) && $SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
+        if ($pagecount != 0 && $redirect != '') {
+
+            if ($pagecount < 0) {
+                $pagecount = 10;
+            }
+
+            $oldpagecount = get_user_preferences('exammanagement_pagecount');
+
+            if ($pagecount != $oldpagecount) {
+                set_user_preference('exammanagement_pagecount', $pagecount);
+            }
+
+            redirect ($redirect, get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        }
 
         $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
 

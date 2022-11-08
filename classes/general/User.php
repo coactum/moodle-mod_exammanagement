@@ -55,17 +55,17 @@ class User{
 
     // Get array with all requested exam participants.
 
-    public function getexamparticipants($participantsmode, $requestedattributes, $sortorder = 'name', $pagination = false, $activepage = null, $countperpage = 10,
-        $conditions = false) {
+    public function getexamparticipants($participantsmode, $requestedattributes, $sortorder = 'name', $pagination = false, $activepage = null, $conditions = false) {
 
         $moodledbobj = MoodleDB::getInstance();
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
         $allparticipants = array();
 
         // For pagination.
         if ($pagination && isset($activepage)) {
-            $limitfrom = $countperpage * ($activepage - 1);
-            $limitnum = $countperpage;
+            $limitfrom = $exammanagementinstanceobj->pagecount * ($activepage - 1);
+            $limitnum = $exammanagementinstanceobj->pagecount;
         } else {
             $limitfrom = 0;
             $limitnum = 0;
@@ -82,8 +82,6 @@ class User{
         } else if ($participantsmode['mode'] === 'header') {
             $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsmode['id']));
         } else if ($participantsmode['mode'] === 'resultsafterexamreview') {
-            $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
-
             $examreviewtime = $exammanagementinstanceobj->getExamReviewTime();
 
             $select = "exammanagement =".$this->exammanagement;

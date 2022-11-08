@@ -78,7 +78,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             // Create new PDF document.
             $pdf = new examLabels(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $pdf->setmode($mode);
 
             // Set document information.
             $pdf->SetCreator(PDF_CREATOR);

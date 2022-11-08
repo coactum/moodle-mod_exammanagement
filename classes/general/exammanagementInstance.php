@@ -30,616 +30,625 @@ use context_module;
 use core\message\message;
 use stdClass;
 
-class exammanagementInstance{
+class exammanagementInstance {
 
-	protected $id;
-	protected $e;
-	protected $cron;
-	protected $cm;
-	protected $course;
-	public $moduleinstance;
-	protected $modulecontext;
+    protected $id;
+    protected $e;
+    protected $cron;
+    protected $cm;
+    protected $course;
+    public $moduleinstance;
+    protected $modulecontext;
+    public $pagecount;
 
-	public function __construct($id, $e, $cron=false ) {
+    public function __construct($id, $e, $cron=false ) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $moodledbobj = MoodleDB::getInstance();
 
-		$this->id=$id;
-		$this->e=$e;
-		$this->cron=$cron;
+        $this->id = $id;
+        $this->e = $e;
+        $this->cron = $cron;
 
         if ($id) {
-				$this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
-				$this->course = get_course($this->cm->course);
-				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
-			} else if ($e) {
-				$this->moduleinstance = $MoodleDBObj->getRecordFromDB('exammanagement', array('id' => $e), '*', MUST_EXIST);
-				$this->course = get_course($this->moduleinstance->course);
-				$this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
-			} else {
-				print_error(get_string('missingidandcmid', 'mod_exammanagement'));
-			}
+            $this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
+            $this->course = get_course($this->cm->course);
+            $this->moduleinstance = $moodledbobj->getRecordFromDB('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
+        } else if ($e) {
+            $this->moduleinstance = $moodledbobj->getRecordFromDB('exammanagement', array('id' => $e), '*', MUST_EXIST);
+            $this->course = get_course($this->moduleinstance->course);
+            $this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
+        } else {
+            print_error(get_string('missingidandcmid', 'mod_exammanagement'));
+        }
 
-			if ($cron == false) { // do this only when not called to send message from cron job
-				require_login($this->course, true, $this->cm);
+        if ($cron == false) { // do this only when not called to send message from cron job
+            require_login($this->course, true, $this->cm);
 
-				$this->modulecontext = context_module::instance($this->cm->id);
-			}
+            $this->modulecontext = context_module::instance($this->cm->id);
+        }
+
+        $pagecount = get_user_preferences('exammanagement_pagecount');
+
+        if (!isset($pagecount) || $pagecount < 0) {
+            $this->pagecount = 10;
+        } else {
+            $this->pagecount = $pagecount;
+        }
 
     }
 
-	#### singleton class ####
+    // singleton class ####
 
-	public static function getInstance($id, $e) {
+    public static function getInstance($id, $e) {
 
-		static $inst = null;
-			if ($inst === null) {
-				$inst = new exammanagementInstance($id, $e);
-			}
-			return $inst;
+        static $inst = null;
+        if ($inst === null) {
+            $inst = new exammanagementInstance($id, $e);
+        }
+         return $inst;
 
-	}
+    }
 
 	#### getter for object properties  ####
 
 	public function getModuleinstance() {
 
-			return $this->moduleinstance;
+         return $this->moduleinstance;
 
 	}
 
 	public function getCourse() {
 
-			return $this->course;
+         return $this->course;
 
 	}
 
 	public function getCm() {
 
-			return $this->cm;
+         return $this->cm;
 
 	}
 
 	public function getModulecontext() {
 
-			return $this->modulecontext;
+         return $this->modulecontext;
 
 	}
 
 	public function getMoodleSystemName() {
 
-		$moodlename = get_config('mod_exammanagement', 'moodlesystemname');
+        $moodlename = get_config('mod_exammanagement', 'moodlesystemname');
 
-		if ($moodlename) {
-			return $moodlename;
-		} else {
-			return '';
-		}
+        if ($moodlename) {
+         return $moodlename;
+              } else {
+         return '';
+              }
 	}
 
 	#### universal functions for exammanagement ####
 
  	public function getExammanagementUrl($component, $id) {
 
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+        $MoodleObj = Moodle::getInstance($this->id, $this->e);
 
- 		$url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
+         $url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
 
- 		return $url;
+         return $url;
 	}
 
 	public function getCleanCourseCategoryName() {
 
-		global $PAGE;
+        global $PAGE;
 
-		$categoryname = substr(strtoupper(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20);
+        $categoryname = substr(strtoupper(preg_replace("/[^0-9a-zA-Z]/", "", $PAGE->category->name)), 0, 20);
 
- 		if ($categoryname) {
-			return $categoryname;
-		} else {
-			return get_string('coursecategory_name_no_semester', 'mod_exammanagement');
-		}
+         if ($categoryname) {
+     return $categoryname;
+              } else {
+      return get_string('coursecategory_name_no_semester', 'mod_exammanagement');
+              }
  	}
 
 	#### get display values for overview page ####
 
 	public function getRoomsCount() {
-		$rooms = $this->moduleinstance->rooms;
+        $rooms = $this->moduleinstance->rooms;
 
-		if ($rooms) {
-				$roomsArr = json_decode($rooms);
-				$roomsCount = count($roomsArr);
-				return $roomsCount;
-			} else {
+        if ($rooms) {
+          $roomsArr = json_decode($rooms);
+          $roomsCount = count($roomsArr);
+          return $roomsCount;
+            } else {
 				return false;
-		}
+              }
 	}
 
 	public function getChoosenRoomNames() {
-		$rooms = $this->moduleinstance->rooms;
-		$roomNames = array();
+        $rooms = $this->moduleinstance->rooms;
+        $roomNames = array();
 
-		if ($rooms) {
-			$roomsArray = json_decode($rooms);
+        if ($rooms) {
+         $roomsArray = json_decode($rooms);
 
-			foreach ($roomsArray as $key => $value) {
-				$temp = $this->getRoomObj($value);
+         foreach ($roomsArray as $key => $value) {
+                $temp = $this->getRoomObj($value);
 
-				if ($temp) {
-					array_push($roomNames, $temp->name);
-				} else {
-					array_push($roomNames, get_string('deleted_room', 'mod_exammanagement'));
-				}
+                if ($temp) {
+                 array_push($roomNames, $temp->name);
+                      } else {
+                 array_push($roomNames, get_string('deleted_room', 'mod_exammanagement'));
+                      }
 
-				}
+          }
 
-			asort($roomNames);
+         asort($roomNames);
 
-			$roomsStr = implode(", ", $roomNames);
+         $roomsStr = implode(", ", $roomNames);
 
-			return $roomsStr;
+         return $roomsStr;
 
-		} else {
-			return false;
-		}
+              } else {
+         return false;
+              }
 	}
 
 	public function getTotalNumberOfSeats() {
 
-		$rooms = $this->getRooms('examrooms');
+        $rooms = $this->getRooms('examrooms');
 
-		$totalSeats = 0;
+        $totalSeats = 0;
 
-		if ($rooms) {
-			foreach ($rooms as $room) {
+        if ($rooms) {
+         foreach ($rooms as $room) {
 
-				$places = $room->places;
+                $places = $room->places;
 
-				if (isset($places)) {
-					$placesCount = count($places);	//get Places of this Room
-				} else {
-					$placesCount = 0;	//get Places of this Room
-				}
+                if (isset($places)) {
+                 $placesCount = count($places);	//get Places of this Room
+                      } else {
+                 $placesCount = 0;	//get Places of this Room
+                      }
 
-				$totalSeats += $placesCount;
-			}
-		}
+                $totalSeats += $placesCount;
+         }
+              }
 
-		return $totalSeats;
+        return $totalSeats;
 
 	}
 
- 	public function getExamtime() {		// get examtime (for form)
-		if ($this->moduleinstance->examtime) {
-				return $this->moduleinstance->examtime;
-			} else {
-				return false;
-			}
+ 	public function getExamtime() {	// get examtime (for form)
+        if ($this->moduleinstance->examtime) {
+            return $this->moduleinstance->examtime;
+             } else {
+     return false;
+             }
 	}
 
 	public function getHrExamtime() {	// Convert exam time to human readable format (used in exported documents)
-		$examtime = $this->getExamtime();
-		if ($examtime) {
-			$hrexamtime = userdate($examtime, get_string('strftimedatetimeshort', 'core_langconfig'));
-			return $hrexamtime;
-		} else {
-			return false;
-		}
+        $examtime = $this->getExamtime();
+        if ($examtime) {
+         $hrexamtime = userdate($examtime, get_string('strftimedatetimeshort', 'core_langconfig'));
+         return $hrexamtime;
+              } else {
+         return false;
+              }
 	}
 
 	public function getTasks() {
 
-		$tasks = (array) json_decode($this->moduleinstance->tasks);
+        $tasks = (array) json_decode($this->moduleinstance->tasks);
 
-		if ($tasks) {
-			return $tasks;
-		} else {
-			return false;
-		}
+        if ($tasks) {
+         return $tasks;
+              } else {
+         return false;
+              }
 	}
 
 	public function getTaskCount() { // get count of tasks
 
-		$tasks = $this->getTasks();
+        $tasks = $this->getTasks();
 
-		if ($tasks) {
-			$taskcount = count((array)$tasks);
-			return $taskcount;
-		} else {
-			return false;
-		}
+        if ($tasks) {
+         $taskcount = count((array)$tasks);
+         return $taskcount;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function getTaskTotalPoints() { // get total points off all tasks
 
-		$tasks = $this->getTasks();
-		$totalpoints = 0;
+        $tasks = $this->getTasks();
+        $totalpoints = 0;
 
-		if ($tasks) {
-			foreach ($tasks as $key => $points) {
-					$totalpoints += floatval($points);
-			}
-			return $totalpoints;
+        if ($tasks) {
+         foreach ($tasks as $key => $points) {
+                 $totalpoints += floatval($points);
+         }
+         return $totalpoints;
 
-		} else {
-			return $totalpoints;
-		}
+              } else {
+         return $totalpoints;
+              }
 
 	}
 
  	public function getTextfieldObject() {
 
- 		$textfield = $this->moduleinstance->textfield;
+         $textfield = $this->moduleinstance->textfield;
 
-		$textfield = json_decode($textfield);
+        $textfield = json_decode($textfield);
 
-		return $textfield;
+        return $textfield;
 	}
 
  	public function getTextFromTextfield() {
 
-		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+        $textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
 
-		if ($textfield) {
-			$text = format_text($textfield->text, $textfield->format, array('para' => false));
-			return $text;
-		} else {
-			return false;
-		}
+        if ($textfield) {
+           $text = format_text($textfield->text, $textfield->format, array('para' => false));
+           return $text;
+            } else {
+         return false;
+            }
 	}
 
 	public function getFormatFromTextfield() {
 
- 		$textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
-		if ($textfield) {
-			$format = $textfield->format;
-			return $format;
-		} else {
-			return false;
-		}
+         $textfield = $this->getTextfieldObject('exammanagement','textfield', array('id' => $this->cm->instance));
+        if ($textfield) {
+         $format = $textfield->format;
+         return $format;
+              } else {
+         return false;
+              }
 	}
 
 	public function placesAssigned() {
-		$assignmentmode = $this->moduleinstance->assignmentmode;
+        $assignmentmode = $this->moduleinstance->assignmentmode;
 
-		if (isset($assignmentmode) || $this->allPlacesAssigned()) {
-			return true;
-		} else {
-			return false;
+        if (isset($assignmentmode) || $this->allPlacesAssigned()) {
+         return true;
+              } else {
+         return false;
 
-		}
+              }
 
 	}
 
 	public function allPlacesAssigned() {
-		$UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
+        $UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
 
-		$assignedPlacesCount = $this->getAssignedPlacesCount();
+        $assignedPlacesCount = $this->getAssignedPlacesCount();
 
-		if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getParticipantsCount()) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getParticipantsCount()) {
+         return true;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function getAssignedPlacesCount() {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->getCm()->instance;
-		$select .= " AND roomid IS NOT NULL";
-		$select .= " AND roomname IS NOT NULL";
-		$select .= " AND place IS NOT NULL";
+        $select = "exammanagement =".$this->getCm()->instance;
+        $select .= " AND roomid IS NOT NULL";
+        $select .= " AND roomname IS NOT NULL";
+        $select .= " AND place IS NOT NULL";
 
-		$assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+        $assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
-		if (isset($assignedPlacesCount)) {
-			return $assignedPlacesCount;
+        if (isset($assignedPlacesCount)) {
+         return $assignedPlacesCount;
 
-		} else {
-			return 0;
+              } else {
+         return 0;
 
-		}
+              }
 
 	}
 
 	public function getAssignedPlaces() {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->getCm()->instance;
-		$select .= " AND roomid IS NOT NULL";
-		$select .= " AND roomname IS NOT NULL";
-		$select .= " AND place IS NOT NULL";
+        $select = "exammanagement =".$this->getCm()->instance;
+        $select .= " AND roomid IS NOT NULL";
+        $select .= " AND roomname IS NOT NULL";
+        $select .= " AND place IS NOT NULL";
 
-		$assignedPlaces = array();
+        $assignedPlaces = array();
 
-		$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select, null, '', 'roomid, place');
+        $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select, null, '', 'roomid, place');
 
-		if ($rs->valid()) {
+        if ($rs->valid()) {
 
             foreach ($rs as $record) {
 				if (!isset($assignedPlaces[$record->roomid])) {
-					$assignedPlaces[$record->roomid] = array($record->place);
+                             $assignedPlaces[$record->roomid] = array($record->place);
 				} else {
-					array_push($assignedPlaces[$record->roomid], $record->place);
+                             array_push($assignedPlaces[$record->roomid], $record->place);
 				}
-			}
+         }
 
-			$rs->close();
-		}
+         $rs->close();
+              }
 
-		if (isset($assignedPlaces) && !empty($assignedPlaces)) {
-			return $assignedPlaces;
-		} else {
-			return false;
-		}
+        if (isset($assignedPlaces) && !empty($assignedPlaces)) {
+         return $assignedPlaces;
+              } else {
+         return false;
+              }
 	}
 
 	public function getAssignmentMode() {
-		$assignmentmode = $this->moduleinstance->assignmentmode;
+        $assignmentmode = $this->moduleinstance->assignmentmode;
 
-		if (isset($assignmentmode)) {
-			return $assignmentmode;
-		} else {
-			return false;
-		}
+        if (isset($assignmentmode)) {
+         return $assignmentmode;
+              } else {
+         return false;
+              }
 	}
 
 	public function isDateTimeVisible() {
 
-		$isDateTimeVisible = $this->moduleinstance->datetimevisible;
+        $isDateTimeVisible = $this->moduleinstance->datetimevisible;
 
-		if ($isDateTimeVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isDateTimeVisible) {
+         return true;
+              } else {
+         return false;
+              }
 	}
 
 	public function isRoomVisible() {
 
-		$isRoomVisible = $this->moduleinstance->roomvisible;
+        $isRoomVisible = $this->moduleinstance->roomvisible;
 
-		if ($isRoomVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isRoomVisible) {
+         return true;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function isPlaceVisible() {
 
-		$isPlaceVisible = $this->moduleinstance->placevisible;
+        $isPlaceVisible = $this->moduleinstance->placevisible;
 
-		if ($isPlaceVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isPlaceVisible) {
+         return true;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function isBonusVisible() {
 
-		$isBonusVisible = $this->moduleinstance->bonusvisible;
+        $isBonusVisible = $this->moduleinstance->bonusvisible;
 
-		if ($isBonusVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isBonusVisible) {
+         return true;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function isResultVisible() {
 
-		$isResultVisible = $this->moduleinstance->resultvisible;
+        $isResultVisible = $this->moduleinstance->resultvisible;
 
-		if ($isResultVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isResultVisible) {
+         return true;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function getGradingscale() {
 
-		$gradingscale = json_decode($this->moduleinstance->gradingscale);
+        $gradingscale = json_decode($this->moduleinstance->gradingscale);
 
-		if ($gradingscale) {
-				return $gradingscale;
-		} else{
-			return false;
-		}
+        if ($gradingscale) {
+          return $gradingscale;
+              } else{
+         return false;
+              }
 	}
 
 	public function getExamReviewTime() {
 
-		$examReviewTime = $this->moduleinstance->examreviewtime;
-		if ($examReviewTime) {
-			return $examReviewTime;
-		} else {
-			return false;
-		}
+        $examReviewTime = $this->moduleinstance->examreviewtime;
+        if ($examReviewTime) {
+         return $examReviewTime;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function getHRExamReviewTime() {
 
-		$examReviewTime = $this->getExamReviewTime();
-		if ($examReviewTime) {
-			$hrexamReviewTime = userdate($examReviewTime, get_string('strftimedatetimeshort', 'core_langconfig'));;
-			return $hrexamReviewTime;
-		} else {
-			return false;
-		}
+        $examReviewTime = $this->getExamReviewTime();
+        if ($examReviewTime) {
+         $hrexamReviewTime = userdate($examReviewTime, get_string('strftimedatetimeshort', 'core_langconfig'));;
+         return $hrexamReviewTime;
+              } else {
+         return false;
+              }
 
 	}
 
 	public function getExamReviewRoom() {
 
-		$examReviewRoom = json_decode($this->moduleinstance->examreviewroom);
-		if ($examReviewRoom) {
-			return $examReviewRoom;
-		} else {
-			return '';
-		}
+        $examReviewRoom = json_decode($this->moduleinstance->examreviewroom);
+        if ($examReviewRoom) {
+         return $examReviewRoom;
+              } else {
+         return '';
+              }
 
 	}
 
 	public function isExamReviewVisible() {
 
-		$isExamReviewVisible = $this->moduleinstance->examreviewvisible;
+        $isExamReviewVisible = $this->moduleinstance->examreviewvisible;
 
-		if ($isExamReviewVisible) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isExamReviewVisible) {
+         return true;
+              } else {
+         return false;
+              }
 	}
 
 	public function getDataDeletionDate() {
 
-		$dataDeletionDate = $this->moduleinstance->datadeletion;
+        $dataDeletionDate = $this->moduleinstance->datadeletion;
 
-		if ($dataDeletionDate) {
-				$dataDeletionDate = userdate($dataDeletionDate, get_string('strftimedatefullshort', 'core_langconfig'));
-		} else {
-			return false;
-		}
+        if ($dataDeletionDate) {
+          $dataDeletionDate = userdate($dataDeletionDate, get_string('strftimedatefullshort', 'core_langconfig'));
+              } else {
+         return false;
+              }
 
-		return $dataDeletionDate;
+        return $dataDeletionDate;
 	}
 
 	public function isExamDataDeleted() {
-		$isExamDataDeleted = $this->moduleinstance->datadeleted;
+        $isExamDataDeleted = $this->moduleinstance->datadeleted;
 
-		if ($isExamDataDeleted) {
-			return true;
-		} else {
-			return false;
-		}
+        if ($isExamDataDeleted) {
+         return true;
+              } else {
+         return false;
+              }
 	}
 
 	#### determine state of phases ####
 
  	public function checkPhaseCompletion($phase) {
 
-		$UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
+        $userobj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
 
- 		switch ($phase) {
+        switch ($phase) {
 
-			case "phase_one":
-				if ($this->getRoomsCount() && $this->getExamtime() && $UserObj->getParticipantsCount() && $this->getTaskCount()) {
-					return true;
-				} else {
-						return false;
-				}
-			case "phase_two":
-				if ($this->placesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))) {
-					return true;
-				} else {
-						return false;
-				}
-			case "phase_exam":
-				if ($this->getExamtime() && $this->getExamtime() < time()) {
-					return true;
-				} else {
-					return false;
-				}
-			case "phase_three":
-				if ($this->getDataDeletionDate()) {
-					return true;
-				} else {
-					return false;
-				}
-			case "phase_four":
-				if ($this->getExamReviewTime() && $this->getExamReviewRoom() && $this->isExamReviewVisible()) {
-					return true;
-				} else {
-					return false;
-				}
-			case "phase_five":
-				if ($this->getExamReviewTime() && $this->getExamReviewTime() < time()) {
-					return true;
-				} else {
-					return false;
-				}
- 		}
+            case "phase_one":
+                if ($this->getRoomsCount() && $this->getExamtime() && $userobj->getParticipantsCount() && $this->getTaskCount()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "phase_two":
+                if ($this->placesAssigned() && (($this->isDateTimeVisible() && $this->isRoomVisible() && $this->isPlaceVisible()) || ($this->getExamtime() && $this->getExamtime() < time()))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "phase_exam":
+                if ($this->getExamtime() && $this->getExamtime() < time()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "phase_three":
+                if ($this->getDataDeletionDate()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "phase_four":
+                if ($this->getExamReviewTime() && $this->getExamReviewRoom() && $this->isExamReviewVisible()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "phase_five":
+                if ($this->getExamReviewTime() && $this->getExamReviewTime() < time()) {
+                    return true;
+                } else {
+                    return false;
+                }
+                }
 
  	}
 
 	public function determineactivePhase() {
 
-			$phaseOne = $this->checkPhaseCompletion("phase_one");
-			$phaseTwo = $this->checkPhaseCompletion("phase_two");
-			$phaseThree = $this->checkPhaseCompletion("phase_three");
-			$phaseFour = $this->checkPhaseCompletion("phase_four");
-			$phaseFive = $this->checkPhaseCompletion("phase_five");
+         $phaseOne = $this->checkPhaseCompletion("phase_one");
+         $phaseTwo = $this->checkPhaseCompletion("phase_two");
+         $phaseThree = $this->checkPhaseCompletion("phase_three");
+         $phaseFour = $this->checkPhaseCompletion("phase_four");
+         $phaseFive = $this->checkPhaseCompletion("phase_five");
 
-			$examDate = $this->getExamtime();
-			$examReviewDate = $this->moduleinstance->examreviewtime;
-			$date = time();
+         $examDate = $this->getExamtime();
+         $examReviewDate = $this->moduleinstance->examreviewtime;
+         $date = time();
 
- 			if (!$phaseOne) {
-				return 'phase_one';
-			} else if (!$phaseTwo) {
+          if (!$phaseOne) {
+     return 'phase_one';
+            } else if (!$phaseTwo) {
 				return 'phase_two';
-			} else if ($phaseTwo && $examDate > $date) {
+            } else if ($phaseTwo && $examDate > $date) {
 				return 'phase_exam';
-			} else if (!$phaseThree && $examDate < $date) {
-				return 'phase_three';
-			} else if ($phaseThree && $examDate < $date) {
-				return 'phase_four';
-			} else if ($phaseFour && $examReviewDate < $date) {
-				return 'phase_four';
-		}
+            } else if (!$phaseThree && $examDate < $date) {
+return 'phase_three';
+            } else if ($phaseThree && $examDate < $date) {
+return 'phase_four';
+            } else if ($phaseFour && $examReviewDate < $date) {
+return 'phase_four';
+              }
 	 }
 
 	 #### general helper method for formating numbers depending on language
 
 	 public function formatNumberForDisplay($number, $format='string') {
-		if ($number !== false) {
+        if ($number !== false) {
 
-			if ($format === 'string' && is_numeric($number)) {
-				$lang = current_language();
+           if ($format === 'string' && is_numeric($number)) {
+                $lang = current_language();
 
-				if ($lang==="de") {
-					$number = str_replace('.', ',', $number);
-				} else {
-					$number = str_replace(',', '.', $number);
-				}
-			}
+                if ($lang==="de") {
+                     $number = str_replace('.', ',', $number);
+                    } else {
+             $number = str_replace(',', '.', $number);
+                    }
+           }
 
-			return $number;
-		} else {
-			return '-';
-		}
+           return $number;
+            } else {
+         return '-';
+            }
 	}
 
  	#### events ####
 
  	public function startEvent($type) {
 
-		require_once(__DIR__.'/../event/course_module_viewed.php');
+        require_once(__DIR__.'/../event/course_module_viewed.php');
 
-		switch ($type) {
+        switch ($type) {
 
-			case 'view':
-				$event = course_module_viewed::create(array(
-					'objectid' => $this->moduleinstance->id,
-					'context' => $this->modulecontext
-				));
-				$event->add_record_snapshot('course', $this->course);
-				$event->add_record_snapshot('exammanagement', $this->moduleinstance);
-				$event->trigger();
-		}
+           case 'view':
+                $event = course_module_viewed::create(array(
+                'objectid' => $this->moduleinstance->id,
+                'context' => $this->modulecontext
+                ));
+                 $event->add_record_snapshot('course', $this->course);
+                 $event->add_record_snapshot('exammanagement', $this->moduleinstance);
+                 $event->trigger();
+                  }
 	}
 
 	#### methods for feature sites ####
@@ -649,9 +658,9 @@ class exammanagementInstance{
      *
      * @return array action
      */
-    public function get_pagebar($items, $pagecount, $activepage) {
+    public function get_pagebar($items, $activepage) {
 
-        $itemsgroupedbypage = array_chunk($items, $pagecount, true);
+        $itemsgroupedbypage = array_chunk($items, $this->pagecount, true);
 		array_unshift($itemsgroupedbypage, "temp");
 		unset($itemsgroupedbypage[0]);
 
@@ -661,21 +670,21 @@ class exammanagementInstance{
                 $obj = new stdClass();
 
 				if (isset($itemgroup[array_key_first($itemgroup)]->name)) {
-					$first = mb_substr($itemgroup[array_key_first($itemgroup)]->name, 0, 1, 'utf-8');
-					$last = mb_substr($itemgroup[array_key_last($itemgroup)]->name, 0, 1, 'utf-8');
+                             $first = mb_substr($itemgroup[array_key_first($itemgroup)]->name, 0, 1, 'utf-8');
+                             $last = mb_substr($itemgroup[array_key_last($itemgroup)]->name, 0, 1, 'utf-8');
 				} else if (isset($itemgroup[array_key_first($itemgroup)]->lastname)) {
-					$first = mb_substr($itemgroup[array_key_first($itemgroup)]->lastname, 0, 1, 'utf-8');
-					$last = mb_substr($itemgroup[array_key_last($itemgroup)]->lastname, 0, 1, 'utf-8');
+                             $first = mb_substr($itemgroup[array_key_first($itemgroup)]->lastname, 0, 1, 'utf-8');
+                             $last = mb_substr($itemgroup[array_key_last($itemgroup)]->lastname, 0, 1, 'utf-8');
 				}
 
 				$obj->nr = $pagenr;
 
 				if ($first && $last && ($first !== $last)) {
-					$displaystr =  $first . '-' . $last;
+                             $displaystr =  $first . '-' . $last;
 				} else if ($first && $last && ($first == $last)) {
-					$displaystr =  $first;
+                             $displaystr =  $first;
 				} else {
-					$displaystr =  $pagenr;
+                             $displaystr =  $pagenr;
 				}
 
                 if ($pagenr == $activepage) {
@@ -700,22 +709,17 @@ class exammanagementInstance{
      */
     public function get_pagecountoptions() {
 
-        $pagecountoptions = array(2, 3, 4, 5, 6, 7, 8, 9, 10,
-            15, 20, 30, 40, 50, 100, 200, 300, 400, 500,
-            1000);
+        $pagecountoptions = array(5, 10, 100, 1000);
 
         foreach ($pagecountoptions as $key => $number) {
             $obj = new stdClass();
 
-            if ($number == 10) {
-			//if ($number == $this->pagecount) {
-                $obj->option = 'value='.$number.' selected';
-                $obj->text = $number;
-
-                $match = true;
+			if ($number == $this->pagecount) {
+                $obj->display = '<strong>' . $number . '</strong>';
+                $obj->nr = $number;
             } else {
-                $obj->option = 'value=' . $number;
-                $obj->text = $number;
+                $obj->display = $number;
+                $obj->nr = $number;
             }
 
             $pagecountoptions[$key] = $obj;
@@ -726,45 +730,44 @@ class exammanagementInstance{
 
 	### rooms ###
 
-	public function getRooms($mode, $sortorder = 'name', $withoutAssignedPlaces = false, $pagination = false, $activepage = null, $countperpage = 10) {
+	public function getRooms($mode, $sortorder = 'name', $withoutAssignedPlaces = false, $pagination = false, $activepage = null) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$rooms = array();
+        $rooms = array();
 
-		// For pagination.
-		if ($pagination && isset($activepage)) {
-			$limitfrom = $countperpage * ($activepage - 1);
-			$limitnum = $countperpage;
-		} else {
+        // For pagination.
+        if ($pagination && isset($activepage)) {
+			$limitfrom = $this->pagecount * ($activepage - 1);
+			$limitnum = $this->pagecount;
+              } else {
 			$limitfrom = 0;
 			$limitnum = 0;
-		}
+              }
 
-		if ($mode === 'examrooms') {
-			$roomIDs = json_decode($this->moduleinstance->rooms);
+        if ($mode === 'examrooms') {
+        	$roomIDs = json_decode($this->moduleinstance->rooms);
 
-			if ($roomIDs) {
-				$roomIDs = implode("', '", $roomIDs);
+        	if ($roomIDs) {
+                $roomIDs = implode("', '", $roomIDs);
 
-				$select = "roomid IN ('" . $roomIDs . "')";
+                $select = "roomid IN ('" . $roomIDs . "')";
 
-				if ($sortorder == 'name') {
-					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
-				} else {
-					$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), '', '*', $limitfrom, $limitnum);
-				}
-
+                if ($sortorder == 'name') {
+                 $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
+                      } else {
+                 $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), '', '*', $limitfrom, $limitnum);
+                      }
 			} else {
-				return false;
+                return false;
 			}
 
-		} else if ($mode === 'defaultrooms') {
+              } else if ($mode === 'defaultrooms') {
 
-			$select = "type = 'defaultroom'";
+        	$select = "type = 'defaultroom'";
 
-			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
-		} else if ($mode === 'all') {
+        	$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
+              } else if ($mode === 'all') {
 
 			global $USER;
 
@@ -772,235 +775,232 @@ class exammanagementInstance{
 			$select .= " OR type = 'customroom' AND moodleuserid = "  . $USER->id;
 
 			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
-		} else {
+              } else {
 			return false;
-		}
+              }
 
         if ($rs->valid()) {
 
-            foreach ($rs as $record) {
-				$record->places = json_decode($record->places);
-				$rooms[$record->roomid] = $record;
+			foreach ($rs as $record) {
+                      $record->places = json_decode($record->places);
+                $rooms[$record->roomid] = $record;
 			}
 
 			$rs->close();
 
 			if ($sortorder == 'places_bigtosmall' || $sortorder == 'places_smalltobig' ) {
-				usort($rooms, function($a, $b) { // sort rooms by places count through custom user function (small to big rooms)
 
-					$aPlaces = count($a->places);
-					$bPlaces = count($b->places);
+                usort($rooms, function($a, $b) { // sort rooms by places count through custom user function (small to big rooms)
+                 $aPlaces = count($a->places);
+                 $bPlaces = count($b->places);
 
-					return strnatcmp($aPlaces, $bPlaces); // sort by places count
+                 return strnatcmp($aPlaces, $bPlaces); // sort by places count
+                            });
 
-				  });
-
-				  if ($sortorder == 'places_bigtosmall') {
-					$rooms = array_reverse($rooms); // reverse array: now big to small rooms
-				  }
+                               if ($sortorder == 'places_bigtosmall') {
+        $rooms = array_reverse($rooms); // reverse array: now big to small rooms
+                                  }
 			}
 
 			if ($withoutAssignedPlaces) {
-				$assignedPlaces = $this->getAssignedPlaces();
+                      $assignedPlaces = $this->getAssignedPlaces();
 
-				if (isset($assignedPlaces)) {
-					foreach ($rooms as $room) {
-						if (isset($assignedPlaces[$room->roomid])) {
-							foreach ($room->places as $place) {
-								if (in_array($place, $assignedPlaces[$room->roomid])) {
-									if (($key = array_search($place, $room->places)) !== false) {
-										unset($room->places[$key]);
-									}
-								}
-							}
-						}
-					}
-				}
-				$room->seatingplan = NULL;
+                if (isset($assignedPlaces)) {
+        			foreach ($rooms as $room) {
+                        if (isset($assignedPlaces[$room->roomid])) {
+             				foreach ($room->places as $place) {
+                                if (in_array($place, $assignedPlaces[$room->roomid])) {
+                  					if (($key = array_search($place, $room->places)) !== false) {
+                                        unset($room->places[$key]);
+                  					}
+                                        }
+             				}
+                              }
+        			}
+                      }
+                $room->seatingplan = NULL;
 			}
 
 			$rs->close();
 			return $rooms;
 
-        } else {
+              } else {
 			$rs->close();
 			return false;
-		}
+              }
 	}
 
 	public function getRoomObj($roomID) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));
+        $room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));
 
-		if ($room) {
-			return $room;
-		} else {
-			return false;
-		}
+        if ($room) {
+        	return $room;
+              } else {
+        	return false;
+              }
 	}
 
 	public function countDefaultRooms() {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$defaultRoomsCount = $MoodleDBObj->countRecordsInDB('exammanagement_rooms', "type = 'defaultroom'");
+        $defaultRoomsCount = $MoodleDBObj->countRecordsInDB('exammanagement_rooms', "type = 'defaultroom'");
 
-		if ($defaultRoomsCount && $defaultRoomsCount !== 0) {
-			return $defaultRoomsCount;
-		} else {
-			return false;
-		}
-
+        if ($defaultRoomsCount && $defaultRoomsCount !== 0) {
+        	return $defaultRoomsCount;
+              } else {
+        	return false;
+              }
 	}
 
 	### text file headers ###
 
 	public function getTextFileHeaders() {
 
-		$textfileheaders = 	json_decode($this->moduleinstance->importfileheaders);
+        $textfileheaders = json_decode($this->moduleinstance->importfileheaders);
 
-		if ($textfileheaders) {
-				return $textfileheaders;
-			} else {
-				return false;
-		}
+        if ($textfileheaders) {
+            return $textfileheaders;
+              } else {
+            return false;
+              }
 	}
 
 	### send moodle message to user ###
 
 	public function sendSingleMessage($user, $subject, $text, $type) {
 
-		global $USER;
+        global $USER;
 
-		$MoodleObj = Moodle::getInstance($this->id, $this->e);
+        $moodleobj = Moodle::getInstance($this->id, $this->e);
 
-		$message = new message();
-		$message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
-		$message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
-		$message->name = $type; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
-		$message->userfrom = $USER; // user object
-		$message->userto = $user; // user object
-		$message->subject = $subject; // very short one-line subject
-		$message->fullmessage = $text; // raw text
-		$message->fullmessageformat = FORMAT_MARKDOWN; // text format
-		$message->fullmessagehtml = $text; // html rendered version
-		$message->smallmessage = $text; // useful for plugins like sms or twitter
-		$message->notification = 1;
-		$message->contexturl = $MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
-		$message->contexturlname = $this->moduleinstance->name . ' (' . get_string('modulename', 'mod_exammanagement') . ')';
-		$message->replyto = "";
+        $message = new message();
+        $message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
+        $message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
+        $message->name = $type; // type of message from that module (as module defines it). Along with component this must exist in the table message_providers
+        $message->userfrom = $USER; // user object
+        $message->userto = $user; // user object
+        $message->subject = $subject; // very short one-line subject
+        $message->fullmessage = $text; // raw text
+        $message->fullmessageformat = FORMAT_MARKDOWN; // text format
+        $message->fullmessagehtml = $text; // html rendered version
+        $message->smallmessage = $text; // useful for plugins like sms or twitter
+        $message->notification = 1;
+        $message->contexturl = $moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
+        $message->contexturlname = $this->moduleinstance->name . ' (' . get_string('modulename', 'mod_exammanagement') . ')';
+        $message->replyto = "";
 
-		$header = '';
-		$url = '<a href="'.$MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id) . '" target="_blank">'.$MoodleObj->getMoodleUrl("/mod/exammanagement/view.php", $this->id).'</a>';
+        $header = '';
+        $url = '<a href="'.$moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id) . '" target="_blank">'.$moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id).'</a>';
 
-		if ($this->cron == false) {
-			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
-		} else {
-			$footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
-		}
-		$content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
+        if ($this->cron == false) {
+            $footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
+              } else {
+            $footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
+              }
+        $content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
 
-		$message->set_additional_content('email', $content);
+        $message->set_additional_content('email', $content);
 
-		$messageid = message_send($message);
+        $messageid = message_send($message);
 
-		return $messageid;
-
+        return $messageid;
 	}
 
 	#### Export PDFS ####
 
 	public function getParticipantsListTableHeader() {
-		$header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-		$header .= "<thead>";
-		$header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-		$header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-		$header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-		$header .= "</tr>";
-		$header .= "</thead>";
+        $header = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+        $header .= "<thead>";
+        $header .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+        $header .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+        $header .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+        $header .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+        $header .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+        $header .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+        $header .= "</tr>";
+        $header .= "</thead>";
 
-		return $header;
+        return $header;
 	}
 
 	public function getSeatingPlanTable($leftCol, $rightCol) {
 
-		$fill = false;
+        $fill = false;
 
-		$table = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-		$table .= "<thead>";
-		$table .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-		$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-		$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-		$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-		$table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
+        $table = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+        $table .= "<thead>";
+        $table .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+        $table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+        $table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+        $table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+        $table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
 
-		if (count($rightCol) > 0) {
-			$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
-		} else {
-			$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
-		}
+        if (count($rightCol) > 0) {
+        	$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\"><b>" . get_string('room', 'mod_exammanagement') . "</b></td>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\"><b>" . get_string('place', 'mod_exammanagement') . "</b></td>";
+              } else {
+        	$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
+              }
 
-		$table .= "</tr>";
-		$table .= "</thead>";
+        $table .= "</tr>";
+        $table .= "</thead>";
 
-		for ($n = 0; $n < count($leftCol); $n++) {
+        for ($n = 0; $n < count($leftCol); $n++) {
 
-			$table .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $leftCol[$n]["matrnr"] . "</td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $leftCol[$n]["roomname"] . "</td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $leftCol[$n]["place"] . "</td>";
-			$table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
+        	$table .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $leftCol[$n]["matrnr"] . "</td>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $leftCol[$n]["roomname"] . "</td>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $leftCol[$n]["place"] . "</td>";
+        	$table .= "<td width=\"" . WIDTH_COLUMN_MIDDLE . "\" bgcolor=\"#FFFFFF\"></td>";
 
-			if ($n < count($rightCol)) {
-				$table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $rightCol[$n]["matrnr"] . "</td>";
-				$table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $rightCol[$n]["roomname"] . "</td>";
-				$table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $rightCol[$n]["place"] . "</td>";
-			} else {
-				$table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
-			}
+        	if ($n < count($rightCol)) {
+                $table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $rightCol[$n]["matrnr"] . "</td>";
+                $table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $rightCol[$n]["roomname"] . "</td>";
+                $table .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $rightCol[$n]["place"] . "</td>";
+         	} else {
+                $table .= "<td bgcolor=\"#FFFFFF\" width=\"" . (WIDTH_COLUMN_MATNO + WIDTH_COLUMN_ROOM + WIDTH_COLUMN_PLACE) . "\" colspan=\"3\"></td>";
+         	}
 
-			$table .= "</tr>";
+        	$table .= "</tr>";
 
-			$fill = !$fill;
-		}
+        	$fill = !$fill;
+              }
 
-		$table .= "</table>";
+        $table .= "</table>";
 
-		return $table;
+        return $table;
 	}
 
 	public function buildChecksumExamLabels($ean) {
-		$s = preg_replace("/([^\d])/", "", $ean);
-		if (strlen($s) != 12) {
-			return false;
-		}
+        $s = preg_replace("/([^\d])/", "", $ean);
+        if (strlen($s) != 12) {
+        	return false;
+              }
 
-		$check = 0;
-		for ($i = 0; $i < 12; $i++) {
-			$check += (($i % 2) * 2 + 1) * $s[$i];
-		}
+        $check = 0;
+        for ($i = 0; $i < 12; $i++) {
+        	$check += (($i % 2) * 2 + 1) * $s[$i];
+              }
 
-		return (10 - ($check % 10)) % 10;
+        return (10 - ($check % 10)) % 10;
 	}
 
 	public function calculateCellAddress($n) {
-		if ($n <= 26) return chr(64 + $n);
-		else if ($n <= 52) return "A" . $this->calculateCellAddress($n - 26);
-		else if ($n <= 78) return "B" . $this->calculateCellAddress($n - 52);
-		else if ($n <= 104) return "C" . $this->calculateCellAddress($n - 78);
-		else if ($n <= 130) return "D" . $this->calculateCellAddress($n - 104);
-		else if ($n <= 156) return "E" . $this->calculateCellAddress($n - 130);
-		else if ($n <= 192) return "F" . $this->calculateCellAddress($n - 156);
-		else if ($n <= 218) return "G" . $this->calculateCellAddress($n - 192);
-		else if ($n <= 244) return "H" . $this->calculateCellAddress($n - 218);
-		else if ($n <= 270) return "I" . $this->calculateCellAddress($n - 244);
-		else return;
+        if ($n <= 26) return chr(64 + $n);
+        else if ($n <= 52) return "A" . $this->calculateCellAddress($n - 26);
+        else if ($n <= 78) return "B" . $this->calculateCellAddress($n - 52);
+        else if ($n <= 104) return "C" . $this->calculateCellAddress($n - 78);
+        else if ($n <= 130) return "D" . $this->calculateCellAddress($n - 104);
+        else if ($n <= 156) return "E" . $this->calculateCellAddress($n - 130);
+        else if ($n <= 192) return "F" . $this->calculateCellAddress($n - 156);
+        else if ($n <= 218) return "G" . $this->calculateCellAddress($n - 192);
+        else if ($n <= 244) return "H" . $this->calculateCellAddress($n - 218);
+        else if ($n <= 270) return "I" . $this->calculateCellAddress($n - 244);
+        else return;
 	}
 }
