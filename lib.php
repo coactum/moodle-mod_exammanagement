@@ -37,10 +37,16 @@ define('EXAMMANAGEMENT_EVENT_TYPE_EXAMREVIEWTIME', 'examreviewtime');
  * @uses FEATURE_SHOW_DESCRIPTION
  * @uses FEATURE_COMPLETION_TRACKS_VIEWS
  * @uses FEATURE__BACKUP_MOODLE2
+ * @uses FEATURE_MOD_PURPOSE
  * @param string $feature Constant representing the feature.
  * @return mixed True if the feature is supported, null otherwise.
  */
 function exammanagement_supports($feature) {
+    // Adding support for FEATURE_MOD_PURPOSE (MDL-71457) and providing backward compatibility (pre-v4.0).
+    if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
+        return MOD_PURPOSE_ASSESSMENT;
+    }
+
     switch ($feature) {
         case FEATURE_MOD_INTRO:
             return true;
@@ -79,10 +85,18 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
         $moduleinstance->password = null;
     }
 
+    // Check if mode export_grades.
     $misc = new stdclass;
     if ($mform->get_data()->exportgrades) {
-
         $misc->mode = 'export_grades';
+    }
+
+    // Set phase and steps deselections.
+    if ($mform->get_data()->deselectphaseexamreview) {
+        $misc->configoptions = array('noexamreview');
+    }
+
+    if (isset($misc->mode) || isset($misc->configoptions)) {
         $moduleinstance->misc = json_encode($misc);
     } else {
         $moduleinstance->misc = null;
@@ -470,28 +484,15 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
  */
 function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
     $modinfo = get_fast_modinfo($course); // Get mod_fast_modinfo from $course.
-    $index = 1;    // Set index.
+    $index = 1; // Set index.
     foreach ($modinfo->get_cms() as $cmid => $cm) { // Search existing course modules for this course.
-        if ($cm->modname == "exammanagement" && $cm->uservisible && $cm->available) { // Look if module (in this case exammanegement) exists, is uservisible and available.
-            $url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); // Set url for the link in the navigation node.
-            $node = navigation_node::create($cm->name . ' (' . get_string('modulename', 'exammanagement') . ')',
-                $url, navigation_node::TYPE_CUSTOM, null , null , new pix_icon('barcode', $cm->name, 'mod_exammanagement'));
+        if ($index == 1 && $cm->modname == "exammanagement" && $cm->uservisible && $cm->available) { // Look if module (in this case exammanagement) exists, is uservisible and available.
+            $url = new moodle_url("/mod/" . $cm->modname . "/index.php", array("id" => $course->id)); // Set url for the link in the navigation node.
+            $node = navigation_node::create(get_string('viewallexams', 'exammanagement'), $url, navigation_node::TYPE_CUSTOM, null , null , null);
             $exammanagementnode->add_node($node);
+            $index++;
         }
-         $index++;
     }
-}
-
-/**
- * Extends the settings navigation with the mod_exammanagement settings.
- *
- * This function is called when the context for the page is a mod_exammanagement module.
- * This is not called by AJAX so it is safe to rely on the $PAGE.
- *
- * @param settings_navigation $settingsnav {@link settings_navigation}
- * @param navigation_node $exammanagementnode {@link navigation_node}
- */
-function exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
 }
 
 /**

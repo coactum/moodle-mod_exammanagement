@@ -46,7 +46,7 @@ require_once(__DIR__.'/../general/Moodle.php');
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class importbonus_form extends moodleform{
+class importbonus_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor
@@ -54,26 +54,27 @@ class importbonus_form extends moodleform{
     public function definition() {
         global $PAGE, $CFG, $OUTPUT;
 
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
-        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'init'); //call jquery for tracking input value change events and creating input type number fields
-        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'addbonusstep'); //call jquery for adding tasks
-        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'removebonusstep'); //call jquery for removing tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'init'); // call jquery for tracking input value change events and creating input type number fields
+        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'addbonusstep'); // call jquery for adding tasks
+        $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'removebonusstep'); // call jquery for removing tasks
 
         $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
+        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        if (!isset($misc['mode'])) {
             $mform->addElement('html', '<div class="row"><h3 class="col-md-8">'.get_string("importBonus", "mod_exammanagement"));
         } else {
             $mform->addElement('html', '<div class="row"><h3 class="col-md-8">'.get_string("import_grades", "mod_exammanagement"));
         }
 
         if ($helptextsenabled) {
-            if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
+            if (!isset($misc['mode'])) {
                 $mform->addElement('html', $OUTPUT->help_icon('importBonus', 'mod_exammanagement', ''));
             } else {
                 $mform->addElement('html', $OUTPUT->help_icon('importBonus_grades', 'mod_exammanagement', ''));
@@ -82,19 +83,19 @@ class importbonus_form extends moodleform{
 
         $mform->addElement('html', '</h3><div class="col-md-4">');
 
-        $bonuscount = $UserObj->getEnteredBonusCount();
+        $bonuscount = $userobj->getEnteredBonusCount();
 
         if ($bonuscount) {
-            if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
-                $mform->addElement('html', '<a href="importBonus.php?id=' . $this->_customdata['id'] . '&dbp=1&sesskey=' . sesskey() . '" role="button" class="btn btn-primary pull-right" title="'.get_string("revert_bonus", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_bonus", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            if (!isset($misc['mode'])) {
+                $mform->addElement('html', '<a href="importBonus.php?id=' . $this->_customdata['id'] . '&dbp=1&sesskey=' . sesskey() . '" role="button" class="btn btn-secondary pull-right" title="'.get_string("revert_bonus", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_bonus", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
             } else {
-                $mform->addElement('html', '<a href="importBonus.php?id=' . $this->_customdata['id'] . '&dbp=1&sesskey=' . sesskey() . '" role="button" class="btn btn-primary pull-right" title="'.get_string("revert_grades", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_grades", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+                $mform->addElement('html', '<a href="importBonus.php?id=' . $this->_customdata['id'] . '&dbp=1&sesskey=' . sesskey() . '" role="button" class="btn btn-secondary pull-right" title="'.get_string("revert_grades", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_grades", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
             }
         }
 
         $mform->addElement('html', '</div></div>');
 
-        if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
+        if (!isset($misc['mode'])) {
             $mform->addElement('html', '<p>'.get_string('import_bonus_text', 'mod_exammanagement').'</p>');
         } else {
             $mform->addElement('html', '<p>'.get_string('import_grades_text', 'mod_exammanagement').'</p>');
@@ -108,7 +109,7 @@ class importbonus_form extends moodleform{
 
         $mform->addElement('html', '<h4>'.get_string('choose_bonus_import_mode', 'mod_exammanagement').'</h4>');
 
-        if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
+        if (!isset($misc['mode'])) {
             $select = $mform->addElement('select', 'bonusmode', get_string('bonus_import_mode', 'mod_exammanagement'), array('steps' => get_string('mode_bonussteps', 'mod_exammanagement'), 'points' => get_string('mode_bonuspoints', 'mod_exammanagement')));
             $select->setSelected('steps');
         } else {
@@ -120,35 +121,35 @@ class importbonus_form extends moodleform{
 
         $mform->addElement('html', '<p id="import_bonuspoints_text">'.get_string('import_bonuspoints_text', 'mod_exammanagement').'</p>');
 
-        $attributes = array('size'=>'1'); // Length of input field.
+        $attributes = array('size' => '1'); // Length of input field.
 
-        if ($ExammanagementInstanceObj->moduleinstance->misc === NULL) {
-            ###### set bonus grade steps #####
+        if (!isset($misc['mode'])) {
+            // set bonus grade steps #####
             $mform->addElement('html', '<div id="set_bonussteps"><h4>'.get_string('set_bonussteps', 'mod_exammanagement').'</h4>');
 
-            //group for add and remove bonusstep buttons
-            $bonusstep_buttonarray = array();
-            array_push($bonusstep_buttonarray, $mform->createElement('button', 'add_bonusstep', '<i class="fa fa-plus" aria-hidden="true"></i>'));
-            array_push($bonusstep_buttonarray, $mform->createElement('button', 'remove_bonusstep', '<i class="fa fa-minus" aria-hidden="true"></i>'));
-            $mform->addGroup($bonusstep_buttonarray, 'bonusstep_buttonarray', get_string('add_remove_bonusstep', 'mod_exammanagement'), array(' '), false);
+            // group for add and remove bonusstep buttons
+            $bonusstepbuttonarray = array();
+            array_push($bonusstepbuttonarray, $mform->createElement('button', 'add_bonusstep', '<i class="fa fa-plus" aria-hidden="true"></i>'));
+            array_push($bonusstepbuttonarray, $mform->createElement('button', 'remove_bonusstep', '<i class="fa fa-minus" aria-hidden="true"></i>'));
+            $mform->addGroup($bonusstepbuttonarray, 'bonusstep_buttonarray', get_string('add_remove_bonusstep', 'mod_exammanagement'), array(' '), false);
 
-            //create list of bonussteps
+            // create list of bonussteps
 
-            $bonussstepnumbers_array = array();
-            $bonussteps_array = array();
+            $bonussstepnumbersarray = array();
+            $bonusstepsarray = array();
             $count = 1;
             $bonusstepcount = $this->_customdata['bonusstepcount'];
 
-            //add tasks from DB
+            // add tasks from DB
             if ($bonusstepcount) {
 
                 for ($count; $count <= $bonusstepcount; $count++) {
 
-                    //number of bonusstep
-                    array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$count.'</strong></span>'));
+                    // number of bonusstep
+                    array_push($bonussstepnumbersarray, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>'.$count.'</strong></span>'));
 
-                    //input field with points needed for bonus grade step
-                    array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints['.$count.']', '', $attributes));
+                    // input field with points needed for bonus grade step
+                    array_push($bonusstepsarray, $mform->createElement('text', 'bonussteppoints['.$count.']', '', $attributes));
                     $mform->setType('bonussteppoints['.$count.']', PARAM_FLOAT);
                     $mform->setDefault('bonussteppoints['.$count.']', '');
                     $mform->hideif ('bonussteppoints['.$count.']', 'bonusmode', 'eq', 'points');
@@ -159,9 +160,9 @@ class importbonus_form extends moodleform{
                 $mform->setType('bonusstepcount', PARAM_FLOAT);
 
             } else {
-                array_push($bonussstepnumbers_array, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
+                array_push($bonussstepnumbersarray, $mform->createElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong></span>'));
 
-                array_push($bonussteps_array, $mform->createElement('text', 'bonussteppoints[1]', '', $attributes));
+                array_push($bonusstepsarray, $mform->createElement('text', 'bonussteppoints[1]', '', $attributes));
                 $mform->setType('bonussteppoints[1]', PARAM_FLOAT);
                 $mform->setDefault('bonussteppoints[1]', '');
                 $mform->hideif ('bonussteppoints[1]', 'bonusmode', 'eq', 'points');
@@ -170,21 +171,21 @@ class importbonus_form extends moodleform{
                 $mform->setType('bonusstepcount', PARAM_FLOAT);
             }
 
-            $mform->addGroup($bonussstepnumbers_array, 'bonussstepnumbers_array', get_string('bonusstep', 'mod_exammanagement'), '', false);
-            $mform->addGroup($bonussteps_array, 'bonussteppoints_array', get_string('required_points', 'mod_exammanagement'), ' ', false);
+            $mform->addGroup($bonussstepnumbersarray, 'bonussstepnumbers_array', get_string('bonusstep', 'mod_exammanagement'), '', false);
+            $mform->addGroup($bonusstepsarray, 'bonussteppoints_array', get_string('required_points', 'mod_exammanagement'), ' ', false);
 
             $mform->addElement('html', '</div>');
 
             $mform->addElement('html', '<hr>');
         }
 
-        ###### add bonuspoints from file ######
+        // add bonuspoints from file ######
         $mform->addElement('html', '<h4>'.get_string('configure_fileimport', 'mod_exammanagement').'</h4>');
 
-        $select = $mform->addElement('select', 'importmode', get_string('import_mode', 'mod_exammanagement'), array('me' => get_string('moodle_export', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), 'i' => get_string('individual', 'mod_exammanagement')));
+        $select = $mform->addElement('select', 'importmode', get_string('import_mode', 'mod_exammanagement'), array('me' => get_string('moodle_export', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), 'i' => get_string('individual', 'mod_exammanagement')));
         $select->setSelected('me');
 
-        $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), $attributes);
+        $mform->addElement('text', 'idfield', get_string('idfield', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), $attributes);
         $mform->setType('idfield', PARAM_TEXT);
         $mform->setDefault('idfield', 'F');
         $mform->disabledif ('idfield', 'importmode', 'eq', 'me');
@@ -195,7 +196,7 @@ class importbonus_form extends moodleform{
 
         $maxbytes = $CFG->maxbytes;
 
-        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement", ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xlsx', '.ods')));
+        $mform->addElement('filepicker', 'bonuspoints_list', get_string("import_bonus_from_file", "mod_exammanagement", ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), null, array('maxbytes' => $maxbytes, 'accepted_types' => array('.xlsx', '.ods')));
         $mform->addRule('bonuspoints_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
@@ -204,7 +205,7 @@ class importbonus_form extends moodleform{
 
     // Custom validation.
     public function validation($data, $files) {
-        $errors= array();
+        $errors = array();
 
         if (isset($data['bonussteppoints'])) {
             foreach ($data['bonussteppoints'] as $key => $bonussteppoints) {
@@ -214,11 +215,11 @@ class importbonus_form extends moodleform{
 
                 if ($data['bonusmode'] === 'steps' && (($bonussteppoints && !$floatval) || !$isnumeric)) {
                     $errors['bonussteppoints['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
-                } else if ($data['bonusmode'] === 'steps' && $bonussteppoints<0) {
+                } else if ($data['bonusmode'] === 'steps' && $bonussteppoints < 0) {
                     $errors['bonussteppoints['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
                 } else if (!preg_match('/^[A-Z]+$/', $data['idfield'])) {
                     $errors['idfield'] = get_string('err_noalphanumeric', 'mod_exammanagement');
-                }  else if (!preg_match('/^[A-Z]+$/', $data['pointsfield'])) {
+                } else if (!preg_match('/^[A-Z]+$/', $data['pointsfield'])) {
                     $errors['pointsfield'] = get_string('err_noalphanumeric', 'mod_exammanagement');
                 }
             }

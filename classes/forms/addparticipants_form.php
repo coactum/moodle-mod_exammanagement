@@ -195,7 +195,7 @@ class addparticipants_form extends moodleform {
 
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => false, 'includefullname' => true, 'size' => 25));
+                        $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => false, 'includefullname' => true));
 
                         $mform->addElement('advcheckbox', 'participants[mid_'.$odduser->moodleuserid.'-'.$odduser->headerid.']', $image, null, array('group' => 1));
                     } else if ($odduser->state == 'state_nonmoodle') {
@@ -250,7 +250,7 @@ class addparticipants_form extends moodleform {
 
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
-                        $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                        $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
 
                         $mform->addElement('advcheckbox', 'deletedparticipants[mid_'.$deleteduser->moodleuserid.']', $image, null, array('group' => 2));
 
@@ -335,10 +335,10 @@ class addparticipants_form extends moodleform {
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
                         if ($existinguser->state === 'state_existingmatrnr') {
-                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
                             $mform->addElement('html', '</div><div class="col-'.$col.'">' . $image . ' </div>');
                         } else {
-                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
                             $mform->addElement('html', '</div><div class="col-'.$col.'"> ' . $image . ' </div>');
                         }
 
@@ -419,7 +419,7 @@ class addparticipants_form extends moodleform {
 
                     $courseid = $exammanagementinstanceobj->getCourse()->id;
 
-                    $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                    $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
 
                     $mform->addElement('advcheckbox', 'participants[mid_' . $newmoodleuser->moodleuserid . '-' . $newmoodleuser->headerid.']', $image, null, array('group' => 3));
 

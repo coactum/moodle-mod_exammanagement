@@ -65,7 +65,7 @@ class examreview_form extends moodleform {
 
         $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreviewdate', 'mod_exammanagement'));
 
-        $attributes = array('size'=>'20');
+        $attributes = array('size' => '20');
 
         $mform->addElement('text', 'examreviewroom', get_string('examreviewroom', 'mod_exammanagement'), $attributes);
         $mform->setType('examreviewroom', PARAM_TEXT);

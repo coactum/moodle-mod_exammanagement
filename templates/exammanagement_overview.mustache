@@ -166,7 +166,12 @@ ajaxsetcorrectioncompletion = function(value) {
 <div class="container-fluid exammanagement_overview">
 	<div class="row">
 		<h3 class="my-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
-		<span class="my-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right mb-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right mr-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
+		<span class="my-1 col-6">
+			{{^deleted}}
+				<a class="btn btn-primary pull-right mb-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>
+				<a class="btn btn-primary pull-right mr-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>
+			{{/deleted}}
+		</span>
 	</div>
 
 	{{#deleted}}

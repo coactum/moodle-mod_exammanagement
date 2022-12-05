@@ -87,15 +87,15 @@ class chooserooms_form extends moodleform {
 
         if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])) {
             if ($allrooms) {
-                $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']) . '" class="btn btn-primary" title="' . get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("export_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
+                $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']) . '" class="btn btn-secondary" title="' . get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("export_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
             }
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("importDefaultRooms", $this->_customdata['id']) . '" class="btn btn-primary ml-1" title="' . get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("import_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("importDefaultRooms", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("import_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
         }
 
         if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])) {
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("editDefaultRoom", $this->_customdata['id']) . '" class="btn btn-primary ml-1" title="' . get_string("add_default_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_default_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("editDefaultRoom", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("add_default_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_default_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
         } else {
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCustomRoom", $this->_customdata['id']) . '" class="btn btn-primary ml-1" title="' . get_string("add_custom_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_custom_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCustomRoom", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("add_custom_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_custom_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
         }
 
         $mform->addElement('html', '</div>');

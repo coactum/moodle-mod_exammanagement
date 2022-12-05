@@ -91,9 +91,9 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
-											{{#participants}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
-											{{^participants}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
-											<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+											{{#participants}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
+											{{^participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
+											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}exam_participants, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -110,9 +110,9 @@ ajaxsetcorrectioncompletion = function(value) {
 									<div class="panel {{^gradingscale}}panel-warning{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 										<div class="panel-heading">
 											<span class="statebar pull-right">
-												{{#gradingscale}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												{{^gradingscale}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+												{{#gradingscale}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+												{{^gradingscale}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
 										</div>
@@ -131,10 +131,10 @@ ajaxsetcorrectioncompletion = function(value) {
 									<div class="panel {{^bonuspointsentered}}{{#participants}}panel-warning{{/participants}}{{/bonuspointsentered}}{{^bonuspointsentered}}{{^participants}}panel-danger{{/participants}}{{/bonuspointsentered}}{{#bonuspointsentered}}panel-success{{/bonuspointsentered}}">
 										<div class="panel-heading">
 											<span class="statebar pull-right">
-												{{#bonuspointsentered}}<span class="label label-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuspointsentered}}
-												{{^bonuspointsentered}}{{#participants}}<span class="label label-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/bonuspointsentered}}
-												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-												<span class="label label-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+												{{#bonuspointsentered}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuspointsentered}}
+												{{^bonuspointsentered}}{{#participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/bonuspointsentered}}
+												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+												<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}grades, mod_exammanagement{{/str}}</h3>
 										</div>
@@ -151,8 +151,8 @@ ajaxsetcorrectioncompletion = function(value) {
 									<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 										<div class="panel-heading">
 											<span class="statebar pull-right">
-												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-												<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 										</span>
 										<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
@@ -173,7 +173,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<span class="statebar pull-right">
 											{{^deleted}}{{#bonuspointsentered}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/bonuspointsentered}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
+											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 										</span>
 										<h3 class="panel-title">{{#str}}complete_preparations, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -188,9 +188,9 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#datadeletiondate}}{{#bonuspointsentered}}panel-info{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{#datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar pull-right">
-											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="label label-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-											{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="label label-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}
-											<span class="label label-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
+											{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}
+											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
 									</div>

@@ -41,11 +41,16 @@ export const init = (lang) => {
     "width": "70px"
   };
 
-  $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").css(styles);
-  $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").attr("step", "0.01");
-  $("#fgroup_id_points_array nput[type=number]:not(#id_matrnr)").attr("min", "0");
+  $(".tasksarea input[type=number]:not(#id_matrnr)").css(styles);
+  $(".tasksarea input[type=number]:not(#id_matrnr)").attr("step", "0.01");
+  $(".tasksarea nput[type=number]:not(#id_matrnr)").attr("min", "0");
 
-  $("#fgroup_id_points_array input[type=number]:not(#id_matrnr)").each(function () {
+  // Remove cols from form layout.
+  $('.exammanagement_task_spacing .form-group div').removeClass('col-md-3');
+  $('.exammanagement_task_spacing .form-group div').removeClass('col-md-9');
+  $('.exammanagement_task_spacing .form-group').removeClass('row');
+
+  $(".tasksarea input[type=number]:not(#id_matrnr)").each(function () {
     $(this).attr("max", parseFloat($("#" + "max_points_" + getInputId($(this))).text().replace(/,/g, '.')));
   });
 

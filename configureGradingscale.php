@@ -49,7 +49,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
         if (!isset($exammanagementinstanceobj->moduleinstance->password) ||
             (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) {
 
-            if ($exammanagementinstanceobj->moduleinstance->misc === null && !$exammanagementinstanceobj->getTaskCount()) {
+            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+            if (!isset($misc['mode']) && !$exammanagementinstanceobj->getTaskCount()) {
                 $moodleobj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
             }
 

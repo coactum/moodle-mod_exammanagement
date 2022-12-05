@@ -766,11 +766,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     border-bottom-color: #ebccd1;
 }
 
-/* label-danger */
-.path-mod-exammanagement .exammanagement_overview .label-danger {
-    background-color: #d9534f !important;
-}
-
 /* pagebar */
 .path-mod-exammanagement .exammanagement-pagebar .pagination {
     margin-bottom: 0;

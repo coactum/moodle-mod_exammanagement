@@ -283,7 +283,7 @@ class addcourseparticipants_form extends moodleform {
 
                 $courseid = $exammanagementinstanceobj->getCourse()->id;
 
-                $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true, 'size' => 25));
+                $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
 
                 $courseparticipant->profile = $image;
 

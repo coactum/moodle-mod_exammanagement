@@ -79,7 +79,7 @@ class participantsoverview_form extends moodleform {
         $mform->addElement('html', '<div class="d-flex justify-content-between"><h3>'.get_string("participantsOverview", "mod_exammanagement"));
 
         if ($helptextsenabled) {
-            if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+            if (!isset($misc['mode'])) {
                 $mform->addElement('html', $OUTPUT->help_icon('participantsOverview', 'mod_exammanagement', ''));
             } else {
                 $mform->addElement('html', $OUTPUT->help_icon('participantsOverview_grades', 'mod_exammanagement', ''));
@@ -88,8 +88,10 @@ class participantsoverview_form extends moodleform {
 
         $mform->addElement('html', '</h3><div>');
 
+        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+
         if (!isset($this->_customdata['epm'])) {
-            if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+            if (!isset($misc['mode'])) {
                 $mform->addElement('html', '<a href="participantsOverview.php?id=' . $this->_customdata['id'] . '&epm=' . true . '&page=' . $this->_customdata['pagenr'] . '" class="btn btn-primary pull-right" title="'.get_string("edit_results_and_boni", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("edit_results_and_boni", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
             } else {
                 $mform->addElement('html', '<a href="participantsOverview.php?id=' . $this->_customdata['id'] . '&epm=' . true . '&page=' . $this->_customdata['pagenr'] . '" class="btn btn-primary pull-right" title="'.get_string("edit_grades", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("edit_grades", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
@@ -120,7 +122,7 @@ class participantsoverview_form extends moodleform {
             $mform->addElement('hidden', 'epm', false);
             $mform->setType('epm', PARAM_INT);
 
-            if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+            if (!isset($misc['mode'])) {
 
                 $mform->addElement('html', '<th scope="col" class="exammanagement_table_width_room">'.get_string("room", "mod_exammanagement").'</th><th scope="col" class="exammanagement_table_width_place">'.get_string("place", "mod_exammanagement").'</th>');
 
@@ -152,7 +154,7 @@ class participantsoverview_form extends moodleform {
             $mform->setType('page', PARAM_INT);
             $mform->setDefault('page', $this->_customdata['pagenr']);
 
-            if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+            if (!isset($misc['mode'])) {
                 $mform->addElement('html', '<th scope="col">'.get_string("points", "mod_exammanagement").'</th>');
 
                 $mform->addElement('html', '<th scope="col">'.get_string("bonuspoints", "mod_exammanagement").'</th>');
@@ -211,7 +213,7 @@ class participantsoverview_form extends moodleform {
                     $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
                     $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
 
-                    if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+                    if (!isset($misc['mode'])) {
                         $mform->addElement('html', '<td>'.$room.'</td>');
                         $mform->addElement('html', '<td>'.$place.'</td>');
 
@@ -334,7 +336,7 @@ class participantsoverview_form extends moodleform {
                     $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
                     $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
 
-                    if ($exammanagementinstanceobj->moduleinstance->misc === null) {
+                    if (!isset($misc['mode'])) {
 
                         $mform->addElement('html', '<td class="p-1">');
 

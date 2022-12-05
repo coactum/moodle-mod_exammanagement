@@ -106,7 +106,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             }
 
             if ($participants) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("convertToGroup", $id) . '" role="button" class="btn btn-primary mr-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("convertToGroup", $id) . '" role="button" class="btn btn-secondary mr-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-users d-xl-none" aria-hidden="true"></i></a>');
             }
 
             echo('</div></div>');
@@ -164,7 +164,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                             echo('<td>' . $participant->profile . '</td>');
                         } else if ($participant->state == 'state_added_to_exam_no_course') {
                             $moodleuser = $userobj->getMoodleUser($participant->moodleuserid);
-                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => false, 'link' => false, 'includefullname' => true, 'size' => 25));
+                            $image = $OUTPUT->user_picture($moodleuser, array('courseid' => false, 'link' => false, 'includefullname' => true));
                             echo('<td>' . $image . '</td>');
                         } else if ($participant->state == 'state_added_to_exam_no_moodle') {
                             echo('<td>' . $participant->firstname . ' ' . $participant->lastname . '</td>');

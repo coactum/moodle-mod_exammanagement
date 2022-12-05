@@ -85,7 +85,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 // or on the first display of the form.
 
                 if (!$examreviewtime = $exammanagementinstanceobj->getExamReviewTime()) {
-                    $examreviewtime = strtotime("+14 days noon");
+                    $examreviewtime = strtotime("+28 days noon");
                 }
 
                 // Set default data (if any).

@@ -67,10 +67,10 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             // Include pdf.
             require_once(__DIR__.'/classes/pdfs/examLabels.php');
 
-            define('LABEL_HEIGHT', 55);
+            define('LABEL_HEIGHT', 52);
             define('X1', 7.7 + 2); // Plus Offset within Label.
             define('X2', 106.3 + 2); // Plus Offset within Label.
-            define('Y', 10 + 2); // Plus Offset within Label.
+            define('Y', 21 + 2); // Plus Offset within Label.
 
             // Include the main TCPDF library (search for installation path).
             require_once(__DIR__.'/../../config.php');
@@ -102,15 +102,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $pdf->setPrintHeader(false);
 
             $style = array(
-            'position' => 'S',
-            'border' => false,
-            'padding' => 0,
-            'fgcolor' => array(0, 0, 0),
-            'bgcolor' => false,
-            'text' => true,
-            'font' => 'helvetica',
-            'fontsize' => 8,
-            'stretchtext' => 4,
+                'position' => 'S',
+                'border' => false,
+                'padding' => 0,
+                'fgcolor' => array(0, 0, 0),
+                'bgcolor' => false,
+                'text' => true,
+                'font' => 'helvetica',
+                'fontsize' => 8,
+                'stretchtext' => 4,
             );
 
             // Get users and construct content for document.
@@ -122,10 +122,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             $date = $exammanagementinstanceobj->getHrExamtime();
 
-            if ($mode == 'barcode') {
-                $lineoffset = -7;
-            } else {
-                $lineoffset = -2;
+            $lineoffset = -7;
+
+            if ($mode !== 'barcode') {
 
                 $styleqr = array(
                     'border' => false,
@@ -177,61 +176,61 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $pdf->MultiCell(90, 5, $examname, 0, 'C', 0, 0, X1, $y, true);
                                     $pdf->SetFont('helvetica', 'B', 12);
                                     $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname .
-                                        ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X1, $y + 7, true);
+                                        ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X1, $y + 6, true);
                                     $pdf->SetFont('helvetica', '', 10);
-                                    $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X1 + 1, $y + 22, true);
-                                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 33, true);
+                                    $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X1 + 1, $y + 21, true);
+                                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 32, true);
                                     $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .
-                                        $participant->roomname, 0, 'L', 0, 0, X1 + 61, $y + 22, true);
+                                        $participant->roomname, 0, 'L', 0, 0, X1 + 61, $y + 21, true);
                                     $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' .
-                                        $participant->place, 0, 'L', 0, 0, X1 + 61, $y + 27 + $roomnamelinesoffsety, true);
+                                        $participant->place, 0, 'L', 0, 0, X1 + 61, $y + 26 + $roomnamelinesoffsety, true);
                                     $pdf->SetFont('helvetica', 'B', 14);
-                                    $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X1 + 68, $y + 35, true);
+                                    $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X1 + 68, $y + 34, true);
 
                                     if ($mode == 'barcode') {
                                         $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
-                                        $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 21, 37, 19, 0.4, $style, 'C');
+                                        $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                     } else {
                                         $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                         $pdf->Text(20, 145, '');
                                     }
 
-                                    if ($first == false) {
-                                        $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
-                                        $pdf->Line(X1, $y + $lineoffset, X1 + 82, $y + $lineoffset, $linestyle);
-                                    }
+                                    // if ($first == false) {
+                                    //     $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
+                                    //     $pdf->Line(X1, $y + $lineoffset, X1 + 82, $y + $lineoffset, $linestyle);
+                                    // }
 
                                 } else { // Print right label.
                                     $pdf->SetFont('helvetica', '', 12);
                                     $pdf->MultiCell(90, 5, $examname, 0, 'C', 0, 0, X2, $y, true);
                                     $pdf->SetFont('helvetica', 'B', 12);
                                     $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname .
-                                        ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X2, $y + 7, true);
+                                        ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X2, $y + 6, true);
                                     $pdf->SetFont('helvetica', '', 10);
-                                    $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X2 + 1, $y + 22, true);
-                                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 33, true);
-                                    $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$participant->roomname, 0, 'L', 0, 0, X2 + 61, $y + 22, true);
+                                    $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X2 + 1, $y + 21, true);
+                                    $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 32, true);
+                                    $pdf->MultiCell(32, 5, get_string('room', 'mod_exammanagement') . ': ' .$participant->roomname, 0, 'L', 0, 0, X2 + 61, $y + 21, true);
                                     $pdf->MultiCell(32, 5, get_string('place', 'mod_exammanagement') . ': ' .
-                                        $participant->place, 0, 'L', 0, 0, X2 + 61, $y + 27 + $roomnamelinesoffsety, true);
+                                        $participant->place, 0, 'L', 0, 0, X2 + 61, $y + 26 + $roomnamelinesoffsety, true);
                                     $pdf->SetFont('helvetica', 'B', 14);
-                                    $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X2 + 68, $y + 35, true);
+                                    $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X2 + 68, $y + 34, true);
 
                                     if ($mode == 'barcode') {
                                         $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
-                                        $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 21, 37, 19, 0.4, $style, 'C');
+                                        $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                     } else {
                                         $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                        $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                         $pdf->Text(20, 145, '');
                                     }
 
-                                    if ($first == false) {
-                                        $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
-                                        $pdf->Line(X2, $y + $lineoffset, X2 + 82, $y + $lineoffset, $linestyle);
-                                    }
+                                    // if ($first == false) {
+                                    //     $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
+                                    //     $pdf->Line(X2, $y + $lineoffset, X2 + 82, $y + $lineoffset, $linestyle);
+                                    // }
                                 }
 
                                 $leftlabel = !$leftlabel;
@@ -278,53 +277,53 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 $pdf->SetFont('helvetica', '', 12);
                                 $pdf->MultiCell(90, 5, $examname, 0, 'C', 0, 0, X1, $y, true);
                                 $pdf->SetFont('helvetica', 'B', 12);
-                                $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X1, $y + 7, true);
+                                $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X1, $y + 6, true);
                                 $pdf->SetFont('helvetica', '', 10);
-                                $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X1 + 1, $y + 22, true);
-                                $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 33, true);
+                                $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X1 + 1, $y + 21, true);
+                                $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X1, $y + 32, true);
                                 $pdf->SetFont('helvetica', 'B', 14);
-                                $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X1 + 68, $y + 33, true);
+                                $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X1 + 68, $y + 32, true);
 
                                 if ($mode == 'barcode') {
                                     $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
-                                    $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 21, 37, 19, 0.4, $style, 'C');
+                                    $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                 } else {
                                     $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                     $pdf->Text(20, 145, '');
                                 }
 
-                                if ($first == false) {
-                                    $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
-                                    $pdf->Line(X1, $y + $lineoffset, X1 + 82, $y + $lineoffset, $linestyle);
-                                }
+                                // if ($first == false) {
+                                //     $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
+                                //     $pdf->Line(X1, $y + $lineoffset, X1 + 82, $y + $lineoffset, $linestyle);
+                                // }
 
                             } else { // Print right label.
                                 $pdf->SetFont('helvetica', '', 12);
                                 $pdf->MultiCell(90, 5, $examname, 0, 'C', 0, 0, X2, $y, true);
                                 $pdf->SetFont('helvetica', 'B', 12);
-                                $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X2, $y + 7, true);
+                                $pdf->MultiCell(90, 5, $participant->lastname . ', ' . $participant->firstname . ' (' . $participant->matrnr . ')', 0, 'C', 0, 0, X2, $y + 6, true);
                                 $pdf->SetFont('helvetica', '', 10);
-                                $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X2 + 1, $y + 22, true);
-                                $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 33, true);
+                                $pdf->MultiCell(21, 5, $date, 0, 'C', 0, 0, X2 + 1, $y + 21, true);
+                                $pdf->MultiCell(21, 5, strtoupper($semester), 0, 'C', 0, 0, X2, $y + 32, true);
                                 $pdf->SetFont('helvetica', 'B', 14);
-                                $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X2 + 68, $y + 33, true);
+                                $pdf->MultiCell(18, 5, ++$idcounter, 0, 'C', 0, 0, X2 + 68, $y + 32, true);
 
                                 if ($mode == 'barcode') {
                                     $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
-                                    $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 21, 37, 19, 0.4, $style, 'C');
+                                    $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                 } else {
                                     $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
-                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 19, 30, 30, $styleqr, 'N');
+                                    $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                     $pdf->Text(20, 145, '');
                                 }
 
-                                if ($first == false) {
-                                    $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
-                                    $pdf->Line(X2, $y + $lineoffset, X2 + 82, $y + $lineoffset, $linestyle);
-                                }
+                                // if ($first == false) {
+                                //     $linestyle = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 10, 10, 'color' => array(160, 160, 160));
+                                //     $pdf->Line(X2, $y + $lineoffset, X2 + 82, $y + $lineoffset, $linestyle);
+                                // }
                             }
 
                             $leftlabel = !$leftlabel;
