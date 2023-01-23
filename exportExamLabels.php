@@ -191,7 +191,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                         $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
                                         $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                     } else {
-                                        $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
+                                        $url = new moodle_url("/mod/exammanagement/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
                                         $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                         $pdf->Text(20, 145, '');
@@ -221,7 +221,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                         $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
                                         $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                     } else {
-                                        $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
+                                        $url = new moodle_url("/mod/exammanagement/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
                                         $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                         $pdf->Text(20, 145, '');
@@ -288,7 +288,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
                                     $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X1 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                 } else {
-                                    $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
+                                    $url = new moodle_url("/mod/exammanagement/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
                                     $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X1 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                     $pdf->Text(20, 145, '');
@@ -314,7 +314,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $checksum = $exammanagementinstanceobj->buildChecksumExamLabels('00000' . $participant->matrnr);
                                     $pdf->write1DBarcode('00000' . $participant->matrnr . $checksum, 'EAN13', X2 + 22, $y + 20, 37, 19, 0.4, $style, 'C');
                                 } else {
-                                    $url = new moodle_url("/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
+                                    $url = new moodle_url("/mod/exammanagement/inputResults.php", array("id" => $id, 'matrnr' => $participant->matrnr));
 
                                     $pdf->write2DBarcode($url->out(false), 'QRCODE,Q', X2 + 25, $y + 18, 25, 25, $styleqr, 'N');
                                     $pdf->Text(20, 145, '');
