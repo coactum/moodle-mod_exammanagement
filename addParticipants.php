@@ -309,6 +309,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 $mform = new addparticipants_form(null, array('id' => $id, 'e' => $e, 'allParticipants' => $allparticipants));
 
             } else {
+
                 // Instantiate form.
                 $mform = new addparticipants_form(null, array('id' => $id, 'e' => $e));
             }
@@ -383,7 +384,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $user->email = null;
                                     $user->headerid = $tempheaderid;
 
-                                    $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
+                                    $dbman = $DB->get_manager();
+                                    $table = new \xmldb_table('exammanagement_participants');
+                                    $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+                                    if ($dbman->field_exists($table, $field)) {
+                                        $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
+                                    }
 
                                     array_push($userobjarr, $user);
 
@@ -439,8 +445,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                                     $user->headerid = $tempheaderid;
 
-                                    $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
-
+                                    $dbman = $DB->get_manager();
+                                    $table = new \xmldb_table('exammanagement_participants');
+                                    $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+                                    if ($dbman->field_exists($table, $field)) {
+                                        $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
+                                    }
                                     array_push($userobjarr, $user);
                                 }
                             }
@@ -523,7 +533,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                             $tempuserobj->categoryid = $exammanagementinstanceobj->moduleinstance->categoryid;
                                             $tempuserobj->identifier = $identifier;
                                             $tempuserobj->line = $key + 1 .'(' . $filecounter.')';
-                                            $tempuserobj->plugininstanceid = 0; // For deprecated old version db version, should be removed.
+
+                                            $dbman = $DB->get_manager();
+                                            $table = new \xmldb_table('exammanagement_temp_part');
+                                            $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+                                            if ($dbman->field_exists($table, $field)) {
+                                                $tempuserobj->plugininstanceid = 0; // For deprecated old version db version, should be removed.
+                                            }
+
                                             $tempuserobj->headerid = $filecounter;
 
                                             array_push($usersobjarr, $tempuserobj);
