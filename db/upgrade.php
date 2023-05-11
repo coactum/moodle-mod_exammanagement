@@ -19,7 +19,7 @@
  *
  * @package     mod_exammanagement
  * @category    upgrade
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -303,6 +303,20 @@ function xmldb_exammanagement_upgrade($oldversion) {
 
         // Exammanagement savepoint reached.
         upgrade_mod_savepoint(true, 2021031300, 'exammanagement');
+    }
+
+    if ($oldversion < 2023021000) { // Change line field if it has wrong type after new installation.
+
+        $table = new xmldb_table('exammanagement_temp_part');
+        $field_old = new xmldb_field('line', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $field_new = new xmldb_field('line', XMLDB_TYPE_CHAR, '10', null, null, null, null, 'identifier');
+
+        if ($dbman->field_exists($table, $field_old)) {
+            $dbman->change_field_type($table, $field_new);
+        }
+
+        // Exammanagement savepoint reached.
+        upgrade_mod_savepoint(true, 2023021000, 'exammanagement');
     }
 
     return true;

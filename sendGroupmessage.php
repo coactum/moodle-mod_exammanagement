@@ -18,88 +18,87 @@
  * Allows to send a groupmessage to all participants of mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\sendGroupmessageForm;
+use mod_exammanagement\forms\sendgroupmessage_form;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
-// Course_module ID, or
+// Course_module ID, or.
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$moodleobj = Moodle::getInstance($id, $e);
+$exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
+$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
-    $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-  } else {
+if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
+    if ($exammanagementinstanceobj->isExamDataDeleted()) {
+        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+    } else {
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
+        if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) {
 
-      if(!$UserObj->getParticipantsCount()){
-        $MoodleObj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-      }
+            if (!$userobj->getParticipantsCount()) {
+                $moodleobj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            }
 
-      $MoodleObj->setPage('sendGroupmessage');
-      $MoodleObj-> outputPageHeader();
+            // Instantiate form.
+            $mform = new sendgroupmessage_form(null, array('id' => $id, 'e' => $e));
 
-      //Instantiate form
-      $mform = new sendGroupmessageForm(null, array('id'=>$id, 'e'=>$e));
+            // Form processing and displaying is done here.
+            if ($mform->is_cancelled()) {
+                // Handle form cancel operation, if cancel button is present on form.
+                $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
-      //Form processing and displaying is done here
-      if ($mform->is_cancelled()) {
-        //Handle form cancel operation, if cancel button is present on form
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+            } else if ($fromform = $mform->get_data()) {
+                // In this case you process validated data. $mform->get_data() returns data posted in form.
+                $mailsubject = get_string('mailsubject', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName(), 'coursename' => $exammanagementinstanceobj->getCourse()->fullname, 'subject' => $fromform->groupmessages_subject]);
+                $mailtext = $fromform->groupmessages_content;
 
-      } else if ($fromform = $mform->get_data()) {
-        //In this case you process validated data. $mform->get_data() returns data posted in form.
+                $participants = $userobj->getExamParticipants(array('mode' => 'moodle'), array());
 
-        $mailsubject = get_string('mailsubject', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName(), 'coursename' => $ExammanagementInstanceObj->getCourse()->fullname, 'subject' => $fromform->groupmessages_subject]);
-        $mailtext = $fromform->groupmessages_content;
+                if ($mailsubject && $mailtext && $participants) {
+                    foreach ($participants as $key => $participantobj) {
 
-        $participants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array());
+                        $user = $userobj->getMoodleUser($participantobj->moodleuserid);
 
-        if($mailsubject && $mailtext && $participants){
-          foreach ($participants as $key => $participantObj){
+                        $exammanagementinstanceobj->sendSingleMessage($user, $mailsubject, $mailtext, 'groupmessage');
 
-            $user = $UserObj->getMoodleUser($participantObj->moodleuserid);
+                    }
 
-            $ExammanagementInstanceObj->sendSingleMessage($user, $mailsubject, $mailtext, 'groupmessage');
+                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
 
-          }
+            } else {
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // or on the first display of the form.
 
-          $MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-        } else {
-          $MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                // Set default data (if any).
+                $mform->set_data(array('id' => $id));
+
+                $moodleobj->setPage('sendGroupmessage');
+                $moodleobj->outputPageHeader();
+
+                $mform->display();
+
+                $moodleobj->outputFooter();
+            }
+
+        } else { // If user has not entered correct password for this session: show enterPasswordPage.
+            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
         }
-
-      } else {
-        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-        // or on the first display of the form.
-
-        //Set default data (if any)
-        $mform->set_data(array('id'=>$id));
-
-        //displays the form
-        $mform->display();
-      }
-
-      $MoodleObj->outputFooter();
-
-    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
-  }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

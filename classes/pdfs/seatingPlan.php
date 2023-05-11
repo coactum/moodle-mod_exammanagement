@@ -18,7 +18,7 @@
  * class for seatingplan PDF for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,7 +44,7 @@ class seatingPlan extends TCPDF {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
 
-    if(file_exists(__DIR__.'/../../data/logo_full.ai')){
+    if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
         $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
         $this->SetFont('helvetica', 'B', 22);
         $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);

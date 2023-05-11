@@ -18,7 +18,7 @@
  * class containing all user specific methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -36,440 +36,457 @@ class User{
 	protected $exammanagement;
 
 	private function __construct($id, $e, $exammanagement) {
-		$this->id = $id;
-		$this->e = $e;
-		$this->exammanagement = $exammanagement;
+        $this->id = $id;
+        $this->e = $e;
+        $this->exammanagement = $exammanagement;
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e, $exammanagement){
+	public static function getInstance($id, $e, $exammanagement) {
 
-		static $inst = null;
-			if ($inst === null) {
-				$inst = new User($id, $e, $exammanagement);
-			}
-			return $inst;
+        static $inst = null;
+         if ($inst === null) {
+      $inst = new User($id, $e, $exammanagement);
+            }
+         return $inst;
 
 	}
 
-	#### get array with all requested exam participants #####
+    // Get array with all requested exam participants.
 
-	public function getExamParticipants($participantsMode, $requestedAttributes, $sortOrder='name'){
+    public function getexamparticipants($participantsmode, $requestedattributes, $sortorder = 'name', $pagination = false, $activepage = null, $conditions = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $moodledbobj = MoodleDB::getInstance();
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		$allParticipants = array();
+        $allparticipants = array();
 
-		if($participantsMode['mode'] === 'all'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement'=>$this->exammanagement));
-		} else if($participantsMode['mode'] === 'moodle'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => NULL));
-		} else if($participantsMode['mode'] === 'nonmoodle'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => NULL));
-		} else if($participantsMode['mode'] === 'room'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'roomid' => $participantsMode['id']));
-		} else if($participantsMode['mode'] === 'header'){
-			$rs = $MoodleDBObj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsMode['id']));
-		} else if($participantsMode['mode'] === 'resultsafterexamreview'){
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        // For pagination.
+        if ($pagination && isset($activepage)) {
+            $limitfrom = $exammanagementinstanceobj->pagecount * ($activepage - 1);
+            $limitnum = $exammanagementinstanceobj->pagecount;
+        } else {
+            $limitfrom = 0;
+            $limitnum = 0;
+        }
 
-			$examReviewTime = $ExammanagementInstanceObj->getExamReviewTime();
+        if ($participantsmode['mode'] === 'all') {
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement));
+        } else if ($participantsmode['mode'] === 'moodle') {
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => null));
+        } else if ($participantsmode['mode'] === 'nonmoodle') {
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => null));
+        } else if ($participantsmode['mode'] === 'room') {
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'roomid' => $participantsmode['id']));
+        } else if ($participantsmode['mode'] === 'header') {
+            $rs = $moodledbobj->getRecordset('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'headerid' => $participantsmode['id']));
+        } else if ($participantsmode['mode'] === 'resultsafterexamreview') {
+            $examreviewtime = $exammanagementinstanceobj->getExamReviewTime();
 
-			$select = "exammanagement =".$this->exammanagement;
-			$select .= " AND exampoints IS NOT NULL";
-			$select .= " AND examstate IS NOT NULL";
-			$select .= " AND timeresultsentered IS NOT NULL";
-			$select .= " AND timeresultsentered >=" . $examReviewTime;
+            $select = "exammanagement =".$this->exammanagement;
+            $select .= " AND exampoints IS NOT NULL";
+            $select .= " AND examstate IS NOT NULL";
+            $select .= " AND timeresultsentered IS NOT NULL";
+            $select .= " AND timeresultsentered >=" . $examreviewtime;
 
-			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select);
+            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null);
 
-		} else if($participantsMode['mode'] === 'no_seats_assigned'){
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        } else if ($participantsmode['mode'] === 'no_seats_assigned') {
+            $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
-			$select = "exammanagement =".$this->exammanagement;
-			$select .= " AND roomid IS NULL";
-			$select .= " AND roomname IS NULL";
-			$select .= " AND place IS NULL";
+            $select = "exammanagement =".$this->exammanagement;
+            $select .= " AND roomid IS NULL";
+            $select .= " AND roomname IS NULL";
+            $select .= " AND place IS NULL";
 
-			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select);
+            $rs = $moodledbobj->getRecordsetSelect('exammanagement_participants', $select, null);
 
-		} else {
-			return false;
-		}
+        } else {
+            return false;
+        }
 
-        if($rs->valid()){
+        if ($rs->valid()) {
 
-			if(in_array('profile', $requestedAttributes) || in_array('groups', $requestedAttributes)){
-				$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-				$MoodleObj = Moodle::getInstance($this->id, $this->e);
+            if (in_array('profile', $requestedattributes) || in_array('groups', $requestedattributes)) {
+                $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
+                $moodleobj = Moodle::getInstance($this->id, $this->e);
 
-				$courseid = $ExammanagementInstanceObj->getCourse()->id;
-			}
+                $courseid = $exammanagementinstanceobj->getCourse()->id;
+            }
 
             foreach ($rs as $record) {
 
-				// add login if it is requested as attribute or needed for matrnr
-				if((in_array('login', $requestedAttributes) && isset($record->moodleuserid)) || (in_array('matrnr', $requestedAttributes) && isset($record->moodleuserid))){
-                    $login = $MoodleDBObj->getFieldFromDB('user','username', array('id' => $record->moodleuserid));
-					$record->login = $login;
-				}
+                // Add login if it is requested as attribute or needed for matrnr.
+                if ((in_array('login', $requestedattributes) && isset($record->moodleuserid)) || (in_array('matrnr', $requestedattributes) && isset($record->moodleuserid))) {
+                    $login = $moodledbobj->getFieldFromDB('user', 'username', array('id' => $record->moodleuserid));
+                    $record->login = $login;
+                }
 
-				// add name if it is requested as attribute or needed for sorting or profile
-				if(isset($record->moodleuserid) && (in_array('name', $requestedAttributes) || in_array('profile', $requestedAttributes) || $sortOrder == 'name' )){
-					$moodleUser = $this->getMoodleUser($record->moodleuserid);
+                // Add name if it is requested as attribute or needed for sorting or profile.
+                if (isset($record->moodleuserid) && (in_array('name', $requestedattributes) || in_array('profile', $requestedattributes) || $sortorder == 'name' )) {
+                    $moodleuser = $this->getMoodleUser($record->moodleuserid);
 
-					if($moodleUser){
-						$record->firstname = $moodleUser->firstname;
-						$record->lastname = $moodleUser->lastname;
-						if(in_array('profile', $requestedAttributes)){ 			// add profile if it is requested
-							global $OUTPUT;
+                    if ($moodleuser) {
+                        $record->firstname = $moodleuser->firstname;
+                        $record->lastname = $moodleuser->lastname;
+                        if (in_array('profile', $requestedattributes)) { // Add profile if it is requested.
+                               global $OUTPUT;
 
-							$image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
+                               $image = $OUTPUT->user_picture($moodleuser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
 
-							$link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $moodleUser->id, 'course', $courseid).'">'.$record->firstname.' '.$record->lastname.'</a></strong>';
+                               $record->profile = $image;
+                        }
 
-							$record->profile = $image.' '.$link;
+                        if (in_array('groups', $requestedattributes)) { // Add group if it is requested.
+                                  $usergroups = groups_get_user_groups($exammanagementinstanceobj->getCourse()->id, $record->moodleuserid);
+                                  $groupnames = false;
 
-						}
+                            foreach ($usergroups as $key => $value) {
+                                if ($value) {
+                                    foreach ($value as $key2 => $value2) {
+                                        if (!$groupnames) {
+                                            $groupnames = '<strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
+                                        } else {
+                                            $groupnames .= ', <strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
+                                        }
+                                    }
+                                } else {
+                                    $groupnames = '-';
+                                    break;
+                                }
+                            }
+                            $record->groups = $groupnames;
+                        }
+                    } else {
+                        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
-						if(in_array('groups', $requestedAttributes)){ 			// add group if it is requested
-							$userGroups = groups_get_user_groups($ExammanagementInstanceObj->getCourse()->id, $record->moodleuserid);
-							$groupnames = false;
+                        $record->firstname = get_string('deleted_user', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]);
+                        $record->lastname = get_string('deleted_user', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]);
+                        if (in_array('profile', $requestedattributes)) {
+                               $record->profile = get_string('deleted_user', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]);
+                        }
+                        if (in_array('groups', $requestedattributes)) {
+                            $record->groups = '-';
+                        }
+                    }
+                }
 
-							foreach ($userGroups as $key => $value){
-								if ($value){
-									foreach ($value as $key2 => $value2){
-										if(!$groupnames){
-											$groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong>';
-										} else {
-											$groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $value2).'">'.groups_get_group_name($value2).'</a></strong> ';
-										}
-									}
-								} else{
-									$groupnames = '-';
-									break;
-								}
-							}
-							$record->groups = $groupnames;
-						}
-					} else {
-						$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+                array_push($allparticipants, $record);
+            }
 
-						$record->firstname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
-						$record->lastname = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
-						if(in_array('profile', $requestedAttributes)){
-							$record->profile = get_string('deleted_user', 'mod_exammanagement',['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
-						}
-						if(in_array('groups', $requestedAttributes)){
-							$record->groups = '-';
-						}
-					}
-				}
+            $rs->close();
 
-				array_push($allParticipants, $record);
-			}
+            // Add matrnr if it is requested.
+            if (in_array('matrnr', $requestedattributes)) {
 
-			$rs->close();
+                require_once(__DIR__.'/../ldap/ldapManager.php');
 
-			// add matrnr if it is requested
-			if(in_array('matrnr', $requestedAttributes)){
+                $ldapmanagerobj = ldapManager::getInstance();
 
-				require_once(__DIR__.'/../ldap/ldapManager.php');
+                $matriculationnumbers = array();
+                $alllogins = array();
 
-				$LdapManagerObj = ldapManager::getInstance();
+                foreach ($allparticipants as $key => $participant) { // Set logins array for ldap method.
+                    array_push($alllogins, $participant->login);
+                }
 
-				$matriculationNumbers = array();
-				$allLogins = array();
+                $matriculationnumbers = $ldapmanagerobj->getMatriculationNumbersForLogins($alllogins); // Retrieve matrnrs for all logins from ldap.
 
-				foreach($allParticipants as $key => $participant){ // set logins array for ldap method
-					array_push($allLogins, $participant->login);
-				}
+                if (!empty($matriculationnumbers)) {
+                    foreach ($allparticipants as $key => $participant) {
+                        if (isset($participant->login) && $participant->login && array_key_exists($participant->login, $matriculationnumbers) && isset($matriculationnumbers[$participant->login]) && is_numeric($matriculationnumbers[$participant->login])) {
+                            $participant->matrnr = $matriculationnumbers[$participant->login];
+                        } else {
+                            $participant->matrnr = '-';
 
-				$matriculationNumbers = $LdapManagerObj->getMatriculationNumbersForLogins($allLogins); // retrieve matrnrs for all logins from ldap
+                            if ($conditions == 'withmatrnr') {
+                                unset($allparticipants[$key]);
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($allparticipants as $key => $participant) {
+                        $participant->matrnr = '-';
 
-				if(!empty($matriculationNumbers)){
-					foreach($allParticipants as $key => $participant){
-						if(isset($participant->login) && $participant->login && array_key_exists($participant->login, $matriculationNumbers) && isset($matriculationNumbers[$participant->login]) && is_numeric($matriculationNumbers[$participant->login])){
-							$participant->matrnr = $matriculationNumbers[$participant->login];
-						} else {
-							$participant->matrnr = '-';
-						}
-					}
-				} else {
-					foreach($allParticipants as $key => $participant){
-						$participant->matrnr = '-';
-					}
-				}
-			}
+                        if ($conditions == 'withmatrnr') {
+                            unset($allparticipants[$key]);
+                        }
+                    }
+                }
+            }
 
-			// sort all participant sarray
-			if($sortOrder == 'name'){
-				usort($allParticipants, function($a, $b){ //sort participants array by name through custom user function
+            // Sort all participant sarray.
+            if ($sortorder == 'name') {
+                usort($allparticipants, function($a, $b) { // Sort participants array by name through custom user function.
 
-					$searchArr = array("Ä","ä","Ö","ö","Ü","ü","ß", "von ", "Von ");
-					$replaceArr  = array("Ae","ae","Oe","oe","Ue","ue","ss", "");
+                    $searcharr = array("Ä", "ä", "Ö", "ö", "Ü", "ü", "ß", "von ", "Von ");
+                    $replacearr  = array("Ae", "ae", "Oe", "oe", "Ue", "ue", "ss", "");
 
-					if (str_replace($searchArr, $replaceArr, ucfirst($a->lastname)) == str_replace($searchArr, $replaceArr, ucfirst($b->lastname))) { //if lastnames are even sort by first name
-						return strcmp(ucfirst($a->firstname), ucfirst($b->firstname));
-					} else{
-						return strcmp(str_replace($searchArr, $replaceArr, ucfirst($a->lastname)) , str_replace($searchArr, $replaceArr, ucfirst($b->lastname))); // else sort by last name
-					}
+                    if (str_replace($searcharr, $replacearr, ucfirst($a->lastname)) == str_replace($searcharr, $replacearr, ucfirst($b->lastname))) { // If lastnames are even sort by first name.
+                          return strcmp(ucfirst($a->firstname), ucfirst($b->firstname));
+                    } else {
+                        return strcmp(str_replace($searcharr, $replacearr, ucfirst($a->lastname)) , str_replace($searcharr, $replacearr, ucfirst($b->lastname))); // Else sort by last name.
+                    }
 
-				});
-			} else if($sortOrder == 'matrnr'){
-				usort($allParticipants, function($a, $b){ //sort participants array by matrnr through custom user function
-					return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr (ascending)
-				});
-			} else if($sortOrder == 'random'){
-				shuffle($allParticipants);
-			}
+                });
+            } else if ($sortorder == 'matrnr') {
+                usort($allparticipants, function($a, $b) { // Sort participants array by matrnr through custom user function.
+                    return strnatcmp($a->matrnr, $b->matrnr); // Sort by matrnr (ascending).
+                });
+            } else if ($sortorder == 'random') {
+                shuffle($allparticipants);
+            }
 
-			return $allParticipants;
+            if ($pagination && isset($activepage)) {
+                return array_slice($allparticipants, $limitfrom, $limitnum);
+            } else {
+                return $allparticipants;
+            }
 
         } else {
-			$rs->close();
-			return false;
-		}
-	}
+            $rs->close();
+            return false;
+        }
+    }
 
 	#### get IDs of all participants enrolled in the course #####
 
-	public function getCourseParticipantsIDs(){
+	public function getCourseParticipantsIDs() {
 
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-			$CourseParticipants = get_enrolled_users($ExammanagementInstanceObj->getModulecontext(), 'mod/exammanagement:takeexams');
-			$CourseParticipantsIDsArray;
+         $CourseParticipants = get_enrolled_users($ExammanagementInstanceObj->getModulecontext(), 'mod/exammanagement:takeexams');
+         $CourseParticipantsIDsArray;
 
-			foreach ($CourseParticipants as $key => $value){
-				$temp = get_object_vars($value);
-				$CourseParticipantsIDsArray[$key] = $temp['id'];
-			}
+         foreach ($CourseParticipants as $key => $value) {
+      $temp = get_object_vars($value);
+      $CourseParticipantsIDsArray[$key] = $temp['id'];
+            }
 
-			if(isset($CourseParticipantsIDsArray)){
+         if (isset($CourseParticipantsIDsArray)) {
 					return $CourseParticipantsIDsArray;
-			} else {
+            } else {
 					return false;
-			}
+            }
 
 	}
 
 	#### get single exam participant #####
 
-	public function getExamParticipantObj($moodleuserid, $userlogin = false, $id = false){
+	public function getExamParticipantObj($moodleuserid, $userlogin = false, $id = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		if($moodleuserid !== false && $moodleuserid !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $moodleuserid));
-		} else if($userlogin !== false && $userlogin !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $userlogin));
-		} else if($id !== false && $id !== null){
-			$participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'id' => $id));
-		}
+        if ($moodleuserid !== false && $moodleuserid !== null) {
+         $participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $moodleuserid));
+              } else if ($userlogin !== false && $userlogin !== null) {
+         $participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $userlogin));
+              } else if ($id !== false && $id !== null) {
+         $participantsObj = $MoodleDBObj->getRecordFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'id' => $id));
+              }
 
-		if($participantsObj){
-			return $participantsObj;
-		} else{
-			return false;
-		}
+        if ($participantsObj) {
+   return $participantsObj;
+              } else{
+   return false;
+              }
 	}
 
 	#### get single moodle user #####
 
-	public function getMoodleUser($userid){
+	public function getMoodleUser($userid) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
+        $user = $MoodleDBObj->getRecordFromDB('user', array('id'=>$userid));
 
-		if($user){
-			return $user;
-		} else {
-			return false;
-		}
+        if ($user) {
+         return $user;
+              } else {
+         return false;
+              }
 
 	}
 
 	#### get mail adresses of all nonmoodle users #####
 
-	public function getNoneMoodleParticipantsEmailadresses(){
+	public function getNoneMoodleParticipantsEmailadresses() {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->exammanagement;
-		$select .= " AND moodleuserid IS NULL";
+        $select = "exammanagement =".$this->exammanagement;
+        $select .= " AND moodleuserid IS NULL";
 
-		$NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
+        $NoneMoodleParticipantsEmailadressesArr = $MoodleDBObj->getFieldsetFromRecordsInDB('exammanagement_participants', 'email', $select);
 
-		if(!empty($NoneMoodleParticipantsEmailadressesArr)){
-			return $NoneMoodleParticipantsEmailadressesArr;
-		} else {
-			return false;
+        if (!empty($NoneMoodleParticipantsEmailadressesArr)) {
+         return $NoneMoodleParticipantsEmailadressesArr;
+              } else {
+         return false;
 
-		}
+              }
 	}
 
 	#### filter checked participants from form ####
 
-	public function filterCheckedParticipants($returnObj){
+	public function filterCheckedParticipants($returnObj) {
 
-			$returnObj = get_object_vars($returnObj);
+         $returnObj = get_object_vars($returnObj);
 
-			$allParicipantsArray = array();
+         $allParicipantsArray = array();
 
-			if(isset($returnObj["participants"])){
-				$allParicipantsArray = $returnObj["participants"];
-			}
-			$participantsArr = array();
+         if (isset($returnObj["participants"])) {
+      $allParicipantsArray = $returnObj["participants"];
+            }
+         $participantsArr = array();
 
-			if($allParicipantsArray){
-				foreach ($allParicipantsArray as $key => $value){
-					if ($value == 1){
-						array_push($participantsArr, $key);
-					}
+         if ($allParicipantsArray) {
+				foreach ($allParicipantsArray as $key => $value) {
+                       if ($value == 1) {
+         array_push($participantsArr, $key);
+                       }
 				}
-			}
+            }
 
-			if ($participantsArr){
+         if ($participantsArr) {
 				return $participantsArr;
-			} else {
+            } else {
 				return false;
-			}
+            }
 
 	}
 
-	public function filterCheckedDeletedParticipants($returnObj){
+	public function filterCheckedDeletedParticipants($returnObj) {
 
-			$returnObj = get_object_vars($returnObj);
+         $returnObj = get_object_vars($returnObj);
 
-			$allParicipantsArray = array();
+         $allParicipantsArray = array();
 
-			if(isset($returnObj["deletedparticipants"])){
-				$allParicipantsArray = $returnObj["deletedparticipants"];
-			}
+         if (isset($returnObj["deletedparticipants"])) {
+      $allParicipantsArray = $returnObj["deletedparticipants"];
+            }
 
-			$participantsArr = array();
+         $participantsArr = array();
 
-			if($allParicipantsArray){
-				foreach ($allParicipantsArray as $key => $value){
-					if ($value == 1){
-						array_push($participantsArr, $key);
-					}
+         if ($allParicipantsArray) {
+				foreach ($allParicipantsArray as $key => $value) {
+                       if ($value == 1) {
+         array_push($participantsArr, $key);
+                       }
 				}
-			}
+            }
 
 
-			if ($participantsArr){
+         if ($participantsArr) {
 				return $participantsArr;
-			} else {
+            } else {
 				return false;
-			}
+            }
 
 	}
 
 	#### delete participants ####
 
-	public function deleteParticipant($userid, $login = false){
+	public function deleteParticipant($userid, $login = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		if($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid));
-		} else if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login));
-		}
+        if ($userid !== false && $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid))) {
+         $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $userid));
+              } else if ($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login))) {
+         $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $login));
+              }
 	}
 
-	public function deleteAllParticipants(){
+	public function deleteAllParticipants() {
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-		$MoodleDBObj = MoodleDB::getInstance();
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
-		$ExammanagementInstanceObj->moduleinstance->assignmentmode = NULL;
-		$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+        $ExammanagementInstanceObj->moduleinstance->importfileheaders = NULL;
+        $ExammanagementInstanceObj->moduleinstance->assignmentmode = NULL;
+        $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-		if($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement))){
-			$MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement));
-		}
+        if ($MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement))) {
+         $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $this->exammanagement));
+              }
 	}
 
-	public function deleteTempParticipants(){
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-			$MoodleDBObj = MoodleDB::getInstance();
+	public function deleteTempParticipants() {
+         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+         $MoodleDBObj = MoodleDB::getInstance();
 
-			$ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
-			$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+         $ExammanagementInstanceObj->moduleinstance->tempimportfileheader = NULL;
+         $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-			if($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $this->exammanagement))){
-				$MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $this->exammanagement));
-			} else {
+         if ($MoodleDBObj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $this->exammanagement))) {
+      $MoodleDBObj->deleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $this->exammanagement));
+            } else {
 				return false;
-			}
+            }
 	}
 
 	#### results ####
 
-	public function participantHasResults($participantObj){
+	public function participantHasResults($participantObj) {
 
-		if($participantObj->exampoints && $participantObj->examstate){
-			return true;
-		} else{
-			return false;
-		}
+        if ($participantObj->exampoints && $participantObj->examstate) {
+         return true;
+              } else{
+         return false;
+              }
 	}
 
-	public function getExamState($participantObj){
+	public function getExamState($participantObj) {
 
-		$stateArr = json_decode($participantObj->examstate);
+        $stateArr = json_decode($participantObj->examstate);
 
-		if($stateArr !== NULL){
-			foreach($stateArr as $key => $value){
-				if($key == 'nt' && $value == "1"){
-						return 'nt';
-				} else if ($key == 'fa' && $value == "1"){
-						return 'fa';
-				} else if ($key == 'ill' && $value == "1"){
-						return 'ill';
-				}
-			}
+        if ($stateArr !== NULL) {
+         foreach ($stateArr as $key => $value) {
+                if ($key == 'nt' && $value == "1") {
+                  return 'nt';
+                      } else if ($key == 'fa' && $value == "1") {
+                  return 'fa';
+                      } else if ($key == 'ill' && $value == "1") {
+            return 'ill';
+                      }
+         }
 
-			return 'normal';
-		} else {
-			return false;
-		}
+         return 'normal';
+              } else {
+         return false;
+              }
 	}
 
-	public function calculatePoints($participantObj, $withBonus=false){
-		$points = 0;
+	public function calculatePoints($participantObj, $withBonus=false) {
+        $points = 0;
 
-		$pointsArr = json_decode($participantObj->exampoints);
+        $pointsArr = json_decode($participantObj->exampoints);
 
-		if($pointsArr != Null){
+        if ($pointsArr != Null) {
 
-			$examstate = $this->getExamState($participantObj);
+         $examstate = $this->getExamState($participantObj);
 
-			if($examstate === 'normal'){
-				foreach($pointsArr as $key => $taskpoints){
-					$points += floatval($taskpoints);
-				}
+         if ($examstate === 'normal') {
+                foreach ($pointsArr as $key => $taskpoints) {
+                 $points += floatval($taskpoints);
+                      }
 
-				if($withBonus && $participantObj->bonuspoints){
-					$points += floatval($participantObj->bonuspoints);
-				}
+                if ($withBonus && $participantObj->bonuspoints) {
+                 $points += floatval($participantObj->bonuspoints);
+                      }
 
-				return number_format(floatval($points),2);
-			} else if($examstate) {
-				return get_string($examstate, "mod_exammanagement");
-			} else {
-				return false;
-			}
+                return number_format(floatval($points),2);
+         } else if ($examstate) {
+                return get_string($examstate, "mod_exammanagement");
+         } else {
+                return false;
+         }
 
-		} else {
-			return false;
-		}
+              } else {
+         return false;
+              }
 	}
 
 	/**
@@ -481,185 +498,185 @@ class User{
 	 * @return Result  $result
 	 */
 
-	public function calculateResultGrade($points, $bonussteps = false){
+	public function calculateResultGrade($points, $bonussteps = false) {
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		$gradingscale = $ExammanagementInstanceObj->getGradingscale();
+        $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
-		$lastpoints = 0;
+        $lastpoints = 0;
 
-		$result = false;
+        $result = false;
 
-		if($points === false || !isset($points)){ // if points are false or not set
+        if ($points === false || !isset($points)) { // if points are false or not set
 
-			$result = '-';
+         $result = '-';
 
-		}else if(!is_numeric($points)){ // else if points indicate special exam state
-			$result = $points;
+              }else if (!is_numeric($points)) { // else if points indicate special exam state
+         $result = $points;
 
-		} else if($gradingscale){ // else if points and gradingscale are set and should be converted into grade
+              } else if ($gradingscale) { // else if points and gradingscale are set and should be converted into grade
 
-			foreach($gradingscale as $key => $step){
+         foreach ($gradingscale as $key => $step) {
 
-				if($key == '1.0' && $points >= floatval($step)){
-					$result = $key;
-				} else if($points < $lastpoints && $points >= floatval($step)){
-					$result = $key;
-				} else if($key == '4.0' && $points < floatval($step)){
-					$result = 5;
-				}
+                if ($key == '1.0' && $points >= floatval($step)) {
+                    $result = $key;
+                      } else if ($points < $lastpoints && $points >= floatval($step)) {
+                    $result = $key;
+                      } else if ($key == '4.0' && $points < floatval($step)) {
+              $result = 5;
+                      }
 
-				$lastpoints = floatval($step);
+                $lastpoints = floatval($step);
 
-			}
+         }
 
-			if($bonussteps){ // if grade should
-				switch ($bonussteps){
-					case '0':
-						$bonussteps = 0.3;
-						break;
-					case '1':
-						$bonussteps = 0.3;
-						break;
-					case '2':
-						$bonussteps = 0.7;
-						break;
-					case '3':
-						$bonussteps = 1.0;
-						break;
-					default: // if bonus grade steps are not entered and null
-						$bonussteps = 0;
-						break;
-				}
+         if ($bonussteps) { // if grade should
+                switch ($bonussteps) {
+                    case '0':
+                        $bonussteps = 0.3;
+                        break;
+                    case '1':
+                     $bonussteps = 0.3;
+                        break;
+                    case '2':
+                     $bonussteps = 0.7;
+                        break;
+                    case '3':
+                     $bonussteps = 1.0;
+                        break;
+                    default: // if bonus grade steps are not entered and null
+                     $bonussteps = 0;
+                        break;
+                      }
 
-				if( $result === 5) {
-					return $result;
-				} else if ( $bonussteps == 0) {
-					return $result;
-				} else {
-					$resultWithBonus = $result-$bonussteps;
+                if ( $result === 5) {
+                    return $result;
+                      } else if ( $bonussteps == 0) {
+                    return $result;
+                      } else {
+              $resultWithBonus = $result-$bonussteps;
 
-					if( $resultWithBonus<=1.0) return '1.0';
-					$peculiarity = round($resultWithBonus-floor($resultWithBonus),1);
+              if ( $resultWithBonus<=1.0) return '1.0';
+              $peculiarity = round($resultWithBonus-floor($resultWithBonus),1);
 
-					if( 0.4==$peculiarity ) {$resultWithBonus=$resultWithBonus-0.1;}
-					if( 0.6==$peculiarity ) {$resultWithBonus=$resultWithBonus+0.1;}
+              if ( 0.4==$peculiarity ) {$resultWithBonus=$resultWithBonus-0.1;}
+              if ( 0.6==$peculiarity ) {$resultWithBonus=$resultWithBonus+0.1;}
 
-					return (str_pad (strval($resultWithBonus), 3, '.0'));
-				}
-			}
-		} else { // if should be converted to grade but gradingscale is not set
-			$result = '-';
-		}
+              return (str_pad (strval($resultWithBonus), 3, '.0'));
+                      }
+         }
+              } else { // if should be converted to grade but gradingscale is not set
+$result = '-';
+              }
 
-		return $result;
+        return $result;
 	}
 
 	#### checks  ####
 
-	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false){
+	public function checkIfAlreadyParticipant($potentialParticipantId, $potentialParticipantLogin = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		if($potentialParticipantId){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $potentialParticipantId));
-		} else if($potentialParticipantLogin){
-			return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $potentialParticipantLogin));
-		}
+        if ($potentialParticipantId) {
+         return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'moodleuserid' => $potentialParticipantId));
+              } else if ($potentialParticipantLogin) {
+         return $MoodleDBObj->checkIfRecordExists('exammanagement_participants', array('exammanagement' => $this->exammanagement, 'login' => $potentialParticipantLogin));
+              }
 	}
 
 	public function checkIfValidMatrNr($mnr) {
-		if (!preg_match("/^\d+$/", $mnr)) {
-			return false;
-		}
+        if (!preg_match("/^\d+$/", $mnr)) {
+         return false;
+              }
 
-		$first = substr($mnr, 0, 1);
+        $first = substr($mnr, 0, 1);
 
-		if ($first==7 && strlen($mnr)==7) {
-			return true;
-		} else {
-			return (($first==3 || $first==6) && strlen($mnr)==7);
-		}
+        if ($first==7 && strlen($mnr)==7) {
+         return true;
+              } else {
+         return (($first==3 || $first==6) && strlen($mnr)==7);
+              }
 	}
 
 	#### counts ####
 
-	public function getParticipantsCount($mode = 'all', $id = false){
+	public function getParticipantsCount($mode = 'all', $id = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->exammanagement;
+        $select = "exammanagement =".$this->exammanagement;
 
-		if($mode == 'moodle'){
-			$select .= " AND moodleuserid IS NOT NULL";
-		} else if($mode =='nonmoodle'){
-			$select .= " AND moodleuserid IS NULL";
-		} else if($mode =='room' && $id){
-			$select .= " AND roomid = '" . $id . "'";
-		}
+        if ($mode == 'moodle') {
+         $select .= " AND moodleuserid IS NOT NULL";
+              } else if ($mode =='nonmoodle') {
+         $select .= " AND moodleuserid IS NULL";
+              } else if ($mode =='room' && $id) {
+         $select .= " AND roomid = '" . $id . "'";
+              }
 
-		$participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+        $participantsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
-		if ($participantsCount){
-				return $participantsCount;
-			} else {
+        if ($participantsCount) {
+    return $participantsCount;
+            } else {
 				return false;
-		}
+              }
 	}
 
-	public function getEnteredBonusCount($mode = 'both'){
+	public function getEnteredBonusCount($mode = 'both') {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->exammanagement;
+        $select = "exammanagement =".$this->exammanagement;
 
-		switch ($mode) {
-			case 'both':
-				$select .= " AND (bonussteps IS NOT NULL";
-				$select .= " OR bonuspoints IS NOT NULL)";
-				break;
-			case 'steps':
-				$select .= " AND bonussteps IS NOT NULL";
-				break;
-			case 'points':
-				$select .= " AND bonuspoints IS NOT NULL";
-				break;
-			default:
-				$select .= " AND (bonussteps IS NOT NULL";
-				$select .= " OR bonuspoints IS NOT NULL)";
-				break;
-		}
+        switch ($mode) {
+         case 'both':
+                $select .= " AND (bonussteps IS NOT NULL";
+                $select .= " OR bonuspoints IS NOT NULL)";
+          break;
+         case 'steps':
+                $select .= " AND bonussteps IS NOT NULL";
+          break;
+         case 'points':
+                $select .= " AND bonuspoints IS NOT NULL";
+          break;
+         default:
+                $select .= " AND (bonussteps IS NOT NULL";
+                $select .= " OR bonuspoints IS NOT NULL)";
+          break;
+              }
 
-		$enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+        $enteredBonusCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
-		if ($enteredBonusCount){
-				return $enteredBonusCount;
-			} else {
+        if ($enteredBonusCount) {
+          return $enteredBonusCount;
+            } else {
 				return false;
-		}
+              }
 	}
 
-	public function getEnteredResultsCount($timestamp = false){
+	public function getEnteredResultsCount($timestamp = false) {
 
-		$MoodleDBObj = MoodleDB::getInstance();
+        $MoodleDBObj = MoodleDB::getInstance();
 
-		$select = "exammanagement =".$this->exammanagement;
-		$select .= " AND exampoints IS NOT NULL";
-		$select .= " AND examstate IS NOT NULL";
+        $select = "exammanagement =".$this->exammanagement;
+        $select .= " AND exampoints IS NOT NULL";
+        $select .= " AND examstate IS NOT NULL";
 
-		if($timestamp){
-			$select .= " AND timeresultsentered IS NOT NULL";
-			$select .= " AND timeresultsentered >=" . $timestamp;
-		}
+        if ($timestamp) {
+         $select .= " AND timeresultsentered IS NOT NULL";
+         $select .= " AND timeresultsentered >=" . $timestamp;
+              }
 
-		$enteredResultsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+        $enteredResultsCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
 
-		if($enteredResultsCount){
-			return $enteredResultsCount;
-		} else {
-			return false;
-		}
+        if ($enteredResultsCount) {
+         return $enteredResultsCount;
+              } else {
+         return false;
+              }
 
 	}
 }

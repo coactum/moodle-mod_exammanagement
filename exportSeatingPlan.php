@@ -18,7 +18,7 @@
  * Outputs pdf file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,12 +44,12 @@ $MoodleObj = Moodle::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $LDAPManagerObj = LDAPManager::getInstance();
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-  if($ExammanagementInstanceObj->isExamDataDeleted()){
+  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
       global $CFG, $SESSION;
 
@@ -57,14 +57,14 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
       } else if (!$UserObj->getParticipantsCount()) {
           $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-      } else if(!$ExammanagementInstanceObj->placesAssigned()){
+      } else if (!$ExammanagementInstanceObj->placesAssigned()) {
           $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
       }
 
-      if($sortmode == 'matrnr'){
-        if(!$LDAPManagerObj->isLDAPenabled()){ // cancel export if no matrnrs are availiable because ldap is not enabled or configured
+      if ($sortmode == 'matrnr') {
+        if (!$LDAPManagerObj->isLDAPenabled()) { // cancel export if no matrnrs are availiable because ldap is not enabled or configured
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
-        } else if(!$LDAPManagerObj->isLDAPconfigured()){
+        } else if (!$LDAPManagerObj->isLDAPconfigured()) {
           $MoodleObj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
         }
       }
@@ -117,20 +117,20 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
       $roomsCount = 0;
 
-      foreach ($roomIDs as $roomID){
+      foreach ($roomIDs as $roomID) {
 
         $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-        if($participants){
+        if ($participants) {
 
-          if($sortmode == 'place'){
-            usort($participants, function($a, $b){ //sort array by custom user function
+          if ($sortmode == 'place') {
+            usort($participants, function($a, $b) { //sort array by custom user function
 
               return strnatcmp($a->place, $b->place); // sort by place
 
             });
-          } else if($sortmode == 'matrnr'){
-            usort($participants, function($a, $b){ //sort array by custom user function
+          } else if ($sortmode == 'matrnr') {
+            usort($participants, function($a, $b) { //sort array by custom user function
 
               return strnatcmp($a->matrnr, $b->matrnr); // sort by matrnr
 
@@ -141,10 +141,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $rightCol = array();
           $tbl;
 
-          foreach ($participants as $key => $participant){
+          foreach ($participants as $key => $participant) {
             $matrnr = $participant->matrnr;
 
-            if($matrnr === '-'){
+            if ($matrnr === '-') {
               $matrnr = $participant->firstname . ' ' . $participant->lastname;
             }
 
@@ -176,18 +176,18 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       }
 
       // construct svg-files pages
-        foreach ($roomIDs as $key => $roomID){
+        foreach ($roomIDs as $key => $roomID) {
           $roomObj = $ExammanagementInstanceObj->getRoomObj($roomID);
 
-          if($roomObj){
+          if ($roomObj) {
             $roomName = $roomObj->name;
 
             // ---------------------------------------------------------
-            if ($key < $roomsCount){
+            if ($key < $roomsCount) {
 
                 $svgFile = base64_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'seatingplan', array('roomid' => $roomObj->roomid)));
 
-                if(isset($svgFile) && $svgFile !== ''){
+                if (isset($svgFile) && $svgFile !== '') {
 
                     $numberofPlaces = count(json_decode($MoodleDBObj->getFieldFromDB('exammanagement_rooms', 'places', array('roomid' => $roomObj->roomid))));
                     $maxSeats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofPlaces;
@@ -230,7 +230,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
       //============================================================+
 
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
   }
 

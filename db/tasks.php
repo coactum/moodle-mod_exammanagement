@@ -18,15 +18,14 @@
  * Tasks for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @category    tasks
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = [
-     [
+    [
          'classname' => 'mod_exammanagement\task\delete_temp_participants',
          'blocking' => 0,
          'minute' => '50',
@@ -34,8 +33,8 @@ $tasks = [
          'day' => '*',
          'month' => '*',
          'dayofweek' => '*',
-     ],
-     [
+    ],
+    [
         'classname' => 'mod_exammanagement\task\check_participants_without_moodle_account',
         'blocking' => 0,
         'minute' => '52',
@@ -62,4 +61,4 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
- ];
+];

@@ -18,7 +18,7 @@
  * class containing addCustomRoomForm for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,23 +44,24 @@ class addCustomRoomForm extends moodleform {
 
     $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-    $mform = $this->_form; // Don't forget the underscore!
+    $mform = $this->_form;
 
     $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
     $mform->addElement('html', '<h3>'.get_string("addCustomRoom", "mod_exammanagement"));
-        
-    if($helptextsenabled){
+
+    if ($helptextsenabled) {
         $mform->addElement('html', $OUTPUT->help_icon('addCustomRoom', 'mod_exammanagement', ''));
     }
 
     $mform->addElement('html', '</h3>');
-    
+
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("change_custom_room_name", "mod_exammanagement").'</div>');
     $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("custom_room_places", "mod_exammanagement").'</div>');
-    
-    $mform->addElement('hidden', 'id', 'dummy');
+
+    $mform->addElement('hidden', 'id');
     $mform->setType('id', PARAM_INT);
+
     $mform->addElement('hidden', 'existingroom', 0);
     $mform->setType('existingroom', PARAM_INT);
 
@@ -93,17 +94,17 @@ class addCustomRoomForm extends moodleform {
 
     $similiarroom = $ExammanagementInstanceObj->getRoomObj($data['roomname'].'_'.$USER->id.'c');
 
-    if($data['existingroom'] !== 1 && $similiarroom){
+    if ($data['existingroom'] !== 1 && $similiarroom) {
        $errors['roomname'] = get_string('err_customroomname_taken', 'mod_exammanagement');
-    } else if(!preg_match('/^[a-zA-Z0-9_\-. ]+$/', $data['roomname'])){
+    } else if (!preg_match('/^[a-zA-Z0-9_\-. ]+$/', $data['roomname'])) {
       $errors['roomname'] = get_string('err_noalphanumeric', 'mod_exammanagement');
     }
 
-    if(!$data['placescount'] || $data['placescount'] <= 0){
+    if (!$data['placescount'] || $data['placescount'] <= 0) {
        $errors['placescount'] = get_string('err_novalidinteger', 'mod_exammanagement');
     }
 
-    if($data['placescount'] && $data['placescount'] > 10000){
+    if ($data['placescount'] && $data['placescount'] > 10000) {
       $errors['placescount'] = get_string('err_novalidplacescount', 'mod_exammanagement');
    }
 

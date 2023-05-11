@@ -18,7 +18,7 @@
  * A cron_task class for deleting old exam data to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -55,11 +55,11 @@ class delete_old_exam_data extends \core\task\scheduled_task {
         $now = time();
         $select = "datadeletion IS NOT NULL AND datadeletion >= ".$now;
 
-        if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
+        if ($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)) {
 
             $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
 
-            foreach($records as $id => $record){
+            foreach ($records as $id => $record) {
 
                 // check warning mail state
                 $warningperiodOne = strtotime("-1 month", $record->datadeletion);
@@ -68,7 +68,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                 $deletionwarningmailidsArray = json_decode($record->deletionwarningmailids);
 
-                if(isset($deletionwarningmailidsArray)){
+                if (isset($deletionwarningmailidsArray)) {
                     $warningmailscount = count($deletionwarningmailidsArray);
                 } else {
                     $warningmailscount = 0;
@@ -78,15 +78,15 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                 $warningstep = false;
 
                 // check if some warningmails were already send and determine if warning period is due
-                if($warningperiodOne <= $now && $warningmailscount == 0){
+                if ($warningperiodOne <= $now && $warningmailscount == 0) {
                     $warningstep = 1;  // no warning mails yet, first to send
-                } else if($warningperiodTwo <= $now && $warningmailscount == 1){
+                } else if ($warningperiodTwo <= $now && $warningmailscount == 1) {
                     $warningstep = 2; // 1 warning mail yet, second to send
-                } else if($warningperiodThree <= $now && $warningmailscount == 2){
+                } else if ($warningperiodThree <= $now && $warningmailscount == 2) {
                     $warningstep = 3; // 2 warning mails yet, last to send
                 }
 
-                if($warningstep){
+                if ($warningstep) {
                     // get user to whom warning mail should be send (teachers of course)
                     $role = $MoodleDBObj->getRecordFromDB('role', array('shortname' => 'editingteacher'));
                     $courseid = $record->course;
@@ -98,7 +98,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                     $ExammanagementInstanceObj = new exammanagementInstance($cmid, '', true);
 
-                    switch ($warningstep){
+                    switch ($warningstep) {
 
                         case 1:
                             $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
@@ -117,7 +117,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                     $warningmailids = array();
 
                     // send mail & save send warningmailid
-                    foreach($teachers as $user){
+                    foreach ($teachers as $user) {
                         $warningmailid = $ExammanagementInstanceObj->sendSingleMessage($user->id, $warningmailsubject, $warningmailcontent, 'deletionwarningmessage');
 
                         array_push($warningmailids, $warningmailid);
@@ -129,7 +129,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                     // update module instance
 
-                    if(!empty($deletionwarningmailidsArray)){
+                    if (!empty($deletionwarningmailidsArray)) {
                         $ExammanagementInstanceObj->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailidsArray);
                         $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
@@ -143,13 +143,13 @@ class delete_old_exam_data extends \core\task\scheduled_task {
         // delete expired  exam data and instances
         $select = "datadeleted IS NULL AND datadeletion IS NOT NULL AND datadeletion <= ".$now;
 
-        if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)){
+        if ($MoodleDBObj->checkIfRecordExistsSelect('exammanagement', $select)) {
 
             $records = $MoodleDBObj->getRecordsSelectFromDB('exammanagement', $select);
 
             mtrace('Starting deletion of old exam data for '. count($records).' exammanagements ...');
 
-            foreach($records as $record){
+            foreach ($records as $record) {
                 $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
 
                 // set deleted property of instance true (for display purposes)
@@ -163,7 +163,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
                 $select = 'exammanagement = ' . $ExammanagementInstanceObj->moduleinstance->id;
                 // delete participants data
-                if($MoodleDBObj->checkIfRecordExistsSelect('exammanagement_participants', $select)){
+                if ($MoodleDBObj->checkIfRecordExistsSelect('exammanagement_participants', $select)) {
                     $count = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
                     mtrace('Deleting ' . $count .' participants for exammanagement id ' . $ExammanagementInstanceObj->moduleinstance->id);
                     $MoodleDBObj->DeleteRecordsFromDB('exammanagement_participants', array('exammanagement' => $ExammanagementInstanceObj->moduleinstance->id));

@@ -19,18 +19,13 @@
  *
  * @package     mod_exammanagement
  * @category    backup
- * @copyright   coactum GmbH 2017
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// For more information about the backup and restore process, please visit:
-// https://docs.moodle.org/dev/Backup_2.0_for_developers
-// https://docs.moodle.org/dev/Restore_2.0_for_developers
-
-require_once($CFG->dirroot.'//mod/exammanagement/backup/moodle2/backup_exammanagement_stepslib.php');
-require_once($CFG->dirroot.'//mod/exammanagement/backup/moodle2/backup_exammanagement_settingslib.php');
+require_once($CFG->dirroot.'/mod/exammanagement/backup/moodle2/backup_exammanagement_stepslib.php');
 
 /**
  * The class provides all the settings and steps to perform one complete backup of mod_exammanagement.
@@ -41,7 +36,7 @@ class backup_exammanagement_activity_task extends backup_activity_task {
      * Defines particular settings for the plugin.
      */
     protected function define_my_settings() {
-        return;
+        // No particular settings for this activity.
     }
 
     /**
@@ -54,21 +49,21 @@ class backup_exammanagement_activity_task extends backup_activity_task {
     /**
      * Codes the transformations to perform in the activity in order to get transportable (encoded) links.
      *
-     * @param string $content.
-     * @return string.
+     * @param string $content content.
+     * @return string $content content.
      */
-    static public function encode_content_links($content) {
+    public static function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
-        // Link to the list of choices
-        $search="/(".$base."\//mod\/exammanagement\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@EXAMMANAGEMENTINDEX*$2@$', $content);
+        // Link to the list of exammanagements.
+        $search = "/(" . $base . "\/mod\/exammanagement\/index.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@EXAMMANAGEMENTINDEX*$2@$', $content);
 
-        // Link to choice view by moduleid
-        $search="/(".$base."\//mod\/exammanagement\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@EXAMMANAGEMENTVIEWBYID*$2@$', $content);
+        // Link to exammanagement view by moduleid.
+        $search = "/(" . $base . "\/mod\/exammanagement\/view.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@EXAMMANAGEMENTVIEWBYID*$2@$', $content);
 
         return $content;
     }

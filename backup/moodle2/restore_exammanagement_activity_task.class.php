@@ -18,16 +18,11 @@
  * The task that provides a complete restore of mod_exammanagement is defined here.
  *
  * @package     mod_exammanagement
- * @category    restore
- * @copyright   coactum GmbH 2017
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-// For more information about the backup and restore process, please visit:
-// https://docs.moodle.org/dev/Backup_2.0_for_developers
-// https://docs.moodle.org/dev/Restore_2.0_for_developers
 
 require_once($CFG->dirroot.'//mod/exammanagement/backup/moodle2/restore_exammanagement_stepslib.php');
 
@@ -57,10 +52,12 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      *
      * @return array.
      */
-    static public function define_decode_contents() {
+    public static function define_decode_contents() {
         $contents = array();
 
-        // Define the contents.
+        // Define the contents (files).
+        // tablename, array(field1, field 2), $mapping.
+        $contents[] = new restore_decode_content('exammanagement', array('intro'), 'exammanagement');
 
         return $contents;
     }
@@ -70,25 +67,45 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      *
      * @return array.
      */
-    static public function define_decode_rules() {
+    public static function define_decode_rules() {
         $rules = array();
 
         // Define the rules.
+        $rules[] = new restore_decode_rule('EXAMMANAGEMENTINDEX', '/mod/exammanagement/index.php?id=$1', 'course');
+        $rules[] = new restore_decode_rule('EXAMMANAGEMENTVIEWBYID', '/mod/exammanagement/view.php?id=$1', array('course_module'));
 
         return $rules;
     }
 
     /**
      * Defines the restore log rules that will be applied by the
-     * {@link restore_logs_processor} when restoring mod_exammanagement logs. It
-     * must return one array of {@link restore_log_rule} objects.
+     * restore_logs_processor when restoring mod_exammanagement logs. It
+     * must return one array of restore_log_rule objects.
      *
      * @return array.
      */
-    static public function define_restore_log_rules() {
+    public static function define_restore_log_rules() {
         $rules = array();
 
         // Define the rules.
+        $rules[] = new restore_log_rule('exammanagement', 'view', 'view.php?id={course_module}', '{exammanagement}');
+        return $rules;
+    }
+
+    /**
+     * Define the restore log rules that will be applied
+     * by the restore_logs_processor when restoring
+     * course logs. It must return one array
+     * of restore_log_rule objects
+     *
+     * Note this rules are applied when restoring course logs
+     * by the restore final task, but are defined here at
+     * activity level. All them are rules not linked to any module instance (cmid = 0)
+     */
+    public static function define_restore_log_rules_for_course() {
+        $rules = array();
+
+        $rules[] = new restore_log_rule('exammanagement', 'view all', 'index.php?id={course}', null);
 
         return $rules;
     }

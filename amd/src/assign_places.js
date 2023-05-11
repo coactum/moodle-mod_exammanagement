@@ -14,25 +14,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Saving assign places form and fetching table fragment via ajax.
+ * Toggle available places pattern.
  *
  * @module      mod_exammanagement/assign_places
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function ($) {
+import $ from 'jquery';
 
-  return {
-    init: function(){
-      // remove cols from form layout
-      $('.exammanagement_table .form-group div').removeClass('col-md-3');
-      $('.exammanagement_table .form-group div').removeClass('col-md-9');
-    },
+export const init = () => {
+    // remove cols from form layout
+    $('.exammanagement_table .form-group div').removeClass('col-md-3');
+    $('.exammanagement_table .form-group div').removeClass('col-md-9');
+};
 
-    toggleAvailablePlaces: function(){
-
-      $("form.mform .fitem").on("change", "select", function () { // change available places pattern if other room is choosen
+export const toggleAvailablePlaces = () => {
+    $("form.mform .fitem").on("change", "select", function () { // change available places pattern if other room is choosen
         var selectedPlacesId = $(this).children(":selected").attr("value");
         var participantId = $(this).attr("id").split('_')[2];
 
@@ -58,6 +56,4 @@ define(['jquery'], function ($) {
 
       });
 
-    }
-  };
-});
+};

@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing convertToGroupForm for exammanagement
+ * The form for converting exam participants to a moodle group for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2020
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,6 @@ use stdclass;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
@@ -42,11 +41,20 @@ require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../general/Moodle.php');
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class convertToGroupForm extends moodleform{
+/**
+ * The form for converting exam participants to a moodle group for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class converttogroup_form extends moodleform {
 
-    //Add elements to form
-    public function definition(){
-        global $PAGE, $CFG, $OUTPUT;
+    /**
+     * Define the form - called by parent constructor
+     */
+    public function definition() {
+        global $PAGE, $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
@@ -58,13 +66,13 @@ class convertToGroupForm extends moodleform{
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'enable_cb'); //call jquery for checking all checkboxes via following checkbox
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'togglesection'); //call jquery for toogling sections
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<h3>'. get_string("convertToGroup", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('convertToGroup', 'mod_exammanagement', ''));
         }
 
@@ -72,16 +80,16 @@ class convertToGroupForm extends moodleform{
 
         $mform->addElement('html', '<p>'.get_string('convert_to_group_str', 'mod_exammanagement', ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]).'</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        if(isset($this->_customdata['moodleParticipants'])){
+        if (isset($this->_customdata['moodleParticipants'])) {
             $moodleParticipants = $this->_customdata['moodleParticipants'];
         } else {
             $moodleParticipants = false;
         }
 
-        if(isset($this->_customdata['noneMoodleParticipants'])){
+        if (isset($this->_customdata['noneMoodleParticipants'])) {
             $noneMoodleParticipants = $this->_customdata['noneMoodleParticipants'];
         } else {
             $noneMoodleParticipants = false;
@@ -89,22 +97,22 @@ class convertToGroupForm extends moodleform{
 
         $courseParticipantsIDs = $UserObj->getCourseParticipantsIDs();
 
-        if($moodleParticipants){
+        if ($moodleParticipants) {
 
-            if($courseParticipantsIDs){
+            if ($courseParticipantsIDs) {
                 foreach ($moodleParticipants as $key => $participant) {
-                    if(!in_array($participant->moodleuserid, $courseParticipantsIDs)){
+                    if (!in_array($participant->moodleuserid, $courseParticipantsIDs)) {
                         $participant->nocourse = true;
                         unset($moodleParticipants[$key]);
 
-                        if(!$noneMoodleParticipants){
+                        if (!$noneMoodleParticipants) {
                             $noneMoodleParticipants = array();
                         }
                         array_push($noneMoodleParticipants, $participant);
                     }
                 }
             } else {
-                if($noneMoodleParticipants){
+                if ($noneMoodleParticipants) {
                     $noneMoodleParticipants = array_merge($noneMoodleParticipants, $moodleParticipants);
                 } else {
                     $noneMoodleParticipants = $moodleParticipants;
@@ -114,12 +122,12 @@ class convertToGroupForm extends moodleform{
             }
         }
 
-        if($moodleParticipants || $noneMoodleParticipants){
+        if ($moodleParticipants || $noneMoodleParticipants) {
 
             # determine if course groups are set #
             $groups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id);
 
-            if(count($groups) > 0){
+            if (count($groups) > 0) {
                 $courseGroups = true;
                 $bigcol = 4;
                 $col = 3;
@@ -136,10 +144,10 @@ class convertToGroupForm extends moodleform{
 
             $mform->addElement('html', '<div class="exammanagement_overview">');
 
-            if($moodleParticipants){
+            if ($moodleParticipants) {
 
-                if($courseGroups){
-                    foreach ($groups as $group){
+                if ($courseGroups) {
+                    foreach ($groups as $group) {
                         $selectOptions[$group->id] = $group->name;
                     }
                 }
@@ -150,12 +158,12 @@ class convertToGroupForm extends moodleform{
                 $attributes = array('size'=>'25');
                 $mform->addElement('text', 'groupname', get_string('groupname', 'mod_exammanagement'), $attributes);
                 $mform->setType('groupname', PARAM_TEXT);
-                $mform->hideIf('groupname', 'groups', 'neq', 'new_group');
+                $mform->hideif ('groupname', 'groups', 'neq', 'new_group');
 
                 $attributes = array('size'=>'40');
                 $mform->addElement('text', 'groupdescription', get_string('groupdescription', 'mod_exammanagement'), $attributes);
                 $mform->setType('groupdescription', PARAM_TEXT);
-                $mform->hideIf('groupdescription', 'groups', 'neq', 'new_group');
+                $mform->hideif ('groupdescription', 'groups', 'neq', 'new_group');
 
                 $mform->addElement('html', '<div class="panel panel-success exammanagement_panel">');
                 $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="new">');
@@ -167,7 +175,7 @@ class convertToGroupForm extends moodleform{
 
                 $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
 
-                if($courseGroups){
+                if ($courseGroups) {
                     $mform->addElement('html', '<div class="col-'.$bigcol.'"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
                 }
 
@@ -189,24 +197,23 @@ class convertToGroupForm extends moodleform{
 
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true));
-                    $link = '<strong><a href="'.$MoodleObj->getMoodleUrl('/user/view.php', $participant->moodleuserid, 'course', $courseid).'">'.$moodleUser->firstname.' '.$moodleUser->lastname.'</a></strong>';
+                    $image = $OUTPUT->user_picture($moodleUser, array('courseid' => $courseid, 'link' => true, 'includefullname' => true));
 
-                    $mform->addElement('advcheckbox', 'participants['.$participant->moodleuserid.']', $image.' '.$link, null, array('group' => 1));
+                    $mform->addElement('advcheckbox', 'participants[' . $participant->moodleuserid . ']', $image, null, array('group' => 1));
 
                     $mform->addElement('html', '</div><div class="col-'.$littlecol.'">'.$participant->matrnr.'</div>');
 
                     $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
-                    if($courseGroups){
-                        if($participant->moodleuserid){
+                    if ($courseGroups) {
+                        if ($participant->moodleuserid) {
                             $userGroups = groups_get_user_groups($courseid, $participant->moodleuserid);
                             $groupnames = false;
 
-                            foreach ($userGroups as $groupskey => $value){
-                                if ($value){
-                                    foreach ($value as $groupskey2 => $groupid){
-                                        if(!$groupnames){
+                            foreach ($userGroups as $groupskey => $value) {
+                                if ($value) {
+                                    foreach ($value as $groupskey2 => $groupid) {
+                                        if (!$groupnames) {
                                             $groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
                                         } else {
                                             $groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
@@ -229,7 +236,7 @@ class convertToGroupForm extends moodleform{
 
             }
 
-            if($noneMoodleParticipants){
+            if ($noneMoodleParticipants) {
 
                 $count = count($noneMoodleParticipants);
 
@@ -243,7 +250,7 @@ class convertToGroupForm extends moodleform{
 
                 $mform->addElement('html', '<div class="row"><div class="col-'.$col.'"><h4>'.get_string("participants", "mod_exammanagement").'</h4></div><div class="col-'.$littlecol.'"><h4>'.get_string("matriculation_number", "mod_exammanagement").'</h4></div>');
 
-                if($courseGroups){
+                if ($courseGroups) {
                     $mform->addElement('html', '<div class="col-'.$bigcol.'"><h4>'.get_string("course_groups", "mod_exammanagement").'</h4></div>');
                 }
 
@@ -255,24 +262,24 @@ class convertToGroupForm extends moodleform{
 
                     $mform->addElement('html', '<div class="col-'.$col.'">'.$participant->firstname.' '.$participant->lastname.'</div>');
 
-                    if($participant->matrnr){
-                        $mform->addElement('html', '<div class="col-'.$littlecol.'">'.$participant->matrnr.'</div>');
+                    if ($participant->matrnr) {
+                        $mform->addElement('html', '<div class="col-' . $littlecol . '">'.$participant->matrnr.'</div>');
                     } else {
-                        $mform->addElement('html', '<div class="col-'.$littlecol.'">'-'</div>');
+                        $mform->addElement('html', '<div class="col-' . $littlecol . '">-</div>');
                     }
 
-                    if($courseGroups){
+                    if ($courseGroups) {
 
-                        if($participant->moodleuserid){
+                        if ($participant->moodleuserid) {
                             $courseid = $ExammanagementInstanceObj->getCourse()->id;
 
                             $userGroups = groups_get_user_groups($courseid, $participant->moodleuserid);
                             $groupnames = false;
 
-                            foreach ($userGroups as $groupskey => $value){
-                                if ($value){
-                                    foreach ($value as $groupskey2 => $groupid){
-                                        if(!$groupnames){
+                            foreach ($userGroups as $groupskey => $value) {
+                                if ($value) {
+                                    foreach ($value as $groupskey2 => $groupid) {
+                                        if (!$groupnames) {
                                             $groupnames = '<strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
                                         } else {
                                             $groupnames .= ', <strong><a href="'.$MoodleObj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
@@ -285,13 +292,13 @@ class convertToGroupForm extends moodleform{
                             }
 
                             $mform->addElement('html', '<div class="col-'.$bigcol.'">'.$groupnames.'</div>');
-                        } else if($participant->matrnr){
+                        } else if ($participant->matrnr) {
                             $mform->addElement('html', '<div class="col-'.$bigcol.'"> - </div>');
                         }
 
                     }
 
-                    if(isset($participant->nocourse) || !$courseParticipantsIDs){
+                    if (isset($participant->nocourse) || !$courseParticipantsIDs) {
                         $state = get_string('state_not_convertable_group_course', "mod_exammanagement");
                     } else {
                         $state = get_string('state_not_convertable_group_moodle', "mod_exammanagement", ['systemname' => $ExammanagementInstanceObj->getMoodleSystemName()]);
@@ -303,7 +310,7 @@ class convertToGroupForm extends moodleform{
                 $mform->addElement('html', '</div></div>');
             }
 
-            if ($moodleParticipants){
+            if ($moodleParticipants) {
                 $this->add_action_buttons(true, get_string("convert_to_group", "mod_exammanagement"));
             } else {
                 $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$ExammanagementInstanceObj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
@@ -314,34 +321,34 @@ class convertToGroupForm extends moodleform{
         }
     }
 
-    //Custom validation should be added here
-    public function validation($data, $files){
+    // Custom validation should be added here.
+    public function validation($data, $files) {
 
         $errors = array();
 
-        if(isset($data['participants'])){
-            foreach($data['participants'] as $participantid => $checked){
+        if (isset($data['participants'])) {
+            foreach ($data['participants'] as $participantid => $checked) {
 
-                if(!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)){
+                if (!preg_match("/^[a-zA-Z0-9_\-]+$/", $participantid)) {
                     $errors['participants['.$participantid.']'] = get_string('err_invalidcheckboxid_participants', 'mod_exammanagement');
                 }
             }
         }
 
-        if($data['groups'] === 'new_group' && !$data['groupname']){
+        if ($data['groups'] === 'new_group' && !$data['groupname']) {
             $errors['groupname'] = get_string('err_filloutfield', 'mod_exammanagement');
         }
 
-        if($data['groups'] === 'new_group'){
+        if ($data['groups'] === 'new_group') {
             $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-            if($courseGroups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id)){
+            if ($courseGroups = groups_get_all_groups($ExammanagementInstanceObj->getCourse()->id)) {
 
-                $groupname_taken = array_filter($courseGroups, function($group) use ($data){
+                $groupname_taken = array_filter($courseGroups, function($group) use ($data) {
                     return $group->name == $data['groupname'];
                 });
 
-                if($groupname_taken){
+                if ($groupname_taken) {
                     $errors['groupname'] = get_string('err_groupname_taken', 'mod_exammanagement');
                 }
             }

@@ -18,7 +18,7 @@
  * class containing all db wrapper functions for moodle db methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ class MoodleDB{
 
 	#### singleton class ######
 
-	public static function getInstance(){
+	public static function getInstance() {
 
 		static $inst = null;
 			if ($inst === null) {
@@ -42,7 +42,7 @@ class MoodleDB{
 
 	#### wrapped Moodle DB functions #####
 
-	public function countRecordsInDB($table, $select, $params=null, $countitem="COUNT('x')"){
+	public function countRecordsInDB($table, $select, $params=null, $countitem="COUNT('x')") {
 		global $DB;
 
 		$count = $DB->count_records_select($table, $select, $params, $countitem);
@@ -51,7 +51,7 @@ class MoodleDB{
 	}
 
 
-	 public function getFieldFromDB($table, $fieldname, $condition){
+	 public function getFieldFromDB($table, $fieldname, $condition) {
 	 	global $DB;
 
 	 	$field = $DB->get_field($table, $fieldname, $condition, '*', MUST_EXIST);
@@ -59,20 +59,20 @@ class MoodleDB{
 	 	return $field;
 	 }
 
-	 public function setFieldInDB($table, $newfield, $newvalue, $conditions=null){
+	 public function setFieldInDB($table, $newfield, $newvalue, $conditions=null) {
 		global $DB;
 
 		$DB->set_field($table, $newfield, $newvalue, $conditions);
 	}
 
-	public function setFieldInDBSelect($table, $newfield, $newvalue, $select, $params=null){
+	public function setFieldInDBSelect($table, $newfield, $newvalue, $select, $params=null) {
 		global $DB;
 
 		$DB->set_field_select($table, $newfield, $newvalue, $select, $params);
 	}
 
 
-	public function getRecordFromDB($table, $condition){
+	public function getRecordFromDB($table, $condition) {
 		global $DB;
 
 		$record = $DB->get_record($table, $condition);
@@ -80,7 +80,7 @@ class MoodleDB{
 		return $record;
 	}
 
-	public function getRecordsFromDB($table, $condition){
+	public function getRecordsFromDB($table, $condition) {
 		global $DB;
 
 		$records = $DB->get_records($table, $condition);
@@ -88,7 +88,7 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function getRecordsSelectFromDB($table, $select){
+	public function getRecordsSelectFromDB($table, $select) {
 		global $DB;
 
 		$records = $DB->get_records_select($table, $select);
@@ -96,7 +96,7 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function getFieldsetFromRecordsInDB($table, $fields, $select){
+	public function getFieldsetFromRecordsInDB($table, $fields, $select) {
 		global $DB;
 
 		$records = $DB->get_fieldset_select($table, $fields, $select);
@@ -104,55 +104,55 @@ class MoodleDB{
 		return $records;
 	}
 
-	public function checkIfRecordExists($table, $conditions){
+	public function checkIfRecordExists($table, $conditions) {
 		global $DB;
 
 		return $DB->record_exists($table, $conditions);
 	}
 
-	public function checkIfRecordExistsSelect($table, $select, $params=null){
+	public function checkIfRecordExistsSelect($table, $select, $params=null) {
 		global $DB;
 
 		return 	$DB->record_exists_select($table, $select, $params);
 	}
 
-	public function UpdateRecordInDB($table, $obj){
+	public function UpdateRecordInDB($table, $obj) {
 		global $DB;
 
 		return $DB->update_record($table, $obj);
 	}
 
-	public function InsertRecordInDB($table, $dataobject){
+	public function InsertRecordInDB($table, $dataobject) {
 		global $DB;
 
 		return $DB->insert_record($table, $dataobject, $returnid=true, $bulk=false);
 	}
 
-	public function InsertBulkRecordsInDB($table, $dataobjects){
+	public function InsertBulkRecordsInDB($table, $dataobjects) {
 		global $DB;
 
 		$DB->insert_records($table, $dataobjects);
 	}
 
-	public function DeleteRecordsFromDB($table, $condition){
+	public function DeleteRecordsFromDB($table, $condition) {
 		global $DB;
 
 		return $DB->delete_records($table, $condition);
 	}
 
-	public function DeleteRecordsFromDBSelect($table, $select, $params=null){
+	public function DeleteRecordsFromDBSelect($table, $select, $params=null) {
 		global $DB;
 
 		return $DB->delete_records_select($table, $select, $params);
 	}
 
-	public function getRecordset($table, $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0){
+	public function getRecordset($table, $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0) {
 		global $DB;
 
 		return $DB->get_recordset($table, $conditions, $sort, $fields, $limitfrom, $limitnum);
 	}
 
-	public function getRecordsetSelect($table, $select, $params=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0){
+	public function getRecordsetSelect($table, $select, $params=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0) {
 		global $DB;
 
 		return 	$DB->get_recordset_select($table, $select, $params, $sort, $fields, $limitfrom, $limitnum);

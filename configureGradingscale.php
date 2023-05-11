@@ -18,7 +18,7 @@
  * Allows teacher to configure gradingscale for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,69 +29,73 @@ use mod_exammanagement\forms\configureGradingscaleForm;
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
-// Course_module ID, or
+// Course_module ID, or.
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
 $e  = optional_param('e', 0, PARAM_INT);
 
-$MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
+$moodleobj = Moodle::getInstance($id, $e);
+$moodledbobj = MoodleDB::getInstance();
+$exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
+    if ($exammanagementinstanceobj->isExamDataDeleted()) {
+        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+    } else {
 
-		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+        // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
+        if (!isset($exammanagementinstanceobj->moduleinstance->password) ||
+            (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) {
 
-			$MoodleObj->setPage('configureGradingscale');
+            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+            if (!isset($misc['mode']) && !$exammanagementinstanceobj->getTaskCount()) {
+                $moodleobj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
+            }
 
-			if($ExammanagementInstanceObj->moduleinstance->misc === NULL && !$ExammanagementInstanceObj->getTaskCount()){
-				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
-			}
+            // Instantiate form.
+            $mform = new configureGradingscaleForm(null, array('id' => $id, 'e' => $e));
 
-			$MoodleObj-> outputPageHeader();
+            // Form processing and displaying is done here.
+            if ($mform->is_cancelled()) {
+                // Handle form cancel operation, if cancel button is present on form.
+                $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
 
-			//Instantiate form
-			$mform = new configureGradingscaleForm(null, array('id'=>$id, 'e'=>$e));
+            } else if ($fromform = $mform->get_data()) {
+                // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-			//Form processing and displaying is done here
-			if ($mform->is_cancelled()) {
-				//Handle form cancel operation, if cancel button is present on form
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+                $gradingscale = json_encode($fromform->gradingsteppoints);
+                $exammanagementinstanceobj->moduleinstance->gradingscale = $gradingscale;
 
-			} else if ($fromform = $mform->get_data()) {
-			//In this case you process validated data. $mform->get_data() returns data posted in form.
+                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                if ($update) {
+                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                } else {
+                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                }
 
-				$gradingscale = json_encode($fromform->gradingsteppoints);
-				$ExammanagementInstanceObj->moduleinstance->gradingscale = $gradingscale;
+            } else {
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // or on the first display of the form.
 
-				$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-				if($update){
-					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-				} else {
-					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-				}
+                // Set default data (if any).
+                $mform->set_data(array('id' => $id));
 
-			} else {
-			// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-			// or on the first display of the form.
+                $moodleobj->setPage('configureGradingscale');
 
-			//Set default data (if any)
-			$mform->set_data(array('id'=>$id));
+                $moodleobj->outputPageHeader();
 
-			//displays the form
-			$mform->display();
-			}
+                // Displays the form.
+                $mform->display();
 
-			$MoodleObj->outputFooter();
-		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-		}
-	}
+                $moodleobj->outputFooter();
+            }
+
+        } else { // If user hasnt entered correct password for this session: show enterPasswordPage.
+            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+        }
+    }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

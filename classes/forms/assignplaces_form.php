@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing assignPlacesForm for exammanagement
+ * The form for assigning places to participants for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2021
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,12 +27,12 @@ namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\User;
 use mod_exammanagement\general\Moodle;
+use mod_exammanagement\output\exammanagement_pagebar;
 use moodleform;
 use stdclass;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
@@ -40,62 +40,74 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/User.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
-class assignPlacesForm extends moodleform{
+/**
+ * The form for assigning places to participants for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class assignplaces_form extends moodleform {
 
-    //Add elements to form
-    public function definition(){
+    /**
+     * Define the form - called by parent constructor
+     */
+    public function definition() {
         global $PAGE, $CFG, $OUTPUT;
 
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $UserObj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $ExammanagementInstanceObj->getCm()->instance);
-        $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); //remove col-md classes for better layout
+        $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // remove col-md classes for better layout
         $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'init'); // call jquery
         $PAGE->requires->js_call_amd('mod_exammanagement/assign_places', 'toggleAvailablePlaces'); // call jquery to enable toggling of new available places
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<div class="row"><h3 class="col-md-4">'.get_string("assignPlaces", "mod_exammanagement"));
+        $mform->addElement('html', '<div class="d-flex justify-content-between"><h3>'.get_string("assignPlaces", "mod_exammanagement"));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
             $mform->addElement('html', $OUTPUT->help_icon('assignPlaces', 'mod_exammanagement', ''));
         }
 
-        $mform->addElement('html', '</h3><div class="col-md-8">');
+        $mform->addElement('html', '</h3><div>');
 
-        if($this->_customdata['map']){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+        if ($this->_customdata['map']) {
+            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-sm-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
         } else {
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-sm-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
         }
 
-        $assignedplacescount = $ExammanagementInstanceObj->getAssignedPlacesCount();
+        $assignedplacescount = $exammanagementinstanceobj->getAssignedPlacesCount();
 
-        if($assignedplacescount){
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'uap', true).'" role="button" class="btn btn-primary pull-right m-r-1 m-b-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+        if ($assignedplacescount) {
+            $mform->addElement('html', '<a href="assignPlaces.php?id=' . $this->_customdata['id'] . '&uap=1&sesskey=' . sesskey() . '" role="button" class="btn btn-secondary pull-right mr-1 mb-1" title="'.get_string("revert_places_assignment", "mod_exammanagement").'"><span class="d-none d-md-block">'.get_string("revert_places_assignment", "mod_exammanagement").'</span><i class="fa fa-trash d-md-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
 
         $mform->addElement('html', '<p>'.get_string('assign_places_text', 'mod_exammanagement').'</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $contextid = $ExammanagementInstanceObj->getModulecontext()->id;
+        $contextid = $exammanagementinstanceobj->getModulecontext()->id;
 
-        if($this->_customdata['map']){
+        if ($this->_customdata['map']) {
             $mform->addElement('html', '<h4 class="d-flex justify-content-center">'.get_string('assign_places_manually', 'mod_exammanagement').'</h4>');
 
-            $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr')); // get all exam participants sorted by sortmode
-            $examrooms = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
+            $allparticipants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
 
-            if($examrooms && $participants){
+            $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'), 'name', true, $this->_customdata['pagenr']);
+            $examrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
 
-                $mform->addElement('html', '<div class="exammanagement_tablewrapper">');
+            if ($examrooms && $participants) {
+
+                $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'assignPlaces.php?id=' . $this->_customdata['id'] . '&map=1', sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
+                $mform->addElement('html', $OUTPUT->render($pagebar));
 
                 $mform->addElement('html', '<table class="table table-striped exammanagement_table">');
 
@@ -110,25 +122,29 @@ class assignPlacesForm extends moodleform{
                 $mform->addElement('hidden', 'map', true);
                 $mform->setType('map', PARAM_INT);
 
-                $roomOptionsArr = array('not_selected' => '-');
+                $mform->addElement('hidden', 'page');
+                $mform->setType('page', PARAM_INT);
+                $mform->setDefault('page', $this->_customdata['pagenr']);
 
-                $i = 1;
+                $roomoptionsarr = array('not_selected' => '-');
 
-                $roomPlacesPatternsArr = array('not_selected' => '-');
+                $i = $exammanagementinstanceobj->pagecount * ($this->_customdata['pagenr'] - 1) + 1;
 
-                foreach($examrooms as $id => $roomid){
+                $roomplacespatternsarr = array('not_selected' => '-');
 
-                    $roomObj = $ExammanagementInstanceObj->getRoomObj($roomid);
+                foreach ($examrooms as $id => $roomid) {
 
-                    if($roomObj){
-                        $roomOptionsArr[$roomid] = $roomObj->name;
+                    $roomobj = $exammanagementinstanceobj->getRoomObj($roomid);
 
-                        $decodedPlaces = json_decode($roomObj->places);
-                        $roomPlacesPatternsArr[$roomid] = array_shift($decodedPlaces) . ', ' . array_shift($decodedPlaces) . ', ..., ' . array_pop($decodedPlaces) . ' ' . '<a id="show" class="pointer"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_available_places collapse">'.implode(', ', json_decode($roomObj->places)).'</div>';
+                    if ($roomobj) {
+                        $roomoptionsarr[$roomid] = $roomobj->name;
+
+                        $decodedplaces = json_decode($roomobj->places);
+                        $roomplacespatternsarr[$roomid] = array_shift($decodedplaces) . ', ' . array_shift($decodedplaces) . ', ..., ' . array_pop($decodedplaces) . ' ' . '<a id="show" class="pointer"><i class="fa fa-2x fa-info-circle"></i></a><div class="exammanagement_available_places collapse">'.implode(', ', json_decode($roomobj->places)).'</div>';
                     }
                 }
 
-                foreach($participants as $participant){
+                foreach ($participants as $participant) {
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
                     $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
@@ -136,8 +152,8 @@ class assignPlacesForm extends moodleform{
                     $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
                     $mform->addElement('html', '<td>');
 
-                    $select = $mform->addElement('select', 'rooms['.$participant->id.']', '', $roomOptionsArr);
-                    if($participant->roomid){
+                    $select = $mform->addElement('select', 'rooms['.$participant->id.']', '', $roomoptionsarr);
+                    if ($participant->roomid) {
                         $select->setSelected($participant->roomid);
                     } else {
                         $select->setSelected('not_selected');
@@ -148,14 +164,14 @@ class assignPlacesForm extends moodleform{
                     $mform->addElement('text', 'places['.$participant->id.']', '');
                     $mform->setType('places['.$participant->id.']', PARAM_TEXT);
 
-                    if($participant->place){
+                    if ($participant->place) {
                         $mform->setDefault('places['.$participant->id.']', $participant->place);
                     }
 
                     $mform->addElement('html', '</td><td id="available_places_'.$participant->id.'">');
 
-                    foreach($roomPlacesPatternsArr as $roomid => $places){
-                        if($participant->roomid == $roomid || ($participant->roomid == NULL && $roomid =="not_selected")){
+                    foreach ($roomplacespatternsarr as $roomid => $places) {
+                        if ($participant->roomid == $roomid || ($participant->roomid == null && $roomid == "not_selected")) {
                             $mform->addElement('html', '<div id="'.$roomid.'" class="hideablepattern">' . $places . '</div>');
                         } else {
                             $mform->addElement('html', '<div id="'.$roomid.'" class="hideablepattern hidden">' . $places . '</div>');
@@ -168,7 +184,7 @@ class assignPlacesForm extends moodleform{
 
                 }
 
-                $mform->addElement('html', '</tbody></table></div>');
+                $mform->addElement('html', '</tbody></table>');
 
             }
 
@@ -177,8 +193,8 @@ class assignPlacesForm extends moodleform{
         } else {
             $mform->addElement('html', '<h4>'.get_string('choose_assignment_mode', 'mod_exammanagement').'</h4>');
 
-            $assignmentmode = $ExammanagementInstanceObj->getAssignmentMode();
-            if($assignmentmode){
+            $assignmentmode = $exammanagementinstanceobj->getAssignmentMode();
+            if ($assignmentmode) {
 
                 $placesmode = substr($assignmentmode, 0, 1);
                 $roommode = substr($assignmentmode, 1, 1);
@@ -218,7 +234,7 @@ class assignPlacesForm extends moodleform{
                         break;
                 }
 
-                if(isset($manuallassignment) && $manuallassignment == '1'){
+                if (isset($manuallassignment) && $manuallassignment == '1') {
                     $mform->addElement('html', ' | <strong>');
                     $mform->addElement('html', get_string('edited_manually', 'mod_exammanagement'));
                     $mform->addElement('html', ' </strong>');
@@ -229,23 +245,23 @@ class assignPlacesForm extends moodleform{
             }
 
             $select = $mform->addElement('select', 'assignment_mode_places', get_string('assignment_mode_places', 'mod_exammanagement'), array('name' => get_string('mode_places_lastname', 'mod_exammanagement'), 'matrnr' => get_string('mode_places_matrnr', 'mod_exammanagement'), 'random' => get_string('mode_places_random', 'mod_exammanagement')));
-            if(isset($placesmode)){
+            if (isset($placesmode)) {
                 $select->setSelected($placesmode);
             } else {
                 $select->setSelected('name');
             }
 
-            if($ExammanagementInstanceObj->getRoomsCount() > 1){
+            if ($exammanagementinstanceobj->getRoomsCount() > 1) {
                 $select = $mform->addElement('select', 'assignment_mode_rooms', get_string('assignment_mode_rooms', 'mod_exammanagement'), array('1' => get_string('mode_room_ascending', 'mod_exammanagement'), '2' => get_string('mode_room_descending', 'mod_exammanagement')));
-                if(isset($roommode) && $roommode !== ''){
+                if (isset($roommode) && $roommode !== '') {
                     $select->setSelected($roommode);
                 } else {
                     $select->setSelected('2');
                 }
-            } if($assignedplacescount && !$ExammanagementInstanceObj->allPlacesAssigned()){
+            } if ($assignedplacescount && !$exammanagementinstanceobj->allPlacesAssigned()) {
                  $mform->addElement('advcheckbox', 'keep_seat_assignment', get_string('keep_seat_assignment_left', 'mod_exammanagement'), get_string('keep_seat_assignment_right', 'mod_exammanagement'), null, null);
                  $mform->setDefault('keep_seat_assignment', true);
-            } else if($assignedplacescount && $ExammanagementInstanceObj->allPlacesAssigned()){
+            } else if ($assignedplacescount && $exammanagementinstanceobj->allPlacesAssigned()) {
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("all_places_already_assigned", "mod_exammanagement").'</div>');
             }
 
@@ -253,12 +269,5 @@ class assignPlacesForm extends moodleform{
         }
 
         $mform->disable_form_change_checker();
-    }
-
-    //Custom validation should be added here
-    public function validation($data, $files){
-        $errors= array();
-
-        return $errors;
     }
 }

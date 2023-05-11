@@ -15,34 +15,39 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the view event.
+ * The mod_exammanagement course module viewed event.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2017
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * The mod_exammanagement instance viewed event class
- *
- * If the view mode needs to be stored as well, you may need to
- * override methods get_url() and get_legacy_log_data(), too.
+ * The mod_exammanagement course module viewed event class
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_viewed extends \core\event\course_module_viewed {
 
     /**
-     * Initialize the event
+     * Init method.
+     *
+     * @return void
      */
     protected function init() {
+        $this->data['crud'] = 'r';
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'exammanagement';
-        parent::init();
+    }
+
+    /**
+     * Get objectid mapping for restore.
+     */
+    public static function get_objectid_mapping() {
+        return array('db' => 'exammanagement', 'restore' => 'exammanagement');
     }
 }

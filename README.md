@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @package     mod_exammanagement
-@copyright   coactum GmbH 2021
+@copyright   2022 coactum GmbH
 @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 # Exam management #
@@ -51,7 +51,3 @@ To ensure that the exam management plugin works as intended make sure that
 - you have configured the mail server for your moodle
 - sheduled tasks are performed automatically
 - the ldap authentication plugin is installed within your moodle and that you have configured it to connect to your own ldap server to fetch matriculation numbers for your participants
-
-Comments and suggestions are always welcome.
-
-D.

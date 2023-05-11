@@ -15,59 +15,58 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing textfieldForm for exammanagement
+ * The form for setting the text field for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\forms;
-use mod_exammanagement\general\exammanagementInstance;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
-require_once(__DIR__.'/../general/exammanagementInstance.php');
 
-class setTextfieldForm extends moodleform {
+/**
+ * The form for setting the text field for mod_exammanagement.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class textfield_form extends moodleform {
 
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition() {
 
-        global $OUTPUT;
-
-        $mform = $this->_form; // Don't forget the underscore!
-
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $mform->addElement('html', '<h3>'.get_string("setTextfield", "mod_exammanagement"));
-        
-        if($helptextsenabled){
-            $mform->addElement('html', $OUTPUT->help_icon('setTextfield', 'mod_exammanagement', ''));
+        $mform->addElement('html', '<h3>'.get_string("settextfield", "mod_exammanagement"));
+
+        if ($helptextsenabled) {
+            global $OUTPUT;
+
+            $mform->addElement('html', $OUTPUT->help_icon('settextfield', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3>');
-        
- 		$mform->addElement('html', '<p>'.get_string('add_text_text', 'mod_exammanagement').'</p>');
 
-         $mform->addElement('hidden', 'id', 'dummy');
+ 		$mform->addElement('html', '<p>'.get_string('settextfieldstr', 'mod_exammanagement').'</p>');
+
+         $mform->addElement('hidden', 'id');
          $mform->setType('id', PARAM_INT);
 
- 		$mform->addElement('editor', 'textfield', get_string('content_of_textfield', 'mod_exammanagement'));
+ 		$mform->addElement('editor', 'textfield', get_string('contentoftextfield', 'mod_exammanagement'));
         $mform->setType('textfield', PARAM_RAW);
         $mform->addRule('textfield', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
         $this->add_action_buttons();
-    }
-
-    //Custom validation should be added here
-    function validation($data, $files) {
-        return array();
     }
 }

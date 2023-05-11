@@ -18,11 +18,10 @@
  * Class containing data for exammanagement main page
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_exammanagement\output;
-defined('MOODLE_INTERNAL') || die();
 
 use renderable;
 use renderer_base;
@@ -33,27 +32,16 @@ use stdClass;
  * Class containing data for exammanagement_overview
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_overview implements renderable, templatable {
 
     protected $cmid;
-    protected $firstphasecompleted;
-    protected $secondphasecompleted;
-    protected $examphasecompleted;
-    protected $thirdphasecompleted;
-    protected $fourthphasecompleted;
-    protected $fifthphasecompleted;
-    protected $firstphaseactive;
-    protected $secondphaseactive;
-    protected $examphaseactive;
-    protected $thirdphaseactive;
-    protected $fourthphaseactive;
-    protected $fifthphaseactive;
+    protected $phases;
     protected $helptexticon;
     protected $additionalressourceslink;
-    protected $hrexamtime;
+    protected $examtime;
     protected $textfield;
     protected $taskcount;
     protected $tasktotalpoints;
@@ -64,8 +52,8 @@ class exammanagement_overview implements renderable, templatable {
     protected $placesassigned;
     protected $allplacesassigned;
     protected $assignedplacescount;
-	protected $datetimevisible;
-	protected $roomvisible;
+    protected $datetimevisible;
+    protected $roomvisible;
     protected $placevisible;
     protected $bonuscount;
     protected $bonuspointsentered;
@@ -85,23 +73,17 @@ class exammanagement_overview implements renderable, templatable {
      * Construct this renderable.
      * @param int $courseid The course record for this page.
      */
-    public function __construct($cmid, $firstphasecompleted, $secondphasecompleted, $examphasecompleted, $thirdphasecompleted, $fourthphasecompleted, $fifthphasecompleted, $firstphaseactive, $secondphaseactive, $examphaseactive, $thirdphaseactive, $fourthphaseactive, $fifthphaseactive, $helptexticon, $additionalressourceslink, $hrexamtime, $taskcount, $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $placesassigned, $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable) {
+    public function __construct($cmid, $phases, $helptexticon, $additionalressourceslink, $examtime, $taskcount,
+        $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $placesassigned, $allplacesassigned,
+        $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible,
+        $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible,
+        $resultsenteredafterexamreview, $deleted, $ldapavailable) {
+
         $this->cmid = $cmid;
-        $this->firstphasecompleted = $firstphasecompleted;
-        $this->secondphasecompleted = $secondphasecompleted;
-        $this->examphasecompleted = $examphasecompleted;
-        $this->thirdphasecompleted = $thirdphasecompleted;
-        $this->fourthphasecompleted = $fourthphasecompleted;
-        $this->fifthphasecompleted = $fifthphasecompleted;
-        $this->firstphaseactive = $firstphaseactive;
-        $this->secondphaseactive = $secondphaseactive;
-        $this->examphaseactive = $examphaseactive;
-        $this->thirdphaseactive = $thirdphaseactive;
-        $this->fourthphaseactive = $fourthphaseactive;
-        $this->fifthphaseactive = $fifthphaseactive;
+        $this->phases = $phases;
         $this->helptexticon = $helptexticon;
         $this->additionalressourceslink = $additionalressourceslink;
-        $this->hrexamtime = $hrexamtime;
+        $this->examtime = $examtime;
         $this->taskcount = $taskcount;
         $this->tasktotalpoints = $tasktotalpoints;
         $this->textfield = $textfield;
@@ -139,21 +121,10 @@ class exammanagement_overview implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
-        $data->firstphasecompleted = $this->firstphasecompleted;
-        $data->secondphasecompleted = $this->secondphasecompleted;
-        $data->examphasecompleted = $this->examphasecompleted;
-        $data->thirdphasecompleted = $this->thirdphasecompleted;
-        $data->fourthphasecompleted = $this->fourthphasecompleted;
-        $data->fifthphasecompleted = $this->fifthphasecompleted;
-        $data->firstphaseactive = $this->firstphaseactive;
-        $data->secondphaseactive = $this->secondphaseactive;
-        $data->examphaseactive = $this->examphaseactive;
-        $data->thirdphaseactive = $this->thirdphaseactive;
-        $data->fourthphaseactive = $this->fourthphaseactive;
-        $data->fifthphaseactive = $this->fifthphaseactive;
+        $data->phases = $this->phases;
         $data->helptexticon = $this->helptexticon;
         $data->additionalressourceslink = $this->additionalressourceslink;
-        $data->hrexamtime = $this->hrexamtime;
+        $data->examtime = $this->examtime;
         $data->taskcount = $this->taskcount;
         $data->tasktotalpoints = $this->tasktotalpoints;
         $data->textfield = $this->textfield;
@@ -180,6 +151,8 @@ class exammanagement_overview implements renderable, templatable {
         $data->resultsenteredafterexamreview = $this->resultsenteredafterexamreview;
         $data->deleted = $this->deleted;
         $data->ldapavailable = $this->ldapavailable;
+        $data->sesskey = sesskey();
+
         return $data;
     }
 }

@@ -18,17 +18,7 @@
  * Plugin internal classes, functions and constants are defined here.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-/**
- * Handle the testevent event.
- *
- * @param object $event The event object.
- */
-function testevent($event) {
-    return;
-}

@@ -18,7 +18,7 @@
  * Outputs pdf file for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,13 +39,13 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-  if($ExammanagementInstanceObj->isExamDataDeleted()){
+  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
     $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
   } else {
 
-    if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
         global $CFG;
 
@@ -53,7 +53,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
           $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
         } else if (!$UserObj->getParticipantsCount()) {
             $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-        } else if(!$ExammanagementInstanceObj->placesAssigned()){
+        } else if (!$ExammanagementInstanceObj->placesAssigned()) {
             $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
         }
 
@@ -121,12 +121,12 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         $previousRoom;
         $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
 
-        foreach ($roomIDs as $roomID){
+        foreach ($roomIDs as $roomID) {
           $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
 
           $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
-          if($participants){
+          if ($participants) {
             if (!empty($previousRoom) && $currentRoom != $previousRoom) {
               //new room -> finish and print current table and begin new page
               $tbl .= "</table>";
@@ -136,13 +136,13 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
               $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
             }
 
-            usort($participants, function($a, $b){ //sort array by custom user function
+            usort($participants, function($a, $b) { //sort array by custom user function
 
               return strnatcmp($a->place, $b->place); // sort by place
 
             });
 
-            foreach ($participants as $participant){
+            foreach ($participants as $participant) {
 
                 $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
                 $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
@@ -183,7 +183,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
         //============================================================+
 
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
     }
   }
 

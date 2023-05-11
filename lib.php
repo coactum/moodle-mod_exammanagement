@@ -21,27 +21,43 @@
  * All the newmodule specific functions, needed to implement all the module
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
-*
+ *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+define('EXAMMANAGEMENT_EVENT_TYPE_EXAMTIME', 'examtime');
+define('EXAMMANAGEMENT_EVENT_TYPE_EXAMREVIEWTIME', 'examreviewtime');
 
 /**
- * Return if the plugin supports $feature.
+ * Indicates API features that the plugin supports.
  *
+ * @uses FEATURE_MOD_INTRO
+ * @uses FEATURE_SHOW_DESCRIPTION
+ * @uses FEATURE_COMPLETION_TRACKS_VIEWS
+ * @uses FEATURE__BACKUP_MOODLE2
+ * @uses FEATURE_MOD_PURPOSE
  * @param string $feature Constant representing the feature.
- * @return true | null True if the feature is supported, null otherwise.
+ * @return mixed True if the feature is supported, null otherwise.
  */
 function exammanagement_supports($feature) {
+    // Adding support for FEATURE_MOD_PURPOSE (MDL-71457) and providing backward compatibility (pre-v4.0).
+    if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
+        return MOD_PURPOSE_ASSESSMENT;
+    }
+
     switch ($feature) {
-    	case FEATURE_MOD_INTRO:
+        case FEATURE_MOD_INTRO:
             return true;
-    	case FEATURE_SHOW_DESCRIPTION:
+        case FEATURE_SHOW_DESCRIPTION:
             return true;
-      default:
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+
+        default:
             return null;
     }
 }
@@ -61,24 +77,40 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     global $DB, $PAGE;
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->categoryid = $PAGE->category->id; //set course category
+    $moduleinstance->categoryid = $PAGE->category->id; // Set course category.
 
-    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+    if (isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== '') {
         $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
     } else {
-        $moduleinstance->password = NULL;
+        $moduleinstance->password = null;
     }
 
+    // Check if mode export_grades.
     $misc = new stdclass;
-    if($mform->get_data()->exportgrades){
-
+    if ($mform->get_data()->exportgrades) {
         $misc->mode = 'export_grades';
+    }
+
+    // Set phase and steps deselections.
+    if ($mform->get_data()->deselectphaseexamreview) {
+        $misc->configoptions = array('noexamreview');
+    }
+
+    if (isset($misc->mode) || isset($misc->configoptions)) {
         $moduleinstance->misc = json_encode($misc);
     } else {
-        $moduleinstance->misc = NULL;
+        $moduleinstance->misc = null;
     }
 
     $moduleinstance->id = $DB->insert_record('exammanagement', $moduleinstance);
+
+    // Unset opening state of the exam phases saved in the user preferences.
+    unset_user_preference('exammanagement_phase_one');
+    unset_user_preference('exammanagement_phase_two');
+    unset_user_preference('exammanagement_phase_exam');
+    unset_user_preference('exammanagement_phase_three');
+    unset_user_preference('exammanagement_phase_four');
+    unset_user_preference('exammanagement_phase_five');
 
     return $moduleinstance->id;
 }
@@ -98,31 +130,40 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
-    $moduleinstance->categoryid = $PAGE->category->id; //set course category
+    $moduleinstance->categoryid = $PAGE->category->id; // Set course category.
 
-    if(isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== ''){
+    if (isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== '') {
 
-        $existingPW = base64_decode($DB->get_record('exammanagement', array('id'=>$moduleinstance->instance))->password);
+        $existingpw = base64_decode($DB->get_record('exammanagement', array('id' => $moduleinstance->instance))->password);
 
-        if (!isset($existingPW) || $existingPW =='' || (isset($existingPW) && isset($mform->get_data()->oldpassword) && password_verify($mform->get_data()->oldpassword, $existingPW))){
-            $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
+        if (!isset($existingpw) || $existingpw == '' ||
+            (isset($existingpw) && isset($mform->get_data()->oldpassword) && password_verify($mform->get_data()->oldpassword, $existingpw))) {
+
+                $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
 
         } else {
             throw new Exception(get_string('incorrect_password_change', 'mod_exammanagement'));
         }
     }
 
+    // Check if mode export_grades.
     $misc = new stdclass;
-    if($mform->get_data()->exportgrades){
-
+    if ($mform->get_data()->exportgrades) {
         $misc->mode = 'export_grades';
+    }
+
+    // Set phase and steps deselections.
+    if ($mform->get_data()->deselectphaseexamreview) {
+        $misc->configoptions = array('noexamreview');
+    }
+
+    if (isset($misc->mode) || isset($misc->configoptions)) {
         $moduleinstance->misc = json_encode($misc);
     } else {
-        $moduleinstance->misc = NULL;
+        $moduleinstance->misc = null;
     }
 
     return $DB->update_record('exammanagement', $moduleinstance);
-
 }
 
 /**
@@ -134,23 +175,128 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
 function exammanagement_delete_instance($id) {
     global $DB;
 
-    // delete participants
-    if($DB->record_exists('exammanagement_participants', array('exammanagement' => $id))) {
-       $DB->delete_records('exammanagement_participants', array('exammanagement' => $id));
+    // Delete participants.
+    if ($DB->record_exists('exammanagement_participants', array('exammanagement' => $id))) {
+        $DB->delete_records('exammanagement_participants', array('exammanagement' => $id));
     }
 
-    // delete temporary participants
+    // Delete temporary participants.
     if ($DB->record_exists('exammanagement_temp_part', array('exammanagement' => $id))) {
         $DB->delete_records('exammanagement_temp_part', array('exammanagement' => $id));
     }
 
-    // delete plugin instance
+    // Delete plugin instance.
     if ($DB->record_exists('exammanagement', array('id' => $id))) {
         $DB->delete_records('exammanagement', array('id' => $id));
         return true;
     } else {
         return false;
     }
+}
+
+/**
+ * Implementation of the function for printing the form elements that control
+ * whether the course reset functionality affects the exammanagement.
+ *
+ * @param object $mform Form passed by reference.
+ */
+function exammanagement_reset_course_form_definition(&$mform) {
+    $mform->addElement('header', 'exammanagementheader', get_string('modulenameplural', 'exammanagement'));
+    $mform->addElement('checkbox', 'reset_exammanagement_data', get_string('deleteallexamdata', 'exammanagement'));
+    $mform->disabledif ('reset_exammanagement_data', 'reset_exammanagement_participantsdata', 'checked');
+
+    $mform->addElement('checkbox', 'reset_exammanagement_participantsdata', get_string('deleteexamparticipantsdata', 'exammanagement'));
+    $mform->disabledif ('reset_exammanagement_participantsdata', 'reset_exammanagement_data', 'checked');
+
+}
+
+/**
+ * Course reset form defaults.
+ *
+ * @param object $course
+ * @return array
+ */
+function exammanagement_reset_course_form_defaults($course) {
+    return array('reset_exammanagement_data' => 1, 'reset_exammanagement_participantsdata' => 0);
+}
+
+/**
+ * This function is used by the reset_course_userdata function in moodlelib.
+ * This function will remove all userdata from the specified exammanagement.
+ *
+ * @param object $data The data submitted from the reset course.
+ * @return array $status Status array.
+ */
+function exammanagement_reset_userdata($data) {
+    global $CFG, $DB;
+
+    require_once($CFG->libdir . '/filelib.php');
+
+    $modulename = get_string('modulenameplural', 'exammanagement');
+    $status = array();
+
+    // Get exammanagements in course that should be resetted.
+    $sql = "SELECT e.id
+                FROM {exammanagement} e
+                WHERE e.course = ?";
+
+    $params = array($data->courseid);
+
+    $exammanagements = $DB->get_records_sql($sql, $params);
+
+    // Delete all exammanagement data.
+    if (!empty($data->reset_exammanagement_data)) {
+
+        $DB->set_field_select('exammanagement', 'password', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'rooms', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examtime', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'importfileheaders', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'tempimportfileheader', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'tasks', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'textfield', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'assignmentmode', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datetimevisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'roomvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'placevisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'bonusvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'resultvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'gradingscale', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datadeletion', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'deletionwarningmailids', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewtime', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewroom', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'examreviewvisible', null, 'course = ?', $params);
+        $DB->set_field_select('exammanagement', 'datadeleted', null, 'course = ?', $params);
+
+        $status[] = array(
+            'component' => $modulename,
+            'item' => get_string('allexamdatadeleted', 'exammanagement'),
+            'error' => false
+        );
+    }
+
+    // Delete exam participants data.
+    if (!empty($data->reset_exammanagement_data) || !empty($data->reset_exammanagement_participantsdata) ) {
+        foreach ($exammanagements as $eid => $unused) {
+            if (!$cm = get_coursemodule_from_instance('exammanagement', $eid)) {
+                continue;
+            }
+
+            $DB->delete_records('exammanagement_participants', array('exammanagement' => $eid));
+        }
+
+        $status[] = array('component' => $modulename, 'item' => get_string('examparticipantsdatadeleted', 'exammanagement'), 'error' => false);
+    }
+
+    // Updating dates - shift may be negative too.
+    if ($data->timeshift) {
+        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
+        // See MDL-9367.
+        shift_course_mod_dates('exammanagement', array(), $data->timeshift, $data->courseid);
+        $status[] = array('component' => $modulename, 'item' => get_string('datechanged'), 'error' => false);
+    }
+
+    return $status;
 }
 
 /**
@@ -218,6 +364,116 @@ function exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $fo
 }
 
 /**
+ * Update the calendar entries for this exammanagement activity.
+ *
+ * @param stdClass $exammanagement the row from the database table exammanagement.
+ * @param int $cmid The coursemodule id
+ * @return bool
+ */
+function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
+    global $DB, $CFG;
+
+    require_once($CFG->dirroot.'/calendar/lib.php');
+
+    // Get CMID if not sent as part of $exammanagement.
+    if (! isset($exammanagement->coursemodule)) {
+        $cm = get_coursemodule_from_instance('exammanagement', $exammanagement->id, $exammanagement->course);
+        $exammanagement->coursemodule = $cm->id;
+    }
+
+    // Exam time calendar events.
+    $event = new stdClass();
+    $event->eventtype = EXAMMANAGEMENT_EVENT_TYPE_EXAMTIME;
+    $event->type = CALENDAR_EVENT_TYPE_STANDARD;
+
+    if ($event->id = $DB->get_field('event', 'id', array(
+        'modulename' => 'exammanagement',
+        'instance' => $exammanagement->id,
+        'eventtype' => $event->eventtype
+    ))) {
+
+        if ((! empty($exammanagement->examtime)) && ($exammanagement->examtime > 0)) {
+            // Calendar event exists so update it.
+            $event->name = get_string('examtime', 'exammanagement', $exammanagement->name);
+            $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
+            $event->timestart = $exammanagement->examtime;
+            $event->timesort = $exammanagement->examtime;
+            $event->visible = instance_is_visible('exammanagement', $exammanagement);
+            $event->timeduration = 0;
+
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event, false);
+        } else {
+            // Calendar event is no longer needed.
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->delete();
+        }
+    } else {
+        // Event doesn't exist so create one.
+        if ((! empty($exammanagement->examtime)) && ($exammanagement->examtime > 0)) {
+            $event->name = get_string('examtime', 'exammanagement', $exammanagement->name);
+            $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
+            $event->courseid = $exammanagement->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'exammanagement';
+            $event->instance = $exammanagement->id;
+            $event->timestart = $exammanagement->examtime;
+            $event->timesort = $exammanagement->examtime;
+            $event->visible = instance_is_visible('exammanagement', $exammanagement);
+            $event->timeduration = 0;
+
+            calendar_event::create($event, false);
+        }
+    }
+
+    // Exam review time calendar events.
+    $event = new stdClass();
+    $event->type = CALENDAR_EVENT_TYPE_STANDARD;
+    $event->eventtype = EXAMMANAGEMENT_EVENT_TYPE_EXAMREVIEWTIME;
+    if ($event->id = $DB->get_field('event', 'id', array(
+        'modulename' => 'exammanagement',
+        'instance' => $exammanagement->id,
+        'eventtype' => $event->eventtype
+    ))) {
+        if ((! empty($exammanagement->examreviewtime)) && ($exammanagement->examreviewtime > 0)) {
+            // Calendar event exists so update it.
+            $event->name = get_string('examreviewtime', 'exammanagement', $exammanagement->name);
+            $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
+            $event->timestart = $exammanagement->examreviewtime;
+            $event->timesort = $exammanagement->examreviewtime;
+            $event->visible = instance_is_visible('exammanagement', $exammanagement);
+            $event->timeduration = 0;
+
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event, false);
+        } else {
+            // Calendar event is on longer needed.
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->delete();
+        }
+    } else {
+        // Event doesn't exist so create one.
+        if ((! empty($exammanagement->examreviewtime)) && ($exammanagement->examreviewtime > 0)) {
+            $event->name = get_string('examreviewtime', 'exammanagement', $exammanagement->name);
+            $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
+            $event->courseid = $exammanagement->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'exammanagement';
+            $event->instance = $exammanagement->id;
+            $event->timestart = $exammanagement->examreviewtime;
+            $event->timesort = $exammanagement->examreviewtime;
+            $event->visible = instance_is_visible('exammanagement', $exammanagement);
+            $event->timeduration = 0;
+
+            calendar_event::create($event, false);
+        }
+    }
+    return true;
+}
+
+/**
  * Extends the global navigation tree by adding mod_exammanagement nodes if there is a relevant content.
  *
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
@@ -225,31 +481,18 @@ function exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $fo
  * @param navigation_node $exammanagementnode An object representing the navigation tree node.
  * @param  stdClass $course Course object
  * @param  context_course $coursecontext Course context
-*/
-
-function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
-		$modinfo = get_fast_modinfo($course); // get mod_fast_modinfo from $course
-		$index = 1;	//set index
-		foreach ($modinfo->get_cms() as $cmid => $cm) { //search existing course modules for this course
-			if ($cm->modname=="exammanagement" && $cm->uservisible && $cm->available) { //look if module (in this case exammanegement) exists, is uservisible and available
-				$url = new moodle_url("/mod/" . $cm->modname . "/view.php", array("id" => $cmid)); //set url for the link in the navigation node
-				$node = navigation_node::create($cm->name.' ('.get_string('modulename', 'exammanagement').')', $url, navigation_node::TYPE_CUSTOM,null , null , new pix_icon('barcode', $cm->name, 'mod_exammanagement'));
-				$exammanagementnode->add_node($node);
-				}
-			$index++;
-		}
-}
-
-/**
- * Extends the settings navigation with the mod_exammanagement settings.
- *
- * This function is called when the context for the page is a mod_exammanagement module.
- * This is not called by AJAX so it is safe to rely on the $PAGE.
- *
- * @param settings_navigation $settingsnav {@link settings_navigation}
- * @param navigation_node $exammanagementnode {@link navigation_node}
  */
-function exammanagement_extend_settings_navigation($settingsnav, $exammanagementnode = null) {
+function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
+    $modinfo = get_fast_modinfo($course); // Get mod_fast_modinfo from $course.
+    $index = 1; // Set index.
+    foreach ($modinfo->get_cms() as $cmid => $cm) { // Search existing course modules for this course.
+        if ($index == 1 && $cm->modname == "exammanagement" && $cm->uservisible && $cm->available) { // Look if module (in this case exammanagement) exists, is uservisible and available.
+            $url = new moodle_url("/mod/" . $cm->modname . "/index.php", array("id" => $course->id)); // Set url for the link in the navigation node.
+            $node = navigation_node::create(get_string('viewallexams', 'exammanagement'), $url, navigation_node::TYPE_CUSTOM, null , null , null);
+            $exammanagementnode->add_node($node);
+            $index++;
+        }
+    }
 }
 
 /**

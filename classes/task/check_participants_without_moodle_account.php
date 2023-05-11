@@ -18,7 +18,7 @@
  * A cron_task class for checking if participants without moodle account now have an account to be used by Tasks API.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,7 +27,7 @@ use mod_exammanagement\general\MoodleDB;
 
 require_once(__DIR__.'/../general/MoodleDB.php');
 
-class check_participants_without_moodle_account extends \core\task\scheduled_task { 
+class check_participants_without_moodle_account extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
      *
@@ -36,7 +36,7 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
     public function get_name() {
         return get_string('check_participants_without_moodle_account', 'mod_exammanagement');
     }
- 
+
     /**
      * Execute the task.
      */
@@ -45,17 +45,17 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
         $MoodleDBObj = MoodleDB::getInstance();
 
         // get all participants without moodle account
-        if($MoodleDBObj->checkIfRecordExists("exammanagement_participants", array('moodleuserid' => NULL))){
-            
+        if ($MoodleDBObj->checkIfRecordExists("exammanagement_participants", array('moodleuserid' => NULL))) {
+
             $NoneMoodleParticipants = $MoodleDBObj->getRecordsFromDB("exammanagement_participants", array('moodleuserid' => NULL));
 
-            foreach($NoneMoodleParticipants as $participant){
-                
-                if($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->login))){                 // check if none moodle participants have now moodle account
-                    
+            foreach ($NoneMoodleParticipants as $participant) {
+
+                if ($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->login))) {                 // check if none moodle participants have now moodle account
+
                     // if this is the case set moodle id instead of username and email
                     $user = $MoodleDBObj->getRecordFromDB('user', array('username'=>$participant->login));
-                    
+
                     $participant->moodleuserid = $user->id;
                     $participant->login = Null;
                     $participant->firstname = Null;
@@ -67,7 +67,7 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
 
 
             }
-            
+
             \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
 
         }

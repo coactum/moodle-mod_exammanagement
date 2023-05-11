@@ -18,7 +18,7 @@
  * class containing all wrapper functions for moodle methods for exammanagement
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,126 +29,133 @@ use core\output\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
-class Moodle{
+class Moodle {
 
 	protected $id;
 	protected $e;
 
 	private function __construct($id, $e) {
-		$this->id = $id;
-		$this->e = $e;
+        $this->id = $id;
+        $this->e = $e;
 
 	}
 
 	#### singleton class ######
 
-	public static function getInstance($id, $e){
+	public static function getInstance($id, $e) {
 
-		static $inst = null;
-			if ($inst === null) {
-				$inst = new Moodle($id, $e);
-			}
-			return $inst;
+        static $inst = null;
+        if ($inst === null) {
+            $inst = new Moodle($id, $e);
+        }
+
+        return $inst;
 
 	}
 
 	#### wrapped general moodle functions #####
 
-	public function setPage($substring){
-		global $PAGE;
+	public function setPage($substring) {
+        global $PAGE, $CFG;
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
+        require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
 
-		$url = $ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id);
-		
-		// Print the page header.
-		$PAGE->set_url($url);
-		$PAGE->set_title(get_string('modulename','mod_exammanagement').': '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
-		$PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
-		$PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
+        $url = $ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id);
 
-		$navbar = $PAGE->navbar->add(get_string($substring, 'mod_exammanagement'), $url);		
+        // Print the page header.
+        $PAGE->set_url($url);
+        $PAGE->set_title(get_string('modulename', 'mod_exammanagement').' - '.format_string($ExammanagementInstanceObj->getModuleinstance()->name));
+        $PAGE->set_heading(format_string($ExammanagementInstanceObj->getCourse()->fullname));
+        $PAGE->set_context($ExammanagementInstanceObj->getModulecontext());
 
-		/*
-		 * Other things you may want to set - remove if not needed.
-		 * $PAGE->set_cacheable(false);
-		 * $PAGE->set_focuscontrol('some-html-id');
-		 * $PAGE->add_body_class('newmodule-'.$somevar);
-		 */
+        if ($CFG->branch < 40) {
+        	$PAGE->force_settings_menu();
+        }
+
+        $navbar = $PAGE->navbar->add(get_string($substring, 'mod_exammanagement'), $url);
+
+        /*
+         * Other things you may want to set - remove if not needed.
+         * $PAGE->set_cacheable(false);
+         * $PAGE->set_focuscontrol('some-html-id');
+         * $PAGE->add_body_class('newmodule-'.$somevar);
+         */
 
 	}
 
-	public function outputPageHeader(){
-		global $OUTPUT;
+	public function outputPageHeader() {
+        global $OUTPUT, $CFG;
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		echo $OUTPUT->header();
+        echo $OUTPUT->header();
 
-		// set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
-		echo $OUTPUT->heading(get_string('maintitle', 'mod_exammanagement'));
+        if ($CFG->branch < 40) {
+            // set basic content (to be moved to renderer that has to define which usecas it is (e.g. overview, subpage, debug infos etc.)
+            echo $OUTPUT->heading(get_string('modulename', 'mod_exammanagement') . ': ' . format_string($exammanagementinstanceobj->getModuleinstance()->name));
 
-		// Conditions to show the intro can change to look for own settings or whatever.
- 		if ($ExammanagementInstanceObj->getModuleinstance()->intro) {
-     		echo $OUTPUT->box(format_module_intro('exammanagement', $ExammanagementInstanceObj->getModuleinstance(), $ExammanagementInstanceObj->getCm()->id), 'generalbox mod_introbox', 'newmoduleintro');
- 		}
+            // Conditions to show the intro can change to look for own settings or whatever.
+            if ($exammanagementinstanceobj->getModuleinstance()->intro) {
+                echo $OUTPUT->box(format_module_intro('exammanagement', $exammanagementinstanceobj->getModuleinstance(), $exammanagementinstanceobj->getCm()->id), 'generalbox mod_introbox', 'newmoduleintro');
+            }
+        }
  	}
 
- 	public function outputFooter(){
+ 	public function outputFooter() {
 
- 		global $OUTPUT;
+         global $OUTPUT;
 
-		// Finish the page.
-		echo $OUTPUT->footer();
+        // Finish the page.
+        echo $OUTPUT->footer();
 
  	}
 
-	public function getMoodleUrl($url, $id = '', $param = '', $value = ''){
+	public function getMoodleUrl($url, $id = '', $param = '', $value = '') {
 
- 		$url = new moodle_url($url, array('id' => $id, $param => $value));
+         $url = new moodle_url($url, array('id' => $id, $param => $value));
 
- 		return $url;
+         return $url;
  	}
 
- 	public function redirectToOverviewPage($anchor, $message, $type){
+ 	public function redirectToOverviewPage($anchor, $message, $type) {
 
-		$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-		$url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
+        $url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
 
-		if ($anchor){
-				$url .= '#'.$anchor;
-		}
+        if ($anchor) {
+            $url .= '#'.$anchor;
+        }
 
-		switch ($type) {
-    		case 'success':
-        		redirect ($url, $message, null, notification::NOTIFY_SUCCESS);
-        		break;
-    		case 'warning':
-        		redirect ($url, $message, null, notification::NOTIFY_WARNING);
-        		break;
-    		case 'error':
-        		redirect ($url, $message, null, notification::NOTIFY_ERROR);
-        		break;
-        	case 'info':
-        		redirect ($url, $message, null, notification::NOTIFY_INFO);
-        		break;
-        	default:
-        		redirect ($url, $message, null, notification::NOTIFY_ERROR);
-        		break;
-		}
-	}
+        switch ($type) {
+            case 'success':
+                redirect ($url, $message, null, notification::NOTIFY_SUCCESS);
+                break;
+            case 'warning':
+                redirect ($url, $message, null, notification::NOTIFY_WARNING);
+                break;
+            case 'error':
+                redirect ($url, $message, null, notification::NOTIFY_ERROR);
+                break;
+            case 'info':
+                redirect ($url, $message, null, notification::NOTIFY_INFO);
+                break;
+            default:
+                redirect ($url, $message, null, notification::NOTIFY_ERROR);
+              break;
+        }
+    }
 
-	public function checkCapability($capname){
-			$ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
+	public function checkCapability($capname) {
+         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
 
-			if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())){
-					return true;
-			} else {
-					return false;
-			}
+         if (has_capability($capname, $ExammanagementInstanceObj->getModulecontext())) {
+       		return true;
+        } else {
+			return false;
+        }
 	}
 
 }

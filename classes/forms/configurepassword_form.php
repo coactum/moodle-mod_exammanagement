@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing configurePasswordForm for exammanagement
+ * The form for configuring a password for the mod_exammanagement instance.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,52 +29,60 @@ use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
-//moodleform is defined in formslib.php
-global $CFG, $SESSION;
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
-class configurePasswordForm extends moodleform {
+/**
+ * The form for configuring a password for the mod_exammanagement instance.
+ *
+ * @package     mod_exammanagement
+ * @copyright   2022 coactum GmbH
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class configurepassword_form extends moodleform {
 
-    //Add elements to form
+    /**
+     * Define the form - called by parent constructor
+     */
     public function definition() {
-
-        global $OUTPUT;
 
         $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $MoodleObj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
-        $mform = $this->_form; // Don't forget the underscore!
+        $mform = $this->_form;
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
         $mform->addElement('html', '<div class="row"><div class="col-6"><h3>'.get_string('configurePassword', 'mod_exammanagement'));
 
-        if($helptextsenabled){
+        if ($helptextsenabled) {
+            global $OUTPUT;
+
             $mform->addElement('html', $OUTPUT->help_icon('configurePassword', 'mod_exammanagement', ''));
         }
 
         $mform->addElement('html', '</h3></div><div class="col-6">');
 
-        if($ExammanagementInstanceObj->getModuleinstance()->password){
+        if ($ExammanagementInstanceObj->getModuleinstance()->password) {
             $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/configurePassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
 
-        $mform->addElement('html', '<p>'.get_string('configure_password', 'mod_exammanagement').'</p>');
+        $mform->addElement('html', '<p>' . get_string('configure_password', 'mod_exammanagement') . '</p>');
 
-        $mform->addElement('hidden', 'id', 'dummy');
+        $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $attributes=array('size'=>'20');
+        $attributes = array('size' => '20');
 
  		$mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-        $mform->addElement('password', 'confirm_password', get_string('confirm_password', 'mod_exammanagement'), $attributes);
+        $mform->addElement('password', 'confirm_password', get_string('confirmpassword', 'mod_exammanagement'), $attributes);
         $mform->setType('confirm_password', PARAM_TEXT);
         $mform->addRule('confirm_password', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
@@ -82,14 +90,14 @@ class configurePasswordForm extends moodleform {
 
     }
 
-    //Custom validation should be added here
+    // Custom validation.
     function validation($data, $files) {
         $errors= array();
 
-        if($data['password'] === '' || $data['password'] === ' ' || $data['password'] === '0' || $data['password'] === 0){
+        if ($data['password'] === '' || $data['password'] === ' ' || $data['password'] === '0' || $data['password'] === 0) {
             $errors['password'] = get_string('err_novalidpassword', 'mod_exammanagement');
-        } else if($data['password'] && $data['confirm_password']){
-            if(strcmp($data['password'], $data['confirm_password']) !== 0){
+        } else if ($data['password'] && $data['confirm_password']) {
+            if (strcmp($data['password'], $data['confirm_password']) !== 0) {
                 $errors['password'] = get_string('err_password_incorrect', 'mod_exammanagement');
                 $errors['confirm_password'] = get_string('err_password_incorrect', 'mod_exammanagement');
             }

@@ -18,13 +18,13 @@
  * Allows teacher to convert participants of mod_exammanagement to moodle group.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2020
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\convertToGroupForm;
+use mod_exammanagement\forms\converttogroup_form;
 use stdclass;
 
 require(__DIR__.'/../../config.php');
@@ -41,25 +41,22 @@ $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleDBObj = MoodleDB::getInstance();
 $UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-	if($ExammanagementInstanceObj->isExamDataDeleted()){
+	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
         $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
 	} else if (!$UserObj->getParticipantsCount()) {
 		$MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
 	} else {
 
-		if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
-
-			$MoodleObj->setPage('convertToGroup');
-			$MoodleObj->outputPageHeader();
+		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 			$moodleParticipants = $UserObj->getExamParticipants(array('mode'=>'moodle'), array('matrnr', 'profile', 'groups'));
 
 			$noneMoodleParticipants = $UserObj->getExamParticipants(array('mode'=>'nonmoodle'), array('matrnr'));
 
 			# Instantiate form #
-			$mform = new convertToGroupForm(null, array('id'=>$id, 'e'=>$e, 'moodleParticipants' => $moodleParticipants, 'noneMoodleParticipants' => $noneMoodleParticipants));
+			$mform = new converttogroup_form(null, array('id'=>$id, 'e'=>$e, 'moodleParticipants' => $moodleParticipants, 'noneMoodleParticipants' => $noneMoodleParticipants));
 
 			// Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
@@ -76,10 +73,10 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				$countFailed = 0;
 				$newgroupid = false;
 
-				if(!empty($participantsIds)){
+				if (!empty($participantsIds)) {
 					require_once($CFG->dirroot.'/group/lib.php');
 
-					if($fromform->groups === 'new_group'){
+					if ($fromform->groups === 'new_group') {
 
 						$data = new stdClass();
 						$data->courseid = $ExammanagementInstanceObj->getCourse()->id;
@@ -89,16 +86,16 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 
 						$newgroupid = groups_create_group($data);
 
-						foreach($participantsIds as $moodleuserid){
-							if(groups_add_member($newgroupid, $moodleuserid)){
+						foreach ($participantsIds as $moodleuserid) {
+							if (groups_add_member($newgroupid, $moodleuserid)) {
 							$countSuccess +=1;
 							} else {
 								$countFailed +=1;
 							}
 						}
 					} else {
-						foreach($participantsIds as $moodleuserid){
-							if(groups_add_member($fromform->groups, $moodleuserid)){
+						foreach ($participantsIds as $moodleuserid) {
+							if (groups_add_member($fromform->groups, $moodleuserid)) {
 							$countSuccess +=1;
 							} else {
 								$countFailed +=1;
@@ -109,7 +106,7 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				}
 
 				# redirect #
-				if((($fromform->groups === 'new_group' && $newgroupid) || $fromform->groups !== 'new_group') && $countFailed ===0 && $countSuccess>0){
+				if ((($fromform->groups === 'new_group' && $newgroupid) || $fromform->groups !== 'new_group') && $countFailed ===0 && $countSuccess>0) {
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 				} else {
 					redirect ($ExammanagementInstanceObj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
@@ -121,8 +118,8 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				# set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants) #
 				$default_values = array('id'=>$id);
 
-				if(isset($moodleParticipants)){
-					foreach($moodleParticipants as $participant){
+				if (isset($moodleParticipants)) {
+					foreach ($moodleParticipants as $participant) {
 						$default_values['participants['.$participant->moodleuserid.']'] = true;
 					}
 				}
@@ -130,14 +127,17 @@ if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
 				//Set default data (if any)
 				$mform->set_data($default_values);
 
-				//displays the form
+				$MoodleObj->setPage('convertToGroup');
+				$MoodleObj->outputPageHeader();
+
 				$mform->display();
+
+				$MoodleObj->outputFooter();
+
 			}
 
-			$MoodleObj->outputFooter();
-
 		} else { // if user hasnt entered correct password for this session: show enterPasswordPage
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
 		}
 	}
 } else {

@@ -18,15 +18,16 @@
  * Prints participantsOverview form for mod_exammanagement.
  *
  * @package     mod_exammanagement
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\forms\participantsOverviewForm;
+use mod_exammanagement\forms\participantsoverview_form;
 use mod_exammanagement\ldap\ldapManager;
 use stdClass;
+use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -42,143 +43,154 @@ $bpne  = optional_param('bpne', 1, PARAM_INT);
 
 $epm = optional_param('epm', 0, PARAM_INT);
 
-$MoodleDBObj = MoodleDB::getInstance();
-$MoodleObj = Moodle::getInstance($id, $e);
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
-$LdapManagerObj = ldapManager::getInstance();
+// Active page.
+$pagenr  = optional_param('page', 1, PARAM_INT);
 
-if($MoodleObj->checkCapability('mod/exammanagement:viewinstance')){
+$moodledbobj = MoodleDB::getInstance();
+$moodleobj = Moodle::getInstance($id, $e);
+$exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
+$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$ldapmanagerobj = ldapManager::getInstance();
 
-    if($ExammanagementInstanceObj->isExamDataDeleted()){
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
-        if(!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))){ // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
-            if(!$UserObj->getParticipantsCount()){
-                $MoodleObj->redirectToOverviewPage('beforeexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+    if ($exammanagementinstanceobj->isExamDataDeleted()) {
+        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+    } else {
+        if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+
+            if (!$userobj->getParticipantsCount()) {
+                $moodleobj->redirectToOverviewPage('beforeexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
             }
 
-            $MoodleObj->setPage('participantsOverview');
-            $MoodleObj->outputPageHeader();
-
-            //Instantiate Form
-            if($epm){
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e, 'epm'=>$epm));
+            // Instantiate Form.
+            if ($epm) {
+                $mform = new participantsoverview_form(null, array('id' => $id, 'e' => $e, 'epm' => $epm, 'pagenr' => $pagenr));
             } else {
-                $mform = new participantsOverviewForm(null, array('id'=>$id, 'e'=>$e));
+                $mform = new participantsoverview_form(null, array('id' => $id, 'e' => $e, 'pagenr' => $pagenr));
             }
 
-            //Form processing and displaying is done here
+            // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
-                //Handle form cancel operation, if cancel button is present on form
-                redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $ExammanagementInstanceObj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+                // Handle form cancel operation, if cancel button is present on form
+                redirect ($exammanagementinstanceobj->getExammanagementUrl('participantsOverview', $exammanagementinstanceobj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
             } else if ($fromform = $mform->get_data()) {
-                //In this case you process validated data. $mform->get_data() returns data posted in form.
+                // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array());
-                $updatedCount = 0;
+                $participants = $userobj->getExamParticipants(array('mode' => 'all'), array());
+                $updatedcount = 0;
 
-                foreach($participants as $participant){
-                    if($ExammanagementInstanceObj->moduleinstance->misc === NULL){
-                        if(isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set'){
-                            switch ($fromform->state[$participant->id]){
-                                case 'normal':
-                                    $examstate = new stdClass;
-                                    $examstate->nt = "0";
-                                    $examstate->fa = "0";
-                                    $examstate->ill = "0";
-                                    break;
-                                case 'nt':
-                                    $examstate = new stdClass;
-                                    $examstate->nt = "1";
-                                    $examstate->fa = "0";
-                                    $examstate->ill = "0";
-                                    break;
-                                case 'fa':
-                                    $examstate = new stdClass;
-                                    $examstate->nt = "0";
-                                    $examstate->fa = "1";
-                                    $examstate->ill = "0";
-                                    break;
-                                case 'ill':
-                                    $examstate = new stdClass;
-                                    $examstate->nt = "0";
-                                    $examstate->fa = "0";
-                                    $examstate->ill = "1";
-                                    break;
-                                default:
-                                    break;
+                foreach ($participants as $participant) {
+                    if (isset($fromform->state[$participant->id]) || isset($fromform->bonuspoints[$participant->id]) || isset($fromform->bonussteps[$participant->id]) || isset($fromform->bonuspoints_entered[$participant->id])) {
+                        $oldparticipant = clone $participant;
+
+                        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+                        if (!isset($misc['mode'])) {
+                            if (isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set') {
+                                switch ($fromform->state[$participant->id]) {
+                                    case 'normal':
+                                        $examstate = new stdClass;
+                                        $examstate->nt = "0";
+                                        $examstate->fa = "0";
+                                        $examstate->ill = "0";
+                                        break;
+                                    case 'nt':
+                                        $examstate = new stdClass;
+                                        $examstate->nt = "1";
+                                        $examstate->fa = "0";
+                                        $examstate->ill = "0";
+                                        break;
+                                    case 'fa':
+                                        $examstate = new stdClass;
+                                        $examstate->nt = "0";
+                                        $examstate->fa = "1";
+                                        $examstate->ill = "0";
+                                        break;
+                                    case 'ill':
+                                        $examstate = new stdClass;
+                                        $examstate->nt = "0";
+                                        $examstate->fa = "0";
+                                        $examstate->ill = "1";
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                $participant->examstate = json_encode($examstate);
+
+                                if ($fromform->points[$participant->id]) { // if participants points were not empty
+                                    $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                                }
+
+                            } else {
+                                $participant->examstate = null;
+                                $participant->exampoints = null;
                             }
 
-                            $participant->examstate = json_encode($examstate);
-
-                            if($fromform->points[$participant->id]){ // if participants points were not empty
-                                $participant->exampoints = json_encode($fromform->points[$participant->id]);
+                            if ($fromform->bonussteps[$participant->id] !== '-') {
+                                $participant->bonussteps = $fromform->bonussteps[$participant->id];
+                                $participant->bonuspoints = null;
+                            } else if ($fromform->bonuspoints_entered[$participant->id] === 1 && $fromform->bonuspoints[$participant->id] !== 0) {
+                                $participant->bonussteps = null;
+                                $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                            } else {
+                                $participant->bonussteps = null;
+                                $participant->bonuspoints = null;
                             }
 
                             $participant->timeresultsentered = time();
 
                         } else {
-                            $participant->examstate = NULL;
-                            $participant->exampoints = NULL;
+                            if ($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])) {
+                                $participant->timeresultsentered = time();
+                                $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                            }
                         }
 
-                        if($fromform->bonussteps[$participant->id] !== '-'){
-                            $participant->bonussteps = $fromform->bonussteps[$participant->id];
-                            $participant->bonuspoints = NULL;
-                        } else if($fromform->bonuspoints_entered[$participant->id] === 1 && $fromform->bonuspoints[$participant->id] !== 0){
-                            $participant->bonussteps = NULL;
-                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
-                        } else {
-                            $participant->bonussteps = NULL;
-                            $participant->bonuspoints = NULL;
+                        if (isset($participant->moodleuserid)) {
+                            $participant->login = null;
+                            $participant->firstname = null;
+                            $participant->lastname = null;
                         }
 
-                    } else {
-                        if($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])){
-                            $participant->timeresultsentered = time();
-                            $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
+                        unset($participant->matrnr);
+
+                        if ($oldparticipant->examstate != $participant->examstate || $oldparticipant->exampoints != $participant->exampoints
+                        || $oldparticipant->bonuspoints != $participant->bonuspoints || $oldparticipant->bonussteps != $participant->bonussteps) {
+
+                            if ($moodledbobj->UpdateRecordInDB('exammanagement_participants', $participant)) {
+                                $updatedcount += 1;
+                            }
                         }
                     }
-
-                    if(isset($participant->moodleuserid)){
-                        $participant->login = NULL;
-                        $participant->firstname = NULL;
-                        $participant->lastname = NULL;
-                    }
-
-                    unset($participant->matrnr);
-
-                    if($MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participant)){
-                        $updatedCount += 1;
-                    }
-
                 }
 
-                if($updatedCount){
-                    $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+                if ($updatedcount) {
+                    $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                    redirect ($exammanagementinstanceobj->getExammanagementUrl('participantsOverview', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    redirect ($ExammanagementInstanceObj->getExammanagementUrl('participantsOverview', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+                    redirect ($exammanagementinstanceobj->getExammanagementUrl('participantsOverview', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
                 }
 
             } else {
-                // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
-                $mform->set_data(array('id'=>$id));
+                $mform->set_data(array('id' => $id));
 
-                //displays the form
+                $moodleobj->setPage('participantsOverview');
+                $moodleobj->outputPageHeader();
+
                 $mform->display();
+
+                $moodleobj->outputFooter();
             }
 
-            $MoodleObj->outputFooter();
-        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkPassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+        } else { // If user hasnt entered correct password for this session: show enterPasswordPage.
+            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
         }
     }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
 }

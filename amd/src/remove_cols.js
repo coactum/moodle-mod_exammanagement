@@ -14,29 +14,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Removes form classes col-md 3 and 9 for better layout
+ * Removes form classes col-md 3 and 9 for better layout.
  *
  * @module      mod_exammanagement/remove_cols
  * @copyright   coactum GmbH 2020
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery'], function ($) {
+import $ from 'jquery';
 
-    return {
-        remove_cols: function () {
-            $(".checkboxgroup1 > div").removeClass('col-md-3');
-            $(".checkboxgroup1 > div").removeClass('col-md-9');
-            $(".checkboxgroup1").removeClass('row');
+export const remove_cols = () => {
 
-            $(".checkboxgroup2 > div").removeClass('col-md-3');
-            $(".checkboxgroup2 > div").removeClass('col-md-9');
-            $(".checkboxgroup2").removeClass('row');
+    $(".checkboxgroup1 > div").removeClass('col-md-3');
+    $(".checkboxgroup1 > div").removeClass('col-md-9');
+    $(".checkboxgroup1").removeClass('row');
 
-            $(".checkboxgroup3 > div").removeClass('col-md-3');
-            $(".checkboxgroup3 > div").removeClass('col-md-9');
-            $(".checkboxgroup3").removeClass('row');
-        }
-    };
+    $(".checkboxgroup2 > div").removeClass('col-md-3');
+    $(".checkboxgroup2 > div").removeClass('col-md-9');
+    $(".checkboxgroup2").removeClass('row');
 
-});
+    $(".checkboxgroup3 > div").removeClass('col-md-3');
+    $(".checkboxgroup3 > div").removeClass('col-md-9');
+    $(".checkboxgroup3").removeClass('row');
+};

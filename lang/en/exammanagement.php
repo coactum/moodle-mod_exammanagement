@@ -19,13 +19,13 @@
  *
  * @package     mod_exammanagement
  * @category    string
- * @copyright   coactum GmbH 2019
+ * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-//exammanagement_participantsview.mustache - can be seen on /view.php as participant
+// exammanagement_participantsview.mustache - can be seen on /view.php as participant
 $string['examinformation'] = 'Information on the exam';
 $string['state'] = 'State';
 $string['no_participant'] = 'You are not registered for the exam.';
@@ -51,13 +51,12 @@ $string['exam_review'] = 'Exam review';
 $string['exam_review_added'] = 'The correction of the exam has now been completed. On <strong>{$a->examreviewtime}</strong> there will be the exam review in room <strong>{$a->examreviewroom}</strong>.';
 $string['examdata_deleted'] = 'The exam that has taken place on <strong>{$a}</strong> is now completed.';
 
-//exammanagement_overview.mustache - can be seen on /view.php as lecturer
-$string['maintitle'] = 'Exam management';
+// exammanagement_overview.mustache - can be seen on /view.php as lecturer
 $string['view'] = 'Overview';
 $string['js_confirm_correction_completion'] = 'This action completes the correction phase. You then have 3 months to export all exam results before they are irretrievably deleted for data protection reasons.';
 $string['data_deleted'] = 'For data protection reasons, the exam data of all participants in this exam organization were deleted three months after completion of the correction phase. This exam organization can therefore no longer be used; only the basic data of the exam can still be viewed.';
 
-//exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
+// exammanagement_overview.mustache phases - can be seen on /view.php as lecturer
 $string['phase_one'] = 'Pre-exam organization';
 $string['phase_two'] = 'Exam organization';
 $string['phase_three'] = 'Exam results';
@@ -121,8 +120,8 @@ $string['participantsOverview_grades_help'] = 'In this <strong>grading overview<
 After clicking on the "Edit grades" button, grades can be entered manually for each participant (both as points or grade values) or already entered grades can be edited. With the help of the TAB key it is possible to switch between the individual participants, while a click on the corresponding button saves all changes made, just like pressing the Enter key.<br><br>
 If a gradingscale has already been entered, the imported grading points are automatically converted into a grade, which can then be exported later. If no gradingscale has been entered (for example, because the gradings have already been imported as grades), these will be exported later instead.';
 $string['participantsOverview_grades'] = 'Participants and results list';
-$string['importBonus_grades_help']= '<strong>Grading points</strong> (for example earned from exercises) can be imported here.
-Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+$string['importBonus_grades_help'] = '<strong>Grading points</strong> (for example earned from exercises) can be imported here.
+Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
 Finally you have to select the file with the grading points you want to import and then click on the "Import file" button to import the points.';
 $string['importBonus_grades'] = 'Import grades';
 $string['edit_grades'] = 'Edit grades';
@@ -150,7 +149,6 @@ $string['important_note'] = 'Please note:';
 $string['note'] = 'Note:';
 $string['exam_rooms_set'] = '<strong> {$a->roomscount} rooms</strong> with <strong> {$a->totalseatscount} places</strong> in total have been selected as exam rooms:';
 $string['exam_rooms_not_set'] = 'No rooms have been selected for the exam yet.';
-$string['at'] = 'at';
 $string['deleted_room'] = 'Deleted room';
 $string['exam_date_set'] = 'The exam takes place on <strong>{$a}</strong>.';
 $string['exam_date_not_set'] = 'No date and time have been set for the exam yet.';
@@ -167,7 +165,7 @@ $string['not_all_places_assigned_yet'] = 'Some participants have not yet been as
 $string['export_seatingplan_str'] = 'Here the seating plan can be exported as a PDF document sorted by place or by matriculation number.';
 $string['information_visible'] = 'The information was made visible to the participants.';
 $string['information_not_visible'] = 'The information has not been made visible to the participants yet.';
-$string['export_examlabels_str'] = 'Here exam labels can be exported as barcodes.';
+$string['export_examlabels_str'] = 'Here exam labels with barcodes or qrcodes can be exported.';
 $string['export_examlabels_note'] = 'Seats only appear on the exam labels if seats have been assigned to all participants of the exam.';
 $string['export_participantslists_str'] = 'Here you can export participant lists sorted by last name or seats as a PDF document.';
 $string['export_participantslists_note'] = 'These lists are only intended for internal use by the lecturers and should not be published because of data protection reasons!';
@@ -211,13 +209,14 @@ $string['assign_places'] = 'Assign seats automatically';
 $string['assign_places_manually'] = 'Assign seats manually';
 $string['export_seatingplan_place'] = 'Sorted by place';
 $string['export_seatingplan_matrnr'] = 'Sorted by matriculation number';
-$string['export_barcodes'] = 'Export barcodes';
+$string['export_barcodes'] = 'With barcodes';
+$string['export_qrcodes'] = 'With QR codes';
 $string['export_participantslist_names'] = 'Sorted by names';
 $string['export_participantslist_places'] = 'Sorted by places';
 $string['import_bonus'] = 'Import bonus';
 $string['configure_gradingscale'] = 'Configure gradingscale';
 $string['add_examresults_manually'] = 'Add results manually';
-$string['add_examresults_barcode'] = 'Add results with barcode scanner';
+$string['add_examresults_barcode'] = 'Add results (QR or barcode)';
 $string['check_results'] = 'Check results';
 $string['export_as_pdf'] = 'Export PDF';
 $string['export_as_excel'] = 'Export excel file';
@@ -226,21 +225,21 @@ $string['examreview_dateroom'] = 'Set date and room for exam review';
 $string['change_examresults'] = 'Change exam results';
 $string['available_places'] = 'Available places';
 
-//configurePasswordForm.php
+// configurepassword_form.php
 $string['configurePassword'] = 'Configure password';
-$string['configure_password'] = 'This page allows setting and modifying the password for the exam management';
+$string['configure_password'] = 'This page allows setting and modifying the password for the exam organization';
 $string['password'] = 'Password';
 $string['reset_password'] = 'Reset password';
 
-//checkPasswordForm.php
-$string['checkPassword'] = 'Enter password';
-$string['checkPasswordAdmin'] = 'Enter password';
-$string['check_password'] = 'A password for this exam organization was set by the lecturer. You have to enter it below to gain access.';
-$string['confirm_password'] = 'Confirm password';
-$string['reset_password_admin'] = 'Reset password and inform all teachers';
-$string['request_password_reset'] = 'Request password reset via support';
+// checkpasswordForm.php
+$string['checkpassword'] = 'Enter password';
+$string['checkpasswordadmin'] = 'Enter password';
+$string['checkpasswordstr'] = 'A password for this exam organization was set by the lecturer. You have to enter it below to gain access.';
+$string['confirmpassword'] = 'Confirm password';
+$string['resetpasswordadmin'] = 'Reset password and inform all teachers';
+$string['requestpasswordreset'] = 'Request password reset via support';
 
-//checkPassword.php
+//checkpassword.php
 $string['wrong_password'] = 'Wrong password. Please retry.';
 $string['password_reset_successfull'] = 'The password of the exam organization was successfully reset and all lecturers of the {$a->systemname} course were informed about this via {$a->systemname} message.';
 $string['password_reset_failed'] = 'Password reset failed due to missing permissions.';
@@ -251,7 +250,7 @@ $string['password_reset_mailtext'] = 'Der {$a->systemname} Support hat wie angef
 $string['password_reset_request_mailsubject'] = '{$a->systemname} Prüfungsorganisation: Anforderung eines Passwort-Resets für die Prüfungsorganisation "{$a->name}" im Kurs "{$a->coursename}"';
 $string['password_reset_request_mailtext'] = 'Der bzw. die {$a->systemname} Benutzerin {$a->user} hat das Zurücksetzen des Passwortes für die Prüfungsorganisation im Kurs "{$a->coursename}" beantragt. <br> Durch einen Klick auf diesen <b><a href="{$a->url}">Link</a></b> können Sie als in {$a->systemname} angemeldeter Benutzer mit der Rolle Admin, Manager oder Kursverwalter das Passwort der Prüfungsorganisation zurücksetzen. Dadurch können sämtliche Lehrenden des Kurses wieder ohne Eingabe eines Passwortes auf die Inhalt der Prüfungsorganisation zugreifen und werden darüber automatisch per Mail informiert.';
 
-//chooseRoomsForm.php
+// chooserooms_form.php
 $string['chooseRooms'] = 'Select exam rooms';
 $string['choose_rooms_str'] = 'The following rooms can be chosen as exam rooms.';
 $string['export_default_rooms'] = 'Export default rooms';
@@ -262,7 +261,6 @@ $string['roomid'] = 'Room ID';
 $string['exam_room'] = 'Room';
 $string['description'] = 'Description';
 $string['room_type'] = 'Room type';
-$string['options'] = 'Options';
 $string['no_seatingplan_available'] = 'No seating plan available';
 $string['default_room'] = 'Default room';
 $string['custom_room'] = 'Custom room';
@@ -280,8 +278,8 @@ $string['room_deselected_as_examroom'] = 'The room must first be deselected as a
 $string['default_exam_rooms'] = 'Default exam rooms';
 $string['no_default_rooms'] = 'No default exam rooms available';
 
-//addDefaultRoomsForm.php
-$string['addDefaultRooms'] = 'Import default rooms';
+// importdefaultrooms_form.php
+$string['importDefaultRooms'] = 'Import default rooms';
 $string['import_default_rooms_str'] = 'Here, administrators can import the standard rooms available to all lecturers as possible exam rooms from a text file.';
 $string['default_rooms_already_exists'] = '<strong>Warning:</strong> Default rooms have already been imported. These are overwritten by the new import.';
 $string['default_rooms_file_structure'] = 'Import of default rooms from text file (.txt). <br><strong>Structure</strong>: One exam room per line. First column system-internal room id (roomname_variant; e.g. Audimax_2), second column user-visible room name (e.g. Audimax), third column user-visible description including number of free and total seats (e.g. 2 free seats, 56 total seats), fourth column for calculating the number of seats required array with the label of each individual seat in json syntax (e.g. ["R/R01/P07", "R/R01/P04", "R/R01/P01"] ), fifth column source code of an SVG file with the room plan to show it to users (if available, otherwise leave empty). Room properties separated by the symbol * . <i>Example:</i> AudiMax_1*AudiMax*1 place free, 3 places total*["R/R01/P01","R/R02/P01","R/R02/P03"]*< svg>...< /svg>';
@@ -328,21 +326,20 @@ $string['defaultroom_svg'] = 'Seating plan (text file (.txt) with the source cod
 //editDefaultRoom.php
 $string['no_editable_default_room'] = 'No editable default room because the room is a custom room created by a lecturer';
 
-//setDateTimeForm.php
-$string['setDateTime'] = 'Set exam date and time';
-$string['set_date_time_str'] = 'The date and time of the exam can be selected here.';
+// setexamdate.php
+$string['setexamdate'] = 'Set exam date and time';
+$string['setexamdatestr'] = 'The date and time of the exam can be selected here.';
 
 //viewParticipants.php
 $string['viewParticipants'] = 'View participants';
-$string['import_participants_from_file_recommended'] = 'Import participants from file (recommended)';
-$string['import_course_participants_optional'] = 'Import participants from course (optional)';
+$string['import_participants_from_file_recommended'] = 'Import participants from file';
+$string['import_course_participants_optional'] = 'Import participants from course';
 $string['view_added_partipicants'] = 'List of all participants added to the exam.';
 $string['participants'] = 'Participants';
 $string['matriculation_number'] = 'Matriculation number';
 $string['course_groups'] = 'Groups in course';
 $string['import_state'] = 'State';
 $string['state_added_to_exam'] = 'Participant of exam';
-$string['participants_with_special_state'] = 'Participants with special state';
 $string['state_added_to_exam_no_moodle'] = 'Participant of exam (without {$a->systemname} account)';
 $string['state_added_to_exam_no_moodle_help'] = 'This participant must log in to the system at least once to view the exam information in his participant view. He also cannot receive group messages sent via the exam organization and cannot be added to course groups.';
 $string['state_added_to_exam_no_course'] = 'Participant of exam (no course participant)';
@@ -364,13 +361,13 @@ $string['groupdescription'] = 'Description of the group';
 $string['group'] = 'Group';
 $string['new_group'] = 'New group';
 
-//addParticipantsForm.php
+// addparticipants_form.php
 $string['import_participants_from_file'] = 'Import participants from files';
 $string['import_from_text_file'] = 'Import participants from files (entries separated by tabs; first two lines are reserved for exam information and will not be used).';
 $string['read_file'] = 'Read files';
 $string['addParticipants'] = 'Import participants';
 $string['import_new_participants'] = 'Import other participants';
-$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned.  If new exam participants are added, new seats must be assigned to them.';
+$string['places_already_assigned_participants'] = '<strong>Warning:</strong> Seats have already been assigned. If new exam participants are added, new seats must be assigned to them.';
 $string['newmatrnr'] = 'Users will be added to exam.';
 $string['badmatrnr'] = 'Users can not be added to exam (invalid matriculation numbers)!';
 $string['oddmatrnr'] = 'Users with warnings will be added to exam.';
@@ -395,7 +392,7 @@ $string['state_convertable_group'] = 'Assignable to group';
 $string['state_not_convertable_group_moodle'] = 'Not assignable (without {$a->systemname} account)';
 $string['state_not_convertable_group_course'] = 'Not assignable (no course participant)';
 
-//addCourseParticipantsForm.php
+// addcourseparticipants_form.php
 $string['addCourseParticipants'] = 'Import participants from course';
 $string['state_courseparticipant'] = 'Participant of course';
 $string['view_added_and_course_partipicants'] = 'List of all course participants and all participants added to the exam.';
@@ -409,16 +406,16 @@ $string['configure_tasks_text'] = 'Define the quantity of tasks and their maximu
 $string['add_remove_tasks'] = 'Add or remove tasks';
 $string['task'] = 'Task';
 $string['points'] = 'Points';
-$string['total'] = 'Total';
+$string['total'] = 'Total points';
 $string['results_already_entered'] = '<strong>Warning:</strong> Some exam results have already been entered. After changing the tasks, you should check whether they may need to be updated.';
 $string['gradingscale_already_entered'] = '<strong>Warning:</strong> The gradingscale for the exam has already been entered. After changing the tasks, you should check if it needs to be updated.';
 
-//setTextfieldForm.php
-$string['setTextfield'] = 'Add textfield';
-$string['content_of_textfield'] = 'Content of textfield';
-$string['add_text_text'] = 'Any information for the exam can be entered here as <strong>free text</strong>, which is immediately displayed to the participants after saving.';
+// textfield_form.php
+$string['settextfield'] = 'Add textfield';
+$string['contentoftextfield'] = 'Content of textfield';
+$string['settextfieldstr'] = 'Any information for the exam can be entered here as <strong>free text</strong>, which is immediately displayed to the participants after saving.';
 
-//sendGroupmessageForm.php
+// sendgroupmessage_form.php
 $string['sendGroupmessage'] = 'Send groupmessage';
 $string['groupmessages_text'] = 'An email and {$a->systemname} notification with the text added below will be send to <strong>{$a->participantscount}</strong> participants of the exam.';
 $string['groupmessages_warning'] = '<strong>Warning: {$a->participantscount}</strong> exam participants have no {$a->systemname} account and will not recieve this message. Please contact them manually via email using the following button:';
@@ -445,7 +442,6 @@ $string['mode_places_random'] = 'Random';
 $string['mode_places_manual'] = 'Manual assignment';
 $string['mode_room_ascending'] = 'Ascending (from smallest to largest room)';
 $string['mode_room_descending'] = 'Descending (from largest to smallest room)';
-//$string['mode_room_equal'] = 'Equal (all rooms are filled equally starting with the largest one)';
 $string['all_places_already_assigned'] = '<strong>Warning:</strong> All seats have already been assigned. These are completely overwritten during a reassignment.';
 $string['keep_seat_assignment_left'] = 'Keep existing assignment';
 $string['keep_seat_assignment_right'] = 'Keep already existing assignments during automatic reassignment. If not checked these will be deleted.';
@@ -523,7 +519,6 @@ $string['nt'] = 'Not participated';
 $string['fa'] = 'Fraud attempt';
 $string['ill'] = 'Ill';
 $string['available'] = 'Available';
-$string['jump_to_end'] = 'Jump to end of table';
 $string['edit_results_and_boni'] = 'Edit results and boni';
 $string['nr'] = 'Nb';
 $string['max'] = 'Max:';
@@ -585,13 +580,13 @@ $string['points_with_bonus'] = 'Points with bonus';
 $string['results'] = 'Results';
 $string['cannot_create_zip_archive'] = 'Error creating zip archive';
 
-// examReviewDateRoomForm.php
-$string['examReviewDateRoom'] = 'Set date and room for exam review';
-$string['examreview_dateroom_str'] = 'If you are planning an exam review, you can select the date and the room here.';
-$string['examreview_date'] = 'Date';
-$string['examreview_room'] = 'Room (enter as free text)';
+// examreview_form.php
+$string['examreview'] = 'Set date and room for exam review';
+$string['examreviewstr'] = 'If you are planning an exam review, you can select the date and the room here.';
+$string['examreviewdate'] = 'Date';
+$string['examreviewroom'] = 'Room (enter as free text)';
 
-// forms (common)
+// Forms (common)
 $string['operation_canceled'] = 'Operation canceled';
 $string['operation_successfull'] = 'Operation successfull';
 $string['alteration_failed'] = 'Alteration failed';
@@ -601,25 +596,37 @@ $string['no_places_assigned'] = 'No places assigned yet. Work step not possible'
 $string['no_tasks_configured'] = 'No tasks configured yet. Work step not possible';
 $string['no_results_entered'] = 'No exam results entered yet. Work step not possible';
 $string['correction_not_completed'] = 'Marking not completed. Work step not possible';
+$string['itemscount'] = 'Items per page';
+$string['chooseitemsperpage'] = 'Choose count of objects per page';
+
+// course reset (lib.php)
+$string['deleteallexamdata'] = 'Delete all exam data (eg. exam rooms and time, task points, gradingscale) and all exam participants';
+$string['allexamdatadeleted'] = 'Exam data deleted';
+$string['deleteexamparticipantsdata'] = 'Delete only exam participants and keep exam data';
+$string['examparticipantsdatadeleted'] = 'Exam participants deleted';
+
+// Calendar.
+$string['examtime'] = 'Exam "{$a}"';
+$string['examreviewtime'] = 'Exam review for the exam "{$a}"';
 
 //helptexts
-$string['overview_help']= 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
+$string['overview_help'] = 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
 These are neatly arranged into different phases, which are ordered along a timeline. For each individual step, the processing state is indicated by corresponding symbols, texts and colors. There are mandatory work steps and optional ones, which are helpful but can be left out. As soon as all obligatory steps of one phase have been completed, it automatically closes and the next one opens. However, phases can also be opened and closed manually at any time. <br><br>
 Each work step can be opened by clicking on the corresponding button that will appear as soon as all required steps for the worksteps have been completed.<br><br>
 The "Configure password" button also allows you to (re)set a password, which must then be entered to access the exam organization. With this you can, for example, prevent your student assistants who supervise your courses from accessing the sensitive contents of the exam organization. <br><br>
 <strong>Note:</strong> Students do not have access to this view. Instead, they will see all information of the exam which has been enabled for them in a separate view.';
 $string['overview_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['checkPassword_help'] = 'A password for this exam management was set by the lecturer. You have to enter it below to gain access to the content of this module. <br><br> By clicking on the corresponding button, you can request a password reset via support if necessary. If the password has been reset, you and all other lecturers of the '. get_config('mod_exammanagement', 'moodlesystemname').' course will be informed via '. get_config('mod_exammanagement', 'moodlesystemname').' notification.';
-$string['checkPassword_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['checkPasswordAdmin_help'] = 'A password for this exam management was set by the lecturer. You have to enter it below to gain access to the content of this module. <br> <br>
+$string['checkpassword_help'] = 'A password for this exam organization was set by the lecturer. You have to enter it below to gain access to the content of this module. <br><br> By clicking on the corresponding button, you can request a password reset via support if necessary. If the password has been reset, you and all other lecturers of the '. get_config('mod_exammanagement', 'moodlesystemname').' course will be informed via '. get_config('mod_exammanagement', 'moodlesystemname').' notification.';
+$string['checkpassword_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['checkpasswordadmin_help'] = 'A password for this exam organization was set by the lecturer. You have to enter it below to gain access to the content of this module. <br> <br>
 Admins can reset the password of the exam organization here if lecturers request this. All lecturers of the '. get_config('mod_exammanagement', 'moodlesystemname').' course will be informed about this via '. get_config('mod_exammanagement', 'moodlesystemname').' message.';
-$string['checkPasswordAdmin_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['checkpasswordadmin_link'] = get_config('mod_exammanagement', 'additionalressources');
 $string['configurePassword_help'] = 'On this page, you can set or change the password for the exam organization. This password has to be entered by every lecturer of the '. get_config('mod_exammanagement', 'moodlesystemname').' course in order to access the contents of the exam organization.<br><br>
 To set a password, it must initially be entered in the first and then confirmed in the second field.<br><br>
 Remember to choose your password with sufficient security and especially do not use a password that you already use elsewhere (especially not in the context of university!).<br><br>
 By clicking on the button "Reset password" you can revoke the password protection for the exam organization.';
 $string['configurePassword_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['chooseRooms_help']= 'On this page you can view the list of all possible <strong>exam rooms</strong> available in the system and select one or more of them as the room for the current exam. <br /> <br />
+$string['chooseRooms_help'] = 'On this page you can view the list of all possible <strong>exam rooms</strong> available in the system and select one or more of them as the room for the current exam. <br /> <br />
 After clicking on the button "Add custom exam room", you can also add your own exam rooms to the list (and later select them as exam rooms). <br /> <br />
 To select a room as an exam room, first click on the box to the left of its name. A click on the button "Select rooms" saves the selected rooms as exam rooms. If a room is already marked after opening the page, it has already been saved as a room for the exam. <br /> <br />
 The chosen exam rooms will be used later to assign seats to the participants added to the exam. Their seats will later be displayed to them in their view (as soon as you have made this information visible to the students on the overview page). The seat allocation is also used in documents such as the list of participants or the seating plan. <br /> <br />
@@ -635,7 +642,7 @@ To create a new room, first enter its name. Next, you must specify the number of
 A room created in this way can be selected from the list of available exam rooms and can be used like any other exam room.<br><br>
 If, on the other hand, an existing exam room has been selected for editing on the room selection page, it can now be modified here. In this case, the number of seats and the description of the selected room can now be altered and then saved by clicking on "Save room". If the number of seats is reduced, all exam participants still retain their previously assigned seats until you perform the automatic seat assignment again.';
 $string['addCustomRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['addDefaultRooms_help']= 'As a '. get_config('mod_exammanagement', 'moodlesystemname').' administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
+$string['importDefaultRooms_help'] = 'As a '. get_config('mod_exammanagement', 'moodlesystemname').' administrator, you can import a number of <strong>default rooms </strong> here which are after that available to all lecturers as possible rooms when they select their exam rooms. <br><br>
 In order to import the default rooms, a correctly structured text file must first be selected in the lower area and then read in by clicking on the corresponding button.<br><br>
 The text file to be imported must contain the following information (separated by the char *) for each exam room, where each line stands for one exam room:
 <ul><li>First column: The system-internal room id according to the pattern <i>room_name_variant</i>, for example <i>Audimax_2</i></li>
@@ -645,32 +652,32 @@ The text file to be imported must contain the following information (separated b
 <li>Fifth column: If a seating plan for the room is available as a .svg file and this should be displayed to the users, the source code of the SVG file must be in this column, otherwise this column can be left empty</li></ul>
 <strong>Example: </strong>AudiMax_1 * AudiMax * 1 place free, 3 places total * ["R/R01/P01","R/R02/P01","R/R02/P03"] * < svg>...< /svg><br><br>
 All existing default rooms are overwritten by a new import. The information on any deleted or changed rooms is retained in all exam organizations in which they are currently used. However, deleted rooms can no longer be selected by instructors as new exam rooms or used for the (re)assignment of seats. Changes to the names or seats of default rooms also become only effective in the individual exam organizations after a new assignment of seats.';
-$string['addDefaultRooms_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['editDefaultRoom_help']= 'Here, administrators can edit an existing <strong> default exam room </strong> or create a new one.<br><br>
+$string['importDefaultRooms_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['editDefaultRoom_help'] = 'Here, administrators can edit an existing <strong> default exam room </strong> or create a new one.<br><br>
 First the basic information of the room is displayed, which also may be entered or edited. This is first the system-internal ID of the room, which is used internally by the plugin to identify the room and should be structured according to the following schema: The room name followed by an underscore followed by the variant of the room, which is particularly relevant for several models of the same room with a different number of free seats between the occupiable seats. For the part of the room name all letters, numbers and also dots are allowed, the room variant after the underscore may only consist of numbers. If an existing room is edited, the room ID cannot be changed. Next comes the name of the room, which is visible to all lecturers and may consist of letters, numbers, dots and spaces. The room description is also visible for the users, should contain information about the selected modelling (one or two free seats between two occupiable seats) and may contain the same characters as the room name. Under this information, if an existing room has been selected for editing, further information about the room is displayed, such as the previous number of available seats and an overview of their designations and (if available) the seating plan stored for the room. <br><br>
 If seats should be edited in an existing room, this is possible as soon as the option "Yes" has been selected in the next section under "Edit seats". This is not necessary when creating a new room, in this case you can continue directly with entering the new seats in the "New seats" section. For the filling of the room with seats there are three different modes, which should enable the simple replication of all important modelling types of exam rooms: In the " Default " mode, a number of assignable seats is automatically created for a room until the specified total number of seats in the room is reached, taking into account the specified number of free seats between two assignable seats. The naming of the seats starts with 1 and then counts upwards. If a room is to be filled with 100 total seats and one seat should remain unused between them it would receive a total of 50 seats with the designations 1, 3, 5, ..., 100 that can be assigned in the exam organization. With two places free there would be 34 places with the designations 1, 4, 7, ..., 100. The seat mode "Rows" works similarly, only the number of rows existing in a room as well as the available places per row must be specified here. Each row is then filled with the corresponding number of seats, whereby the specified number of free seats and the number of rows to be left free are taken into account. The seats are named with a combination of row and seat number, for example R01/P01, R01/P03, R01/P05, R02/P01 ... . For all room modelling that cannot be replicated using these two modes, there is a third mode with the name "Completely individual". In this mode, the names of all places can be entered completely free, whereby a comma must always be placed between two seat designations. All letters, numbers, dots, minus signs, slashes and spaces are allowed inside the seat names. This mode is very well suited for more complex seat modelling or for adapting models created with the first two modes. This is useful, for example, if the first or last row of a room has fewer seats than the others due to structural conditions, or if continuous numbered seats are still arranged in rows and every second row is to be left empty. When editing an already existing room, this mode is therefore already preselected, but can of course be replaced by any other mode at any time.<br><br>
 Finally, a new room plan can be added for a room. This must be drawn up outside the exam organization and should contain all the seats of the default room. The room plan must be saved as SVG in a text file (.txt), which then can be uploaded in the last section of this page. Please note that the contents of the file with the SVG of the room plan must be carefully checked before uploading, as the plugin cannot detect malicious or incorrect contents in the file at this point. If a file with a room plan was selected, it is saved after a click on "Save room" together with the rest of the specified information. <br><br>
 The room thus created or modified can immediately be selected as the exam room by all teachers in their exam organizations. When a name is changed or a seat is changed in an existing exam room that is already used in exam organizations, the name and previous seat assignments remain stored there for the time being. Teachers must therefore reassign seats once before the changes to the room take effect.';
 $string['editDefaultRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['setDateTime_help']= 'The <strong>date and time of the exam</strong> can be selected here.<br><br>
+$string['setexamdate_help'] = 'The <strong>date and time of the exam</strong> can be selected here.<br><br>
 The exam date selected here is displayed on the overview page of the exam organization and is used later in the documents generated, such as the list of participants or the exam labels. In addition, it will be displayed to the exam participants in their view as soon as you have made this information visible to the students on the overview page. <br /> <br />
 The date and time of the exam should therefore be set here so that the exam organization can be used effectively in '. get_config('mod_exammanagement', 'moodlesystemname').'.';
-$string['setDateTime_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['viewParticipants_help']= 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in '. get_config('mod_exammanagement', 'moodlesystemname').'. <br /> <br />
+$string['setexamdate_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['viewParticipants_help'] = 'On this page you can view all <strong>exam participants</strong> added to the exam and information such as their profile, matriculation number and any groups assigned to them in '. get_config('mod_exammanagement', 'moodlesystemname').'. <br /> <br />
 New participants can also be added to the exam here. There are two ways to do this: <br /> <br />
 1. After clicking on the button "Add participants from file", participants can be imported from one or more exam lists. This is the recommended way of importing participants, as only in this way it is possible to export the exam results later according to the number and structure of these imported lists. You should therefore choose this variant if you want to reimport the exam results later.<br>
 2. It is also possible to import participants of the '. get_config('mod_exammanagement', 'moodlesystemname').' course as exam participants by clicking on the button "Import participants from course". If this option is selected, the exam results can later only be exported in a single result list, a listwise export and a simple reimport of the exam results is then not possible. It is also not possible to "rewrite" participants who have been imported as course participants later by subsequently importing a list with exam participants. To do this, the participant must first be completely deleted.<br><br>
 Adding participants is one of the most important steps in the exam organization. Only if you see at least one added participant here you will later be able to assign seats, enter exam points or export result documents. Students who have not been added as exam participants (even if they are already enrolled in the '. get_config('mod_exammanagement', 'moodlesystemname').' course) also do not have access to the participant view with the exam information and do not receive any notifications send with the messaging function on the overview page of the exam organization.<br /> <br />
-If you see a lower part of the table separated by a subheading, you have imported exam participants who do not have a user account in '. get_config('mod_exammanagement', 'moodlesystemname').'. Although these can also be imported from a file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
+If you see participants with a corresponding status, then you have imported exam participants that do not have a user account in '. get_config('mod_exammanagement', 'moodlesystemname').'. Although these can also be imported from a file, some steps, such as writing a notification, must be done manually for these participants and others (such as viewing the student view for the participants themselves) are completely impossible.<br><br>
 It is also possible on this page to delete individual exam participants or all of them that have already been imported. To delete individual participants, simply click on the trash can in the participant´s row. To delete all participants, on the other hand, press the red button below the table. Please note, however, that deleting one or all participants automatically deletes all information stored for them, such as seats or entered exam points, and that this information cannot be restored afterwards.<br><br>
 Finally, the button "Convert to group" can be used to convert individual or all participants listed here into a '. get_config('mod_exammanagement', 'moodlesystemname').' group.';
 $string['viewParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['convertToGroup_help']= 'Here selected or all imported exam participants can be converted into an '. get_config('mod_exammanagement', 'moodlesystemname'). ' group. <br /> <br />
+$string['convertToGroup_help'] = 'Here selected or all imported exam participants can be converted into an '. get_config('mod_exammanagement', 'moodlesystemname'). ' group. <br /> <br />
 To do this, either for the creation of a new '.get_config('mod_exammanagement', 'moodlesystemname').' group its name and optionally also description can be entered into the corresponding form fields or an already existing group can be selected. Then all desired participants can be selected in the lower section and afterwards converted into a group by clicking the button "Convert to group".<br /> <br />
 Exam participants who are no course participants or do not have a '.get_config('mod_exammanagement', 'moodlesystemname').' user account are displayed in a separate section and cannot be added to a group. <br /> <br />
 Groups created here can be used throughout the course and all it`s activities just like normal groups. After clicking on a group, for example in the participant overview, it can be edited or changed.';
 $string['convertToGroup_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['addParticipants_help']= 'On this page you can add <strong>participants</strong> from exam lists to the exam. In this way their results can be exported later again and then can be simply reimported. <br /> <br />
+$string['addParticipants_help'] = 'On this page you can add <strong>participants</strong> from exam lists to the exam. In this way their results can be exported later again and then can be simply reimported. <br /> <br />
 To do this, you first need one or multiple lists with the matriculation numbers of your exam participants. These files can be dragged into the selection area and then be read in by clicking on the corresponding button. <br><br>
 On the following page you will see all matriculation numbers read from the files. The state of a matriculation number and whether the corresponding student can be added to the exam are displayed in different sections. <br><br>
 In the following the different states are briefly explained:<br>
@@ -685,28 +692,28 @@ In the following the different states are briefly explained:<br>
 All participants to be added to (or removed from) the exam can now be selected either by checking the box next to the name or by checking the "Select/deselect all" box of the respective area. Then press the "Add to exam" button to add the selected participants to the exam.<br><br>
 If you have read in a wrong file, you can repeat the import by clicking on the button "Import other participants". The currently loaded participants are not imported but discarded.';
 $string['addParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['addCourseParticipants_help']= 'Here you can import all <strong>'. get_config('mod_exammanagement', 'moodlesystemname').'course participants</strong> as exam participants. <br><br>
+$string['addCourseParticipants_help'] = 'Here you can import all <strong>'. get_config('mod_exammanagement', 'moodlesystemname').'course participants</strong> as exam participants. <br><br>
 All course participants who should be added to the exam must be selected by checking the box next to their name. To select (or deselect) all course participants it is sufficient to click in the corresponding box "Select/deselect all". In the corresponding section, you can also select existing participants who are not course participants. These are then removed from the exam by clicking on the "Add to exam" button at the bottom, while the selected course participants are then added to the exam. For all participants with the state "Already exam participants" nothing changes. <br><br>
 If participants are added after seats have already been assigned, their seats need to be assigned.<br><br>
 <strong>Please note:</strong> If this variant of participant import is selected, the results of all participants added in this way will be exported later in a single separate list for the exam office, which may make it difficult to reimport them. If you plan to have the exam results reimported, you should add participants to the exam using the appropriate participants lists in the corresponding import.';
 $string['addCourseParticipants_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['configureTasks_help']= 'Here you can define the quantity of all <strong>exam tasks</strong> and their maximum points. <br><br>
+$string['configureTasks_help'] = 'Here you can define the quantity of all <strong>exam tasks</strong> and their maximum points. <br><br>
 By clicking the "+" button new tasks can be added to the exam. In the field below the respective task number, you must enter the maximum number of points that can be achieved in the respective task later. This number of points must be positive, but can be a decimal. By clicking on the "-" button, exam tasks can be removed again, but at least one task always remains. <br><br>
 The tasks are a central element of the exam organization. They correspond to the tasks which are later available in the actual exam and are required in order to be able to enter the exam results for the participants after the exam. For each task, the points obtained by the participants can then be entered separately, up to a maximum of the maximum number of points specified here for the respective task. The tasks specified here and their maximum number of points are also required for setting the gradingscale and for exporting the exam results.
 If the tasks are changed after the exam results have already been entered or after the gradingscale has been set, these must be adapted to the new number or the new maximum of points of the tasks.';
 $string['configureTasks_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['setTextfield_help']= 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving.  <br /> <br />
+$string['settextfield_help'] = 'Any content can be entered here as <strong>free text</strong> for the exam, which is immediately displayed to the participants in their participant view after saving. <br /> <br />
 In this way, the exam participants can e. g. be easily informed about the equipment permitted in the exam. In addition to simple texts, more complex elements such as pictures or even formulas can be used. <br /> <br />
 This function is purely optional. If, for example, you do not have any information for the exam participants, you can simply leave the field below empty and click on the "Cancel" button. <br /> <br />
 <Strong>Note:</strong> This function is mainly intended for messages that are not time-critical. If, however, you would like to inform the exam participants e. g. about a short-term change of exam rooms on the day before the exam, it is advisable to use the function "Write message to participants" on the overview page instead. In this way, the exam participants will immediately receive an e-mail and will thus be able to see the information entered even if they do not actively look in '. get_config('mod_exammanagement', 'moodlesystemname').'.';
-$string['setTextfield_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['sendGroupmessage_help']= 'On this page the subject and content of a <strong>message</strong> can be entered, which will be sent to all </strong> students added as <strong>exam participants</strong> after clicking the button "Send message". <br /> <br />
+$string['settextfield_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['sendGroupmessage_help'] = 'On this page the subject and content of a <strong>message</strong> can be entered, which will be sent to all </strong> students added as <strong>exam participants</strong> after clicking the button "Send message". <br /> <br />
 They receive the message immediately after sending it both as a '. get_config('mod_exammanagement', 'moodlesystemname').' notification and as an e-mail to their university e-mail account and can thus, for example, simply be made aware of short-term changes (such as changes of the exam times or rooms). <br /> <br />
 If you have added participants to the exam who do not yet have a '. get_config('mod_exammanagement', 'moodlesystemname').' user account, this will be displayed below. Since these participants will not automatically receive the message written here, you will have to write to them manually by e-mail instead. You can do this, for example, by clicking on the "Write Email" button, which opens your email client and enters the email addresses of the corresponding participants. <br /> <br />
 The whole notification function is purely optional, you do not have to use it to send a message to the participants.
 <strong>Note:</strong> In order to give the participants more detailed information about the auxiliary means permitted in the exam, for example, the free textfield accessible via the overview page can also be used.';
 $string['sendGroupmessage_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['assignPlaces_help']= 'On this page, all exam participants can be assigned <strong>seats</strong> for the exam. These can later be exported in corresponding documents such as the seating plans or exam labels.<br><br>
+$string['assignPlaces_help'] = 'On this page, all exam participants can be assigned <strong>seats</strong> for the exam. These can later be exported in corresponding documents such as the seating plans or exam labels.<br><br>
 Seats can be assigned either manually or automatically.<br /> <br />
 For <strong>manual assignment</strong>, the corresponding button must first be clicked. After that, a seat in a room can be manually assigned to each participant in the table. The available seats for each room will be displayed. After clicking on the button "Assign seats manually", all changes are saved for participants who have been assigned both a room and a seat.<br /><br />
 For <strong>automated assignment</strong>, the assignment mode for the seats must first be selected. The following three alternatives are possible:<br />
@@ -719,21 +726,21 @@ If several rooms have been selected as exam rooms, the assignment mode of the ro
 After clicking on the button "Assign seats automatically" then the seats are assigned according to the selected settings. By setting the corresponding check mark, it can be specified that existing assignments are kept and only unassigned seats are assigned to participants without a seat. Otherwise, existing assignments will be completely overwritten. Already existing assignments can also be completely reset via the corresponding button.<br><br>
 <strong>Note:</strong> It is thus also possible to first assign selected participants certain seats (such as in the first rows) and then automatically assign all remaining seats.';
 $string['assignPlaces_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['importBonus_help']= '<strong>Bonus points</strong> (for example earned from exercises) can either be directly imported or converted to <strong>bonus grade steps</strong> for the exam. The directly imported bonus points are later added to the points earned in the exam, while bonus grade steps are added to the final exam grade.
+$string['importBonus_help'] = '<strong>Bonus points</strong> (for example earned from exercises) can either be directly imported or converted to <strong>bonus grade steps</strong> for the exam. The directly imported bonus points are later added to the points earned in the exam, while bonus grade steps are added to the final exam grade.
 To do this, you must first select the import mode in the upper section. If the mode "Bonus grade steps" is selected here, the number of possible bonus grade steps for the exam must also be defined. A maximum of three bonus grading steps are possible (one grading step would be an improvement from 1.7 to 1.3 i.e.). Therefore, participants can improve their grade by a maximum of one grade in total. After that, for each bonus grade step must be stated, how many points the students must have achieved at least to receive it. <br><br>
 In the lower section you can next specify the type of file import. There are two possibilities: <br><br>
 1. Exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').': If your students have submitted their exercise sheets via the '. get_config('mod_exammanagement', 'moodlesystemname').' assignment activity and these have been corrected and graded there, the exported grades from '. get_config('mod_exammanagement', 'moodlesystemname').' should be selected here, since in this way all bonus points for the complete '. get_config('mod_exammanagement', 'moodlesystemname').' course can be easily read in. <br>
-To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/35/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
+To do this, the gradings from the '. get_config('mod_exammanagement', 'moodlesystemname').' course must first be exported (see <a href="https://docs.moodle.org/en/Grade_export" class="alert-link" target="_blank">here</a>). Then you have to open the exported file once and check in which column the points are entered. The name of the column must then be entered in the field provided in the lower section. <br><br>
 2. Individual: If you have not managed your bonus points via the '. get_config('mod_exammanagement', 'moodlesystemname').' assignment activity, you can alternatively select the mode "Other". For this you need an Excel file, in which for each participant affected either the email address stored in '. get_config('mod_exammanagement', 'moodlesystemname').' or the matriculation number are entered in one and the achieved points in another column in a separate line. The name of both the column containing the user indexes of all students and the column containing all bonus points must then be entered in the corresponding fields in the lower section. <br><br>
 Finally you have to select the file with the bonus points you want to import and then click on the "Import file" button to import the bonus points. The imported number of bonus grade steps or bonus points will be shown to the participants in their view as soon as this has been activated in the corresponding step of the overview page.';
 $string['importBonus_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['configureGradingscale_help']= 'A <strong>gradingscale</strong> for the exam can be configured here.<br><br>
+$string['configureGradingscale_help'] = 'A <strong>gradingscale</strong> for the exam can be configured here.<br><br>
 As soon as the exam results have been entered, the gradingscale is used to automatically calculate the exam grades for all participants. If no gradingscale has been configured, the automatic calculation of the exam grades is not possible.<br><br>
 The minimum number of points required to reach a step must be specified individually for each single grade. A 70 in the field below 1.0 would therefore mean that a participant has to reach at least 70 points in order to get the grade 1.0.<br><br>
 The number of points to be achieved for a grade step can be between 0 and the stated total number of points for all exam tasks, but it must be higher than the number of points required for the previous grade step. For example, more points must be required for achieving the grade 1.0 than for achieving a 1.3. In addition, it is also possible to use desimals as points. If a participant achieves fewer points than which are necessary for 4.0, he or she will receive the grade 5 instead.<br><br>
 The gradingscale can be changed at any time (even after the exam results have been entered), in that case the participants grades are automatically adapted to the new gradingscale.';
 $string['configureGradingscale_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['inputResults_help']= 'On this page you can enter the <strong>exam results</strong> of the participants.<br><br>
+$string['inputResults_help'] = 'On this page you can enter the <strong>exam results</strong> of the participants.<br><br>
 For this purpose, the matriculation number of the participant whose results should be entered must first be validated. There are two ways to do this:<br>
 1. You can manually enter the matriculation number of the participant. To do this, click in the "Matriculation number or barcode" field, enter the matriculation number and confirm it by pressing Enter (or Return), Tab or the "Validate matriculation number" button. <br>
 2. Alternatively, if you have used exam labels in your exam, you can also use a barcode scanner to enter the exam results more quickly. For this you need a barcode scanner or alternatively a smartphone with a corresponding app. With this you have to scan the barcode on the exam label of a participant, whereby his matriculation number is automatically entered into the field "Matriculation number or barcode" and confirmed immediately. If the automatic entry does not work immediately, you may have to click manually in the field "Matriculation number or barcode" once and then repeat the scan.<br><br>
@@ -741,18 +748,18 @@ As soon as a matriculation number has been entered and confirmed, it is checked 
 In the case of a valid matriculation number, the exam results can now be entered on the page that opens. In the section "Exam participant" you will first see the matriculation number and the name of the selected participant. By clicking on the "Change matriculation number" button below, you can return to the previous page to enter a different matriculation number (e.g. in case of an error). In the "Exam points" section below, you can enter the points earned in each exam task by the selected participant. The corresponding points can be entered directly in the points field of the first task and then be continued in the field of the next task after pressing the tab key. A number between zero and the displayed maximum number of points of the respective task can be entered as the number of points, whereby decimals with up to two places are also permitted. If the participant is subject to a special exam state (e.g. if he has "not participated", committed a "fraud attempt" or was "sick"), this state can be selected in the last section "Exam state" by ticking the corresponding checkbox. This sets the task points to zero, disables the entry of points, and displays the selected state in all later documents (e.g. for export) instead of the result. Removing the check mark at the respective exam state reactivates the option to enter points. If results have already been entered for the participant in the past, both the section on the exam points and the exam state may already be filled in. In this case, the information can now be changed and the changes can then be saved.<br><br>
 After a click on the button "Save and next" or after pressing the Enter or Return key, the entered results are then saved and the page is automatically reloaded so that the matriculation number of the next exam participant can be read in (either manually or by barcode scanner).';
 $string['inputResults_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['participantsOverview_help']= 'In this <strong>participants and results overview</strong> the information of all imported exam participants and their results can be viewed and edited. <br><br>
+$string['participantsOverview_help'] = 'In this <strong>participants and results overview</strong> the information of all imported exam participants and their results can be viewed and edited. <br><br>
 The first name, surname and matriculation number of each exam participant will be displayed here in alphabetical order. If a place has already been assigned to a participant, this place and the corresponding room are also displayed in the correspondingly named columns. If exam tasks have already been created and exam results have already been entered for a participant, these are also displayed. In the "Points" column you can see how many points the participant has earned in each individual task, while in the "Total points" column the total number of points is displayed. If no exam tasks have been created yet, a click on the symbol displayed instead in the "Points" column allows you to do this directly. If no gradingscale has been entered yet, this can be done by clicking on the corresponding symbol in the "Result" column, otherwise the exam grade calculated using the gradingscale will be displayed in this column (if results have already been entered for the participant). If the participant has a special state (e.g. if he was ill during the exam or if he was trying to cheat) this will be displayed instead of the exam result. In addition, the columns "Bonus steps" and "Bonus points" show the bonus grade steps and bonus points already achieved by the participant for the exam, while the columns "Total and bonus points" and "Result with bonus steps" show the total number of points and the final score, taking into account the bonus points and bonus steps. <br><br>
 To edit the information about an exam participant it is enough to click on the button "Edit results and boni". After that, the exam results, bonus points and bonus steps as well as the exam state can be entered or edited in the table for each participant. The points achieved by the participant can be entered in the "Points" column on a task-by-task basis. If necessary, a special exam state such as "Sick", "Not participated" ("NT") or "Fraud attempt" can be selected from a drop-down menu, which automatically sets the points to zero and deactivates the possibility to enter points for that participant. Resetting the state to "Normal" allows to enter points again, while the "-" status resets the points to not set. It is also possible to enter either the bonus points or steps achieved by the participants. By pressing the TAB key it is possible to switch between the individual fields and participants, while a click on the corresponding button or pressing the Enter key saves all entered changes.<br><br>
 For the students, all these information can be entered or edited simultaneously or individually. In this way, this page can be used not only to correct incorrectly entered information, but also to manually enter results or boni for exam participants as a whole. Exam results can also be easily entered in this way for participants without a matriculation number. The manual assignment of seats is instead possible in the corresponding work step.';
 $string['participantsOverview_link'] = get_config('mod_exammanagement', 'additionalressources');
-$string['examReviewDateRoom_help']=  'If you are planning an <strong>exam review</strong>, you can select the date and the room for it here. <br><br>
+$string['examreview_help'] = 'If you are planning an <strong>exam review</strong>, you can select the date and the room for it here. <br><br>
 The name of the room can be freely entered in the lower textfield. In this way, you can select rooms that are not stored in the system as exam rooms, such as your office, as room for the exam review. <br><br>
 If you change the exam results for the participants after the time of the exam review set on this page, you can simply export them separately for the exam office on the overview page. <br><br>
 The information on the date and room of the exam review can later be made visible to the students on the overview page.';
-$string['examReviewDateRoom_link'] = get_config('mod_exammanagement', 'additionalressources');
+$string['examreview_link'] = get_config('mod_exammanagement', 'additionalressources');
 
-//errors and permissions
+// Errors and permissions.
 $string['missingidandcmid'] = 'Coursemodule-id missing';
 $string['nopermissions'] = 'You have no permissions to do this. Action denied.';
 $string['ldapnotenabled'] = 'LDAP usage disabled.';
@@ -788,11 +795,12 @@ $string['err_nocourseparticipants'] = 'No course participants available yet.';
 $string['err_groupname_taken'] = 'Group name already taken.';
 $string['err_too_long'] = 'Entered value is too long.';
 
-//universal
+// Universal.
 $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
 $string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
+$string['viewallexams'] = 'View all exam managements in the course';
 
 //add new module instance and mod_form.php
 $string['modulename_help'] = 'The exam management allows to organize easy exams for a course and makes it possible to manage even large exams with many participants.
@@ -801,7 +809,7 @@ In a separate view a lecturer can
 
 * set the basic exam data
 * export documents that are useful for the exam, such as seating plans and lists of participants
-* enter the exam results for the participants manually or using a barcode scanner
+* enter the exam results for the participants manually or using a barcode scanner or a smartphone
 * export all results in various documents for further use (e.g. by the exam office).
 
 The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat or the bonus grade steps achieved for the exam. In addition, the notification function allows an easy and reliable communication with them.';
@@ -821,6 +829,8 @@ $string['incorrect_password_change'] = 'Incorrect password. Terminated password 
 $string['export_grades_as_exam_results'] = 'Export course grades as exam results';
 $string['activate_mode'] = 'Activate grade export mode';
 $string['export_grades_as_exam_results_help'] = 'If this option is activated, the course gradings of all participants can easily be exported in a text document with the exam organization. Each grading is assigned to the matriculation number of the respective participant.';
+$string['deselectstepsandphases'] = 'Deselect worksteps and phases';
+$string['deselectphaseexamreview'] = 'Deselect phase exam review';
 
 //capabilities
 $string['exammanagement:addinstance'] = 'Add new exam organization';
@@ -834,7 +844,6 @@ $string['exammanagement:requestpasswordreset'] = 'Request password reset';
 $string['exammanagement:receivedeletionwarningmessages'] = 'Receive deletion warnings';
 
 //message providers
-//$string['messageprovider:exam management messages'] = 'exam management messages';
 $string['messageprovider:groupmessage'] = 'Group messages for exam organization';
 $string['messageprovider:passwordresetrequest'] = 'Requests to reset the password of exam organizations';
 $string['messageprovider:passwordresetmessage'] = 'Confirmation messages of resetting the password of exam organization';
@@ -875,6 +884,16 @@ $string['privacy:metadata:exammanagement_rooms:type'] = 'Room type (default or c
 $string['privacy:metadata:exammanagement_rooms:moodleuserid'] = 'Moodle intern id of user who created custom room';
 $string['privacy:metadata:exammanagement_rooms:misc'] = 'Other config values in json syntax (at the moment only timestamp when default room is created)';
 $string['privacy:metadata:core_message'] = 'The exam management plugin sends messages to users and saves their content in the database. This can either be group messages to the participants with exam information, messages to the support if a teacher wants the support to reset the password of an exam management or a system message that informs the teacher about the upcoming deletion of the sensible exam data of an exam management.';
+$string['privacy:metadata:preference:exammanagement_phase_one'] = 'If the user has opened or closed the first phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_two'] = 'If the user has opened or closed the second phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_exam'] = 'If the user has opened or closed the exam phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_three'] = 'If the user has opened or closed the third phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_four'] = 'If the user has opened or closed the fourth phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phase_five'] = 'If the user has opened or closed the fifth phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_phaseopenedorclosed'] = 'If the user has manually opened or closed the phase of the exam management';
+$string['privacy:metadata:preference:exammanagement_pagecount'] = 'How many objects the user wants to have displayed per page on the paginated tables';
+$string['opened'] = 'Open';
+$string['closed'] = 'Closed';
 
 //settings.php - admin settings
 $string['enablepasswordresetrequest'] = 'Enable requesting password reset';
@@ -890,7 +909,7 @@ $string['enablehelptexts_help'] = 'If this option is activated, plugin help text
 $string['additionalressources'] = 'Additional ressources';
 $string['additionalressources_help'] = 'The web link entered here is displayed in the plugin internal help texts as a source for further information (if these have been activated for the plugin).';
 $string['enableldap'] = 'Use LDAP';
-$string['enableldap_help'] = 'Checking this box allows the plugin to use an external LDAP server specified in the system to determine the basic data of the exam participants, such as their matriculation numbers. In order for this to work, the external LDAP server must be available and <a href="https://docs.moodle.org/35/en/LDAP_authentication"><u>configured</u></a> in Moodle. In addition, in the following settings the "distinguished name" (short dn) and the names of all LDAP fields containing the information required by the plugin must be entered. Once this is done, the plugin automatically uses the data stored in the LDAP. Otherwise the corresponding plugin functionalities (e.g. the import of participants, the entering of results by matriculation number or the export of exam labels) are not available.';
+$string['enableldap_help'] = 'Checking this box allows the plugin to use an external LDAP server specified in the system to determine the basic data of the exam participants, such as their matriculation numbers. In order for this to work, the external LDAP server must be available and <a href="https://docs.moodle.org/en/LDAP_authentication"><u>configured</u></a> in Moodle. In addition, in the following settings the "distinguished name" (short dn) and the names of all LDAP fields containing the information required by the plugin must be entered. Once this is done, the plugin automatically uses the data stored in the LDAP. Otherwise the corresponding plugin functionalities (e.g. the import of participants, the entering of results by matriculation number or the export of exam labels) are not available.';
 $string['ldapdn'] = '"Distinguished name" ("dn")';
 $string['ldapdn_help'] = 'The "distinguished name" ("dn") must be entered in this field. It describes the positioning of the entries in your LDAP system. If this field is left empty, the plugin uses the value "contexts" from the global settings of the authentication plugin LDAP server ("auth_ldap"). If neither of these two fields is filled in, the LDAP dependent plugin functions cannot be used.';
 $string['ldap_objectclass_student'] = 'LDAP class of the student object';
