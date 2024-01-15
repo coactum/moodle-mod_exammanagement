@@ -85,7 +85,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     if (isset($fromform->state[$participant->id]) || isset($fromform->bonuspoints[$participant->id]) || isset($fromform->bonussteps[$participant->id]) || isset($fromform->bonuspoints_entered[$participant->id])) {
                         $oldparticipant = clone $participant;
 
-                        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+                        if (is_null($exammanagementinstanceobj->moduleinstance->misc)) {
+                            $misc = null;
+                        } else {
+                            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+                        }
                         if (!isset($misc['mode'])) {
                             if (isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set') {
                                 switch ($fromform->state[$participant->id]) {

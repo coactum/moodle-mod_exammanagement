@@ -59,7 +59,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-			$misc = (array) json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+			if (is_null($ExammanagementInstanceObj->moduleinstance->misc)) {
+				$misc = null;
+			} else {
+				$misc = (array) json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+			}
+
 			if (!isset($misc['mode']) && !$ExammanagementInstanceObj->placesAssigned()) {
 				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
 			} else if (!$UserObj->getParticipantsCount()) {
@@ -177,6 +182,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 						}
 					}
+
+					$update = false;
 
 					foreach ($dataArr as $line => $data) {
 						$participantObj = false;

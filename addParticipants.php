@@ -114,7 +114,13 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 // Check if headers are already saved and find new headerid.
                 $tempfileheaders = json_decode($exammanagementinstanceobj->moduleinstance->tempimportfileheader);
-                $savedfileheadersarr = json_decode($exammanagementinstanceobj->moduleinstance->importfileheaders);
+
+                if (is_null($exammanagementinstanceobj->moduleinstance->importfileheaders)) {
+                    $savedfileheadersarr = false;
+                } else {
+                    $savedfileheadersarr = json_decode($exammanagementinstanceobj->moduleinstance->importfileheaders);
+                }
+
                 $converttempheaders = false;
 
                 if ($savedfileheadersarr) {
@@ -336,8 +342,17 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     if ($participantsidsarr != false || $deletedparticipantsidsarr != false) {
 
                         // Get headers and temp file header.
-                        $tempfileheaders = json_decode($exammanagementinstanceobj->moduleinstance->tempimportfileheader);
-                        $savedfileheadersarr = json_decode($exammanagementinstanceobj->moduleinstance->importfileheaders);
+                        if (is_null($exammanagementinstanceobj->moduleinstance->importfileheaders)) {
+                            $savedfileheadersarr = false;
+                        } else {
+                            $savedfileheadersarr = json_decode($exammanagementinstanceobj->moduleinstance->importfileheaders);
+                        }
+
+                        if (is_null($exammanagementinstanceobj->moduleinstance->tempimportfileheader)) {
+                            $tempfileheaders = false;
+                        } else {
+                            $tempfileheaders = json_decode($exammanagementinstanceobj->moduleinstance->tempimportfileheader);
+                        }
 
                         if (!$savedfileheadersarr && $tempfileheaders) { // If there are no saved headers by now.
                             // Save new file header.

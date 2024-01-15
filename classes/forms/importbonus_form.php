@@ -66,7 +66,12 @@ class importbonus_form extends moodleform {
 
         $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
 
-        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        if (is_null($exammanagementinstanceobj->moduleinstance->misc)) {
+            $misc = null;
+        } else {
+            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        }
+
         if (!isset($misc['mode'])) {
             $mform->addElement('html', '<div class="row"><h3 class="col-md-8">'.get_string("importBonus", "mod_exammanagement"));
         } else {

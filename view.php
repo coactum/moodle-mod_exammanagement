@@ -99,7 +99,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
             redirect ($redirect, get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
         }
 
-        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        if (is_null($exammanagementinstanceobj->moduleinstance->misc)) {
+            $misc = null;
+        } else {
+            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        }
 
         if (isset($misc['mode']) && $misc['mode'] == 'export_grades') {
             $mode = 'export_grades';

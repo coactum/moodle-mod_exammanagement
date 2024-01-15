@@ -98,7 +98,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 $roomsarray = $allrooms["rooms"];
                 $checkedrooms = array();
                 $uncheckedrooms = array();
-                $oldrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
+
+                if (is_null($exammanagementinstanceobj->moduleinstance->rooms)) {
+                    $oldrooms = null;
+                } else {
+                    $oldrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
+                }
 
                 if (!isset($oldrooms)) {
                     $oldrooms = array();

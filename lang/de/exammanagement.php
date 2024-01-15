@@ -606,8 +606,8 @@ $string['deleteexamparticipantsdata'] = 'Alle Prüfungsteilnehmenden löschen ab
 $string['examparticipantsdatadeleted'] = 'Prüfungsteilnehmende gelöscht';
 
 // Calendar.
-$string['examtime'] = 'Prüfung "{$a}"';
-$string['examreviewtime'] = 'Klausureinsicht für die Prüfung "{$a}"';
+$string['examtime_calendarevent'] = 'Prüfung "{$a}"';
+$string['examreviewtime_calendarevent'] = 'Klausureinsicht für die Prüfung "{$a}"';
 
 // helptexts
 $string['overview_help'] = 'Dies ist die <strong>Startseite der Prüfungsorganisation</strong>. Lehrende und/oder deren Mitarbeiterinnen und Mitarbeiter können hier alle für das Durchführen einer Prüfung sinnvollen Arbeitsschritte ausführen. <br /><br />
@@ -800,7 +800,6 @@ $string['modulename'] = 'Prüfungsorganisation';
 $string['modulenameplural'] = 'Prüfungsorganisationen';
 $string['pluginname'] = 'Prüfungsorganisation';
 $string['coursecategory_name_no_semester'] = 'SEMESTERLOS';
-$string['viewallexams'] = 'Alle Prüfungsorganisationen im Kurs ansehen';
 
 //add new module instance and mod_form.php
 $string['modulename_help'] = 'Mithilfe der Prüfungsorganisation können Sie Prüfungen für Ihren Kurs einfach online organisieren und somit auch Prüfungen mit vielen Teilnehmerinnen und Teilnehmern bequem verwalten.

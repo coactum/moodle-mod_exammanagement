@@ -49,7 +49,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 	} else {
         if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-            $misc = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+            if (is_null($ExammanagementInstanceObj->moduleinstance->misc)) {
+                $misc = null;
+            } else {
+                $misc = json_decode($ExammanagementInstanceObj->moduleinstance->misc);
+            }
             $gradingscale = $ExammanagementInstanceObj->getGradingscale();
 
             if (isset($misc->mode) && $misc->mode === 'export_grades') {

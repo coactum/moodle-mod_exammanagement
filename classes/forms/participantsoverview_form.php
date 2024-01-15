@@ -88,7 +88,11 @@ class participantsoverview_form extends moodleform {
 
         $mform->addElement('html', '</h3><div>');
 
-        $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        if (is_null($exammanagementinstanceobj->moduleinstance->misc)) {
+            $misc = null;
+        } else {
+            $misc = (array) json_decode($exammanagementinstanceobj->moduleinstance->misc);
+        }
 
         if (!isset($this->_customdata['epm'])) {
             if (!isset($misc['mode'])) {
@@ -199,7 +203,11 @@ class participantsoverview_form extends moodleform {
                     $state = 'not_set';
                 }
 
-                $exampoints = array_values((array) json_decode($participant->exampoints));
+                if (is_null($participant->exampoints)) {
+                    $exampoints = null;
+                } else {
+                    $exampoints = array_values((array) json_decode($participant->exampoints));
+                }
 
                 $totalpoints = $userobj->calculatePoints($participant);
                 $totalpointsdisplay = $exammanagementinstanceobj->formatNumberForDisplay($totalpoints);

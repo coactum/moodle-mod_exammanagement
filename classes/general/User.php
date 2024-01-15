@@ -440,29 +440,37 @@ class User{
 
 	public function getExamState($participantObj) {
 
-        $stateArr = json_decode($participantObj->examstate);
+        if (is_null($participantObj->examstate)) {
+            $stateArr = null;
+        } else {
+            $stateArr = json_decode($participantObj->examstate);
+        }
 
         if ($stateArr !== NULL) {
-         foreach ($stateArr as $key => $value) {
+            foreach ($stateArr as $key => $value) {
                 if ($key == 'nt' && $value == "1") {
-                  return 'nt';
-                      } else if ($key == 'fa' && $value == "1") {
-                  return 'fa';
-                      } else if ($key == 'ill' && $value == "1") {
-            return 'ill';
-                      }
-         }
+                    return 'nt';
+                } else if ($key == 'fa' && $value == "1") {
+                    return 'fa';
+                } else if ($key == 'ill' && $value == "1") {
+                    return 'ill';
+                }
+            }
 
-         return 'normal';
-              } else {
-         return false;
-              }
+            return 'normal';
+        } else {
+            return false;
+        }
 	}
 
 	public function calculatePoints($participantObj, $withBonus=false) {
         $points = 0;
 
-        $pointsArr = json_decode($participantObj->exampoints);
+        if (is_null($participantObj->exampoints)) {
+            $pointsArr = null;
+        } else {
+            $pointsArr = json_decode($participantObj->exampoints);
+        }
 
         if ($pointsArr != Null) {
 
@@ -588,16 +596,14 @@ $result = '-';
 
 	public function checkIfValidMatrNr($mnr) {
         if (!preg_match("/^\d+$/", $mnr)) {
-         return false;
-              }
+            return false;
+        }
 
         $first = substr($mnr, 0, 1);
 
-        if ($first==7 && strlen($mnr)==7) {
-         return true;
-              } else {
-         return (($first==3 || $first==6) && strlen($mnr)==7);
-              }
+        if (strlen($mnr)==7) {
+            return true;
+        }
 	}
 
 	#### counts ####

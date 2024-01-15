@@ -244,7 +244,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                             }
                         } else {
                             if ($resultwithbonus) {
-                                $summarytable[str_pad (strval($resultwithbonus), 3, '.0')]["countBonus"]++;
+
+                                if ($resultwithbonus != '5') {
+                                    $keysummarytable = str_pad(strval($resultwithbonus), 3, '.0');
+                                } else {
+                                    $keysummarytable = $resultwithbonus;
+                                }
+
+                                $summarytable[strval($keysummarytable)]["countBonus"]++;
+
                             }
                         }
                     }
@@ -284,7 +292,6 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 }
 
                 foreach ($summarytable as $gradestep => $options) {
-
                     $worksheet->setCellValue("A".$rowcounter, strval($gradestep));
                     $worksheet->setCellValue("B".$rowcounter, $options["from"] . " - " . $options["to"]);
 

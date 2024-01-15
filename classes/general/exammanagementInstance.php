@@ -238,7 +238,11 @@ class exammanagementInstance {
 
 	public function getTasks() {
 
-        $tasks = (array) json_decode($this->moduleinstance->tasks);
+        if (is_null($this->moduleinstance->tasks)) {
+            $tasks = null;
+        } else {
+            $tasks = (array) json_decode($this->moduleinstance->tasks);
+        }
 
         if ($tasks) {
          return $tasks;
@@ -279,7 +283,11 @@ class exammanagementInstance {
 
  	public function getTextfieldObject() {
 
-         $textfield = $this->moduleinstance->textfield;
+        $textfield = $this->moduleinstance->textfield;
+
+        if (is_null($textfield)) {
+            $textfield = '';
+        }
 
         $textfield = json_decode($textfield);
 
@@ -459,7 +467,11 @@ class exammanagementInstance {
 
 	public function getGradingscale() {
 
-        $gradingscale = json_decode($this->moduleinstance->gradingscale);
+        if (is_null($this->moduleinstance->gradingscale)) {
+            $gradingscale = null;
+        } else {
+            $gradingscale = json_decode($this->moduleinstance->gradingscale);
+        }
 
         if ($gradingscale) {
           return $gradingscale;
@@ -493,13 +505,17 @@ class exammanagementInstance {
 
 	public function getExamReviewRoom() {
 
-        $examReviewRoom = json_decode($this->moduleinstance->examreviewroom);
-        if ($examReviewRoom) {
-         return $examReviewRoom;
-              } else {
-         return '';
-              }
+        if (is_null($this->moduleinstance->examreviewroom)) {
+            $examReviewRoom = '';
+        } else {
+            $examReviewRoom = json_decode($this->moduleinstance->examreviewroom);
+        }
 
+        if ($examReviewRoom) {
+            return $examReviewRoom;
+        } else {
+            return '';
+        }
 	}
 
 	public function isExamReviewVisible() {
@@ -746,7 +762,12 @@ return 'phase_four';
               }
 
         if ($mode === 'examrooms') {
-        	$roomIDs = json_decode($this->moduleinstance->rooms);
+
+            if (is_null($this->moduleinstance->rooms)) {
+                $roomIDs = null;
+            } else {
+                $roomIDs = json_decode($this->moduleinstance->rooms);
+            }
 
         	if ($roomIDs) {
                 $roomIDs = implode("', '", $roomIDs);
@@ -860,13 +881,17 @@ return 'phase_four';
 
 	public function getTextFileHeaders() {
 
-        $textfileheaders = json_decode($this->moduleinstance->importfileheaders);
+        if (is_null($this->moduleinstance->importfileheaders)) {
+            $textfileheaders = null;
+        } else {
+            $textfileheaders = json_decode($this->moduleinstance->importfileheaders);
+        }
 
         if ($textfileheaders) {
             return $textfileheaders;
-              } else {
+        } else {
             return false;
-              }
+        }
 	}
 
 	### send moodle message to user ###

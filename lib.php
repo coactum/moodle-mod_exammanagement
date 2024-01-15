@@ -394,7 +394,7 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
 
         if ((! empty($exammanagement->examtime)) && ($exammanagement->examtime > 0)) {
             // Calendar event exists so update it.
-            $event->name = get_string('examtime', 'exammanagement', $exammanagement->name);
+            $event->name = get_string('examtime_calendarevent', 'exammanagement', $exammanagement->name);
             $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
             $event->timestart = $exammanagement->examtime;
             $event->timesort = $exammanagement->examtime;
@@ -411,7 +411,7 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     } else {
         // Event doesn't exist so create one.
         if ((! empty($exammanagement->examtime)) && ($exammanagement->examtime > 0)) {
-            $event->name = get_string('examtime', 'exammanagement', $exammanagement->name);
+            $event->name = get_string('examtime_calendarevent', 'exammanagement', $exammanagement->name);
             $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
             $event->courseid = $exammanagement->course;
             $event->groupid = 0;
@@ -438,7 +438,7 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     ))) {
         if ((! empty($exammanagement->examreviewtime)) && ($exammanagement->examreviewtime > 0)) {
             // Calendar event exists so update it.
-            $event->name = get_string('examreviewtime', 'exammanagement', $exammanagement->name);
+            $event->name = get_string('examreviewtime_calendarevent', 'exammanagement', $exammanagement->name);
             $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
             $event->timestart = $exammanagement->examreviewtime;
             $event->timesort = $exammanagement->examreviewtime;
@@ -455,7 +455,7 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     } else {
         // Event doesn't exist so create one.
         if ((! empty($exammanagement->examreviewtime)) && ($exammanagement->examreviewtime > 0)) {
-            $event->name = get_string('examreviewtime', 'exammanagement', $exammanagement->name);
+            $event->name = get_string('examreviewtime_calendarevent', 'exammanagement', $exammanagement->name);
             $event->description = format_module_intro('exammanagement', $exammanagement, $cmid);
             $event->courseid = $exammanagement->course;
             $event->groupid = 0;
@@ -471,28 +471,6 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
         }
     }
     return true;
-}
-
-/**
- * Extends the global navigation tree by adding mod_exammanagement nodes if there is a relevant content.
- *
- * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
- *
- * @param navigation_node $exammanagementnode An object representing the navigation tree node.
- * @param  stdClass $course Course object
- * @param  context_course $coursecontext Course context
- */
-function exammanagement_extend_navigation_course($exammanagementnode, $course, $coursecontext) {
-    $modinfo = get_fast_modinfo($course); // Get mod_fast_modinfo from $course.
-    $index = 1; // Set index.
-    foreach ($modinfo->get_cms() as $cmid => $cm) { // Search existing course modules for this course.
-        if ($index == 1 && $cm->modname == "exammanagement" && $cm->uservisible && $cm->available) { // Look if module (in this case exammanagement) exists, is uservisible and available.
-            $url = new moodle_url("/mod/" . $cm->modname . "/index.php", array("id" => $course->id)); // Set url for the link in the navigation node.
-            $node = navigation_node::create(get_string('viewallexams', 'exammanagement'), $url, navigation_node::TYPE_CUSTOM, null , null , null);
-            $exammanagementnode->add_node($node);
-            $index++;
-        }
-    }
 }
 
 /**

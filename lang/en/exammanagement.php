@@ -606,8 +606,8 @@ $string['deleteexamparticipantsdata'] = 'Delete only exam participants and keep 
 $string['examparticipantsdatadeleted'] = 'Exam participants deleted';
 
 // Calendar.
-$string['examtime'] = 'Exam "{$a}"';
-$string['examreviewtime'] = 'Exam review for the exam "{$a}"';
+$string['examtime_calendarevent'] = 'Exam "{$a}"';
+$string['examreviewtime_calendarevent'] = 'Exam review for the exam "{$a}"';
 
 //helptexts
 $string['overview_help'] = 'This is the <strong>overview page of the exam organization</strong>. Lecturers and / or their staff can see all necessary and helpful work steps for performing an exam. <br><br>
@@ -800,7 +800,6 @@ $string['modulename'] = 'Exam management';
 $string['modulenameplural'] = 'Exam managements';
 $string['pluginname'] = 'Exam management';
 $string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
-$string['viewallexams'] = 'View all exam managements in the course';
 
 //add new module instance and mod_form.php
 $string['modulename_help'] = 'The exam management allows to organize easy exams for a course and makes it possible to manage even large exams with many participants.
