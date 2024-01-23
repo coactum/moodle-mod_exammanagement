@@ -26,6 +26,7 @@ namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
 use moodleform;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -66,7 +67,12 @@ class configurepassword_form extends moodleform {
         $mform->addElement('html', '</h3></div><div class="col-6">');
 
         if ($ExammanagementInstanceObj->getModuleinstance()->password) {
-            $mform->addElement('html', '<a href="'.$MoodleObj->getMoodleUrl('/mod/exammanagement/configurePassword.php', $this->_customdata['id'], 'resetPW', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("reset_password", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("reset_password", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $url = new moodle_url('/mod/exammanagement/configurePassword.php',
+                ['id' => $this->_customdata['id'], 'resetPW' => true]);
+            $mform->addElement('html', '<a href="' . $url . '" role="button" class="btn btn-primary pull-right" title="' .
+                get_string("reset_password", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
+                get_string("reset_password", "mod_exammanagement") .
+                '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
@@ -78,7 +84,7 @@ class configurepassword_form extends moodleform {
 
         $attributes = array('size' => '20');
 
- 		$mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
+        $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
@@ -90,9 +96,15 @@ class configurepassword_form extends moodleform {
 
     }
 
-    // Custom validation.
-    function validation($data, $files) {
-        $errors= array();
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
+    public function validation($data, $files) {
+        $errors = [];
 
         if ($data['password'] === '' || $data['password'] === ' ' || $data['password'] === '0' || $data['password'] === 0) {
             $errors['password'] = get_string('err_novalidpassword', 'mod_exammanagement');

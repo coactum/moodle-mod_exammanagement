@@ -25,37 +25,37 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$messageproviders = array (
+$messageproviders = [
 
-    'groupmessage' => array(
+    'groupmessage' => [
         'capability' => 'mod/exammanagement:receivegroupmessage',
-        'defaults' => array(
+        'defaults' => [
             'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
-        ),
-    ),
+        ],
+    ],
 
-    'passwordresetrequest' => array (
+    'passwordresetrequest' => [
         'capability' => 'mod/exammanagement:requestpasswordreset',
-        'defaults' => array(
+        'defaults' => [
             'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
-        ),
-    ),
+        ],
+    ],
 
-    'passwordresetmessage' => array (
+    'passwordresetmessage' => [
         'capability' => 'mod/exammanagement:requestpasswordreset',
-        'defaults' => array(
+        'defaults' => [
             'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
-        ),
-    ),
+        ],
+    ],
 
-    'deletionwarningmessage' => array (
+    'deletionwarningmessage' => [
         'capability' => 'mod/exammanagement:receivedeletionwarningmessages',
-        'defaults' => array(
+        'defaults' => [
             'popup' => MESSAGE_FORCED,
             'email' => MESSAGE_FORCED,
-        ),
-    ),
-);
+        ],
+    ],
+];

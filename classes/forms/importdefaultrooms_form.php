@@ -25,7 +25,6 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
-use mod_exammanagement\general\MoodleDB;
 
 use moodleform;
 
@@ -36,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
 
 /**
  * The form for importing default rooms for mod_exammanagement.
@@ -84,10 +82,5 @@ class importdefaultrooms_form extends moodleform {
 
         $mform->disable_form_change_checker();
 
-    }
-
-    // Custom validation should be added here.
-    public function validation($data, $files) {
-        return array();
     }
 }

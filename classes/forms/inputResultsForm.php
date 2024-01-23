@@ -41,7 +41,9 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
  */
 class inputResultsForm extends moodleform {
 
-    // Add elements to form.
+    /**
+     * Define the form - called by parent constructor.
+     */
     public function definition() {
 
         global $PAGE, $OUTPUT;
@@ -163,7 +165,13 @@ class inputResultsForm extends moodleform {
         $mform->disable_form_change_checker();
     }
 
-    // Custom validation.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
         $errors = array();
 

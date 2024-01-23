@@ -125,7 +125,13 @@ class configureGradingscaleForm extends moodleform {
 
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
 
         $errors = array();

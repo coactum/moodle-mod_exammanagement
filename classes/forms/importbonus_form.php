@@ -25,7 +25,7 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
 use moodleform;
 use stdclass;
@@ -36,7 +36,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
 /**
@@ -55,7 +55,7 @@ class importbonus_form extends moodleform {
         global $PAGE, $CFG, $OUTPUT;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/import_bonus', 'init'); // call jquery for tracking input value change events and creating input type number fields
@@ -88,7 +88,7 @@ class importbonus_form extends moodleform {
 
         $mform->addElement('html', '</h3><div class="col-md-4">');
 
-        $bonuscount = $userobj->getEnteredBonusCount();
+        $bonuscount = $userobj->getenteredbonuscount();
 
         if ($bonuscount) {
             if (!isset($misc['mode'])) {
@@ -208,7 +208,13 @@ class importbonus_form extends moodleform {
         $mform->disable_form_change_checker();
     }
 
-    // Custom validation.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
         $errors = array();
 

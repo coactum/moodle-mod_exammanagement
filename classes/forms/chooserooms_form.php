@@ -24,12 +24,12 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
-use mod_exammanagement\general\MoodleDB;
 use mod_exammanagement\output\exammanagement_pagebar;
 
 use moodleform;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,9 +37,8 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
 require_once(__DIR__.'/../output/exammanagement_pagebar.php');
 
 /**
@@ -56,12 +55,11 @@ class chooserooms_form extends moodleform {
      */
     public function definition() {
 
-        global $PAGE, $OUTPUT;
+        global $PAGE, $OUTPUT, $DB;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $moodledbobj = MoodleDB::getInstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // Remove col-md classes for better layout
 
@@ -87,15 +85,15 @@ class chooserooms_form extends moodleform {
 
         if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])) {
             if ($allrooms) {
-                $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("exportDefaultRooms", $this->_customdata['id']) . '" class="btn btn-secondary" title="' . get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("export_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
+                $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/exportDefaultRooms.php', ['id' => $this->_customdata['id']]) . '" class="btn btn-secondary" title="' . get_string("export_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("export_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>');
             }
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("importDefaultRooms", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("import_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/importDefaultRooms.php', ['id' => $this->_customdata['id']]) . '" class="btn btn-secondary ml-1" title="' . get_string("import_default_rooms", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("import_default_rooms", "mod_exammanagement") . '</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>');
         }
 
         if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms', $this->_customdata['id'], $this->_customdata['e'])) {
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("editDefaultRoom", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("add_default_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_default_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/editDefaultRoom.php', ['id' => $this->_customdata['id']]) . '" class="btn btn-secondary ml-1" title="' . get_string("add_default_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_default_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
         } else {
-            $mform->addElement('html', '<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCustomRoom", $this->_customdata['id']) . '" class="btn btn-secondary ml-1" title="' . get_string("add_custom_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_custom_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/addCustomRoom.php', ['id' => $this->_customdata['id']]) . '" class="btn btn-secondary ml-1" title="' . get_string("add_custom_room", "mod_exammanagement").'"><span class="d-none d-lg-block">' . get_string("add_custom_room", "mod_exammanagement") . '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a></div>');
         }
 
         $mform->addElement('html', '</div>');
@@ -127,9 +125,9 @@ class chooserooms_form extends moodleform {
 
             foreach ($displayrooms as $room) {
 
-                $isroomfilled = $userobj->getParticipantsCount('room', $room->roomid);
+                $isroomfilled = $userobj->getparticipantscount('room', $room->roomid);
 
-                $similiarrooms = $moodledbobj->getRecordsFromDB('exammanagement_rooms', array('name' => $room->name));;
+                $similiarrooms = $DB->get_records('exammanagement_rooms', array('name' => $room->name));;
                 $disablename = explode('_', $room->roomid);
 
                 $mform->addElement('html', '<tr>');
@@ -226,17 +224,23 @@ class chooserooms_form extends moodleform {
 
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
         $errors = array();
+
+        global $DB;
 
         foreach ($data['rooms'] as $roomid => $checked) {
 
             if ($checked == "1") {
-                $moodledbobj = MoodleDB::getInstance();
-
                 $roomname = explode('_', $roomid);
-                $similiarrooms = $moodledbobj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomname[0]));
+                $similiarrooms = $DB->get_records('exammanagement_rooms', array('name' => $roomname[0]));
 
                 foreach ($similiarrooms as $key => $similiarroomobj) {
                     if (isset($data['rooms'][$similiarroomobj->roomid]) && is_string($data['rooms'][$similiarroomobj->roomid]) && $data['rooms'][$similiarroomobj->roomid] !== "0"

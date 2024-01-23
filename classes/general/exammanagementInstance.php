@@ -29,6 +29,7 @@ use mod_exammanagement\event\course_module_viewed;
 use context_module;
 use core\message\message;
 use stdClass;
+use moodle_url;
 
 class exammanagementInstance {
 
@@ -43,7 +44,7 @@ class exammanagementInstance {
 
     public function __construct($id, $e, $cron=false ) {
 
-        $moodledbobj = MoodleDB::getInstance();
+        global $DB;
 
         $this->id = $id;
         $this->e = $e;
@@ -52,9 +53,9 @@ class exammanagementInstance {
         if ($id) {
             $this->cm             = get_coursemodule_from_id('exammanagement', $id, 0, false, MUST_EXIST);
             $this->course = get_course($this->cm->course);
-            $this->moduleinstance = $moodledbobj->getRecordFromDB('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
+            $this->moduleinstance = $DB->get_record('exammanagement', array('id' => $this->cm->instance), '*', MUST_EXIST);
         } else if ($e) {
-            $this->moduleinstance = $moodledbobj->getRecordFromDB('exammanagement', array('id' => $e), '*', MUST_EXIST);
+            $this->moduleinstance = $DB->get_record('exammanagement', array('id' => $e), '*', MUST_EXIST);
             $this->course = get_course($this->moduleinstance->course);
             $this->cm             = get_coursemodule_from_instance('exammanagement', $this->moduleinstance->id, $this->course->id, false, MUST_EXIST);
         } else {
@@ -124,17 +125,6 @@ class exammanagementInstance {
               } else {
          return '';
               }
-	}
-
-	#### universal functions for exammanagement ####
-
- 	public function getExammanagementUrl($component, $id) {
-
-        $MoodleObj = Moodle::getInstance($this->id, $this->e);
-
-         $url = $MoodleObj->getMoodleUrl('/mod/exammanagement/'.$component.'.php', $id);
-
-         return $url;
 	}
 
 	public function getCleanCourseCategoryName() {
@@ -330,11 +320,11 @@ class exammanagementInstance {
 	}
 
 	public function allPlacesAssigned() {
-        $UserObj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
+        $UserObj = userhandler::getinstance($this->id, $this->e, $this->getCm()->instance);
 
         $assignedPlacesCount = $this->getAssignedPlacesCount();
 
-        if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getParticipantsCount()) {
+        if ($assignedPlacesCount !== 0 && $assignedPlacesCount == $UserObj->getparticipantscount()) {
          return true;
               } else {
          return false;
@@ -344,14 +334,14 @@ class exammanagementInstance {
 
 	public function getAssignedPlacesCount() {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        global $DB;
 
         $select = "exammanagement =".$this->getCm()->instance;
         $select .= " AND roomid IS NOT NULL";
         $select .= " AND roomname IS NOT NULL";
         $select .= " AND place IS NOT NULL";
 
-        $assignedPlacesCount = $MoodleDBObj->countRecordsInDB('exammanagement_participants', $select);
+        $assignedPlacesCount = $DB->count_records_select('exammanagement_participants', $select);
 
         if (isset($assignedPlacesCount)) {
          return $assignedPlacesCount;
@@ -365,7 +355,7 @@ class exammanagementInstance {
 
 	public function getAssignedPlaces() {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        global $DB;
 
         $select = "exammanagement =".$this->getCm()->instance;
         $select .= " AND roomid IS NOT NULL";
@@ -374,7 +364,7 @@ class exammanagementInstance {
 
         $assignedPlaces = array();
 
-        $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_participants', $select, null, '', 'roomid, place');
+        $rs = $DB->get_recordset_select('exammanagement_participants', $select, null, '', 'roomid, place');
 
         if ($rs->valid()) {
 
@@ -556,12 +546,12 @@ class exammanagementInstance {
 
  	public function checkPhaseCompletion($phase) {
 
-        $userobj = User::getInstance($this->id, $this->e, $this->getCm()->instance);
+        $userobj = userhandler::getinstance($this->id, $this->e, $this->getCm()->instance);
 
         switch ($phase) {
 
             case "phase_one":
-                if ($this->getRoomsCount() && $this->getExamtime() && $userobj->getParticipantsCount() && $this->getTaskCount()) {
+                if ($this->getRoomsCount() && $this->getExamtime() && $userobj->getparticipantscount() && $this->getTaskCount()) {
                     return true;
                 } else {
                     return false;
@@ -748,7 +738,7 @@ return 'phase_four';
 
 	public function getRooms($mode, $sortorder = 'name', $withoutAssignedPlaces = false, $pagination = false, $activepage = null) {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        global $DB;
 
         $rooms = array();
 
@@ -775,9 +765,9 @@ return 'phase_four';
                 $select = "roomid IN ('" . $roomIDs . "')";
 
                 if ($sortorder == 'name') {
-                 $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
+                 $rs = $DB->get_recordset_select('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
                       } else {
-                 $rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), '', '*', $limitfrom, $limitnum);
+                 $rs = $DB->get_recordset_select('exammanagement_rooms', $select, array(), '', '*', $limitfrom, $limitnum);
                       }
 			} else {
                 return false;
@@ -787,7 +777,7 @@ return 'phase_four';
 
         	$select = "type = 'defaultroom'";
 
-        	$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
+        	$rs = $DB->get_recordset_select('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
               } else if ($mode === 'all') {
 
 			global $USER;
@@ -795,7 +785,7 @@ return 'phase_four';
 			$select = "type = 'defaultroom'";
 			$select .= " OR type = 'customroom' AND moodleuserid = "  . $USER->id;
 
-			$rs = $MoodleDBObj->getRecordsetSelect('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
+			$rs = $DB->get_recordset_select('exammanagement_rooms', $select, array(), 'name ASC', '*', $limitfrom, $limitnum);
               } else {
 			return false;
               }
@@ -853,9 +843,9 @@ return 'phase_four';
 
 	public function getRoomObj($roomID) {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        global $DB;
 
-        $room = $MoodleDBObj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomID));
+        $room = $DB->get_record('exammanagement_rooms', array('roomid' => $roomID));
 
         if ($room) {
         	return $room;
@@ -866,9 +856,9 @@ return 'phase_four';
 
 	public function countDefaultRooms() {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        global $DB;
 
-        $defaultRoomsCount = $MoodleDBObj->countRecordsInDB('exammanagement_rooms', "type = 'defaultroom'");
+        $defaultRoomsCount = $DB->count_records_select('exammanagement_rooms', "type = 'defaultroom'");
 
         if ($defaultRoomsCount && $defaultRoomsCount !== 0) {
         	return $defaultRoomsCount;
@@ -900,8 +890,6 @@ return 'phase_four';
 
         global $USER;
 
-        $moodleobj = Moodle::getInstance($this->id, $this->e);
-
         $message = new message();
         $message->courseid = $this->course->id; // This is required in recent versions, use it from 3.2 on https://tracker.moodle.org/browse/MDL-47162
         $message->component = 'mod_exammanagement'; // the component sending the message. Along with name this must exist in the table message_providers
@@ -914,19 +902,20 @@ return 'phase_four';
         $message->fullmessagehtml = $text; // html rendered version
         $message->smallmessage = $text; // useful for plugins like sms or twitter
         $message->notification = 1;
-        $message->contexturl = $moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id);
+        $message->contexturl = new moodle_url("/mod/exammanagement/view.php", ['id' => $this->id]);
         $message->contexturlname = $this->moduleinstance->name . ' (' . get_string('modulename', 'mod_exammanagement') . ')';
         $message->replyto = "";
 
         $header = '';
-        $url = '<a href="'.$moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id) . '" target="_blank">'.$moodleobj->getMoodleUrl("/mod/exammanagement/view.php", $this->id).'</a>';
+        $url = '<a href="' . new moodle_url("/mod/exammanagement/view.php", ['id' => $this->id]) . '" target="_blank">' .
+            new moodle_url("/mod/exammanagement/view.php", ['id' => $this->id]) . '</a>';
 
         if ($this->cron == false) {
             $footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => $this->getCleanCourseCategoryName(), 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
               } else {
             $footer = '<br><br> --------------------------------------------------------------------- <br> ' . get_string('mailfooter', 'mod_exammanagement', ['systemname' => $this->getMoodleSystemName(), 'categoryname' => '', 'coursename' => $this->getCourse()->fullname, 'name' => $this->moduleinstance->name, 'url' => $url]);
               }
-        $content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor
+        $content = array('*' => array('header' => $header, 'footer' => $footer)); // Extra content for specific processor.
 
         $message->set_additional_content('email', $content);
 

@@ -24,6 +24,8 @@
 
 namespace mod_exammanagement\general;
 
+use moodle_url;
+
 use \PhpOffice\PhpSpreadsheet\Spreadsheet;
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 use \PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -39,23 +41,25 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 $moodleobj = Moodle::getInstance($id, $e);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
     } else {
 
         if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
 
-            if (!$userobj->getParticipantsCount()) {
-                $moodleobj->redirectToOverviewPage('beforeexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            if (!$userobj->getparticipantscount()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#beforexam', ['id' => $id]),
+                    get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
             }
 
             require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
@@ -121,8 +125,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $worksheet->getStyle('A1:A5')->applyFromArray($boldstyle);
 
             // Table 1.
-            $bonusstepsentered = $userobj->getEnteredBonusCount('steps');
-            $resultscount = $userobj->getEnteredResultsCount();
+            $bonusstepsentered = $userobj->getenteredbonuscount('steps');
+            $resultscount = $userobj->getenteredresultscount();
             $gradingscale = $exammanagementinstanceobj->getGradingscale();
 
             if ($resultscount && $gradingscale) {
@@ -199,7 +203,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             // set data for table 2
 
-            $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
+            $participants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'));
 
             $notpassed = 0;
             $notrated = 0;
@@ -207,7 +211,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $countfa = 0;
             $countsick = 0;
 
-            $bonuspointsentered = $userobj->getEnteredBonusCount('points');
+            $bonuspointsentered = $userobj->getenteredbonuscount('points');
 
             $bonusstepnotset = 0;
             $bonusstepzero = 0;
@@ -217,7 +221,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             foreach ($participants as $participant) {
 
-                $resultstate = $userobj->getExamState($participant);
+                $resultstate = $userobj->getexamstate($participant);
 
                 if ($resultstate == "nt") {
                     $countnt++;
@@ -226,9 +230,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 } else if ($resultstate == "ill") {
                     $countsick++;
                 } else {
-                    $pointswithbonus = $userobj->calculatePoints($participant, true);
-                    $result = $userobj->calculateResultGrade($pointswithbonus);
-                    $resultwithbonus = $userobj->calculateResultGrade($pointswithbonus, $participant->bonussteps);
+                    $pointswithbonus = $userobj->calculatepoints($participant, true);
+                    $result = $userobj->calculateresultgrade($pointswithbonus);
+                    $resultwithbonus = $userobj->calculateresultgrade($pointswithbonus, $participant->bonussteps);
 
                     if ($result == '-') {
                         $notrated++;
@@ -306,7 +310,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             }
 
             // output table 2
-            $registered = $userobj->getParticipantsCount();
+            $registered = $userobj->getparticipantscount();
             $numberparticipants = $registered - $countnt - $countfa - $countsick;
             $numberparticipantspercent = number_format($numberparticipants / $registered * 100, 2);
             $ntpercent = number_format($countnt / $registered * 100, 2);
@@ -545,7 +549,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             foreach ($participants as $participant) {
 
-                $state = $userobj->getExamState($participant);
+                $state = $userobj->getexamstate($participant);
 
                 $worksheet->setCellValue("A".$rowcounter, $participant->matrnr);
                 $worksheet->setCellValue("B".$rowcounter, $participant->lastname);
@@ -559,10 +563,10 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     $worksheet->setCellValue("E".$rowcounter, '-');
                 }
 
-                $totalpoints = $userobj->calculatePoints($participant);
-                $totalpointswithbonus = $userobj->calculatePoints($participant, true);
+                $totalpoints = $userobj->calculatepoints($participant);
+                $totalpointswithbonus = $userobj->calculatepoints($participant, true);
 
-                $result = $userobj->calculateResultGrade($totalpointswithbonus);
+                $result = $userobj->calculateresultgrade($totalpointswithbonus);
 
                 if (isset($participant->bonussteps)) {
                     $bonussteps = $participant->bonussteps;
@@ -576,7 +580,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     $bonuspoints = '-';
                 }
 
-                $resultwithbonus = $userobj->calculateResultGrade($totalpointswithbonus, $participant->bonussteps);
+                $resultwithbonus = $userobj->calculateresultgrade($totalpointswithbonus, $participant->bonussteps);
 
                 if ($participant->exampoints) {
                     foreach (json_decode($participant->exampoints) as $key => $points) {
@@ -656,9 +660,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $writer->save('php://output');
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

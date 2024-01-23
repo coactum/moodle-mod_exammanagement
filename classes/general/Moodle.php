@@ -62,7 +62,7 @@ class Moodle {
 
         require_login($ExammanagementInstanceObj->getCourse(), true, $ExammanagementInstanceObj->getCm());
 
-        $url = $ExammanagementInstanceObj->getExammanagementUrl($substring, $ExammanagementInstanceObj->getCm()->id);
+        $url = new moodle_url('/mod/exammanagement/' . $substring . '.php', ['id' => $ExammanagementInstanceObj->getCm()->id]);
 
         // Print the page header.
         $PAGE->set_url($url);
@@ -102,51 +102,6 @@ class Moodle {
             }
         }
  	}
-
- 	public function outputFooter() {
-
-         global $OUTPUT;
-
-        // Finish the page.
-        echo $OUTPUT->footer();
-
- 	}
-
-	public function getMoodleUrl($url, $id = '', $param = '', $value = '') {
-
-         $url = new moodle_url($url, array('id' => $id, $param => $value));
-
-         return $url;
- 	}
-
- 	public function redirectToOverviewPage($anchor, $message, $type) {
-
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);
-
-        $url = $ExammanagementInstanceObj->getExammanagementUrl('view', $ExammanagementInstanceObj->getCm()->id);
-
-        if ($anchor) {
-            $url .= '#'.$anchor;
-        }
-
-        switch ($type) {
-            case 'success':
-                redirect ($url, $message, null, notification::NOTIFY_SUCCESS);
-                break;
-            case 'warning':
-                redirect ($url, $message, null, notification::NOTIFY_WARNING);
-                break;
-            case 'error':
-                redirect ($url, $message, null, notification::NOTIFY_ERROR);
-                break;
-            case 'info':
-                redirect ($url, $message, null, notification::NOTIFY_INFO);
-                break;
-            default:
-                redirect ($url, $message, null, notification::NOTIFY_ERROR);
-              break;
-        }
-    }
 
 	public function checkCapability($capname) {
          $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->id, $this->e);

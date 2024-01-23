@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class for resultsPercentages PDF for exammanagement
+ * Class for resultsPercentages PDF for exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -29,12 +29,21 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
 
-// Extend the TCPDF class to create custom Header and Footer
+/**
+ * Extend the base TCPDF class to create custom header and footer for the document.
+ *
+ * @package   mod_exammanagement
+ * @copyright 2022 coactum GmbH
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class resultsPercentages extends TCPDF {
 
-  public function Footer() {
-		$this->SetY(-16); // 1.6 cm from bottom
-		$this->SetFont('helvetica', 'BI', 12);
-		$this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
-	}
+    /**
+     * Override the footer of the base class.
+     */
+    public function footer() {
+        $this->SetY(-16); // 1.6 cm from bottom.
+        $this->SetFont('helvetica', 'BI', 12);
+        $this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
+    }
 }

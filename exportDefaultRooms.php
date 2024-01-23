@@ -24,6 +24,8 @@
 
 namespace mod_exammanagement\general;
 
+use moodle_url;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
@@ -31,13 +33,12 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
-
+$e = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 $MoodleObj = Moodle::getInstance($id, $e);
 
-define("SEPARATOR", chr(42)); //comma
+define("SEPARATOR", chr(42)); // Comma.
 define("NEWLINE", "\r\n");
 
 if ($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')) {
@@ -45,7 +46,8 @@ if ($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')) {
         $allDefaultRooms = $ExammanagementInstanceObj->getRooms('defaultrooms');
 
         if (!isset($allDefaultRooms) || $allDefaultRooms == false) {
-            redirect('chooseRooms.php?id='.$id, get_string('no_default_rooms', 'mod_exammanagement'), null, 'error');
+            redirect(new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
+                get_string('no_default_rooms', 'mod_exammanagement'), null, 'error');
         }
 
         global $CFG;
@@ -76,8 +78,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:importdefaultrooms')) {
         header("Content-Length: ". strlen($textfile));
         echo $textfile;
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+        redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
     }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

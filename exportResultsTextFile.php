@@ -24,6 +24,7 @@
 
 namespace mod_exammanagement\general;
 use zipArchive;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -32,12 +33,12 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$afterexamreview  = optional_param('afterexamreview', 0, PARAM_BOOL);
+$afterexamreview = optional_param('afterexamreview', 0, PARAM_BOOL);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$UserObj = userhandler::getinstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 define( "SEPARATOR", chr(9) ); //Tabulator
@@ -45,7 +46,8 @@ define( "NEWLINE", "\r\n" );
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
 	} else {
         if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
@@ -62,10 +64,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 $mode = 'normal';
             }
 
-            if (($mode === 'normal' && !$UserObj->getEnteredResultsCount()) || ($mode === 'export_grades' && !$UserObj->getEnteredBonusCount('points'))) {
-                $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
+            if (($mode === 'normal' && !$UserObj->getenteredresultscount()) || ($mode === 'export_grades' && !$UserObj->getenteredbonuscount('points'))) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+                    get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
             } else if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
-                $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
+                redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+                    get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
             }
 
             $courseName = $ExammanagementInstanceObj->getCourse()->fullname;
@@ -85,9 +89,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 $textfile = $header1 . NEWLINE . $header2 . NEWLINE;
 
                 if ($afterexamreview == false) {
-                    $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
+                    $participants = $UserObj->getexamparticipants(array('mode'=>'all'), array('matrnr'));
                 } else {  // if export of changed results after exam review
-                    $participants = $UserObj->getExamParticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
+                    $participants = $UserObj->getexamparticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
                 }
 
                 $examNumber = '""';
@@ -96,12 +100,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
                     if ($mode === 'export_grades') {
                         if ($gradingscale) {
-                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($participant->bonuspoints));
                         } else {
                             $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                         }
                     } else {
-                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                        $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($UserObj->calculatepoints($participant, true), $participant->bonussteps));
 
                     }
 
@@ -130,7 +134,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 $filenameUmlaute = get_string("results", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name;
                 $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
 
-                $participantsFromCourse = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => 0), array('matrnr')); // get all participants that are imported from course (header id = 0)
+                $participantsFromCourse = $UserObj->getexamparticipants(array('mode'=>'header', 'id' => 0), array('matrnr')); // get all participants that are imported from course (header id = 0)
 
                 if (count($TextFileHeadersArr) > 1 || (count($TextFileHeadersArr) == 1 && $participantsFromCourse)) { // if there are other participants that are read in from file
 
@@ -156,12 +160,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
                         if ($mode === 'export_grades') {
                             if ($gradingscale) {
-                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($participant->bonuspoints));
                             } else {
                                 $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                             }
                         } else {
-                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                            $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($UserObj->calculatepoints($participant, true), $participant->bonussteps));
                         }
 
                         $resultWithBonus = '"' . $resultWithBonus . '"';
@@ -179,9 +183,9 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 foreach ($TextFileHeadersArr as $key => $TextFileHeader) { // iterate over all headers and create new file for archive
 
                     if ($afterexamreview == false) {
-                        $participants = $UserObj->getExamParticipants(array('mode'=>'header', 'id' => $key+1), array('matrnr'));
+                        $participants = $UserObj->getexamparticipants(array('mode'=>'header', 'id' => $key+1), array('matrnr'));
                     } else {
-                        $participants = $UserObj->getExamParticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
+                        $participants = $UserObj->getexamparticipants(array('mode'=>'resultsafterexamreview'), array('matrnr'));
                     }
 
                     $textfile = false;
@@ -196,12 +200,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
                             if ($mode === 'export_grades') {
                                 if ($gradingscale) {
-                                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($participant->bonuspoints));
+                                    $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($participant->bonuspoints));
                                 } else {
                                     $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($participant->bonuspoints);
                                 }
                             } else {
-                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateResultGrade($UserObj->calculatePoints($participant, true), $participant->bonussteps));
+                                $resultWithBonus = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculateresultgrade($UserObj->calculatepoints($participant, true), $participant->bonussteps));
                             }
 
                             $resultWithBonus = '"' . $resultWithBonus . '"';
@@ -237,13 +241,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                     readfile($tempfile);
                     unlink($tempfile);
                 } else {
-                    $MoodleObj->redirectToOverviewPage('', get_string('cannot_create_zip_archive', 'mod_exammanagement'), 'error');
+                    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+                        get_string('cannot_create_zip_archive', 'mod_exammanagement'), null, 'error');
                 }
             }
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

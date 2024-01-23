@@ -36,26 +36,27 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 $resetpw = optional_param('resetPW', 0, PARAM_INT);
-$requestpwreset  = optional_param('requestPWReset', 0, PARAM_INT);
+$requestpwreset = optional_param('requestPWReset', 0, PARAM_INT);
 
 $moodleobj = Moodle::getInstance($id, $e);
-$moodledbobj = MoodleDB::getInstance();
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
+
+    global $DB, $OUTPUT;
 
     // Reset password.
     if ($moodleobj->checkCapability('mod/exammanagement:resetpassword') && $resetpw == true && isset($exammanagementinstanceobj->moduleinstance->password)) {
 
         $exammanagementinstanceobj->moduleinstance->password = null;
-        $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+        $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
         // Send mail to all teachers to inform them about password reset.
-        $role = $moodledbobj->getRecordFromDB('role', array('shortname' => 'editingteacher'));
+        $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
         $courseid = $exammanagementinstanceobj->getCourse()->id;
         $coursecontext = context_course::instance($courseid);
         $teachers = get_role_users($role->id, $coursecontext);
@@ -67,9 +68,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $exammanagementinstanceobj->sendSingleMessage($user->id, $mailsubject, $text, 'passwordresetmessage');
         }
 
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('password_reset_successfull', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), 'success');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('password_reset_successfull', 'mod_exammanagement',
+            ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), null, 'success');
     } else if ($resetpw == true) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('password_reset_failed', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('password_reset_failed', 'mod_exammanagement'), null, 'error');
     }
 
     // Handle password reset request.
@@ -96,14 +100,17 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
         }
 
         if (isset($messageid)) {
-            $moodleobj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_successfull', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), 'success');
+            redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                get_string('password_reset_request_successfull', 'mod_exammanagement',
+                ['systemname' => $exammanagementinstanceobj->getMoodleSystemName()]), null, 'success');
         } else {
-            $moodleobj->redirectToOverviewPage('beforeexam', get_string('password_reset_request_failed', 'mod_exammanagement'), 'error');
+            redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                get_string('password_reset_request_failed', 'mod_exammanagement'), null, 'error');
         }
     }
 
     if (!isset($exammanagementinstanceobj->moduleinstance->password)) {
-        $moodleobj->redirectToOverviewPage(null, null, null);
+        redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]), null, null, null);
     }
 
     // Instantiate form.
@@ -112,7 +119,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
     // Form processing and displaying is done here.
     if ($mform->is_cancelled()) {
         // Handle form cancel operation, if cancel button is present on form.
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
     } else if ($fromform = $mform->get_data()) {
         // In this case you process validated data.
@@ -128,7 +136,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $exammanagementinstanceobj->moduleinstance->password = $hash;
 
-                $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
             }
 
@@ -137,13 +145,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             // Remember login and redirect.
             $SESSION->loggedInExamOrganizationId = $id;
 
-            $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+            redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
         } else { // If password is not correct.
-            $moodleobj->redirectToOverviewPage('beforeexam', get_string('wrong_password', 'mod_exammanagement'), 'error');
+            redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                get_string('wrong_password', 'mod_exammanagement'), null, 'error');
         }
 
     } else {
-        // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+        // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
         // or on the first display of the form.
 
         // Set default data.
@@ -154,9 +164,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
         $mform->display();
 
-        $moodleobj->outputFooter();
+        // Finish the page.
+        echo $OUTPUT->footer();
     }
 
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

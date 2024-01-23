@@ -23,70 +23,117 @@
  */
 
 require(__DIR__.'/../../config.php');
-
 require_once(__DIR__.'/lib.php');
 
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_INT); // ID of the course.
 
-$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
+if ($id) {
+    if (!$course = $DB->get_record('course', ['id' => $id])) {
+        throw new moodle_exception('invalidcourseid');
+    }
+} else {
+    $course = get_site();
+}
+
 require_course_login($course);
 
 $coursecontext = context_course::instance($course->id);
 
-$event = \mod_exammanagement\event\course_module_instance_list_viewed::create(array(
-    'context' => $coursecontext
-));
+// Trigger course_module_instance_list_viewed event.
+$event = \mod_exammanagement\event\course_module_instance_list_viewed::create([
+    'context' => $coursecontext,
+]);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$PAGE->set_url('/mod/exammanagement/index.php', array('id' => $id));
-$PAGE->set_title(format_string($course->fullname));
-$PAGE->set_heading(format_string($course->fullname));
+// Set page navigation.
+$modulenameplural = get_string('modulenameplural', 'mod_exammanagement');
+
+$PAGE->set_pagelayout('incourse');
+
+$PAGE->set_url('/mod/exammanagement/index.php', ['id' => $id]);
+
 $PAGE->set_context($coursecontext);
 
-echo $OUTPUT->header();
+$PAGE->navbar->add($modulenameplural);
 
-$modulenameplural = get_string('modulenameplural', 'mod_exammanagement');
+$PAGE->set_title($course->shortname . ': ' . $modulenameplural);
+$PAGE->set_heading($course->fullname);
+
+echo $OUTPUT->header();
 echo $OUTPUT->heading($modulenameplural);
 
+// Build table with all instances.
+$modinfo = get_fast_modinfo($course);
 $exammanagements = get_all_instances_in_course('exammanagement', $course);
 
+// Sections.
+$usesections = course_format_uses_sections($course->format);
+if ($usesections) {
+    $sections = $modinfo->get_section_info_all();
+}
+
 if (empty($exammanagements)) {
-    notice(get_string('nonewmodules', 'mod_exammanagement'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    notice(get_string('nonewmodules', 'mod_exammanagement'), new moodle_url('/course/view.php', ['id' => $course->id]));
 }
 
 $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
-
-if ($course->format == 'weeks') {
-    $table->head  = array(get_string('week'), get_string('name'));
-    $table->align = array('center', 'left');
-} else if ($course->format == 'topics') {
-    $table->head  = array(get_string('topic'), get_string('name'));
-    $table->align = array('center', 'left', 'left', 'left');
-} else {
-    $table->head  = array(get_string('name'));
-    $table->align = array('left', 'left', 'left');
+$table->head = [];
+$table->align = [];
+if ($usesections) {
+    // Add column heading based on the course format. e.g. Week, Topic.
+    $table->head[] = get_string('sectionname', 'format_' . $course->format);
+    $table->align[] = 'left';
 }
+// Add activity, Name, and activity, Description, headings.
+$table->head[] = get_string('name');
+$table->align[] = 'left';
+$table->head[] = get_string('description');
+$table->align[] = 'left';
+
+$currentsection = '';
+$i = 0;
 
 foreach ($exammanagements as $exammanagement) {
-    if (!$exammanagement->visible) {
-        $link = html_writer::link(
-            new moodle_url('/mod/exammanagement/view.php', array('id' => $exammanagement->coursemodule)),
-            format_string($exammanagement->name, true),
-            array('class' => 'dimmed'));
-    } else {
-        $link = html_writer::link(
-            new moodle_url('/mod/exammanagement/view.php', array('id' => $exammanagement->coursemodule)),
-            format_string($exammanagement->name, true));
+
+    $context = context_module::instance($exammanagement->coursemodule);
+
+    // Section.
+    $printsection = '';
+    if ($exammanagement->section !== $currentsection) {
+        if ($exammanagement->section) {
+            $printsection = get_section_name($course, $sections[$exammanagement->section]);
+        }
+        if ($currentsection !== '') {
+            $table->data[$i] = 'hr';
+            $i ++;
+        }
+        $currentsection = $exammanagement->section;
+    }
+    if ($usesections) {
+        $table->data[$i][] = $printsection;
     }
 
-    if ($course->format == 'weeks' || $course->format == 'topics') {
-        $table->data[] = array($exammanagement->section, $link);
+    // Link.
+    $exammanagementname = format_string($exammanagement->name, true, [
+        'context' => $context,
+    ]);
+    if (! $exammanagement->visible) {
+        // Show dimmed if the mod is hidden.
+        $table->data[$i][] = "<a class=\"dimmed\" href=\"view.php?id=$exammanagement->coursemodule\">" .
+            $exammanagementname . "</a>";
     } else {
-        $table->data[] = array($link);
+        // Show normal if the mod is visible.
+        $table->data[$i][] = "<a href=\"view.php?id=$exammanagement->coursemodule\">" . $exammanagementname . "</a>";
     }
+
+    // Description.
+    $table->data[$i][] = format_module_intro('exammanagement', $exammanagement, $exammanagement->coursemodule);
+
+    $i ++;
 }
 
 echo html_writer::table($table);
+
 echo $OUTPUT->footer();

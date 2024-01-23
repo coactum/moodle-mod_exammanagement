@@ -25,14 +25,14 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
-use mod_exammanagement\general\MoodleDB;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 
 use moodleform;
 use stdclass;
 use notification;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,10 +40,9 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../ldap/ldapManager.php');
+require_once(__DIR__.'/../ldap/ldapmanager.php');
 
 /**
  * The form for adding course participants to the exammanagement.
@@ -58,13 +57,12 @@ class addcourseparticipants_form extends moodleform {
      * Define the form - called by parent constructor
      */
     public function definition() {
-        global $PAGE, $OUTPUT;
+        global $PAGE, $OUTPUT, $DB;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
-        $moodledbobj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $ldapmanagerobj = ldapManager::getInstance();
+        $ldapmanager = ldapmanager::getinstance();
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // Remove col-md classes from moodle form layout for better layout.
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'init'); // Updating participants count if checkboxes are checked.
@@ -95,11 +93,11 @@ class addcourseparticipants_form extends moodleform {
         $mform->setType('id', PARAM_INT);
 
         // Get all nedded user data.
-        $moodleparticipants = $userobj->getExamParticipants(array('mode' => 'moodle'), array('matrnr', 'profile', 'groups'));
+        $moodleparticipants = $userobj->getexamparticipants(array('mode' => 'moodle'), array('matrnr', 'profile', 'groups'));
 
-        $nonmoodleparticipants = $userobj->getExamParticipants(array('mode' => 'nonmoodle'), array('matrnr'));
+        $nonmoodleparticipants = $userobj->getexamparticipants(array('mode' => 'nonmoodle'), array('matrnr'));
 
-        $courseparticipantsids = $userobj->getCourseParticipantsIDs();
+        $courseparticipantsids = $userobj->getcourseparticipantsids();
 
         $courseparticipants = array(); // Will contain all moodle users that are course participants and that can be choosen as future exam participants.
 
@@ -275,11 +273,11 @@ class addcourseparticipants_form extends moodleform {
 
                 $courseparticipant = new stdclass;
                 $courseparticipant->moodleuserid = $id;
-                $courseparticipant->login = $moodledbobj->getFieldFromDB('user', 'username', array('id' => $id));
+                $courseparticipant->login = $DB->get_field('user', 'username', array('id' => $id));
 
                 array_push($alllogins, $courseparticipant->login);
 
-                $moodleuser = $userobj->getMoodleUser($id);
+                $moodleuser = $userobj->getmoodleuser($id);
 
                 $courseid = $exammanagementinstanceobj->getCourse()->id;
 
@@ -295,9 +293,13 @@ class addcourseparticipants_form extends moodleform {
                         if ($value) {
                             foreach ($value as $groupskey2 => $groupid) {
                                 if (!$groupnames) {
-                                    $groupnames = '<strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
+                                    $groupnames = '<strong><a href="' . new moodle_url('/group/index.php',
+                                        ['id' => $courseid, 'group' => $groupid]) . '">' .
+                                        groups_get_group_name($groupid) . '</a></strong>';
                                 } else {
-                                    $groupnames .= ', <strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                                    $groupnames .= ', <strong><a href="' . new moodle_url('/group/index.php',
+                                        ['id' => $courseid, 'group' => $groupid]) . '">' .
+                                        groups_get_group_name($groupid) . '</a></strong>';
                                 }
                             }
                         } else {
@@ -311,7 +313,7 @@ class addcourseparticipants_form extends moodleform {
                 $courseparticipants[$key] = $courseparticipant;
             }
 
-            $matriculationnumbers = $ldapmanagerobj->getMatriculationNumbersForLogins($alllogins); // Retrieve matrnrs for all logins from ldap.
+            $matriculationnumbers = $ldapmanager->getmatrnrsforlogins($alllogins); // Retrieve matrnrs for all logins from ldap.
 
             if (!empty($courseparticipants)) {
                 foreach ($courseparticipants as $key => $participant) {

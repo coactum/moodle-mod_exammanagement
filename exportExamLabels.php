@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\general;
 
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 use mod_exammanagement\pdfs\examLabels;
 use moodle_url;
 
@@ -35,33 +35,39 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$mode  = optional_param('mode', 'barcode', PARAM_TEXT);
+$mode = optional_param('mode', 'barcode', PARAM_TEXT);
 
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 $moodleobj = Moodle::getInstance($id, $e);
-$ldapmanagerobj = LDAPManager::getInstance();
+$ldapmanager = ldapmanager::getinstance();
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
     } else {
 
         global $CFG, $SESSION;
 
         if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-            if (!$userobj->getParticipantsCount()) {
-                $moodleobj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            if (!$userobj->getparticipantscount()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
             }
 
-            if (!$ldapmanagerobj->isLDAPenabled()) { // Cancel export if no matrnrs are availiable because ldap is not enabled or configured.
-                $moodleobj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
-            } else if (!$ldapmanagerobj->isLDAPconfigured()) {
-                $moodleobj->redirectToOverviewPage('forexam', get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '. get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+            if (!$ldapmanager->isldapenabled()) { // Cancel export if no matrnrs are availiable because ldap is not enabled or configured.
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
+                    get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+            } else if (!$ldapmanager->isldapconfigured()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
+                    get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
             }
 
             // Include pdf.
@@ -140,7 +146,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 foreach ($roomsarray as $roomid) {
 
-                    $participants = $userobj->getExamParticipants(array('mode' => 'room', 'id' => $roomid), array('matrnr'), 'name', false, null, 10, 'withmatrnr');
+                    $participants = $userobj->getexamparticipants(array('mode' => 'room', 'id' => $roomid), array('matrnr'), 'name', false, null, 10, 'withmatrnr');
 
                     if ($participants) {
 
@@ -255,7 +261,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             } else { // If no rooms are set or no places are assigned.
 
-                $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
+                $participants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'));
 
                 if ($participants) {
 
@@ -359,9 +365,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $pdf->Output($filename, 'D');
 
         } else { // If user has not entered correct password for this session: show enterPasswordPage.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

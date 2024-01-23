@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\resultsExamReview;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -33,16 +34,17 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$UserObj = userhandler::getinstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
   if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-    $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
   } else {
     if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
@@ -56,10 +58,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
         define("WIDTH_COLUMN_MATNO", 70);
         define("WIDTH_COLUMN_POINTS", 80);
 
-        if (!$UserObj->getEnteredResultsCount()) {
-          $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
+        if (!$UserObj->getenteredresultscount()) {
+          redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+              get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
         } else if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
-          $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
+          redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+              get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
         }
 
         // Include the main TCPDF library (search for installation path).
@@ -147,11 +151,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
         $tbl .= "</tr>";
         $tbl .= "</thead>";
 
-        $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
+        $participants = $UserObj->getexamparticipants(array('mode'=>'all'), array('matrnr'));
 
         foreach ($participants as $participant) {
 
-          $totalPoints = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participant));
+          $totalPoints = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatepoints($participant));
 
           $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
           $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
@@ -186,10 +190,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
         // END OF FILE
         //============================================================+
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+      redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
     }
   }
 
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

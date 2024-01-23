@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\editDefaultRoomForm;
 use stdclass;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -34,25 +35,25 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$roomid  = optional_param('roomid', 0, PARAM_TEXT);
+$roomid = optional_param('roomid', 0, PARAM_TEXT);
 
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
 $moodleobj = Moodle::getInstance($id, $e);
-$moodledbobj = MoodleDB::getInstance();
 
 if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
 
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
     } else {
 
         // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
         if (!isset($exammanagementinstanceobj->moduleinstance->password) ||
             (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) {
 
-            global $USER;
+            global $USER, $DB, $OUTPUT;
 
             if ($roomid) {
 
@@ -74,7 +75,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
 
                         $roomplanavailable = base64_decode($roomobj->seatingplan);
                     } else {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id),
+                        redirect (new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
                             get_string('no_editable_default_room', 'mod_exammanagement'), null, 'error');
                     }
                 }
@@ -90,7 +91,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
             // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
                 // Handle form cancel operation, if cancel button is present on form.
-                redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $exammanagementinstanceobj->getCm()->id),
+                redirect (new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
                     get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
             } else if ($fromform = $mform->get_data()) {
@@ -129,9 +130,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
                 $defaultroomsvg = $mform->get_file_content('defaultroom_svg');
 
                  // If default room exists and should be edited.
-                if ($fromform->existingroom == true && $moodledbobj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $roomid))) {
+                if ($fromform->existingroom == true && $DB->record_exists('exammanagement_rooms', array('roomid' => $roomid))) {
 
-                    $roomobj = $moodledbobj->getRecordFromDB('exammanagement_rooms', array('roomid' => $roomid));
+                    $roomobj = $DB->get_record('exammanagement_rooms', array('roomid' => $roomid));
 
                     $roomobj->name = $roomname;
                     $roomobj->description = $description;
@@ -175,12 +176,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
 
                     $roomobj->misc = json_encode(array('timelastmodified' => time()));
 
-                    $update = $moodledbobj->UpdateRecordInDB('exammanagement_rooms', $roomobj);
+                    $update = $DB->update_record('exammanagement_rooms', $roomobj);
 
                     if ($update) {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+                        redirect(new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
+                            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                        redirect(new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
+                            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                     }
                 } else { // If default room doesn't exists and should be created.
 
@@ -227,12 +230,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
                     $roomobj->moodleuserid = null;
                     $roomobj->misc = json_encode(array('timelastmodified' => time()));
 
-                    $import = $moodledbobj->InsertRecordInDB('exammanagement_rooms', $roomobj);
+                    $import = $DB->insert_record('exammanagement_rooms', $roomobj);
 
                     if ($import) {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+                        redirect(new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
+                            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                        redirect(new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
+                            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                     }
                 }
 
@@ -259,14 +264,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
 
                 $mform->display();
 
-                $moodleobj->outputFooter();
-
+                // Finish the page.
+                echo $OUTPUT->footer();
             }
 
-        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+        } else { // If user hasnt entered correct password for this session: show enterPasswordPage
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

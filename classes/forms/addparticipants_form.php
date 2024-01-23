@@ -25,11 +25,11 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
-use mod_exammanagement\general\MoodleDB;
 use moodleform;
 use stdclass;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,9 +37,8 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
 
 /**
  * The form for adding participants to the exammanagement.
@@ -57,9 +56,8 @@ class addparticipants_form extends moodleform {
         global $PAGE, $CFG, $OUTPUT;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $moodledbobj = MoodleDB::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // Remove col-md classes from moodle form layout for better layout.
         $PAGE->requires->js_call_amd('mod_exammanagement/add_participants', 'init'); // Updating participants count if checkboxes are checked.
@@ -91,7 +89,11 @@ class addparticipants_form extends moodleform {
         $mform->addElement('html', '</h3></div><div class="col-4">');
 
         if ($allparticipants) {
-            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/addParticipants.php', $this->_customdata['id'], 'dtp', true).'" role="button" class="btn btn-primary pull-right" title="'.get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("import_new_participants", "mod_exammanagement").'</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/addParticipants.php',
+                ['id' => $this->_customdata['id'], 'dtp' => true]) . '" role="button" class="btn btn-primary pull-right" title="'
+                . get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">' .
+                get_string("import_new_participants", "mod_exammanagement") .
+                '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
         }
 
         $mform->addElement('html', '</div></div>');
@@ -191,7 +193,7 @@ class addparticipants_form extends moodleform {
 
                         global $OUTPUT;
 
-                        $moodleuser = $userobj->getMoodleUser($odduser->moodleuserid);
+                        $moodleuser = $userobj->getmoodleuser($odduser->moodleuserid);
 
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
@@ -246,7 +248,7 @@ class addparticipants_form extends moodleform {
                     if ($deleteduser->moodleuserid) {
                         global $OUTPUT;
 
-                        $moodleuser = $userobj->getMoodleUser($deleteduser->moodleuserid);
+                        $moodleuser = $userobj->getmoodleuser($deleteduser->moodleuserid);
 
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
@@ -272,9 +274,13 @@ class addparticipants_form extends moodleform {
                                 if ($value) {
                                     foreach ($value as $groupskey2 => $groupid) {
                                         if (!$groupnames) {
-                                            $groupnames = '<strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
+                                            $groupnames = '<strong><a href="' . new moodle_url('/group/index.php',
+                                                ['id' => $courseid, 'group' => $groupid]) . '">' .
+                                                groups_get_group_name($groupid) . '</a></strong>';
                                         } else {
-                                            $groupnames .= ', <strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                                            $groupnames .= ', <strong><a href="' . new moodle_url('/group/index.php',
+                                                ['id' => $courseid, 'group' => $groupid]) . '">' .
+                                                groups_get_group_name($groupid) . '</a></strong>';
                                         }
                                     }
                                 } else {
@@ -283,16 +289,20 @@ class addparticipants_form extends moodleform {
                                 }
                             }
 
-                            $mform->addElement('html', '<div class="col-'.$col.'">'.$groupnames.'</div>');
+                            $mform->addElement('html', '<div class="col-' . $col . '">' . $groupnames . '</div>');
                         } else {
-                            $mform->addElement('html', '<div class="col-'.$col.'">-</div>');
+                            $mform->addElement('html', '<div class="col-' . $col . '">-</div>');
                         }
                     }
 
                     if ($deleteduser->moodleuserid) {
-                        $mform->addElement('html', '<div class="col-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_not_in_file_anymore', "mod_exammanagement") .')</div></div>');
+                        $mform->addElement('html', '<div class="col-' . $col . '">' .
+                            get_string('state_to_be_deleted', "mod_exammanagement") . ' (' .
+                            get_string('state_not_in_file_anymore', "mod_exammanagement") . ')</div></div>');
                     } else if ($deleteduser->matrnr) {
-                        $mform->addElement('html', '<div class="col-'.$col.'">'.get_string('state_to_be_deleted', "mod_exammanagement"). ' (' .get_string('state_not_in_file_anymore', "mod_exammanagement") .')</div></div>');
+                        $mform->addElement('html', '<div class="col-' . $col . '">' .
+                            get_string('state_to_be_deleted', "mod_exammanagement") . ' (' .
+                            get_string('state_not_in_file_anymore', "mod_exammanagement") . ')</div></div>');
                     }
 
                 }
@@ -330,7 +340,7 @@ class addparticipants_form extends moodleform {
 
                         global $OUTPUT;
 
-                        $moodleuser = $userobj->getMoodleUser($existinguser->moodleuserid);
+                        $moodleuser = $userobj->getmoodleuser($existinguser->moodleuserid);
 
                         $courseid = $exammanagementinstanceobj->getCourse()->id;
 
@@ -360,9 +370,13 @@ class addparticipants_form extends moodleform {
                                 if ($value) {
                                     foreach ($value as $groupskey2 => $groupid) {
                                         if (!$groupnames) {
-                                            $groupnames = '<strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
+                                            $groupnames = '<strong><a href="' . new moodle_url('/group/index.php',
+                                                ['id' => $courseid, 'group' => $groupid]) . '">' . groups_get_group_name($groupid) .
+                                                '</a></strong>';
                                         } else {
-                                            $groupnames .= ', <strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                                            $groupnames .= ', <strong><a href="' . new moodle_url('/group/index.php',
+                                                ['id' => $courseid, 'group' => $groupid]) . '">' . groups_get_group_name($groupid) .
+                                                '</a></strong> ';
                                         }
                                     }
                                 } else {
@@ -371,14 +385,15 @@ class addparticipants_form extends moodleform {
                                 }
                             }
 
-                            $mform->addElement('html', '<div class="col-'.$col.'">'.$groupnames.'</div>');
+                            $mform->addElement('html', '<div class="col-' . $col . '">' . $groupnames . '</div>');
                         } else if ($existinguser->matrnr) {
-                            $mform->addElement('html', '<div class="col-'.$col.'"> - </div>');
+                            $mform->addElement('html', '<div class="col-' . $col . '"> - </div>');
                         }
 
                     }
 
-                    $mform->addElement('html', '<div class="col-'.$col.'">'.get_string($existinguser->state, "mod_exammanagement", ['systemname' => $systemname]).'</div></div>');
+                    $mform->addElement('html', '<div class="col-' . $col . '">' .
+                        get_string($existinguser->state, "mod_exammanagement", ['systemname' => $systemname]) . '</div></div>');
                 }
 
                 $mform->addElement('html', '</div></div>');
@@ -415,7 +430,7 @@ class addparticipants_form extends moodleform {
 
                     global $OUTPUT;
 
-                    $moodleuser = $userobj->getMoodleUser($newmoodleuser->moodleuserid);
+                    $moodleuser = $userobj->getmoodleuser($newmoodleuser->moodleuserid);
 
                     $courseid = $exammanagementinstanceobj->getCourse()->id;
 
@@ -436,9 +451,11 @@ class addparticipants_form extends moodleform {
                                 if ($value) {
                                     foreach ($value as $groupskey2 => $groupid) {
                                         if (!$groupnames) {
-                                            $groupnames = '<strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong>';
+                                            $groupnames = '<strong><a href="' . new moodle_url('/group/index.php', ['id' => $courseid, 'group' => $groupid]).'">' .
+                                                groups_get_group_name($groupid).'</a></strong>';
                                         } else {
-                                            $groupnames .= ', <strong><a href="'.$moodleobj->getMoodleUrl('/group/index.php', $courseid, 'group', $groupid).'">'.groups_get_group_name($groupid).'</a></strong> ';
+                                            $groupnames .= ', <strong><a href="' . new moodle_url('/group/index.php', ['id' => $courseid, 'group' => $groupid]).'">' .
+                                                groups_get_group_name($groupid).'</a></strong> ';
                                         }
                                     }
                                 } else {
@@ -468,7 +485,7 @@ class addparticipants_form extends moodleform {
 
                 $this->add_action_buttons(true, get_string("add_to_exam", "mod_exammanagement"));
             } else {
-                $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+                $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.new moodle_url('/mod/exammanagement/view.php', ['id' => $this->_customdata['id']]).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
             }
 
             $mform->addElement('html', '</div>');
@@ -487,7 +504,13 @@ class addparticipants_form extends moodleform {
         }
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
 
         $errors = array();

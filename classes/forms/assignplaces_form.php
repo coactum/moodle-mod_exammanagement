@@ -25,11 +25,12 @@
 namespace mod_exammanagement\forms;
 
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\output\exammanagement_pagebar;
 use moodleform;
 use stdclass;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,7 +38,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
 /**
@@ -56,7 +57,7 @@ class assignplaces_form extends moodleform {
         global $PAGE, $CFG, $OUTPUT;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
 
         $PAGE->requires->js_call_amd('mod_exammanagement/remove_cols', 'remove_cols'); // remove col-md classes for better layout
@@ -76,9 +77,17 @@ class assignplaces_form extends moodleform {
         $mform->addElement('html', '</h3><div>');
 
         if ($this->_customdata['map']) {
-            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id']).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places", "mod_exammanagement").'"><span class="d-none d-sm-block">'.get_string("assign_places", "mod_exammanagement").'</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/assignPlaces.php',
+                ['id' => $this->_customdata['id']]) . '" class="btn btn-primary pull-right mr-1 mb-1" title="' .
+                get_string("assign_places", "mod_exammanagement") . '"><span class="d-none d-sm-block">' .
+                get_string("assign_places", "mod_exammanagement") .
+                '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
         } else {
-            $mform->addElement('html', '<a href="'.$moodleobj->getMoodleUrl('/mod/exammanagement/assignPlaces.php', $this->_customdata['id'], 'map', true).'" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("assign_places_manually", "mod_exammanagement").'"><span class="d-none d-sm-block">'.get_string("assign_places_manually", "mod_exammanagement").'</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
+            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/assignPlaces.php',
+                ['id' => $this->_customdata['id'], 'map' => true]) . '" class="btn btn-primary pull-right mr-1 mb-1" title="' .
+                get_string("assign_places_manually", "mod_exammanagement") . '"><span class="d-none d-sm-block">' .
+                get_string("assign_places_manually", "mod_exammanagement") .
+                '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>');
         }
 
         $assignedplacescount = $exammanagementinstanceobj->getAssignedPlacesCount();
@@ -99,9 +108,9 @@ class assignplaces_form extends moodleform {
         if ($this->_customdata['map']) {
             $mform->addElement('html', '<h4 class="d-flex justify-content-center">'.get_string('assign_places_manually', 'mod_exammanagement').'</h4>');
 
-            $allparticipants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
+            $allparticipants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'));
 
-            $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'), 'name', true, $this->_customdata['pagenr']);
+            $participants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'), 'name', true, $this->_customdata['pagenr']);
             $examrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
 
             if ($examrooms && $participants) {

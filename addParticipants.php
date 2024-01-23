@@ -25,8 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\addparticipants_form;
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 use stdclass;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -35,24 +36,30 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$dtp  = optional_param('dtp', 0, PARAM_INT);
+$dtp = optional_param('dtp', 0, PARAM_INT);
 
 $moodleobj = Moodle::getInstance($id, $e);
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$ldapmanagerobj = ldapManager::getInstance();
-$moodledbobj = MoodleDB::getInstance();
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$ldapmanager = ldapmanager::getinstance();
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
+    global $DB, $OUTPUT;
+
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-    } else if (!$ldapmanagerobj->isLDAPenabled()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
-    } else if (!$ldapmanagerobj->isLDAPconfigured()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    } else if (!$ldapmanager->isldapenabled()) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+    } else if (!$ldapmanager->isldapconfigured()) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
     } else {
 
         // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
@@ -62,11 +69,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             $moodleobj->outputPageHeader();
 
             if ($dtp) {
-                $userobj->deleteTempParticipants();
+                $userobj->deletetempparticipants();
             }
 
             // Define participants for form.
-            $tempparticipants = $moodledbobj->getRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance)); // Get all participants that are already readed in and saved as temnp participants.
+            $tempparticipants = $DB->get_records('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance)); // Get all participants that are already readed in and saved as temnp participants.
 
             if ($tempparticipants) {
 
@@ -84,12 +91,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 $tempids = array(); // Will contain moodleids and logins of all valid temp participants for checking for deleted users.
                 $allpotentialidentifiers = array(); // Will contain all potential identifiers from file to check for double entries.
 
-                $courseparticipantsids = $userobj->getCourseParticipantsIDs(); // contains moodle user ids of all course participants.
+                $courseparticipantsids = $userobj->getcourseparticipantsids(); // contains moodle user ids of all course participants.
 
                 // Sort out bad matriculation numbers to badmatrnr array.
                 foreach ($tempparticipants as $key => $participant) { // Filter invalid / bad matrnr.
 
-                    if (!$userobj->checkIfValidMatrNr($participant->identifier)) {
+                    if (!$userobj->checkifvalidmatrnr($participant->identifier)) {
                         $tempuserobj = new stdclass;
                         $tempuserobj->line = $participant->line;
                         $tempuserobj->matrnr = $participant->identifier;
@@ -154,14 +161,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     $alllines[$key] = $participant->line;
                 }
 
-                $users = $ldapmanagerobj->getLDAPAttributesForMatrNrs($allmatriculationnumbers, 'usernames_and_matriculationnumbers', $alllines); // Get data for all remaining matriculation numbers from ldap.
+                $users = $ldapmanager->getldapattributesformatrnrs($allmatriculationnumbers, 'usernames_and_matriculationnumbers', $alllines); // Get data for all remaining matriculation numbers from ldap.
 
                 if ($users) {
                     ksort($users);
 
                     // Users from ldap.
                     foreach ($users as $line => $login) {
-                        $moodleuserid = $moodledbobj->getFieldFromDB('user', 'id', array('username' => $login['login'])); // Get moodle id for user.
+                        $moodleuserid = $DB->get_field('user', 'id', array('username' => $login['login'])); // Get moodle id for user.
 
                         $temp = array_filter($tempparticipants, function($tempparticipant) use ($login) {
                             return $tempparticipant->identifier == $login['matrnr'];
@@ -194,7 +201,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                         $tempuserobj->login = $data['login'];
                         $tempuserobj->headerid = $data['headerid'];
 
-                        if ($userobj->checkIfAlreadyParticipant($data['moodleuserid'])) {    // If user is already saved for instance.
+                        if ($userobj->checkifalreadyparticipant($data['moodleuserid'])) {    // If user is already saved for instance.
                             if ($courseparticipantsids && !in_array($data['moodleuserid'], $courseparticipantsids)) {
                                 $tempuserobj->state = 'state_existingmatrnrnocourse';
                             } else {
@@ -231,8 +238,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                         $tempuserobj->login = $data['login'];
                         $tempuserobj->headerid = $data['headerid'];
 
-                        if ($userobj->checkIfAlreadyParticipant(false, $data['login'])) { // If user is already saved as participant.
-                               $existingparticipant = $userobj->getExamParticipantObj(false, $data['login']);
+                        if ($userobj->checkifalreadyparticipant(false, $data['login'])) { // If user is already saved as participant.
+                               $existingparticipant = $userobj->getexamparticipant(false, $data['login']);
                                $tempuserobj->firstname = $existingparticipant->firstname;
                                $tempuserobj->lastname = $existingparticipant->lastname;
                                $tempuserobj->state = 'state_existingmatrnrnomoodle';
@@ -271,7 +278,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                     $tempfileheaderkeyincreased = $tempfileheaderkey + 1;
 
-                    $oldparticipantstemp = $userobj->getExamParticipants(array('mode' => 'header', 'id' => $tempfileheaderkeyincreased), array('matrnr'));
+                    $oldparticipantstemp = $userobj->getexamparticipants(array('mode' => 'header', 'id' => $tempfileheaderkeyincreased), array('matrnr'));
 
                     if (!empty($oldparticipantstemp)) {
                         $oldparticipants = $oldparticipants + $oldparticipantstemp;
@@ -323,9 +330,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
                 // Handle form cancel operation, if cancel button is present on form.
-
-                redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $exammanagementinstanceobj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
-
+                redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                    get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
             } else if ($fromform = $mform->get_data()) {
                 // In this case you process validated data. $mform->get_data() returns data posted in form.
 
@@ -334,10 +340,10 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 if (!$draftid) { // If no import file and exam participants should be saved in db.
 
                     // Get checked userids from form.
-                    $participantsidsarr = $userobj->filterCheckedParticipants($fromform);
+                    $participantsidsarr = $userobj->filtercheckedparticipants($fromform);
                     $nonemoodleparticipantsmatrnrarr = array();
-                    $deletedparticipantsidsarr = $userobj->filterCheckedDeletedParticipants($fromform);
-                    $tempparticipants = $moodledbobj->getRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance)); // Get all participants that are already readed in and saved as temnp participants.
+                    $deletedparticipantsidsarr = $userobj->filtercheckeddeletedparticipants($fromform);
+                    $tempparticipants = $DB->get_records('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance)); // Get all participants that are already readed in and saved as temnp participants.
 
                     if ($participantsidsarr != false || $deletedparticipantsidsarr != false) {
 
@@ -416,7 +422,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                             }
 
                             if (!empty($nonemoodleparticipantsmatrnrarr)) {
-                                $nonemoodleparticipantsarr = $ldapmanagerobj->getLDAPAttributesForMatrNrs($nonemoodleparticipantsmatrnrarr, 'all_attributes');
+                                $nonemoodleparticipantsarr = $ldapmanager->getldapattributesformatrnrs($nonemoodleparticipantsmatrnrarr, 'all_attributes');
 
                                 foreach ($participantsidsarr as $key => $identifier) { // Now only contains participants that have no moodle account.
 
@@ -471,7 +477,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                             }
 
                             // Insert records of new participants.
-                            $moodledbobj->InsertBulkRecordsInDB('exammanagement_participants', $userobjarr);
+                            $DB->insert_records('exammanagement_participants', $userobjarr);
 
                         }
 
@@ -481,15 +487,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 $temp = explode('_', $identifier);
 
                                 if ($temp[0] == 'mid') { // Delete moodle participant.
-                                    $userobj->deleteParticipant($temp[1], false);
+                                    $userobj->deleteparticipant($temp[1], false);
                                 } else { // Delete participant without moodle account.
 
                                     $userlogin = false;
 
-                                    $userlogin = $ldapmanagerobj->getLoginForMatrNr($temp[1], 'importmatrnrnotpossible');
+                                    $userlogin = $ldapmanager->getloginformatrnr($temp[1], 'importmatrnrnotpossible');
 
                                     if ($userlogin) {
-                                        $userobj->deleteParticipant(false, $userlogin);
+                                        $userobj->deleteparticipant(false, $userlogin);
                                     }
                                 }
                             }
@@ -498,21 +504,22 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                         // Delete temp file header and update saved file headers.
                         $exammanagementinstanceobj->moduleinstance->tempimportfileheader = null;
 
-                        $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                        $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
                         // Delete temp participants.
-                        $userobj->deleteTempParticipants();
+                        $userobj->deletetempparticipants();
 
                         // Redirect.
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
-
+                        redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                     } else {
-                        redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                        redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                     }
 
                 } else if ($draftid) { // If participants are readed in from import file and should be saved as temporary participants.
 
-                    $userobj->deleteTempParticipants();
+                    $userobj->deletetempparticipants();
 
                     $fs = get_file_storage();
                     $context = \context_user::instance($USER->id);
@@ -580,11 +587,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                     $exammanagementinstanceobj->moduleinstance->tempimportfileheader = json_encode($tempfileheaders);
 
-                    $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                    $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
-                    $moodledbobj->InsertBulkRecordsInDB('exammanagement_temp_part', $usersobjarr);
+                    $DB->insert_records('exammanagement_temp_part', $usersobjarr);
 
-                    redirect ($exammanagementinstanceobj->getExammanagementUrl('addParticipants', $id), get_string('operation_successfull', 'mod_exammanagement') , null, 'success');
+                    redirect(new moodle_url('/mod/exammanagement/addParticipants.php', ['id' => $id]),
+                        get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 }
 
             } else {
@@ -615,14 +623,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 $mform->display();
 
-                $moodleobj->outputFooter();
+                // Finish the page.
+                echo $OUTPUT->footer();
             }
 
 
         } else { // If user has not entered correct password for this session: show enterPasswordPage.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/addParticipants.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

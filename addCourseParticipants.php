@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\addcourseparticipants_form;
 use stdclass;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -34,19 +35,22 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 $moodleobj = Moodle::getInstance($id, $e);
-$moodledbobj = MoodleDB::getInstance();
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
+    global $DB, $OUTPUT;
+
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-    } else if (empty($userobj->getCourseParticipantsIDs())) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_nocourseparticipants', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    } else if (empty($userobj->getcourseparticipantsids())) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_nocourseparticipants', 'mod_exammanagement'), null, 'error');
     } else {
 
          // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
@@ -58,13 +62,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
                 // Handle form cancel operation, if cancel button is present on form.
-                redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $exammanagementinstanceobj->getCm()->id), get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+                redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                    get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
             } else if ($fromform = $mform->get_data()) {
                 // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-                $participantsidsarr = $userobj->filterCheckedParticipants($fromform);
-                $deletedparticipantsidsarr = $userobj->filterCheckedDeletedParticipants($fromform);
+                $participantsidsarr = $userobj->filtercheckedparticipants($fromform);
+                $deletedparticipantsidsarr = $userobj->filtercheckeddeletedparticipants($fromform);
 
                 if ($participantsidsarr != false || $deletedparticipantsidsarr != false) {
 
@@ -76,7 +81,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                         foreach ($participantsidsarr as $participantid) {
 
-                            if ($userobj->checkIfAlreadyParticipant($participantid) == false) {
+                            if ($userobj->checkifalreadyparticipant($participantid) == false) {
                                 $user = new stdClass();
                                 $user->exammanagement = $exammanagementinstanceobj->getCm()->instance;
                                 $user->courseid = $courseid;
@@ -86,7 +91,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                                 $dbman = $DB->get_manager();
                                 $table = new \xmldb_table('exammanagement_participants');
-                                $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+                                $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null,
+                                    XMLDB_NOTNULL, null, null);
+
                                 if ($dbman->field_exists($table, $field)) {
                                     $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
                                 }
@@ -101,28 +108,30 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                                 $temp = explode('_', $identifier);
 
                             if ($temp[0] == 'mid') {
-                                $userobj->deleteParticipant($temp[1], false);
+                                $userobj->deleteparticipant($temp[1], false);
                             } else {
-                                $userobj->deleteParticipant(false, $temp[1]);
+                                $userobj->deleteparticipant(false, $temp[1]);
                             }
                         }
                     }
 
-                    $moodledbobj->InsertBulkRecordsInDB('exammanagement_participants', $userobjarr);
+                    $DB->insert_records('exammanagement_participants', $userobjarr);
 
-                    redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $id), get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
-
+                    redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                        get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    redirect ($exammanagementinstanceobj->getExammanagementUrl('viewParticipants', $id), get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                    redirect(new moodle_url('/mod/exammanagement/viewParticipants.php', ['id' => $id]),
+                        get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                 }
 
             } else {
                 // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
-                // Set data if checkboxes should be checked (setDefault in the form is much more time consuming for big amount of participants).
+                // Set data if checkboxes should be checked
+                // (setDefault in the form is much more time consuming for big amount of participants).
                 $defaultvalues = array('id' => $id);
-                $courseparticipantsids = $userobj->getCourseParticipantsIDs();
+                $courseparticipantsids = $userobj->getcourseparticipantsids();
 
                 if (isset($courseparticipantsids)) {
                     foreach ($courseparticipantsids as $id) {
@@ -138,13 +147,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 $mform->display();
 
-                $moodleobj->outputFooter();
+                // Finish the page.
+                echo $OUTPUT->footer();
             }
 
         } else { // If user has not entered correct password for this session: show enterPasswordPage.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

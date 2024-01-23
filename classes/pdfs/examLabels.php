@@ -29,7 +29,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/pdflib.php');
 
-// Extend the TCPDF class to create custom Header and Footer.
+/**
+ * Extend the base TCPDF class to create custom header and footer for the document.
+ *
+ * @package   mod_exammanagement
+ * @copyright 2022 coactum GmbH
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class examLabels extends TCPDF {
 
     /**

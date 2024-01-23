@@ -58,12 +58,12 @@ class textfield_form extends moodleform {
 
         $mform->addElement('html', '</h3>');
 
- 		$mform->addElement('html', '<p>'.get_string('settextfieldstr', 'mod_exammanagement').'</p>');
+        $mform->addElement('html', '<p>'.get_string('settextfieldstr', 'mod_exammanagement').'</p>');
 
-         $mform->addElement('hidden', 'id');
-         $mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
 
- 		$mform->addElement('editor', 'textfield', get_string('contentoftextfield', 'mod_exammanagement'));
+        $mform->addElement('editor', 'textfield', get_string('contentoftextfield', 'mod_exammanagement'));
         $mform->setType('textfield', PARAM_RAW);
         $mform->addRule('textfield', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 

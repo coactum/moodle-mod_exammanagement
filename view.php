@@ -27,8 +27,9 @@ namespace mod_exammanagement\general;
 use mod_exammanagement\output\exammanagement_overview;
 use mod_exammanagement\output\exammanagement_overview_export_grades;
 use mod_exammanagement\output\exammanagement_participantsview;
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 use stdclass;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -37,7 +38,7 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 // relevant if called from itself and information is set visible for users or correction is marked as completed
 $calledfromformdt = optional_param('calledfromformdt', 0, PARAM_BOOL);
@@ -68,17 +69,15 @@ $phase = optional_param('phase', 0, PARAM_TEXT);
 $pagecount = optional_param('pagecount', 0, PARAM_INT);
 $redirect = optional_param('redirect', '', PARAM_TEXT);
 
-global $PAGE, $CFG, $USER, $SESSION;
+global $PAGE, $CFG, $USER, $SESSION, $DB, $OUTPUT;
 
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
 
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 $moodleobj = Moodle::getInstance($id, $e);
 
-$moodledbobj = MoodleDB::getInstance();
-
-$ldapmanagerobj = ldapManager::getInstance();
+$ldapmanager = ldapmanager::getinstance();
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teacher.
 
@@ -144,12 +143,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->datetimevisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformroom) { // Set exam room visible.
                 require_sesskey();
 
@@ -159,12 +153,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->roomvisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformplace) {  // Set exam place visible.
                 require_sesskey();
 
@@ -174,12 +163,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->placevisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformbonus) {  // Set exam bonus visible.
                 require_sesskey();
 
@@ -189,12 +173,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->bonusvisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformresult) {  // Set exam result visible.
                 require_sesskey();
 
@@ -204,18 +183,13 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->resultvisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformcorrection) {  // Set correction completed.
                 require_sesskey();
 
-                $resultscount = $userobj->getEnteredResultsCount();
+                $resultscount = $userobj->getenteredresultscount();
 
-                $bonuscount = $userobj->getEnteredBonusCount('points'); // If mode is export_grades.
+                $bonuscount = $userobj->getenteredbonuscount('points'); // If mode is export_grades.
 
                 if (($mode === 'normal' && $resultscount) || $mode = 'export_grades' && $bonuscount) {
                     if ($correctioncompleted) {
@@ -225,15 +199,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                         $exammanagementinstanceobj->moduleinstance->deletionwarningmailids = null;
                     }
                 } else {
-                    $moodleobj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
+                    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+                        get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('afterexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('afterexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             } else if ($calledfromformexamreview) { // Set exam rewview visible.
                 require_sesskey();
 
@@ -243,12 +213,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                     $exammanagementinstanceobj->moduleinstance->examreviewvisible = false;
                 }
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
-                if ($update) {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('forexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
+                $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
             }
         }
 
@@ -263,25 +228,25 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
 
             // Update category id for instance.
             $exammanagementinstanceobj->moduleinstance->categoryid = $coursecategoryid;
-            $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+            $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
             // Opdate  category ids for participants.
-            $moodledbobj->setFieldInDB('exammanagement_participants', 'categoryid', $coursecategoryid, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
-            $moodledbobj->setFieldInDB('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+            $DB->set_field('exammanagement_participants', 'categoryid', $coursecategoryid, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+            $DB->set_field('exammanagement_temp_part', 'categoryid', $coursecategoryid, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
 
         }
 
         // Delete temp participants and headers if exist.
-        if ($moodledbobj->checkIfRecordExists('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance))) {
+        if ($DB->record_exists('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance))) {
             $exammanagementinstanceobj->moduleinstance->tempimportfileheader = null;
 
-            $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+            $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
 
-            $moodledbobj->DeleteRecordsFromDB('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+            $DB->delete_records('exammanagement_temp_part', array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
         }
 
         // Reset phase information if participants are deleted.
-        if (!$exammanagementinstanceobj->isExamDataDeleted() && !$userobj->getParticipantsCount()) {
+        if (!$exammanagementinstanceobj->isExamDataDeleted() && !$userobj->getparticipantscount()) {
             $exammanagementinstanceobj->moduleinstance->importfileheaders = null;
             $exammanagementinstanceobj->moduleinstance->assignmentmode = null;
             $exammanagementinstanceobj->moduleinstance->datetimevisible = null;
@@ -290,7 +255,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
             $exammanagementinstanceobj->moduleinstance->datadeletion = null;
             $exammanagementinstanceobj->moduleinstance->examreviewvisible = null;
 
-            $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+            $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
         }
 
         if ($mode === 'normal') {
@@ -419,7 +384,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                 }
             }
 
-            $participantscount = $userobj->getParticipantsCount();
+            $participantscount = $userobj->getparticipantscount();
             $roomscount = $exammanagementinstanceobj->getRoomsCount();
             $roomnames = $exammanagementinstanceobj->getChoosenRoomNames();
             $totalseats = $exammanagementinstanceobj->getTotalNumberOfSeats();
@@ -429,11 +394,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
             $datetimevisible = $exammanagementinstanceobj->isDateTimeVisible();
             $roomvisible = $exammanagementinstanceobj->isRoomVisible();
             $placevisible = $exammanagementinstanceobj->isPlaceVisible();
-            $bonuscount = $userobj->getEnteredBonusCount();
-            $bonuspointsentered = $userobj->getEnteredBonusCount('points');
+            $bonuscount = $userobj->getenteredbonuscount();
+            $bonuspointsentered = $userobj->getenteredbonuscount('points');
             $bonusvisible = $exammanagementinstanceobj->isBonusVisible();
             $gradingscale = $exammanagementinstanceobj->getGradingscale();
-            $resultscount = $userobj->getEnteredResultsCount();
+            $resultscount = $userobj->getenteredresultscount();
             $resultvisible = $exammanagementinstanceobj->isResultVisible();
             $datadeletiondate = $exammanagementinstanceobj->getDataDeletionDate();
             $examreviewtime = $exammanagementinstanceobj->getHrExamReviewTime();
@@ -441,14 +406,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
             $examreviewvisible = $exammanagementinstanceobj->isExamReviewVisible();
             $deleted = $exammanagementinstanceobj->isExamDataDeleted();
 
-            if ($ldapmanagerobj->isLDAPenabled() && $ldapmanagerobj->isLDAPconfigured()) {
+            if ($ldapmanager->isldapenabled() && $ldapmanager->isldapconfigured()) {
                 $ldapavailable = true;
             } else {
                 $ldapavailable = false;
             }
 
             if ($exammanagementinstanceobj->getExamReviewTime()) {
-                $resultsenteredafterexamreview = $userobj->getEnteredResultsCount($exammanagementinstanceobj->getExamReviewTime());
+                $resultsenteredafterexamreview = $userobj->getenteredresultscount($exammanagementinstanceobj->getExamReviewTime());
             } else {
                 $resultsenteredafterexamreview = false;
             }
@@ -468,16 +433,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
                 $additionalressourceslink = false;
             }
 
-            if ($ldapmanagerobj->isLDAPenabled() && $ldapmanagerobj->isLDAPconfigured()) {
+            if ($ldapmanager->isldapenabled() && $ldapmanager->isldapconfigured()) {
                 $ldapavailable = true;
             } else {
                 $ldapavailable = false;
             }
 
-            $participantscount = $userobj->getParticipantsCount();
-            $bonuspointsentered = $userobj->getEnteredBonusCount('points');
+            $participantscount = $userobj->getparticipantscount();
+            $bonuspointsentered = $userobj->getenteredbonuscount('points');
             $gradingscale = $exammanagementinstanceobj->getGradingscale();
-            $resultscount = $userobj->getEnteredResultsCount();
+            $resultscount = $userobj->getenteredresultscount();
 
             $datadeletiondate = $exammanagementinstanceobj->getDataDeletionDate();
             $deleted = $exammanagementinstanceobj->isExamDataDeleted();
@@ -486,10 +451,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
             echo $OUTPUT->render($page);
         }
 
-        $moodleobj->outputFooter();
+        // Finish the page.
+        echo $OUTPUT->footer();
 
     } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-        redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+        redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
     }
 
 } else if ($moodleobj->checkCapability('mod/exammanagement:viewparticipantspage')) { // student view
@@ -510,12 +477,10 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
         $time = false;
     }
 
-    // room and place
+    // Room and place.
     global $USER;
 
-    $moodledbobj = MoodleDB::getInstance();
-
-    $participantobj = $userobj->getExamParticipantObj($USER->id);
+    $participantobj = $userobj->getexamparticipant($USER->id);
 
     if ($exammanagementinstanceobj->isRoomVisible() && $participantobj && $participantobj->roomname) {
         $room = $participantobj->roomname;
@@ -529,12 +494,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
         $place = false;
     }
 
-    // textfield
+    // Textfield.
     $textfield = $exammanagementinstanceobj->getTextFromTextfield();
 
-    // bonussteps
+    // Bonussteps.
     if ($exammanagementinstanceobj->isBonusVisible() && $participantobj) {
-        if ($participantobj->bonussteps === '0') { // allows mustache template to render 0
+        if ($participantobj->bonussteps === '0') { // Allows mustache template to render 0.
             $bonussteps = get_string('no_bonus_earned', 'mod_exammanagement');
         } else {
             $bonussteps = $participantobj->bonussteps;
@@ -543,7 +508,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
         $bonussteps = false;
     }
 
-    // Bonuspoints
+    // Bonuspoints.
     if ($exammanagementinstanceobj->isBonusVisible() && $participantobj) {
         if ($participantobj->bonuspoints === '0') { // Allows mustache template to render 0.
             $bonuspoints = get_string('no_bonus_earned', 'mod_exammanagement');
@@ -557,15 +522,15 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
     // Totalpoints
     if ($exammanagementinstanceobj->isResultVisible() && $participantobj) {
 
-        $examstate = $userobj->getExamState($participantobj);
+        $examstate = $userobj->getexamstate($participantobj);
 
         if ($examstate === 'normal') {
             $examstate = false;
-            $totalpoints = $userobj->calculatePoints($participantobj);
+            $totalpoints = $userobj->calculatepoints($participantobj);
 
             $tasktotalpoints = $exammanagementinstanceobj->formatNumberForDisplay($exammanagementinstanceobj->getTaskTotalPoints());
 
-            $totalpointswithbonus = $exammanagementinstanceobj->formatNumberForDisplay($userobj->calculatePoints($participantobj, true));
+            $totalpointswithbonus = $exammanagementinstanceobj->formatNumberForDisplay($userobj->calculatepoints($participantobj, true));
 
             if ($totalpoints === '0') {
                 $totalpoints = get_string('no_points_earned', 'mod_exammanagement');
@@ -602,10 +567,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) { // If teac
 
     // Rendering and displaying content.
 
-    $page = new exammanagement_participantsview($exammanagementinstanceobj->getCm()->id, $userobj->checkIfAlreadyParticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);
+    $page = new exammanagement_participantsview($exammanagementinstanceobj->getCm()->id, $userobj->checkifalreadyparticipant($USER->id), $date, $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);
     echo $OUTPUT->render($page);
 
-    $moodleobj->outputFooter();
+    // Finish the page.
+    echo $OUTPUT->footer();
 
 } else {
     redirect($CFG->wwwroot, get_string('nopermissions', 'mod_exammanagement'), null, \core\output\notification::NOTIFY_ERROR);

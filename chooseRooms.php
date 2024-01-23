@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\chooserooms_form;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -33,26 +34,26 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
 // Active page.
-$pagenr  = optional_param('page', 1, PARAM_INT);
+$pagenr = optional_param('page', 1, PARAM_INT);
 
-global $USER;
+$deletecustomroomid = optional_param('deletecustomroomid', 0, PARAM_TEXT);
 
-$deletecustomroomid  = optional_param('deletecustomroomid', 0, PARAM_TEXT);
-
-$deletedefaultroomid  = optional_param('deletedefaultroomid', 0, PARAM_TEXT);
+$deletedefaultroomid = optional_param('deletedefaultroomid', 0, PARAM_TEXT);
 
 $moodleobj = Moodle::getInstance($id, $e);
-$moodledbobj = MoodleDB::getInstance();
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
+    global $USER, $DB, $OUTPUT;
+
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
     } else {
 
         // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
@@ -62,10 +63,10 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             if ($deletecustomroomid) {
                 require_sesskey();
 
-                if ($moodledbobj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))) {
+                if ($DB->record_exists('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id))) {
                     if (!json_decode($exammanagementinstanceobj->getModuleinstance()->rooms)
                         || !in_array($deletecustomroomid, json_decode($exammanagementinstanceobj->getModuleinstance()->rooms))) {
-                        $moodledbobj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
+                        $DB->delete_records('exammanagement_rooms', array('roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id));
                     } else {
                         redirect ('chooseRooms.php?id='.$id, get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
                     }
@@ -76,8 +77,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 require_sesskey();
 
                 if ($moodleobj->checkCapability('mod/exammanagement:importdefaultrooms')) {
-                    if ($moodledbobj->checkIfRecordExists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))) {
-                        $moodledbobj->DeleteRecordsFromDB('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
+                    if ($DB->record_exists('exammanagement_rooms', array('roomid' => $deletedefaultroomid))) {
+                        $DB->delete_records('exammanagement_rooms', array('roomid' => $deletedefaultroomid));
                     }
                 } else {
                     redirect ('chooseRooms.php?id='.$id, get_string('nopermissions', 'mod_exammanagement'), null, 'error');
@@ -89,7 +90,8 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
-                $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+                redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                    get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
             } else if ($fromform = $mform->get_data()) {
                 // In this case you process validated data.
 
@@ -113,11 +115,11 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                     if ($value == 1 && is_string($value)) {
 
                         $roomname = explode('_', $key);
-                        $similiarrooms = $moodledbobj->getRecordsFromDB('exammanagement_rooms', array('name' => $roomname[0]));
+                        $similiarrooms = $DB->get_records('exammanagement_rooms', array('name' => $roomname[0]));
 
                         foreach ($similiarrooms as $similiarroomobj) {
                             if (isset($oldrooms) && in_array($similiarroomobj->roomid, $oldrooms) && $similiarroomobj->roomid != $key) {
-                                redirect ($exammanagementinstanceobj->getExammanagementUrl('chooseRooms', $id),
+                                redirect (new moodle_url('/mod/exammanagement/chooseRooms.php', ['id' => $id]),
                                     get_string('err_roomsdoubleselected', 'mod_exammanagement'), null, 'error');
                             }
                         }
@@ -140,12 +142,12 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                     foreach ($deselectedroomsarr as $roomid) {
 
-                        if ($userobj->getParticipantsCount('room', $roomid)) { // If there are participants that have places in deselected rooms: delete whole places assignment.
+                        if ($userobj->getparticipantscount('room', $roomid)) { // If there are participants that have places in deselected rooms: delete whole places assignment.
                             $exammanagementinstanceobj->moduleinstance->assignmentmode = null;
 
-                            $moodledbobj->setFieldInDB('exammanagement_participants', 'roomid', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
-                            $moodledbobj->setFieldInDB('exammanagement_participants', 'roomname', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
-                            $moodledbobj->setFieldInDB('exammanagement_participants', 'place', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+                            $DB->set_field('exammanagement_participants', 'roomid', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+                            $DB->set_field('exammanagement_participants', 'roomname', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
+                            $DB->set_field('exammanagement_participants', 'place', null, array('exammanagement' => $exammanagementinstanceobj->getCm()->instance));
                             break;
                         }
                     }
@@ -157,11 +159,13 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 $exammanagementinstanceobj->moduleinstance->rooms = json_encode($checkedrooms);
 
-                $update = $moodledbobj->UpdateRecordInDB("exammanagement", $exammanagementinstanceobj->moduleinstance);
+                $update = $DB->update_record("exammanagement", $exammanagementinstanceobj->moduleinstance);
                 if ($update) {
-                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+                    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                        get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
                 } else {
-                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+                    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                        get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                 }
 
             } else {
@@ -176,13 +180,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
                 $mform->display();
 
-                $moodleobj->outputFooter();
+                // Finish the page.
+                echo $OUTPUT->footer();
             }
 
         } else { // If user has not entered correct password for this session.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

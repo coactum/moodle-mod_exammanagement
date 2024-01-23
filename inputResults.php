@@ -25,8 +25,9 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\inputResultsForm;
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 use core\output\notification;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -35,33 +36,42 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$input  = optional_param('matrnr', 0, PARAM_TEXT);
+$input = optional_param('matrnr', 0, PARAM_TEXT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$LdapManagerObj = ldapManager::getInstance();
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$ldapmanager = ldapmanager::getinstance();
+$UserObj = userhandler::getinstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
+
+    global $DB, $OUTPUT;
+
     if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-    } elseif (!$LdapManagerObj->isLDAPenabled()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('enterresultsmatrnr', 'mod_exammanagement') . ' ' . get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
-    } elseif (!$LdapManagerObj->isLDAPconfigured()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('enterresultsmatrnr', 'mod_exammanagement') . ' ' . get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    } else if (!$ldapmanager->isldapenabled()) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('enterresultsmatrnr', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+    } else if (!$ldapmanager->isldapconfigured()) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('enterresultsmatrnr', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
     } else {
         if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
-            if (!$UserObj->getParticipantsCount()) {
-                $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-            } elseif (!$ExammanagementInstanceObj->getTaskCount()) {
-                $MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_tasks_configured', 'mod_exammanagement'), 'error');
+            if (!$UserObj->getparticipantscount()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                    get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+            } else if (!$ExammanagementInstanceObj->getTaskCount()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                    get_string('no_tasks_configured', 'mod_exammanagement'), null, 'error');
             }
 
             $matrnr = false;
-            $case='';
+            $case ='';
             $result;
             $firstname = '';
             $lastname = '';
@@ -97,32 +107,32 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                     }
 
                     if ($matrnr) {
-                        if ($UserObj->checkIfValidMatrNr($matrnr)) {
+                        if ($UserObj->checkifvalidmatrnr($matrnr)) {
                             // convert matrnr to user
                             $userlogin = false;
                             $userid = false;
 
-                            $userlogin = $LdapManagerObj->getLoginForMatrNr($matrnr, 'enterresultsmatrnr');
+                            $userlogin = $ldapmanager->getloginformatrnr($matrnr, 'enterresultsmatrnr');
 
                             if ($userlogin) {
-                                $userid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username' => $userlogin));
+                                $userid = $DB->get_field('user', 'id', array('username' => $userlogin));
                             }
 
                             $participantObj = false;
 
-                            // getExamParticipantObj
+                            // getexamparticipant
                             if ($userid !== false && $userid !== null) {
-                                $participantObj = $UserObj->getExamParticipantObj($userid);
+                                $participantObj = $UserObj->getexamparticipant($userid);
                             } elseif ($userlogin !== false && $userlogin !== null) {
-                                $participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+                                $participantObj = $UserObj->getexamparticipant(false, $userlogin);
                             }
 
                             // if user is participant
-                            if ($participantObj && $UserObj->checkIfAlreadyParticipant($participantObj->moodleuserid, $userlogin)) {
+                            if ($participantObj && $UserObj->checkifalreadyparticipant($participantObj->moodleuserid, $userlogin)) {
                                 $case = 'participant';
 
                                 if ($userid !== false && $userid !== null) {
-                                    $MoodleUserObj = $UserObj->getMoodleUser($userid);
+                                    $MoodleUserObj = $UserObj->getmoodleuser($userid);
                                     $firstname = $MoodleUserObj->firstname;
                                     $lastname = $MoodleUserObj->lastname;
                                 } else {
@@ -130,7 +140,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                                     $lastname = $participantObj->lastname;
                                 }
 
-                                if ($UserObj->participantHasResults($participantObj)) { // if participants has results
+                                if ($UserObj->participanthasresults($participantObj)) { // if participants has results
                                     $case = 'participantwithresults';
                                 }
                             } else {
@@ -145,15 +155,17 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 }
             }
 
-            //Instantiate Textfield_form
-            $mform = new inputResultsForm(null, array('id'=>$id, 'e'=>$e, 'matrnr'=>$matrnr, 'firstname'=>$firstname, 'lastname'=>$lastname));
+            // Instantiate Textfield_form.
+            $mform = new inputResultsForm(null, array('id' => $id, 'e' => $e, 'matrnr' => $matrnr, 'firstname' => $firstname, 'lastname' => $lastname));
 
-            //Form processing and displaying is done here
+            // Form processing and displaying is done here.
             if ($mform->is_cancelled()) {
-                //Handle form cancel operation, if cancel button is present on form
-                $MoodleObj->redirectToOverviewPage('beforeexam', null, 'success');
-            } elseif ($fromform = $mform->get_data()) {
-                //In this case you process validated data. $mform->get_data() returns data posted in form.
+                // Handle form cancel operation, if cancel button is present on form.
+                redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                    null, null, null);
+
+            } else if ($fromform = $mform->get_data()) {
+                // In this case you process validated data. $mform->get_data() returns data posted in form.
 
                 $matrval = $fromform->matrval;
 
@@ -162,25 +174,26 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                 $participantObj = false;
 
                 if ($matrval) {
-                    redirect('inputResults.php?id='.$id.'&matrnr='.$fromform->matrnr, null, null, null);
+                    redirect(new moodle_url('/mod/exammanagement/inputResults.php', ['id' => $id, 'matrnr' => $fromform->matrnr]),
+                        null, null, null);
                 } else {
-                    $userlogin = $LdapManagerObj->getLoginForMatrNr($fromform->matrnr, 'enterresultsmatrnr');
+                    $userlogin = $ldapmanager->getloginformatrnr($fromform->matrnr, 'enterresultsmatrnr');
 
                     if ($userlogin) {
-                        $userid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username' => $userlogin));
+                        $userid = $DB->get_field('user', 'id', array('username' => $userlogin));
                     }
 
-                    // getExamParticipantObj
+                    // Get exam participant.
                     if ($userid !== false && $userid !== null) {
-                        $participantObj = $UserObj->getExamParticipantObj($userid);
-                    } elseif ($userlogin !== false && $userlogin !== null) {
-                        $participantObj = $UserObj->getExamParticipantObj(false, $userlogin);
+                        $participantObj = $UserObj->getexamparticipant($userid);
+                    } else if ($userlogin !== false && $userlogin !== null) {
+                        $participantObj = $UserObj->getexamparticipant(false, $userlogin);
                     }
 
                     if ($participantObj) {
                         $participantObj->examstate = json_encode($fromform->state);
 
-                        if ($fromform->state['nt']=='1' || $fromform->state['fa']=='1' || $fromform->state['ill']=='1') {
+                        if ($fromform->state['nt'] == '1' || $fromform->state['fa'] == '1' || $fromform->state['ill'] == '1') {
                             foreach ($fromform->points as $task => $points) {
                                 $fromform->points[$task] = 0;
                             }
@@ -189,18 +202,20 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                         $participantObj->exampoints = json_encode($fromform->points);
                         $participantObj->timeresultsentered = time();
 
-                        $update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+                        $update = $DB->update_record('exammanagement_participants', $participantObj);
                         if ($update) {
-                            redirect($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), null, null, null);
+                            redirect(new moodle_url('/mod/exammanagement/inputResults.php', ['id' => $id]), null, null, null);
                         } else {
-                            redirect($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('alteration_failed', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+                            redirect(new moodle_url('/mod/exammanagement/inputResults.php', ['id' => $id]),
+                                get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
                         }
                     } else {
-                        redirect($ExammanagementInstanceObj->getExammanagementUrl('inputResults', $id), get_string('noparticipant', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+                        redirect(new moodle_url('/mod/exammanagement/inputResults.php', ['id' => $id]),
+                            get_string('noparticipant', 'mod_exammanagement'), null, 'error');
                     }
                 }
             } else {
-                // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
                 // or on the first display of the form.
 
                 switch ($case) {
@@ -209,46 +224,48 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
                         $stateObj = json_decode($participantObj->examstate);
                         $pointsArr = json_decode($participantObj->exampoints);
 
-                        $mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr, 'state[nt]'=>$stateObj->nt, 'state[fa]'=>$stateObj->fa, 'state[ill]'=>$stateObj->ill));
+                        $mform->set_data(array('id' => $id, 'matrval' => 0, 'matrnr' => $matrnr, 'state[nt]' => $stateObj->nt, 'state[fa]' => $stateObj->fa, 'state[ill]' => $stateObj->ill));
 
-                        foreach ($pointsArr as $key=>$points) {
-                            $mform->set_data(array('points['.$key.']'=>$points));
+                        foreach ($pointsArr as $key => $points) {
+                            $mform->set_data(array('points['.$key.']' => $points));
                         }
                         break;
                     case 'participant':
-                        $mform->set_data(array('id'=>$id, 'matrval'=>0, 'matrnr'=>$matrnr));
+                        $mform->set_data(array('id' => $id, 'matrval' => 0, 'matrnr' => $matrnr));
                         break;
                     case 'noparticipant':
-                        $mform->set_data(array('id'=>$id, 'matrval'=>1,));
+                        $mform->set_data(array('id' => $id, 'matrval' => 1));
                         \core\notification::add(get_string('noparticipant', 'mod_exammanagement'), 'error');
                         break;
                     case 'novalidmatrnr':
-                        $mform->set_data(array('id'=>$id, 'matrval'=>1,));
+                        $mform->set_data(array('id' => $id, 'matrval' => 1));
                         \core\notification::add(get_string('invalid_matrnr', 'mod_exammanagement'), 'error');
                         break;
                     case 'novalidbarcode':
-                        $mform->set_data(array('id'=>$id, 'matrval'=>1,));
+                        $mform->set_data(array('id' => $id, 'matrval' => 1));
                         \core\notification::add(get_string('invalid_barcode', 'mod_exammanagement'), 'error');
                         break;
                     default:
-                        $mform->set_data(array('id'=>$id, 'matrval'=>1,));
+                        $mform->set_data(array('id' => $id, 'matrval' => 1));
                         break;
                 }
 
                 $MoodleObj->setPage('inputResults');
                 $MoodleObj->outputPageHeader();
 
-                //displays the form
+                // Displays the form.
                 $mform->display();
 
-                $MoodleObj->outputFooter();
-
+                // Finish the page.
+                echo $OUTPUT->footer();
             }
 
-        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+        } else { // If user hasnt entered correct password for this session: show enterPasswordPage.
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
+
         }
     }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

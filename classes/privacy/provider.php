@@ -24,13 +24,14 @@
 
 namespace mod_exammanagement\privacy;
 
-use \core_privacy\local\request\userlist;
-use \core_privacy\local\request\approved_contextlist;
-use \core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper;
-use \core_privacy\local\metadata\collection;
-use \core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\writer;
+use core_privacy\local\request\helper;
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\transform;
+use core_privacy\local\request\contextlist;
 
 use core_privacy\local\request\user_preference_provider;
 
@@ -63,7 +64,7 @@ class provider implements
 
         // The table 'exammanagement' does not store any specific user data.
         // It only stores general information about the exam like exam time, rooms, gradingscale and so on.
-        $items->add_database_table('exammanagement', ['-' => 'privacy:metadata:exammanagement:no_data'
+        $items->add_database_table('exammanagement', ['-' => 'privacy:metadata:exammanagement:no_data',
         ], 'privacy:metadata:exammanagement');
 
         // The table 'exammanagement_participants' stores the personal data of all participants added to any exam.
@@ -98,7 +99,8 @@ class provider implements
             'headerid' => 'privacy:metadata:exammanagement_temp_part:headerid',
         ], 'privacy:metadata:exammanagement_temp_part');
 
-        // The table 'exammanagement_rooms' stores all available exam rooms. If a user has created a custom exam room it is stored here.
+        // The table 'exammanagement_rooms' stores all available exam rooms.
+        // If a user has created a custom exam room it is stored here.
         $items->add_database_table('exammanagement_rooms', [
             'roomid' => 'privacy:metadata:exammanagement_rooms:roomid',
             'name' => 'privacy:metadata:exammanagement_rooms:name',
@@ -134,13 +136,13 @@ class provider implements
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid) : \core_privacy\local\request\contextlist {
-        $contextlist = new \core_privacy\local\request\contextlist();
+    public static function get_contexts_for_userid(int $userid) : contextlist {
+        $contextlist = new contextlist();
 
         $params = [
-            'modulename'       => 'exammanagement',
-            'contextlevel'  => CONTEXT_MODULE,
-            'userid'        => $userid,
+            'modulename' => 'exammanagement',
+            'contextlevel' => CONTEXT_MODULE,
+            'userid' => $userid,
         ];
 
         // Where user is participant.
@@ -171,8 +173,8 @@ class provider implements
         }
 
         $params = [
-            'instanceid'    => $context->id,
-            'modulename'    => 'exammanagement',
+            'instanceid' => $context->id,
+            'modulename' => 'exammanagement',
         ];
 
         // Participants.
@@ -246,17 +248,17 @@ class provider implements
                     if ($exammanagement->timemodified == 0) {
                         $exammanagement->timemodified = null;
                     } else {
-                        $exammanagement->timemodified = \core_privacy\local\request\transform::datetime($exammanagement->timemodified);
+                        $exammanagement->timemodified = transform::datetime($exammanagement->timemodified);
                     }
 
                     $exammanagementdata = [
-                        'id'       => $exammanagement->exammanagement,
-                        'timecreated'   => \core_privacy\local\request\transform::datetime($exammanagement->timecreated),
+                        'id' => $exammanagement->exammanagement,
+                        'timecreated' => transform::datetime($exammanagement->timecreated),
                         'timemodified' => $exammanagement->timemodified,
                     ];
 
                     if ($exammanagement->timeresultsentered !== null) {
-                        $exammanagement->timeresultsentered = \core_privacy\local\request\transform::datetime($exammanagement->timeresultsentered);
+                        $exammanagement->timeresultsentered = transform::datetime($exammanagement->timeresultsentered);
                     }
 
                     if ($exammanagement->exampoints !== null) {
@@ -300,7 +302,9 @@ class provider implements
      * @param array $subcontext The location within the current context that this data belongs.
      * @param \stdClass $user the user record
      */
-    protected static function export_exammanagement_data_for_user(array $exammanagementdata, \context_module $context, array $subcontext, \stdClass $user) {
+    protected static function export_exammanagement_data_for_user(array $exammanagementdata, \context_module $context,
+        array $subcontext, \stdClass $user) {
+
         // Fetch the generic module data for the exammanagement activity.
         $contextdata = helper::get_context_data($context, $user);
         // Merge with exammanagement data and write it.
@@ -470,8 +474,11 @@ class provider implements
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        if ($DB->record_exists_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)) {
-            $DB->delete_records_select('exammanagement_participants', "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
+        if ($DB->record_exists_select('exammanagement_participants',
+            "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)) {
+
+            $DB->delete_records_select('exammanagement_participants',
+                "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
         }
     }
 }

@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\configurepassword_form;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -33,71 +34,80 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$resetPW  = optional_param('resetPW', 0, PARAM_INT);
+$resetPW = optional_param('resetPW', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
-	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
+    global $DB, $OUTPUT;
 
-		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    } else {
 
-			if ($resetPW == true) {
-				$ExammanagementInstanceObj->moduleinstance->password = NULL;
-				$MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-			}
+        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
 
-			// Instantiate form.
-			$mform = new configurepassword_form(null, array('id'=>$id, 'e'=>$e));
+            if ($resetPW == true) {
+                $ExammanagementInstanceObj->moduleinstance->password = null;
+                $DB->update_record("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                        get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            }
 
-			// Form processing and displaying is done here.
-			if ($mform->is_cancelled()) {
-				// Handle form cancel operation, if cancel button is present on form.
-				$MoodleObj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+            // Instantiate form.
+            $mform = new configurepassword_form(null, array('id' => $id, 'e' => $e));
 
-			} else if ($fromform = $mform->get_data()) { // In this case you process validated data.
+            // Form processing and displaying is done here.
+            if ($mform->is_cancelled()) {
+                // Handle form cancel operation, if cancel button is present on form.
+                redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                    get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
-				$password = $fromform->password;
+            } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
 
-				$password_hash = base64_encode(password_hash($password, PASSWORD_DEFAULT));
+                $password = $fromform->password;
 
-				$ExammanagementInstanceObj->moduleinstance->password = $password_hash;
+                $password_hash = base64_encode(password_hash($password, PASSWORD_DEFAULT));
 
-				$update = $MoodleDBObj->UpdateRecordInDB("exammanagement", $ExammanagementInstanceObj->moduleinstance);
+                $ExammanagementInstanceObj->moduleinstance->password = $password_hash;
 
-				if ($update) {
-					$MoodleObj->redirectToOverviewPage('beforeexam',get_string('operation_successfull', 'mod_exammanagement'), 'success');
-				} else {
-					$MoodleObj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-				}
+                $update = $DB->update_record("exammanagement", $ExammanagementInstanceObj->moduleinstance);
 
-				} else {
-					// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-					// or on the first display of the form.
+                if ($update) {
+                    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                        get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+                } else {
+                    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+                        get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                }
 
-					// Set default data (if any).
-					$mform->set_data(array('id'=>$id));
+            } else {
+                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+                // or on the first display of the form.
 
-					$MoodleObj->setPage('configurePassword');
-					$MoodleObj->outputPageHeader();
+                // Set default data (if any).
+                $mform->set_data(array('id' => $id));
 
-					$mform->display();
+                $MoodleObj->setPage('configurePassword');
+                $MoodleObj->outputPageHeader();
 
-					$MoodleObj->outputFooter();
-				}
+                $mform->display();
 
-		} else { // If user has not entered correct password for this session.
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-		}
-	}
+                // Finish the page.
+                echo $OUTPUT->footer();
+            }
+
+        } else { // If user has not entered correct password for this session.
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
+        }
+    }
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

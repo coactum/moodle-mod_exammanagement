@@ -25,9 +25,10 @@
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
 use mod_exammanagement\general\Moodle;
-use mod_exammanagement\general\User;
+use mod_exammanagement\general\userhandler;
 
 use moodleform;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,7 +37,7 @@ require_once("$CFG->libdir/formslib.php");
 
 require_once(__DIR__.'/../general/exammanagementInstance.php');
 require_once(__DIR__.'/../general/Moodle.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 
 /**
  * The form for sending group messages for mod_exammanagement.
@@ -54,7 +55,7 @@ class sendgroupmessage_form extends moodleform {
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
 
         $mform = $this->_form;
 
@@ -72,15 +73,15 @@ class sendgroupmessage_form extends moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $moodleparticipantscount = $userobj->getParticipantsCount('moodle');
-        $nonemoodleparticipantscount = $userobj->getParticipantsCount('nonmoodle');
+        $moodleparticipantscount = $userobj->getparticipantscount('moodle');
+        $nonemoodleparticipantscount = $userobj->getparticipantscount('nonmoodle');
 
         if ($moodleparticipantscount) {
 
             $mform->addElement('html', '<p>'.get_string('groupmessages_text', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName(), 'participantscount' => $moodleparticipantscount]).'</p>');
 
             if ($nonemoodleparticipantscount) {
-                $mailadressarr = $userobj->getNoneMoodleParticipantsEmailadresses();
+                $mailadressarr = $userobj->getnonemoodleparticipantsemailadresses();
 
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>');
 
@@ -109,7 +110,7 @@ class sendgroupmessage_form extends moodleform {
             $this->add_action_buttons(true, get_string('send_message', 'mod_exammanagement'));
 
         } else if ($nonemoodleparticipantscount) {
-            $mailadressarr = $userobj->getNoneMoodleParticipantsEmailadresses();
+            $mailadressarr = $userobj->getnonemoodleparticipantsemailadresses();
 
             $mform->addElement('html', '<p><strong>'.$nonemoodleparticipantscount. '</strong>' .get_string('groupmessages_warning_2', 'mod_exammanagement').'</p>');
 
@@ -121,15 +122,11 @@ class sendgroupmessage_form extends moodleform {
 
             $mform->addElement('html', '" role="button" class="btn btn-primary" title="'.get_string('send_manual_message', 'mod_exammanagement').'">'.get_string('send_manual_message', 'mod_exammanagement').'</a>');
 
-            $mform->addElement('html', '<span class="col-sm-5"></span><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+            $mform->addElement('html', '<span class="col-sm-5"></span><a href="'.new moodle_url('/mod/exammanagement/view.php', ['id' => $this->_customdata['id']]).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
         } else {
-            $moodleobj->redirectToOverviewPage('', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+            redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+                get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
         }
-    }
-
-    // Custom validation should be added here.
-    public function validation($data, $files) {
-        return array();
     }
 }

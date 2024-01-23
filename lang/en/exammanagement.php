@@ -940,6 +940,3 @@ $string['warningmailcontentenglish'] = '<strong>English version</strong>: All in
 
 //delete_unassigned_custom_rooms.php - task
 $string['delete_unassigned_custom_rooms'] = 'Delete unassigned custom rooms';
-
-//upb_migrate_plugininstanceid_to_exammanagement.php - task
-$string['upb_migrate_plugininstanceid_to_exammanagement'] = 'Migrate db field plugininstance to exammanagement (UPB)'; // only for upb migration to pluginversion XXX

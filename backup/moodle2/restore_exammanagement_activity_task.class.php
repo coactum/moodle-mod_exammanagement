@@ -53,11 +53,11 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
         // Define the contents (files).
-        // tablename, array(field1, field 2), $mapping.
-        $contents[] = new restore_decode_content('exammanagement', array('intro'), 'exammanagement');
+        // tablename, [field1, field 2], $mapping.
+        $contents[] = new restore_decode_content('exammanagement', ['intro'], 'exammanagement');
 
         return $contents;
     }
@@ -68,11 +68,11 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         // Define the rules.
         $rules[] = new restore_decode_rule('EXAMMANAGEMENTINDEX', '/mod/exammanagement/index.php?id=$1', 'course');
-        $rules[] = new restore_decode_rule('EXAMMANAGEMENTVIEWBYID', '/mod/exammanagement/view.php?id=$1', array('course_module'));
+        $rules[] = new restore_decode_rule('EXAMMANAGEMENTVIEWBYID', '/mod/exammanagement/view.php?id=$1', ['course_module']);
 
         return $rules;
     }
@@ -85,7 +85,7 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         // Define the rules.
         $rules[] = new restore_log_rule('exammanagement', 'view', 'view.php?id={course_module}', '{exammanagement}');
@@ -103,7 +103,7 @@ class restore_exammanagement_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('exammanagement', 'view all', 'index.php?id={course}', null);
 

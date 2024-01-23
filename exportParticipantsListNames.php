@@ -25,6 +25,7 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\pdfs\participantsList;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -36,13 +37,14 @@ $id = optional_param('id', 0, PARAM_INT);
 $e  = optional_param('e', 0, PARAM_INT);
 
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$UserObj = userhandler::getinstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
 $MoodleObj = Moodle::getInstance($id, $e);
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
     if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
 	} else {
 
         if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
@@ -50,11 +52,15 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
             global $CFG;
 
             if (!$ExammanagementInstanceObj->getRoomsCount()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
-            } else if (!$UserObj->getParticipantsCount()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+
+            } else if (!$UserObj->getparticipantscount()) {
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
             } else if (!$ExammanagementInstanceObj->placesAssigned()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
+                redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                    get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
             }
 
             //include pdf
@@ -123,7 +129,7 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
             foreach ($roomIDs as $roomID) {
                 $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
 
-                $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
+                $participants = $UserObj->getexamparticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
 
                 if ($participants) {
                     if (!empty($previousRoom) && $currentRoom != $previousRoom) {
@@ -175,10 +181,12 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
             //============================================================+
 
         } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

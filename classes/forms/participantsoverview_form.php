@@ -24,20 +24,19 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\User;
-use mod_exammanagement\general\MoodleDB;
+use mod_exammanagement\general\userhandler;
 use mod_exammanagement\general\Moodle;
 use mod_exammanagement\output\exammanagement_pagebar;
 
 use moodleform;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
-require_once(__DIR__.'/../general/MoodleDB.php');
+require_once(__DIR__.'/../general/userhandler.php');
 require_once(__DIR__.'/../general/Moodle.php');
 
 /**
@@ -57,10 +56,8 @@ class participantsoverview_form extends moodleform {
         global $PAGE, $OUTPUT;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
         $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-
-        $moodledbobj = MoodleDB::getInstance();
 
         if ($exammanagementinstanceobj->getTaskCount()) {
             $tasks = $exammanagementinstanceobj->getTasks();
@@ -106,9 +103,15 @@ class participantsoverview_form extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string("participants_overview_text", "mod_exammanagement").'</p>');
 
-        $allparticipants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'));
-        $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr'), 'name', true, $this->_customdata['pagenr']);
-        $examrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
+        $allparticipants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'));
+        $participants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr'), 'name', true, $this->_customdata['pagenr']);
+
+        if (is_null($exammanagementinstanceobj->moduleinstance->rooms)) {
+            $examrooms = null;
+        } else {
+            $examrooms = json_decode($exammanagementinstanceobj->moduleinstance->rooms);
+        }
+
         $gradingscale = $exammanagementinstanceobj->getGradingscale();
 
         $pagebar = new exammanagement_pagebar($this->_customdata['id'], 'participantsOverview.php?id=' . $this->_customdata['id'], sesskey(), $exammanagementinstanceobj->get_pagebar($allparticipants, $this->_customdata['pagenr']), $exammanagementinstanceobj->get_pagecountoptions(),  count($participants), count($allparticipants));
@@ -197,7 +200,7 @@ class participantsoverview_form extends moodleform {
 
                 $totalpoints = false;
 
-                $state = $userobj->getExamState($participant);
+                $state = $userobj->getexamstate($participant);
 
                 if (!$state) {
                     $state = 'not_set';
@@ -209,9 +212,9 @@ class participantsoverview_form extends moodleform {
                     $exampoints = array_values((array) json_decode($participant->exampoints));
                 }
 
-                $totalpoints = $userobj->calculatePoints($participant);
+                $totalpoints = $userobj->calculatepoints($participant);
                 $totalpointsdisplay = $exammanagementinstanceobj->formatNumberForDisplay($totalpoints);
-                $totalpointswithbonus = $userobj->calculatePoints($participant, true);
+                $totalpointswithbonus = $userobj->calculatepoints($participant, true);
                 $totalpointswithbonusdisplay = $exammanagementinstanceobj->formatNumberForDisplay($totalpointswithbonus);
 
                 if (!isset($this->_customdata['epm']) || $this->_customdata['epm'] === 0 ) { // Show users.
@@ -255,7 +258,7 @@ class participantsoverview_form extends moodleform {
                         $mform->addElement('html', '<td>'.$totalpointsdisplay.'</td>');
 
                         // bonuspoints
-                        if ($userobj->getEnteredBonusCount('points')) {
+                        if ($userobj->getenteredbonuscount('points')) {
                             if (isset($participant->bonuspoints)) {
                                 $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay(number_format($participant->bonuspoints, 2)).'</td>');
                             } else {
@@ -266,7 +269,7 @@ class participantsoverview_form extends moodleform {
                         }
 
                         // totalpoints with bonuspoints
-                        if ($userobj->getEnteredBonusCount('points')) {
+                        if ($userobj->getenteredbonuscount('points')) {
                             $mform->addElement('html', '<td>'. $totalpointswithbonusdisplay .'</td>');
                         } else {
                             $mform->addElement('html', '<td>-</td>');
@@ -274,13 +277,13 @@ class participantsoverview_form extends moodleform {
 
                         // result
                         if ($gradingscale) {
-                            $result = $userobj->calculateResultGrade($totalpointswithbonus);
+                            $result = $userobj->calculateresultgrade($totalpointswithbonus);
                             $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay($result).'</td>');
                         } else {
                             $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                         }
 
-                        if ($userobj->getEnteredBonusCount('steps')) {
+                        if ($userobj->getenteredbonuscount('steps')) {
                             if (isset($participant->bonussteps)) {
                                 $mform->addElement('html', '<td>'.$participant->bonussteps);
 
@@ -314,13 +317,13 @@ class participantsoverview_form extends moodleform {
                         }
 
                         if ($gradingscale) {
-                            $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay($userobj->calculateResultGrade($totalpointswithbonus, $participant->bonussteps)).'</td>');
+                            $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay($userobj->calculateresultgrade($totalpointswithbonus, $participant->bonussteps)).'</td>');
                         } else {
                             $mform->addElement('html', '<td><a href="configureGradingscale.php?id='.$this->_customdata['id'].'" title="'.get_string("configure_gradingscale", "mod_exammanagement").'"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                         }
                     } else {
                         // bonuspoints
-                        if ($userobj->getEnteredBonusCount('points')) {
+                        if ($userobj->getenteredbonuscount('points')) {
                             if (isset($participant->bonuspoints)) {
                                 $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay(number_format($participant->bonuspoints, 2)).'</td>');
                             } else {
@@ -332,7 +335,7 @@ class participantsoverview_form extends moodleform {
 
                         // result
                         if ($gradingscale) {
-                            $result = $userobj->calculateResultGrade($participant->bonuspoints);
+                            $result = $userobj->calculateresultgrade($participant->bonuspoints);
                             $mform->addElement('html', '<td>'.$exammanagementinstanceobj->formatNumberForDisplay($result).'</td>');
                         }
                     }
@@ -452,14 +455,8 @@ class participantsoverview_form extends moodleform {
         if (isset($this->_customdata['epm'])) {
             $this->add_action_buttons(true, get_string("save_changes", "mod_exammanagement"));
         } else {
-            $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $this->_customdata['id']).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
+            $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="'.new moodle_url('/mod/exammanagement/view.php', ['id' => $this->_customdata['id']]).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a></div>');
         }
 
-    }
-
-    // Custom validation should be added here.
-    public function validation($data, $files) {
-        $errors = array();
-        return $errors;
     }
 }

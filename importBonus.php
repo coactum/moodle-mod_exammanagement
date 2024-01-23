@@ -25,11 +25,12 @@
 namespace mod_exammanagement\general;
 
 use mod_exammanagement\forms\importbonus_form;
-use mod_exammanagement\ldap\ldapManager;
+use mod_exammanagement\ldap\ldapmanager;
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 use \PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 use stdclass;
 use core\output\notification;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -39,22 +40,24 @@ require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$bonusstepcount  = optional_param('bonusstepcount', 0, PARAM_INT);
+$bonusstepcount = optional_param('bonusstepcount', 0, PARAM_INT);
 
-$dbp  = optional_param('dbp', 0, PARAM_INT);
+$dbp = optional_param('dbp', 0, PARAM_INT);
 
 $MoodleObj = Moodle::getInstance($id, $e);
 $ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$MoodleDBObj = MoodleDB::getInstance();
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
-$LdapManagerObj = LdapManager::getInstance();
+$UserObj = userhandler::getinstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
+$ldapmanager = ldapmanager::getinstance();
 
 if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
+    global $DB, $OUTPUT;
+
 	if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
 	} else {
 
 		if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
@@ -66,15 +69,17 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 			}
 
 			if (!isset($misc['mode']) && !$ExammanagementInstanceObj->placesAssigned()) {
-				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
-			} else if (!$UserObj->getParticipantsCount()) {
-				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('no_participants_added', 'mod_exammanagement'), 'error');
+				redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+					get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
+			} else if (!$UserObj->getparticipantscount()) {
+				redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+					get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
 			}
 
 			if ($dbp) {
 				require_sesskey();
-				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonuspoints', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
-				$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonussteps', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+				$DB->set_field('exammanagement_participants', 'bonuspoints', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+				$DB->set_field('exammanagement_participants', 'bonussteps', NULL, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 			}
 
 			//Instantiate form
@@ -82,17 +87,18 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 			//Form processing and displaying is done here
 			if ($mform->is_cancelled()) {
-				//Handle form cancel operation, if cancel button is present on form
+				// Handle form cancel operation, if cancel button is present on form.
 
-				$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+				redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+					get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
 
 			} else if ($fromform = $mform->get_data()) {
 			//In this case you process validated data. $mform->get_data() returns data posted in form.
 
 				if ($fromform->bonuspoints_list) {
 
-					if ($fromform->bonusmode==='steps' && ((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3]))) {
-						redirect($ExammanagementInstanceObj->getExammanagementUrl('importBonus', $id), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
+					if ($fromform->bonusmode === 'steps' && ((isset($fromform->bonussteppoints[2]) && $fromform->bonussteppoints[1]>=$fromform->bonussteppoints[2]) || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2]>=$fromform->bonussteppoints[3]))) {
+						redirect(new moodle_url('/mod/exammanagement/importBonus.php', ['id' => $id]), get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, notification::NOTIFY_ERROR);
 					}
 
 					// retrieve Files from form
@@ -108,6 +114,11 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 					$ExcelReaderWrapper = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($tempfile);
 					$ExcelReaderWrapper->setReadDataOnly(true);
 
+					/**
+					 * Constructor
+					 * @param int $lower The lower value
+					 * @param int $upper The upper value
+					 */
 					function excelColumnRange($lower, $upper) {
 						++$upper;
 						for ($i = $lower; $i !== $upper; ++$i) {
@@ -115,10 +126,23 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 						}
 					}
 
-					class MyReadFilter implements \PhpOffice\PhpSpreadsheet\Reader\IReadFilter { // not working in the way intended (read only cells with relevant data)
+					/**
+					 * Custom read filter for phpspreadsheet.
+					 *
+					 * @package     mod_exammanagement
+					 * @copyright   2022 coactum GmbH
+					 * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+					 */
+					class MyReadFilter implements \PhpOffice\PhpSpreadsheet\Reader\IReadFilter {
+						// not working in the way intended (read only cells with relevant data)
 
+						/** @var array */
 						private $columns = array();
 
+						/**
+						 * Constructor
+					     * @param int $toColumn The to column
+						 */
 						public function __construct($toColumn) {
 
 							foreach (excelColumnRange('A', $toColumn) as $value) {
@@ -127,6 +151,13 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 						}
 
+						/**
+						 * Constructor
+					     * @param int $column The column
+					     * @param string $row The row
+					     * @param string $worksheetName The worksheet name
+						 * @return bool Instance or null if not found
+						 */
 						public function readCell($column, $row, $worksheetName = '') {
 
 							if (in_array($column, $this->columns)) {
@@ -158,21 +189,21 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 					foreach ($potentialUserIDsArr as $key => $potentialIdentifier) { // unset all identifiers that are no valid matriculation numbers or mail adresses
 
 						if ($potentialIdentifier[0] && filter_var($potentialIdentifier[0], FILTER_VALIDATE_EMAIL)) { // if identifier is mail adress (import of moodle grades export)
-							$dataArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $MoodleDBObj->getFieldFromDB('user', 'id', array('email'=>$potentialIdentifier[0])), 'points' =>$pointsArr[$key][0]);
-						} else if ($potentialIdentifier[0] && $UserObj->checkIfValidMatrNr($potentialIdentifier[0])) { // if identifier is matrnr (individual import)
+							$dataArr[$key] = array('matrnr' => false, 'login' => false, 'moodleuserid' => $DB->get_field('user', 'id', array('email'=>$potentialIdentifier[0])), 'points' =>$pointsArr[$key][0]);
+						} else if ($potentialIdentifier[0] && $UserObj->checkifvalidmatrnr($potentialIdentifier[0])) { // if identifier is matrnr (individual import)
 							$matrNrsArr[$key] = $potentialIdentifier[0];
 							array_push($linesArr, $key);
 						}
 					}
 
 					if (!empty($matrNrsArr)) {
-						$loginsArray = $LdapManagerObj->getLDAPAttributesForMatrNrs($matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
+						$loginsArray = $ldapmanager->getldapattributesformatrnrs($matrNrsArr, 'usernames_and_matriculationnumbers', $linesArr);
 					}
 
 					if (!empty($loginsArray)) {
 						foreach ($loginsArray as $key => $data) {
 
-							$moodleuserid = $MoodleDBObj->getFieldFromDB('user', 'id', array('username'=>$data['login']));
+							$moodleuserid = $DB->get_field('user', 'id', array('username'=>$data['login']));
 
 							if ($moodleuserid) {
 								$dataArr[$key] = array('login' => false, 'moodleuserid' => $moodleuserid, 'points' =>$pointsArr[$key][0]);
@@ -188,10 +219,10 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 					foreach ($dataArr as $line => $data) {
 						$participantObj = false;
 
-						if ($data['moodleuserid'] && $UserObj->checkIfAlreadyParticipant($data['moodleuserid'])) {
-							$participantObj = $UserObj->getExamParticipantObj($data['moodleuserid']);
-						} else if ($data['login'] && $UserObj->checkIfAlreadyParticipant(false, $data['login'])) {
-							$participantObj = $UserObj->getExamParticipantObj(false, $data['login']);
+						if ($data['moodleuserid'] && $UserObj->checkifalreadyparticipant($data['moodleuserid'])) {
+							$participantObj = $UserObj->getexamparticipant($data['moodleuserid']);
+						} else if ($data['login'] && $UserObj->checkifalreadyparticipant(false, $data['login'])) {
+							$participantObj = $UserObj->getexamparticipant(false, $data['login']);
 						}
 
 						if ($participantObj) {
@@ -218,24 +249,26 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 								}
 							}
 
-							$update = $MoodleDBObj->UpdateRecordInDB('exammanagement_participants', $participantObj);
+							$update = $DB->update_record('exammanagement_participants', $participantObj);
 
 						}
 					}
 
 					if ($fromform->bonusmode === "steps") {
-						$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonuspoints', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+						$DB->set_field('exammanagement_participants', 'bonuspoints', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 					} else if ($fromform->bonusmode === "points") {
-						$MoodleDBObj->setFieldInDB('exammanagement_participants', 'bonussteps', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
+						$DB->set_field('exammanagement_participants', 'bonussteps', null, array('exammanagement' => $ExammanagementInstanceObj->getCm()->instance));
 					}
 
 					fclose($handle);
 					unlink($tempfile);
 
 					if ($update) {
-						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('operation_successfull', 'mod_exammanagement'), 'success');
+						redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                        	get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
 					} else {
-						$MoodleObj->redirectToOverviewPage('aftercorrection', get_string('alteration_failed', 'mod_exammanagement'), 'error');
+						redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                        	get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
 					}
 				}
 			} else {
@@ -250,13 +283,16 @@ if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
 
 				$mform->display();
 
-				$MoodleObj->outputFooter();
+				// Finish the page.
+                echo $OUTPUT->footer();
 			}
 
 		} else { // If user has not entered correct password.
-			redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
+			redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
 		}
 	}
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }

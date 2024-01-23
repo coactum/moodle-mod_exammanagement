@@ -24,7 +24,7 @@
 
 namespace mod_exammanagement\forms;
 use mod_exammanagement\general\exammanagementInstance;
-use mod_exammanagement\general\user;
+use mod_exammanagement\general\userhandler;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(__DIR__.'/../general/exammanagementInstance.php');
-require_once(__DIR__.'/../general/User.php');
+require_once(__DIR__.'/../general/userhandler.php');
 
 /**
  * The form for configuring the tasks for mod_exammanagement.
@@ -51,7 +51,7 @@ class configureTasksForm extends moodleform {
         global $PAGE, $OUTPUT;
 
         $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $userobj = User::getInstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
+        $userobj = userhandler::getinstance($this->_customdata['id'], $this->_customdata['e'], $exammanagementinstanceobj->getCm()->instance);
 
         $jsargs = array('lang' => current_language());
 
@@ -73,7 +73,7 @@ class configureTasksForm extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('configure_tasks_text', 'mod_exammanagement').'</p>');
 
-        if ($userobj->getEnteredResultsCount()) {
+        if ($userobj->getenteredresultscount()) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in"
                 role="alert"><button type="button" class="close" data-dismiss="alert">×</button>' . get_string("results_already_entered", "mod_exammanagement") . '</div>');
         }
@@ -175,7 +175,13 @@ class configureTasksForm extends moodleform {
         $mform->disable_form_change_checker();
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
 
         $errors = array();

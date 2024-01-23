@@ -26,6 +26,7 @@ namespace mod_exammanagement\general;
 
 use stdclass;
 use mod_exammanagement\output\exammanagement_pagebar;
+use moodle_url;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -34,24 +35,24 @@ require_once(__DIR__.'/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+$e = optional_param('e', 0, PARAM_INT);
 
-$dap  = optional_param('dap', 0, PARAM_INT);
-$dpmatrnr  = optional_param('dpmatrnr', 0, PARAM_TEXT);
-$dpmid  = optional_param('dpmid', 0, PARAM_INT);
+$dap = optional_param('dap', 0, PARAM_INT);
+$dpmatrnr = optional_param('dpmatrnr', 0, PARAM_TEXT);
+$dpmid = optional_param('dpmid', 0, PARAM_INT);
 
 // Active page.
-$pagenr  = optional_param('page', 1, PARAM_INT);
+$pagenr = optional_param('page', 1, PARAM_INT);
 
 $moodleobj = Moodle::getInstance($id, $e);
-$moodledbobj = MoodleDB::getInstance();
 $exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+$userobj = userhandler::getinstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
 
 if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
     if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
     } else {
 
         // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
@@ -62,17 +63,17 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
             // Delete all participants.
             if ($dap) {
                 require_sesskey();
-                $userobj->deleteAllParticipants();
+                $userobj->deleteallparticipants();
                 redirect ('viewParticipants.php?id=' . $id, null, null, null);
             }
 
             // Delete single participant.
             if ($dpmid) {
                 require_sesskey();
-                $userobj->deleteParticipant($dpmid, false);
+                $userobj->deleteparticipant($dpmid, false);
             } else if ($dpmatrnr) {
                 require_sesskey();
-                $userobj->deleteParticipant(false, $dpmatrnr);
+                $userobj->deleteparticipant(false, $dpmatrnr);
             }
 
             $moodleobj->setPage('viewParticipants');
@@ -80,9 +81,9 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             // List of participants.
 
-            $allparticipants = $userobj->getExamParticipants(array('mode' => 'all'), array());
+            $allparticipants = $userobj->getexamparticipants(array('mode' => 'all'), array());
 
-            $participants = $userobj->getExamParticipants(array('mode' => 'all'), array('matrnr', 'profile', 'groups'), 'name', true, $pagenr);
+            $participants = $userobj->getexamparticipants(array('mode' => 'all'), array('matrnr', 'profile', 'groups'), 'name', true, $pagenr);
 
             echo('<div class="d-flex justify-content-between"><div>');
 
@@ -97,16 +98,16 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             echo('</div><div>');
 
-            if (!empty($userobj->getCourseParticipantsIDs())) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addCourseParticipants", $id) . '" class="btn btn-primary pull-right mr-1 mb-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
+            if (!empty($userobj->getcourseparticipantsids())) {
+                echo('<a href="' . new moodle_url('/mod/exammanagement/addCourseParticipants.php', ['id' => $id]) . '" class="btn btn-primary pull-right mr-1 mb-1" role="button" title="'.get_string("import_course_participants_optional", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_course_participants_optional", "mod_exammanagement").'</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
             }
 
             if (get_config('mod_exammanagement', 'enableldap')) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("addParticipants", $id) . '" role="button" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . new moodle_url('/mod/exammanagement/addParticipants.php', ['id' => $id]) . '" role="button" class="btn btn-primary pull-right mr-1 mb-1" title="'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("import_participants_from_file_recommended", "mod_exammanagement").'</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
             }
 
             if ($participants) {
-                echo('<a href="' . $exammanagementinstanceobj->getExammanagementUrl("convertToGroup", $id) . '" role="button" class="btn btn-secondary mr-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-users d-xl-none" aria-hidden="true"></i></a>');
+                echo('<a href="' . new moodle_url('/mod/exammanagement/convertToGroup.php', ['id' => $id]) . '" role="button" class="btn btn-secondary mr-3" title="'.get_string("convert_to_group", "mod_exammanagement").'"><span class="d-none d-xl-block">'.get_string("convert_to_group", "mod_exammanagement").'</span><i class="fa fa-users d-xl-none" aria-hidden="true"></i></a>');
             }
 
             echo('</div></div>');
@@ -143,7 +144,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 // Show participants.
                 if ($participants) {
 
-                    $courseparticipants = $userobj->getCourseParticipantsIDs();
+                    $courseparticipants = $userobj->getcourseparticipantsids();
                     $nonecourseparticipants = array();
 
                     foreach ($participants as $key => $participant) {
@@ -163,7 +164,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                         if ($participant->state == 'state_added_to_exam') {
                             echo('<td>' . $participant->profile . '</td>');
                         } else if ($participant->state == 'state_added_to_exam_no_course') {
-                            $moodleuser = $userobj->getMoodleUser($participant->moodleuserid);
+                            $moodleuser = $userobj->getmoodleuser($participant->moodleuserid);
                             $image = $OUTPUT->user_picture($moodleuser, array('courseid' => false, 'link' => false, 'includefullname' => true));
                             echo('<td>' . $image . '</td>');
                         } else if ($participant->state == 'state_added_to_exam_no_moodle') {
@@ -200,7 +201,7 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
                 echo('<div class="row"><p class="col-12 text-xs-center">'.get_string("no_participants_added_page", "mod_exammanagement").'</p></div>');
             }
 
-            echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="'.$exammanagementinstanceobj->getExammanagementUrl("view", $id).'" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
+            echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a href="' . new moodle_url('/mod/exammanagement/view.php', ['id' => $id]) . '" class="btn btn-primary">'.get_string("cancel", "mod_exammanagement").'</a>');
 
             if ($participants) {
                 echo ('<a href="viewParticipants.php?id=' . $id . '&dap=1&sesskey=' . sesskey() . '" class="btn btn-secondary ml-1" onClick="javascript:return confirm(\''.get_string("all_participants_deletion_warning", "mod_exammanagement").'\');">'.get_string("delete_all_participants", "mod_exammanagement").'</a></div>');
@@ -208,11 +209,14 @@ if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
 
             echo('</span>');
 
-            $moodleobj->outputFooter();
+            // Finish the page.
+            echo $OUTPUT->footer();
         } else { // If user hasnt entered correct password for this session: show enterPasswordPage.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+            redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]),
+                null, null, null);;
         }
     }
 } else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+        get_string('nopermissions', 'mod_exammanagement'), null, 'error');
 }
