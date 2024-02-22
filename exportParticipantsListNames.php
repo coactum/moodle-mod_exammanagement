@@ -15,170 +15,168 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Outputs pdf file for mod_exammanagement.
+ * Outputs the exam participants list sorted by names for the exammanagement as a pdf file.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general;
+use mod_exammanagement\pdfs\participantslist;
+use mod_exammanagement\local\helper;
 
-use mod_exammanagement\pdfs\participantsList;
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
-
-// Course_module ID, or
+// Course_module ID, or ...
 $id = optional_param('id', 0, PARAM_INT);
 
-// ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+// ... module instance id - should be named as the first character of the module.
+$e = optional_param('e', 0, PARAM_INT);
 
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
-$MoodleObj = Moodle::getInstance($id, $e);
-
-if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
-
-    if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-        $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-	} else {
-
-        if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
-
-            global $CFG;
-
-            if (!$ExammanagementInstanceObj->getRoomsCount()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_rooms_added', 'mod_exammanagement'), 'error');
-            } else if (!$UserObj->getParticipantsCount()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-            } else if (!$ExammanagementInstanceObj->placesAssigned()) {
-                $MoodleObj->redirectToOverviewPage('forexam', get_string('no_places_assigned', 'mod_exammanagement'), 'error');
-            }
-
-            //include pdf
-            require_once(__DIR__.'/classes/pdfs/participantsList.php');
-
-            define("WIDTH_COLUMN_NAME", 200);
-            define("WIDTH_COLUMN_FIRSTNAME", 150);
-            define("WIDTH_COLUMN_MATNO", 60);
-            define("WIDTH_COLUMN_ROOM", 90);
-            define("WIDTH_COLUMN_PLACE", 70);
-
-            // Include the main TCPDF library (search for installation path).
-            require_once(__DIR__.'/../../config.php');
-            require_once($CFG->libdir.'/pdflib.php');
-
-            // create new PDF document
-            $pdf = new participantsList(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-            // set document information
-            $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
-            $pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
-            $pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
-            $pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
-
-            // set default monospaced font
-            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-            // set default header data
-            $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-            // set margins
-            $pdf->SetMargins(25, 55, 25);
-            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-            //set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, 19);
-
-            // set image scale factor
-            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-            // set some language-dependent strings (optional)
-            // if (@file_exists(__DIR__.'/lang/eng.php')) {
-            // 	require_once(__DIR__.'/lang/eng.php');
-            // 	$pdf->setLanguageArray($l);
-            // }
-
-            // ---------------------------------------------------------
-
-            // Set font
-            // dejavusans is a UTF-8 Unicode font, if you only need to
-            // print standard ASCII chars, you can use core fonts like
-            // helvetica or times to reduce file size.
-            $pdf->SetFont('freeserif', '', 10);
-
-            // Add a page
-            // This method has several options, check the source code documentation for more information.
-            $pdf->AddPage();
-
-            // get users and construct content for document
-            $roomIDs = json_decode($ExammanagementInstanceObj->moduleinstance->rooms);
-            $fill = false;
-            $previousRoom;
-            $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-
-            foreach ($roomIDs as $roomID) {
-                $currentRoom = $ExammanagementInstanceObj->getRoomObj($roomID);
-
-                $participants = $UserObj->getExamParticipants(array('mode'=>'room', 'id' => $roomID), array('matrnr'));
-
-                if ($participants) {
-                    if (!empty($previousRoom) && $currentRoom != $previousRoom) {
-                        //new room -> finish and print current table and begin new page
-                        $tbl .= "</table>";
-                        $pdf->writeHTML($tbl, true, false, false, false, '');
-                        $pdf->AddPage();
-                        $fill = false;
-                        $tbl = $ExammanagementInstanceObj->getParticipantsListTableHeader();
-                    }
-
-                    foreach ($participants as $participant) {
-
-                        $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-                        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
-                        $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $participant->firstname . "</td>";
-                        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
-                        $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
-                        $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
-                        $tbl .= "</tr>";
-
-                        $fill = !$fill;
-                    }
-
-                    $previousRoom = $currentRoom;
-                }
-            }
-
-            $tbl .= "</table>";
-
-            // Print text using writeHTMLCell()
-
-            $pdf->writeHTML($tbl, true, false, false, false, '');
-
-            //generate filename without umlaute
-            $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-            $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-            $filenameUmlaute = get_string("participantslist_names", "mod_exammanagement"). '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name .'.pdf';
-            $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-            // ---------------------------------------------------------
-
-            // Close and output PDF document
-            // This method has several options, check the source code documentation for more information.
-            $pdf->Output($filename, 'D');
-
-            //============================================================+
-            // END OF FILE
-            //============================================================+
-
-        } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-            redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-        }
-    }
-
+// Set the basic variables $course, $cm and $moduleinstance.
+if ($id) {
+    [$course, $cm] = get_course_and_cm_from_cmid($id, 'exammanagement');
+    $moduleinstance = $DB->get_record('exammanagement', ['id' => $cm->instance], '*', MUST_EXIST);
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    throw new moodle_exception('missingparameter');
 }
+
+// Check if course module, course and course section exist.
+if (!$cm) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+} else if (!$course) {
+    throw new moodle_exception(get_string('incorrectcourseid', 'exammanagement'));
+} else if (!$coursesections = $DB->get_record("course_sections", ["id" => $cm->section])) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+}
+
+// Check login and capability.
+require_login($course, true, $cm);
+
+$context = context_module::instance($cm->id);
+
+require_capability('mod/exammanagement:viewinstance', $context);
+
+// Get global and construct helper objects.
+global $CFG;
+
+// If user has not entered the correct password: redirect to check password page.
+if (isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
+
+    redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
+}
+
+// Check if requirements are met.
+if (helper::isexamdatadeleted($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+} else if (!helper::getparticipantscount($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+} else if (!helper::getroomscount($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+} else if (!helper::placesassigned($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
+}
+
+// Include pdf.
+require_once(__DIR__ . '/classes/pdfs/participantslist.php');
+
+define("WIDTH_COLUMN_NAME", 200);
+define("WIDTH_COLUMN_FIRSTNAME", 150);
+define("WIDTH_COLUMN_MATNO", 60);
+define("WIDTH_COLUMN_ROOM", 90);
+define("WIDTH_COLUMN_PLACE", 70);
+
+// Include the main TCPDF library (search for installation path).
+require_once($CFG->libdir . '/pdflib.php');
+
+// Create new PDF document.
+$pdf = new participantslist(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// Set document information.
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor(helper::getmoodlesystemname());
+$pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name);
+$pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
+$pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $course->fullname . ', ' .
+    $moduleinstance->name);
+
+// Set default monospaced font.
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// Set default header data.
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+// Set margins.
+$pdf->SetMargins(25, 55, 25);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// Set auto page breaks.
+$pdf->SetAutoPageBreak(true, 19);
+
+// Set image scale factor.
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// Set font.
+$pdf->SetFont('freeserif', '', 10);
+
+// Add a page.
+$pdf->AddPage();
+
+// Get users and construct content for document.
+$roomids = json_decode($moduleinstance->rooms);
+$fill = false;
+$previousroom;
+$tbl = helper::getparticipantslisttableheader();
+
+foreach ($roomids as $roomid) {
+    $currentroom = $DB->get_record('exammanagement_rooms', ['roomid' => $roomid]);
+
+    $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'room', 'id' => $roomid], ['matrnr']);
+
+    if ($participants) {
+        if (!empty($previousroom) && $currentroom != $previousroom) {
+            // New room starts. Finish and print current table and begin new page.
+            $tbl .= "</table>";
+            $pdf->writeHTML($tbl, true, false, false, false, '');
+            $pdf->AddPage();
+            $fill = false;
+            $tbl = helper::getparticipantslisttableheader();
+        }
+
+        foreach ($participants as $participant) {
+
+            $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $participant->firstname . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $participant->roomname . "</td>";
+            $tbl .= "<td width=\"" . WIDTH_COLUMN_PLACE . "\" align=\"center\">" . $participant->place . "</td>";
+            $tbl .= "</tr>";
+
+            $fill = !$fill;
+        }
+
+        $previousroom = $currentroom;
+    }
+}
+
+$tbl .= "</table>";
+
+// Print text using writeHTMLCell().
+$pdf->writeHTML($tbl, true, false, false, false, '');
+
+// Generate filename without umlaute.
+$umlaute = ["/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/"];
+$replace = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"];
+$filenameumlaute = get_string("participantslist_names", "mod_exammanagement") . '_' . helper::getcleancoursecategoryname() .
+    '_' . $course->fullname . '_' . $moduleinstance->name .'.pdf';
+$filename = preg_replace($umlaute, $replace, $filenameumlaute);
+
+// Close and output PDF document.
+$pdf->Output($filename, 'D');

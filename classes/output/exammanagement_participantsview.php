@@ -36,26 +36,58 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_participantsview implements renderable, templatable {
+
+    /** @var int */
     protected $cmid;
+    /** @var bool */
     protected $isparticipant;
+    /** @var string */
     protected $examdate;
+    /** @var string */
     protected $examtime;
+    /** @var string */
     protected $room;
+    /** @var string */
     protected $place;
+    /** @var string */
     protected $textfield;
+    /** @var string */
     protected $bonussteps;
+    /** @var string */
     protected $bonuspoints;
+    /** @var string */
     protected $examstate;
+    /** @var string */
     protected $totalpoints;
+    /** @var string */
     protected $tasktotalpoints;
+    /** @var bool */
     protected $totalpointswithbonus;
+    /** @var string */
     protected $examreviewtime;
+    /** @var string */
     protected $examreviewroom;
+    /** @var bool */
     protected $deleted;
 
     /**
      * Construct this renderable.
-     * @param int $courseid The course record for this page.
+     * @param int $cmid The course module id
+     * @param bool $isparticipant If user is participant
+     * @param string $examdate The exam date
+     * @param string $examtime The time of the exam
+     * @param string $room The room
+     * @param string $place The place
+     * @param string $textfield The shortened textfield content
+     * @param string $bonussteps The number of participants that have a bonus entered
+     * @param string $bonuspoints The number of bonus points (not bonus steps) entered
+     * @param string $examstate State of the exam
+     * @param string $totalpoints The total points
+     * @param string $tasktotalpoints Number of total points for tasks
+     * @param bool $totalpointswithbonus If results are visible to participants
+     * @param string $examreviewtime The time of the exam review
+     * @param string $examreviewroom The room for the exam review
+     * @param bool $deleted If the data is already deleted
      */
     public function __construct($cmid, $isparticipant, $examdate, $examtime, $room,
         $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints,

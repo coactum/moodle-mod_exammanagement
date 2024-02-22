@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Disabling roomid field when room is edited.
+ * Disabling room id field if room is edited.
  *
  * @module      mod_exammanagement/edit_defaultroom
  * @copyright   2022 coactum GmbH
@@ -31,7 +31,7 @@ export const init = () => {
     $('#id_roomid').prop("disabled", true);
   }
 
-  $('#id_submitbutton').click(function () {  // If submit button is pressed enable complete form.
+  $('#id_submitbutton').click(function() { // If submit button is pressed enable complete form.
     $("#id_roomid").prop("disabled", false);
   });
 };

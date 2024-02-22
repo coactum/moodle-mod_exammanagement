@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The main mod_exammanagement configuration form.
+ * This file contains the forms to create and edit an instance of the module.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\local\helper;
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
@@ -45,9 +45,14 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         if (isset($_GET['update'])) {
             $id = $_GET['update'];
-            $exammanagementinstanceobj = exammanagementInstance::getInstance($id, false);
-            $oldpw = $exammanagementinstanceobj->getModuleinstance()->password;
-            $misc = json_decode($exammanagementinstanceobj->getModuleinstance()->misc);
+            $moduleinstance = helper::getmoduleinstance($id, false);
+            $oldpw = $moduleinstance->password;
+
+            if (isset($moduleinstance->misc)) {
+                $misc = json_decode($moduleinstance->misc);
+            } else {
+                $misc = null;
+            }
         } else {
             $oldpw = null;
             $misc = null;
@@ -59,11 +64,13 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         if (get_config('mod_exammanagement', 'enableglobalmessage')) {
-            $mform->addElement('html', '<div class="alert alert-info alert-block fade in " role="alert">'.get_config('mod_exammanagement', 'globalmessage').'</div>');
+            $mform->addElement('html', '<div class="alert alert-info alert-block fade in " role="alert">' .
+                get_config('mod_exammanagement', 'globalmessage') . '</div>');
         }
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('exammanagement_name', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"));
+        $mform->addElement('text', 'name', get_string('exammanagement_name', 'mod_exammanagement'),
+            ['size' => '64', 'autocomplete' => "nope", 'autocorrect' => "off", "spellcheck" => "false"]);
         $mform->addHelpButton('name', 'exammanagement_name', 'mod_exammanagement');
 
         if (!empty($CFG->formatstringstriptags)) {
@@ -81,24 +88,28 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         // Adding the rest of mod_exammanagement settings.
         $mform->addElement('header', 'security_password', get_string('security_password', 'mod_exammanagement'));
 
-        $mform->addElement('password', 'newpassword', get_string('new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "nope"));
+        $mform->addElement('password', 'newpassword', get_string('new_password', 'mod_exammanagement'),
+           ['size' => '64', 'autocomplete' => "nope"]);
         $mform->setType('newpassword', PARAM_TEXT);
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('newpassword', 'security_password', 'mod_exammanagement');
 
-        $mform->addElement('password', 'confirmnewpassword', get_string('confirm_new_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+        $mform->addElement('password', 'confirmnewpassword', get_string('confirm_new_password', 'mod_exammanagement'),
+           ['size' => '64', 'autocomplete' => "off"]);
         $mform->setType('newpassword', PARAM_TEXT);
         $mform->addRule('newpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
         $mform->addHelpButton('confirmnewpassword', 'confirm_new_password', 'mod_exammanagement');
 
         if (isset($oldpw) || (!isset($_GET['update']) && !isset($_GET['add']))) {
-            $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'), array('size' => '64', 'autocomplete' => "off"));
+            $mform->addElement('password', 'oldpassword', get_string('old_password', 'mod_exammanagement'),
+               ['size' => '64', 'autocomplete' => "off"]);
             $mform->setType('oldpassword', PARAM_TEXT);
             $mform->addRule('oldpassword', get_string('maximumchars', '', 25), 'maxlength', 25, 'client');
             $mform->addHelpButton('oldpassword', 'old_password', 'mod_exammanagement');
         }
 
-        $mform->addElement('header', 'export_grades_as_exam_results', get_string('export_grades_as_exam_results', 'mod_exammanagement'));
+        $mform->addElement('header', 'export_grades_as_exam_results',
+            get_string('export_grades_as_exam_results', 'mod_exammanagement'));
 
         $mform->addElement('advcheckbox', 'exportgrades', get_string('activate_mode', 'mod_exammanagement'));
         $mform->addHelpButton('exportgrades', 'export_grades_as_exam_results', 'mod_exammanagement');
@@ -125,9 +136,15 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
-        $errors = array();
+        $errors = [];
 
         if ($data['newpassword']) {
             if ($data['confirmnewpassword'] == null) {

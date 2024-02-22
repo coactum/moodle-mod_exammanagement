@@ -45,77 +45,77 @@ export const init = (tasks) => {
     $("[id^=id_bonuspoints]").first().focus();
   }
 
-  $("[id^=id_points]").each(function () {
+  $("[id^=id_points]").each(function() {
 
     var participantid = $(this).attr("id").split('_')[2];
     var count = $(this).attr("id").split('_')[3];
 
-    $(this).attr("max", tasks[count]); // set maximum points for tasks
+    $(this).attr("max", tasks[count]); // Set maximum points for tasks.
 
     if ($("#id_state_" + participantid).val() !== 'normal' && $("#id_state_" + participantid).val() !== 'not_set') {
-      $(this).prop("disabled", true); //initial disabling point fields if examstate is not normal or not set
+      $(this).prop("disabled", true); // Initial disabling point fields if examstate is not normal or not set.
     }
   });
 
-  $("[id^=id_bonuspoints]").each(function () {
+  $("[id^=id_bonuspoints]").each(function() {
 
     var participantid = $(this).attr("id").split('_')[2];
 
     if ($("#id_bonussteps_" + participantid).val() && $("#id_bonussteps_" + participantid).val() !== '-') {
-      $(this).prop("disabled", true); //initial disabling bonuspoint fields if bonusstep is set
+      $(this).prop("disabled", true); // Initial disabling bonuspoint fields if bonusstep is set.
     }
   });
 
-  // if exam bonus steps change
-  $("[id^=id_bonussteps]").change(function () {
+  // If exam bonus steps change.
+  $("[id^=id_bonussteps]").change(function() {
     var participantid = $(this).attr("id").split('_')[2];
 
     if ($(this).val() !== '-') {
-      $("#id_bonuspoints_" + participantid).val('-');  // reset bonus points
-      $("#id_bonuspoints_" + participantid).prop("disabled", true); // disable bonuspoints
+      $("#id_bonuspoints_" + participantid).val('-'); // Reset bonus points.
+      $("#id_bonuspoints_" + participantid).prop("disabled", true); // Disable bonuspoints.
     } else {
-      $("#id_bonuspoints_" + participantid).prop("disabled", false); // enable bonuspoints
+      $("#id_bonuspoints_" + participantid).prop("disabled", false); // Enable bonuspoints.
     }
 
-    $("#id_state_" + participantid).focus(); // move focus
+    $("#id_state_" + participantid).focus(); // Move focus.
 
-    $('input[name="bonuspoints_entered[' + participantid + ']"]').val(0);  // set bonuspoints entered to true
+    $('input[name="bonuspoints_entered[' + participantid + ']"]').val(0); // Set bonuspoints entered to true.
   });
 
-  // if exam bonus points change
-  $("[id^=id_bonuspoints]").change(function () {
+  // If exam bonus points change.
+  $("[id^=id_bonuspoints]").change(function() {
     var participantid = $(this).attr("id").split('_')[2];
 
     if ($(this).val()) {
-      $("#id_bonussteps_" + participantid).val('-'); // reset bonus steps
-      $("#id_state_" + participantid).focus(); // move focus
-      $('input[name="bonuspoints_entered[' + participantid + ']"]').val(1);  // set bonuspoints entered to true
+      $("#id_bonussteps_" + participantid).val('-'); // Reset bonus steps.
+      $("#id_state_" + participantid).focus(); // Move focus.
+      $('input[name="bonuspoints_entered[' + participantid + ']"]').val(1); // Set bonuspoints entered to true.
     }
   });
 
-  // if exam points are entered
-  $("[id^=id_points]").change(function () {
+  // If exam points are entered.
+  $("[id^=id_points]").change(function() {
     var participantid = $(this).attr("id").split('_')[2];
     $("#id_state_" + participantid).val('normal');
   });
 
-  // if examstate changes
-  $("[id^=id_state]").change(function () {
+  // If examstate changes.
+  $("[id^=id_state]").change(function() {
     var participantid = $(this).attr("id").split('_')[2];
 
     // If examstate is now not normal or not set: disable all point-fields and set their value to 0.
     if ($(this).val() !== 'normal' && $(this).val() !== 'not_set') {
-      $("[id^=id_points_" + participantid + "]").each(function () {
+      $("[id^=id_points_" + participantid + "]").each(function() {
         $(this).prop("disabled", true);
         $(this).val(0);
       });
-    } else if ($(this).val() === 'normal') {  // if examstate is now normal
-      $("[id^=id_points_" + participantid + "]").each(function () { // enable all point-fields
+    } else if ($(this).val() === 'normal') { // If examstate is now normal.
+      $("[id^=id_points_" + participantid + "]").each(function() { // Enable all point fields.
         $(this).prop("disabled", false);
         $("[id^=id_points_" + participantid + "").first().focus();
       });
     } else if ($(this).val() == 'not_set') {
-      $("[id^=id_points_" + participantid + "]").each(function () { // enable all point-fields
+      $("[id^=id_points_" + participantid + "]").each(function() { // Enable all point fields.
         $(this).val('');
         $(this).prop("disabled", false);
         $("[id^=id_points_" + participantid + "").first().focus();
@@ -123,13 +123,13 @@ export const init = (tasks) => {
     }
   });
 
-  // remove cols from form layout
+  // Remove cols from form layout.
   $('.exammanagement_table div').removeClass('col-md-3');
   $('.exammanagement_table div').removeClass('col-md-9');
 
-  $('form.mform #id_submitbutton').click(function () {  // if submittbutton is pressed enable complete form (for moodle purposes)
+  $('form.mform #id_submitbutton').click(function() { // If submittbutton is pressed enable complete form (for moodle purposes).
 
-    $("form.mform .form-group input.form-control").not("[id^=id_bonuspoints]").each(function () { // enable all point-fields
+    $("form.mform .form-group input.form-control").not("[id^=id_bonuspoints]").each(function() { // Enable all point fields.
       $(this).prop("disabled", false);
     });
   });

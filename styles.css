@@ -72,11 +72,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     border-radius: 2px;
 }
 
-.path-mod-exammanagement .exammanagement_overview .exmammanagement-summary li:target {
-    padding-top: 0px !important;
-    margin-top: 0px !important;
-}
-
 .path-mod-exammanagement .exammanagement_overview .exmammanagement-summary a {
     cursor: pointer;
 }
@@ -85,19 +80,14 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     cursor: pointer;
 }
 
-.path-mod-exammanagement .exammanagement_overview .exmammanagement-summary :target::before {
-    height: 0px !important;
-    margin-top: 0px !important;
-}
-
 .path-mod-exammanagement .exammanagement_overview .mainpanel::before {
     position: absolute;
     display: block;
     top: 8px;
     left: 36px;
     content: '';
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border: inherit;
     border-width: 12px;
     border-top-color: transparent;
@@ -109,7 +99,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     /* minimize/maximize buttons */
     background: rgba(0, 0, 0, 0.15);
     display: inline;
-    margin-top: -30px;
+    margin-top: -35px;
     padding: 6px 12px;
     border-radius: 4px;
 }
@@ -121,10 +111,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /* row-equal-height */
 .path-mod-exammanagement .exammanagement_overview .row-eq-height,
 .path-mod-exammanagement .row-eq-height > div[class*='col-'] {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex: 1 0 auto;
 }
@@ -208,7 +194,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     max-width: 50%;
 }
 
-/* chooseRooms.php - SVG Overlay */
+/* chooserooms.php - SVG Overlay */
 .path-mod-exammanagement .exammanagement_rooms_svg {
     position: absolute;
     width: 350px;
@@ -240,15 +226,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     display: block;
 }
 
-/* editDefaultRoomForm.php */
-.path-mod-exammanagement .exammanagement_editdefaultroom_placespreview {
-    position: relative;
-    width: 500px;
-    overflow: hidden;
-    z-index: 1000;
-    display: block;
-}
-
 .path-mod-exammanagement .exammanagement_editdefaultroom_svg {
     position: relative;
     width: 300px;
@@ -260,7 +237,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     border: 2px solid black;
 }
 
-/* addparticipants_form.php & addcourseparticipants_form.php */
+/* mod_exammanagement_addparticipants_form.php & mod_exammanagement_addcourseparticipants_form.php */
 .path-mod-exammanagement .exammanagement_panel a {
     cursor: pointer;
 }
@@ -278,14 +255,14 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     display: none;
 }
 
-/* configureTasksForm.php - spacing between task numbers */
+/* Styles for configuretasks_form.php - spacing between task numbers */
 .path-mod-exammanagement .exammanagement_task_spacing {
     width: 70px;
     text-align: center;
     margin-right: 4px;
 }
 
-/* configureGradingscaleForm.php - spacing between gradingscale steps */
+/* configuregradingscaleform.php - spacing between gradingscale steps */
 .path-mod-exammanagement .exammanagement_gradingscale_steps_spacing {
     width: 100px;
     text-align: center;
@@ -296,7 +273,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     display: block;
 }
 
-/* participantsOverviewForm.php - color of table borders */
+/* Styles for participantsOverview_form.php - color of table borders */
 .path-mod-exammanagement .exammanagement_table {
     border: 1px solid #00205b;
 }
@@ -314,7 +291,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .path-mod-exammanagement .exammanagement_brand_backgroundcolor {
-    background-color: #00205b !important;
+    background-color: #00205b;
 }
 
 .path-mod-exammanagement .exammanagement_brand_bordercolor {
@@ -322,23 +299,23 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .path-mod-exammanagement .exammanagement_table_width_room {
-    width: 125px !important;
+    width: 125px;
 }
 
 .path-mod-exammanagement .exammanagement_table_width_place {
-    width: 145px !important;
+    width: 145px;
 }
 
-.path-mod-exammanagement .exammanagement_table_edit_tasks th{
-    width: 75px !important;
+.path-mod-exammanagement .exammanagement_table_edit_tasks th {
+    width: 75px;
     text-align: center;
 }
 
-.path-mod-exammanagement .exammanagement_vertical_align_middle{
-    vertical-align: middle !important;
+.path-mod-exammanagement .exammanagement_vertical_align_middle {
+    vertical-align: middle;
 }
 
-.path-mod-exammanagement .exammanagement_table_edit_tasks .form-group{
+.path-mod-exammanagement .exammanagement_table_edit_tasks .form-group {
     margin-bottom: 0;
 }
 
@@ -426,7 +403,8 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     border-bottom-left-radius: 3px;
 }
 
-.path-mod-exammanagement .exammanagement_overview .panel > .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {
+.path-mod-exammanagement .exammanagement_overview
+.panel > .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
@@ -437,165 +415,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 .path-mod-exammanagement .list-group + .panel-footer {
     border-top-width: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table,
-.path-mod-exammanagement .exammanagement_overview .panel > .panel-collapse > .table {
-    margin-bottom: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table caption,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table caption,
-.path-mod-exammanagement .exammanagement_overview .panel > .panel-collapse > .table caption {
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > thead:first-child > tr:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > tbody:first-child > tr:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > thead:first-child > tr:first-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > thead:first-child > tr:first-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > tbody:first-child > tr:first-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {
-    border-top-left-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > thead:first-child > tr:first-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > thead:first-child > tr:first-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:first-child > tbody:first-child > tr:first-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {
-    border-top-right-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child {
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tbody:last-child > tr:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tfoot:last-child > tr:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child {
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tbody:last-child > tr:last-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {
-    border-bottom-left-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tbody:last-child > tr:last-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {
-    border-bottom-right-radius: 3px;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .panel-body + .table,
-.path-mod-exammanagement .exammanagement_overview .panel > .panel-body + .table-responsive,
-.path-mod-exammanagement .exammanagement_overview .panel > .table + .panel-body,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive + .panel-body {
-    border-top: 1px solid #ddd;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table > tbody:first-child > tr:first-child th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table > tbody:first-child > tr:first-child td {
-    border-top: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered {
-    border: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr > th:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr > td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr > td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr > td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr > td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr > td:first-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child {
-    border-left: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr > th:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr > td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr > td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr > td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr > td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr > td:last-child,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child {
-    border-right: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr:first-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr:first-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr:first-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr:first-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > thead > tr:first-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > thead > tr:first-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr:first-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr:first-child > th {
-    border-bottom: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr:last-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr:last-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr:last-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr:last-child > td,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tbody > tr:last-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tbody > tr:last-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-bordered > tfoot > tr:last-child > th,
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive > .table-bordered > tfoot > tr:last-child > th {
-    border-bottom: 0;
-}
-
-.path-mod-exammanagement .exammanagement_overview .panel > .table-responsive {
-    margin-bottom: 0;
-    border: 0;
 }
 
 .path-mod-exammanagement .exammanagement_overview .panel-group {

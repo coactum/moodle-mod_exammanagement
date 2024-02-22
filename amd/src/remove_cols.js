@@ -23,7 +23,7 @@
 
 import $ from 'jquery';
 
-export const remove_cols = () => {
+export const removecols = () => {
 
     $(".checkboxgroup1 > div").removeClass('col-md-3');
     $(".checkboxgroup1 > div").removeClass('col-md-9');

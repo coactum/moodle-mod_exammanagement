@@ -15,181 +15,187 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Outputs pdf file for mod_exammanagement.
+ * Outputs the exam results for the exammanagement as a pdf file.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general;
+use mod_exammanagement\pdfs\resultsexamreview;
+use mod_exammanagement\local\helper;
 
-use mod_exammanagement\pdfs\resultsExamReview;
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
-
-// Course_module ID, or
+// Course_module ID, or ...
 $id = optional_param('id', 0, PARAM_INT);
 
-// ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+// ... module instance id - should be named as the first character of the module.
+$e = optional_param('e', 0, PARAM_INT);
 
-$ExammanagementInstanceObj = exammanagementInstance::getInstance($id, $e);
-$UserObj = User::getInstance($id, $e, $ExammanagementInstanceObj->getCm()->instance);
-$MoodleObj = Moodle::getInstance($id, $e);
+// Set the basic variables $course, $cm and $moduleinstance.
+if ($id) {
+    [$course, $cm] = get_course_and_cm_from_cmid($id, 'exammanagement');
+    $moduleinstance = $DB->get_record('exammanagement', ['id' => $cm->instance], '*', MUST_EXIST);
+} else {
+    throw new moodle_exception('missingparameter');
+}
 
-if ($MoodleObj->checkCapability('mod/exammanagement:viewinstance')) {
+// Check if course module, course and course section exist.
+if (!$cm) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+} else if (!$course) {
+    throw new moodle_exception(get_string('incorrectcourseid', 'exammanagement'));
+} else if (!$coursesections = $DB->get_record("course_sections", ["id" => $cm->section])) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+}
 
-  if ($ExammanagementInstanceObj->isExamDataDeleted()) {
-    $MoodleObj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
-  } else {
-    if (!isset($ExammanagementInstanceObj->moduleinstance->password) || (isset($ExammanagementInstanceObj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) { // if no password for moduleinstance is set or if user already entered correct password in this session: show main page
+// Check login and capability.
+require_login($course, true, $cm);
 
-        global $CFG;
+$context = context_module::instance($cm->id);
 
-        //include pdf
-        require_once(__DIR__.'/classes/pdfs/resultsExamReview.php');
+require_capability('mod/exammanagement:viewinstance', $context);
 
-        define("WIDTH_COLUMN_NAME", 225);
-        define("WIDTH_COLUMN_FORENAME", 225);
-        define("WIDTH_COLUMN_MATNO", 70);
-        define("WIDTH_COLUMN_POINTS", 80);
+// Get global and construct helper objects.
+global $CFG;
 
-        if (!$UserObj->getEnteredResultsCount()) {
-          $MoodleObj->redirectToOverviewPage('afterexam', get_string('no_results_entered', 'mod_exammanagement'), 'error');
-        } else if (!$ExammanagementInstanceObj->getDataDeletionDate()) {
-          $MoodleObj->redirectToOverviewPage('afterexam', get_string('correction_not_completed', 'mod_exammanagement'), 'error');
-        }
+// If user has not entered the correct password: redirect to check password page.
+if (isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
 
-        // Include the main TCPDF library (search for installation path).
-        require_once(__DIR__.'/../../config.php');
-        require_once($CFG->libdir.'/pdflib.php');
+    redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
+}
 
-        // create new PDF document
-        $pdf = new resultsExamReview(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+// Check if requirements are met.
+if (helper::isexamdatadeleted($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+} else if (!helper::getenteredresultscount($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
+} else if (!helper::getdatadeletiondate($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
+}
+
+// Include pdf.
+require_once(__DIR__ . '/classes/pdfs/resultsexamreview.php');
+
+define("WIDTH_COLUMN_NAME", 225);
+define("WIDTH_COLUMN_FORENAME", 225);
+define("WIDTH_COLUMN_MATNO", 70);
+define("WIDTH_COLUMN_POINTS", 80);
+
+// Include the main TCPDF library (search for installation path).
+require_once($CFG->libdir . '/pdflib.php');
+
+// Create new PDF document.
+$pdf = new resultsexamreview(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 
-        // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor($ExammanagementInstanceObj->getMoodleSystemName());
-        $pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $ExammanagementInstanceObj->getCourse()->fullname . ', '. $ExammanagementInstanceObj->moduleinstance->name);
-        $pdf->SetSubject(get_string('pointslist_examreview', 'mod_exammanagement'));
-        $pdf->SetKeywords(get_string('pointslist_examreview', 'mod_exammanagement') . ', ' . $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name);
+// Set document information.
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor(helper::getmoodlesystemname());
+$pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name);
+$pdf->SetSubject(get_string('pointslist_examreview', 'mod_exammanagement'));
+$pdf->SetKeywords(get_string('pointslist_examreview', 'mod_exammanagement') . ', ' .
+  $course->fullname . ', ' . $moduleinstance->name);
 
-        // header/footer
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(true);
+// Set the header and footer.
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(true);
 
-        // set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+// Set default monospaced font.
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-        //set margins
-        $pdf->SetMargins(20, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+// Set margins.
+$pdf->SetMargins(20, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 
-        //set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+// Set auto page breaks.
+$pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
-        //set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// Set image scale factor.
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-        //set some language-dependent strings
-        //$pdf->setLanguageArray($l);
+$pdf->AddPage();
+$pdf->Line(20, 15, 190, 15);
 
-        // ---------------------------------------------------------
+if (file_exists(__DIR__ . '/../../data/logo_full.ai')) {
+    $pdf->ImageEps('data/logo.ai', 30, 25, 13);
+}
 
-        $pdf->AddPage();
-        $pdf->Line(20, 15, 190, 15);
+$pdf->SetFont('helvetica', '', 16);
+$pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 17);
 
-        if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
-            $pdf->ImageEps('data/logo.ai', 30, 25, 13);
-        }
+$pdf->SetFont('helvetica', 'B', 16);
+$pdf->MultiCell(130, 3, $course->fullname . ', ' . $moduleinstance->name, 0, 'C', 0, 0, 50, 25);
+$pdf->SetFont('helvetica', '', 16);
 
-        $pdf->SetFont('helvetica', '', 16);
-        $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 17);
+$date = helper::gethrexamtime($moduleinstance);
 
-        $pdf->SetFont('helvetica', 'B', 16);
-        $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCourse()->fullname . ', ' . $ExammanagementInstanceObj->moduleinstance->name, 0, 'C', 0, 0, 50, 25);
-        $pdf->SetFont('helvetica', '', 16);
-
-        $date = $ExammanagementInstanceObj->getHrExamtime();
-
-        if ($date) {
-          $pdf->MultiCell(130, 3, $date . ', ' . $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
-
-        } else {
-          $pdf->MultiCell(130, 3, $ExammanagementInstanceObj->getCleanCourseCategoryName(), 0, 'C', 0, 0, 50, 42);
-        }
-
-        $pdf->SetFont('helvetica', '', 10);
-
-        $pdf->SetTextColor(255, 0, 0);
-        $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->MultiCell(130, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 50, 55);
-
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('helvetica', '', 10);
-
-        $pdf->Line(20, 62, 190, 62);
-        $pdf->SetXY(20, 65);
-
-        $maxPoints = $ExammanagementInstanceObj->formatNumberForDisplay($ExammanagementInstanceObj->getTaskTotalPoints());
-
-        $fill = false;
-
-        $tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
-        $tbl .= "<thead>";
-        $tbl .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
-        $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\"><b>" . get_string('points', 'mod_exammanagement') . "<br>(max. " . $maxPoints . ")" . "</b></td>";
-        $tbl .= "</tr>";
-        $tbl .= "</thead>";
-
-        $participants = $UserObj->getExamParticipants(array('mode'=>'all'), array('matrnr'));
-
-        foreach ($participants as $participant) {
-
-          $totalPoints = $ExammanagementInstanceObj->formatNumberForDisplay($UserObj->calculatePoints($participant));
-
-          $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
-          $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalPoints . "</td>";
-          $tbl .= "</tr>";
-
-          $fill = !$fill;
-
-        }
-
-        $tbl .= "</table>";
-
-        // Print text using writeHTMLCell()
-
-        $pdf->writeHTML($tbl, true, false, false, false, '');
-
-        //generate filename without umlaute
-        $umlaute = Array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/");
-        $replace = Array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss");
-        $filenameUmlaute = get_string("pointslist_examreview", "mod_exammanagement") . '_' . $ExammanagementInstanceObj->getCleanCourseCategoryName() . '_' . $ExammanagementInstanceObj->getCourse()->fullname . '_' . $ExammanagementInstanceObj->moduleinstance->name . '.pdf';
-        $filename = preg_replace($umlaute, $replace, $filenameUmlaute);
-
-        // ---------------------------------------------------------
-
-        // Close and output PDF document
-        // This method has several options, check the source code documentation for more information.
-        $pdf->Output($filename, 'D');
-
-        //============================================================+
-        // END OF FILE
-        //============================================================+
-    } else { // if user hasnt entered correct password for this session: show enterPasswordPage
-      redirect ($ExammanagementInstanceObj->getExammanagementUrl('checkpassword', $ExammanagementInstanceObj->getCm()->id), null, null, null);
-    }
-  }
+if ($date) {
+    $pdf->MultiCell(130, 3, $date . ', ' . helper::getcleancoursecategoryname(), 0, 'C', 0, 0, 50, 42);
 
 } else {
-    $MoodleObj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+    $pdf->MultiCell(130, 3, helper::getcleancoursecategoryname(), 0, 'C', 0, 0, 50, 42);
 }
+
+$pdf->SetFont('helvetica', '', 10);
+
+$pdf->SetTextColor(255, 0, 0);
+$pdf->SetFont('helvetica', 'B', 10);
+$pdf->MultiCell(130, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 50, 55);
+
+$pdf->SetTextColor(0, 0, 0);
+$pdf->SetFont('helvetica', '', 10);
+
+$pdf->Line(20, 62, 190, 62);
+$pdf->SetXY(20, 65);
+
+$maxpoints = helper::formatnumberfordisplay(helper::gettasktotalpoints($moduleinstance));
+
+$fill = false;
+
+$tbl = "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\">";
+$tbl .= "<thead>";
+$tbl .= "<tr bgcolor=\"#000000\" color=\"#FFFFFF\">";
+$tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\"><b>" . get_string('lastname', 'mod_exammanagement') . "</b></td>";
+$tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\"><b>" . get_string('firstname', 'mod_exammanagement') . "</b></td>";
+$tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\"><b>" . get_string('matrno', 'mod_exammanagement') . "</b></td>";
+$tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\"><b>" .
+    get_string('points', 'mod_exammanagement') . "<br>(max. " . $maxpoints . ")" . "</b></td>";
+$tbl .= "</tr>";
+$tbl .= "</thead>";
+
+$participants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], ['matrnr']);
+
+foreach ($participants as $participant) {
+
+    $totalpoints = helper::formatnumberfordisplay(helper::calculatepoints($participant));
+
+    $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
+    $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
+    $tbl .= "<td width=\"" . WIDTH_COLUMN_FORENAME . "\">" . $participant->firstname . "</td>";
+    $tbl .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $participant->matrnr . "</td>";
+    $tbl .= "<td width=\"" . WIDTH_COLUMN_POINTS . "\" align=\"center\">" . $totalpoints . "</td>";
+    $tbl .= "</tr>";
+
+    $fill = !$fill;
+}
+
+$tbl .= "</table>";
+
+// Print text using writeHTMLCell().
+$pdf->writeHTML($tbl, true, false, false, false, '');
+
+// Generate filename without umlaute.
+$umlaute = ["/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/"];
+$replace = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"];
+$filenameumlaute = get_string("pointslist_examreview", "mod_exammanagement") . '_' . helper::getcleancoursecategoryname() .
+    '_' . $course->fullname . '_' . $moduleinstance->name . '.pdf';
+$filename = preg_replace($umlaute, $replace, $filenameumlaute);
+
+// Close and output PDF document.
+$pdf->Output($filename, 'D');

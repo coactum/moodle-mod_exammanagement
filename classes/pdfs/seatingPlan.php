@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class for seatingplan PDF for exammanagement
+ * Class for seating plan pdf.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -23,44 +23,64 @@
  */
 
 namespace mod_exammanagement\pdfs;
-use mod_exammanagement\general\exammanagementInstance;
 use TCPDF;
+use mod_exammanagement\local\helper;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/pdflib.php');
-require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once($CFG->libdir . '/pdflib.php');
 
-// Extend the TCPDF class to create custom Header and Footer
-class seatingPlan extends TCPDF {
+/**
+ * Extend the base TCPDF class to create custom header and footer for the document.
+ *
+ * @package   mod_exammanagement
+ * @copyright 2022 coactum GmbH
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class seatingplan extends TCPDF {
 
-  public function Header() {
+    /**
+     * Override the header of the base class.
+     */
+    public function header() {
 
-    // Course_module ID, or
-    $id = optional_param('id', 0, PARAM_INT);
+        // Course_module ID, or ...
+        $id = optional_param('id', 0, PARAM_INT);
 
-    // ... module instance id - should be named as the first character of the module
-    $e  = optional_param('e', 0, PARAM_INT);
+        // ... module instance id - should be named as the first character of the module.
+        $e = optional_param('e', 0, PARAM_INT);
 
-    $ExammanagementInstanceObj = exammanagementInstance::getInstance($id,$e);
+        global $DB;
 
-    if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
-        $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
-        $this->SetFont('helvetica', 'B', 22);
-        $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
-    } else {
-        $this->SetFont('helvetica', 'B', 22);
-        $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 70, 17);
+        // Set the basic variables $course, $cm and $moduleinstance.
+        if ($id) {
+            [$course, $cm] = get_course_and_cm_from_cmid($id, 'exammanagement');
+            $moduleinstance = $DB->get_record('exammanagement', ['id' => $cm->instance], '*', MUST_EXIST);
+        } else {
+            throw new moodle_exception('missingparameter');
+        }
+        if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
+            $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
+            $this->SetFont('helvetica', 'B', 22);
+            $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
+        } else {
+            $this->SetFont('helvetica', 'B', 22);
+            $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 70, 17);
+        }
+
+        $this->SetFont('helvetica', 'B', 14);
+        $this->MultiCell(130, 5, strtoupper(helper::getcleancoursecategoryname()) . ' / ' .
+            $course->fullname . ' ('. $moduleinstance->name .')',
+            0, 'L', 0, 0, 25, 40);
+        $this->MultiCell(26, 5, helper::gethrexamtime($moduleinstance), 0, 'R', 0, 0, 159, 40);
     }
 
-    $this->SetFont('helvetica', 'B', 14);
-    $this->MultiCell(130, 5, strtoupper($ExammanagementInstanceObj->getCleanCourseCategoryName()) . ' / ' . $ExammanagementInstanceObj->getCourse()->fullname . ' ('. $ExammanagementInstanceObj->getModuleinstance()->name .')', 0, 'L', 0, 0, 25, 40);
-    $this->MultiCell(26, 5, $ExammanagementInstanceObj->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
-  }
-
-  public function Footer() {
-  	$this->SetY(-16); // 1.6 cm from bottom
-  	$this->SetFont('helvetica', 'BI', 12);
-  	$this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
-  }
+    /**
+     * Override the footer of the base class.
+     */
+    public function footer() {
+        $this->SetY(-16); // 1.6 cm from bottom.
+        $this->SetFont('helvetica', 'BI', 12);
+        $this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
+    }
 }

@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Toggle available places pattern.
+ * Toggle available places pattern and removes unneccesary cols.
  *
  * @module      mod_exammanagement/assign_places
  * @copyright   2022 coactum GmbH
@@ -24,34 +24,34 @@
 import $ from 'jquery';
 
 export const init = () => {
-    // remove cols from form layout
+    // Remove cols from form layout.
     $('.exammanagement_table .form-group div').removeClass('col-md-3');
     $('.exammanagement_table .form-group div').removeClass('col-md-9');
 };
 
 export const toggleAvailablePlaces = () => {
-    $("form.mform .fitem").on("change", "select", function () { // change available places pattern if other room is choosen
+    $("form.mform .fitem").on("change", "select", function() { // Change available places pattern if other room is choosen.
         var selectedPlacesId = $(this).children(":selected").attr("value");
         var participantId = $(this).attr("id").split('_')[2];
 
-        // hide all placespatterns for participant
-        $("#available_places_" + participantId + " .hideablepattern").each(function () {
-          $(this).hide(); // hide old places pattern
+        // Hide all placespatterns for participant.
+        $("#available_places_" + participantId + " .hideablepattern").each(function() {
+          $(this).hide(); // Hide old places pattern.
         });
 
-        var posPoint = selectedPlacesId.indexOf('.'); // make room ids with . working
+        var posPoint = selectedPlacesId.indexOf('.'); // Make room ids with . working.
 
         if (posPoint !== -1) {
           selectedPlacesId = selectedPlacesId.substr(0, posPoint) + '\\' + selectedPlacesId.substr(posPoint);
         }
 
-        // show all placespatterns for participant
-        $('#available_places_' + participantId + ' #' + selectedPlacesId).show(); // make correct pattern for places visible
+        // Show all placespatterns for participant.
+        $('#available_places_' + participantId + ' #' + selectedPlacesId).show(); // Make correct pattern for places visible.
 
-        // reset places
+        // Reset places.
         $('#id_places_' + participantId).val('');
 
-        // change focus to places field
+        // Change focus to places field.
         $('#id_places_' + participantId).focus();
 
       });

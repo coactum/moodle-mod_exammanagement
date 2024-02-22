@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class containing data for exammanagement main page (mode export grades)
+ * Class containing data for exammanagement main page (mode export grades).
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -29,7 +29,7 @@ use templatable;
 use stdClass;
 
 /**
- * Class containing data for exammanagement_overview_export_grades
+ * Class containing data for exammanagement_overview_export_grades.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -37,20 +37,39 @@ use stdClass;
  */
 class exammanagement_overview_export_grades implements renderable, templatable {
 
+    /** @var int */
     protected $cmid;
+    /** @var string */
     protected $helptexticon;
+    /** @var string */
     protected $additionalressourceslink;
+    /** @var int */
     protected $participants;
+    /** @var int */
     protected $bonuspointsentered;
+    /** @var object */
     protected $gradingscale;
+    /** @var bool */
     protected $resultscount;
+    /** @var string */
     protected $datadeletiondate;
+    /** @var bool */
     protected $deleted;
+    /** @var bool */
     protected $ldapavailable;
 
     /**
      * Construct this renderable.
-     * @param int $courseid The course record for this page.
+     * @param int $cmid The course module id
+     * @param string $helptexticon The help text icon
+     * @param string $additionalressourceslink The link to the additional ressources
+     * @param int $participants The number of participants
+     * @param int $bonuspointsentered The number of participants that have bonus points entered
+     * @param object $gradingscale The grading scale
+     * @param bool $resultscount If results are entered
+     * @param string $datadeletiondate The date when the data will be deleted
+     * @param bool $deleted If the data is already deleted
+     * @param bool $ldapavailable If ldap is available
      */
     public function __construct($cmid, $helptexticon, $additionalressourceslink, $participants,
         $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable) {
@@ -85,6 +104,8 @@ class exammanagement_overview_export_grades implements renderable, templatable {
         $data->datadeletiondate = $this->datadeletiondate;
         $data->deleted = $this->deleted;
         $data->ldapavailable = $this->ldapavailable;
+        $data->sesskey = sesskey();
+
         return $data;
     }
 }

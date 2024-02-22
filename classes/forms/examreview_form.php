@@ -22,9 +22,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\forms;
-use moodleform;
-
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -37,7 +34,7 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class examreview_form extends moodleform {
+class mod_exammanagement_examreview_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor
@@ -46,26 +43,12 @@ class examreview_form extends moodleform {
 
         $mform = $this->_form;
 
-        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
-
-        $mform->addElement('html', '<h3>'.get_string("examreview", "mod_exammanagement"));
-
-        if ($helptextsenabled) {
-            global $OUTPUT;
-
-            $mform->addElement('html', $OUTPUT->help_icon('examreview', 'mod_exammanagement', ''));
-        }
-
-        $mform->addElement('html', '</h3>');
-
-        $mform->addElement('html', '<p>'.get_string('examreviewstr', 'mod_exammanagement').'</p>');
-
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('date_time_selector', 'examreviewtime', get_string('examreviewdate', 'mod_exammanagement'));
 
-        $attributes = array('size' => '20');
+        $attributes = ['size' => '20'];
 
         $mform->addElement('text', 'examreviewroom', get_string('examreviewroom', 'mod_exammanagement'), $attributes);
         $mform->setType('examreviewroom', PARAM_TEXT);

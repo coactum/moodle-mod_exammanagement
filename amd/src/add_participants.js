@@ -14,8 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Ticks or unticks all checkboxes when clicking the Select all or Deselect all elements when viewing the participants overview
- * and remove unnecessary col-mds.
+ * Ticks or unticks all checkboxes when clicking the select all or deselect all element on viewparticipants.
  *
  * @module      mod_exammanagement/add_participants
  * @copyright   2022 coactum GmbH
@@ -25,30 +24,30 @@
 import $ from 'jquery';
 
 export const init = () => {
-    $('.mform input[type="checkbox"]').click(function () {
+    $('.mform input[type="checkbox"]').click(function() {
         $('#selectedGroupOneCount').text($('input[type="checkbox"]:checked.checkboxgroup1').not("#checkboxgroup1").length);
         $('#selectedGroupTwoCount').text($('input[type="checkbox"]:checked.checkboxgroup2').not("#checkboxgroup2").length);
         $('#selectedGroupThreeCount').text($('input[type="checkbox"]:checked.checkboxgroup3').not("#checkboxgroup3").length);
     });
 };
 
-export const enable_cb = () => {
-      $("#checkboxgroup1").click(function () {
+export const enablecb = () => {
+      $("#checkboxgroup1").click(function() {
         $('input.checkboxgroup1').prop('checked', this.checked);
         $('#selectedGroupOneCount').text($('input[type="checkbox"]:checked.checkboxgroup1').not("#checkboxgroup1").length);
       });
-      $("#checkboxgroup2").click(function () {
+      $("#checkboxgroup2").click(function() {
         $('input.checkboxgroup2').not(this).prop('checked', this.checked);
         $('#selectedGroupTwoCount').text($('input[type="checkbox"]:checked.checkboxgroup2').not("#checkboxgroup2").length);
       });
-      $("#checkboxgroup3").click(function () {
+      $("#checkboxgroup3").click(function() {
         $('input.checkboxgroup3').not(this).prop('checked', this.checked);
         $('#selectedGroupThreeCount').text($('input[type="checkbox"]:checked.checkboxgroup3').not("#checkboxgroup3").length);
       });
 };
 
 export const togglesection = () => {
-    $('.toggable').click(function () {
+    $('.toggable').click(function() {
         $('.' + $(this).attr('id') + '_body').slideToggle("slow");
         $('.' + $(this).attr('id') + '_maximize').toggle();
         $('.' + $(this).attr('id') + '_minimize').toggle();

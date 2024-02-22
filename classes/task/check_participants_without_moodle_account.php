@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A cron_task class for checking if participants without moodle account now have an account to be used by Tasks API.
+ * A class for checking if participants without moodle account now have an account to be used by Tasks API.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -23,10 +23,14 @@
  */
 
 namespace mod_exammanagement\task;
-use mod_exammanagement\general\MoodleDB;
 
-require_once(__DIR__.'/../general/MoodleDB.php');
-
+/**
+ * A class for checking if participants without moodle account now have an account to be used by Tasks API.
+ *
+ * @package   mod_exammanagement
+ * @copyright 2022 coactum GmbH
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class check_participants_without_moodle_account extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
@@ -42,33 +46,34 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
      */
     public function execute() {
 
-        $MoodleDBObj = MoodleDB::getInstance();
+        mtrace('Starting scheduled task ' . get_string('check_participants_without_moodle_account', 'mod_exammanagement'));
 
-        // get all participants without moodle account
-        if ($MoodleDBObj->checkIfRecordExists("exammanagement_participants", array('moodleuserid' => NULL))) {
+        // Get all participants without moodle account.
+        if ($DB->record_exists("exammanagement_participants", ['moodleuserid' => null])) {
 
-            $NoneMoodleParticipants = $MoodleDBObj->getRecordsFromDB("exammanagement_participants", array('moodleuserid' => NULL));
+            $nonemoodleparticipants = $DB->get_records("exammanagement_participants", ['moodleuserid' => null]);
 
-            foreach ($NoneMoodleParticipants as $participant) {
+            mtrace('Check ' . count($nonemoodleparticipants) . ' participants ...');
 
-                if ($MoodleDBObj->checkIfRecordExists("user", array('username' => $participant->login))) {                 // check if none moodle participants have now moodle account
+            foreach ($nonemoodleparticipants as $participant) {
 
-                    // if this is the case set moodle id instead of username and email
-                    $user = $MoodleDBObj->getRecordFromDB('user', array('username'=>$participant->login));
+                // Check if some of the nonemoodle participants have a moodle account now.
+                if ($user = $DB->record_exists("user", ['username' => $participant->login])) {
 
+                    // If this is the case set moodle id instead of username and email.
                     $participant->moodleuserid = $user->id;
-                    $participant->login = Null;
-                    $participant->firstname = Null;
-                    $participant->lastname = Null;
-                    $participant->email = Null;
+                    $participant->login = null;
+                    $participant->firstname = null;
+                    $participant->lastname = null;
+                    $participant->email = null;
 
-                    $MoodleDBObj->UpdateRecordInDB("exammanagement_participants", $participant);
+                    $DB->update_record("exammanagement_participants", $participant);
                 }
-
-
             }
 
-            \core\task\manager::clear_static_caches(); // restart cron after running the task because it made many DB updates and clear cron cache (https://docs.moodle.org/dev/Task_API#Caches)
+            // Restart cron after running the task because it made many DB updates and clear cron cache
+            // (https://docs.moodle.org/dev/Task_API#Caches).
+            \core\task\manager::clear_static_caches();
 
         }
     }

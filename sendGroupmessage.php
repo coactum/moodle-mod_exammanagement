@@ -15,90 +15,206 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Allows to send a groupmessage to all participants of mod_exammanagement.
+ * Allows teachers to send a groupmessage to all participants in an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\general;
+use mod_exammanagement\local\helper;
 
-use mod_exammanagement\forms\sendgroupmessage_form;
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
-
-// Course_module ID, or.
+// Course_module ID, or ...
 $id = optional_param('id', 0, PARAM_INT);
 
-// ... module instance id - should be named as the first character of the module
-$e  = optional_param('e', 0, PARAM_INT);
+// ... module instance id - should be named as the first character of the module.
+$e = optional_param('e', 0, PARAM_INT);
 
-$moodleobj = Moodle::getInstance($id, $e);
-$exammanagementinstanceobj = exammanagementInstance::getInstance($id, $e);
-$userobj = User::getInstance($id, $e, $exammanagementinstanceobj->getCm()->instance);
+// Set the basic variables $course, $cm and $moduleinstance.
+if ($id) {
+    [$course, $cm] = get_course_and_cm_from_cmid($id, 'exammanagement');
+    $moduleinstance = $DB->get_record('exammanagement', ['id' => $cm->instance], '*', MUST_EXIST);
+} else {
+    throw new moodle_exception('missingparameter');
+}
 
-if ($moodleobj->checkCapability('mod/exammanagement:viewinstance')) {
-    if ($exammanagementinstanceobj->isExamDataDeleted()) {
-        $moodleobj->redirectToOverviewPage('beforeexam', get_string('err_examdata_deleted', 'mod_exammanagement'), 'error');
+// Check if course module, course and course section exist.
+if (!$cm) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+} else if (!$course) {
+    throw new moodle_exception(get_string('incorrectcourseid', 'exammanagement'));
+} else if (!$coursesections = $DB->get_record("course_sections", ["id" => $cm->section])) {
+    throw new moodle_exception(get_string('incorrectmodule', 'exammanagement'));
+}
+
+// Check login and capability.
+require_login($course, true, $cm);
+
+$context = context_module::instance($cm->id);
+
+require_capability('mod/exammanagement:viewinstance', $context);
+
+// Get global and construct helper objects.
+global $OUTPUT, $PAGE;
+
+$courseparticipantsids = helper::getcourseparticipantsids($id);
+
+// If user has not entered the correct password: redirect to check password page.
+if (isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
+
+    redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
+}
+
+$moodleparticipantscount = helper::getparticipantscount($moduleinstance, 'moodle');
+$nonemoodleparticipantscount = helper::getparticipantscount($moduleinstance, 'nonmoodle');
+
+// Check if requirements are met.
+if (helper::isexamdatadeleted($moduleinstance)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+} else if (!helper::getparticipantscount($moduleinstance) || (!$moodleparticipantscount && !$nonemoodleparticipantscount)) {
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+}
+
+$moodlesystemname = helper::getmoodlesystemname();
+
+// Instantiate form.
+require_once($CFG->dirroot . '/mod/exammanagement/classes/forms/sendgroupmessage_form.php');
+$mform = new mod_exammanagement_sendgroupmessage_form(null, ['id' => $id, 'e' => $e]);
+
+// Form processing and displaying is done here.
+if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
+    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+} else if ($fromform = $mform->get_data()) { // In this case you process validated data.
+    $mailsubject = get_string('mailsubject', 'mod_exammanagement', [
+        'systemname' => $moodlesystemname,
+        'coursename' => $course->fullname,
+        'subject' => $fromform->groupmessages_subject,
+    ]);
+    $mailtext = $fromform->groupmessages_content;
+
+    $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'moodle'], []);
+
+    if ($mailsubject && $mailtext && $participants) {
+        global $USER;
+        $userfrom = $USER;
+
+        foreach ($participants as $key => $participant) {
+
+            $userto = helper::getmoodleuser($participant->moodleuserid);
+
+            helper::sendsinglemessage($moduleinstance, $id, $course, $moodlesystemname, $userfrom, $userto, $mailsubject, $mailtext,
+                'groupmessage');
+        }
+
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
     } else {
+        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+    }
 
-        // If no password for moduleinstance is set or if user already entered correct password in this session: show main page.
-        if (!isset($exammanagementinstanceobj->moduleinstance->password) || (isset($exammanagementinstanceobj->moduleinstance->password) && (isset($SESSION->loggedInExamOrganizationId)&&$SESSION->loggedInExamOrganizationId == $id))) {
+} else {
+    // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+    // or on the first display of the form.
 
-            if (!$userobj->getParticipantsCount()) {
-                $moodleobj->redirectToOverviewPage('beforexam', get_string('no_participants_added', 'mod_exammanagement'), 'error');
-            }
+    // Set $PAGE.
+    $plugintype = get_string('modulename', 'mod_exammanagement');
+    $modulename = format_string($moduleinstance->name, true, [
+        'context' => $context,
+    ]);
+    $title = get_string('sendgroupmessage', 'mod_exammanagement');
 
-            // Instantiate form.
-            $mform = new sendgroupmessage_form(null, array('id' => $id, 'e' => $e));
+    $PAGE->set_url('/mod/exammanagement/sendgroupmessage.php', ['id' => $id]);
+    $PAGE->navbar->add($title);
+    $PAGE->set_title($plugintype . ': ' . $modulename . ' - ' . $title);
+    $PAGE->set_heading($course->fullname);
+    if ($CFG->branch < 400) {
+        $PAGE->force_settings_menu();
+    }
 
-            // Form processing and displaying is done here.
-            if ($mform->is_cancelled()) {
-                // Handle form cancel operation, if cancel button is present on form.
-                $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_canceled', 'mod_exammanagement'), 'warning');
+    // Output header.
+    echo $OUTPUT->header();
 
-            } else if ($fromform = $mform->get_data()) {
-                // In this case you process validated data. $mform->get_data() returns data posted in form.
-                $mailsubject = get_string('mailsubject', 'mod_exammanagement', ['systemname' => $exammanagementinstanceobj->getMoodleSystemName(), 'coursename' => $exammanagementinstanceobj->getCourse()->fullname, 'subject' => $fromform->groupmessages_subject]);
-                $mailtext = $fromform->groupmessages_content;
+    if ($CFG->branch < 400) {
+        echo $OUTPUT->heading($modulename);
 
-                $participants = $userobj->getExamParticipants(array('mode' => 'moodle'), array());
-
-                if ($mailsubject && $mailtext && $participants) {
-                    foreach ($participants as $key => $participantobj) {
-
-                        $user = $userobj->getMoodleUser($participantobj->moodleuserid);
-
-                        $exammanagementinstanceobj->sendSingleMessage($user, $mailsubject, $mailtext, 'groupmessage');
-
-                    }
-
-                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('operation_successfull', 'mod_exammanagement'), 'success');
-                } else {
-                    $moodleobj->redirectToOverviewPage('beforeexam', get_string('alteration_failed', 'mod_exammanagement'), 'error');
-                }
-
-            } else {
-                // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-                // or on the first display of the form.
-
-                // Set default data (if any).
-                $mform->set_data(array('id' => $id));
-
-                $moodleobj->setPage('sendGroupmessage');
-                $moodleobj->outputPageHeader();
-
-                $mform->display();
-
-                $moodleobj->outputFooter();
-            }
-
-        } else { // If user has not entered correct password for this session: show enterPasswordPage.
-            redirect ($exammanagementinstanceobj->getExammanagementUrl('checkpassword', $exammanagementinstanceobj->getCm()->id), null, null, null);
+        if ($moduleinstance->intro) {
+            echo $OUTPUT->box(format_module_intro('exammanagement', $moduleinstance, $cm->id), 'generalbox', 'intro');
         }
     }
-} else {
-    $moodleobj->redirectToOverviewPage('', get_string('nopermissions', 'mod_exammanagement'), 'error');
+
+    // Output heading.
+    if (get_config('mod_exammanagement', 'enablehelptexts')) {
+        echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('sendgroupmessage', 'mod_exammanagement', ''), 4);
+    } else {
+        echo $OUTPUT->heading($title, 4);
+    }
+
+    // Output description.
+    if ($moodleparticipantscount) {
+        echo '<p>' . get_string('groupmessages_text', 'mod_exammanagement',
+            ['systemname' => $moodlesystemname, 'participantscount' => $moodleparticipantscount]) . '</p>';
+
+        // Output alerts.
+        if ($nonemoodleparticipantscount) {
+            $mailaddresses = helper::getnonemoodleparticipantsemailadresses($moduleinstance);
+
+            echo '<div class="alert alert-warning alert-block fade in " role="alert">
+                <button type="button" class="close" data-dismiss="alert">×</button>';
+
+            echo '<p>' . get_string('groupmessages_warning', 'mod_exammanagement', [
+                'systemname' => helper::getmoodlesystemname(),
+                'participantscount' => $nonemoodleparticipantscount,
+                ]) . '</p>';
+
+            echo '<a href="mailto:?bcc=';
+
+            foreach ($mailaddresses as $address) {
+                echo $address . ';';
+            }
+
+            echo '" role="button" class="btn btn-primary" title="' . get_string('send_manual_message', 'mod_exammanagement') .
+                '">' . get_string('send_manual_message', 'mod_exammanagement') . '</a>';
+
+            echo '</div>';
+        }
+
+        echo '<span class="mt-1"><hr></span>';
+
+        // Set default data.
+        $mform->set_data(['id' => $id]);
+
+        // Display form.
+        $mform->display();
+
+    } else if ($nonemoodleparticipantscount) {
+        $mailaddresses = helper::getnonemoodleparticipantsemailadresses($moduleinstance);
+
+        echo '<p><strong>' . $nonemoodleparticipantscount . '</strong>' .
+            get_string('groupmessages_warning_2', 'mod_exammanagement') . '</p>';
+
+        echo '<a href="mailto:?bcc=';
+
+        foreach ($mailaddresses as $address) {
+            echo $address . ';';
+        }
+
+        echo '" role="button" class="btn btn-primary" title="' . get_string('send_manual_message', 'mod_exammanagement') .
+            '">' . get_string('send_manual_message', 'mod_exammanagement') . '</a>';
+
+        echo '<span class="col-sm-5"></span><a href="' . new moodle_url('/mod/exammanagement/view.php',
+            ['id' => $id]) . '" class="btn btn-primary">' . get_string("cancel", "mod_exammanagement") .
+            '</a>';
+
+    }
+
+    // Finish the page.
+    echo $OUTPUT->footer();
 }
