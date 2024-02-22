@@ -119,15 +119,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                     $user->moodleuserid = $participantid;
                     $user->headerid = 0;
 
-                    // To be removed.
-                    $dbman = $DB->get_manager();
-                    $table = new \xmldb_table('exammanagement_participants');
-                    $field = new \xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null,
-                        XMLDB_NOTNULL, null, null);
-                    if ($dbman->field_exists($table, $field)) {
-                        $user->plugininstanceid = 0; // For deprecated old version db version, should be removed.
-                    }
-
                     array_push($users, $user);
                 }
             }

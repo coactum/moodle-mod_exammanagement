@@ -319,5 +319,25 @@ function xmldb_exammanagement_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2023021000, 'exammanagement');
     }
 
+    if ($oldversion < 2024022200) { // Remove legacy field for plugininstanceid.
+
+        // Define field plugininstanceid to be removed to exammanagement_participants.
+        $table = new xmldb_table('exammanagement_participants');
+        $field = new xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Conditionally launch remove field.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Define field plugininstanceid to be removed to exammanagement.
+        $table = new xmldb_table('exammanagement_temp_part');
+
+        // Conditionally launch remove field.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+    }
+
     return true;
 }
