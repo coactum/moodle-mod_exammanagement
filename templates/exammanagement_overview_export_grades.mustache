@@ -63,7 +63,7 @@ ajaxsetcorrectioncompletion = function(value) {
 <div class="container-fluid exammanagement_overview">
 	<div class="row">
 		<h3 class="my-1 col-6">{{#str}}export_grades_as_exam_results, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
-		<span class="my-1 col-6">{{^deleted}}<a class="btn btn-primary pull-right mb-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary pull-right mr-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
+		<span class="my-1 col-6">{{^deleted}}<a class="btn btn-primary float-right mb-1" href="participantsoverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>{{/deleted}}{{^deleted}}<a class="btn btn-primary float-right mr-1" href="configurepassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurepassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurepassword, mod_exammanagement{{/str}}"></i></a>{{/deleted}}</span>
 	</div>
 
 	{{#deleted}}
@@ -90,7 +90,7 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#participants}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
 											{{^participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
@@ -102,14 +102,14 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^participants}}<p> {{#str}}exam_participants_not_set, mod_exammanagement{{/str}}</p>{{/participants}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="viewParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} float-right" href="viewparticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
 							<div class="col-6">
 									<div class="panel {{^gradingscale}}panel-warning{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#gradingscale}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
 												{{^gradingscale}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
@@ -121,7 +121,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}<a class="btn {{#gradingscale}}btn-success{{/gradingscale}}{{^gradingscale}}btn-warning{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+											{{^deleted}}<a class="btn {{#gradingscale}}btn-success{{/gradingscale}}{{^gradingscale}}btn-warning{{/gradingscale}} float-right" href="configuregradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 										</div>
 									</div>
 							</div>
@@ -130,10 +130,10 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{^bonuspointsentered}}{{#participants}}panel-warning{{/participants}}{{/bonuspointsentered}}{{^bonuspointsentered}}{{^participants}}panel-danger{{/participants}}{{/bonuspointsentered}}{{#bonuspointsentered}}panel-success{{/bonuspointsentered}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#bonuspointsentered}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuspointsentered}}
 												{{^bonuspointsentered}}{{#participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/bonuspointsentered}}
-												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+												{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 												<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}grades, mod_exammanagement{{/str}}</h3>
@@ -143,15 +143,15 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^bonuspointsentered}}<p>{{#str}}grades_not_set, mod_exammanagement{{/str}}</p>{{/bonuspointsentered}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#participants}}<a class="btn {{#bonuspointsentered}}btn-success{{/bonuspointsentered}}{{^bonuspointsentered}}btn-warning{{/bonuspointsentered}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_grades, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_grades, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+											{{^deleted}}{{#participants}}<a class="btn {{#bonuspointsentered}}btn-success{{/bonuspointsentered}}{{^bonuspointsentered}}btn-warning{{/bonuspointsentered}} float-right" href="importbonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_grades, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_grades, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											<span class="statebar float-right">
+												{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 										</span>
@@ -161,7 +161,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<p> {{#str}}exam_results_overview_grades, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+										{{^deleted}}{{#participants}}<a class="btn btn-primary float-right" href="participantsoverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -170,10 +170,10 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-warning{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{^deleted}}{{#bonuspointsentered}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/bonuspointsentered}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
+											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importbonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 										</span>
 										<h3 class="panel-title">{{#str}}complete_preparations, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -187,9 +187,9 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#datadeletiondate}}{{#bonuspointsentered}}panel-info{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}{{#datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-											{{^bonuspointsentered}}<a href="importBonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}
+											{{^bonuspointsentered}}<a href="importbonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}
 											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
@@ -198,7 +198,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#datadeletiondate}}{{#bonuspointsentered}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
+										{{^deleted}}{{#datadeletiondate}}{{#bonuspointsentered}}<a href="exportresultstextfile.php?id={{cmid}}" class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 									</div>
 								</div>
 							</div>

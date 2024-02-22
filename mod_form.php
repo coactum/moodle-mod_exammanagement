@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The main mod_exammanagement configuration form.
+ * This file contains the forms to create and edit an instance of the module.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_exammanagement\general\exammanagementInstance;
+use mod_exammanagement\local\helper;
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
@@ -45,9 +45,14 @@ class mod_exammanagement_mod_form extends moodleform_mod {
 
         if (isset($_GET['update'])) {
             $id = $_GET['update'];
-            $exammanagementinstanceobj = exammanagementInstance::getInstance($id, false);
-            $oldpw = $exammanagementinstanceobj->getModuleinstance()->password;
-            $misc = json_decode($exammanagementinstanceobj->getModuleinstance()->misc);
+            $moduleinstance = helper::getmoduleinstance($id, false);
+            $oldpw = $moduleinstance->password;
+
+            if (isset($moduleinstance->misc)) {
+                $misc = json_decode($moduleinstance->misc);
+            } else {
+                $misc = null;
+            }
         } else {
             $oldpw = null;
             $misc = null;
@@ -131,7 +136,13 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    // Custom validation should be added here.
+    /**
+     * Custom validation for the form.
+     *
+     * @param object $data The data from the form.
+     * @param object $files The files from the form.
+     * @return object $errors The errors.
+     */
     public function validation($data, $files) {
         $errors = [];
 

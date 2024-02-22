@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A cron_task class for checking if participants without moodle account now have an account to be used by Tasks API.
+ * A class for checking if participants without moodle account now have an account to be used by Tasks API.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -25,7 +25,7 @@
 namespace mod_exammanagement\task;
 
 /**
- * A cron_task class for checking if participants without moodle account now have an account to be used by Tasks API.
+ * A class for checking if participants without moodle account now have an account to be used by Tasks API.
  *
  * @package   mod_exammanagement
  * @copyright 2022 coactum GmbH
@@ -45,21 +45,22 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
      * Execute the task.
      */
     public function execute() {
-        global $DB;
+
+        mtrace('Starting scheduled task ' . get_string('check_participants_without_moodle_account', 'mod_exammanagement'));
 
         // Get all participants without moodle account.
         if ($DB->record_exists("exammanagement_participants", ['moodleuserid' => null])) {
 
             $nonemoodleparticipants = $DB->get_records("exammanagement_participants", ['moodleuserid' => null]);
 
+            mtrace('Check ' . count($nonemoodleparticipants) . ' participants ...');
+
             foreach ($nonemoodleparticipants as $participant) {
 
                 // Check if some of the nonemoodle participants have a moodle account now.
-                if ($DB->record_exists("user", ['username' => $participant->login])) {
+                if ($user = $DB->record_exists("user", ['username' => $participant->login])) {
 
                     // If this is the case set moodle id instead of username and email.
-                    $user = $DB->get_records('user', ['username' => $participant->login]);
-
                     $participant->moodleuserid = $user->id;
                     $participant->login = null;
                     $participant->firstname = null;

@@ -15,15 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The form for setting the text field for mod_exammanagement.
+ * The form for setting the text field for an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace mod_exammanagement\forms;
-use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -31,13 +28,13 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * The form for setting the text field for mod_exammanagement.
+ * The form for setting the text field for an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class textfield_form extends moodleform {
+class mod_exammanagement_textfield_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor
@@ -45,20 +42,6 @@ class textfield_form extends moodleform {
     public function definition() {
 
         $mform = $this->_form;
-
-        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
-
-        $mform->addElement('html', '<h3>'.get_string("settextfield", "mod_exammanagement"));
-
-        if ($helptextsenabled) {
-            global $OUTPUT;
-
-            $mform->addElement('html', $OUTPUT->help_icon('settextfield', 'mod_exammanagement', ''));
-        }
-
-        $mform->addElement('html', '</h3>');
-
-        $mform->addElement('html', '<p>'.get_string('settextfieldstr', 'mod_exammanagement').'</p>');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for participantsListsNames PDF for exammanagement.
+ * Class for participantslists pdf.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -23,13 +23,12 @@
  */
 
 namespace mod_exammanagement\pdfs;
-use mod_exammanagement\general\exammanagementInstance;
 use TCPDF;
+use mod_exammanagement\local\helper;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/pdflib.php');
-require_once(__DIR__.'/../general/exammanagementInstance.php');
+require_once($CFG->libdir . '/pdflib.php');
 
 /**
  * Extend the base TCPDF class to create custom header and footer for the document.
@@ -38,7 +37,7 @@ require_once(__DIR__.'/../general/exammanagementInstance.php');
  * @copyright 2022 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class participantsList extends TCPDF {
+class participantslist extends TCPDF {
 
     /**
      * Override the header of the base class.
@@ -51,7 +50,15 @@ class participantsList extends TCPDF {
         // ... module instance id - should be named as the first character of the module.
         $e = optional_param('e', 0, PARAM_INT);
 
-        $exammanagementinstance = exammanagementInstance::getInstance($id, $e);
+        global $DB;
+
+        // Set the basic variables $course, $cm and $moduleinstance.
+        if ($id) {
+            [$course, $cm] = get_course_and_cm_from_cmid($id, 'exammanagement');
+            $moduleinstance = $DB->get_record('exammanagement', ['id' => $cm->instance], '*', MUST_EXIST);
+        } else {
+            throw new moodle_exception('missingparameter');
+        }
 
         if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
             $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
@@ -71,10 +78,10 @@ class participantsList extends TCPDF {
 
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('freeserif', '', 14);
-        $this->MultiCell(130, 50, strtoupper($exammanagementinstance->getCleanCourseCategoryName()) . ' / ' .
-            $exammanagementinstance->getCourse()->fullname . ' ('. $exammanagementinstance->getModuleinstance()->name .
+        $this->MultiCell(130, 50, strtoupper(helper::getcleancoursecategoryname()) . ' / ' .
+            $course->fullname . ' ('. $moduleinstance->name .
             ')', 0, 'L', 0, 0, 25, 40);
-        $this->MultiCell(26, 50, $exammanagementinstance->getHrExamtime(), 0, 'R', 0, 0, 159, 40);
+        $this->MultiCell(26, 50, helper::gethrexamtime($moduleinstance), 0, 'R', 0, 0, 159, 40);
     }
 
 

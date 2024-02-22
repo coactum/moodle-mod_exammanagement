@@ -29,7 +29,7 @@ use core\notification;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->libdir.'/ldaplib.php');
+require_once($CFG->libdir . '/ldaplib.php');
 
 /**
  * Class containing all ldap methods for exammanagement.

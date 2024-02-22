@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for resultsExamReview PDF for exammanagement.
+ * Class for results exam review pdf.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -27,7 +27,7 @@ use TCPDF;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/pdflib.php');
+require_once($CFG->libdir . '/pdflib.php');
 
 /**
  * Extend the base TCPDF class to create custom header and footer for the document.
@@ -36,7 +36,7 @@ require_once($CFG->libdir.'/pdflib.php');
  * @copyright 2022 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class resultsExamReview extends TCPDF {
+class resultsexamreview extends TCPDF {
 
     /**
      * Override the footer of the base class.

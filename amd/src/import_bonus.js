@@ -24,7 +24,7 @@
 import $ from 'jquery';
 
 export const init = () => {
-  // create input type number elements
+  // Create input type number elements.
   $("form.mform input[type=text]").not('#id_idfield, #id_pointsfield').attr("type", "number");
 
   var styles = {
@@ -40,7 +40,7 @@ export const init = () => {
 
   $("#import_bonuspoints_text").hide();
 
-  $('#id_bonusmode').change(function () {
+  $('#id_bonusmode').change(function() {
     if (this.value == 'points') {
       $("#set_bonussteps").hide();
       $("#import_bonuspoints_text").show();
@@ -54,7 +54,7 @@ export const init = () => {
 
 export const addbonusstep = () => { // Add new step.
 
-  $("#id_add_bonusstep").click(function () {
+  $("#id_add_bonusstep").click(function() {
 
     var bonusstepcount = getBonusstepCount();
     var newbonusstepcount = bonusstepcount + 1;
@@ -84,7 +84,7 @@ export const addbonusstep = () => { // Add new step.
 
 export const removebonusstep = () => { // Remove step.
 
-  $("#id_remove_bonusstep").click(function () {
+  $("#id_remove_bonusstep").click(function() {
 
     var bonusstepcount = getBonusstepCount();
 
@@ -97,10 +97,10 @@ export const removebonusstep = () => { // Remove step.
   });
 };
 
-var getBonusstepCount = function () {
+var getBonusstepCount = function() {
   var bonusstepcount = 0;
 
-  $("form.mform .form-group input.form-control").not('#id_idfield, #id_pointsfield').each(function () {
+  $("form.mform .form-group input.form-control").not('#id_idfield, #id_pointsfield').each(function() {
     bonusstepcount += 1;
   });
 

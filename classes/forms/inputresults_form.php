@@ -15,31 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The form for entering the exam results for the participants for mod_exammanagement.
+ * The form for entering the exam results for the participants in an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_exammanagement\forms;
-use mod_exammanagement\general\exammanagementInstance;
-use moodleform;
+use mod_exammanagement\local\helper;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
-require_once(__DIR__.'/../general/exammanagementInstance.php');
 
 /**
- * The form for entering the exam results for the participants for mod_exammanagement.
+ * The form for entering the exam results for the participants in an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class inputResultsForm extends moodleform {
+class mod_exammanagement_inputresults_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
@@ -48,25 +45,12 @@ class inputResultsForm extends moodleform {
 
         global $PAGE, $OUTPUT;
 
-        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $jsargs = ['lang' => current_language()];
 
-        $jsargs = array('lang' => current_language());
-
-        $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init', $jsargs); // Call jquery for tracking input value change events.
+        // Call jquery for tracking input value change events.
+        $PAGE->requires->js_call_amd('mod_exammanagement/input_results', 'init', $jsargs);
 
         $mform = $this->_form;
-
-        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
-
-        $mform->addElement('html', '<h3>'.get_string("inputResults", "mod_exammanagement"));
-
-        if ($helptextsenabled) {
-            $mform->addElement('html', $OUTPUT->help_icon('inputResults', 'mod_exammanagement', ''));
-        }
-
-        $mform->addElement('html', '</h3>');
-
-        $mform->addElement('html', '<p>'.get_string("input_results_text", "mod_exammanagement").'</p>');
 
         // Create hidden id field.
         $mform->addElement('hidden', 'id');
@@ -77,24 +61,31 @@ class inputResultsForm extends moodleform {
         $mform->setType('matrval', PARAM_INT);
 
         if ($this->_customdata['matrnr']) {
-            $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>'.get_string("confirm_matrnr", "mod_exammanagement").'</div>');
 
-            $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_participant', 'mod_exammanagement').'</p></strong>');
+            $mform->addElement('html', '<hr /><strong><p>' .
+                get_string('exam_participant', 'mod_exammanagement') . '</p></strong>');
 
             // Create input field for matrnr.
 
-            $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'), 'test');
+            $mform->addElement('text', 'matrnr', get_string('matrnr', 'mod_exammanagement'));
 
             $mform->setType('matrnr', PARAM_TEXT);
 
             if ($this->_customdata['firstname'] && $this->_customdata['lastname']) {
-                $mform->addElement('static', 'participant', '<strong><p>'.get_string('participant', 'mod_exammanagement').'</p></strong>', $this->_customdata['firstname'] . ' '. $this->_customdata['lastname'] . ' <a class="btn btn-secondary ml-5" href="inputResults.php?id='.$this->_customdata['id'].'" role="button" title="'.get_string("input_other_matrnr", "mod_exammanagement").'"><span class="d-none d-lg-block">'.get_string("input_other_matrnr", "mod_exammanagement").'</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
+                $mform->addElement('static', 'participant', '<strong><p>' .
+                    get_string('participant', 'mod_exammanagement') . '</p></strong>',
+                    $this->_customdata['firstname'] . ' '. $this->_customdata['lastname'] .
+                    ' <a class="btn btn-secondary ml-5" href="' .
+                    new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $this->_customdata['id']]) .
+                    '" role="button" title="' . get_string("input_other_matrnr", "mod_exammanagement") .
+                    '"><span class="d-none d-lg-block">' . get_string("input_other_matrnr", "mod_exammanagement") .
+                    '</span><i class="fa fa-edit d-lg-none" aria-hidden="true"></i></a>');
             }
 
             // Create list of tasks.
             $mform->addElement('html', '<hr /><strong><p>' . get_string('exam_points', 'mod_exammanagement') . '</p></strong>');
 
-            $tasks = $exammanagementinstanceobj->getTasks();
+            $tasks = helper::gettasks($this->_customdata['moduleinstance']);
             $totalpoints = 0;
 
             // Add label.
@@ -102,7 +93,8 @@ class inputResultsForm extends moodleform {
 
             $mform->addElement('html', '<span><strong>' . get_string('task', 'mod_exammanagement') . '</strong></span>');
             $mform->addElement('html', '<br><span>' . get_string('max_points', 'mod_exammanagement') . '</span>');
-            $mform->addElement('html', '<br><span style="position: relative; top: 15px;">' . get_string('points', 'mod_exammanagement') . '</span></span></div><div class="col-9">');
+            $mform->addElement('html', '<br><span style="position: relative; top: 15px;">' .
+                get_string('points', 'mod_exammanagement') . '</span></span></div><div class="col-9">');
             $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
 
             if ($tasks) {
@@ -110,13 +102,15 @@ class inputResultsForm extends moodleform {
                 foreach ($tasks as $tasknumber => $points) {
 
                     // Number of the task.
-                    $mform->addElement('html', '<span class="exammanagement_task_spacing"><strong>' . $tasknumber . '</strong><br>');
+                    $mform->addElement('html', '<span class="exammanagement_task_spacing"><strong>' .
+                        $tasknumber . '</strong><br>');
 
                     // Max points of the task.
-                    $mform->addElement('html', '<span class="exammanagement_task_spacing">' . $exammanagementinstanceobj->formatNumberForDisplay($points) . '</span>');
+                    $mform->addElement('html', '<span class="exammanagement_task_spacing">' .
+                        helper::formatnumberfordisplay($points) . '</span>');
 
                     // Input field with the task points achieved in the exam.
-                    $mform->addElement('text', 'points[' . $tasknumber . ']', '', array());
+                    $mform->addElement('text', 'points[' . $tasknumber . ']', '', []);
                     $mform->setType('points[' . $tasknumber . ']', PARAM_FLOAT);
                     $mform->setDefault('points[' . $tasknumber . ']', '');
 
@@ -132,15 +126,18 @@ class inputResultsForm extends moodleform {
             $mform->hideif ('tasks_array', 'matrval', 'eq', 1);
             $mform->hideif ('points_array', 'matrval', 'eq', 1);
 
-            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">'.get_string('total', 'mod_exammanagement').':</span><span class="col-md-9" id="totalpoints">'.$exammanagementinstanceobj->formatNumberForDisplay($totalpoints).'</span></strong></div>');
+            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">' .
+                get_string('total', 'mod_exammanagement') . ':</span><span class="col-md-9" id="totalpoints">' .
+                helper::formatnumberfordisplay($totalpoints) . '</span></strong></div>');
 
             // Create checkboxes for exams state.
 
-            $mform->addElement('html', '<hr /><strong><p>'.get_string('exam_state', 'mod_exammanagement').'</p></strong>');
+            $mform->addElement('html', '<hr /><strong><p>' . get_string('exam_state', 'mod_exammanagement') . '</p></strong>');
 
-            $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null, array('group' => 1));
-            $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, array('group' => 1));
-            $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, array('group' => 1));
+            $mform->addElement('advcheckbox', 'state[nt]', get_string('not_participated', 'mod_exammanagement'), null,
+                ['group' => 1]);
+            $mform->addElement('advcheckbox', 'state[fa]', get_string('fraud_attempt', 'mod_exammanagement'), null, ['group' => 1]);
+            $mform->addElement('advcheckbox', 'state[ill]', get_string('ill', 'mod_exammanagement'), null, ['group' => 1]);
 
             $mform->hideif ('state[nt]', 'matrval', 'eq', 1);
             $mform->hideif ('state[fa]', 'matrval', 'eq', 1);
@@ -173,10 +170,9 @@ class inputResultsForm extends moodleform {
      * @return object $errors The errors.
      */
     public function validation($data, $files) {
-        $errors = array();
+        $errors = [];
 
-        $exammanagementinstanceobj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-        $savedtasksarr = array_values($exammanagementinstanceobj->getTasks());
+        $savedtasksarr = array_values(helper::gettasks($this->_customdata['moduleinstance']));
 
         if ($data['matrval'] == 0 && !$data['state']['nt'] && !$data['state']['ill'] && !$data['state']['fa']) {
             foreach ($data['points'] as $task => $points) {
@@ -185,11 +181,11 @@ class inputResultsForm extends moodleform {
                 $isnumeric = is_numeric($points);
 
                 if (($points && !$floatval) || !$isnumeric) {
-                    $errors['points['. $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+                    $errors['points[' . $task .']'] = get_string('err_novalidinteger', 'mod_exammanagement');
                 } else if ($points < 0) {
-                    $errors['points['.$task.']'] = get_string('err_underzero', 'mod_exammanagement');
+                    $errors['points[' . $task . ']'] = get_string('err_underzero', 'mod_exammanagement');
                 } else if ($points > $savedtasksarr[$task - 1]) {
-                     $errors['points['. $task .']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
+                     $errors['points[' . $task . ']'] = get_string('err_taskmaxpoints', 'mod_exammanagement');
                 }
             }
         }

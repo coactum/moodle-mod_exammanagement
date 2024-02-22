@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A cron_task class for deleting unassigned custom exam rooms to be used by Tasks API.
+ * A class for deleting unassigned custom exam rooms to be used by Tasks API.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -25,7 +25,7 @@
 namespace mod_exammanagement\task;
 
 /**
- * A cron_task class for deleting unassigned custom exam rooms to be used by Tasks API.
+ * A class for deleting unassigned custom exam rooms to be used by Tasks API.
  *
  * @package   mod_exammanagement
  * @copyright 2022 coactum GmbH
@@ -46,9 +46,13 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
      */
     public function execute() {
 
+        mtrace('Starting scheduled task ' . get_string('delete_unassigned_custom_rooms', 'mod_exammanagement'));
+
         if ($rs = $DB->get_recordset_select("exammanagement_rooms", "type = 'customroom'")) {
 
             if ($rs->valid()) {
+
+                mtrace('Deleting records ...');
 
                 foreach ($rs as $record) {
                     if (!$DB->record_exists('user', ['id' => $record->moodleuserid])) {

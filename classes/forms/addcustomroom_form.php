@@ -15,57 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * class containing addCustomRoomForm for exammanagement
+ * The form for adding a custom room to the exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace mod_exammanagement\forms;
-use mod_exammanagement\general\exammanagementInstance;
-
-use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
-require_once(__DIR__.'/../general/exammanagementInstance.php');
-
 /**
- * The form for adding a custom room.
+ * The form for adding a custom room to the exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class addCustomRoomForm extends moodleform {
+class mod_exammanagement_addcustomroom_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
      */
     public function definition() {
 
-        global $OUTPUT;
-
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
-
         $mform = $this->_form;
-
-        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
-
-        $mform->addElement('html', '<h3>'.get_string("addCustomRoom", "mod_exammanagement"));
-
-        if ($helptextsenabled) {
-            $mform->addElement('html', $OUTPUT->help_icon('addCustomRoom', 'mod_exammanagement', ''));
-        }
-
-        $mform->addElement('html', '</h3>');
-
-        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>' . get_string("change_custom_room_name", "mod_exammanagement") . '</div>');
-        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close" data-dismiss="alert">×</button>' . get_string("custom_room_places", "mod_exammanagement") . '</div>');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
@@ -73,7 +49,7 @@ class addCustomRoomForm extends moodleform {
         $mform->addElement('hidden', 'existingroom', 0);
         $mform->setType('existingroom', PARAM_INT);
 
-        $attributes = array('size' => '20');
+        $attributes = ['size' => '20'];
 
         $mform->addElement('text', 'roomname', get_string('customroom_name', 'mod_exammanagement'), $attributes);
         $mform->setType('roomname', PARAM_TEXT);
@@ -100,13 +76,11 @@ class addCustomRoomForm extends moodleform {
      */
     public function validation($data, $files) {
 
-        global $USER;
+        global $DB, $USER;
 
-        $ExammanagementInstanceObj = exammanagementInstance::getInstance($this->_customdata['id'], $this->_customdata['e']);
+        $errors = [];
 
-        $errors = array();
-
-        $similiarroom = $ExammanagementInstanceObj->getRoomObj($data['roomname'].'_'.$USER->id.'c');
+        $similiarroom = $DB->get_record('exammanagement_rooms', ['roomid' => $data['roomname'] . '_' . $USER->id . 'c']);
 
         if ($data['existingroom'] !== 1 && $similiarroom) {
             $errors['roomname'] = get_string('err_customroomname_taken', 'mod_exammanagement');

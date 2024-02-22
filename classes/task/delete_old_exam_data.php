@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A cron_task class for deleting old exam data to be used by Tasks API.
+ * A class for deleting old exam data to be used by Tasks API.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -23,15 +23,12 @@
  */
 
 namespace mod_exammanagement\task;
-use mod_exammanagement\general\exammanagementInstance;
 use context_course;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__.'/../general/exammanagementInstance.php');
+use core_user;
+use mod_exammanagement\local\helper;
 
 /**
- * A cron_task class for deleting old exam data to be used by Tasks API.
+ * A class for deleting old exam data to be used by Tasks API.
  *
  * @package   mod_exammanagement
  * @copyright 2022 coactum GmbH
@@ -58,99 +55,105 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
         // Get all records where datadeletion date is set and that are not to be deleted yet.
         $now = time();
-        $select = "datadeletion IS NOT NULL AND datadeletion >= ".$now;
+        $select = "datadeletion IS NOT NULL AND datadeletion >= " . $now;
 
         if ($DB->record_exists_select('exammanagement', $select)) {
 
-            $records = $DB->get_records_select('exammanagement', $select);
+            if ($rs = $DB->get_recordset_select("exammanagement", $select)) {
 
-            foreach ($records as $id => $record) {
+                if ($rs->valid()) {
 
-                // Check warning mail state.
-                $warningone = strtotime("-1 month", $record->datadeletion);
-                $warningtwo = strtotime("-7 days", $record->datadeletion);
-                $warningthree = strtotime("-1 day", $record->datadeletion);
+                    $moodlesystemname = helper::getmoodlesystemname();
 
-                if (isset($record->deletionwarningmailids)) {
-                    $deletionwarningmailids = json_decode($record->deletionwarningmailids);
-                    $warningmailscount = count($deletionwarningmailids);
-                } else {
-                    $deletionwarningmailids = [];
-                    $warningmailscount = 0;
-                }
+                    foreach ($rs as $id => $record) {
+                        // Check warning mail state.
+                        $warningone = strtotime("-1 month", $record->datadeletion);
+                        $warningtwo = strtotime("-7 days", $record->datadeletion);
+                        $warningthree = strtotime("-1 day", $record->datadeletion);
 
-                $warningstep = false;
+                        if (isset($record->deletionwarningmailids)) {
+                            $deletionwarningmailids = json_decode($record->deletionwarningmailids);
+                            $warningmailscount = count($deletionwarningmailids);
+                        } else {
+                            $deletionwarningmailids = [];
+                            $warningmailscount = 0;
+                        }
 
-                // Check if some warningmails are already send and determine if warning period is due.
-                if ($warningone <= $now && $warningmailscount == 0) {
-                    $warningstep = 1;  // No warning mails yet, first to send.
-                } else if ($warningtwo <= $now && $warningmailscount == 1) {
-                    $warningstep = 2; // One warning mail yet, second to send.
-                } else if ($warningthree <= $now && $warningmailscount == 2) {
-                    $warningstep = 3; // Two warning mails yet, last to send.
-                }
+                        $warningstep = false;
 
-                if ($warningstep) {
-                    // Get user to whom warning mail should be send (teachers of course).
-                    $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
-                    $courseid = $record->course;
-                    $coursecontext = context_course::instance($courseid);
-                    $teachers = get_role_users($role->id, $coursecontext);
+                        // Check if some warningmails are already send and determine if warning period is due.
+                        if ($warningone <= $now && $warningmailscount == 0) {
+                            $warningstep = 1;  // No warning mails yet, first to send.
+                        } else if ($warningtwo <= $now && $warningmailscount == 1) {
+                            $warningstep = 2; // One warning mail yet, second to send.
+                        } else if ($warningthree <= $now && $warningmailscount == 2) {
+                            $warningstep = 3; // Two warning mails yet, last to send.
+                        }
 
-                    // Set mail properties and contents.
-                    $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
+                        if ($warningstep) {
+                            // Get user to whom warning mail should be send (teachers of course).
+                            $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
+                            $courseid = $record->course;
+                            $coursecontext = context_course::instance($courseid);
+                            $teachers = get_role_users($role->id, $coursecontext);
 
-                    $exammanagementinstance = new exammanagementInstance($cmid, '', true);
+                            // Set mail properties and contents.
+                            list($course, $cm) = get_course_and_cm_from_instance($record->id, 'exammanagement');
 
-                    switch ($warningstep) {
+                            switch ($warningstep) {
 
-                        case 1:
-                            $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
-                            break;
-                        case 2:
-                            $warningmailsubject = get_string("warningmailsubjecttwo", "mod_exammanagement");
-                            break;
-                        case 3:
-                            $warningmailsubject = get_string("warningmailsubjectthree", "mod_exammanagement");
-                            break;
+                                case 1:
+                                    $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
+                                    break;
+                                case 2:
+                                    $warningmailsubject = get_string("warningmailsubjecttwo", "mod_exammanagement");
+                                    break;
+                                case 3:
+                                    $warningmailsubject = get_string("warningmailsubjectthree", "mod_exammanagement");
+                                    break;
+                            }
+
+                            $warningmailcontent = get_string("warningmailcontent", "mod_exammanagement" ,
+                                ['systemname' => $moodlesystemname,
+                                'examname' => $record->name,
+                                'coursename' => $course->fullname,
+                                'datadeletiondate' => helper::getdatadeletiondate($record)]);
+
+                            $warningmailcontent .= '<br><br>'.get_string("warningmailcontentenglish", "mod_exammanagement" ,
+                                ['systemname' => $moodlesystemname,
+                                'examname' => $record->name,
+                                'coursename' => $course->fullname,
+                                'datadeletiondate' => helper::getdatadeletiondate($record)]);
+
+                            $warningmailids = [];
+
+                            // Send mail and save send warning mail id.
+                            foreach ($teachers as $user) {
+                                $warningmailid = helper::sendsinglemessage($record, $cm->id, $course, $moodlesystemname,
+                                    core_user::get_noreply_user(), $user->id, $warningmailsubject, $warningmailcontent,
+                                    'deletionwarningmessage', true);
+
+                                array_push($warningmailids, $warningmailid);
+                            }
+
+                            array_push($deletionwarningmailids, $warningmailids);
+
+                            mtrace('Sending ' . count($warningmailids) .' warning mails for step ' . $warningstep .
+                                ' to teachers of exammanagement id ' . $record->id);
+
+                            // Update module instance.
+
+                            if (!empty($deletionwarningmailids)) {
+                                $record->deletionwarningmailids = json_encode($deletionwarningmailids);
+                                $DB->update_record("exammanagement", $record);
+
+                                mtrace('Updating module instance for exammanagement id ' . $record->id .
+                                    ' with new deletion warning mail ids.');
+                            }
+                        }
                     }
 
-                    $warningmailcontent = get_string("warningmailcontent", "mod_exammanagement" ,
-                        ['systemname' => $exammanagementinstance->getMoodleSystemName(),
-                        'examname' => $exammanagementinstance->moduleinstance->name,
-                        'coursename' => $exammanagementinstance->getCourse()->fullname,
-                        'datadeletiondate' => $exammanagementinstance->getDataDeletionDate()]);
-
-                    $warningmailcontent .= '<br><br>'.get_string("warningmailcontentenglish", "mod_exammanagement" ,
-                        ['systemname' => $exammanagementinstance->getMoodleSystemName(),
-                        'examname' => $exammanagementinstance->moduleinstance->name,
-                        'coursename' => $exammanagementinstance->getCourse()->fullname,
-                        'datadeletiondate' => $exammanagementinstance->getDataDeletionDate()]);
-
-                    $warningmailids = [];
-
-                    // Send mail and save send warning mail id.
-                    foreach ($teachers as $user) {
-                        $warningmailid = $exammanagementinstance->sendSingleMessage($user->id, $warningmailsubject,
-                            $warningmailcontent, 'deletionwarningmessage');
-
-                        array_push($warningmailids, $warningmailid);
-                    }
-
-                    array_push($deletionwarningmailids, $warningmailids);
-
-                    mtrace('Sending ' . count($warningmailids) .' warning mails for step ' . $warningstep .
-                        ' to teachers of exammanagement id ' . $exammanagementinstance->moduleinstance->id);
-
-                    // Update module instance.
-
-                    if (!empty($deletionwarningmailids)) {
-                        $exammanagementinstance->moduleinstance->deletionwarningmailids = json_encode($deletionwarningmailids);
-                        $DB->update_record("exammanagement", $exammanagementinstance->moduleinstance);
-
-                        mtrace('Updating module instance for exammanagement id '.$exammanagementinstance->moduleinstance->id .
-                            ' with new deletion warning mail ids.');
-                    }
+                    $rs->close();
                 }
             }
         }
@@ -160,33 +163,42 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
         if ($DB->record_exists_select('exammanagement', $select)) {
 
-            $records = $DB->get_records_select('exammanagement', $select);
+            $count = $DB->count_records_select('exammanagement', $select);
 
-            mtrace('Starting deletion of old exam data for '. count($records).' exammanagements ...');
+            mtrace('Starting deletion of old exam data for '. $count . ' exammanagements ...');
 
-            foreach ($records as $record) {
-                $cmid = get_coursemodule_from_instance('exammanagement', $record->id, $record->course, false, MUST_EXIST)->id;
+            if ($rs = $DB->get_recordset_select("exammanagement", $select)) {
 
-                // Set deleted property of instance true (for display purposes).
-                $exammanagementinstance = new exammanagementInstance($cmid, '', true);
+                if ($rs->valid()) {
 
-                $exammanagementinstance->moduleinstance->datadeleted = 1;
+                    foreach ($rs as $id => $record) {
 
-                $DB->update_record("exammanagement", $exammanagementinstance->moduleinstance);
+                        $cmid = get_coursemodule_from_instance('exammanagement', $record->id,
+                            $record->course, false, MUST_EXIST)->id;
 
-                mtrace('Deleting old exam data for exammanagement id ' . $exammanagementinstance->moduleinstance->id);
+                        // Set deleted property of instance true (for display purposes).
+                        $record->datadeleted = 1;
 
-                $select = 'exammanagement = ' . $exammanagementinstance->moduleinstance->id;
+                        $DB->update_record("exammanagement", $record);
 
-                // Delete participants data.
-                if ($DB->record_exists_select('exammanagement_participants', $select)) {
-                    $count = $DB->count_records_select('exammanagement_participants', $select);
+                        mtrace('Deleting old exam data for exammanagement id ' . $record->id);
 
-                    mtrace('Deleting ' . $count .' participants for exammanagement id ' .
-                        $exammanagementinstance->moduleinstance->id);
+                        $select = 'exammanagement = ' . $record->id;
 
-                    $DB->delete_records('exammanagement_participants',
-                        ['exammanagement' => $exammanagementinstance->moduleinstance->id]);
+                        // Delete participants data.
+                        if ($DB->record_exists_select('exammanagement_participants', $select)) {
+                            $count = $DB->count_records_select('exammanagement_participants', $select);
+
+                            mtrace('Deleting ' . $count .' participants for exammanagement id ' .
+                                $record->id);
+
+                            $DB->delete_records('exammanagement_participants',
+                                ['exammanagement' => $record->id]);
+                        }
+                    }
+
+                    $rs->close();
+
                 }
             }
         }

@@ -43,7 +43,7 @@ export const init = (lang) => {
   $('.exammanagement_task_spacing .form-group div').removeClass('col-md-9');
   $('.exammanagement_task_spacing .form-group').removeClass('row');
 
-  $("form.mform .form-group").on("change", "input", function () { // Update total points if some field changes
+  $("form.mform .form-group").on("change", "input", function() { // Update total points if some field changes.
 
     var totalpoints = getTotalpoints(lang);
     $("#totalpoints").text(totalpoints);
@@ -51,7 +51,7 @@ export const init = (lang) => {
 };
 
 export const addtask = (lang) => { // Add new tasks.
-  $("#id_add_task").click(function () {
+  $("#id_add_task").click(function() {
 
     var taskcount = getTaskCount();
     var newtaskcount = taskcount + 1;
@@ -81,7 +81,7 @@ export const addtask = (lang) => { // Add new tasks.
 };
 
 export const removetask = (lang) => { // Remove task.
-  $("#id_remove_task").click(function () {
+  $("#id_remove_task").click(function() {
 
     var taskcount = getTaskCount();
 
@@ -96,11 +96,11 @@ export const removetask = (lang) => { // Remove task.
   });
 };
 
-var getTotalpoints = function (lang) {
+var getTotalpoints = function(lang) {
   var totalpoints = 0;
   var newval;
 
-  $(".form-group input.form-control").each(function () {
+  $(".form-group input.form-control").each(function() {
     newval = parseFloat($(this).val());
     if (newval) {
       totalpoints += newval;
@@ -112,10 +112,10 @@ var getTotalpoints = function (lang) {
   return totalpoints;
 };
 
-var getTaskCount = function () {
+var getTaskCount = function() {
   var taskcount = 0;
 
-  $("form.mform .exammanagement_task_spacing").each(function () {
+  $("form.mform .exammanagement_task_spacing").each(function() {
     taskcount += 1;
   });
 

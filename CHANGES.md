@@ -1,5 +1,11 @@
 ## Changelog ##
 
+- [1.5.9]:
+    - Total rework of all files and forms to make plugin fully compatible with the moodle coding style.
+    - [Bugfix]: Exam labels now usable even if course name is very long.
+    - SVGs now have the correct width.
+    - Some other small fixes and improvements.
+
 - [1.5.8]:
     - Removed some validation of matriculation numbers to allow a broader variety of numbers for the participants import.
     - Fixed some warnings related to json_decode functions that are displayed in current php versions.

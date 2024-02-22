@@ -15,93 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The form for setting the password for mod_exammanagement.
+ * The form for checking the password for an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace mod_exammanagement\forms;
-use mod_exammanagement\general\Moodle;
-use moodleform;
-use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
-require_once(__DIR__.'/../general/Moodle.php');
 
 /**
- * The form for setting the password for mod_exammanagement.
+ * The form for checking the password for an exammanagement.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class checkpassword_form extends moodleform {
+class mod_exammanagement_checkpassword_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor
      */
     public function definition() {
 
-        $moodleobj = Moodle::getInstance($this->_customdata['id'], $this->_customdata['e']);
-
         $mform = $this->_form;
-
-        $helptextsenabled = get_config('mod_exammanagement', 'enablehelptexts');
-
-        $mform->addElement('html', '<div class="row"><div class="col-6"><h3>'.get_string('checkpassword', 'mod_exammanagement'));
-
-        if ($helptextsenabled) {
-            global $OUTPUT;
-
-            if ($moodleobj->checkCapability('mod/exammanagement:resetpassword')) {
-                $mform->addElement('html', $OUTPUT->help_icon('checkpasswordadmin', 'mod_exammanagement', ''));
-            } else {
-                $mform->addElement('html', $OUTPUT->help_icon('checkpassword', 'mod_exammanagement', ''));
-            }
-        }
-
-        $mform->addElement('html', '</h3></div><div class="col-6">');
-
-        if ($moodleobj->checkCapability('mod/exammanagement:resetpassword')) {
-            $url = new moodle_url('/mod/exammanagement/checkpassword.php',
-                ['id' => $this->_customdata['id'], 'resetPW' => true]
-            );
-            $mform->addElement('html', '<a href="' . $url . '" role="button" class="btn btn-primary pull-right" title="' .
-                get_string("resetpasswordadmin", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
-                get_string("resetpasswordadmin", "mod_exammanagement") .
-                '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
-        } else if ($moodleobj->checkCapability('mod/exammanagement:requestpasswordreset') &&
-            get_config('mod_exammanagement', 'enablepasswordresetrequest') === '1') {
-            $url = new moodle_url('/mod/exammanagement/checkpassword.php',
-                ['id' => $this->_customdata['id'],
-                'requestPWReset' => true,
-                'sesskey' => sesskey()]
-            );
-            $mform->addElement('html', '<a href="' . $url . '" role="button" class="btn btn-secondary pull-right" title="' .
-                get_string("requestpasswordreset", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
-                get_string("requestpasswordreset", "mod_exammanagement") .
-                '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>');
-        }
-
-        $mform->addElement('html', '</div></div>');
-
-        $mform->addElement('html', '<p>'.get_string('checkpasswordstr', 'mod_exammanagement').'</p>');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $attributes = array('size' => '20');
+        $attributes = ['size' => '20'];
 
         $mform->addElement('password', 'password', get_string('password', 'mod_exammanagement'), $attributes);
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', get_string('err_filloutfield', 'mod_exammanagement'), 'required', 'client');
 
-        $this->add_action_buttons(true, get_string("confirmpassword", "mod_exammanagement"));
-
+        $this->add_action_buttons(false, get_string('confirmpassword', 'mod_exammanagement'));
     }
 }

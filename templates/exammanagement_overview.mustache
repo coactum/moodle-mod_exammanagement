@@ -168,8 +168,8 @@ ajaxsetcorrectioncompletion = function(value) {
 		<h3 class="my-1 col-6">{{#str}}overview, mod_exammanagement{{/str}}{{{helptexticon}}}</h3>
 		<span class="my-1 col-6">
 			{{^deleted}}
-				<a class="btn btn-primary pull-right mb-1" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>
-				<a class="btn btn-primary pull-right mr-1" href="configurePassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurePassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurePassword, mod_exammanagement{{/str}}"></i></a>
+				<a class="btn btn-primary float-right mb-1" href="participantsoverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}</span><i class="fa fa-user d-lg-none" aria-hidden="true" title="{{#str}}participants_and_results_overview, mod_exammanagement{{/str}}"></i></a>
+				<a class="btn btn-primary float-right mr-1" href="configurepassword.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configurepassword, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configurepassword, mod_exammanagement{{/str}}"></i></a>
 			{{/deleted}}
 		</span>
 	</div>
@@ -190,8 +190,8 @@ ajaxsetcorrectioncompletion = function(value) {
 				<div class="panel-heading">
 					<a aria-expanded="false" onclick="togglePhase('phase_one'); return true;">
 						<h4>{{#str}}phase_one, mod_exammanagement{{/str}}</h4>
-						<span class="{{#phases.phase_one.open}}collapse.show{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse{{/phases.phase_one.open}} phase_one_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#phases.phase_one.open}}collapse{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse.show{{/phases.phase_one.open}} phase_one_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_one.open}}collapse.show{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse{{/phases.phase_one.open}} phase_one_minimize float-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_one.open}}collapse{{/phases.phase_one.open}}{{^phases.phase_one.open}}collapse.show{{/phases.phase_one.open}} phase_one_maximize float-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
 				<div class="{{#phases.phase_one.open}}collapse.show{{/phases.phase_one.open}} {{^phases.phase_one.open}}collapse{{/phases.phase_one.open}} phase_one">
@@ -200,7 +200,7 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#rooms}}panel-success{{/rooms}}{{^rooms}}panel-warning{{/rooms}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#rooms}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/rooms}}
 											{{^rooms}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
@@ -212,14 +212,14 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^rooms}}<p> {{#str}}exam_rooms_not_set, mod_exammanagement{{/str}}</p>{{/rooms}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} pull-right" href="chooseRooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#rooms}}btn-success{{/rooms}}{{^rooms}}btn-warning{{/rooms}} float-right" href="chooserooms.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}choose_rooms, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}choose_rooms, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="panel {{#examtime}}panel-success{{/examtime}}{{^examtime}}panel-warning{{/examtime}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#examtime}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examtime}}
 											{{^examtime}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examtime}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
@@ -231,7 +231,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^examtime}}<p> {{#str}}exam_date_not_set, mod_exammanagement{{/str}}</p>{{/examtime}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#examtime}}btn-success{{/examtime}}{{^examtime}}btn-warning{{/examtime}} pull-right" href="setexamdate.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#examtime}}btn-success{{/examtime}}{{^examtime}}btn-warning{{/examtime}} float-right" href="setexamdate.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}set_date, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -240,7 +240,7 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#participants}}panel-success{{/participants}}{{^participants}}panel-warning{{/participants}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#participants}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/participants}}
 											{{^participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
@@ -252,14 +252,14 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^participants}}<p> {{#str}}exam_participants_not_set, mod_exammanagement{{/str}}</p>{{/participants}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} pull-right" href="viewParticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#participants}}btn-success{{/participants}}{{^participants}}btn-warning{{/participants}} float-right" href="viewparticipants.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_participants, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_participants, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="panel {{#taskcount}}panel-success{{/taskcount}}{{^taskcount}}panel-warning{{/taskcount}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#taskcount}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
 											{{^taskcount}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
@@ -271,7 +271,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^taskcount}}<p> {{#str}}exam_tasks_not_set, mod_exammanagement{{/str}}</p>{{/taskcount}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} pull-right" href="configureTasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#taskcount}}btn-success{{/taskcount}}{{^taskcount}}btn-warning{{/taskcount}} float-right" href="configuretasks.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_tasks, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_tasks, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -280,7 +280,7 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#textfield}}panel-success{{/textfield}}{{^textfield}}panel-info{{/textfield}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#textfield}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/textfield}}
 											{{^textfield}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/textfield}}
 											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
@@ -292,15 +292,15 @@ ajaxsetcorrectioncompletion = function(value) {
 										{{^textfield}}<p> {{#str}}textfield_not_set, mod_exammanagement{{/str}}</p>{{/textfield}}
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} pull-right" href="settextfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+										{{^deleted}}<a class="btn {{#textfield}}btn-success{{/textfield}}{{^textfield}}btn-primary{{/textfield}} float-right" href="settextfield.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}edit_textfield, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}edit_textfield, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
 									</div>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
-											{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+										<span class="statebar float-right">
+											{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}message_to_participants, mod_exammanagement{{/str}}</h3>
@@ -309,7 +309,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<p>{{#str}}message_to_participants_str, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#participants}}<a class="btn btn-primary pull-right" href="sendGroupmessage.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+										{{^deleted}}{{#participants}}<a class="btn btn-primary float-right" href="sendgroupmessage.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}send_groupmessage, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}send_groupmessage, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -327,8 +327,8 @@ ajaxsetcorrectioncompletion = function(value) {
 				<div class="panel-heading">
 					<a aria-expanded="false" onclick="togglePhase('phase_two'); return true;">
 						<h4>{{#str}}phase_two, mod_exammanagement{{/str}}</h4>
-						<span class="{{#phases.phase_two.open}}collapse.show{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse{{/phases.phase_two.open}} phase_two_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#phases.phase_two.open}}collapse{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse.show{{/phases.phase_two.open}} phase_two_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_two.open}}collapse.show{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse{{/phases.phase_two.open}} phase_two_minimize float-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_two.open}}collapse{{/phases.phase_two.open}}{{^phases.phase_two.open}}collapse.show{{/phases.phase_two.open}} phase_two_maximize float-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
 				<div class="{{#phases.phase_two.open}}collapse.show{{/phases.phase_two.open}} {{^phases.phase_two.open}}collapse{{/phases.phase_two.open}} phase_two">
@@ -337,11 +337,11 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#placesassigned}}panel-success{{/placesassigned}}{{^placesassigned}}{{#participants}}{{#rooms}}panel-warning{{/rooms}}{{/participants}}{{/placesassigned}}{{^placesassigned}}{{^participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/placesassigned}}{{^placesassigned}}{{#participants}}{{^rooms}}panel-danger{{/rooms}}{{/participants}}{{/placesassigned}}{{^placesassigned}}{{^participants}}{{#rooms}}panel-danger{{/rooms}}{{/participants}}{{/placesassigned}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{#placesassigned}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/placesassigned}}
 											{{^placesassigned}}{{#participants}}{{#rooms}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/rooms}}{{/participants}}{{/placesassigned}}
-											{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-											{{^rooms}}<a href="chooseRooms.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span></a>{{/rooms}}
+											{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											{{^rooms}}<a href="chooserooms.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_rooms_missing, mod_exammanagement{{/str}}</span></span></a>{{/rooms}}
 											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}assigning_places, mod_exammanagement{{/str}}</h3>
@@ -351,15 +351,15 @@ ajaxsetcorrectioncompletion = function(value) {
 										<br><br>{{^allplacesassigned}}{{#placesassigned}}<strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}not_all_places_assigned_yet, mod_exammanagement{{/str}}{{/placesassigned}}{{/allplacesassigned}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#placesassigned}}btn-success{{/placesassigned}}{{^placesassigned}}btn-warning{{/placesassigned}} pull-right" href="assignPlaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assignPlaces, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assignPlaces, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
+											{{^deleted}}{{#participants}}{{#rooms}}<a class="btn {{#placesassigned}}btn-success{{/placesassigned}}{{^placesassigned}}btn-warning{{/placesassigned}} float-right" href="assignplaces.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}assignplaces, mod_exammanagement{{/str}}</span><i class="fa fa-refresh  d-lg-none" aria-hidden="true" title="{{#str}}assignplaces, mod_exammanagement{{/str}}"></i></a>{{/rooms}}{{/participants}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#placesassigned}}panel-info{{/placesassigned}}{{^placesassigned}}panel-danger{{/placesassigned}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+											<span class="statebar float-right">
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}seatingplan, mod_exammanagement{{/str}}</h3>
@@ -368,7 +368,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											<p>{{#str}}export_seatingplan_str, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#placesassigned}}{{#ldapavailable}}<a class="btn btn-primary" href="exportSeatingPlan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/ldapavailable}}<a class="btn btn-primary pull-right" href="exportSeatingPlan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
+											{{^deleted}}{{#placesassigned}}{{#ldapavailable}}<a class="btn btn-primary" href="exportseatingplan.php?id={{cmid}}&sortmode=matrnr"><span class="d-none d-lg-block">{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_matrnr, mod_exammanagement{{/str}}"></i></a>{{/ldapavailable}}<a class="btn btn-primary float-right" href="exportseatingplan.php?id={{cmid}}&sortmode=place"><span class="d-none d-lg-block">{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_seatingplan_place, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -377,8 +377,8 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#placesassigned}}panel-info{{/placesassigned}}{{^placesassigned}}panel-danger{{/placesassigned}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+											<span class="statebar float-right">
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}participants_lists, mod_exammanagement{{/str}}</h3>
@@ -387,15 +387,15 @@ ajaxsetcorrectioncompletion = function(value) {
 											<p>{{#str}}export_participantslists_str, mod_exammanagement{{/str}}<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_participantslists_note, mod_exammanagement{{/str}} </p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#placesassigned}}<a href="exportParticipantsListNames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportParticipantsListPlaces.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
+											{{^deleted}}{{#placesassigned}}<a href="exportparticipantslistnames.php?id={{cmid}}" class="btn btn-primary"><span class="d-none d-lg-block">{{#str}}export_participantslist_names, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_names, mod_exammanagement{{/str}}"></i></a><a href="exportparticipantslistplaces.php?id={{cmid}}" class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_participantslist_places, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_participantslist_places, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^participants}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											<span class="statebar float-right">
+												{{^participants}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 										</span>
@@ -406,7 +406,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											<strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_examlabels_note, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#participants}}<a class="btn btn-primary" href="exportExamLabels.php?id={{cmid}}&mode=qrcodes"><span class="d-none d-lg-block">{{#str}}export_qrcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_qrcodes, mod_exammanagement{{/str}}"></i></a> <a class="btn btn-primary pull-right" href="exportExamLabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+											{{^deleted}}{{#participants}}<a class="btn btn-primary" href="exportexamlabels.php?id={{cmid}}&mode=qrcodes"><span class="d-none d-lg-block">{{#str}}export_qrcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_qrcodes, mod_exammanagement{{/str}}"></i></a> <a class="btn btn-primary float-right" href="exportexamlabels.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_barcodes, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_barcodes, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -415,7 +415,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#examtime}}panel-info{{/examtime}}{{^examtime}}panel-danger{{/examtime}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
 												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												{{^examtime}}<a href="setexamdate.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examtime}}
@@ -437,15 +437,15 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#placesassigned}}panel-info{{/placesassigned}}{{^placesassigned}}panel-danger{{/placesassigned}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger pull-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+											<span class="statebar float-right">
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger float-right"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
 											</span>
 											<h3 class="panel-title">{{#str}}set_visibility_of_examrooms_and_places, mod_exammanagement{{/str}}</h3>
 										</div>
 										<div class="panel-body">
 											<div class="row">
 												<div class="col-6">
-													<span class="pull-right">
+													<span class="float-right">
 														{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 													</span>
@@ -460,7 +460,7 @@ ajaxsetcorrectioncompletion = function(value) {
 													{{/roomvisible}}
 												</div>
 												<div class="col-6">
-													<span class="pull-right">
+													<span class="float-right">
 														{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 														<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 													</span>
@@ -492,8 +492,8 @@ ajaxsetcorrectioncompletion = function(value) {
 					<div class="panel-heading">
 						<a aria-expanded="false" onclick="togglePhase('phase_exam'); return true;">
 							<h4>{{#str}}exam_appointment, mod_exammanagement{{/str}}</h4>
-							<span class="{{#phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse{{/phases.phase_exam.open}} phase_exam_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-							<span class="{{#phases.phase_exam.open}}collapse{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}} phase_exam_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse{{/phases.phase_exam.open}} phase_exam_minimize float-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_exam.open}}collapse{{/phases.phase_exam.open}}{{^phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}} phase_exam_maximize float-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 						</a>
 					</div>
 					<div class="{{#phases.phase_exam.open}}collapse.show{{/phases.phase_exam.open}} {{^phases.phase_exam.open}}collapse{{/phases.phase_exam.open}} phase_exam">
@@ -502,7 +502,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								{{#examtime}} <i class="fa fa-calendar" aria-hidden="true"></i> {{#userdate}}{{examtime}}, {{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdate}} <i class="fa fa-clock-o" aria-hidden="true"></i> {{/examtime}}
 								{{^examtime}}{{#roomnames}} - {{/roomnames}}{{/examtime}}
 							</span>
-							<span class="pull-right">
+							<span class="float-right">
 								{{#roomnames}} <i class="fa fa-building-o" aria-hidden="true"></i> {{roomnames}} {{/roomnames}}
 							</span>
 							{{^examtime}}{{^roomnames}}<p class="text-xs-center">{{#str}}no_exam_date_set_str, mod_exammanagement{{/str}}</p>{{/roomnames}}{{/examtime}}
@@ -513,14 +513,14 @@ ajaxsetcorrectioncompletion = function(value) {
 			{{!after_grading}}
 			<span id="aftercorrection"></span>
 			<li class="item">
-				{{#phases.phase_third.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_third.completed}}
-				{{^phases.phase_third.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_third.completed}}
+				{{#phases.phase_three.completed}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/phases.phase_three.completed}}
+				{{^phases.phase_three.completed}}<i class="fa fa-fw" aria-hidden="true"></i>{{/phases.phase_three.completed}}
 				<div class="panel panel-primary mainpanel">
 					<div class="panel-heading">
 						<a aria-expanded="false" onclick="togglePhase('phase_three'); return true;">
 							<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
-							<span class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three_minimize pull-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-							<span class="{{#phases.phase_three.open}}collapse{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} phase_three_maximize pull-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three_minimize float-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_three.open}}collapse{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} phase_three_maximize float-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 						</a>
 					</div>
 					<div class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} {{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three">
@@ -529,9 +529,9 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{^bonuscount}}{{#placesassigned}}panel-info{{/placesassigned}}{{/bonuscount}}{{^bonuscount}}{{^placesassigned}}panel-danger{{/placesassigned}}{{/bonuscount}}{{#bonuscount}}panel-success{{/bonuscount}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#bonuscount}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuscount}}
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}bonus, mod_exammanagement{{/str}}</h3>
@@ -541,16 +541,16 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^bonuscount}}<p>{{#str}}bonus_not_set, mod_exammanagement{{/str}}</p>{{/bonuscount}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#placesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} pull-right" href="importBonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonus, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonus, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
+											{{^deleted}}{{#placesassigned}}<a class="btn {{^bonuscount}}btn-primary{{/bonuscount}}{{#bonuscount}}btn-success{{/bonuscount}} float-right" href="importbonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_bonus, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_bonus, mod_exammanagement{{/str}}"></i></a>{{/placesassigned}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{^gradingscale}}{{#taskcount}}panel-info{{/taskcount}}{{/gradingscale}}{{^gradingscale}}{{^taskcount}}panel-danger{{/taskcount}}{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#gradingscale}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												{{^gradingscale}}{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}{{/gradingscale}}
+												{{^gradingscale}}{{^taskcount}}<a href="configuretasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}{{/gradingscale}}
 												{{^gradingscale}}{{#taskcount}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/gradingscale}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
@@ -561,7 +561,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} pull-right" href="configureGradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/deleted}}
+											{{^deleted}}{{#taskcount}}<a class="btn {{^gradingscale}}btn-primary{{/gradingscale}}{{#gradingscale}}btn-success{{/gradingscale}} float-right" href="configuregradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/deleted}}
 										</div>
 									</div>
 								</div>
@@ -570,11 +570,11 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#resultscount}}panel-success{{/resultscount}}{{^resultscount}}{{#placesassigned}}{{#taskcount}}panel-warning{{/taskcount}}{{/placesassigned}}{{/resultscount}}{{^resultscount}}{{^placesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/placesassigned}}{{/resultscount}}{{^resultscount}}{{#placesassigned}}{{^taskcount}}panel-danger{{/taskcount}}{{/placesassigned}}{{/resultscount}}{{^resultscount}}{{^placesassigned}}{{#taskcount}}panel-danger{{/taskcount}}{{/placesassigned}}{{/resultscount}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#resultscount}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultscount}}
 												{{^resultscount}}{{#placesassigned}}{{#taskcount}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/taskcount}}{{/placesassigned}}{{/resultscount}}
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
-												{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+												{{^taskcount}}<a href="configuretasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
 												<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}exam_results, mod_exammanagement{{/str}}</h3>
@@ -584,16 +584,16 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^resultscount}}<p>{{#str}}results_not_set, mod_exammanagement{{/str}}</p>{{/resultscount}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}}" href="participantsOverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}add_examresults_manually, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_manually, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/deleted}}{{^deleted}}{{#ldapavailable}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} pull-right" href="inputResults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/ldapavailable}}{{/deleted}}
+											{{^deleted}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}}" href="participantsoverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}add_examresults_manually, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_manually, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/deleted}}{{^deleted}}{{#ldapavailable}}{{#placesassigned}}{{#taskcount}}<a class="btn {{#resultscount}}btn-success{{/resultscount}}{{^resultscount}}btn-warning{{/resultscount}} float-right" href="inputresults.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}add_examresults_barcode, mod_exammanagement{{/str}}"></i></a>{{/taskcount}}{{/placesassigned}}{{/ldapavailable}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#placesassigned}}{{#resultscount}}panel-info{{/resultscount}}{{/placesassigned}}{{^resultscount}}{{#placesassigned}}panel-danger{{/placesassigned}}{{/resultscount}}{{#resultscount}}{{^placesassigned}}panel-success{{/placesassigned}}{{/resultscount}}{{^resultscount}}{{^placesassigned}}panel-danger{{/placesassigned}}{{/resultscount}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
-												{{^placesassigned}}<a href="assignPlaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
-												{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											<span class="statebar float-right">
+												{{^placesassigned}}<a href="assignplaces.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_assignedplaces_missing, mod_exammanagement{{/str}}</span></span></a>{{/placesassigned}}
+												{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 										</span>
@@ -603,7 +603,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<p> {{#str}}exam_results_overview_str, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#placesassigned}}{{#resultscount}}<a class="btn btn-primary pull-right" href="participantsOverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/placesassigned}}{{/deleted}}
+										{{^deleted}}{{#placesassigned}}{{#resultscount}}<a class="btn btn-primary float-right" href="participantsoverview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}check_results, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}check_results, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/placesassigned}}{{/deleted}}
 									</div>
 								</div>
 							</div>
@@ -612,16 +612,16 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{#resultscount}}{{^bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{^resultscount}}{{#bonuscount}}panel-info{{/bonuscount}}{{/resultscount}}{{^resultscount}}{{^bonuscount}}panel-danger{{/bonuscount}}{{/resultscount}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
-											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-											{{^bonuscount}}<a href="importBonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuscount}}
+										<span class="statebar float-right">
+											{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											{{^bonuscount}}<a href="importbonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_bonus_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuscount}}
 										</span>
 										<h3 class="panel-title">{{#str}}set_visibility_of_bonus_and_results, mod_exammanagement{{/str}}</h3>
 									</div>
 									<div class="panel-body">
 										<div class="row">
 											<div class="col-6">
-												<span class="pull-right">
+												<span class="float-right">
 													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
@@ -636,7 +636,7 @@ ajaxsetcorrectioncompletion = function(value) {
 												{{/bonusvisible}}
 											</div>
 											<div class="col-6">
-												<span class="pull-right">
+												<span class="float-right">
 													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', jQuery(this).prop('checked')); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
@@ -657,10 +657,10 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
-											{{^datadeletiondate}}{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+											{{^datadeletiondate}}{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 										</span>
 										<h3 class="panel-title">{{#str}}complete_correction, mod_exammanagement{{/str}}</h3>
 									</div>
@@ -685,8 +685,8 @@ ajaxsetcorrectioncompletion = function(value) {
 				<div class="panel-heading">
 					<a aria-expanded="false" onclick="togglePhase('phase_four'); return true;">
 						<h4>{{#str}}phase_four, mod_exammanagement{{/str}}</h4>
-						<span class="{{#phases.phase_four.open}}collapse.show{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse{{/phases.phase_four.open}} phase_four_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#phases.phase_four.open}}collapse{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse.show{{/phases.phase_four.open}} phase_four_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_four.open}}collapse.show{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse{{/phases.phase_four.open}} phase_four_minimize float-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_four.open}}collapse{{/phases.phase_four.open}}{{^phases.phase_four.open}}collapse.show{{/phases.phase_four.open}} phase_four_maximize float-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
 				<div class="{{#phases.phase_four.open}}collapse.show{{/phases.phase_four.open}} {{^phases.phase_four.open}}collapse{{/phases.phase_four.open}} phase_four">
@@ -695,9 +695,9 @@ ajaxsetcorrectioncompletion = function(value) {
 							<div class="col-6">
 								<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
 											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}points_for_exam_review, mod_exammanagement{{/str}}</h3>
@@ -708,16 +708,16 @@ ajaxsetcorrectioncompletion = function(value) {
 										<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 									</div>
 									<div class="panel-footer">
-										{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary pull-right" href="exportResultsExamReview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+										{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a class="btn btn-primary float-right" href="exportresultsexamreview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 									</div>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="panel {{#datadeletiondate}}{{#resultscount}}panel-info{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 									<div class="panel-heading">
-										<span class="statebar pull-right">
+										<span class="statebar float-right">
 											{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-											{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+											{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
 											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 									</span>
@@ -729,7 +729,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_lists_note, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
-									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportResultsPercentages.php?id={{cmid}}"  class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}<a href="exportresultspercentages.php?id={{cmid}}"  class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_as_pdf, mod_exammanagement{{/str}}</span><i class="fa fa-file-pdf-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_pdf, mod_exammanagement{{/str}}"></i></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 								</div>
 							</div>
 						</div>
@@ -738,8 +738,8 @@ ajaxsetcorrectioncompletion = function(value) {
 						<div class="col-6">
 							<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
 								<div class="panel-heading">
-									<span class="statebar pull-right">
-										{{^participants}}<a href="viewParticipants.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+									<span class="statebar float-right">
+										{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
 										<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 									</span>
 									<h3 class="panel-title">{{#str}}results_and_statistics, mod_exammanagement{{/str}}</h3>
@@ -749,17 +749,17 @@ ajaxsetcorrectioncompletion = function(value) {
 									<br /><br /><strong>{{#str}}important_note, mod_exammanagement{{/str}}</strong> {{#str}}export_results_statistics_note, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
-									{{^deleted}}{{#participants}}<a href="exportResultsStatistics.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
+									{{^deleted}}{{#participants}}<a href="exportresultsstatistics.php?id={{cmid}}" class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_as_excel, mod_exammanagement{{/str}}</span><i class="fa fa-file-excel-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_excel, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 								</div>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="panel {{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-info{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{#resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultscount}}{{#gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}{{^gradingscale}}panel-danger{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}">
 								<div class="panel-heading">
-									<span class="statebar pull-right">
+									<span class="statebar float-right">
 										{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-										{{^resultscount}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
-										{{^gradingscale}}<a href="configureGradingscale.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}</span></span></a>{{/gradingscale}}
+										{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}
+										{{^gradingscale}}<a href="configuregradingscale.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_gradingscale_missing, mod_exammanagement{{/str}}</span></span></a>{{/gradingscale}}
 										<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 									</span>
 									<h3 class="panel-title">{{#str}}results_for_exam_office, mod_exammanagement{{/str}}</h3>
@@ -768,7 +768,7 @@ ajaxsetcorrectioncompletion = function(value) {
 									<p>{{#str}}export_results_text_str, mod_exammanagement{{/str}}</p>
 								</div>
 								<div class="panel-footer">
-									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportResultsTextFile.php?id={{cmid}}" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
+									{{^deleted}}{{#datadeletiondate}}{{#resultscount}}{{#gradingscale}}<a href="exportresultstextfile.php?id={{cmid}}" class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/gradingscale}}{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 								</div>
 							</div>
 						</div>
@@ -798,8 +798,8 @@ ajaxsetcorrectioncompletion = function(value) {
 					<div class="panel-heading">
 						<a aria-expanded="false" onclick="togglePhase('phase_five'); return true;">
 							<h4>{{#str}}phase_five, mod_exammanagement{{/str}}</h4>
-							<span class="{{#phases.phase_five.open}}collapse.show{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse{{/phases.phase_five.open}} phase_five_minimize pull-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-							<span class="{{#phases.phase_five.open}}collapse{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse.show{{/phases.phase_five.open}} phase_five_maximize pull-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_five.open}}collapse.show{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse{{/phases.phase_five.open}} phase_five_minimize float-right" title="{{#str}}minimize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}minimize_phase, mod_exammanagement{{/str}}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+							<span class="{{#phases.phase_five.open}}collapse{{/phases.phase_five.open}}{{^phases.phase_five.open}}collapse.show{{/phases.phase_five.open}} phase_five_maximize float-right" title="{{#str}}maximize_phase, mod_exammanagement{{/str}}" aria-label="{{#str}}maximize_phase, mod_exammanagement{{/str}}"><i class="fa fa-plus" aria-hidden="true"></i></span>
 						</a>
 					</div>
 					<div class="{{#phases.phase_five.open}}collapse.show{{/phases.phase_five.open}} {{^phases.phase_five.open}}collapse{{/phases.phase_five.open}} phase_five">
@@ -808,7 +808,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-success{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{#examreviewroom}}panel-warning{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}panel-danger{{/datadeletiondate}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 												{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 												{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
@@ -825,14 +825,14 @@ ajaxsetcorrectioncompletion = function(value) {
 											{{^examreviewtime}}{{^examreviewroom}}<p> {{#str}}date_room_examreview_not_set, mod_exammanagement{{/str}}</p>{{/examreviewroom}}{{/examreviewtime}}
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} pull-right" href="examreview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}{{/deleted}}
+											{{^deleted}}{{#datadeletiondate}}<a class="btn {{#examreviewtime}}{{#examreviewroom}}btn-success{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{#examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{#examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}}{{^examreviewtime}}{{^examreviewroom}}btn-warning{{/examreviewroom}}{{/examreviewtime}} float-right" href="examreview.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}examreview_dateroom, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}set_date, mod_exammanagement{{/str}}"></i></a>{{/datadeletiondate}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
@@ -860,11 +860,11 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="col-6">
 									<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-success{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^resultsenteredafterexamreview}}{{#datadeletiondate}}{{#examreviewtime}}panel-warning{{/examreviewtime}}{{/datadeletiondate}}{{/resultsenteredafterexamreview}}{{^datadeletiondate}}{{#examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}panel-danger{{/examreviewtime}}{{/datadeletiondate}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 												{{#datadeletiondate}}{{^resultsenteredafterexamreview}}{{#taskcount}}{{#examreviewtime}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/examreviewtime}}{{/taskcount}}{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 												{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-												{{^taskcount}}<a href="configureTasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
+												{{^taskcount}}<a href="configuretasks.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_tasks_missing, mod_exammanagement{{/str}}</span></span></a>{{/taskcount}}
 												{{^examreviewtime}}<a href="examreview.php?id={{cmid}}"><span class="badge badge-danger" title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
@@ -878,16 +878,16 @@ ajaxsetcorrectioncompletion = function(value) {
 											</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} pull-right" href="participantsOverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
+											{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}<a class="btn {{#resultsenteredafterexamreview}}btn-success{{/resultsenteredafterexamreview}}{{^resultsenteredafterexamreview}}btn-warning{{/resultsenteredafterexamreview}} float-right" href="participantsoverview.php?id={{cmid}}&epm=1"><span class="d-none d-lg-block">{{#str}}change_examresults, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}change_examresults, mod_exammanagement{{/str}}"></i></a>{{/examreviewtime}}{{/datadeletiondate}}{{/deleted}}
 										</div>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="panel {{#datadeletiondate}}{{#resultsenteredafterexamreview}}panel-info{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{#resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{#datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultsenteredafterexamreview}}panel-danger{{/resultsenteredafterexamreview}}{{/datadeletiondate}}">
 										<div class="panel-heading">
-											<span class="statebar pull-right">
+											<span class="statebar float-right">
 												{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
-												{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<a href="inputResults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
+												{{#datadeletiondate}}{{^resultsenteredafterexamreview}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}
 												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 											</span>
 											<h3 class="panel-title">{{#str}}export_altered_exam_results, mod_exammanagement{{/str}}</h3>
@@ -896,7 +896,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											<p>{{#str}}export_altered_examresults_str, mod_exammanagement{{/str}} <br /><br /><strong>{{#str}}note, mod_exammanagement{{/str}}</strong> {{#str}}export_altered_examresults_note, mod_exammanagement{{/str}}</p>
 										</div>
 										<div class="panel-footer">
-											{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportResultsTextFile.php?id={{cmid}}&afterexamreview=1" class="btn btn-primary pull-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
+											{{^deleted}}{{#datadeletiondate}}{{#resultsenteredafterexamreview}}<a href="exportresultstextfile.php?id={{cmid}}&afterexamreview=1" class="btn btn-primary float-right"><span class="d-none d-lg-block">{{#str}}export_as_text, mod_exammanagement{{/str}}</span><i class="fa fa-file-text-o d-lg-none" aria-hidden="true" title="{{#str}}export_as_text, mod_exammanagement{{/str}}"></i></a>{{/resultsenteredafterexamreview}}{{/datadeletiondate}}{{/deleted}}
 										</div>
 									</div>
 								</div>

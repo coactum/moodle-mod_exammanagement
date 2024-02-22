@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A cron_task class for deleting temporary saved participants to be used by Tasks API.
+ * A class for deleting temporary saved participants to be used by Tasks API.
  *
  * @package     mod_exammanagement
  * @copyright   2022 coactum GmbH
@@ -25,7 +25,7 @@
 namespace mod_exammanagement\task;
 
 /**
- * A cron_task class for deleting temporary saved participants to be used by Tasks API.
+ * A class for deleting temporary saved participants to be used by Tasks API.
  *
  * @package   mod_exammanagement
  * @copyright 2022 coactum GmbH
@@ -46,8 +46,12 @@ class delete_temp_participants extends \core\task\scheduled_task {
      */
     public function execute() {
 
+        mtrace('Starting scheduled task ' . get_string('delete_temp_participants', 'mod_exammanagement'));
+
         // Delete the contents of the whole temp_part table.
         if ($DB->record_exists("exammanagement_temp_part", [])) {
+
+            mtrace('Deleting records ...');
 
             $DB->set_field('exammanagement', 'tempimportfileheader', null, []);
 
