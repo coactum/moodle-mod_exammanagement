@@ -57,28 +57,6 @@ class restore_exammanagement_activity_structure_step extends restore_activity_st
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
-        // See MDL-9367.
-        if (!isset($data->examtime)) {
-            $data->examtime = 0;
-        }
-        $data->examtime = $this->apply_date_offset($data->examtime);
-
-        if (!isset($data->datadeletion)) {
-            $data->datadeletion = 0;
-        }
-        $data->datadeletion = $this->apply_date_offset($data->datadeletion);
-
-        if (!isset($data->datadeletion)) {
-            $data->datadeletion = 0;
-        }
-        $data->datadeletion = $this->apply_date_offset($data->datadeletion);
-
-        if (!isset($data->examreviewtime)) {
-            $data->examreviewtime = 0;
-        }
-        $data->examreviewtime = $this->apply_date_offset($data->examreviewtime);
-
         $newitemid = $DB->insert_record('exammanagement', $data);
         $this->apply_activity_instance($newitemid);
     }

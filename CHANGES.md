@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [1.6.0]:
+    - Removing images und some legacy code.
+
 - [1.5.9]:
     - Total rework of all files and forms to make plugin fully compatible with the moodle coding style.
     - [Bugfix]: Exam labels now usable even if course name is very long.

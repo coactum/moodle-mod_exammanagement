@@ -136,7 +136,7 @@ if ($canrequestpasswordreset && $requestpwreset == true
     ]);
     $profilelink = '<strong><a href="' . $url . '">' . $USER->firstname . ' ' . $USER->lastname . '</a></strong>';
 
-    $urlstr = strval(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id, 'resetpw' => true]));
+    $urlstr = strval(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]));
     $text = get_string('password_reset_request_mailtext', 'mod_exammanagement', [
         'systemname' => $moodlesystemname,
         'user' => $profilelink,
