@@ -60,7 +60,7 @@ class provider implements
      * @param   collection     $items The initialised collection to add items to.
      * @return  collection     A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $items) : collection {
+    public static function get_metadata(collection $items): collection {
 
         // The table 'exammanagement' does not store any specific user data.
         // It only stores general information about the exam like exam time, rooms, gradingscale and so on.
@@ -136,7 +136,7 @@ class provider implements
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         $params = [

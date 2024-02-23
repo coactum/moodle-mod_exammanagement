@@ -453,7 +453,7 @@ class helper {
         if ($userid) {
             return $DB->record_exists('exammanagement_participants',
                 ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]);
-        } else if ($login) { // TODO: Check if the login part is really neccessary.
+        } else if ($login) { // This part seems wrong but is probably needed anyway.
             return $DB->record_exists('exammanagement_participants',
                 ['exammanagement' => $moduleinstance->id, 'login' => $userid]);
         }

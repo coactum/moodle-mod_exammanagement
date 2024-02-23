@@ -19,6 +19,11 @@
     @template	exammanagement/exammanagement_overview_export_grades
 
     Overview for mode export_grades.
+
+    Example context (json):
+    {
+    }
+
 }}
 
 {{#js}}
@@ -74,13 +79,13 @@ ajaxsetcorrectioncompletion = function(value) {
 
 	<ul class="exmammanagement-summary list-unstyled">
 		{{!before_exam}}
-		<span id="beforeexam"></span>
 		<li class="item">
+			<span id="beforeexam"></span>
 			{{#datadeletiondate}}<i class="fa fa-check text-success" aria-hidden="true"></i>{{/datadeletiondate}}
 			{{^datadeletiondate}}<i class="fa fa-fw" aria-hidden="true"></i>{{/datadeletiondate}}
 			<div class="panel panel-primary mainpanel">
 				<div class="panel-heading">
-					<a aria-expanded="true">
+					<a role="button" aria-expanded="true">
 						<h4>{{#str}}export_grades, mod_exammanagement{{/str}}</h4>
 					</a>
 				</div>
@@ -107,53 +112,52 @@ ajaxsetcorrectioncompletion = function(value) {
 								</div>
 							</div>
 							<div class="col-6">
-									<div class="panel {{^gradingscale}}panel-warning{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
-										<div class="panel-heading">
-											<span class="statebar float-right">
-												{{#gradingscale}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												{{^gradingscale}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
-												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-											</span>
-											<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
-										</div>
-										<div class="panel-body">
-											{{#gradingscale}}<p>{{#str}}gradingscale_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
-											{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
-										</div>
-										<div class="panel-footer">
-											{{^deleted}}<a class="btn {{#gradingscale}}btn-success{{/gradingscale}}{{^gradingscale}}btn-warning{{/gradingscale}} float-right" href="configuregradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
-										</div>
+								<div class="panel {{^gradingscale}}panel-warning{{/gradingscale}}{{#gradingscale}}panel-success{{/gradingscale}}">
+									<div class="panel-heading">
+										<span class="statebar float-right">
+											{{#gradingscale}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+											{{^gradingscale}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/gradingscale}}
+											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}gradingscale, mod_exammanagement{{/str}}</h3>
 									</div>
+									<div class="panel-body">
+										{{#gradingscale}}<p>{{#str}}gradingscale_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
+										{{^gradingscale}}<p>{{#str}}gradingscale_not_set, mod_exammanagement{{/str}}</p>{{/gradingscale}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}<a class="btn {{#gradingscale}}btn-success{{/gradingscale}}{{^gradingscale}}btn-warning{{/gradingscale}} float-right" href="configuregradingscale.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}configure_gradingscale, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}configure_gradingscale, mod_exammanagement{{/str}}"></i></a>{{/deleted}}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="row row-eq-height">
-								<div class="col-6">
-									<div class="panel {{^bonuspointsentered}}{{#participants}}panel-warning{{/participants}}{{/bonuspointsentered}}{{^bonuspointsentered}}{{^participants}}panel-danger{{/participants}}{{/bonuspointsentered}}{{#bonuspointsentered}}panel-success{{/bonuspointsentered}}">
-										<div class="panel-heading">
-											<span class="statebar float-right">
-												{{#bonuspointsentered}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuspointsentered}}
-												{{^bonuspointsentered}}{{#participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/bonuspointsentered}}
-												{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-												<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
-											</span>
-											<h3 class="panel-title">{{#str}}grades, mod_exammanagement{{/str}}</h3>
-										</div>
-										<div class="panel-body">
-											{{#bonuspointsentered}}<p>{{#str}}grades_set, mod_exammanagement, { "gradescount":  {{# quote }}{{bonuspointsentered}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuspointsentered}}
-											{{^bonuspointsentered}}<p>{{#str}}grades_not_set, mod_exammanagement{{/str}}</p>{{/bonuspointsentered}}
-										</div>
-										<div class="panel-footer">
-											{{^deleted}}{{#participants}}<a class="btn {{#bonuspointsentered}}btn-success{{/bonuspointsentered}}{{^bonuspointsentered}}btn-warning{{/bonuspointsentered}} float-right" href="importbonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_grades, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_grades, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
-										</div>
+							<div class="col-6">
+								<div class="panel {{^bonuspointsentered}}{{#participants}}panel-warning{{/participants}}{{/bonuspointsentered}}{{^bonuspointsentered}}{{^participants}}panel-danger{{/participants}}{{/bonuspointsentered}}{{#bonuspointsentered}}panel-success{{/bonuspointsentered}}">
+									<div class="panel-heading">
+										<span class="statebar float-right">
+											{{#bonuspointsentered}}<span class="badge badge-success" title="{{#str}}state_success, mod_exammanagement{{/str}}"><i class="fa fa-check-circle" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_success, mod_exammanagement{{/str}}</span></span>{{/bonuspointsentered}}
+											{{^bonuspointsentered}}{{#participants}}<span class="badge badge-warning" title="{{#str}}state_notset, mod_exammanagement{{/str}}"><i class="fa fa-exclamation-triangle"></i><span class="d-none d-md-inline"> {{#str}}state_notset, mod_exammanagement{{/str}}</span></span>{{/participants}}{{/bonuspointsentered}}
+											{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											<span class="badge badge-info" title="{{#str}}state_required, mod_exammanagement{{/str}}"><i class="fa fa-exclamation" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_required, mod_exammanagement{{/str}}</span></span>
+										</span>
+										<h3 class="panel-title">{{#str}}grades, mod_exammanagement{{/str}}</h3>
+									</div>
+									<div class="panel-body">
+										{{#bonuspointsentered}}<p>{{#str}}grades_set, mod_exammanagement, { "gradescount":  {{# quote }}{{bonuspointsentered}}{{/ quote }}, "participantscount":  {{# quote }}{{participants}}{{/ quote }} }{{/str}}</p>{{/bonuspointsentered}}
+										{{^bonuspointsentered}}<p>{{#str}}grades_not_set, mod_exammanagement{{/str}}</p>{{/bonuspointsentered}}
+									</div>
+									<div class="panel-footer">
+										{{^deleted}}{{#participants}}<a class="btn {{#bonuspointsentered}}btn-success{{/bonuspointsentered}}{{^bonuspointsentered}}btn-warning{{/bonuspointsentered}} float-right" href="importbonus.php?id={{cmid}}"><span class="d-none d-lg-block">{{#str}}import_grades, mod_exammanagement{{/str}}</span><i class="fa fa-pencil-square-o d-lg-none" aria-hidden="true" title="{{#str}}import_grades, mod_exammanagement{{/str}}"></i></a>{{/participants}}{{/deleted}}
 									</div>
 								</div>
-								<div class="col-6">
-									<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
-										<div class="panel-heading">
-											<span class="statebar float-right">
-												{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
-												<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
-											</span>
+							</div>
+							<div class="col-6">
+								<div class="panel {{#participants}}panel-info{{/participants}}{{^participants}}panel-danger{{/participants}}">
+									<div class="panel-heading">
+										<span class="statebar float-right">
+											{{^participants}}<a href="viewparticipants.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_participants_missing, mod_exammanagement{{/str}}</span></span></a>{{/participants}}
+											<span class="badge badge-info" title="{{#str}}state_optional, mod_exammanagement{{/str}}"><i class="fa fa-circle-o" aria-hidden="true"></i><span class="d-none d-md-inline"> {{#str}}state_optional, mod_exammanagement{{/str}}</span></span>
 										</span>
 										<h3 class="panel-title">{{#str}}exam_results_overview, mod_exammanagement{{/str}}</h3>
 									</div>
