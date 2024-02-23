@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.1]:
+    - Some small bugfixes and further changes to reflect the moodle coding style.
+
 - [2.0.0]:
     - Removing images und some legacy code.
     - Version for submission into the moodle plugins repository.

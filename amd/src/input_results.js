@@ -158,6 +158,7 @@ export const init = (lang) => {
 
       return false;
     }
+    return true;
   });
 
 };
@@ -178,7 +179,8 @@ require(['core/str'], function(str) {
   str.get_strings(localizedStrings).then(function(results) {
     invalidMatrnrFormatStr = results[0];
     $("#id_cancel").val(results[1]);
-  });
+    return;
+  }).catch();
 });
 
 var getInputId = function(element) {
@@ -213,4 +215,5 @@ var getUrlParameter = function getUrlParameter(sParam) {
       return sParameterName[1] === undefined ? true : sParameterName[1];
     }
   }
+  return false;
 };

@@ -785,16 +785,16 @@ $string['pluginname'] = 'Exam management';
 $string['coursecategory_name_no_semester'] = 'DEFAULT_SEMESTER';
 
 // Strings for mod_form.php.
-$string['modulename_help'] = 'The exam management allows to organize easy exams for a course and makes it possible to manage even large exams with many participants.
+$string['modulename_help'] = 'The exam management allows the easy organization of exams in courses and makes it possible to manage even large attendance exams with many participants.
 
-In a separate view a lecturer can
+In their view teachers can ...
 
 * set the basic exam data
 * export documents that are useful for the exam, such as seating plans and lists of participants
 * enter the exam results for the participants manually or using a barcode scanner or a smartphone with qr codes
-* export all results in various documents for further use (e.g. by the exam office).
+* export all results in various documents for further use (e.g. by the exam office)
 
-The exam participants, on the other hand, see in their own view all the relevant information about the exam, such as the date, their seat, the bonus grade steps achieved for the exam or the exam results. In addition, the notification function allows an easy and reliable communication with them.';
+The exam participants, on the other hand, can see all the relevant information about the exam, such as the date, their seat, the bonus grade steps achieved for the exam or the exam results in their own view. In addition, the notification function allows an easy and reliable communication with the participants.';
 $string['modulename_link'] = 'https://docs.moodle.org/en/mod/exammanagement';
 $string['exammanagement_name'] = 'Name of the exam management';
 $string['exammanagement_name_help'] = 'The name of the activity displayed in the course (e.g. "Exam 1").';

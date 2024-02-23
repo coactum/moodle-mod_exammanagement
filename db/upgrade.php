@@ -23,8 +23,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Execute mod_exammanagement upgrade from the given old version.
  *
@@ -43,7 +41,7 @@ function xmldb_exammanagement_upgrade($oldversion) {
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor.
 
-    if ($oldversion < 2024022200) { // Remove legacy field for plugininstanceid.
+    if ($oldversion < 2024022300) { // Remove legacy field for plugininstanceid.
 
         // Define field plugininstanceid to be removed to exammanagement_participants.
         $table = new xmldb_table('exammanagement_participants');
@@ -61,6 +59,8 @@ function xmldb_exammanagement_upgrade($oldversion) {
         if ($dbman->field_exists($table, $field)) {
             $dbman->drop_field($table, $field);
         }
+
+        upgrade_mod_savepoint(true, 2024022300, 'exammanagement');
     }
 
     return true;

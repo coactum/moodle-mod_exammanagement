@@ -20,9 +20,9 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Description ##
 
-The exam management allows the easy organization of exams for a course and makes it possible to manage even large exams with many participants.
+The exam management allows the easy organization of exams in courses and makes it possible to manage even large attendance exams with many participants.
 
-In the lecturers view a lecturer can
+In their view teachers can
 
 - set the basic exam data
 - export documents that are useful for the exam, such as seating plans and lists of participants
@@ -38,7 +38,7 @@ The exam participants, on the other hand, can see all the relevant information a
 3) Be sure you have the latest version of all your used language packs.
 4) Move the plugin folder to your moodles /mod directory.
 5) Open the site admninistration to start plugin installation.
-6) Wait untill installation is finished.
+6) Wait until installation is finished.
 7) Set plugin settings.
 8) Make sure you have all necessarry components active and configured (see next chapter of this file)
 9) Create an exam management activity and add or import default exam rooms that can be used by all teachers.
