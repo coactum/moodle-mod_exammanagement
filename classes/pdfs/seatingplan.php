@@ -59,6 +59,13 @@ class seatingplan extends TCPDF {
         } else {
             throw new moodle_exception('missingparameter');
         }
+
+        if (strlen($course->fullname) <= 40) {
+            $coursename = $course->fullname;
+        } else {
+            $coursename = $course->shortname;
+        }
+
         if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
             $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
             $this->SetFont('helvetica', 'B', 22);
@@ -70,8 +77,7 @@ class seatingplan extends TCPDF {
 
         $this->SetFont('helvetica', 'B', 14);
         $this->MultiCell(130, 5, strtoupper(helper::getcleancoursecategoryname()) . ' / ' .
-            $course->fullname . ' ('. $moduleinstance->name .')',
-            0, 'L', 0, 0, 25, 40);
+            $coursename . ' (' . $moduleinstance->name . ')', 0, 'L', 0, 0, 25, 40);
         $this->MultiCell(26, 5, helper::gethrexamtime($moduleinstance), 0, 'R', 0, 0, 159, 40);
     }
 
