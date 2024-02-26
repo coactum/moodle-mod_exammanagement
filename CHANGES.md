@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.5]:
+    - Fixed typo in github workflow.
+
 - [2.0.4]:
     - Shortened long course names in exported documents.
 
