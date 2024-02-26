@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.2]:
+    - Renamed files from camelCase to lowercase.
+
 - [2.0.1]:
     - Some small bugfixes and further changes to reflect the moodle coding style.
 
