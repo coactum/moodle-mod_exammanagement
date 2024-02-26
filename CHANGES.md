@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.3]:
+    - Renamed more files from camelCase to lowercase.
+
 - [2.0.2]:
     - Renamed files from camelCase to lowercase.
 
