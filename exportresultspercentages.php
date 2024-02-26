@@ -131,8 +131,14 @@ if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
 $pdf->SetFont('helvetica', '', 16);
 $pdf->MultiCell(130, 3, get_string('pointslist_examreview', 'mod_exammanagement'), 0, 'C', 0, 0, 50, 17);
 
+if (strlen($course->fullname) <= 40) {
+    $coursename = $course->fullname;
+} else {
+    $coursename = $course->shortname;
+}
+
 $pdf->SetFont('helvetica', 'B', 16);
-$pdf->MultiCell(130, 3, $course->fullname . ', ' . $moduleinstance->name, 0, 'C', 0, 0, 50, 25);
+$pdf->MultiCell(130, 3, $coursename . ', ' . $moduleinstance->name, 0, 'C', 0, 0, 50, 25);
 $pdf->SetFont('helvetica', '', 16);
 
 $date = helper::gethrexamtime($moduleinstance);
