@@ -48,7 +48,7 @@ ajaxsetcorrectioncompletion = function(value) {
 		if (confirmed) {
 			jQuery.ajax ({
 					url: './view.php',
-					data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}'},
+					data: {'id': {{cmid}}, 'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}'},
 					success: function(response) {
 								$('.loadable').toggle();
 								location.href = 'view.php?id='+{{cmid}};

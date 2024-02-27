@@ -89,6 +89,8 @@ if (!isset($moduleinstance->misc)) {
 
     if (isset($misc->mode) && $misc->mode === 'export_grades') {
         $mode = 'export_grades';
+    } else {
+        $mode = 'normal';
     }
 }
 

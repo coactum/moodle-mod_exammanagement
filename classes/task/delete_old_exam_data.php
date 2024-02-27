@@ -51,6 +51,8 @@ class delete_old_exam_data extends \core\task\scheduled_task {
 
         mtrace('Starting scheduled task ' . get_string('delete_old_exam_data', 'mod_exammanagement'));
 
+        global $DB;
+
         // Send warning mails for soon to be deleted module instances.
 
         // Get all records where datadeletion date is set and that are not to be deleted yet.
@@ -72,7 +74,7 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                         $warningthree = strtotime("-1 day", $record->datadeletion);
 
                         if (isset($record->deletionwarningmailids)) {
-                            $deletionwarningmailids = json_decode($record->deletionwarningmailids);
+                            $deletionwarningmailids = json_decode($record->deletionwarningmailids ?? '');
                             $warningmailscount = count($deletionwarningmailids);
                         } else {
                             $deletionwarningmailids = [];

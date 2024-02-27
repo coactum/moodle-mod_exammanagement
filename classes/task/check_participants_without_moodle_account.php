@@ -48,6 +48,8 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
 
         mtrace('Starting scheduled task ' . get_string('check_participants_without_moodle_account', 'mod_exammanagement'));
 
+        global $DB;
+
         // Get all participants without moodle account.
         if ($DB->record_exists("exammanagement_participants", ['moodleuserid' => null])) {
 

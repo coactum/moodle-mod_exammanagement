@@ -180,7 +180,9 @@ require(['core/str'], function(str) {
     invalidMatrnrFormatStr = results[0];
     $("#id_cancel").val(results[1]);
     return;
-  }).catch();
+  }).catch(() => {
+    return;
+  });
 });
 
 var getInputId = function(element) {

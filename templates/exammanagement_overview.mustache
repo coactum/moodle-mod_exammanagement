@@ -35,7 +35,7 @@ toggleHelptextPanel = function() {
 togglePhase = function(phase) {
 	jQuery.ajax ({
         url: './view.php',
-        data: {'id': {{cmid}},'togglephase': true, 'phase': phase, 'sesskey': '{{sesskey}}' },
+        data: {'id': {{cmid}}, 'togglephase': true, 'phase': phase, 'sesskey': '{{sesskey}}' },
         complete: function(response) {
 			$('.' + phase).slideToggle("slow");
 			$('.' + phase + '_maximize').toggle();
@@ -523,8 +523,8 @@ ajaxsetcorrectioncompletion = function(value) {
 				<div class="panel-heading">
 					<a role="button" aria-expanded="false" onclick="togglePhase('phase_three'); return true;">
 						<h4>{{#str}}phase_three, mod_exammanagement{{/str}}</h4>
-						<span class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three_minimize float-right" title="Phase minimieren" aria-label="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
-						<span class="{{#phases.phase_three.open}}collapse{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} phase_three_maximize float-right" title="Phase öffnen" aria-label="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three_minimize float-right" title="Phase minimieren"><i class="fa fa-minus" aria-hidden="true"></i></span>
+						<span class="{{#phases.phase_three.open}}collapse{{/phases.phase_three.open}}{{^phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} phase_three_maximize float-right" title="Phase öffnen"><i class="fa fa-plus" aria-hidden="true"></i></span>
 					</a>
 				</div>
 				<div class="{{#phases.phase_three.open}}collapse.show{{/phases.phase_three.open}} {{^phases.phase_three.open}}collapse{{/phases.phase_three.open}} phase_three">
