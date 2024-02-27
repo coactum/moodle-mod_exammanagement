@@ -48,6 +48,8 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
 
         mtrace('Starting scheduled task ' . get_string('delete_unassigned_custom_rooms', 'mod_exammanagement'));
 
+        global $DB;
+
         if ($rs = $DB->get_recordset_select("exammanagement_rooms", "type = 'customroom'")) {
 
             if ($rs->valid()) {

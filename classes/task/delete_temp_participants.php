@@ -48,6 +48,8 @@ class delete_temp_participants extends \core\task\scheduled_task {
 
         mtrace('Starting scheduled task ' . get_string('delete_temp_participants', 'mod_exammanagement'));
 
+        global $DB;
+
         // Delete the contents of the whole temp_part table.
         if ($DB->record_exists("exammanagement_temp_part", [])) {
 

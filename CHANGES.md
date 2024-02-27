@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.6]:
+    - Small bugfixes and fixes for moodle coding style.
+
 - [2.0.5]:
     - Fixed typo in github workflow.
 
