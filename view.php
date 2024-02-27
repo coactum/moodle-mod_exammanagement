@@ -604,7 +604,7 @@ if ($CFG->branch < 400) {
 }
 
 // Trigger course_module_viewed event.
-$event = \mod_annopy\event\course_module_viewed::create([
+$event = \mod_exammanagement\event\course_module_viewed::create([
     'objectid' => $moduleinstance->id,
     'context' => $context,
 ]);
