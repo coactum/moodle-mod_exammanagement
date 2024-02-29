@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.9]:
+    - Removed old indices (for legacy installations of the plugin).
+
 - [2.0.8]:
     - Activity completion for views now possible.
     - Small last bugfixes.
