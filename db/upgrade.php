@@ -41,11 +41,18 @@ function xmldb_exammanagement_upgrade($oldversion) {
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor.
 
-    if ($oldversion < 2024022300) { // Remove legacy field for plugininstanceid.
+    if ($oldversion < 2024022900) { // Remove legacy field for plugininstanceid.
 
         // Define field plugininstanceid to be removed to exammanagement_participants.
         $table = new xmldb_table('exammanagement_participants');
         $field = new xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        $index = new xmldb_index('plugininstanceid', XMLDB_INDEX_NOTUNIQUE, ['plugininstanceid']);
+
+        // Conditionally launch remove index.
+        if ($dbman->index_exists($table, $index)) {
+            $dbman->drop_index($table, $index);
+        }
 
         // Conditionally launch remove field.
         if ($dbman->field_exists($table, $field)) {
@@ -55,12 +62,17 @@ function xmldb_exammanagement_upgrade($oldversion) {
         // Define field plugininstanceid to be removed to exammanagement.
         $table = new xmldb_table('exammanagement_temp_part');
 
+        // Conditionally launch remove index.
+        if ($dbman->index_exists($table, $index)) {
+            $dbman->drop_index($table, $index);
+        }
+
         // Conditionally launch remove field.
         if ($dbman->field_exists($table, $field)) {
             $dbman->drop_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2024022300, 'exammanagement');
+        upgrade_mod_savepoint(true, 2024022900, 'exammanagement');
     }
 
     return true;
