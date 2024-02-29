@@ -49,7 +49,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
             $oldpw = $moduleinstance->password;
 
             if (isset($moduleinstance->misc)) {
-                $misc = json_decode($moduleinstance->misc);
+                $misc = (array) json_decode($moduleinstance->misc);
             } else {
                 $misc = null;
             }
@@ -114,7 +114,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('advcheckbox', 'exportgrades', get_string('activate_mode', 'mod_exammanagement'));
         $mform->addHelpButton('exportgrades', 'export_grades_as_exam_results', 'mod_exammanagement');
 
-        if (isset($misc) && isset($misc->mode) && $misc->mode === 'export_grades') {
+        if (isset($misc) && isset($misc['mode']) && $misc['mode'] === 'export_grades') {
             $mform->setDefault('exportgrades', 1);
         } else {
             $mform->setDefault('exportgrades', 0);
@@ -123,7 +123,7 @@ class mod_exammanagement_mod_form extends moodleform_mod {
         $mform->addElement('header', 'deselectstepsandphases', get_string('deselectstepsandphases', 'mod_exammanagement'));
         $mform->addElement('advcheckbox', 'deselectphaseexamreview', get_string('deselectphaseexamreview', 'mod_exammanagement'));
 
-        if (isset($misc) && isset($misc->configoptions) && in_array('noexamreview', $misc->configoptions)) {
+        if (isset($misc) && isset($misc['configoptions']) && in_array('noexamreview', $misc['configoptions'])) {
             $mform->setDefault('deselectphaseexamreview', 1);
         } else {
             $mform->setDefault('deselectphaseexamreview', 0);

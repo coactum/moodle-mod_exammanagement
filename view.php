@@ -123,7 +123,7 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
     } else {
         $misc = (array) json_decode($moduleinstance->misc);
 
-        if (isset($misc->mode) && $misc->mode === 'export_grades') {
+        if (isset($misc['mode']) && $misc['mode'] === 'export_grades') {
             $mode = 'export_grades';
         } else {
             $mode = 'normal';
@@ -502,7 +502,7 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
     }
 
     // Textfield.
-    $textfield = helper::gettextfield($moduleinstance)->text;
+    $textfield = helper::gettextfield($moduleinstance)->text ?? false;
 
     // Bonussteps.
     if ($moduleinstance->bonusvisible && $participant) {
@@ -592,6 +592,9 @@ if ($CFG->branch < 400) {
     $PAGE->force_settings_menu();
 }
 
+$completion = new completion_info($course);
+$completion->set_module_viewed($cm);
+
 // Output header.
 echo $OUTPUT->header();
 
@@ -604,7 +607,7 @@ if ($CFG->branch < 400) {
 }
 
 // Trigger course_module_viewed event.
-$event = \mod_annopy\event\course_module_viewed::create([
+$event = \mod_exammanagement\event\course_module_viewed::create([
     'objectid' => $moduleinstance->id,
     'context' => $context,
 ]);

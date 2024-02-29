@@ -85,9 +85,9 @@ define( "NEWLINE", "\r\n" );
 if (!isset($moduleinstance->misc)) {
     $mode = 'normal';
 } else {
-    $misc = json_decode($moduleinstance->misc);
+    $misc = (array) json_decode($moduleinstance->misc);
 
-    if (isset($misc->mode) && $misc->mode === 'export_grades') {
+    if (isset($misc['mode']) && $misc['mode'] === 'export_grades') {
         $mode = 'export_grades';
     } else {
         $mode = 'normal';

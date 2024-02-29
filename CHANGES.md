@@ -1,5 +1,12 @@
 ## Changelog ##
 
+- [2.0.8]:
+    - Activity completion for views now possible.
+    - Small last bugfixes.
+
+- [2.0.7]:
+    - Fixed typo in view event.
+
 - [2.0.6]:
     - Small bugfixes and fixes for moodle coding style.
 
