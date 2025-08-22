@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.10]:
+    - Added moodle 4.5 compatibility.
+
 - [2.0.9]:
     - Removed old indices (for legacy installations of the plugin).
 
