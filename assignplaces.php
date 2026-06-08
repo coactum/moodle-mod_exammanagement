@@ -362,7 +362,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         echo '<a href="' . new moodle_url(
             '/mod/exammanagement/assignplaces.php',
             ['id' => $id]
-        ) . '" class="btn btn-primary float-right mr-1" title="' .
+        ) . '" class="btn btn-primary float-end me-1" title="' .
             get_string('assign_places', 'mod_exammanagement') . '"><span class="d-none d-sm-block">' .
             get_string('assign_places', 'mod_exammanagement') .
             '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>';
@@ -370,7 +370,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         echo '<a href="' . new moodle_url(
             '/mod/exammanagement/assignplaces.php',
             ['id' => $id, 'map' => true]
-        ) . '" class="btn btn-primary float-right mr-1" title="' .
+        ) . '" class="btn btn-primary float-end me-1" title="' .
             get_string('assign_places_manually', 'mod_exammanagement') . '"><span class="d-none d-sm-block">' .
             get_string('assign_places_manually', 'mod_exammanagement') .
             '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>';
@@ -378,7 +378,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     if ($assignedplacescount) {
         echo '<a href="assignplaces.php?id=' . $id . '&uap=1&sesskey=' . sesskey() .
-            '" role="button" class="btn btn-secondary float-right mr-1" title="' .
+            '" role="button" class="btn btn-secondary float-end me-1" title="' .
             get_string('revert_places_assignment', 'mod_exammanagement') . '"><span class="d-none d-md-block">' .
             get_string('revert_places_assignment', 'mod_exammanagement') .
             '</span><i class="fa fa-trash d-md-none" aria-hidden="true"></i></a>';

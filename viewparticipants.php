@@ -159,11 +159,11 @@ $participants = helper::getexamparticipants(
     $pagenr
 );
 
-echo('<div class="float-right">');
+echo('<div class="float-end">');
 
 if (!empty(helper::getcourseparticipantsids($id))) {
     echo('<a href="' . new moodle_url('/mod/exammanagement/addcourseparticipants.php', ['id' => $id]) .
-        '" class="btn btn-primary float-right mr-1" role="button" title="' .
+        '" class="btn btn-primary float-end me-1" role="button" title="' .
         get_string("import_course_participants_optional", "mod_exammanagement") .
         '"><span class="d-none d-xl-block">' . get_string("import_course_participants_optional", "mod_exammanagement") .
         '</span><i class="fa fa-user d-xl-none" aria-hidden="true"></i></a>');
@@ -171,7 +171,7 @@ if (!empty(helper::getcourseparticipantsids($id))) {
 
 if (get_config('mod_exammanagement', 'enableldap')) {
     echo('<a href="' . new moodle_url('/mod/exammanagement/addparticipants.php', ['id' => $id]) .
-        '" role="button" class="btn btn-primary float-right mr-1" title="' .
+        '" role="button" class="btn btn-primary float-end me-1" title="' .
         get_string("import_participants_from_file_recommended", "mod_exammanagement") .
         '"><span class="d-none d-xl-block">' . get_string("import_participants_from_file_recommended", "mod_exammanagement") .
         '</span><i class="fa fa-file-text d-xl-none" aria-hidden="true"></i></a>');
@@ -179,7 +179,7 @@ if (get_config('mod_exammanagement', 'enableldap')) {
 
 if ($participants) {
     echo('<a href="' . new moodle_url('/mod/exammanagement/converttogroup.php', ['id' => $id]) .
-        '" role="button" class="btn btn-secondary mr-3" title="' . get_string("convert_to_group", "mod_exammanagement") .
+        '" role="button" class="btn btn-secondary me-3" title="' . get_string("convert_to_group", "mod_exammanagement") .
         '"><span class="d-none d-xl-block">' . get_string("convert_to_group", "mod_exammanagement") .
         '</span><i class="fa fa-users d-xl-none" aria-hidden="true"></i></a>');
 }
@@ -326,7 +326,7 @@ if ($participants) {
         '/mod/exammanagement/viewparticipants.php',
         ['id' => $id, 'dap' => 1, 'sesskey' => sesskey()]
     ) .
-        '" class="btn btn-secondary ml-1" onClick="javascript:return confirm(\'' .
+        '" class="btn btn-secondary ms-1" onClick="javascript:return confirm(\'' .
         get_string("all_participants_deletion_warning", "mod_exammanagement") . '\');">' .
         get_string("delete_all_participants", "mod_exammanagement") . '</a></div>');
 }

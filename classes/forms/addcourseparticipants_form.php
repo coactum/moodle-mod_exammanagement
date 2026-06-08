@@ -137,11 +137,11 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             );
             $mform->addElement(
                 'html',
-                '<span class="collapse.show deleted_minimize float-right" title="' .
+                '<span class="collapse.show deleted_minimize float-end" title="' .
                 get_string("minimize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("minimize_phase", "mod_exammanagement") . '"><i class="fa fa-minus" aria-hidden="true"></i></span>'
             );
-            $mform->addElement('html', '<span class="collapse deleted_maximize float-right" title="' .
+            $mform->addElement('html', '<span class="collapse deleted_maximize float-end" title="' .
                 get_string("maximize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("maximize_phase", "mod_exammanagement") .
                 '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
@@ -159,7 +159,7 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
 
             $mform->addElement('html', '<div class="col-' . $col . '"><h4>' . get_string("import_state", "mod_exammanagement") .
                 '</h4></div></div>');
-            $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' pl-4">');
+            $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' ps-4">');
             $mform->addElement(
                 'advcheckbox',
                 'checkall_deleted',
@@ -173,7 +173,7 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             // With moodle account.
             if ($moodleparticipants) { // Now contains only moodle users that should be deleted.
                 foreach ($moodleparticipants as $key => $participant) {
-                    $mform->addElement('html', '<div class="row text-danger"><div class="col-' . $col . ' pl-4">');
+                    $mform->addElement('html', '<div class="row text-danger"><div class="col-' . $col . ' ps-4">');
 
                     $mform->addElement('advcheckbox', 'deletedparticipants[mid_' . $participant->moodleuserid . ']', ' ' .
                         $participant->profile, null, ['group' => 1]);
@@ -194,7 +194,7 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             if ($nonmoodleparticipants) {
                 // Contains all non moodle users (that are marked to be deleted because they are no course participants).
                 foreach ($nonmoodleparticipants as $key => $participant) {
-                    $mform->addElement('html', '<div class="row text-danger"><div class="col-' . $col . ' pl-4">');
+                    $mform->addElement('html', '<div class="row text-danger"><div class="col-' . $col . ' ps-4">');
 
                     $mform->addElement('advcheckbox', 'deletedparticipants[matrnr_' . $participant->login . ']', ' ' .
                         $participant->firstname . ' ' . $participant->lastname, null, ['group' => 1]);
@@ -223,10 +223,10 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             $mform->addElement('html', '<a aria-expanded="false" class="toggable" id="already">');
             $mform->addElement('html', '<div class="panel-heading text-info"><h3 class="panel-title">' .
                 count($alreadyparticipants) . ' ' . get_string("existingmatrnr_course", "mod_exammanagement") . '</h3>');
-            $mform->addElement('html', '<span class="collapse.show already_minimize float-right" title="' .
+            $mform->addElement('html', '<span class="collapse.show already_minimize float-end" title="' .
                 get_string("minimize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("minimize_phase", "mod_exammanagement") . '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
-            $mform->addElement('html', '<span class="collapse already_maximize float-right" title="' .
+            $mform->addElement('html', '<span class="collapse already_maximize float-end" title="' .
                 get_string("maximize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("maximize_phase", "mod_exammanagement") .
                 '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
@@ -267,10 +267,10 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             $mform->addElement('html', '<div class="panel-heading text-success"><h3 class="panel-title">
                 <span id="selectedGroupTwoCount" class="exammanagement_pure">' . count($courseparticipantsids) . '</span>/' .
                 count($courseparticipantsids) . ' ' . get_string("newmatrnr", "mod_exammanagement") . '</h3>');
-            $mform->addElement('html', '<span class="collapse.show course_minimize float-right" title="' .
+            $mform->addElement('html', '<span class="collapse.show course_minimize float-end" title="' .
                 get_string("minimize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("minimize_phase", "mod_exammanagement") . '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
-            $mform->addElement('html', '<span class="collapse course_maximize float-right" title="' .
+            $mform->addElement('html', '<span class="collapse course_maximize float-end" title="' .
                 get_string("maximize_phase", "mod_exammanagement") . '" aria-label="' .
                 get_string("maximize_phase", "mod_exammanagement") .
                 '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
@@ -289,7 +289,7 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
             $mform->addElement('html', '<div class="col-' . $col . '"><h4>' .
                 get_string("import_state", "mod_exammanagement") . '</h4></div></div>');
 
-            $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' pl-4">');
+            $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' ps-4">');
             $mform->addElement(
                 'advcheckbox',
                 'checkall_new',
@@ -374,7 +374,7 @@ class mod_exammanagement_addcourseparticipants_form extends moodleform {
                         $matrnr = '-';
                     }
 
-                    $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' pl-4">');
+                    $mform->addElement('html', '<div class="row"><div class="col-' . $col . ' ps-4">');
                     $mform->addElement('advcheckbox', 'participants[' . $participant->moodleuserid .
                         ']', ' ' . $participant->profile, null, ['group' => 2]);
 

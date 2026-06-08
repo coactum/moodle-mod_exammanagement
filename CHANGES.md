@@ -1,5 +1,9 @@
 ## Changelog ##
 
+- [3.0.0]:
+    - Migrated the plugin to Moodle 5.1 / 5.2 and Bootstrap 5. The minimum requirement is now Moodle 5.1 (2025100600); the plugin no longer runs on Moodle 5.0 or earlier.
+    - Replaced all Bootstrap 4 markup with the Bootstrap 5 equivalents (float-end/start, text-bg-* badges, data-bs-dismiss, btn-close, visually-hidden, ms-/me-/ps-/pe- spacing, mb-3 form rows) and updated the related styles.
+
 - [2.0.11]:
     - Removed executable code (get_config calls) from the language files; language strings are now plain data as required by the Moodle standards. The configured system name is now passed as a {$a} placeholder and the additional resources link is injected via a custom help icon.
 

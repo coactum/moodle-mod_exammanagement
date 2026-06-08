@@ -285,13 +285,13 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         if (!isset($misc['mode'])) {
             echo '<a href="' .
                 new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id, 'epm' => true, 'page' => $pagenr])  .
-                '" class="btn btn-primary float-right" title="' . get_string("edit_results_and_boni", "mod_exammanagement") .
+                '" class="btn btn-primary float-end" title="' . get_string("edit_results_and_boni", "mod_exammanagement") .
                 '"><span class="d-none d-lg-block">' . get_string("edit_results_and_boni", "mod_exammanagement") .
                 '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
         } else {
             echo '<a href="' .
                 new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id, 'epm' => true, 'page' => $pagenr])  .
-                '" class="btn btn-primary float-right" title="' . get_string("edit_grades", "mod_exammanagement") .
+                '" class="btn btn-primary float-end" title="' . get_string("edit_grades", "mod_exammanagement") .
                 '"><span class="d-none d-lg-block">' . get_string("edit_grades", "mod_exammanagement") .
                 '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
         }

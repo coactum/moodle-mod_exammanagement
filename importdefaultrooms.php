@@ -191,7 +191,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Output alerts.
     if ($defaultroomsexist) {
         echo '<div class="alert alert-warning alert-block fade in " role="alert">
-            <button type="button" class="close" data-dismiss="alert">×</button>' .
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
             get_string("default_rooms_already_exists", "mod_exammanagement") . '</div>';
     }
 

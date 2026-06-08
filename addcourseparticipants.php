@@ -203,13 +203,13 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output alerts.
     echo '<div class="alert alert-warning alert-block fade in " role="alert">';
-    echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     echo  get_string("course_participant_import_preventing_text_export", "mod_exammanagement");
     echo '</div>';
 
     if (helper::placesassigned($moduleinstance)) {
         echo '<div class="alert alert-warning alert-block fade in " role="alert">';
-        echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+        echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
         echo get_string("places_already_assigned_participants", "mod_exammanagement");
         echo '</div>';
     }

@@ -221,12 +221,12 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output alerts.
     echo '<div class="alert alert-warning alert-block fade in " role="alert">';
-    echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     echo  get_string("change_custom_room_name", "mod_exammanagement");
     echo '</div>';
 
     echo '<div class="alert alert-warning alert-block fade in " role="alert">';
-    echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     echo  get_string("custom_room_places", "mod_exammanagement");
     echo '</div>';
 

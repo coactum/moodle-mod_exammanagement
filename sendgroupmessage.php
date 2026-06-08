@@ -198,7 +198,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             $mailaddresses = helper::getnonemoodleparticipantsemailadresses($moduleinstance);
 
             echo '<div class="alert alert-warning alert-block fade in " role="alert">
-                <button type="button" class="close" data-dismiss="alert">×</button>';
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 
             echo '<p>' . get_string('groupmessages_warning', 'mod_exammanagement', [
                 'systemname' => helper::getmoodlesystemname(),

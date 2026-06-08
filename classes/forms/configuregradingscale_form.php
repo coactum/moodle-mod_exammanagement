@@ -58,7 +58,7 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
         $mform = $this->_form;
 
         if ($totalpoints) {
-            $mform->addElement('html', '<div class="mb-1"><strong class="exammanagement_gradingscale_totalpoints mr-2">'
+            $mform->addElement('html', '<div class="mb-1"><strong class="exammanagement_gradingscale_totalpoints me-2">'
                 . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement') . '</strong><span id="totalpoints"> ' .
                 helper::formatnumberfordisplay($totalpoints) . '</span></div>');
         }
@@ -86,7 +86,7 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
         }
 
         // Add labels for grading steps.
-        $mform->addElement('html', '<div class="form-group row fitem">');
+        $mform->addElement('html', '<div class="mb-3 row fitem">');
 
         foreach ($gradingscale as $key => $points) {
             $mform->addElement('html', '<span class="exammanagement_gradingscale_steps_spacing">
