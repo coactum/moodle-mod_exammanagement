@@ -56,6 +56,25 @@ class helper {
     }
 
     /**
+     * Render a help icon for the given identifier.
+     *
+     * Uses a custom help_icon that substitutes the configured system name ({$a} placeholder) into the
+     * help text and injects the configured additional resources link as the "More help" link. This
+     * replaces the formerly used executable code inside the language strings.
+     *
+     * @param string $identifier The help string identifier (without the _help suffix).
+     * @return string The rendered help icon HTML.
+     */
+    public static function gethelpicon($identifier) {
+        global $OUTPUT;
+
+        $helpicon = new \mod_exammanagement\output\help_icon($identifier, 'mod_exammanagement');
+        $helpicon->diag_strings();
+
+        return $OUTPUT->render($helpicon);
+    }
+
+    /**
      * Get the pagecount.
      *
      * @return int $pagecount The pagecount.

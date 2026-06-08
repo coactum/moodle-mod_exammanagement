@@ -235,9 +235,9 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
 
         if ($canresetpassword) {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('checkpasswordadmin', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('checkpasswordadmin'), 4);
         } else {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('checkpassword', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('checkpassword'), 4);
         }
     } else {
         echo $OUTPUT->heading($title, 4);

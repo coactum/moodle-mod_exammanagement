@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [2.0.11]:
+    - Removed executable code (get_config calls) from the language files; language strings are now plain data as required by the Moodle standards. The configured system name is now passed as a {$a} placeholder and the additional resources link is injected via a custom help icon.
+
 - [2.0.10]:
     - Added moodle 4.5 compatibility.
 

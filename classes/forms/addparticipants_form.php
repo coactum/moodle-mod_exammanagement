@@ -198,7 +198,7 @@ class mod_exammanagement_addparticipants_form extends moodleform {
                     }
                     $mform->addElement('html', '<div class="col-' . $col . '">' .
                         get_string($odduser->state, "mod_exammanagement", ['systemname' => $systemname]) . ' ' .
-                        $OUTPUT->help_icon($odduser->state, 'mod_exammanagement', '') . '</div></div>');
+                        helper::gethelpicon($odduser->state) . '</div></div>');
                 }
 
                 $mform->addElement('html', '</div></div>');

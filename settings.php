@@ -72,9 +72,15 @@ if ($ADMIN->fulltree) {
             get_string('ldap_objectclass_student', 'mod_exammanagement'),
             get_string('ldap_objectclass_student_help', 'mod_exammanagement'), '', PARAM_TEXT));
 
+      // The configured system name is passed as {$a} into the help texts below.
+      $systemname = get_config('mod_exammanagement', 'moodlesystemname');
+      if (empty($systemname)) {
+            $systemname = 'Moodle';
+      }
+
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_username',
             get_string('ldap_field_map_username', 'mod_exammanagement'),
-            get_string('ldap_field_map_username_help', 'mod_exammanagement'), '', PARAM_TEXT));
+            get_string('ldap_field_map_username_help', 'mod_exammanagement', $systemname), '', PARAM_TEXT));
 
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_matriculationnumber',
             get_string('ldap_field_map_matriculationnumber', 'mod_exammanagement'),
@@ -82,13 +88,13 @@ if ($ADMIN->fulltree) {
 
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_firstname',
             get_string('ldap_field_map_firstname', 'mod_exammanagement'),
-            get_string('ldap_field_map_firstname_help', 'mod_exammanagement'), '', PARAM_TEXT));
+            get_string('ldap_field_map_firstname_help', 'mod_exammanagement', $systemname), '', PARAM_TEXT));
 
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_lastname',
             get_string('ldap_field_map_lastname', 'mod_exammanagement'),
-      get_string('ldap_field_map_lastname_help', 'mod_exammanagement'), '', PARAM_TEXT));
+      get_string('ldap_field_map_lastname_help', 'mod_exammanagement', $systemname), '', PARAM_TEXT));
 
       $settings->add(new admin_setting_configtext('mod_exammanagement/ldap_field_map_mail',
             get_string('ldap_field_map_mail', 'mod_exammanagement'),
-            get_string('ldap_field_map_mail_help', 'mod_exammanagement'), '', PARAM_TEXT));
+            get_string('ldap_field_map_mail_help', 'mod_exammanagement', $systemname), '', PARAM_TEXT));
 }

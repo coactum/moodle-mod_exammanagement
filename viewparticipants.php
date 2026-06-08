@@ -137,7 +137,7 @@ if ($CFG->branch < 400) {
 
 // Output heading.
 if (get_config('mod_exammanagement', 'enablehelptexts')) {
-    echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('viewparticipants', 'mod_exammanagement', ''), 4);
+    echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('viewparticipants'), 4);
 } else {
     echo $OUTPUT->heading($title, 4);
 }
@@ -264,7 +264,7 @@ if ($participants) {
 
             } else if ($participant->state === 'state_added_to_exam_no_course') {
                 echo('<td>' . get_string("state_added_to_exam_no_course", "mod_exammanagement") . ' ' .
-                    $OUTPUT->help_icon('state_added_to_exam_no_course', 'mod_exammanagement', '') . '</td>');
+                    helper::gethelpicon('state_added_to_exam_no_course') . '</td>');
 
                 echo('<td class="exammanagement_brand_bordercolor_left"><a href="' .
                     new moodle_url('/mod/exammanagement/viewparticipants.php',
@@ -276,7 +276,7 @@ if ($participants) {
             } else if ($participant->state === 'state_added_to_exam_no_moodle') {
                 echo('<td>' . get_string("state_added_to_exam_no_moodle", "mod_exammanagement",
                     ['systemname' => helper::getmoodlesystemname()]) . ' ' .
-                    $OUTPUT->help_icon('state_added_to_exam_no_moodle', 'mod_exammanagement', '') . '</td>');
+                    helper::gethelpicon('state_added_to_exam_no_moodle') . '</td>');
 
                 echo('<td class="exammanagement_brand_bordercolor_left"><a href="' .
                     new moodle_url('/mod/exammanagement/viewparticipants.php',

@@ -379,7 +379,7 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
         $phases->phase_five = $phasefive;
 
         if (get_config('mod_exammanagement', 'enablehelptexts')) {
-            $helptexticon = $OUTPUT->help_icon('overview', 'mod_exammanagement', '');
+            $helptexticon = helper::gethelpicon('overview');
             $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
         } else {
             $helptexticon = false;
@@ -447,7 +447,7 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
     } else if ($mode === 'export_grades') {
 
         if (get_config('mod_exammanagement', 'enablehelptexts')) {
-            $helptexticon = $OUTPUT->help_icon('export_grades', 'mod_exammanagement', '');
+            $helptexticon = helper::gethelpicon('export_grades');
             $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
         } else {
             $helptexticon = false;

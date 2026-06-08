@@ -252,9 +252,9 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
         if (!isset($misc['mode'])) {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('participantsoverview', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('participantsoverview'), 4);
         } else {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('participantsoverview_grades', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('participantsoverview_grades'), 4);
         }
     } else {
         echo $OUTPUT->heading($title, 4);

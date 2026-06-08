@@ -166,7 +166,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
-        echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('importdefaultrooms', 'mod_exammanagement', ''), 4);
+        echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('importdefaultrooms'), 4);
     } else {
         echo $OUTPUT->heading($title, 4);
     }
