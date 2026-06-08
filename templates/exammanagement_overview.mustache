@@ -426,7 +426,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#examtime}}panel-info{{/examtime}}{{^examtime}}panel-danger{{/examtime}}">
 									<div class="panel-heading">
 										<span class="statebar float-right">
-											{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', require(['jquery'], function($) { $(this).prop('checked')})); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
+											{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', this.checked); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 											{{^examtime}}<a href="setexamdate.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examtime}}
 										</span>
@@ -456,7 +456,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<div class="row">
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', require(['jquery'], function($) { $(this).prop('checked')})); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
+													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', this.checked); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
@@ -471,7 +471,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											</div>
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', require(['jquery'], function($) { $(this).prop('checked')})); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
+													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', this.checked); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
@@ -631,7 +631,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<div class="row">
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', require(['jquery'], function($) { $(this).prop('checked')})); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
+													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', this.checked); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}bonus, mod_exammanagement{{/str}}</strong>
@@ -646,7 +646,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											</div>
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', require(['jquery'], function($) { $(this).prop('checked')})); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', this.checked); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}result, mod_exammanagement{{/str}}</strong>
@@ -667,7 +667,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar float-right">
-											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(require(['jquery'], function($) { $(this).prop('checked')})); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(this.checked); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
 											{{^datadeletiondate}}{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 										</span>
@@ -842,7 +842,7 @@ ajaxsetcorrectioncompletion = function(value) {
 									<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 										<div class="panel-heading">
 											<span class="statebar float-right">
-												{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', require(['jquery'], function($) { $(this).prop('checked')})); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+												{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', this.checked); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
 												{{#datadeletiondate}}{{^examreviewtime}}<a href="examreview.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}{{/datadeletiondate}}
