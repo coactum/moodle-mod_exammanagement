@@ -36,7 +36,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_participantsview implements renderable, templatable {
-
     /** @var int */
     protected $cmid;
     /** @var bool */
@@ -89,9 +88,24 @@ class exammanagement_participantsview implements renderable, templatable {
      * @param string $examreviewroom The room for the exam review
      * @param bool $deleted If the data is already deleted
      */
-    public function __construct($cmid, $isparticipant, $examdate, $examtime, $room,
-        $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints,
-        $tasktotalpoints, $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted) {
+    public function __construct(
+        $cmid,
+        $isparticipant,
+        $examdate,
+        $examtime,
+        $room,
+        $place,
+        $textfield,
+        $bonussteps,
+        $bonuspoints,
+        $examstate,
+        $totalpoints,
+        $tasktotalpoints,
+        $totalpointswithbonus,
+        $examreviewtime,
+        $examreviewroom,
+        $deleted
+    ) {
 
         $this->cmid = $cmid;
         $this->isparticipant = $isparticipant;

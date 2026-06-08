@@ -37,7 +37,6 @@ require_once($CFG->libdir . '/pdflib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class examlabels extends TCPDF {
-
     /**
      * Override the footer of the base class.
      */
@@ -50,5 +49,4 @@ class examlabels extends TCPDF {
 
         $this->Cell(0, 12, $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
     }
-
 }

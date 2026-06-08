@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_importdefaultrooms_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor.
      */
@@ -46,13 +45,17 @@ class mod_exammanagement_importdefaultrooms_form extends moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('filepicker', 'defaultrooms_list', get_string("default_rooms_file_structure", "mod_exammanagement"),
-            null, ['accepted_types' => '.txt']);
+        $mform->addElement(
+            'filepicker',
+            'defaultrooms_list',
+            get_string("default_rooms_file_structure", "mod_exammanagement"),
+            null,
+            ['accepted_types' => '.txt']
+        );
         $mform->addRule('defaultrooms_list', get_string('err_nofile', 'mod_exammanagement'), 'required', 'client');
 
         $this->add_action_buttons(true, get_string("read_file", "mod_exammanagement"));
 
         $mform->disable_form_change_checker();
-
     }
 }

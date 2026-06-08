@@ -37,7 +37,6 @@ require_once($CFG->libdir . '/pdflib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class resultspercentages extends TCPDF {
-
     /**
      * Override the footer of the base class.
      */

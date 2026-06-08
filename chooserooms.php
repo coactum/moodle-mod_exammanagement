@@ -72,16 +72,21 @@ global $OUTPUT, $PAGE, $USER;
 $canimportdefaultrooms = has_capability('mod/exammanagement:importdefaultrooms', $context);
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 if ($deletecustomroomid) {
@@ -91,8 +96,12 @@ if ($deletecustomroomid) {
         if (!json_decode($moduleinstance->rooms) || !in_array($deletecustomroomid, json_decode($moduleinstance->rooms))) {
             $DB->delete_records('exammanagement_rooms', ['roomid' => $deletecustomroomid, 'moodleuserid' => $USER->id]);
         } else {
-            redirect (new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                get_string('room_deselected_as_examroom', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                get_string('room_deselected_as_examroom', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
     }
 }
@@ -105,8 +114,12 @@ if ($deletedefaultroomid) {
             $DB->delete_records('exammanagement_rooms', ['roomid' => $deletedefaultroomid]);
         }
     } else {
-        redirect (new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-            get_string('nopermissions', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+            get_string('nopermissions', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
 }
 
@@ -130,10 +143,13 @@ $mform = new mod_exammanagement_chooserooms_form(null, [
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
-
     $allrooms = get_object_vars($fromform);
 
     $roomsarray = $allrooms["rooms"];
@@ -148,14 +164,17 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
 
     foreach ($roomsarray as $key => $value) {
         if ($value == 1 && is_string($value)) {
-
             $roomname = explode('_', $key);
             $similiarrooms = $DB->get_records('exammanagement_rooms', ['name' => $roomname[0]]);
 
             foreach ($similiarrooms as $similiarroomobj) {
                 if (isset($oldrooms) && in_array($similiarroomobj->roomid, $oldrooms) && $similiarroomobj->roomid != $key) {
-                    redirect (new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                        get_string('err_roomsdoubleselected', 'mod_exammanagement'), null, 'error');
+                    redirect(
+                        new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                        get_string('err_roomsdoubleselected', 'mod_exammanagement'),
+                        null,
+                        'error'
+                    );
                 }
             }
 
@@ -173,11 +192,9 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
     }
 
     if (isset($deselectedrooms)) {
-
         $oldrooms = array_diff($oldrooms, $deselectedrooms);
 
         foreach ($deselectedrooms as $roomid) {
-
              // If there are participants that have places in deselected rooms: delete whole places assignment.
             if (helper::getparticipantscount($moduleinstance, 'room', $roomid)) {
                 $moduleinstance->assignmentmode = null;
@@ -198,13 +215,20 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
 
     $update = $DB->update_record("exammanagement", $moduleinstance);
     if ($update) {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('alteration_failed', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -237,7 +261,7 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
-        echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('chooserooms', 'mod_exammanagement', ''), 4);
+        echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('chooserooms'), 4);
     } else {
         echo $OUTPUT->heading($title, 4);
     }

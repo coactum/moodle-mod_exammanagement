@@ -42,7 +42,6 @@ function xmldb_exammanagement_upgrade($oldversion) {
     // https://docs.moodle.org/dev/XMLDB_editor.
 
     if ($oldversion < 2024022900) { // Remove legacy field for plugininstanceid.
-
         // Define field plugininstanceid to be removed to exammanagement_participants.
         $table = new xmldb_table('exammanagement_participants');
         $field = new xmldb_field('plugininstanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);

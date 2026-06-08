@@ -61,19 +61,28 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $OUTPUT, $PAGE;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!isset($moduleinstance->datadeletion)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-        get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('correction_not_completed', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Instantiate form.
@@ -82,9 +91,12 @@ $mform = new mod_exammanagement_examreview_form();
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
-
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     $moduleinstance->examreviewtime = $fromform->examreviewtime;
 
@@ -98,13 +110,20 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     if ($update) {
         exammanagement_update_calendar($moduleinstance, $id);
 
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('alteration_failed', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -137,7 +156,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
-        echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('examreview', 'mod_exammanagement', ''), 4);
+        echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('examreview'), 4);
     } else {
         echo $OUTPUT->heading($title, 4);
     }

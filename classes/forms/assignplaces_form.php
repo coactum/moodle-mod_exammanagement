@@ -38,7 +38,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_assignplaces_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -65,15 +64,24 @@ class mod_exammanagement_assignplaces_form extends moodleform {
 
             $allparticipants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], ['matrnr']);
 
-            $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], ['matrnr'], 'name', true,
-                $this->_customdata['pagenr']);
+            $participants = helper::getexamparticipants(
+                $moduleinstance,
+                ['mode' => 'all'],
+                ['matrnr'],
+                'name',
+                true,
+                $this->_customdata['pagenr']
+            );
             $examrooms = json_decode($moduleinstance->rooms);
 
             if ($examrooms && $participants) {
-
-                $pagebar = new exammanagement_pagebar($this->_customdata['id'],
+                $pagebar = new exammanagement_pagebar(
+                    $this->_customdata['id'],
                     new moodle_url('/mod/exammanagement/assignplaces.php', ['id' => $this->_customdata['id'], 'map' => 1]),
-                    $allparticipants, count($participants), $this->_customdata['pagenr']);
+                    $allparticipants,
+                    count($participants),
+                    $this->_customdata['pagenr']
+                );
 
                 $mform->addElement('html', $OUTPUT->render($pagebar));
 
@@ -107,7 +115,6 @@ class mod_exammanagement_assignplaces_form extends moodleform {
                 $roomplacespattern = ['not_selected' => '-'];
 
                 foreach ($examrooms as $id => $roomid) {
-
                     $room = $DB->get_record('exammanagement_rooms', ['roomid' => $roomid]);
 
                     if (isset($room) && $room) {
@@ -123,10 +130,10 @@ class mod_exammanagement_assignplaces_form extends moodleform {
 
                 foreach ($participants as $participant) {
                     $mform->addElement('html', '<tr>');
-                    $mform->addElement('html', '<th scope="row" id="'.$i.'">'.$i.'</th>');
-                    $mform->addElement('html', '<td>'.$participant->firstname.'</td>');
-                    $mform->addElement('html', '<td>'.$participant->lastname.'</td>');
-                    $mform->addElement('html', '<td>'.$participant->matrnr.'</td>');
+                    $mform->addElement('html', '<th scope="row" id="' . $i . '">' . $i . '</th>');
+                    $mform->addElement('html', '<td>' . $participant->firstname . '</td>');
+                    $mform->addElement('html', '<td>' . $participant->lastname . '</td>');
+                    $mform->addElement('html', '<td>' . $participant->matrnr . '</td>');
                     $mform->addElement('html', '<td>');
 
                     $select = $mform->addElement('select', 'rooms[' . $participant->id . ']', '', $roomoptions);
@@ -159,21 +166,17 @@ class mod_exammanagement_assignplaces_form extends moodleform {
                     $mform->addElement('html', '</td></tr>');
 
                     $i++;
-
                 }
 
                 $mform->addElement('html', '</tbody></table>');
-
             }
 
             $this->add_action_buttons(true, get_string("assign_places_manually", "mod_exammanagement"));
-
         } else {
             $mform->addElement('html', '<h4>' . get_string('choose_assignment_mode', 'mod_exammanagement') . '</h4>');
 
             $assignmentmode = $moduleinstance->assignmentmode;
             if (isset($assignmentmode)) {
-
                 $placesmode = substr($assignmentmode, 0, 1);
                 $roommode = substr($assignmentmode, 1, 1);
                 $manuallassignment = substr($assignmentmode, 2, 2);
@@ -221,15 +224,18 @@ class mod_exammanagement_assignplaces_form extends moodleform {
                 }
 
                 $mform->addElement('html', '</span></div>');
-
             }
 
-            $select = $mform->addElement('select', 'assignment_mode_places',
-                get_string('assignment_mode_places', 'mod_exammanagement'), [
+            $select = $mform->addElement(
+                'select',
+                'assignment_mode_places',
+                get_string('assignment_mode_places', 'mod_exammanagement'),
+                [
                     'name' => get_string('mode_places_lastname', 'mod_exammanagement'),
                     'matrnr' => get_string('mode_places_matrnr', 'mod_exammanagement'),
                     'random' => get_string('mode_places_random', 'mod_exammanagement'),
-                ]);
+                ]
+            );
             if (isset($placesmode)) {
                 $select->setSelected($placesmode);
             } else {
@@ -237,10 +243,17 @@ class mod_exammanagement_assignplaces_form extends moodleform {
             }
 
             if (helper::getroomscount($moduleinstance) > 1) {
-                $select = $mform->addElement('select', 'assignment_mode_rooms',
-                    get_string('assignment_mode_rooms', 'mod_exammanagement'), [
+                $select = $mform->addElement(
+                    'select',
+                    'assignment_mode_rooms',
+                    get_string('assignment_mode_rooms', 'mod_exammanagement'),
+                    [
                         '1' => get_string('mode_room_ascending', 'mod_exammanagement'),
-                        '2' => get_string('mode_room_descending', 'mod_exammanagement')]);
+                    '2' => get_string(
+                        'mode_room_descending',
+                        'mod_exammanagement'
+                    )]
+                );
                 if (isset($roommode) && $roommode !== '') {
                     $select->setSelected($roommode);
                 } else {
@@ -250,9 +263,14 @@ class mod_exammanagement_assignplaces_form extends moodleform {
 
             // If some or all places are already assigned.
             if ($this->_customdata['assignedplacescount'] != 0 && !helper::allplacesassigned($moduleinstance)) {
-                 $mform->addElement('advcheckbox', 'keep_seat_assignment',
-                    get_string('keep_seat_assignment_left', 'mod_exammanagement'),
-                    get_string('keep_seat_assignment_right', 'mod_exammanagement'), null, null);
+                 $mform->addElement(
+                     'advcheckbox',
+                     'keep_seat_assignment',
+                     get_string('keep_seat_assignment_left', 'mod_exammanagement'),
+                     get_string('keep_seat_assignment_right', 'mod_exammanagement'),
+                     null,
+                     null
+                 );
                  $mform->setDefault('keep_seat_assignment', true);
             } else if ($this->_customdata['assignedplacescount'] != 0 && helper::allplacesassigned($moduleinstance)) {
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert">

@@ -74,30 +74,51 @@ global $OUTPUT, $PAGE;
 $ldapmanager = ldapmanager::getinstance();
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!$ldapmanager->isldapenabled()) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
-        get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' ' .
+        get_string('ldapnotenabled', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!$ldapmanager->isldapconfigured()) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
-        get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' ' .
+        get_string('ldapnotconfigured', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::gettasks($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_tasks_configured', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_tasks_configured', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 $matrnr = false;
@@ -198,9 +219,12 @@ $mform = new mod_exammanagement_inputresults_form(null, [
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        null, null, null);
-
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        null,
+        null,
+        null
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     $matrval = $fromform->matrval;
 
@@ -209,8 +233,12 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     $participant = false;
 
     if ($matrval) {
-        redirect(new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id, 'matrnr' => $fromform->matrnr]),
-            null, null, null);
+        redirect(
+            new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id, 'matrnr' => $fromform->matrnr]),
+            null,
+            null,
+            null
+        );
     } else {
         $userlogin = $ldapmanager->getloginformatrnr($fromform->matrnr, 'enterresultsmatrnr');
 
@@ -241,12 +269,20 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             if ($update) {
                 redirect(new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id]), null, null, null);
             } else {
-                redirect(new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id]),
-                    get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+                redirect(
+                    new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id]),
+                    get_string('alteration_failed', 'mod_exammanagement'),
+                    null,
+                    'error'
+                );
             }
         } else {
-            redirect(new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id]),
-                get_string('noparticipant', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $id]),
+                get_string('noparticipant', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
     }
 } else {
@@ -281,7 +317,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
-        echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('inputresults', 'mod_exammanagement', ''), 4);
+        echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('inputresults'), 4);
     } else {
         echo $OUTPUT->heading($title, 4);
     }
@@ -299,7 +335,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Set default data.
     switch ($case) {
         case 'participantwithresults':
-
             $states = json_decode($participant->examstate);
             $points = json_decode($participant->exampoints);
 

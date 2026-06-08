@@ -36,7 +36,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_overview_export_grades implements renderable, templatable {
-
     /** @var int */
     protected $cmid;
     /** @var string */
@@ -71,8 +70,18 @@ class exammanagement_overview_export_grades implements renderable, templatable {
      * @param bool $deleted If the data is already deleted
      * @param bool $ldapavailable If ldap is available
      */
-    public function __construct($cmid, $helptexticon, $additionalressourceslink, $participants,
-        $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable) {
+    public function __construct(
+        $cmid,
+        $helptexticon,
+        $additionalressourceslink,
+        $participants,
+        $bonuspointsentered,
+        $gradingscale,
+        $resultscount,
+        $datadeletiondate,
+        $deleted,
+        $ldapavailable
+    ) {
 
         $this->cmid = $cmid;
         $this->helptexticon = $helptexticon;

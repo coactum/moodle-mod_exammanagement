@@ -76,19 +76,28 @@ global $OUTPUT, $PAGE;
 $ldapmanager = ldapmanager::getinstance();
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Instantiate Form.
@@ -112,17 +121,21 @@ if ($epm) {
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect (new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
-
+    redirect(
+        new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], []);
     $updatedcount = 0;
 
     foreach ($participants as $participant) {
-        if (isset($fromform->state[$participant->id]) || isset($fromform->bonuspoints[$participant->id])
-            || isset($fromform->bonussteps[$participant->id]) || isset($fromform->bonuspoints_entered[$participant->id])) {
-
+        if (
+            isset($fromform->state[$participant->id]) || isset($fromform->bonuspoints[$participant->id])
+            || isset($fromform->bonussteps[$participant->id]) || isset($fromform->bonuspoints_entered[$participant->id])
+        ) {
             $oldparticipant = clone $participant;
 
             $misc = (array) json_decode($moduleinstance->misc ?? '');
@@ -131,25 +144,25 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 if (isset($fromform->state[$participant->id]) && $fromform->state[$participant->id] !== 'not_set') {
                     switch ($fromform->state[$participant->id]) {
                         case 'normal':
-                            $examstate = new stdClass;
+                            $examstate = new stdClass();
                             $examstate->nt = "0";
                             $examstate->fa = "0";
                             $examstate->ill = "0";
                             break;
                         case 'nt':
-                            $examstate = new stdClass;
+                            $examstate = new stdClass();
                             $examstate->nt = "1";
                             $examstate->fa = "0";
                             $examstate->ill = "0";
                             break;
                         case 'fa':
-                            $examstate = new stdClass;
+                            $examstate = new stdClass();
                             $examstate->nt = "0";
                             $examstate->fa = "1";
                             $examstate->ill = "0";
                             break;
                         case 'ill':
-                            $examstate = new stdClass;
+                            $examstate = new stdClass();
                             $examstate->nt = "0";
                             $examstate->fa = "0";
                             $examstate->ill = "1";
@@ -163,7 +176,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                     if ($fromform->points[$participant->id]) { // If participants points were not empty.
                         $participant->exampoints = json_encode($fromform->points[$participant->id]);
                     }
-
                 } else {
                     $participant->examstate = null;
                     $participant->exampoints = null;
@@ -172,9 +184,10 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 if ($fromform->bonussteps[$participant->id] !== '-') {
                     $participant->bonussteps = $fromform->bonussteps[$participant->id];
                     $participant->bonuspoints = null;
-                } else if ($fromform->bonuspoints_entered[$participant->id] === 1
-                    && $fromform->bonuspoints[$participant->id] !== 0) {
-
+                } else if (
+                    $fromform->bonuspoints_entered[$participant->id] === 1
+                    && $fromform->bonuspoints[$participant->id] !== 0
+                ) {
                     $participant->bonussteps = null;
                     $participant->bonuspoints = $fromform->bonuspoints[$participant->id];
                 } else {
@@ -183,7 +196,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 }
 
                 $participant->timeresultsentered = time();
-
             } else {
                 if ($fromform->bonuspoints_entered[$participant->id] === 1 && isset($fromform->bonuspoints[$participant->id])) {
                     $participant->timeresultsentered = time();
@@ -199,10 +211,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
             unset($participant->matrnr);
 
-            if ($oldparticipant->examstate != $participant->examstate || $oldparticipant->exampoints != $participant->exampoints
+            if (
+                $oldparticipant->examstate != $participant->examstate || $oldparticipant->exampoints != $participant->exampoints
                 || $oldparticipant->bonuspoints != $participant->bonuspoints
-                || $oldparticipant->bonussteps != $participant->bonussteps) {
-
+                || $oldparticipant->bonussteps != $participant->bonussteps
+            ) {
                 if ($DB->update_record('exammanagement_participants', $participant)) {
                     $updatedcount += 1;
                 }
@@ -212,13 +225,20 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     if ($updatedcount) {
         $DB->update_record("exammanagement", $moduleinstance);
-        redirect(new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else {
-        redirect (new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
-            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $id]),
+            get_string('alteration_failed', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -252,9 +272,9 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
         if (!isset($misc['mode'])) {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('participantsoverview', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('participantsoverview'), 4);
         } else {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('participantsoverview_grades', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('participantsoverview_grades'), 4);
         }
     } else {
         echo $OUTPUT->heading($title, 4);
@@ -291,4 +311,3 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Finish the page.
     echo $OUTPUT->footer();
 }
-

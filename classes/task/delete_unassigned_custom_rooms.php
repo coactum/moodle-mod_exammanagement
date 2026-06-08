@@ -51,9 +51,7 @@ class delete_unassigned_custom_rooms extends \core\task\scheduled_task {
         global $DB;
 
         if ($rs = $DB->get_recordset_select("exammanagement_rooms", "type = 'customroom'")) {
-
             if ($rs->valid()) {
-
                 mtrace('Deleting records ...');
 
                 foreach ($rs as $record) {

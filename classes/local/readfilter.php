@@ -33,7 +33,6 @@ use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class readfilter implements IReadFilter {
-
     /** @var array */
     private $columns = [];
 

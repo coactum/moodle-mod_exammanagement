@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_examreview_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -57,6 +56,5 @@ class mod_exammanagement_examreview_form extends moodleform {
         $this->add_action_buttons();
 
         $mform->disable_form_change_checker();
-
     }
 }

@@ -27,145 +27,150 @@
 }}
 
 {{#js}}
-toggleHelptextPanel = function() {
-		$('.helptextpanel').slideToggle("slow");
-		$('.helptextpanel-icon').toggle();
+window.toggleHelptextPanel = function() {
+    require(['jquery'], function($) {
+        $('.helptextpanel').slideToggle('slow');
+        $('.helptextpanel-icon').toggle();
+    });
 };
 
-togglePhase = function(phase) {
-	jQuery.ajax ({
-        url: './view.php',
-        data: {'id': {{cmid}}, 'togglephase': true, 'phase': phase, 'sesskey': '{{sesskey}}' },
-        complete: function(response) {
-			$('.' + phase).slideToggle("slow");
-			$('.' + phase + '_maximize').toggle();
-			$('.' + phase + '_minimize').toggle();
+window.togglePhase = function(phase) {
+    require(['jquery'], function($) {
+        $.ajax({
+            url: './view.php',
+            data: {'id': '{{cmid}}', 'togglephase': true, 'phase': phase, 'sesskey': '{{sesskey}}'},
+            complete: function() {
+                $('.' + phase).slideToggle('slow');
+                $('.' + phase + '_maximize').toggle();
+                $('.' + phase + '_minimize').toggle();
+            }
+        });
+    });
+};
+
+window.ajaxtoggleInformation = function(command, value) {
+    require(['jquery'], function($) {
+        $('.loadable').toggle();
+
+        if (command == 'room') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformroom': true, 'roomvisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.roomVisible').toggle();
+                    $('.roomNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else if (command == 'place') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformplace': true, 'placevisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.placeVisible').toggle();
+                    $('.placeNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else if (command == 'datetime') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformdt': true, 'datetimevisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.datetimeVisible').toggle();
+                    $('.datetimeNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else if (command == 'bonus') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformbonus': true, 'bonusvisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.bonusVisible').toggle();
+                    $('.bonusNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else if (command == 'result') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformresult': true, 'resultvisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.resultVisible').toggle();
+                    $('.resultNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else if (command == 'examreview') {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformexamreview': true, 'examreviewvisible': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.examReviewVisible').toggle();
+                    $('.examReviewNotVisible').toggle();
+                    $('.loadable').toggle();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
         }
     });
 };
 
-ajaxtoggleInformation = function(command, value) {
+window.ajaxsetcorrectioncompletion = function(value) {
+    require(['jquery'], function($) {
+        $('.loadable').toggle();
 
-	$('.loadable').toggle();
+        var confirmed = false;
 
-	if (command=='room') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformroom': true, 'roomvisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.roomVisible').toggle();
-							$('.roomNotVisible').toggle();
-							$('.loadable').toggle();
-            },
-            error: function(response) {
-							$('.loadable').toggle();
-							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    } else if (command=='place') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformplace': true, 'placevisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.placeVisible').toggle();
-							$('.placeNotVisible').toggle();
-							$('.loadable').toggle();
-            },
-            error: function(response) {
-							$('.loadable').toggle();
-							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    } else if (command=='datetime') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformdt': true, 'datetimevisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.datetimeVisible').toggle();
-							$('.datetimeNotVisible').toggle();
-							$('.loadable').toggle();
-						},
-            error: function(response) {
-							$('.loadable').toggle();
-              alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    } else if (command=='bonus') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformbonus': true, 'bonusvisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.bonusVisible').toggle();
-							$('.bonusNotVisible').toggle();
-							$('.loadable').toggle();
-            },
-            error: function(response) {
-							$('.loadable').toggle();
-							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    } else if (command=='result') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformresult': true, 'resultvisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.resultVisible').toggle();
-							$('.resultNotVisible').toggle();
-							$('.loadable').toggle();
-            },
-            error: function(response) {
-							$('.loadable').toggle();
-							alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    } else if (command=='examreview') {
-        jQuery.ajax ({
-            url: './view.php',
-            data: {'id': {{cmid}},'calledfromformexamreview': true, 'examreviewvisible': Number(value), 'sesskey': '{{sesskey}}' },
-            success: function(response) {
-							$('.examReviewVisible').toggle();
-							$('.examReviewNotVisible').toggle();
-							$('.loadable').toggle();
-						},
-            error: function(response) {
-							$('.loadable').toggle();
-              alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-            }
-        });
-    }
+        if (value == true) {
+            confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}"); // eslint-disable-line no-alert
+        } else {
+            confirmed = true;
+        }
+
+        if (confirmed) {
+            $.ajax({
+                url: './view.php',
+                data: {'id': '{{cmid}}', 'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}'},
+                success: function() {
+                    $('.loadable').toggle();
+                    location.reload();
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else {
+            $('.loadable').toggle();
+            location.reload();
+        }
+    });
 };
-
-ajaxsetcorrectioncompletion = function(value) {
-
-		$('.loadable').toggle();
-
-		var confirmed = false;
-
-		if (value == true) {
-			confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}");
-		} else {
-			confirmed = true;
-		}
-
-		if (confirmed) {
-			jQuery.ajax ({
-					url: './view.php',
-					data: {'id': {{cmid}},'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}' },
-					success: function(response) {
-								$('.loadable').toggle();
-								location.reload();
-							},
-					error: function(response) {
-								$('.loadable').toggle();
-								alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-					}
-		    });
-		} else {
-			$('.loadable').toggle();
-			location.reload();
-		}
-}
-
 {{/js}}
 
 <div class="container-fluid exammanagement_overview">
@@ -420,7 +425,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#examtime}}panel-info{{/examtime}}{{^examtime}}panel-danger{{/examtime}}">
 									<div class="panel-heading">
 										<span class="statebar float-right">
-											{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', jQuery(this).prop('checked')); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
+											{{^deleted}}{{#examtime}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="datetimevisible" value="1" onclick="ajaxtoggleInformation('datetime', this.checked); return true" {{#datetimevisible}}checked {{/datetimevisible}}><span class="exammanagement-slider round"></span></label>{{/examtime}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 											{{^examtime}}<a href="setexamdate.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examtime}}
 										</span>
@@ -450,7 +455,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<div class="row">
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', jQuery(this).prop('checked')); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
+													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('room', this.checked); return true"  {{#roomvisible}}checked {{/roomvisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}exam_rooms, mod_exammanagement{{/str}}</strong>
@@ -465,7 +470,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											</div>
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', jQuery(this).prop('checked')); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
+													{{^deleted}}{{#placesassigned}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('place', this.checked); return true"  {{#placevisible}}checked {{/placevisible}}><span class="exammanagement-slider round"></span></label>{{/placesassigned}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}places, mod_exammanagement{{/str}}</strong>
@@ -625,7 +630,7 @@ ajaxsetcorrectioncompletion = function(value) {
 										<div class="row">
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', jQuery(this).prop('checked')); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
+													{{^deleted}}{{#bonuscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="roomvisible" value="1" onclick="ajaxtoggleInformation('bonus', this.checked); return true"  {{#bonusvisible}}checked {{/bonusvisible}}><span class="exammanagement-slider round"></span></label>{{/bonuscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}bonus, mod_exammanagement{{/str}}</strong>
@@ -640,7 +645,7 @@ ajaxsetcorrectioncompletion = function(value) {
 											</div>
 											<div class="col-6">
 												<span class="float-right">
-													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', jQuery(this).prop('checked')); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+													{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="placevisible" value="1" onclick="ajaxtoggleInformation('result', this.checked); return true"  {{#resultvisible}}checked {{/resultvisible}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 													<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												</span>
 												<strong>{{#str}}result, mod_exammanagement{{/str}}</strong>
@@ -661,7 +666,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#resultscount}}panel-warning{{/resultscount}}{{/datadeletiondate}}{{^datadeletiondate}}{{^resultscount}}panel-danger{{/resultscount}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar float-right">
-											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
+											{{^deleted}}{{#resultscount}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(this.checked); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/resultscount}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
 											{{^datadeletiondate}}{{^resultscount}}<a href="inputresults.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/resultscount}}{{/datadeletiondate}}{{/deleted}}
 										</span>
@@ -836,7 +841,7 @@ ajaxsetcorrectioncompletion = function(value) {
 									<div class="panel {{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-info{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{^datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{^examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}{{#datadeletiondate}}{{#examreviewtime}}{{^examreviewroom}}panel-danger{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}">
 										<div class="panel-heading">
 											<span class="statebar float-right">
-												{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', jQuery(this).prop('checked')); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
+												{{^deleted}}{{#datadeletiondate}}{{#examreviewtime}}{{#examreviewroom}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_information, mod_exammanagement{{/str}}"><input type="checkbox" name="examreviewvisible" value="1" onclick="ajaxtoggleInformation('examreview', this.checked); return true" {{#examreviewvisible}}checked {{/examreviewvisible}}><span class="exammanagement-slider round"></span></label>{{/examreviewroom}}{{/examreviewtime}}{{/datadeletiondate}}
 												<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>{{/deleted}}
 												{{^datadeletiondate}}<a href="view.php?id={{cmid}}#aftercorrection"><span class="badge badge-danger" title="{{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_correctioncompleted_missing, mod_exammanagement{{/str}}</span></span></a>{{/datadeletiondate}}
 												{{#datadeletiondate}}{{^examreviewtime}}<a href="examreview.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_examreviewtime_missing, mod_exammanagement{{/str}}</span></span></a>{{/examreviewtime}}{{/datadeletiondate}}

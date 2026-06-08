@@ -96,7 +96,6 @@ $currentsection = '';
 $i = 0;
 
 foreach ($exammanagements as $exammanagement) {
-
     $context = context_module::instance($exammanagement->coursemodule);
 
     // Section.
@@ -107,7 +106,7 @@ foreach ($exammanagements as $exammanagement) {
         }
         if ($currentsection !== '') {
             $table->data[$i] = 'hr';
-            $i ++;
+            $i++;
         }
         $currentsection = $exammanagement->section;
     }
@@ -131,7 +130,7 @@ foreach ($exammanagements as $exammanagement) {
     // Description.
     $table->data[$i][] = format_module_intro('exammanagement', $exammanagement, $exammanagement->coursemodule);
 
-    $i ++;
+    $i++;
 }
 
 echo html_writer::table($table);

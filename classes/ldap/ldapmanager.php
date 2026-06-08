@@ -39,7 +39,6 @@ require_once($CFG->libdir . '/ldaplib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ldapmanager {
-
     /** @var string */
     protected $dn;
     /** @var string */
@@ -142,14 +141,14 @@ class ldapmanager {
         $config = get_config('auth_ldap');
 
         $connection = ldap_connect_moodle(
-         $config->host_url,
-         $config->ldap_version,
-         $config->user_type,
-         $config->bind_dn,
-         $config->bind_pw,
-         $config->opt_deref,
-         $debuginfo,
-         $config->start_tls
+            $config->host_url,
+            $config->ldap_version,
+            $config->user_type,
+            $config->bind_dn,
+            $config->bind_pw,
+            $config->opt_deref,
+            $debuginfo,
+            $config->start_tls
         );
         return $connection;
     }
@@ -196,12 +195,12 @@ class ldapmanager {
                 $connection = $this->connect_ldap();
 
                 if ($connection) {
-
                     // If some required config is missing display error message and end method.
-                    if (in_array('ldap_objectclass', $this->missingconfig) ||
+                    if (
+                        in_array('ldap_objectclass', $this->missingconfig) ||
                         in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
-                        in_array('ldap_field_map_username', $this->missingconfig)) {
-
+                        in_array('ldap_field_map_username', $this->missingconfig)
+                    ) {
                         $missingconfigstr = '';
 
                         if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig)) {
@@ -284,10 +283,11 @@ class ldapmanager {
                 $connection = $this->connect_ldap();
 
                 if ($connection) {
-
                     // If some required config is missing display error message and end method.
-                    if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
-                        in_array('ldap_field_map_username', $this->missingconfig)) {
+                    if (
+                        in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
+                        in_array('ldap_field_map_username', $this->missingconfig)
+                    ) {
                         $missingconfigstr = '';
 
                         if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig)) {
@@ -299,7 +299,7 @@ class ldapmanager {
                         }
 
                         notification::error(get_string('nomatrnravailable', 'mod_exammanagement') . ' ' .
-                            get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+                            get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
                         return false;
                     }
 
@@ -312,23 +312,28 @@ class ldapmanager {
                     if (isset($logins)) {
                         foreach ($logins as $login) {
                             if ($filterstringfirst) { // First participant.
-                                $filterstring = "(".$this->ldapfieldusername."=".$login.")";
+                                $filterstring = "(" . $this->ldapfieldusername . "=" . $login . ")";
                             } else { // All other participants.
-                                $filterstring = "(|".$filterstring."(".$this->ldapfieldusername."=".$login."))";
+                                $filterstring = "(|" . $filterstring . "(" . $this->ldapfieldusername . "=" . $login . "))";
                             }
                             $filterstringfirst = false;
                         }
 
                         $dn = $this->dn;
 
-                        $search = ldap_search( $connection, $dn, $filterstring,
-                            [$this->ldapfieldusername, $this->ldapfieldmatriculationnumber]);
+                        $search = ldap_search(
+                            $connection,
+                            $dn,
+                            $filterstring,
+                            [$this->ldapfieldusername, $this->ldapfieldmatriculationnumber]
+                        );
 
                         if ($search) {
                             // Get ldap attributes.
-                            for ($entryid = ldap_first_entry($connection, $search); $entryid != false; $entryid =
-                                ldap_next_entry($connection, $entryid)) {
-
+                            for (
+                                $entryid = ldap_first_entry($connection, $search); $entryid != false; $entryid =
+                                ldap_next_entry($connection, $entryid)
+                            ) {
                                 $login = @ldap_get_values($connection, $entryid, $this->ldapfieldusername);
                                 $matrnr = @ldap_get_values($connection, $entryid, $this->ldapfieldmatriculationnumber);
 
@@ -347,17 +352,17 @@ class ldapmanager {
                         }
                     }
                 } else {
-                    notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' .
+                    notification::error(get_string('nomatrnravailable', 'mod_exammanagement') . ' ' .
                         get_string('connectionfailed', 'mod_exammanagement'), 'error');
                     return false;
                 }
             } else {
-                notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' .
+                notification::error(get_string('nomatrnravailable', 'mod_exammanagement') . ' ' .
                     get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
                 return false;
             }
         } else {
-            notification::error(get_string('nomatrnravailable', 'mod_exammanagement'). ' ' .
+            notification::error(get_string('nomatrnravailable', 'mod_exammanagement') . ' ' .
                 get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
             return false;
         }
@@ -379,12 +384,12 @@ class ldapmanager {
                 $connection = $this->connect_ldap();
 
                 if ($connection) {
-
                     // If some required config is missing display error message and end method.
                     if ($attributes == 'usernames_and_matriculationnumbers') { // If only matrnr and username is needed.
-                        if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
-                            in_array('ldap_field_map_username', $this->missingconfig)) {
-
+                        if (
+                            in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
+                            in_array('ldap_field_map_username', $this->missingconfig)
+                        ) {
                             $missingconfigstr = '';
 
                             if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig)) {
@@ -396,18 +401,19 @@ class ldapmanager {
                             }
 
                             notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
-                                get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+                                get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
                             return false;
                         } else {
                             $attributes = [$this->ldapfieldusername, $this->ldapfieldmatriculationnumber];
                         }
                     } else if ($attributes == 'all_attributes') { // If matrnr, username, firstname, lastname and email is needed.
-                        if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
+                        if (
+                            in_array('ldap_field_map_matriculationnumber', $this->missingconfig) ||
                             in_array('ldap_field_map_username', $this->missingconfig) ||
                             in_array('ldap_field_map_firstname', $this->missingconfig) ||
                             in_array('ldap_field_map_lastname', $this->missingconfig) ||
-                            in_array('ldap_field_map_mail', $this->missingconfig)) {
-
+                            in_array('ldap_field_map_mail', $this->missingconfig)
+                        ) {
                             $missingconfigstr = '';
 
                             if (in_array('ldap_field_map_matriculationnumber', $this->missingconfig)) {
@@ -431,7 +437,7 @@ class ldapmanager {
                             }
 
                             notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
-                                get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr , 'error');
+                                get_string('ldapconfigmissing', 'mod_exammanagement') . $missingconfigstr, 'error');
                             return false;
                         } else {
                             $attributes = [
@@ -459,30 +465,31 @@ class ldapmanager {
                     if (isset($matrnrs)) {
                         foreach ($matrnrs as $matrnr) {
                             if ($filterstringfirst) { // First participant.
-                                          $filterstring = "(".$this->ldapfieldmatriculationnumber."=".$matrnr.")";
+                                          $filterstring = "(" . $this->ldapfieldmatriculationnumber . "=" . $matrnr . ")";
                             } else { // All other participants.
-                                $filterstring = "(|".$filterstring."(".$this->ldapfieldmatriculationnumber."=".$matrnr."))";
+                                $filterstring = "(|" . $filterstring . "(" .
+                                    $this->ldapfieldmatriculationnumber . "=" . $matrnr . "))";
                             }
                             $filterstringfirst = false;
                         }
 
                         $dn = $this->dn;
 
-                        $search = ldap_search( $connection, $dn, $filterstring, $attributes);
+                        $search = ldap_search($connection, $dn, $filterstring, $attributes);
 
                         if ($search) {
                             // Get ldap attributes.
-                            for ($entryid = ldap_first_entry($connection, $search); $entryid != false; $entryid =
-                                ldap_next_entry($connection, $entryid)) {
-
+                            for (
+                                $entryid = ldap_first_entry($connection, $search); $entryid != false; $entryid =
+                                ldap_next_entry($connection, $entryid)
+                            ) {
                                 foreach ($attributes as $attribute) {
-                                    $value = ldap_get_values( $connection, $entryid, $attribute );
+                                    $value = ldap_get_values($connection, $entryid, $attribute);
 
                                     switch ($attribute) {
-
                                         case $this->ldapfieldusername:
                                             $result['login'] = $value[0];
-                                                  break;
+                                            break;
                                         case $this->ldapfieldlastname:
                                             $result['lastname'] = $value[0];
                                             break;
@@ -519,20 +526,19 @@ class ldapmanager {
                         } else {
                             return false;
                         }
-
                     }
                 } else {
-                    notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' .
+                    notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
                         get_string('connectionfailed', 'mod_exammanagement'), 'error');
                     return false;
                 }
             } else {
-                notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' .
+                notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
                     get_string('ldapnotconfigured', 'mod_exammanagement'), 'error');
                 return false;
             }
         } else {
-            notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement'). ' ' .
+            notification::error(get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
                 get_string('ldapnotenabled', 'mod_exammanagement'), 'error');
             return false;
         }

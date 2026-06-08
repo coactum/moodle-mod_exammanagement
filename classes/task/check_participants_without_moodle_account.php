@@ -52,16 +52,13 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
 
         // Get all participants without moodle account.
         if ($DB->record_exists("exammanagement_participants", ['moodleuserid' => null])) {
-
             $nonemoodleparticipants = $DB->get_records("exammanagement_participants", ['moodleuserid' => null]);
 
             mtrace('Check ' . count($nonemoodleparticipants) . ' participants ...');
 
             foreach ($nonemoodleparticipants as $participant) {
-
                 // Check if some of the nonemoodle participants have a moodle account now.
                 if ($user = $DB->record_exists("user", ['username' => $participant->login])) {
-
                     // If this is the case set moodle id instead of username and email.
                     $participant->moodleuserid = $user->id;
                     $participant->login = null;
@@ -76,7 +73,6 @@ class check_participants_without_moodle_account extends \core\task\scheduled_tas
             // Restart cron after running the task because it made many DB updates and clear cron cache
             // (https://docs.moodle.org/dev/Task_API#Caches).
             \core\task\manager::clear_static_caches();
-
         }
     }
 }

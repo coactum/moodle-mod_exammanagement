@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
-require_once(__DIR__.'/../output/exammanagement_pagebar.php');
+require_once(__DIR__ . '/../output/exammanagement_pagebar.php');
 
 /**
  * The form for choosing exam rooms for an exammanagement.
@@ -39,7 +39,6 @@ require_once(__DIR__.'/../output/exammanagement_pagebar.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_chooserooms_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -62,8 +61,8 @@ class mod_exammanagement_chooserooms_form extends moodleform {
         $mform->setDefault('page', $this->_customdata['pagenr']);
 
         if ($this->_customdata['displayrooms']) {
-
-            $pagebar = new exammanagement_pagebar($this->_customdata['id'],
+            $pagebar = new exammanagement_pagebar(
+                $this->_customdata['id'],
                 new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $this->_customdata['id']]),
                 $this->_customdata['allrooms'],
                 count($this->_customdata['displayrooms']),
@@ -96,10 +95,10 @@ class mod_exammanagement_chooserooms_form extends moodleform {
             $mform->addElement('html', '<tbody>');
 
             foreach ($this->_customdata['displayrooms'] as $room) {
-
                 $isroomfilled = helper::getparticipantscount($this->_customdata['moduleinstance'], 'room', $room->roomid);
 
-                $similiarrooms = $DB->get_records('exammanagement_rooms', ['name' => $room->name]);;
+                $similiarrooms = $DB->get_records('exammanagement_rooms', ['name' => $room->name]);
+                ;
                 $disablename = explode('_', $room->roomid);
 
                 $mform->addElement('html', '<tr>');
@@ -107,7 +106,6 @@ class mod_exammanagement_chooserooms_form extends moodleform {
                 $mform->addElement('html', '<th scope="row" id="' . $i . '">' . $i . '</th>');
 
                 if ($this->_customdata['canimportdefaultrooms']) {
-
                     $mform->addElement('html', '<td>');
 
                     $mform->addElement('html', $room->roomid);
@@ -120,9 +118,8 @@ class mod_exammanagement_chooserooms_form extends moodleform {
 
                  // Code for preventing selection of multiple versions of the same room.
                 foreach ($similiarrooms as $similiarroomobj) {
-
                     if (strpos($similiarroomobj->roomid, $disablename[0]) !== false) {
-                        $mform->disabledif ('rooms[' . $room->roomid . ']', 'rooms[' . $similiarroomobj->roomid . ']', 'checked');
+                        $mform->disabledif('rooms[' . $room->roomid . ']', 'rooms[' . $similiarroomobj->roomid . ']', 'checked');
                     }
                 }
 
@@ -132,12 +129,10 @@ class mod_exammanagement_chooserooms_form extends moodleform {
 
                 $mform->addElement('html', '<td>');
                 if ($room->seatingplan) {
-
                     $svgstr = base64_decode($room->seatingplan);
 
                     $mform->addElement('html', '<a id="show" class="pointer"><i class="fa fa-2x fa-info-circle"></i></a>
                         <div class="exammanagement_rooms_svg collapse">' . $svgstr . '</div>');
-
                 } else {
                     $mform->addElement('html', get_string('no_seatingplan_available', 'mod_exammanagement'));
                 }
@@ -147,29 +142,35 @@ class mod_exammanagement_chooserooms_form extends moodleform {
                     if ($this->_customdata['canimportdefaultrooms']) {
                         $mform->addElement('html', get_string('default_room', 'mod_exammanagement'));
                         $mform->addElement('html', '</td><td class="exammanagement_brand_bordercolor_left">');
-                        $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/editdefaultroom.php',
-                            ['id' => $this->_customdata['id'], 'roomid' => $room->roomid]) . '" title="' .
+                        $mform->addElement('html', '<a href="' . new moodle_url(
+                            '/mod/exammanagement/editdefaultroom.php',
+                            ['id' => $this->_customdata['id'], 'roomid' => $room->roomid]
+                        ) . '" title="' .
                             get_string("change_room", "mod_exammanagement") . '"><i class="fa fa-2x fa-edit"></i></a>');
-                        $mform->addElement('html', ' <a href="' . new moodle_url('/mod/exammanagement/chooserooms.php',
-                            ['id' => $this->_customdata['id'], 'deletedefaultroomid' => $room->roomid, 'sesskey' => sesskey()]) .
+                        $mform->addElement('html', ' <a href="' . new moodle_url(
+                            '/mod/exammanagement/chooserooms.php',
+                            ['id' => $this->_customdata['id'], 'deletedefaultroomid' => $room->roomid, 'sesskey' => sesskey()]
+                        ) .
                             '" onClick="javascript:return confirm(\'' .
                             get_string("delete_defaultroom_confirm", "mod_exammanagement") . '\');" title="' .
                             get_string("delete_defaultroom_confirm", "mod_exammanagement") .
                             '"><i class="fa fa-2x fa-trash"></i></a>');
-
                     } else {
                         $mform->addElement('html', get_string('default_room', 'mod_exammanagement') .
                             '</td><td class="exammanagement_brand_bordercolor_left"></td>');
                     }
-
                 } else {
                     $mform->addElement('html', get_string('custom_room', 'mod_exammanagement'));
                     $mform->addElement('html', '</td><td class="exammanagement_brand_bordercolor_left">');
-                    $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/addcustomroom.php',
-                        ['id' => $this->_customdata['id'], 'roomid' => $room->roomid]) . '" title="' .
+                    $mform->addElement('html', '<a href="' . new moodle_url(
+                        '/mod/exammanagement/addcustomroom.php',
+                        ['id' => $this->_customdata['id'], 'roomid' => $room->roomid]
+                    ) . '" title="' .
                         get_string("change_room", "mod_exammanagement") . '"><i class="fa fa-2x fa-edit"></i></a>');
-                    $mform->addElement('html', ' <a href="' . new moodle_url('/mod/exammanagement/chooserooms.php',
-                        ['id' => $this->_customdata['id'], 'deletecustomroomid' => $room->roomid, 'sesskey' => sesskey()]) .
+                    $mform->addElement('html', ' <a href="' . new moodle_url(
+                        '/mod/exammanagement/chooserooms.php',
+                        ['id' => $this->_customdata['id'], 'deletecustomroomid' => $room->roomid, 'sesskey' => sesskey()]
+                    ) .
                         '" onClick="javascript:return confirm(\'' . get_string("delete_room_confirm", "mod_exammanagement") .
                         '\');" title="' . get_string("delete_room", "mod_exammanagement") .
                         '"><i class="fa fa-2x fa-trash"></i></a>');
@@ -178,7 +179,7 @@ class mod_exammanagement_chooserooms_form extends moodleform {
                 if ($this->_customdata['examrooms']) {
                     foreach ($this->_customdata['examrooms'] as $room2) {
                         if ($room->roomid == $room2->roomid) {
-                              $mform->setDefault('rooms['.$room->roomid.']', true);
+                              $mform->setDefault('rooms[' . $room->roomid . ']', true);
                         }
                     }
                 }
@@ -186,7 +187,6 @@ class mod_exammanagement_chooserooms_form extends moodleform {
                 $mform->addElement('html', '</tr>');
 
                 if ($isroomfilled) {
-
                     $colspan = 7;
 
                     if ($this->_customdata['canimportdefaultrooms']) {
@@ -203,14 +203,11 @@ class mod_exammanagement_chooserooms_form extends moodleform {
             $mform->addElement('html', '<tr></tr></tbody></table></div>');
 
             $this->add_action_buttons(true, get_string('choose_rooms', 'mod_exammanagement'));
-
         } else {
             $mform->addElement('html', '<p>' . get_string('no_rooms_found', 'mod_exammanagement') . '</p>');
-
         }
 
         $mform->disable_form_change_checker();
-
     }
 
     /**
@@ -226,23 +223,23 @@ class mod_exammanagement_chooserooms_form extends moodleform {
         global $DB;
 
         foreach ($data['rooms'] as $roomid => $checked) {
-
             if ($checked == "1") {
                 $roomname = explode('_', $roomid);
                 $similiarrooms = $DB->get_records('exammanagement_rooms', ['name' => $roomname[0]]);
 
                 foreach ($similiarrooms as $key => $similiarroomobj) {
-                    if (isset($data['rooms'][$similiarroomobj->roomid]) && is_string($data['rooms'][$similiarroomobj->roomid])
+                    if (
+                        isset($data['rooms'][$similiarroomobj->roomid]) && is_string($data['rooms'][$similiarroomobj->roomid])
                         && $data['rooms'][$similiarroomobj->roomid] !== "0"
-                        && is_string($data['rooms'][$roomid]) && $similiarroomobj->roomid !== $roomid) {
-
-                        $errors['rooms['.$roomid.']'] = get_string('err_roomsdoubleselected', 'mod_exammanagement');
+                        && is_string($data['rooms'][$roomid]) && $similiarroomobj->roomid !== $roomid
+                    ) {
+                        $errors['rooms[' . $roomid . ']'] = get_string('err_roomsdoubleselected', 'mod_exammanagement');
                     }
                 }
             }
 
             if (!preg_match("/^[a-zA-Z0-9_\-. ]+$/", $roomid)) {
-                $errors['rooms['.$roomid.']'] = get_string('err_invalidcheckboxid_rooms', 'mod_exammanagement');
+                $errors['rooms[' . $roomid . ']'] = get_string('err_invalidcheckboxid_rooms', 'mod_exammanagement');
             }
         }
 

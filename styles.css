@@ -324,8 +324,8 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     left: -10px;
 }
 
-.path-mod-exammanagement .exammanagement_table .custom-select {
-    max-width: 97% !important;
+.path-mod-exammanagement .exammanagement_table .custom-select.custom-select {
+    max-width: 97%;
 }
 
 /* exammanagement_overview.mustache - panels (copied from bootstrap) */

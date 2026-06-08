@@ -72,7 +72,6 @@ $moodlesystemname = helper::getmoodlesystemname();
 
 // Reset password.
 if ($canresetpassword && $resetpw == true && isset($moduleinstance->password)) {
-
     global $USER;
     $userfrom = $USER;
 
@@ -97,24 +96,44 @@ if ($canresetpassword && $resetpw == true && isset($moduleinstance->password)) {
     ]);
 
     foreach ($teachers as $user) {
-        helper::sendsinglemessage($moduleinstance, $id, $course, $moodlesystemname, $userfrom, $user->id, $mailsubject, $text,
-            'passwordresetmessage');
+        helper::sendsinglemessage(
+            $moduleinstance,
+            $id,
+            $course,
+            $moodlesystemname,
+            $userfrom,
+            $user->id,
+            $mailsubject,
+            $text,
+            'passwordresetmessage'
+        );
     }
 
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('password_reset_successfull', 'mod_exammanagement',
-        ['systemname' => $moodlesystemname]), null, 'success');
-
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string(
+            'password_reset_successfull',
+            'mod_exammanagement',
+            ['systemname' => $moodlesystemname]
+        ),
+        null,
+        'success'
+    );
 } else if ($resetpw == true) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('password_reset_failed', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('password_reset_failed', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Handle password reset request.
-if ($canrequestpasswordreset && $requestpwreset == true
+if (
+    $canrequestpasswordreset && $requestpwreset == true
     && get_config('mod_exammanagement', 'enablepasswordresetrequest') === '1'
-    && isset($moduleinstance->password)) {
-
+    && isset($moduleinstance->password)
+) {
     require_sesskey();
 
     // Send message to users with global manager role to request password reset.
@@ -145,17 +164,37 @@ if ($canrequestpasswordreset && $requestpwreset == true
     ]);
 
     foreach ($supportusers as $userto) {
-        $messageid = $helper::sendsinglemessage($moduleinstance, $id, $course, $moodlesystemname, $userfrom, $userto, $mailsubject,
-            $text, 'passwordresetrequest');
+        $messageid = $helper::sendsinglemessage(
+            $moduleinstance,
+            $id,
+            $course,
+            $moodlesystemname,
+            $userfrom,
+            $userto,
+            $mailsubject,
+            $text,
+            'passwordresetrequest'
+        );
     }
 
     if (isset($messageid)) {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('password_reset_request_successfull', 'mod_exammanagement',
-            ['systemname' => $moodlesystemname]), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string(
+                'password_reset_request_successfull',
+                'mod_exammanagement',
+                ['systemname' => $moodlesystemname]
+            ),
+            null,
+            'success'
+        );
     } else {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('password_reset_request_failed', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('password_reset_request_failed', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
 }
 
@@ -170,24 +209,23 @@ $mform = new mod_exammanagement_checkpassword_form(null, ['id' => $id, 'e' => $e
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
-
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
-
     $password = $fromform->password;
     $passwordhash = base64_decode($moduleinstance->password);
 
     if (password_verify($password, $passwordhash)) { // Check if password is correct.
-
         if (password_needs_rehash($passwordhash, PASSWORD_DEFAULT)) { // Check if passwords needs rehash because of new algorithm.
-
             // If so update saved password hash.
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $moduleinstance->password = $hash;
 
             $DB->update_record("exammanagement", $moduleinstance);
-
         }
 
         global $SESSION;
@@ -195,13 +233,20 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         // Remember login and redirect.
         $SESSION->loggedInExamOrganizationId = $id;
 
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else { // If password is not correct.
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('wrong_password', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('wrong_password', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -233,11 +278,10 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output heading.
     if (get_config('mod_exammanagement', 'enablehelptexts')) {
-
         if ($canresetpassword) {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('checkpasswordadmin', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('checkpasswordadmin'), 4);
         } else {
-            echo $OUTPUT->heading($title . ' ' . $OUTPUT->help_icon('checkpassword', 'mod_exammanagement', ''), 4);
+            echo $OUTPUT->heading($title . ' ' . helper::gethelpicon('checkpassword'), 4);
         }
     } else {
         echo $OUTPUT->heading($title, 4);
@@ -245,7 +289,8 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output buttons.
     if ($canresetpassword) {
-        $url = new moodle_url('/mod/exammanagement/checkpassword.php',
+        $url = new moodle_url(
+            '/mod/exammanagement/checkpassword.php',
             ['id' => $id, 'resetpw' => true]
         );
         echo '<a href="' . $url . '" role="button" class="btn btn-primary float-right" title="' .
@@ -253,7 +298,8 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             get_string("resetpasswordadmin", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
     } else if ($canrequestpasswordreset && get_config('mod_exammanagement', 'enablepasswordresetrequest') === '1') {
-        $url = new moodle_url('/mod/exammanagement/checkpassword.php',
+        $url = new moodle_url(
+            '/mod/exammanagement/checkpassword.php',
             ['id' => $id,
             'requestPWReset' => true,
             'sesskey' => sesskey()]
@@ -277,5 +323,4 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Finish the page.
     echo $OUTPUT->footer();
-
 }

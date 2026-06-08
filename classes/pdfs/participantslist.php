@@ -38,7 +38,6 @@ require_once($CFG->libdir . '/pdflib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class participantslist extends TCPDF {
-
     /**
      * Override the header of the base class.
      */
@@ -66,14 +65,13 @@ class participantslist extends TCPDF {
             $coursename = $course->shortname;
         }
 
-        if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
-            $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
+        if (file_exists(__DIR__ . '/../../data/logo_full.ai')) {
+            $this->ImageEps(__DIR__ . '/../../data/logo_full.ai', 25, 12, 70);
             $this->SetFont('freeserif', 'B', 22);
             $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
             $this->SetTextColor(255, 0, 0);
             $this->SetFont('freeserif', 'B', 10);
             $this->MultiCell(80, 3, "- " . get_string('internal_use', 'mod_exammanagement') . " -", 0, 'C', 0, 0, 110, 28);
-
         } else {
             $this->SetFont('freeserif', 'B', 22);
             $this->MultiCell(70, 10, get_string('participantslist', 'mod_exammanagement'), 0, 'C', 0, 0, 70, 17);

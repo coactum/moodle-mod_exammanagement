@@ -58,9 +58,10 @@ $context = context_module::instance($cm->id);
 require_capability('mod/exammanagement:importdefaultrooms', $context);
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
@@ -70,8 +71,12 @@ define("NEWLINE", "\r\n");
 $alldefaultrooms = helper::getrooms($moduleinstance, 'defaultrooms');
 
 if (!isset($alldefaultrooms) || $alldefaultrooms == false) {
-    redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-        get_string('no_default_rooms', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+        get_string('no_default_rooms', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 global $CFG;
@@ -83,7 +88,7 @@ foreach ($alldefaultrooms as $room) {
         json_encode($room->places) . SEPARATOR;
 
     if (isset($room->seatingplan) && $room->seatingplan !== '') {
-        $textfile .= str_replace(["\r\n" , "\r" , "\n"], '', base64_decode($room->seatingplan));
+        $textfile .= str_replace(["\r\n", "\r", "\n"], '', base64_decode($room->seatingplan));
     }
 
     if ($room !== end($alldefaultrooms)) {
@@ -100,5 +105,5 @@ $filename = preg_replace($umlaute, $replace, $filenameumlaute);
 // Return content as text file.
 header("Content-Type: application/force-download; charset=UTF-8");
 header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
-header("Content-Length: ". strlen($textfile));
+header("Content-Length: " . strlen($textfile));
 echo $textfile;

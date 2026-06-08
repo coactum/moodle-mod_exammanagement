@@ -24,7 +24,6 @@
 namespace mod_exammanagement\output;
 
 use mod_exammanagement\local\helper;
-
 use renderable;
 use renderer_base;
 use templatable;
