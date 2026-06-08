@@ -100,7 +100,7 @@ class mod_exammanagement_configuretasks_form extends moodleform {
         }
 
         // Add label.
-        $mform->addElement('html', '<div class="form-group row" style="margin-bottom:auto;"><div class="col-3">');
+        $mform->addElement('html', '<div class="mb-3 row" style="margin-bottom:auto;"><div class="col-3">');
 
         $mform->addElement('html', '<span><strong>' . get_string('task', 'mod_exammanagement') . '</strong></span>');
         $mform->addElement('html', '<br><span style="position: relative; top: 15px;">' .
@@ -108,7 +108,7 @@ class mod_exammanagement_configuretasks_form extends moodleform {
 
         // Add tasks to form.
         if (!$tasks) { // No tasks saved yet - add only one task field.
-            $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
+            $mform->addElement('html', '<div class="mb-3 row fitem tasksarea" style="margin-bottom:auto;">');
 
             $mform->addElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong>');
 
@@ -125,7 +125,7 @@ class mod_exammanagement_configuretasks_form extends moodleform {
 
             $totalpoints = 10;
         } else {  // Already tasks saved.
-            $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
+            $mform->addElement('html', '<div class="mb-3 row fitem tasksarea" style="margin-bottom:auto;">');
 
             foreach ($tasks as $nr => $points) {
                 $mform->addElement('html', '<span class="exammanagement_task_spacing">
@@ -149,7 +149,7 @@ class mod_exammanagement_configuretasks_form extends moodleform {
         $mform->addElement('html', '</div></div>');
 
         // Display total points.
-        $mform->addelement('html', '<div class="form-group row  fitem"><span class="col-md-3"><strong>' .
+        $mform->addelement('html', '<div class="mb-3 row  fitem"><span class="col-md-3"><strong>' .
             get_string('total', 'mod_exammanagement') . ':</strong></span><span class="col-md-9" id="totalpoints">' .
             helper::formatnumberfordisplay($totalpoints) . '</span></div>');
 

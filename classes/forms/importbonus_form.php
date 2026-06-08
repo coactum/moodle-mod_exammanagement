@@ -57,7 +57,7 @@ class mod_exammanagement_importbonus_form extends moodleform {
 
         if ($this->_customdata['bonuscount']) {
             $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert">
-                <button type="button" class="close" data-dismiss="alert">×</button>' .
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
                 get_string(
                     "bonus_already_entered",
                     "mod_exammanagement",

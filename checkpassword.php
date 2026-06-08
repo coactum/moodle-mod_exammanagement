@@ -293,7 +293,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             '/mod/exammanagement/checkpassword.php',
             ['id' => $id, 'resetpw' => true]
         );
-        echo '<a href="' . $url . '" role="button" class="btn btn-primary float-right" title="' .
+        echo '<a href="' . $url . '" role="button" class="btn btn-primary float-end" title="' .
             get_string("resetpasswordadmin", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
             get_string("resetpasswordadmin", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
@@ -304,7 +304,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             'requestPWReset' => true,
             'sesskey' => sesskey()]
         );
-        echo '<a href="' . $url . '" role="button" class="btn btn-secondary float-right" title="' .
+        echo '<a href="' . $url . '" role="button" class="btn btn-secondary float-end" title="' .
             get_string("requestpasswordreset", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
             get_string("requestpasswordreset", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';

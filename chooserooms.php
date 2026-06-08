@@ -267,7 +267,7 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
     }
 
     // Output buttons.
-    echo '<div class="float-right">';
+    echo '<div class="float-end">';
     if ($canimportdefaultrooms) {
         if ($allrooms) {
             echo '<a href="' . new moodle_url('/mod/exammanagement/exportdefaultrooms.php', ['id' => $id]) .
@@ -276,17 +276,17 @@ if ($mform->is_cancelled()) {  // Handle form cancel operation, if cancel button
                 '</span><i class="fa fa-download d-lg-none" aria-hidden="true"></i></a>';
         }
         echo '<a href="' . new moodle_url('/mod/exammanagement/importdefaultrooms.php', ['id' => $id]) .
-            '" class="btn btn-secondary ml-1" title="' . get_string("import_default_rooms", "mod_exammanagement") .
+            '" class="btn btn-secondary ms-1" title="' . get_string("import_default_rooms", "mod_exammanagement") .
             '"><span class="d-none d-lg-block">' . get_string("import_default_rooms", "mod_exammanagement") .
             '</span><i class="fa fa-file-text d-lg-none" aria-hidden="true"></i></a>';
 
         echo '<a href="' . new moodle_url('/mod/exammanagement/editdefaultroom.php', ['id' => $id]) .
-            '" class="btn btn-secondary ml-1" title="' . get_string("add_default_room", "mod_exammanagement") .
+            '" class="btn btn-secondary ms-1" title="' . get_string("add_default_room", "mod_exammanagement") .
             '"><span class="d-none d-lg-block">' . get_string("add_default_room", "mod_exammanagement") .
             '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>';
     } else {
         echo '<a href="' . new moodle_url('/mod/exammanagement/addcustomroom.php', ['id' => $id]) .
-            '" class="btn btn-secondary ml-1" title="' . get_string("add_custom_room", "mod_exammanagement") .
+            '" class="btn btn-secondary ms-1" title="' . get_string("add_custom_room", "mod_exammanagement") .
             '"><span class="d-none d-lg-block">' . get_string("add_custom_room", "mod_exammanagement") .
             '</span><i class="fa fa-plus d-lg-none" aria-hidden="true"></i></a>';
     }

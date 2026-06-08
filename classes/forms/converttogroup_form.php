@@ -143,10 +143,10 @@ class mod_exammanagement_converttogroup_form extends moodleform {
                     <span id="selectedGroupOneCount" class="exammanagement_pure">' .
                     count($moodleparticipants) . '</span>/' . count($moodleparticipants) . ' ' .
                     get_string("participants_convertable", "mod_exammanagement") . '</h3>');
-                $mform->addElement('html', '<span class="collapse.show new_minimize float-right" title="' .
+                $mform->addElement('html', '<span class="collapse.show new_minimize float-end" title="' .
                     get_string("minimize_phase", "mod_exammanagement") . '" aria-label="' .
                     get_string("minimize_phase", "mod_exammanagement") . '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
-                $mform->addElement('html', '<span class="collapse new_maximize float-right" title="' .
+                $mform->addElement('html', '<span class="collapse new_maximize float-end" title="' .
                     get_string("maximize_phase", "mod_exammanagement") . '" aria-label="' .
                     get_string("maximize_phase", "mod_exammanagement") .
                     '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');
@@ -244,11 +244,11 @@ class mod_exammanagement_converttogroup_form extends moodleform {
                         "mod_exammanagement",
                         ['systemname' => helper::getmoodlesystemname()]
                     ) . '</h3>');
-                $mform->addElement('html', '<span class="collapse.show existing_minimize float-right" title="' .
+                $mform->addElement('html', '<span class="collapse.show existing_minimize float-end" title="' .
                     get_string("minimize_phase", "mod_exammanagement") . '" aria-label="' .
                     get_string("minimize_phase", "mod_exammanagement") .
                     '"><i class="fa fa-minus" aria-hidden="true"></i></span>');
-                $mform->addElement('html', '<span class="collapse existing_maximize float-right" title="' .
+                $mform->addElement('html', '<span class="collapse existing_maximize float-end" title="' .
                     get_string("maximize_phase", "mod_exammanagement") . '" aria-label="' .
                     get_string("maximize_phase", "mod_exammanagement") .
                     '"><i class="fa fa-plus" aria-hidden="true"></i></span></a></div>');

@@ -315,7 +315,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     vertical-align: middle;
 }
 
-.path-mod-exammanagement .exammanagement_table_edit_tasks .form-group {
+.path-mod-exammanagement .exammanagement_table_edit_tasks .mb-3 {
     margin-bottom: 0;
 }
 
@@ -324,7 +324,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     left: -10px;
 }
 
-.path-mod-exammanagement .exammanagement_table .custom-select.custom-select {
+.path-mod-exammanagement .exammanagement_table .form-select.form-select {
     max-width: 97%;
 }
 

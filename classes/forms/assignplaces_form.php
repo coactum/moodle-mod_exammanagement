@@ -181,7 +181,7 @@ class mod_exammanagement_assignplaces_form extends moodleform {
                 $roommode = substr($assignmentmode, 1, 1);
                 $manuallassignment = substr($assignmentmode, 2, 2);
 
-                $mform->addElement('html', '<div class="form-group row  fitem">');
+                $mform->addElement('html', '<div class="mb-3 row  fitem">');
                 $mform->addElement('html', '<span class="col-md-3">' .
                     get_string('current_assignment_mode', 'mod_exammanagement') .
                     '</span><span class="col-md-9">');
@@ -274,7 +274,7 @@ class mod_exammanagement_assignplaces_form extends moodleform {
                  $mform->setDefault('keep_seat_assignment', true);
             } else if ($this->_customdata['assignedplacescount'] != 0 && helper::allplacesassigned($moduleinstance)) {
                 $mform->addElement('html', '<div class="alert alert-warning alert-block fade in " role="alert">
-                    <button type="button" class="close" data-dismiss="alert">×</button>' .
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
                     get_string("all_places_already_assigned", "mod_exammanagement") . '</div>');
             }
 

@@ -329,7 +329,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 '/mod/exammanagement/importbonus.php',
                 ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]
             ) .
-                '" role="button" class="btn btn-secondary float-right" title="' .
+                '" role="button" class="btn btn-secondary float-end" title="' .
                 get_string("revert_bonus", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
                 get_string("revert_bonus", "mod_exammanagement") .
                 '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
@@ -338,7 +338,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 '/mod/exammanagement/importbonus.php',
                 ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]
             ) .
-                '" role="button" class="btn btn-secondary float-right" title="' .
+                '" role="button" class="btn btn-secondary float-end" title="' .
                 get_string("revert_grades", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
                 get_string("revert_grades", "mod_exammanagement") .
                 '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';

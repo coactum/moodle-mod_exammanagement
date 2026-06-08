@@ -171,7 +171,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     if (isset($moduleinstance->password)) {
         $url = new moodle_url('/mod/exammanagement/configurepassword.php', ['id' => $id, 'resetpw' => true]);
 
-        echo '<div class="float-right"><a href="' . $url . '" role="button" class="btn btn-primary" title="' .
+        echo '<div class="float-end"><a href="' . $url . '" role="button" class="btn btn-primary" title="' .
             get_string("reset_password", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
             get_string("reset_password", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a></div>';

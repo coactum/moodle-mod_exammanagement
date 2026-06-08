@@ -76,7 +76,7 @@ class mod_exammanagement_inputresults_form extends moodleform {
                     '<strong><p>' .
                     get_string('participant', 'mod_exammanagement') . '</p></strong>',
                     $this->_customdata['firstname'] . ' ' . $this->_customdata['lastname'] .
-                    ' <a class="btn btn-secondary ml-5" href="' .
+                    ' <a class="btn btn-secondary ms-5" href="' .
                     new moodle_url('/mod/exammanagement/inputresults.php', ['id' => $this->_customdata['id']]) .
                     '" role="button" title="' . get_string("input_other_matrnr", "mod_exammanagement") .
                     '"><span class="d-none d-lg-block">' . get_string("input_other_matrnr", "mod_exammanagement") .
@@ -91,13 +91,13 @@ class mod_exammanagement_inputresults_form extends moodleform {
             $totalpoints = 0;
 
             // Add label.
-            $mform->addElement('html', '<div class="form-group row" style="margin-bottom:auto;"><div class="col-3">');
+            $mform->addElement('html', '<div class="mb-3 row" style="margin-bottom:auto;"><div class="col-3">');
 
             $mform->addElement('html', '<span><strong>' . get_string('task', 'mod_exammanagement') . '</strong></span>');
             $mform->addElement('html', '<br><span>' . get_string('max_points', 'mod_exammanagement') . '</span>');
             $mform->addElement('html', '<br><span style="position: relative; top: 15px;">' .
                 get_string('points', 'mod_exammanagement') . '</span></span></div><div class="col-9">');
-            $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
+            $mform->addElement('html', '<div class="mb-3 row fitem tasksarea" style="margin-bottom:auto;">');
 
             if ($tasks) {
                 foreach ($tasks as $tasknumber => $points) {
@@ -126,7 +126,7 @@ class mod_exammanagement_inputresults_form extends moodleform {
             $mform->hideif('tasks_array', 'matrval', 'eq', 1);
             $mform->hideif('points_array', 'matrval', 'eq', 1);
 
-            $mform->addelement('html', '<div class="form-group row fitem"><strong><span class="col-md-3">' .
+            $mform->addelement('html', '<div class="mb-3 row fitem"><strong><span class="col-md-3">' .
                 get_string('total', 'mod_exammanagement') . ':</span><span class="col-md-9" id="totalpoints">' .
                 helper::formatnumberfordisplay($totalpoints) . '</span></strong></div>');
 

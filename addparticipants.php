@@ -669,7 +669,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         echo '<p><a href="' . new moodle_url(
             '/mod/exammanagement/addparticipants.php',
             ['id' => $id, 'dtp' => true]
-        ) . '" role="button" class="btn btn-primary float-right" title="'
+        ) . '" role="button" class="btn btn-primary float-end" title="'
             . get_string("import_new_participants", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
             get_string("import_new_participants", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a></p><br><br>';
@@ -679,8 +679,9 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output alerts.
     if (helper::placesassigned($moduleinstance)) {
-        echo '<div class="alert alert-warning alert-block fade in " role="alert"><button type="button" class="close"
-            data-dismiss="alert">×</button>' . get_string("places_already_assigned_participants", "mod_exammanagement") . '</div>';
+        echo '<div class="alert alert-warning alert-block fade in " role="alert">' .
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
+            get_string("places_already_assigned_participants", "mod_exammanagement") . '</div>';
     }
 
     // Set default data.
