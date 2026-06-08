@@ -140,7 +140,6 @@ $string['configure_fileimport'] = 'Dateiimport konfigurieren';
 $string['configure_gradingscale'] = 'Notenschlüssel konfigurieren';
 $string['configure_gradingscale_text'] = 'Hier kann ein Notenschlüssel für die Prüfung konfiguriert werden.';
 $string['configure_gradingscale_totalpoints'] = 'Die maximal erreichbare Anzahl an Punkten ist:';
-$string['configure_password'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['configure_tasks'] = 'Aufgaben konfigurieren';
 $string['configure_tasks_text'] = 'Hier können die Anzahl und die Maximalpunktzahlen aller Prüfungsaufgaben festgelegt werden.';
 $string['configuregradingscale'] = 'Notenschlüssel konfigurieren';
@@ -150,6 +149,7 @@ Es muss für jeden Notenschritt einzeln angegeben werden, wie viele Punkte für 
 Die zu erreichende Punktzahl für einen Notenschritt kann zwischen 0 und der angegebenen Gesamtpunktezahl aller Prüfungsaufgaben liegen, sie muss allerdings höher sein als die für den Notenschritt davor benötigte Punktzahl. So müssen für das Erreichen einer 1,0 etwa mehr Punkte gefordert sein als für das Erreichen einer 1,3. Dazu ist auch die Nutzung von Kommazahlen als Punkte möglich. Erreicht ein Teilnehmender weniger Punkte als für die 4,0 notwendig sind bekommt er stattdessen die Note 5.<br><br>
 Der Notenschlüssel kann jederzeit (auch nach dem Eintragen der Prüfungsergebnisse) geändert werden, die Noten der Prüfungsteilnehmer/innen werden in diesem Fall sofort automatisch an den neuen Notenschlüssel angepasst.';
 $string['configurepassword'] = 'Passwort konfigurieren';
+$string['configurepassword_description'] = 'Hier kann ein Passwort für die Prüfungsorganisation gesetzt und geändert werden.';
 $string['configurepassword_help'] = 'Auf dieser Seite kann ein <strong>Passwort</strong> für die Prüfungsorganisation gesetzt oder geändert werden. Dieses muss ab dann von jeder oder jedem Lehrenden des {$a}-Kurses eingegeben werden, um auf die Inhalte der Prüfungsorganisation zugreifen zu können. <br><br>
 Um ein Passwort zu setzen muss dieses zunächst in das erste Feld eingegeben und dann im zweiten Feld bestätigt werden.<br><br>
 Denken Sie daran, ihr Passwort hinreichend sicher zu wählen und nehmen Sie vor allem kein Kennwort, dass Sie bereits anderswo als Passwort verwenden (vor allem nicht im Universitätskontext!).<br><br>

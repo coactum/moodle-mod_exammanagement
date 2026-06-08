@@ -178,7 +178,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     }
 
     // Output description.
-    echo '<p>' . get_string("configure_password", "mod_exammanagement") . '</p>';
+    echo '<p>' . get_string("configurepassword_description", "mod_exammanagement") . '</p>';
 
     // Set default data.
     $mform->set_data(['id' => $id]);

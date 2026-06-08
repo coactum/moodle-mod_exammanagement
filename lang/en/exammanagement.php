@@ -140,7 +140,6 @@ $string['configure_fileimport'] = 'Configure file import';
 $string['configure_gradingscale'] = 'Configure gradingscale';
 $string['configure_gradingscale_text'] = 'A gradingscale for the exam can be configured here.';
 $string['configure_gradingscale_totalpoints'] = 'Number of total points:';
-$string['configure_password'] = 'This page allows setting and modifying the password for the exam management';
 $string['configure_tasks'] = 'Configure tasks';
 $string['configure_tasks_text'] = 'Define the quantity of tasks and their maximum score.';
 $string['configuregradingscale'] = 'Configure gradingscale';
@@ -150,6 +149,7 @@ The minimum number of points required to reach a step must be specified individu
 The number of points to be achieved for a grade step can be between 0 and the stated total number of points for all exam tasks, but it must be higher than the number of points required for the previous grade step. For example, more points must be required for achieving the grade 1.0 than for achieving a 1.3. In addition, it is also possible to use desimals as points. If a participant achieves fewer points than which are necessary for 4.0, he or she will receive the grade 5 instead.<br><br>
 The gradingscale can be changed at any time (even after the exam results have been entered), in that case the participants grades are automatically adapted to the new gradingscale.';
 $string['configurepassword'] = 'Configure password';
+$string['configurepassword_description'] = 'This page allows setting and modifying the password for the exam management';
 $string['configurepassword_help'] = 'On this page, you can set or change the password for the exam management. This password has to be entered by every lecturer of the {$a} course in order to access the contents of the exam management.<br><br>
 To set a password, it must initially be entered in the first and then confirmed in the second field.<br><br>
 Remember to choose your password with sufficient security and especially do not use a password that you already use elsewhere (especially not in the context of university!).<br><br>
