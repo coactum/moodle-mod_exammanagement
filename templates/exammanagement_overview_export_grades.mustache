@@ -27,46 +27,44 @@
 }}
 
 {{#js}}
-
-toggleHelptextPanel = function() {
+window.toggleHelptextPanel = function() {
     require(['jquery'], function($) {
-		$('.helptextpanel').slideToggle("slow");
-		$('.helptextpanel-icon').toggle();
+        $('.helptextpanel').slideToggle('slow');
+        $('.helptextpanel-icon').toggle();
     });
 };
 
-ajaxsetcorrectioncompletion = function(value) {
+window.ajaxsetcorrectioncompletion = function(value) {
     require(['jquery'], function($) {
-		$('.loadable').toggle();
+        $('.loadable').toggle();
 
-		var confirmed = false;
+        var confirmed = false;
 
-		if (value == true) {
-			confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}");
-		} else {
-			confirmed = true;
-		}
+        if (value == true) {
+            confirmed = confirm("{{#str}}js_confirm_correction_completion, mod_exammanagement{{/str}}"); // eslint-disable-line no-alert
+        } else {
+            confirmed = true;
+        }
 
-		if (confirmed) {
-			$.ajax ({
-					url: './view.php',
-					data: {'id': '{{cmid}}', 'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}'},
-					success: function(response) {
-								$('.loadable').toggle();
-								location.href = 'view.php?id='+'{{cmid}}';
-							},
-					error: function(response) {
-								$('.loadable').toggle();
-								alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}')
-					}
-		    });
-		} else {
-			$('.loadable').toggle();
-			location.href = 'view.php?id='+'{{cmid}}';
-		}
+        if (confirmed) {
+            $.ajax({
+                url: './view.php',
+                data: { 'id': '{{cmid}}', 'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}' },
+                success: function() {
+                    $('.loadable').toggle();
+                    location.href = 'view.php?id=' + '{{cmid}}';
+                },
+                error: function() {
+                    $('.loadable').toggle();
+                    alert('{{#str}}err_js_internal_error, mod_exammanagement{{/str}}'); // eslint-disable-line no-alert
+                }
+            });
+        } else {
+            $('.loadable').toggle();
+            location.href = 'view.php?id=' + '{{cmid}}';
+        }
     });
-}
-
+};
 {{/js}}
 <div class="container-fluid exammanagement_overview">
 	<div class="row">
