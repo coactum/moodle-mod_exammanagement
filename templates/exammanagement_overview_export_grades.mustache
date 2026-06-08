@@ -29,12 +29,14 @@
 {{#js}}
 
 toggleHelptextPanel = function() {
+    require(['jquery'], function($) {
 		$('.helptextpanel').slideToggle("slow");
 		$('.helptextpanel-icon').toggle();
+    });
 };
 
 ajaxsetcorrectioncompletion = function(value) {
-
+    require(['jquery'], function($) {
 		$('.loadable').toggle();
 
 		var confirmed = false;
@@ -46,7 +48,7 @@ ajaxsetcorrectioncompletion = function(value) {
 		}
 
 		if (confirmed) {
-			jQuery.ajax ({
+			$.ajax ({
 					url: './view.php',
 					data: {'id': {{cmid}}, 'calledfromformcorrection': true, 'correctioncompleted': Number(value), 'sesskey': '{{sesskey}}'},
 					success: function(response) {
@@ -62,6 +64,7 @@ ajaxsetcorrectioncompletion = function(value) {
 			$('.loadable').toggle();
 			location.href = 'view.php?id='+{{cmid}};
 		}
+    });
 }
 
 {{/js}}
@@ -175,7 +178,7 @@ ajaxsetcorrectioncompletion = function(value) {
 								<div class="panel {{#datadeletiondate}}panel-success{{/datadeletiondate}}{{^datadeletiondate}}{{#bonuspointsentered}}panel-warning{{/bonuspointsentered}}{{/datadeletiondate}}{{^datadeletiondate}}{{^bonuspointsentered}}panel-danger{{/bonuspointsentered}}{{/datadeletiondate}}">
 									<div class="panel-heading">
 										<span class="statebar float-right">
-											{{^deleted}}{{#bonuspointsentered}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(jQuery(this).prop('checked')); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/bonuspointsentered}}
+											{{^deleted}}{{#bonuspointsentered}}<label class="exammanagement-switch loadable collapse.show" title="{{#str}}toggle_grading_completion, mod_exammanagement{{/str}}"><input type="checkbox" name="correctioncompleted" value="1" onclick="ajaxsetcorrectioncompletion(require(['jquery'], function($) { $(this).prop('checked')})); return true" {{#datadeletiondate}}checked {{/datadeletiondate}}><span class="exammanagement-slider round"></span></label>{{/bonuspointsentered}}
 											<i class="fa fa-spinner fa-pulse fa-fw loadable collapse" title="{{#str}}state_loading, mod_exammanagement{{/str}}"></i><span class="sr-only">{{#str}}state_loading, mod_exammanagement{{/str}}</span>
 											{{^datadeletiondate}}{{^bonuspointsentered}}<a href="importbonus.php?id={{cmid}}"><span class="badge badge-danger"  title="{{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}"><i class="fa fa-times"></i><span class="d-none d-md-inline"> {{#str}}state_notpossible_results_missing, mod_exammanagement{{/str}}</span></span></a>{{/bonuspointsentered}}{{/datadeletiondate}}{{/deleted}}
 										</span>
