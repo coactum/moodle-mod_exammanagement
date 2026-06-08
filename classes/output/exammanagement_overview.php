@@ -36,7 +36,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class exammanagement_overview implements renderable, templatable {
-
     /** @var int */
     protected $cmid;
     /** @var object */
@@ -134,11 +133,39 @@ class exammanagement_overview implements renderable, templatable {
      * @param bool $deleted If the data is already deleted
      * @param bool $ldapavailable If ldap is available
      */
-    public function __construct($cmid, $phases, $helptexticon, $additionalressourceslink, $examtime, $taskcount,
-        $tasktotalpoints, $textfield, $participants, $rooms, $roomnames, $totalseats, $placesassigned, $allplacesassigned,
-        $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount, $bonuspointsentered, $bonusvisible,
-        $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime, $examreviewroom, $examreviewvisible,
-        $resultsenteredafterexamreview, $deleted, $ldapavailable) {
+    public function __construct(
+        $cmid,
+        $phases,
+        $helptexticon,
+        $additionalressourceslink,
+        $examtime,
+        $taskcount,
+        $tasktotalpoints,
+        $textfield,
+        $participants,
+        $rooms,
+        $roomnames,
+        $totalseats,
+        $placesassigned,
+        $allplacesassigned,
+        $assignedplacescount,
+        $datetimevisible,
+        $roomvisible,
+        $placevisible,
+        $bonuscount,
+        $bonuspointsentered,
+        $bonusvisible,
+        $gradingscale,
+        $resultscount,
+        $resultvisible,
+        $datadeletiondate,
+        $examreviewtime,
+        $examreviewroom,
+        $examreviewvisible,
+        $resultsenteredafterexamreview,
+        $deleted,
+        $ldapavailable
+    ) {
 
         $this->cmid = $cmid;
         $this->phases = $phases;

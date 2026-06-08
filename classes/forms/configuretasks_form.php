@@ -37,7 +37,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_configuretasks_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -61,12 +60,21 @@ class mod_exammanagement_configuretasks_form extends moodleform {
 
         // Group for add and remove tasks buttons.
         $tasksbuttonarray = [];
-        array_push($tasksbuttonarray,
-            $mform->createElement('button', 'add_task', '<i class="fa fa-plus" aria-hidden="true"></i>'));
-        array_push($tasksbuttonarray,
-            $mform->createElement('button', 'remove_task', '<i class="fa fa-minus" aria-hidden="true"></i>'));
-        $mform->addGroup($tasksbuttonarray,
-            'tasks_buttonarray', get_string('add_remove_tasks', 'mod_exammanagement'), [' '], false);
+        array_push(
+            $tasksbuttonarray,
+            $mform->createElement('button', 'add_task', '<i class="fa fa-plus" aria-hidden="true"></i>')
+        );
+        array_push(
+            $tasksbuttonarray,
+            $mform->createElement('button', 'remove_task', '<i class="fa fa-minus" aria-hidden="true"></i>')
+        );
+        $mform->addGroup(
+            $tasksbuttonarray,
+            'tasks_buttonarray',
+            get_string('add_remove_tasks', 'mod_exammanagement'),
+            [' '],
+            false
+        );
 
         // Create list of tasks.
         $tasks = helper::gettasks($this->_customdata['moduleinstance']);
@@ -78,7 +86,6 @@ class mod_exammanagement_configuretasks_form extends moodleform {
         if ($temptaskcount > 0 && $tasks && $temptaskcount < count($tasks)) {
             $tasks = array_slice($tasks, 0, $temptaskcount, true); // Remove deleted tasks.
         } else if ($temptaskcount > 0) {
-
             $temptaskpoints = 10;
 
             if (!$tasks) {
@@ -105,7 +112,7 @@ class mod_exammanagement_configuretasks_form extends moodleform {
 
             $mform->addElement('html', '<span class="exammanagement_task_spacing"><strong>1</strong>');
 
-            $mform->addElement('text', 'task[1]', '',  []);
+            $mform->addElement('text', 'task[1]', '', []);
             $mform->setType('task[1]', PARAM_FLOAT);
             $mform->setDefault('task[1]', 10);
 
@@ -117,7 +124,6 @@ class mod_exammanagement_configuretasks_form extends moodleform {
             $mform->setType('newtaskcount', PARAM_INT);
 
             $totalpoints = 10;
-
         } else {  // Already tasks saved.
             $mform->addElement('html', '<div class="form-group row fitem tasksarea" style="margin-bottom:auto;">');
 
@@ -168,11 +174,11 @@ class mod_exammanagement_configuretasks_form extends moodleform {
             $isnumeric = is_numeric($taskval);
 
             if (!$isnumeric) {
-                $errors['task['.$key.']'] = get_string('err_novalidinteger', 'mod_exammanagement');
+                $errors['task[' . $key . ']'] = get_string('err_novalidinteger', 'mod_exammanagement');
             } else if ($taskval <= 0) {
-                $errors['task['.$key.']'] = get_string('err_underzero', 'mod_exammanagement');
+                $errors['task[' . $key . ']'] = get_string('err_underzero', 'mod_exammanagement');
             } else if ($taskval >= 100) {
-                $errors['task['.$key.']'] = get_string('err_toohigh', 'mod_exammanagement');
+                $errors['task[' . $key . ']'] = get_string('err_toohigh', 'mod_exammanagement');
             }
         }
 

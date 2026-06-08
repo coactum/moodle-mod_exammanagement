@@ -60,11 +60,8 @@ class delete_old_exam_data extends \core\task\scheduled_task {
         $select = "datadeletion IS NOT NULL AND datadeletion >= " . $now;
 
         if ($DB->record_exists_select('exammanagement', $select)) {
-
             if ($rs = $DB->get_recordset_select("exammanagement", $select)) {
-
                 if ($rs->valid()) {
-
                     $moodlesystemname = helper::getmoodlesystemname();
 
                     foreach ($rs as $id => $record) {
@@ -100,10 +97,9 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                             $teachers = get_role_users($role->id, $coursecontext);
 
                             // Set mail properties and contents.
-                            list($course, $cm) = get_course_and_cm_from_instance($record->id, 'exammanagement');
+                            [$course, $cm] = get_course_and_cm_from_instance($record->id, 'exammanagement');
 
                             switch ($warningstep) {
-
                                 case 1:
                                     $warningmailsubject = get_string("warningmailsubjectone", "mod_exammanagement");
                                     break;
@@ -115,32 +111,47 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                                     break;
                             }
 
-                            $warningmailcontent = get_string("warningmailcontent", "mod_exammanagement" ,
+                            $warningmailcontent = get_string(
+                                "warningmailcontent",
+                                "mod_exammanagement",
                                 ['systemname' => $moodlesystemname,
                                 'examname' => $record->name,
                                 'coursename' => $course->fullname,
-                                'datadeletiondate' => helper::getdatadeletiondate($record)]);
+                                'datadeletiondate' => helper::getdatadeletiondate($record)]
+                            );
 
-                            $warningmailcontent .= '<br><br>'.get_string("warningmailcontentenglish", "mod_exammanagement" ,
+                            $warningmailcontent .= '<br><br>' . get_string(
+                                "warningmailcontentenglish",
+                                "mod_exammanagement",
                                 ['systemname' => $moodlesystemname,
                                 'examname' => $record->name,
                                 'coursename' => $course->fullname,
-                                'datadeletiondate' => helper::getdatadeletiondate($record)]);
+                                'datadeletiondate' => helper::getdatadeletiondate($record)]
+                            );
 
                             $warningmailids = [];
 
                             // Send mail and save send warning mail id.
                             foreach ($teachers as $user) {
-                                $warningmailid = helper::sendsinglemessage($record, $cm->id, $course, $moodlesystemname,
-                                    core_user::get_noreply_user(), $user->id, $warningmailsubject, $warningmailcontent,
-                                    'deletionwarningmessage', true);
+                                $warningmailid = helper::sendsinglemessage(
+                                    $record,
+                                    $cm->id,
+                                    $course,
+                                    $moodlesystemname,
+                                    core_user::get_noreply_user(),
+                                    $user->id,
+                                    $warningmailsubject,
+                                    $warningmailcontent,
+                                    'deletionwarningmessage',
+                                    true
+                                );
 
                                 array_push($warningmailids, $warningmailid);
                             }
 
                             array_push($deletionwarningmailids, $warningmailids);
 
-                            mtrace('Sending ' . count($warningmailids) .' warning mails for step ' . $warningstep .
+                            mtrace('Sending ' . count($warningmailids) . ' warning mails for step ' . $warningstep .
                                 ' to teachers of exammanagement id ' . $record->id);
 
                             // Update module instance.
@@ -164,19 +175,20 @@ class delete_old_exam_data extends \core\task\scheduled_task {
         $select = "datadeleted IS NULL AND datadeletion IS NOT NULL AND datadeletion <= " . $now;
 
         if ($DB->record_exists_select('exammanagement', $select)) {
-
             $count = $DB->count_records_select('exammanagement', $select);
 
-            mtrace('Starting deletion of old exam data for '. $count . ' exammanagements ...');
+            mtrace('Starting deletion of old exam data for ' . $count . ' exammanagements ...');
 
             if ($rs = $DB->get_recordset_select("exammanagement", $select)) {
-
                 if ($rs->valid()) {
-
                     foreach ($rs as $id => $record) {
-
-                        $cmid = get_coursemodule_from_instance('exammanagement', $record->id,
-                            $record->course, false, MUST_EXIST)->id;
+                        $cmid = get_coursemodule_from_instance(
+                            'exammanagement',
+                            $record->id,
+                            $record->course,
+                            false,
+                            MUST_EXIST
+                        )->id;
 
                         // Set deleted property of instance true (for display purposes).
                         $record->datadeleted = 1;
@@ -191,16 +203,17 @@ class delete_old_exam_data extends \core\task\scheduled_task {
                         if ($DB->record_exists_select('exammanagement_participants', $select)) {
                             $count = $DB->count_records_select('exammanagement_participants', $select);
 
-                            mtrace('Deleting ' . $count .' participants for exammanagement id ' .
+                            mtrace('Deleting ' . $count . ' participants for exammanagement id ' .
                                 $record->id);
 
-                            $DB->delete_records('exammanagement_participants',
-                                ['exammanagement' => $record->id]);
+                            $DB->delete_records(
+                                'exammanagement_participants',
+                                ['exammanagement' => $record->id]
+                            );
                         }
                     }
 
                     $rs->close();
-
                 }
             }
         }

@@ -63,9 +63,10 @@ global $OUTPUT, $PAGE;
 $courseparticipantsids = helper::getcourseparticipantsids($id);
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
@@ -74,11 +75,19 @@ $nonemoodleparticipantscount = helper::getparticipantscount($moduleinstance, 'no
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance) || (!$moodleparticipantscount && !$nonemoodleparticipantscount)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 $moodlesystemname = helper::getmoodlesystemname();
@@ -89,8 +98,12 @@ $mform = new mod_exammanagement_sendgroupmessage_form(null, ['id' => $id, 'e' =>
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     $mailsubject = get_string('mailsubject', 'mod_exammanagement', [
         'systemname' => $moodlesystemname,
@@ -106,20 +119,35 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $userfrom = $USER;
 
         foreach ($participants as $key => $participant) {
-
             $userto = helper::getmoodleuser($participant->moodleuserid);
 
-            helper::sendsinglemessage($moduleinstance, $id, $course, $moodlesystemname, $userfrom, $userto, $mailsubject, $mailtext,
-                'groupmessage');
+            helper::sendsinglemessage(
+                $moduleinstance,
+                $id,
+                $course,
+                $moodlesystemname,
+                $userfrom,
+                $userto,
+                $mailsubject,
+                $mailtext,
+                'groupmessage'
+            );
         }
 
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else {
-        redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-            get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+            get_string('alteration_failed', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -159,8 +187,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output description.
     if ($moodleparticipantscount) {
-        echo '<p>' . get_string('groupmessages_text', 'mod_exammanagement',
-            ['systemname' => $moodlesystemname, 'participantscount' => $moodleparticipantscount]) . '</p>';
+        echo '<p>' . get_string(
+            'groupmessages_text',
+            'mod_exammanagement',
+            ['systemname' => $moodlesystemname, 'participantscount' => $moodleparticipantscount]
+        ) . '</p>';
 
         // Output alerts.
         if ($nonemoodleparticipantscount) {
@@ -193,7 +224,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
         // Display form.
         $mform->display();
-
     } else if ($nonemoodleparticipantscount) {
         $mailaddresses = helper::getnonemoodleparticipantsemailadresses($moduleinstance);
 
@@ -209,10 +239,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         echo '" role="button" class="btn btn-primary" title="' . get_string('send_manual_message', 'mod_exammanagement') .
             '">' . get_string('send_manual_message', 'mod_exammanagement') . '</a>';
 
-        echo '<span class="col-sm-5"></span><a href="' . new moodle_url('/mod/exammanagement/view.php',
-            ['id' => $id]) . '" class="btn btn-primary">' . get_string("cancel", "mod_exammanagement") .
+        echo '<span class="col-sm-5"></span><a href="' . new moodle_url(
+            '/mod/exammanagement/view.php',
+            ['id' => $id]
+        ) . '" class="btn btn-primary">' . get_string("cancel", "mod_exammanagement") .
             '</a>';
-
     }
 
     // Finish the page.

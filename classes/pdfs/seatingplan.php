@@ -38,7 +38,6 @@ require_once($CFG->libdir . '/pdflib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class seatingplan extends TCPDF {
-
     /**
      * Override the header of the base class.
      */
@@ -66,8 +65,8 @@ class seatingplan extends TCPDF {
             $coursename = $course->shortname;
         }
 
-        if (file_exists(__DIR__.'/../../data/logo_full.ai')) {
-            $this->ImageEps(__DIR__.'/../../data/logo_full.ai', 25, 12, 70);
+        if (file_exists(__DIR__ . '/../../data/logo_full.ai')) {
+            $this->ImageEps(__DIR__ . '/../../data/logo_full.ai', 25, 12, 70);
             $this->SetFont('helvetica', 'B', 22);
             $this->MultiCell(70, 10, get_string('seatingplan', 'mod_exammanagement'), 0, 'C', 0, 0, 115, 17);
         } else {

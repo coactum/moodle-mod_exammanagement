@@ -64,23 +64,32 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $CFG;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
-define( "SEPARATOR", chr(9) ); // Tabulator.
-define( "NEWLINE", "\r\n" );
+define("SEPARATOR", chr(9)); // Tabulator.
+define("NEWLINE", "\r\n");
 
 if (!isset($moduleinstance->misc)) {
     $mode = 'normal';
@@ -94,14 +103,23 @@ if (!isset($moduleinstance->misc)) {
     }
 }
 
-if (($mode === 'normal' && !helper::getenteredresultscount($moduleinstance)) ||
-    ($mode === 'export_grades' && !helper::getenteredbonuscount($moduleinstance, 'points'))) {
-
-    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-        get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
+if (
+    ($mode === 'normal' && !helper::getenteredresultscount($moduleinstance)) ||
+    ($mode === 'export_grades' && !helper::getenteredbonuscount($moduleinstance, 'points'))
+) {
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('no_results_entered', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getdatadeletiondate($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-        get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('correction_not_completed', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 $gradingscale = json_decode($moduleinstance->gradingscale ?? '');
@@ -114,7 +132,7 @@ $resultfilesziparchive = false;
 
 // If no headers of import files are saved because all participants are imported from course.
 
-if ( !$textfileheaders ) {
+if (!$textfileheaders) {
     $examdate = helper::gethrexamtime($moduleinstance);
     $header1 = '"' . $coursename . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
     $header2 = '"Prüfungsnummer"' . SEPARATOR . '"Matrikelnummer"' . SEPARATOR . '"Vorname"' . SEPARATOR . '"Mittelname"' .
@@ -131,18 +149,20 @@ if ( !$textfileheaders ) {
     $examnumber = '""';
 
     foreach ($participants as $participant) { // Construct lines for each participant.
-
         if ($mode === 'export_grades') {
             if ($gradingscale) {
                 $resultwithnonus = helper::formatnumberfordisplay(
-                        helper::calculateresultgrade($moduleinstance, $participant->bonuspoints));
+                    helper::calculateresultgrade($moduleinstance, $participant->bonuspoints)
+                );
             } else {
                 $resultwithnonus = helper::formatnumberfordisplay($participant->bonuspoints);
             }
         } else {
-            $resultwithnonus = helper::formatnumberfordisplay(helper::calculateresultgrade($moduleinstance,
-                helper::calculatepoints($participant, true), $participant->bonussteps));
-
+            $resultwithnonus = helper::formatnumberfordisplay(helper::calculateresultgrade(
+                $moduleinstance,
+                helper::calculatepoints($participant, true),
+                $participant->bonussteps
+            ));
         }
 
         $resultwithnonus = '"' . $resultwithnonus . '"';
@@ -159,13 +179,11 @@ if ( !$textfileheaders ) {
     $filename = preg_replace($umlaute, $replace, $filenameumlaute);
 
     // Return content as file.
-    header( "Content-Type: application/force-download; charset=UTF-8" );
-    header( "Content-Disposition: attachment; filename=\"" . $filename . "\"" );
-    header( "Content-Length: ". strlen( $textfile ) );
+    header("Content-Type: application/force-download; charset=UTF-8");
+    header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+    header("Content-Length: " . strlen($textfile));
     echo $textfile;
-
 } else {
-
     // Generate filename without umlaute.
     $umlaute = ["/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/"];
     $replace = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"];
@@ -178,7 +196,6 @@ if ( !$textfileheaders ) {
 
     // If there are other participants that are read in from file.
     if (count($textfileheaders) > 1 || (count($textfileheaders) == 1 && $participantsfromcourse)) {
-
         // Prepare zip file.
         $tempfile = tempnam(sys_get_temp_dir(), "examresults.zip");
         $resultfilesziparchive = new ZipArchive();
@@ -188,7 +205,6 @@ if ( !$textfileheaders ) {
     $filecount = 0;
 
     if ($participantsfromcourse && $afterexamreview == false) { // Construct lines for participants from course (header id = 0).
-
         $examdate = helper::gethrexamtime($moduleinstance);
 
         $header1 = '"' . $coursename . '"' . SEPARATOR . '"Prüfung"' . SEPARATOR . '""' . SEPARATOR . '"' . $examdate . '"';
@@ -199,18 +215,22 @@ if ( !$textfileheaders ) {
         $examnumber = '""';
 
         foreach ($participantsfromcourse as $participant) {
-
             if ($mode === 'export_grades') {
                 if ($gradingscale) {
                     $resultwithnonus = helper::formatnumberfordisplay(
-                        helper::calculateresultgrade($moduleinstance, $participant->bonuspoints));
+                        helper::calculateresultgrade($moduleinstance, $participant->bonuspoints)
+                    );
                 } else {
                     $resultwithnonus = helper::formatnumberfordisplay($participant->bonuspoints);
                 }
             } else {
                 $resultwithnonus = helper::formatnumberfordisplay(
-                    helper::calculateresultgrade($moduleinstance, helper::calculatepoints($participant, true),
-                        $participant->bonussteps));
+                    helper::calculateresultgrade(
+                        $moduleinstance,
+                        helper::calculatepoints($participant, true),
+                        $participant->bonussteps
+                    )
+                );
             }
 
             $resultwithnonus = '"' . $resultwithnonus . '"';
@@ -222,15 +242,15 @@ if ( !$textfileheaders ) {
         $filecount += 1;
 
         // If there are more files coming: add content to archive (else it will be send to browser at the end of the code).
-        if ($textfile && (count($textfileheaders) > 1
-            || (count($textfileheaders) == 1 && $participantsfromcourse)) && $resultfilesziparchive) {
-
+        if (
+            $textfile && (count($textfileheaders) > 1
+            || (count($textfileheaders) == 1 && $participantsfromcourse)) && $resultfilesziparchive
+        ) {
                 $resultfilesziparchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
         }
     }
 
     foreach ($textfileheaders as $key => $textfileheader) { // Iterate over all headers and create new file for archive.
-
         if ($afterexamreview == false) {
             $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'header', 'id' => $key + 1], ['matrnr']);
         } else {
@@ -240,24 +260,27 @@ if ( !$textfileheaders ) {
         $textfile = false;
 
         if ($participants) {
-
             $textfile = $textfileheader . NEWLINE;
 
             $examnumber = '""';
 
             foreach ($participants as $participant) {
-
                 if ($mode === 'export_grades') {
                     if ($gradingscale) {
                         $resultwithnonus = helper::formatnumberfordisplay(
-                            helper::calculateresultgrade($moduleinstance, $participant->bonuspoints));
+                            helper::calculateresultgrade($moduleinstance, $participant->bonuspoints)
+                        );
                     } else {
                         $resultwithnonus = helper::formatnumberfordisplay($participant->bonuspoints);
                     }
                 } else {
                     $resultwithnonus = helper::formatnumberfordisplay(
-                        helper::calculateresultgrade($moduleinstance, helper::calculatepoints($participant, true),
-                            $participant->bonussteps));
+                        helper::calculateresultgrade(
+                            $moduleinstance,
+                            helper::calculatepoints($participant, true),
+                            $participant->bonussteps
+                        )
+                    );
                 }
 
                 $resultwithnonus = '"' . $resultwithnonus . '"';
@@ -270,9 +293,10 @@ if ( !$textfileheaders ) {
 
         $filecount += 1;
 
-        if ($textfile && (count($textfileheaders) > 1
-            || (count($textfileheaders) == 1 && $participantsfromcourse)) && $resultfilesziparchive) {
-
+        if (
+            $textfile && (count($textfileheaders) > 1
+            || (count($textfileheaders) == 1 && $participantsfromcourse)) && $resultfilesziparchive
+        ) {
             // Add content.
             $resultfilesziparchive->addFromString($filename . '_' . $filecount . '.txt', $textfile);
         }
@@ -282,25 +306,30 @@ if ( !$textfileheaders ) {
         }
     }
 
-    if ($textfile && (count($textfileheaders) == 1 || (count($textfileheaders) == 0 && $participantsfromcourse)
-        || $afterexamreview == true) && $resultfilesziparchive == false) {
-
+    if (
+        $textfile && (count($textfileheaders) == 1 || (count($textfileheaders) == 0 && $participantsfromcourse)
+        || $afterexamreview == true) && $resultfilesziparchive == false
+    ) {
         unlink($tempfile);
 
-        header( "Content-Type: application/force-download; charset=UTF-8"  );
-        header( "Content-Disposition: attachment; filename=\"" . $filename . ".txt\"" );
-        header( "Content-Length: ". strlen( $textfile ) );
+        header("Content-Type: application/force-download; charset=UTF-8");
+        header("Content-Disposition: attachment; filename=\"" . $filename . ".txt\"");
+        header("Content-Length: " . strlen($textfile));
         echo($textfile);
     } else if ($resultfilesziparchive) {
         // Close and send to users.
         $resultfilesziparchive->close();
         header('Content-Type: application/zip; charset=UTF-8');
         header('Content-Length: ' . filesize($tempfile));
-        header('Content-Disposition: attachment; filename="'.$filename.'.zip"');
+        header('Content-Disposition: attachment; filename="' . $filename . '.zip"');
         readfile($tempfile);
         unlink($tempfile);
     } else {
-        redirect(new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
-            get_string('cannot_create_zip_archive', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php', ['id' => $id]),
+            get_string('cannot_create_zip_archive', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
 }

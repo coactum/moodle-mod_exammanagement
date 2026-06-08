@@ -68,42 +68,67 @@ global $CFG;
 $ldapmanager = ldapmanager::getinstance();
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::placesassigned($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_places_assigned', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getroomscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_rooms_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Cancel export if the sort mode is matrucilation numbers but ldap is not enabled or configured.
 if ($sortmode == 'matrnr') {
     if (!$ldapmanager->isldapenabled()) {
-        redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-            get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
-            get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+            get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotenabled', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     } else if (!$ldapmanager->isldapconfigured()) {
-        redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-            get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' '.
-            get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+            get_string('not_possible_no_matrnr', 'mod_exammanagement') . ' ' .
+            get_string('ldapnotconfigured', 'mod_exammanagement'),
+            null,
+            'error'
+        );
     }
 }
 
 // Include pdf.
-require_once(__DIR__.'/classes/pdfs/seatingplan.php');
+require_once(__DIR__ . '/classes/pdfs/seatingplan.php');
 
 define("WIDTH_COLUMN_MATNO", 90);
 define("WIDTH_COLUMN_ROOM", 90);
@@ -119,7 +144,7 @@ $pdf = new seatingplan(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'U
 // Set document information.
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor(helper::getmoodlesystemname());
-$pdf->SetTitle(get_string('seatingplan', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name);
+$pdf->SetTitle(get_string('seatingplan', 'mod_exammanagement') . ': ' . $course->fullname . ', ' . $moduleinstance->name);
 $pdf->SetSubject(get_string('seatingplan', 'mod_exammanagement'));
 $pdf->SetKeywords(get_string('seatingplan', 'mod_exammanagement') . ', ' . $course->fullname .
     ', ' . $moduleinstance->name);
@@ -149,16 +174,17 @@ $roomids = json_decode($moduleinstance->rooms);
 $roomscount = 0;
 
 foreach ($roomids as $roomid) {
-
     $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'room', 'id' => $roomid], ['matrnr']);
 
     if ($participants) {
         if ($sortmode == 'place') {
-            usort($participants, function($a, $b) { // Sort array by custom user function.
+            usort($participants, function ($a, $b) {
+                // Sort array by custom user function.
                 return strnatcmp($a->place, $b->place); // Sort by place.
             });
         } else if ($sortmode == 'matrnr') {
-            usort($participants, function($a, $b) { // Sort array by custom user function.
+            usort($participants, function ($a, $b) {
+                // Sort array by custom user function.
                 return strnatcmp($a->matrnr, $b->matrnr); // Sort by matrnr.
             });
         }
@@ -198,7 +224,6 @@ foreach ($roomids as $roomid) {
 
         $roomscount += 1;
     }
-
 }
 
 // Construct svg-files pages.
@@ -209,11 +234,9 @@ foreach ($roomids as $key => $roomid) {
         $roomname = $room->name;
 
         if ($key < $roomscount) {
-
             $svg = base64_decode($DB->get_field('exammanagement_rooms', 'seatingplan', ['roomid' => $room->roomid]));
 
             if (isset($svg) && $svg !== '') {
-
                 $numberofplaces = count(json_decode($DB->get_field('exammanagement_rooms', 'places', ['roomid' => $room->roomid])));
                 $maxseats = get_string('total_seats', 'mod_exammanagement') . ": " . $numberofplaces;
 
@@ -233,8 +256,16 @@ foreach ($roomids as $key => $roomid) {
                 $pdf->setTextColor(0, 0, 0);
 
                 // Using @ to supress php7 tempnam notice inside tcpdf lib that prevents pdf output.
-                @$pdf->ImageSVG('@'.$svg, $x = '40', $y = '30', $w = '1000', $h = '1000', $link = '', $border = 1,
-                    $fitonpage = false);
+                @$pdf->ImageSVG(
+                    '@' . $svg,
+                    $x = '40',
+                    $y = '30',
+                    $w = '1000',
+                    $h = '1000',
+                    $link = '',
+                    $border = 1,
+                    $fitonpage = false
+                );
             }
         }
     }

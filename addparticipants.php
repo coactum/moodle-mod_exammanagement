@@ -67,24 +67,37 @@ global $OUTPUT, $PAGE;
 $ldapmanager = ldapmanager::getinstance();
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!$ldapmanager->isldapenabled()) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
         get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
-        get_string('ldapnotenabled', 'mod_exammanagement'), null, 'error');
+        get_string('ldapnotenabled', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!$ldapmanager->isldapconfigured()) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
         get_string('importmatrnrnotpossible', 'mod_exammanagement') . ' ' .
-        get_string('ldapnotconfigured', 'mod_exammanagement'), null, 'error');
+        get_string('ldapnotconfigured', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 if ($dtp) {
@@ -95,7 +108,6 @@ if ($dtp) {
 $tempparticipants = $DB->get_records('exammanagement_temp_part', ['exammanagement' => $moduleinstance->id]);
 
 if ($tempparticipants) {
-
     $allparticipants = []; // Will contain all participants ordered in their respective sub array.
 
     $moodleusers = []; // Will contain all moodle users for further classification.
@@ -116,9 +128,8 @@ if ($tempparticipants) {
 
     // Sort out bad matriculation numbers to badmatrnr array.
     foreach ($tempparticipants as $key => $participant) { // Filter invalid / bad matrnr.
-
         if (!helper::checkifvalidmatrnr($participant->identifier)) {
-            $tempuser = new stdclass;
+            $tempuser = new stdclass();
             $tempuser->line = $participant->line;
             $tempuser->matrnr = $participant->identifier;
             $tempuser->state = 'state_badmatrnr';
@@ -126,7 +137,7 @@ if ($tempparticipants) {
             array_push($badmatriculationnumbers, $tempuser);
             unset($tempparticipants[$key]);
         } else if (in_array($participant->identifier, $allpotentialidentifiers)) {
-            $tempuser = new stdclass;
+            $tempuser = new stdclass();
             $tempuser->line = $participant->line;
             $tempuser->matrnr = $participant->identifier;
             $tempuser->state = 'state_doubled';
@@ -154,13 +165,10 @@ if ($tempparticipants) {
     }
 
     if (isset($savedfileheaders) && $tempfileheaders) { // If headers are already saved.
-
         foreach ($tempfileheaders as $tempheaderkey => $tempfileheader) {
-
             $saved = false;
 
             foreach ($savedfileheaders as $savedheaderkey => $header) { // If new header is already saved.
-
                 if ($tempfileheader == $header) {
                     $saved = $savedheaderkey;
                 }
@@ -188,7 +196,7 @@ if ($tempparticipants) {
         foreach ($users as $line => $login) {
             $moodleuserid = $DB->get_field('user', 'id', ['username' => $login['login']]); // Get moodle id for user.
 
-            $temp = array_filter($tempparticipants, function($tempparticipant) use ($login) {
+            $temp = array_filter($tempparticipants, function ($tempparticipant) use ($login) {
                 return $tempparticipant->identifier == $login['matrnr'];
             });
 
@@ -220,9 +228,8 @@ if ($tempparticipants) {
 
     // Check moodle users and classify them to array according to case.
     foreach ($moodleusers as $line => $data) {
-
         if (isset($data['moodleuserid']) && $data['moodleuserid']) {
-            $tempuser = new stdclass;
+            $tempuser = new stdclass();
             $tempuser->line = $line;
             $tempuser->moodleuserid = $data['moodleuserid'];
             $tempuser->matrnr = $data['matrnr'];
@@ -258,9 +265,8 @@ if ($tempparticipants) {
 
     // Check nonmoodle users and classify them to array according to case.
     foreach ($nonmoodleusers as $line => $data) {
-
         if (isset($data['login']) && $data['login']) {
-            $tempuser = new stdclass;
+            $tempuser = new stdclass();
             $tempuser->line = $line;
             $tempuser->moodleuserid = false;
             $tempuser->matrnr = $data['matrnr'];
@@ -292,7 +298,7 @@ if ($tempparticipants) {
 
     // Push all remaining matriculation numbers that could not be resolved by ldap into the bad matriculationnumbers array.
     foreach ($tempparticipants as $key => $participant) {
-        $tempuser = new stdclass;
+        $tempuser = new stdclass();
         $tempuser->line = $participant->line;
         $tempuser->matrnr = $participant->identifier;
         $tempuser->state = 'state_badmatrnr';
@@ -305,11 +311,13 @@ if ($tempparticipants) {
     $oldparticipants = [];
 
     foreach ($tempfileheaders as $tempfileheaderkey => $tempfileheader) {
-
         $tempfileheaderkeyincreased = $tempfileheaderkey + 1;
 
-        $oldparticipantstemp = helper::getexamparticipants($moduleinstance,
-            ['mode' => 'header', 'id' => $tempfileheaderkeyincreased], ['matrnr']);
+        $oldparticipantstemp = helper::getexamparticipants(
+            $moduleinstance,
+            ['mode' => 'header', 'id' => $tempfileheaderkeyincreased],
+            ['matrnr']
+        );
 
         if (!empty($oldparticipantstemp)) {
             $oldparticipants = $oldparticipants + $oldparticipantstemp;
@@ -317,13 +325,10 @@ if ($tempparticipants) {
     }
 
     if ($oldparticipants) {
-
         foreach ($oldparticipants as $key => $participant) {
-
             // Moodle participant that is not readed in again and should therefore be deleted.
             if ($participant->moodleuserid && !in_array($participant->moodleuserid, $tempids)) {
-
-                $deletedmatrnr = new stdclass;
+                $deletedmatrnr = new stdclass();
                 $deletedmatrnr->moodleuserid = $participant->moodleuserid;
                 $deletedmatrnr->matrnr = $participant->matrnr;
                 $deletedmatrnr->firstname = false;
@@ -331,11 +336,10 @@ if ($tempparticipants) {
                 $deletedmatrnr->line = '';
 
                 array_push($deletedparticipants, $deletedmatrnr);
-
             } else if ($participant->moodleuserid === null && $participant->login && !in_array($participant->login, $tempids)) {
                 // Moodle participant that is not readed in again and should therefore be deleted.
 
-                $deletedmatrnr = new stdclass;
+                $deletedmatrnr = new stdclass();
                 $deletedmatrnr->moodleuserid = false;
                 $deletedmatrnr->matrnr = $participant->matrnr;
                 $deletedmatrnr->firstname = $participant->firstname;
@@ -365,14 +369,16 @@ if ($tempparticipants) {
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+    redirect(
+        new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
-
     $draftid = file_get_submitted_draft_itemid('participantslists');
 
     if (!$draftid) { // If no import file and exam participants should be saved.
-
         // Get IDs of (deleted) participants.
         $participantids = helper::filtercheckedparticipants($fromform);
 
@@ -394,7 +400,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $tempparticipants = $DB->get_records('exammanagement_temp_part', ['exammanagement' => $moduleinstance->id]);
 
         if ($newparticipantsids != false || $deletedparticipantsids != false) {
-
             // Get headers and temp file header.
             $savedfileheaders = json_decode($moduleinstance->importfileheaders ?? '');
 
@@ -405,11 +410,9 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 $savedfileheaders = $tempfileheaders;
             } else if (isset($savedfileheaders) && isset($tempfileheaders)) {
                 foreach ($tempfileheaders as $tempheaderkey => $tempfileheader) {
-
                     $saved = false;
 
                     foreach ($savedfileheaders as $savedheaderkey => $header) { // If new header is already saved.
-
                         if ($tempfileheader == $header) {
                             $saved = true;
                         }
@@ -428,7 +431,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 $users = [];
 
                 foreach ($newparticipantsids as $key => $tempidentifier) {
-
                     $tempheaderid = explode('-', $tempidentifier)[1];
 
                     $identifier = explode('_', explode('-', $tempidentifier)[0]);
@@ -448,7 +450,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                         array_push($users, $user);
 
                         unset($newparticipantsids[$key]);
-
                     } else {
                         array_push($nonemoodleparticipantsmatrnrarr, $identifier[1]);
                     }
@@ -456,10 +457,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
                 if (!empty($nonemoodleparticipantsmatrnrarr)) {
                     $nonemoodleparticipantsarr = $ldapmanager->getldapattributesformatrnrs(
-                        $nonemoodleparticipantsmatrnrarr, 'all_attributes');
+                        $nonemoodleparticipantsmatrnrarr,
+                        'all_attributes'
+                    );
 
                     foreach ($newparticipantsids as $key => $identifier) { // Now only contains participants without moodle account.
-
                         $tempheaderid = explode('-', $identifier)[1];
 
                         $matrnr = explode('_', explode('-', $identifier)[0])[1];
@@ -506,7 +508,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
                 // Insert records of new participants.
                 $DB->insert_records('exammanagement_participants', $users);
-
             }
 
             // Delete participants that should be deleted.
@@ -517,7 +518,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                     if ($temp[0] == 'mid') { // Delete moodle participant.
                         helper::deleteparticipant($temp[1], false);
                     } else { // Delete participant without moodle account.
-
                         $userlogin = false;
 
                         $userlogin = $ldapmanager->getloginformatrnr($temp[1], 'importmatrnrnotpossible');
@@ -538,15 +538,21 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             helper::deletetempparticipants($moduleinstance);
 
             // Redirect.
-            redirect(new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
-                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            redirect(
+                new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'),
+                null,
+                'success'
+            );
         } else {
-            redirect(new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
-                get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
+                get_string('alteration_failed', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
-
     } else if ($draftid) { // If participants are readed in from import file and should be saved as temporary participants.
-
         helper::deletetempparticipants($moduleinstance);
 
         $fs = get_file_storage();
@@ -559,12 +565,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $filecounter = 1;
 
         foreach ($files as $file) {
-
             // Get matriculation numbers from text file as an array.
             $filecontent = explode(PHP_EOL, $file->get_content()); // Separate lines.
 
             if ($filecontent) {
-                $fileheader = $filecontent[0] . "\r\n".$filecontent[1];
+                $fileheader = $filecontent[0] . "\r\n" . $filecontent[1];
 
                 unset($filecontent[0]);
                 unset($filecontent[1]);
@@ -574,21 +579,19 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
                     if ($potentialmatriculationnumbersarr) {
                         foreach ($potentialmatriculationnumbersarr as $key2 => $pmatrnr) { // Create temp user.
-
                             $identifier = str_replace('"', '', $pmatrnr);
                              // If identifier contains numbers and only alpha numerical signs and is not to long.
                             if (preg_match('/\\d/', $identifier) !== 0 && ctype_alnum($identifier) && strlen($identifier) <= 20) {
-                                $tempuser = new stdclass;
+                                $tempuser = new stdclass();
                                 $tempuser->exammanagement = $moduleinstance->id;
                                 $tempuser->courseid = $course->id;
                                 $tempuser->categoryid = $moduleinstance->categoryid;
                                 $tempuser->identifier = $identifier;
-                                $tempuser->line = $key + 1 .'(' . $filecounter.')';
+                                $tempuser->line = $key + 1 . '(' . $filecounter . ')';
 
                                 $tempuser->headerid = $filecounter;
 
                                 array_push($users, $tempuser);
-
                             }
                         }
                     }
@@ -601,7 +604,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 }
 
                 array_push($tempfileheaders, $fileheader);
-
             }
 
             $filecounter += 1;
@@ -613,10 +615,13 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
         $DB->insert_records('exammanagement_temp_part', $users);
 
-        redirect(new moodle_url('/mod/exammanagement/addparticipants.php', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+        redirect(
+            new moodle_url('/mod/exammanagement/addparticipants.php', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -661,9 +666,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output buttons.
     if (isset($allparticipants)) {
-        echo '<p><a href="' . new moodle_url('/mod/exammanagement/addparticipants.php',
-            ['id' => $id, 'dtp' => true]) . '" role="button" class="btn btn-primary float-right" title="'
-            . get_string("import_new_participants", "mod_exammanagement").'"><span class="d-none d-lg-block">' .
+        echo '<p><a href="' . new moodle_url(
+            '/mod/exammanagement/addparticipants.php',
+            ['id' => $id, 'dtp' => true]
+        ) . '" role="button" class="btn btn-primary float-right" title="'
+            . get_string("import_new_participants", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
             get_string("import_new_participants", "mod_exammanagement") .
             '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a></p><br><br>';
     }

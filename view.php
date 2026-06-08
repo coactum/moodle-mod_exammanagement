@@ -96,9 +96,10 @@ $ldapmanager = ldapmanager::getinstance();
 // If user is teacher.
 if (has_capability('mod/exammanagement:viewinstance', $context)) {
     // If user has not entered the correct password: redirect to check password page.
-    if (isset($moduleinstance->password) &&
-        (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+    if (
+        isset($moduleinstance->password) &&
+        (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+    ) {
         redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
     }
 
@@ -114,7 +115,7 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
             set_user_preference('exammanagement_pagecount', $pagecount);
         }
 
-        redirect ($redirect, null, null, null);
+        redirect($redirect, null, null, null);
     }
 
     // Determine mode.
@@ -153,7 +154,6 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
 
     // Set exam information visible.
     if (!helper::isexamdatadeleted($moduleinstance)) {
-
         if ($calledfromformdt) { // Set exam date visible.
             require_sesskey();
 
@@ -219,8 +219,12 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
                     $moduleinstance->deletionwarningmailids = null;
                 }
             } else {
-                redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-                    get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
+                redirect(
+                    new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+                    get_string('no_results_entered', 'mod_exammanagement'),
+                    null,
+                    'error'
+                );
             }
 
             $DB->update_record("exammanagement", $moduleinstance);
@@ -242,7 +246,6 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
     $coursecategoryid = $PAGE->category->id; // Set course category.
 
     if ($oldcategoryid !== $coursecategoryid) {
-
         // Update category id for instance.
         $moduleinstance->categoryid = $coursecategoryid;
         $DB->update_record("exammanagement", $moduleinstance);
@@ -276,7 +279,6 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
 
     // Rendering and displaying content.
     if ($mode === 'normal') {
-
         // Set phases information.
         $activephase = helper::determineactivephase($moduleinstance);
 
@@ -438,14 +440,40 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
             $resultsenteredafterexamreview = false;
         }
 
-        $page = new exammanagement_overview($cm->id, $phases, $helptexticon, $additionalressourceslink, $examtime, $taskcount,
-            $taskpoints, $textfieldcontent, $participantscount, $roomscount, $roomnames, $totalseats, $placesassigned,
-            $allplacesassigned, $assignedplacescount, $datetimevisible, $roomvisible, $placevisible, $bonuscount,
-            $bonuspointsentered, $bonusvisible, $gradingscale, $resultscount, $resultvisible, $datadeletiondate, $examreviewtime,
-            $examreviewroom, $examreviewvisible, $resultsenteredafterexamreview, $deleted, $ldapavailable);
-
+        $page = new exammanagement_overview(
+            $cm->id,
+            $phases,
+            $helptexticon,
+            $additionalressourceslink,
+            $examtime,
+            $taskcount,
+            $taskpoints,
+            $textfieldcontent,
+            $participantscount,
+            $roomscount,
+            $roomnames,
+            $totalseats,
+            $placesassigned,
+            $allplacesassigned,
+            $assignedplacescount,
+            $datetimevisible,
+            $roomvisible,
+            $placevisible,
+            $bonuscount,
+            $bonuspointsentered,
+            $bonusvisible,
+            $gradingscale,
+            $resultscount,
+            $resultvisible,
+            $datadeletiondate,
+            $examreviewtime,
+            $examreviewroom,
+            $examreviewvisible,
+            $resultsenteredafterexamreview,
+            $deleted,
+            $ldapavailable
+        );
     } else if ($mode === 'export_grades') {
-
         if (get_config('mod_exammanagement', 'enablehelptexts')) {
             $helptexticon = helper::gethelpicon('export_grades');
             $additionalressourceslink = get_config('mod_exammanagement', 'additionalressources');
@@ -468,11 +496,20 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
         $datadeletiondate = helper::getdatadeletiondate($moduleinstance);
         $deleted = helper::isexamdatadeleted($moduleinstance);
 
-        $page = new exammanagement_overview_export_grades($cm->id, $helptexticon, $additionalressourceslink, $participantscount,
-            $bonuspointsentered, $gradingscale, $resultscount, $datadeletiondate, $deleted, $ldapavailable);
+        $page = new exammanagement_overview_export_grades(
+            $cm->id,
+            $helptexticon,
+            $additionalressourceslink,
+            $participantscount,
+            $bonuspointsentered,
+            $gradingscale,
+            $resultscount,
+            $datadeletiondate,
+            $deleted,
+            $ldapavailable
+        );
     }
 } else if (has_capability('mod/exammanagement:viewparticipantspage', $context)) { // If user is student.
-
     // Exam time.
     $examtime = $moduleinstance->examtime;
 
@@ -528,7 +565,6 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
 
     // Totalpoints.
     if ($moduleinstance->resultvisible && $participant) {
-
         $examstate = helper::getexamstate($participant);
 
         if ($examstate === 'normal') {
@@ -553,7 +589,6 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
             $totalpointswithbonus = false;
             $tasktotalpoints = false;
         }
-
     } else {
         $examstate = false;
         $totalpoints = false;
@@ -572,9 +607,24 @@ if (has_capability('mod/exammanagement:viewinstance', $context)) {
     // Check if exam data is deleted.
     $deleted = helper::isexamdatadeleted($moduleinstance);
 
-    $page = new exammanagement_participantsview($cm->id, helper::checkifalreadyparticipant($moduleinstance, $USER->id), $date,
-        $time, $room, $place, $textfield, $bonussteps, $bonuspoints, $examstate, $totalpoints, $tasktotalpoints,
-        $totalpointswithbonus, $examreviewtime, $examreviewroom, $deleted);
+    $page = new exammanagement_participantsview(
+        $cm->id,
+        helper::checkifalreadyparticipant($moduleinstance, $USER->id),
+        $date,
+        $time,
+        $room,
+        $place,
+        $textfield,
+        $bonussteps,
+        $bonuspoints,
+        $examstate,
+        $totalpoints,
+        $tasktotalpoints,
+        $totalpointswithbonus,
+        $examreviewtime,
+        $examreviewroom,
+        $deleted
+    );
 }
 
 // Set $PAGE.

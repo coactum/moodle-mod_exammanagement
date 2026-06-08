@@ -73,16 +73,21 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $OUTPUT, $PAGE;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Delete all participants.
@@ -145,8 +150,14 @@ if (get_config('mod_exammanagement', 'enablehelptexts')) {
 // Output buttons.
 
 $allparticipants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], []);
-$participants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], ['matrnr', 'profile', 'groups'],
-    'name', true, $pagenr);
+$participants = helper::getexamparticipants(
+    $moduleinstance,
+    ['mode' => 'all'],
+    ['matrnr', 'profile', 'groups'],
+    'name',
+    true,
+    $pagenr
+);
 
 echo('<div class="float-right">');
 
@@ -182,7 +193,6 @@ echo '<p>' . get_string("view_added_partipicants", "mod_exammanagement") . '</p>
 $i = helper::getpagecount() * ($pagenr - 1) + 1;
 
 if ($participants) {
-
     $coursegroups = groups_get_all_groups($course->id);
 
     if (count($coursegroups) > 0) {
@@ -191,9 +201,13 @@ if ($participants) {
         $coursegroups = false;
     }
 
-    $pagebar = new exammanagement_pagebar($id,
+    $pagebar = new exammanagement_pagebar(
+        $id,
         new moodle_url('/mod/exammanagement/viewparticipants.php', ['id' => $id]),
-        $allparticipants, count($participants), $pagenr);
+        $allparticipants,
+        count($participants),
+        $pagenr
+    );
 
     echo $OUTPUT->render($pagebar);
 
@@ -214,12 +228,10 @@ if ($participants) {
 
     // Show participants.
     if ($participants) {
-
         $courseparticipants = helper::getcourseparticipantsids($id);
         $nonecourseparticipants = [];
 
         foreach ($participants as $key => $participant) {
-
             if (!isset($participant->moodleuserid)) {
                 $participant->state = 'state_added_to_exam_no_moodle';
             } else if ($courseparticipants && in_array($participant->moodleuserid, $courseparticipants)) {
@@ -256,31 +268,38 @@ if ($participants) {
                 echo('<td>' . get_string($participant->state, "mod_exammanagement") . '</td>');
 
                 echo('<td class="exammanagement_brand_bordercolor_left"><a href="' .
-                    new moodle_url('/mod/exammanagement/viewparticipants.php',
-                    ['id' => $id, 'dpmid' => $participant->moodleuserid, 'sesskey' => sesskey()]) .
+                    new moodle_url(
+                        '/mod/exammanagement/viewparticipants.php',
+                        ['id' => $id, 'dpmid' => $participant->moodleuserid, 'sesskey' => sesskey()]
+                    ) .
                     '" onClick="javascript:return confirm(\'' . get_string("participant_deletion_warning", "mod_exammanagement") .
                     '\');" title="' . get_string("delete_participant", "mod_exammanagement") .
                     '"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
-
             } else if ($participant->state === 'state_added_to_exam_no_course') {
                 echo('<td>' . get_string("state_added_to_exam_no_course", "mod_exammanagement") . ' ' .
                     helper::gethelpicon('state_added_to_exam_no_course') . '</td>');
 
                 echo('<td class="exammanagement_brand_bordercolor_left"><a href="' .
-                    new moodle_url('/mod/exammanagement/viewparticipants.php',
-                    ['id' => $id, 'dpmid' => $participant->moodleuserid, 'sesskey' => sesskey()]) .
+                    new moodle_url(
+                        '/mod/exammanagement/viewparticipants.php',
+                        ['id' => $id, 'dpmid' => $participant->moodleuserid, 'sesskey' => sesskey()]
+                    ) .
                     '" onClick="javascript:return confirm(\'' . get_string("participant_deletion_warning", "mod_exammanagement") .
                     '\');" title="' . get_string("delete_participant", "mod_exammanagement") .
                     '"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
-
             } else if ($participant->state === 'state_added_to_exam_no_moodle') {
-                echo('<td>' . get_string("state_added_to_exam_no_moodle", "mod_exammanagement",
-                    ['systemname' => helper::getmoodlesystemname()]) . ' ' .
+                echo('<td>' . get_string(
+                    "state_added_to_exam_no_moodle",
+                    "mod_exammanagement",
+                    ['systemname' => helper::getmoodlesystemname()]
+                ) . ' ' .
                     helper::gethelpicon('state_added_to_exam_no_moodle') . '</td>');
 
                 echo('<td class="exammanagement_brand_bordercolor_left"><a href="' .
-                    new moodle_url('/mod/exammanagement/viewparticipants.php',
-                    ['id' => $id, 'dplogin' => $participant->login, 'sesskey' => sesskey()]) .
+                    new moodle_url(
+                        '/mod/exammanagement/viewparticipants.php',
+                        ['id' => $id, 'dplogin' => $participant->login, 'sesskey' => sesskey()]
+                    ) .
                     '" onClick="javascript:return confirm(\'' . get_string("participant_deletion_warning", "mod_exammanagement") .
                     '\');" title="' . get_string("delete_participant", "mod_exammanagement") .
                     '"><i class="fa fa-2x fa-trash" aria-hidden="true"></i></a></td>');
@@ -293,7 +312,6 @@ if ($participants) {
     }
 
     echo('</tbody></table></div>');
-
 } else {
     echo('<div class="row"><p class="col-12 text-xs-center">' .
         get_string("no_participants_added_page", "mod_exammanagement") . '</p></div>');
@@ -304,8 +322,10 @@ echo('<div class="row"><span class="col-md-3"></span><span class="col-md-9"><a h
      get_string("cancel", "mod_exammanagement") . '</a>');
 
 if ($participants) {
-    echo ('<a href="' . new moodle_url('/mod/exammanagement/viewparticipants.php',
-        ['id' => $id, 'dap' => 1, 'sesskey' => sesskey()]) .
+    echo ('<a href="' . new moodle_url(
+        '/mod/exammanagement/viewparticipants.php',
+        ['id' => $id, 'dap' => 1, 'sesskey' => sesskey()]
+    ) .
         '" class="btn btn-secondary ml-1" onClick="javascript:return confirm(\'' .
         get_string("all_participants_deletion_warning", "mod_exammanagement") . '\');">' .
         get_string("delete_all_participants", "mod_exammanagement") . '</a></div>');

@@ -24,7 +24,6 @@
 namespace mod_exammanagement\local;
 
 use mod_exammanagement\ldap\ldapmanager;
-
 use moodle_url;
 use stdClass;
 use context_module;
@@ -38,7 +37,6 @@ use core\message\message;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class helper {
-
     /**
      * Get the moodle system name from thr plugin config.
      *
@@ -108,7 +106,6 @@ class helper {
             $moduleinstance = $DB->get_record('exammanagement', ['id' => $e], '*', MUST_EXIST);
 
             return $moduleinstance;
-
         } else {
             return false;
         }
@@ -147,8 +144,15 @@ class helper {
      * @return array $editoroptions Array containing the editor options.
      * @return array $attachmentoptions Array containing the attachment options.
      */
-    public static function getexamparticipants($moduleinstance, $participantsmode, $requestedattributes, $sortorder = 'name',
-        $pagination = false, $activepage = null, $conditions = false) {
+    public static function getexamparticipants(
+        $moduleinstance,
+        $participantsmode,
+        $requestedattributes,
+        $sortorder = 'name',
+        $pagination = false,
+        $activepage = null,
+        $conditions = false
+    ) {
 
         global $DB;
 
@@ -167,17 +171,25 @@ class helper {
         if ($participantsmode['mode'] === 'all') {
             $rs = $DB->get_recordset('exammanagement_participants', ['exammanagement' => $moduleinstance->id]);
         } else if ($participantsmode['mode'] === 'moodle') {
-            $rs = $DB->get_recordset('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'login' => null]);
+            $rs = $DB->get_recordset(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'login' => null]
+            );
         } else if ($participantsmode['mode'] === 'nonmoodle') {
-            $rs = $DB->get_recordset('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => null]);
+            $rs = $DB->get_recordset(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => null]
+            );
         } else if ($participantsmode['mode'] === 'room') {
-            $rs = $DB->get_recordset('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'roomid' => $participantsmode['id']]);
+            $rs = $DB->get_recordset(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'roomid' => $participantsmode['id']]
+            );
         } else if ($participantsmode['mode'] === 'header') {
-            $rs = $DB->get_recordset('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'headerid' => $participantsmode['id']]);
+            $rs = $DB->get_recordset(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'headerid' => $participantsmode['id']]
+            );
         } else if ($participantsmode['mode'] === 'resultsafterexamreview') {
             $examreviewtime = $moduleinstance->examreviewtime;
 
@@ -188,7 +200,6 @@ class helper {
             $select .= " AND timeresultsentered >=" . $examreviewtime;
 
             $rs = $DB->get_recordset_select('exammanagement_participants', $select, null);
-
         } else if ($participantsmode['mode'] === 'no_seats_assigned') {
             $select = "exammanagement =" . $moduleinstance->id;
             $select .= " AND roomid IS NULL";
@@ -196,29 +207,28 @@ class helper {
             $select .= " AND place IS NULL";
 
             $rs = $DB->get_recordset_select('exammanagement_participants', $select, null);
-
         } else {
             return false;
         }
 
         if ($rs->valid()) {
-
             $courseid = $moduleinstance->course;
 
             foreach ($rs as $record) {
-
                 // Add login if it is requested as attribute or needed for matrnr.
-                if ((in_array('login', $requestedattributes) && isset($record->moodleuserid)) ||
-                    (in_array('matrnr', $requestedattributes) && isset($record->moodleuserid))) {
-
+                if (
+                    (in_array('login', $requestedattributes) && isset($record->moodleuserid)) ||
+                    (in_array('matrnr', $requestedattributes) && isset($record->moodleuserid))
+                ) {
                     $login = $DB->get_field('user', 'username', ['id' => $record->moodleuserid]);
                     $record->login = $login;
                 }
 
                 // Add name if it is requested as attribute or needed for sorting or profile.
-                if (isset($record->moodleuserid) && (in_array('name', $requestedattributes) ||
-                    in_array('profile', $requestedattributes) || $sortorder == 'name' )) {
-
+                if (
+                    isset($record->moodleuserid) && (in_array('name', $requestedattributes) ||
+                    in_array('profile', $requestedattributes) || $sortorder == 'name' )
+                ) {
                     $moodleuser = self::getmoodleuser($record->moodleuserid);
 
                     if ($moodleuser) {
@@ -227,8 +237,10 @@ class helper {
                         if (in_array('profile', $requestedattributes)) { // Add profile if it is requested.
                                 global $OUTPUT;
 
-                                $image = $OUTPUT->user_picture($moodleuser,
-                                    ['courseid' => $courseid, 'link' => true, 'includefullname' => true]);
+                                $image = $OUTPUT->user_picture(
+                                    $moodleuser,
+                                    ['courseid' => $courseid, 'link' => true, 'includefullname' => true]
+                                );
 
                                 $record->profile = $image;
                         }
@@ -242,10 +254,10 @@ class helper {
                                     foreach ($value as $key2 => $value2) {
                                         $url = new moodle_url('/group/index.php', ['id' => $courseid, 'group' => $value2]);
                                         if (!$groupnames) {
-                                            $groupnames = '<strong><a href="' . $url .'">' .
+                                            $groupnames = '<strong><a href="' . $url . '">' .
                                                 groups_get_group_name($value2) . '</a></strong>';
                                         } else {
-                                            $groupnames .= ', <strong><a href="' . $url  .'">' .
+                                            $groupnames .= ', <strong><a href="' . $url  . '">' .
                                                 groups_get_group_name($value2) . '</a></strong>';
                                         }
                                     }
@@ -277,8 +289,7 @@ class helper {
 
             // Add matrnr if it is requested.
             if (in_array('matrnr', $requestedattributes)) {
-
-                require_once(__DIR__.'/../ldap/ldapmanager.php');
+                require_once(__DIR__ . '/../ldap/ldapmanager.php');
 
                 $ldapmanager = ldapmanager::getinstance();
 
@@ -293,11 +304,12 @@ class helper {
 
                 if (!empty($matriculationnumbers)) {
                     foreach ($allparticipants as $key => $participant) {
-                        if (isset($participant->login) && $participant->login &&
+                        if (
+                            isset($participant->login) && $participant->login &&
                             array_key_exists($participant->login, $matriculationnumbers) &&
                             isset($matriculationnumbers[$participant->login]) &&
-                            is_numeric($matriculationnumbers[$participant->login])) {
-
+                            is_numeric($matriculationnumbers[$participant->login])
+                        ) {
                             $participant->matrnr = $matriculationnumbers[$participant->login];
                         } else {
                             $participant->matrnr = '-';
@@ -320,24 +332,32 @@ class helper {
 
             // Sort all participant sarray.
             if ($sortorder == 'name') {
-                usort($allparticipants, function($a, $b) { // Sort participants array by name through custom user function.
+                usort($allparticipants, function ($a, $b) {
+                    // Sort participants array by name through custom user function.
 
                     $searcharr = ["Ä", "ä", "Ö", "ö", "Ü", "ü", "ß", "von ", "Von "];
                     $replacearr = ["Ae", "ae", "Oe", "oe", "Ue", "ue", "ss", ""];
 
                     // If lastnames are even sort by first name.
-                    if (str_replace($searcharr, $replacearr,
-                        ucfirst($a->lastname)) == str_replace($searcharr, $replacearr, ucfirst($b->lastname))) {
-
+                    if (
+                        str_replace(
+                            $searcharr,
+                            $replacearr,
+                            ucfirst($a->lastname)
+                        ) == str_replace($searcharr, $replacearr, ucfirst($b->lastname))
+                    ) {
                         return strcmp(ucfirst($a->firstname), ucfirst($b->firstname));
                     } else { // Else sort by last name.
-                        return strcmp(str_replace($searcharr, $replacearr,
-                            ucfirst($a->lastname)) , str_replace($searcharr, $replacearr, ucfirst($b->lastname)));
+                        return strcmp(str_replace(
+                            $searcharr,
+                            $replacearr,
+                            ucfirst($a->lastname)
+                        ), str_replace($searcharr, $replacearr, ucfirst($b->lastname)));
                     }
-
                 });
             } else if ($sortorder == 'matrnr') {
-                usort($allparticipants, function($a, $b) { // Sort participants array by matrnr through custom user function.
+                usort($allparticipants, function ($a, $b) {
+                    // Sort participants array by matrnr through custom user function.
                     return strnatcmp($a->matrnr, $b->matrnr); // Sort by matrnr (ascending).
                 });
             } else if ($sortorder == 'random') {
@@ -349,7 +369,6 @@ class helper {
             } else {
                 return $allparticipants;
             }
-
         } else {
             $rs->close();
             return false;
@@ -370,14 +389,20 @@ class helper {
         global $DB;
 
         if ($moodleuserid !== false && $moodleuserid !== null) {
-            $participants = $DB->get_record('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $moodleuserid]);
+            $participants = $DB->get_record(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $moodleuserid]
+            );
         } else if ($userlogin !== false && $userlogin !== null) {
-            $participants = $DB->get_record('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'login' => $userlogin]);
+            $participants = $DB->get_record(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'login' => $userlogin]
+            );
         } else if ($id !== false && $id !== null) {
-            $participants = $DB->get_record('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'id' => $id]);
+            $participants = $DB->get_record(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'id' => $id]
+            );
         }
 
         if ($participants) {
@@ -450,7 +475,7 @@ class helper {
             }
         }
 
-        if (!empty($participants['participants']) || !empty($participants['deletedparticipants']) ) {
+        if (!empty($participants['participants']) || !empty($participants['deletedparticipants'])) {
             return $participants;
         } else {
             return false;
@@ -470,11 +495,15 @@ class helper {
         global $DB;
 
         if ($userid) {
-            return $DB->record_exists('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]);
+            return $DB->record_exists(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]
+            );
         } else if ($login) { // This part seems wrong but is probably needed anyway.
-            return $DB->record_exists('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'login' => $userid]);
+            return $DB->record_exists(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'login' => $userid]
+            );
         }
     }
 
@@ -625,17 +654,27 @@ class helper {
 
         global $DB;
 
-        if ($userid !== false &&
-            $DB->record_exists('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid])) {
-
-            $DB->delete_records('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]);
-        } else if ($DB->record_exists('exammanagement_participants',
-            ['exammanagement' => $moduleinstance->id, 'login' => $login])) {
-
-            $DB->delete_records('exammanagement_participants',
-                ['exammanagement' => $moduleinstance->id, 'login' => $login]);
+        if (
+            $userid !== false &&
+            $DB->record_exists(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]
+            )
+        ) {
+            $DB->delete_records(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'moodleuserid' => $userid]
+            );
+        } else if (
+            $DB->record_exists(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'login' => $login]
+            )
+        ) {
+            $DB->delete_records(
+                'exammanagement_participants',
+                ['exammanagement' => $moduleinstance->id, 'login' => $login]
+            );
         }
     }
 
@@ -651,8 +690,14 @@ class helper {
      *
      * @return array $rooms The rooms or false.
      */
-    public static function getrooms($moduleinstance, $mode, $sortorder = 'name',
-        $withoutassignedplaces = false, $pagination = false, $activepage = null) {
+    public static function getrooms(
+        $moduleinstance,
+        $mode,
+        $sortorder = 'name',
+        $withoutassignedplaces = false,
+        $pagination = false,
+        $activepage = null
+    ) {
 
         global $DB;
 
@@ -669,7 +714,6 @@ class helper {
         }
 
         if ($mode === 'examrooms') {
-
             $roomids = json_decode($moduleinstance->rooms ?? '');
 
             if (isset($roomids)) {
@@ -685,14 +729,11 @@ class helper {
             } else {
                 return false;
             }
-
         } else if ($mode === 'defaultrooms') {
-
             $select = "type = 'defaultroom'";
 
             $rs = $DB->get_recordset_select('exammanagement_rooms', $select, [], 'name ASC', '*', $limitfrom, $limitnum);
         } else if ($mode === 'all') {
-
             global $USER;
 
             $select = "type = 'defaultroom'";
@@ -704,7 +745,6 @@ class helper {
         }
 
         if ($rs->valid()) {
-
             foreach ($rs as $record) {
                 $record->places = json_decode($record->places);
                 $rooms[$record->roomid] = $record;
@@ -712,9 +752,9 @@ class helper {
 
             $rs->close();
 
-            if ($sortorder == 'places_bigtosmall' || $sortorder == 'places_smalltobig' ) {
-
-                usort($rooms, function($a, $b) { // Sort rooms by places count through custom user function (small to big rooms).
+            if ($sortorder == 'places_bigtosmall' || $sortorder == 'places_smalltobig') {
+                usort($rooms, function ($a, $b) {
+                    // Sort rooms by places count through custom user function (small to big rooms).
                     $aplaces = count($a->places);
                     $bplaces = count($b->places);
 
@@ -748,7 +788,6 @@ class helper {
 
             $rs->close();
             return $rooms;
-
         } else {
             $rs->close();
             return false;
@@ -776,7 +815,6 @@ class helper {
         $rs = $DB->get_recordset_select('exammanagement_participants', $select, null, '', 'roomid, place');
 
         if ($rs->valid()) {
-
             foreach ($rs as $record) {
                 if (!isset($assignedplaces[$record->roomid])) {
                     $assignedplaces[$record->roomid] = [$record->place];
@@ -844,7 +882,6 @@ class helper {
             $rooms = implode(", ", $roomnames);
 
             return $rooms;
-
         } else {
             return false;
         }
@@ -864,7 +901,6 @@ class helper {
 
         if ($rooms) {
             foreach ($rooms as $room) {
-
                 $places = $room->places;
 
                 if (isset($places)) {
@@ -878,7 +914,6 @@ class helper {
         }
 
         return $totalseats;
-
     }
 
     /**
@@ -920,7 +955,6 @@ class helper {
                 $totalpoints += floatval($points);
             }
             return $totalpoints;
-
         } else {
             return $totalpoints;
         }
@@ -1004,7 +1038,7 @@ class helper {
      *
      * @return int $points The points.
      */
-    public static function calculatepoints($participant, $withbonus=false) {
+    public static function calculatepoints($participant, $withbonus = false) {
         $points = 0;
 
         if (is_null($participant->exampoints)) {
@@ -1014,7 +1048,6 @@ class helper {
         }
 
         if ($allpoints != null) {
-
             $examstate = self::getexamstate($participant);
 
             if ($examstate === 'normal') {
@@ -1032,7 +1065,6 @@ class helper {
             } else {
                 return false;
             }
-
         } else {
             return false;
         }
@@ -1048,7 +1080,6 @@ class helper {
     public static function getexamstate($participant) {
 
         if (isset($participant->examstate)) {
-
             $state = json_decode($participant->examstate);
 
             foreach ($state as $key => $value) {
@@ -1085,16 +1116,11 @@ class helper {
         $result = false;
 
         if ($points === false || !isset($points)) { // If points are false or not set.
-
             $result = '-';
-
         } else if (!is_numeric($points)) { // Else if points indicate special exam state.
             $result = $points;
-
         } else if ($gradingscale) { // Else if points and gradingscale are set and should be converted into grade.
-
             foreach ($gradingscale as $key => $step) {
-
                 if ($key == '1.0' && $points >= floatval($step)) {
                     $result = $key;
                 } else if ($points < $lastpoints && $points >= floatval($step)) {
@@ -1130,7 +1156,6 @@ class helper {
                 } else if ($bonussteps == 0) {
                     return $result;
                 } else {
-
                     $resultwithbonus = $result - $bonussteps;
 
                     if ($resultwithbonus <= 1.0) {
@@ -1139,15 +1164,15 @@ class helper {
 
                     $peculiarity = round($resultwithbonus - floor($resultwithbonus), 1);
 
-                    if (0.4 == $peculiarity ) {
+                    if (0.4 == $peculiarity) {
                         $resultwithbonus = $resultwithbonus - 0.1;
                     }
 
-                    if (0.6 == $peculiarity ) {
+                    if (0.6 == $peculiarity) {
                         $resultwithbonus = $resultwithbonus + 0.1;
                     }
 
-                    return (str_pad (strval($resultwithbonus), 3, '.0'));
+                    return (str_pad(strval($resultwithbonus), 3, '.0'));
                 }
             }
         } else { // Should be converted to grade but gradingscale is not set.
@@ -1243,8 +1268,18 @@ class helper {
      *
      * @return int $messageid The id of the message send.
      */
-    public static function sendsinglemessage($moduleinstance, $cmid, $course, $moodlesystemname, $userfrom, $userto, $subject,
-        $text, $type, $cron = false) {
+    public static function sendsinglemessage(
+        $moduleinstance,
+        $cmid,
+        $course,
+        $moodlesystemname,
+        $userfrom,
+        $userto,
+        $subject,
+        $text,
+        $type,
+        $cron = false
+    ) {
 
         $message = new message();
         $message->courseid = $course->id;
@@ -1277,13 +1312,16 @@ class helper {
                 ]);
         } else {
             $footer = '<br><br> --------------------------------------------------------------------- <br> ' .
-                get_string('mailfooter', 'mod_exammanagement',
+                get_string(
+                    'mailfooter',
+                    'mod_exammanagement',
                     ['systemname' => $moodlesystemname,
                     'categoryname' => '',
                     'coursename' => $course->fullname,
                     'name' => $moduleinstance->name,
                     'url' => $url,
-                ]);
+                    ]
+                );
         }
         $content = ['*' => ['header' => $header, 'footer' => $footer]]; // Extra content for specific processor.
 
@@ -1343,9 +1381,8 @@ class helper {
      *
      * @return int $number The number
      */
-    public static function formatnumberfordisplay($number, $format='string') {
+    public static function formatnumberfordisplay($number, $format = 'string') {
         if ($number !== false) {
-
             if ($format === 'string' && is_numeric($number)) {
                 $lang = current_language();
 
@@ -1445,7 +1482,6 @@ class helper {
         $table .= "</thead>";
 
         for ($n = 0; $n < count($leftcol); $n++) {
-
             $table .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
             $table .= "<td width=\"" . WIDTH_COLUMN_MATNO . "\" align=\"center\">" . $leftcol[$n]["matrnr"] . "</td>";
             $table .= "<td width=\"" . WIDTH_COLUMN_ROOM . "\" align=\"center\">" . $leftcol[$n]["roomname"] . "</td>";
@@ -1529,20 +1565,21 @@ class helper {
     public static function checkphasecompletion($moduleinstance, $phase) {
 
         switch ($phase) {
-
             case "phase_one":
-                if (self::getroomscount($moduleinstance) && isset($moduleinstance->examtime)
-                    && self::getparticipantscount($moduleinstance) && self::gettasks($moduleinstance)) {
-
+                if (
+                    self::getroomscount($moduleinstance) && isset($moduleinstance->examtime)
+                    && self::getparticipantscount($moduleinstance) && self::gettasks($moduleinstance)
+                ) {
                     return true;
                 } else {
                     return false;
                 }
             case "phase_two":
-                if (self::placesassigned($moduleinstance)
+                if (
+                    self::placesassigned($moduleinstance)
                     && (($moduleinstance->datetimevisible && $moduleinstance->roomvisible && $moduleinstance->placevisible)
-                    || (isset($moduleinstance->examtime) && $moduleinstance->examtime < time()))) {
-
+                    || (isset($moduleinstance->examtime) && $moduleinstance->examtime < time()))
+                ) {
                     return true;
                 } else {
                     return false;
@@ -1560,9 +1597,10 @@ class helper {
                     return false;
                 }
             case "phase_four":
-                if (isset($moduleinstance->examreviewtime) && isset($moduleinstance->examreviewroom)
-                    && $moduleinstance->examreviewvisible) {
-
+                if (
+                    isset($moduleinstance->examreviewtime) && isset($moduleinstance->examreviewroom)
+                    && $moduleinstance->examreviewvisible
+                ) {
                     return true;
                 } else {
                     return false;

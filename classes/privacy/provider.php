@@ -32,7 +32,6 @@ use core_privacy\local\request\helper;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\contextlist;
-
 use core_privacy\local\request\user_preference_provider;
 
 /**
@@ -45,15 +44,14 @@ class provider implements
     // This plugin has data.
     \core_privacy\local\metadata\provider,
 
-    // This plugin currently implements the original plugin\provider interface.
-    \core_privacy\local\request\plugin\provider,
-
     // This plugin is capable of determining which users have data within it.
     \core_privacy\local\request\core_userlist_provider,
 
+    // This plugin currently implements the original plugin\provider interface.
+    \core_privacy\local\request\plugin\provider,
+
     // This plugin saves user preferences.
     \core_privacy\local\request\user_preference_provider {
-
     /**
      * Returns meta data about this system.
      *
@@ -202,7 +200,7 @@ class provider implements
         $user = $contextlist->get_user();
         $userid = $user->id;
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         // Exammanagement and participants exam data.
         $sql = "SELECT
@@ -302,8 +300,12 @@ class provider implements
      * @param array $subcontext The location within the current context that this data belongs.
      * @param \stdClass $user the user record
      */
-    protected static function export_exammanagement_data_for_user(array $exammanagementdata, \context_module $context,
-        array $subcontext, \stdClass $user) {
+    protected static function export_exammanagement_data_for_user(
+        array $exammanagementdata,
+        \context_module $context,
+        array $subcontext,
+        \stdClass $user
+    ) {
 
         // Fetch the generic module data for the exammanagement activity.
         $contextdata = helper::get_context_data($context, $user);
@@ -324,86 +326,108 @@ class provider implements
 
         $phaseoneopen = get_user_preferences('exammanagement_phase_one', null, $userid);
         if (isset($phaseoneopen)) {
-
             if ($phaseoneopen == 1) {
                 $phaseoneopen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phaseoneopen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_one', $phaseoneopen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_one',
+                $phaseoneopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $phasetwoopen = get_user_preferences('exammanagement_phase_two', null, $userid);
         if (isset($phasetwoopen)) {
-
             if ($phasetwoopen == 1) {
                 $phasetwoopen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phasetwoopen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_two', $phasetwoopen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_two',
+                $phasetwoopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $phaseexamopen = get_user_preferences('exammanagement_phase_exam', null, $userid);
         if (isset($phaseexamopen)) {
-
             if ($phaseexamopen == 1) {
                 $phaseexamopen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phaseexamopen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_exam', $phaseexamopen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_exam',
+                $phaseexamopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $phasethreeopen = get_user_preferences('exammanagement_phase_three', null, $userid);
         if (isset($phasethreeopen)) {
-
             if ($phasethreeopen == 1) {
                 $phasethreeopen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phasethreeopen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_three', $phasethreeopen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_three',
+                $phasethreeopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $phasefouropen = get_user_preferences('exammanagement_phase_four', null, $userid);
         if (isset($phasefouropen)) {
-
             if ($phasefouropen == 1) {
                 $phasefouropen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phasefouropen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_four', $phasefouropen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_four',
+                $phasefouropen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $phasefiveopen = get_user_preferences('exammanagement_phase_five', null, $userid);
         if (isset($phasefiveopen)) {
-
             if ($phasefiveopen == 1) {
                 $phasefiveopen = get_string('opened', 'mod_exammanagement');
             } else {
                 $phasefiveopen = get_string('closed', 'mod_exammanagement');
             }
 
-            writer::export_user_preference('mod_exammanagement', 'exammanagement_phase_five', $phasefiveopen,
-                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'exammanagement_phase_five',
+                $phasefiveopen,
+                get_string('privacy:metadata:preference:exammanagement_phaseopenedorclosed', 'mod_exammanagement')
+            );
         }
 
         $pagecount = get_user_preferences('exammanagement_pagecount', null, $userid);
         if (isset($pagecount)) {
-            writer::export_user_preference('mod_exammanagement', 'pagecount', $pagecount,
-                get_string('privacy:metadata:preference:exammanagement_pagecount', 'mod_exammanagement'));
+            writer::export_user_preference(
+                'mod_exammanagement',
+                'pagecount',
+                $pagecount,
+                get_string('privacy:metadata:preference:exammanagement_pagecount', 'mod_exammanagement')
+            );
         }
     }
 
@@ -451,7 +475,6 @@ class provider implements
             $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
             if ($DB->record_exists('exammanagement_participants', ['exammanagement' => $cm->instance, 'moodleuserid' => $userid])) {
-
                 $DB->delete_records('exammanagement_participants', [
                     'exammanagement' => $cm->instance,
                     'moodleuserid' => $userid,
@@ -471,14 +494,21 @@ class provider implements
         $context = $userlist->get_context();
         $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
-        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        [$userinsql, $userinparams] = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['exammanagementid' => $cm->instance], $userinparams);
 
-        if ($DB->record_exists_select('exammanagement_participants',
-            "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params)) {
-
-            $DB->delete_records_select('exammanagement_participants',
-                "exammanagement = :exammanagementid AND moodleuserid {$userinsql}", $params);
+        if (
+            $DB->record_exists_select(
+                'exammanagement_participants',
+                "exammanagement = :exammanagementid AND moodleuserid {$userinsql}",
+                $params
+            )
+        ) {
+            $DB->delete_records_select(
+                'exammanagement_participants',
+                "exammanagement = :exammanagementid AND moodleuserid {$userinsql}",
+                $params
+            );
         }
     }
 }

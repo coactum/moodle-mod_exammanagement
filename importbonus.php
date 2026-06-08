@@ -25,7 +25,6 @@
 use mod_exammanagement\ldap\ldapmanager;
 use mod_exammanagement\local\helper;
 use mod_exammanagement\local\readfilter;
-
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 
@@ -77,22 +76,35 @@ $ldapmanager = ldapmanager::getinstance();
 $misc = (array) json_decode($moduleinstance->misc ?? '');
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!isset($misc['mode']) && !helper::placesassigned($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
-        get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+        get_string('no_places_assigned', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 if ($dbp) {
@@ -115,17 +127,25 @@ $mform = new mod_exammanagement_importbonus_form(null, [
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     if ($fromform->bonuspoints_list) {
-
-        if ($fromform->bonusmode === 'steps' && ((isset($fromform->bonussteppoints[2])
+        if (
+            $fromform->bonusmode === 'steps' && ((isset($fromform->bonussteppoints[2])
             && $fromform->bonussteppoints[1] >= $fromform->bonussteppoints[2])
-            || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2] >= $fromform->bonussteppoints[3]))) {
-
-            redirect(new moodle_url('/mod/exammanagement/importbonus.php', ['id' => $id]),
-                get_string('points_bonussteps_invalid', 'mod_exammanagement'), null, 'error');
+            || (isset($fromform->bonussteppoints[3]) && $fromform->bonussteppoints[2] >= $fromform->bonussteppoints[3]))
+        ) {
+            redirect(
+                new moodle_url('/mod/exammanagement/importbonus.php', ['id' => $id]),
+                get_string('points_bonussteps_invalid', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
 
         // Retrieve Files from form.
@@ -141,7 +161,7 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $excelreader = IOFactory::createReaderForFile($tempfile);
         $excelreader->setReadDataOnly(true);
 
-        $excelreader->setReadFilter( new readfilter($fromform->pointsfield) );
+        $excelreader->setReadFilter(new readfilter($fromform->pointsfield));
 
         $excelreader->setReadDataOnly(true);
 
@@ -160,7 +180,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
         // Unset all identifiers that are no valid matriculation numbers or mail adresses.
         foreach ($potentialuserids as $key => $identifier) {
-
             // If identifier is mail adress (import of moodle grades export).
             if ($identifier[0] && filter_var($identifier[0], FILTER_VALIDATE_EMAIL)) {
                 $alldata[$key] = [
@@ -182,7 +201,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
         if (!empty($logins)) {
             foreach ($logins as $key => $data) {
-
                 $moodleuserid = $DB->get_field('user', 'id', ['username' => $data['login']]);
 
                 if ($moodleuserid) {
@@ -190,7 +208,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                 } else {
                     $alldata[$key] = ['login' => $data['login'], 'moodleuserid' => false, 'points' => $points[$key][0]];
                 }
-
             }
         }
 
@@ -210,7 +227,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                     $participant->bonussteps = 0;
 
                     foreach ($fromform->bonussteppoints as $step => $points) {
-
                         if (floatval($data['points']) >= $points) {
                             $participant->bonussteps = $step; // Change to detect bonus step.
                             $participant->bonuspoints = false;
@@ -218,13 +234,14 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                             break;
                         }
                     }
-                } else if ($fromform->bonusmode === "points" && isset($data['points'])
-                    && $data['points']&& is_numeric($data['points'])) {
-
+                } else if (
+                    $fromform->bonusmode === "points" && isset($data['points'])
+                    && $data['points'] && is_numeric($data['points'])
+                ) {
                     $participant->bonussteps = false;
                     $participant->bonuspoints = $data['points'];
 
-                    if ($moduleinstance->misc !== null ) { // If mode is export_gradings.
+                    if ($moduleinstance->misc !== null) { // If mode is export_gradings.
                         $participant->exampoints = '{"1":0}'; // Add 0 points as exam result.
                         $participant->examstate = '{"nt":"0","fa":"0","ill":"0"}';
                     }
@@ -244,11 +261,19 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         unlink($tempfile);
 
         if ($update) {
-            redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
-                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            redirect(
+                new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'),
+                null,
+                'success'
+            );
         } else {
-            redirect(new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
-                get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/view.php#aftercorrection', ['id' => $id]),
+                get_string('alteration_failed', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
     }
 } else {
@@ -300,15 +325,19 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Output buttons.
     if ($bonuscount) {
         if (!isset($misc['mode'])) {
-            echo '<a href="' . new moodle_url('/mod/exammanagement/importbonus.php',
-                ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]) .
+            echo '<a href="' . new moodle_url(
+                '/mod/exammanagement/importbonus.php',
+                ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]
+            ) .
                 '" role="button" class="btn btn-secondary float-right" title="' .
                 get_string("revert_bonus", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
                 get_string("revert_bonus", "mod_exammanagement") .
                 '</span><i class="fa fa-repeat d-lg-none" aria-hidden="true"></i></a>';
         } else {
-            echo '<a href="' . new moodle_url('/mod/exammanagement/importbonus.php',
-                ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]) .
+            echo '<a href="' . new moodle_url(
+                '/mod/exammanagement/importbonus.php',
+                ['id' => $id, 'dbp' => 1, 'sesskey' => sesskey()]
+            ) .
                 '" role="button" class="btn btn-secondary float-right" title="' .
                 get_string("revert_grades", "mod_exammanagement") . '"><span class="d-none d-lg-block">' .
                 get_string("revert_grades", "mod_exammanagement") .
@@ -334,5 +363,3 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
     // Finish the page.
     echo $OUTPUT->footer();
 }
-
-

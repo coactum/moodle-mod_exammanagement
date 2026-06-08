@@ -52,7 +52,6 @@ class delete_temp_participants extends \core\task\scheduled_task {
 
         // Delete the contents of the whole temp_part table.
         if ($DB->record_exists("exammanagement_temp_part", [])) {
-
             mtrace('Deleting records ...');
 
             $DB->set_field('exammanagement', 'tempimportfileheader', null, []);

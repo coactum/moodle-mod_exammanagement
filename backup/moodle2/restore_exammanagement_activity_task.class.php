@@ -24,13 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'//mod/exammanagement/backup/moodle2/restore_exammanagement_stepslib.php');
+require_once($CFG->dirroot . '//mod/exammanagement/backup/moodle2/restore_exammanagement_stepslib.php');
 
 /**
  * Restore task for mod_exammanagement.
  */
 class restore_exammanagement_activity_task extends restore_activity_task {
-
     /**
      * Defines particular settings that this activity can have.
      */

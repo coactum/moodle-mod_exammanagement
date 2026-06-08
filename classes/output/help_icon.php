@@ -38,7 +38,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class help_icon extends \help_icon {
-
     /**
      * Export this data so it can be used as the context for a mustache template.
      *

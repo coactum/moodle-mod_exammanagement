@@ -25,13 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/exammanagement/backup/moodle2/backup_exammanagement_stepslib.php');
+require_once($CFG->dirroot . '/mod/exammanagement/backup/moodle2/backup_exammanagement_stepslib.php');
 
 /**
  * The class provides all the settings and steps to perform one complete backup of mod_exammanagement.
  */
 class backup_exammanagement_activity_task extends backup_activity_task {
-
     /**
      * Defines particular settings for the plugin.
      */

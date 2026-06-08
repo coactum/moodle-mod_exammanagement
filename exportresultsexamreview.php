@@ -62,22 +62,35 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $CFG;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getenteredresultscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-        get_string('no_results_entered', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('no_results_entered', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getdatadeletiondate($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
-        get_string('correction_not_completed', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#afterexam', ['id' => $id]),
+        get_string('correction_not_completed', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Include pdf.
@@ -98,7 +111,7 @@ $pdf = new resultsexamreview(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, tr
 // Set document information.
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor(helper::getmoodlesystemname());
-$pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name);
+$pdf->SetTitle(get_string('pointslist_examreview', 'mod_exammanagement') . ': ' . $course->fullname . ', ' . $moduleinstance->name);
 $pdf->SetSubject(get_string('pointslist_examreview', 'mod_exammanagement'));
 $pdf->SetKeywords(get_string('pointslist_examreview', 'mod_exammanagement') . ', ' .
   $course->fullname . ', ' . $moduleinstance->name);
@@ -143,7 +156,6 @@ $date = helper::gethrexamtime($moduleinstance);
 
 if ($date) {
     $pdf->MultiCell(130, 3, $date . ', ' . helper::getcleancoursecategoryname(), 0, 'C', 0, 0, 50, 42);
-
 } else {
     $pdf->MultiCell(130, 3, helper::getcleancoursecategoryname(), 0, 'C', 0, 0, 50, 42);
 }
@@ -178,7 +190,6 @@ $tbl .= "</thead>";
 $participants = helper::getexamparticipants($moduleinstance, ['mode' => 'all'], ['matrnr']);
 
 foreach ($participants as $participant) {
-
     $totalpoints = helper::formatnumberfordisplay(helper::calculatepoints($participant));
 
     $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";

@@ -63,16 +63,21 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $OUTPUT, $PAGE;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Instantiate form.
@@ -81,11 +86,13 @@ $mform = new mod_exammanagement_addcustomroom_form(null, ['id' => $id, 'e' => $e
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
-
+    redirect(
+        new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) {  // In this case you process validated data.
-
     // Get the properties of the new room.
     $roomname = $fromform->roomname;
     $placescount = $fromform->placescount;
@@ -93,9 +100,10 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Update existing room.
     if ($DB->record_exists('exammanagement_rooms', ['roomid' => $roomname . '_' . $USER->id . 'c', 'moodleuserid' => $USER->id])) {
-
-        $room = $DB->get_record('exammanagement_rooms',
-            ['roomid' => $roomname . '_' . $USER->id . 'c', 'moodleuserid' => $USER->id]);
+        $room = $DB->get_record(
+            'exammanagement_rooms',
+            ['roomid' => $roomname . '_' . $USER->id . 'c', 'moodleuserid' => $USER->id]
+        );
 
         if ($description) {
             $room->description = $description;
@@ -114,11 +122,19 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $update = $DB->update_record('exammanagement_rooms', $room);
 
         if ($update) {
-            redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            redirect(
+                new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'),
+                null,
+                'success'
+            );
         } else {
-            redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                get_string('alteration_failed', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
     } else {
         // Add a new room.
@@ -149,14 +165,21 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         $import = $DB->insert_record('exammanagement_rooms', $room);
 
         if ($import) {
-            redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            redirect(
+                new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'),
+                null,
+                'success'
+            );
         } else {
-            redirect(new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
-                get_string('alteration_failed', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/chooserooms.php', ['id' => $id]),
+                get_string('alteration_failed', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
     }
-
 } else {
     // This branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
@@ -235,5 +258,4 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Finish the page.
     echo $OUTPUT->footer();
-
 }

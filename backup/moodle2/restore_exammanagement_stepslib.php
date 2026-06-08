@@ -26,7 +26,6 @@
  * Defines the structure step to restore one mod_exammanagement activity.
  */
 class restore_exammanagement_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * Defines the structure to be restored.
      *

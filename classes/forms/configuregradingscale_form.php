@@ -37,7 +37,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_configuregradingscale_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -60,8 +59,8 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
 
         if ($totalpoints) {
             $mform->addElement('html', '<div class="mb-1"><strong class="exammanagement_gradingscale_totalpoints mr-2">'
-                . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement').'</strong><span id="totalpoints"> ' .
-                helper::formatnumberfordisplay($totalpoints).'</span></div>');
+                . get_string('configure_gradingscale_totalpoints', 'mod_exammanagement') . '</strong><span id="totalpoints"> ' .
+                helper::formatnumberfordisplay($totalpoints) . '</span></div>');
         }
 
         // Create gradingscale input list.
@@ -106,7 +105,6 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
         $this->add_action_buttons();
 
         $mform->disable_form_change_checker();
-
     }
 
     /**
@@ -123,7 +121,6 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
         $maxpoints = helper::gettasktotalpoints($this->_customdata['moduleinstance']);
 
         foreach ($data['gradingsteppoints'] as $key => $gradingsteppoints) {
-
             $floatval = floatval($gradingsteppoints);
             $isnumeric = is_numeric($gradingsteppoints);
 
@@ -133,12 +130,13 @@ class mod_exammanagement_configuregradingscale_form extends moodleform {
                 $errors['gradingsteppoints[' . $key . ']'] = get_string('err_underzero', 'mod_exammanagement');
             } else if ($maxpoints && $gradingsteppoints > $maxpoints) {
                 $errors['gradingsteppoints[' . $key . ']'] = get_string('err_overmaxpoints', 'mod_exammanagement');
-            } else if ($key !== '1.0' && !array_key_exists('gradingsteppoints[' . $lastgradingstepkey . ']', $errors)
-                && ($lastgradingsteppoints <= $gradingsteppoints)) {
+            } else if (
+                $key !== '1.0' && !array_key_exists('gradingsteppoints[' . $lastgradingstepkey . ']', $errors)
+                && ($lastgradingsteppoints <= $gradingsteppoints)
+            ) {
                 $errors['gradingsteppoints[' . $key . ']'] = get_string('err_gradingstepsnotcorrect', 'mod_exammanagement');
                 $errors['gradingsteppoints[' . $lastgradingstepkey . ']'] =
                     get_string('err_gradingstepsnotcorrect', 'mod_exammanagement');
-
             }
 
             $lastgradingsteppoints = $gradingsteppoints;

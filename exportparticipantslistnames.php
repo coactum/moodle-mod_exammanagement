@@ -62,25 +62,42 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $CFG;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getroomscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_rooms_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::placesassigned($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('no_places_assigned', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('no_places_assigned', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Include pdf.
@@ -101,7 +118,8 @@ $pdf = new participantslist(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, tru
 // Set document information.
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor(helper::getmoodlesystemname());
-$pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name);
+$pdf->SetTitle(get_string('participantslist_names', 'mod_exammanagement') .
+    ': ' . $course->fullname . ', ' . $moduleinstance->name);
 $pdf->SetSubject(get_string('participantslist_names', 'mod_exammanagement'));
 $pdf->SetKeywords(get_string('participantslist_names', 'mod_exammanagement') . ', ' . $course->fullname . ', ' .
     $moduleinstance->name);
@@ -150,7 +168,6 @@ foreach ($roomids as $roomid) {
         }
 
         foreach ($participants as $participant) {
-
             $tbl .= ($fill) ? "<tr bgcolor=\"#DDDDDD\">" : "<tr>";
             $tbl .= "<td width=\"" . WIDTH_COLUMN_NAME . "\">" . $participant->lastname . "</td>";
             $tbl .= "<td width=\"" . WIDTH_COLUMN_FIRSTNAME . "\">" . $participant->firstname . "</td>";
@@ -175,7 +192,7 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 $umlaute = ["/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/"];
 $replace = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"];
 $filenameumlaute = get_string("participantslist_names", "mod_exammanagement") . '_' . helper::getcleancoursecategoryname() .
-    '_' . $course->fullname . '_' . $moduleinstance->name .'.pdf';
+    '_' . $course->fullname . '_' . $moduleinstance->name . '.pdf';
 $filename = preg_replace($umlaute, $replace, $filenameumlaute);
 
 // Close and output PDF document.

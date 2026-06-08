@@ -38,7 +38,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_exammanagement_participantsoverview_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor
      */
@@ -55,16 +54,26 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
         $mform = $this->_form;
 
         $allparticipants = helper::getexamparticipants($this->_customdata['moduleinstance'], ['mode' => 'all'], ['matrnr']);
-        $participants = helper::getexamparticipants($this->_customdata['moduleinstance'], ['mode' => 'all'], ['matrnr'],
-            'name', true, $this->_customdata['pagenr']);
+        $participants = helper::getexamparticipants(
+            $this->_customdata['moduleinstance'],
+            ['mode' => 'all'],
+            ['matrnr'],
+            'name',
+            true,
+            $this->_customdata['pagenr']
+        );
 
         $examrooms = json_decode($this->_customdata['moduleinstance']->rooms ?? '');
 
         $gradingscale = json_decode($this->_customdata['moduleinstance']->gradingscale ?? '');
 
-        $pagebar = new exammanagement_pagebar($this->_customdata['id'],
+        $pagebar = new exammanagement_pagebar(
+            $this->_customdata['id'],
             new moodle_url('/mod/exammanagement/participantsoverview.php', ['id' => $this->_customdata['id']]),
-            $allparticipants, count($participants), $this->_customdata['pagenr']);
+            $allparticipants,
+            count($participants),
+            $this->_customdata['pagenr']
+        );
 
         $mform->addElement('html', $OUTPUT->render($pagebar));
 
@@ -73,7 +82,7 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
         $mform->addElement('html', '<thead class="exammanagement_tableheader exammanagement_brand_backgroundcolor">');
         $mform->addElement('html', '<th scope="col">#</th><th scope="col">' . get_string("firstname", "mod_exammanagement") .
             '</th><th scope="col">' . get_string("lastname", "mod_exammanagement") . '</th><th scope="col">' .
-            get_string("matriculation_number", "mod_exammanagement").'</th>');
+            get_string("matriculation_number", "mod_exammanagement") . '</th>');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
@@ -83,13 +92,12 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
             $mform->setType('epm', PARAM_INT);
 
             if (!isset($misc['mode'])) {
-
                 $mform->addElement('html', '<th scope="col" class="exammanagement_table_width_room">' .
                     get_string("room", "mod_exammanagement") . '</th><th scope="col" class="exammanagement_table_width_place">' .
                     get_string("place", "mod_exammanagement") . '</th>');
 
                 $mform->addElement('html', '<th scope="col">' . get_string("points", "mod_exammanagement") .
-                    '</th><th scope="col">' . get_string("totalpoints", "mod_exammanagement").'</th>');
+                    '</th><th scope="col">' . get_string("totalpoints", "mod_exammanagement") . '</th>');
 
                 $mform->addElement('html', '<th scope="col">' . get_string("bonuspoints", "mod_exammanagement") . '</th>');
 
@@ -101,7 +109,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                 $mform->addElement('html', '<th scope="col">' . get_string("bonussteps", "mod_exammanagement") . '</th>');
 
                 $mform->addElement('html', '<th scope="col">' . get_string("resultwithbonus", "mod_exammanagement") . '</th>');
-
             } else {
                 $mform->addElement('html', '<th scope="col">' . get_string("grading_points", "mod_exammanagement") . '</th>');
 
@@ -110,7 +117,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                         '</th>');
                 }
             }
-
         } else { // Participants can be edited.
             $mform->addElement('hidden', 'epm', true);
             $mform->setType('epm', PARAM_INT);
@@ -127,11 +133,9 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                 $mform->addElement('html', '<th scope="col">' . get_string("bonussteps", "mod_exammanagement") . '</th>');
 
                 $mform->addElement('html', '<th scope="col">' . get_string("exam_state", "mod_exammanagement") . '</th>');
-
             } else {
                 $mform->addElement('html', '<th scope="col">' . get_string("grading_points", "mod_exammanagement") . '</th>');
             }
-
         }
 
         $mform->addElement('html', '</thead>');
@@ -139,11 +143,9 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
         $mform->addElement('html', '<tbody>');
 
         if ($participants) {
-
             $i = helper::getpagecount() * ($this->_customdata['pagenr'] - 1) + 1;
 
             foreach ($participants as $key => $participant) {
-
                 if (isset($participant->roomname)) {
                     $room = $participant->roomname;
                 } else {
@@ -175,7 +177,7 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                 $totalpointswithbonus = helper::calculatepoints($participant, true);
                 $totalpointswithbonusdisplay = helper::formatnumberfordisplay($totalpointswithbonus);
 
-                if (!isset($this->_customdata['epm']) || $this->_customdata['epm'] === 0 ) { // Show users.
+                if (!isset($this->_customdata['epm']) || $this->_customdata['epm'] === 0) { // Show users.
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="' . $i . '">' . $i . '</th>');
                     $mform->addElement('html', '<td>' . $participant->firstname . '</td>');
@@ -183,8 +185,8 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                     $mform->addElement('html', '<td>' . $participant->matrnr . '</td>');
 
                     if (!isset($misc['mode'])) {
-                        $mform->addElement('html', '<td>'.$room.'</td>');
-                        $mform->addElement('html', '<td>'.$place.'</td>');
+                        $mform->addElement('html', '<td>' . $room . '</td>');
+                        $mform->addElement('html', '<td>' . $place . '</td>');
 
                         $mform->addElement('html', '<td>');
 
@@ -208,8 +210,10 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
 
                             $mform->addElement('html', '</tr></table>');
                         } else {
-                            $mform->addElement('html', '<a href="' . new moodle_url('/mod/exammanagement/configuretasks.php',
-                                ['id' => $this->_customdata['id']]) . '" title="' .
+                            $mform->addElement('html', '<a href="' . new moodle_url(
+                                '/mod/exammanagement/configuretasks.php',
+                                ['id' => $this->_customdata['id']]
+                            ) . '" title="' .
                                 get_string("configure_tasks", "mod_exammanagement") .
                                 '"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
                         }
@@ -245,8 +249,10 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                             $mform->addElement('html', '<td>' . helper::formatnumberfordisplay($result) . '</td>');
                         } else {
                             $mform->addElement('html', '<td><a href="' .
-                                new moodle_url('/mod/exammanagement/configuregradingscale.php',
-                                ['id' => $this->_customdata['id']]) .
+                                new moodle_url(
+                                    '/mod/exammanagement/configuregradingscale.php',
+                                    ['id' => $this->_customdata['id']]
+                                ) .
                                 '" title="' . get_string("configure_gradingscale", "mod_exammanagement") .
                                 '"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                         }
@@ -262,7 +268,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                                 }
 
                                 switch ($participant->bonussteps) {
-
                                     case 0:
                                         break;
                                     case 1:
@@ -286,12 +291,18 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
 
                         if ($gradingscale) {
                             $mform->addElement('html', '<td>' . helper::formatnumberfordisplay(
-                                helper::calculateresultgrade($this->_customdata['moduleinstance'],
-                                $totalpointswithbonus, $participant->bonussteps)) . '</td>');
+                                helper::calculateresultgrade(
+                                    $this->_customdata['moduleinstance'],
+                                    $totalpointswithbonus,
+                                    $participant->bonussteps
+                                )
+                            ) . '</td>');
                         } else {
                             $mform->addElement('html', '<td><a href="' .
-                                new moodle_url('/mod/exammanagement/configuregradingscale.php',
-                                ['id' => $this->_customdata['id']]) . '" title="' .
+                                new moodle_url(
+                                    '/mod/exammanagement/configuregradingscale.php',
+                                    ['id' => $this->_customdata['id']]
+                                ) . '" title="' .
                                 get_string("configure_gradingscale", "mod_exammanagement") .
                                 '"><i class="fa fa-2x fa-info-circle text-warning"></i></a></td>');
                         }
@@ -300,7 +311,8 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                         if ($bonuspoints) {
                             if (isset($participant->bonuspoints)) {
                                 $mform->addElement('html', '<td>' . helper::formatnumberfordisplay(
-                                    number_format($participant->bonuspoints, 2)) . '</td>');
+                                    number_format($participant->bonuspoints, 2)
+                                ) . '</td>');
                             } else {
                                 $mform->addElement('html', '<td>-</td>');
                             }
@@ -314,7 +326,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                             $mform->addElement('html', '<td>' . helper::formatnumberfordisplay($result) . '</td>');
                         }
                     }
-
                 } else if (isset($this->_customdata['epm']) && $this->_customdata['epm'] != 0) { // Users can be edited.
                     $mform->addElement('html', '<tr>');
                     $mform->addElement('html', '<th scope="row" id="' . $i . '">' . $i . '</th>');
@@ -323,11 +334,9 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                     $mform->addElement('html', '<td>' . $participant->matrnr . '</td>');
 
                     if (!isset($misc['mode'])) {
-
                         $mform->addElement('html', '<td class="p-1">');
 
                         if ($tasks) {
-
                             $mform->addElement('html', '<table class="table-sm exammanagement_table_edit_tasks"><tr>');
 
                             $mform->addElement('html', '<th>' . get_string("nr", "mod_exammanagement") . '</th>');
@@ -342,14 +351,15 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                                 get_string("points", "mod_exammanagement") . '</strong></td>');
 
                             foreach ($tasks as $tasknumber => $taskmaxpoints) {
-
                                 $mform->addElement('html', '<td>');
                                 $mform->addElement('text', 'points[' . $participant->id . '][' . $tasknumber . ']', '');
                                 $mform->setType('points[' . $participant->id . '][' . $tasknumber . ']', PARAM_FLOAT);
 
                                 if (isset($exampoints[$tasknumber - 1])) {
-                                    $mform->setDefault('points[' . $participant->id . '][' . $tasknumber . ']',
-                                        $exampoints[$tasknumber - 1]);
+                                    $mform->setDefault(
+                                        'points[' . $participant->id . '][' . $tasknumber . ']',
+                                        $exampoints[$tasknumber - 1]
+                                    );
                                 }
                                 $mform->addElement('html', '</td>');
                             }
@@ -360,7 +370,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                                 get_string("max", "mod_exammanagement") . '</strong></td>');
 
                             foreach ($tasks as $tasknumber => $taskmaxpoints) {
-
                                 $mform->addElement('html', '<td class="p-0 text-center">');
                                 $mform->addElement('html', helper::formatnumberfordisplay($taskmaxpoints));
                                 $mform->addElement('html', '</td>');
@@ -369,8 +378,10 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                             $mform->addElement('html', '</tr></table>');
                         } else {
                             $mform->addElement('html', '<a href="' .
-                                new moodle_url('/mod/exammanagement/configuretasks.php',
-                                ['id' => $this->_customdata['id']]) . '" title="' .
+                                new moodle_url(
+                                    '/mod/exammanagement/configuretasks.php',
+                                    ['id' => $this->_customdata['id']]
+                                ) . '" title="' .
                                 get_string("configure_tasks", "mod_exammanagement") .
                                 '"><i class="fa fa-2x fa-info-circle text-warning"></i></a>');
                         }
@@ -389,8 +400,12 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                         }
 
                         $mform->addElement('html', '<td>');
-                        $select = $mform->addElement('select', 'bonussteps[' . $participant->id . ']', '',
-                            ['-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3]);
+                        $select = $mform->addElement(
+                            'select',
+                            'bonussteps[' . $participant->id . ']',
+                            '',
+                            ['-' => '-', '0' => 0, '1' => 1, '2' => 2, '3' => 3]
+                        );
                         $mform->addElement('html', '</td>');
 
                         if (isset($participant->bonussteps)) {
@@ -433,7 +448,6 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
                 $mform->addElement('html', '</tr>');
 
                 $i++;
-
             }
         } else {
             $mform->addElement('html', get_string("no_participants_added", "mod_exammanagement"));
@@ -446,8 +460,7 @@ class mod_exammanagement_participantsoverview_form extends moodleform {
         } else {
             $mform->addElement('html', '<div class="row"><span class="col-sm-5"></span><a href="' .
                 new moodle_url('/mod/exammanagement/view.php', ['id' => $this->_customdata['id']]) .
-                '" class="btn btn-primary">' . get_string("cancel", "mod_exammanagement").'</a></div>');
+                '" class="btn btn-primary">' . get_string("cancel", "mod_exammanagement") . '</a></div>');
         }
-
     }
 }

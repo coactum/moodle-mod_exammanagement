@@ -81,7 +81,7 @@ function exammanagement_add_instance($moduleinstance, $mform = null) {
     }
 
     // Check if mode export_grades.
-    $misc = new stdclass;
+    $misc = new stdclass();
     if ($mform->get_data()->exportgrades) {
         $misc->mode = 'export_grades';
     }
@@ -128,22 +128,21 @@ function exammanagement_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->categoryid = $PAGE->category->id; // Set course category.
 
     if (isset($mform->get_data()->newpassword) && $mform->get_data()->newpassword !== '') {
-
         $existingpw = base64_decode($DB->get_record('exammanagement', ['id' => $moduleinstance->instance])->password);
 
-        if (!isset($existingpw) || $existingpw == '' ||
+        if (
+            !isset($existingpw) || $existingpw == '' ||
             (isset($existingpw) && isset($mform->get_data()->oldpassword) &&
-            password_verify($mform->get_data()->oldpassword, $existingpw))) {
-
+            password_verify($mform->get_data()->oldpassword, $existingpw))
+        ) {
                 $moduleinstance->password = base64_encode(password_hash($mform->get_data()->newpassword, PASSWORD_DEFAULT));
-
         } else {
             throw new Exception(get_string('incorrect_password_change', 'mod_exammanagement'));
         }
     }
 
     // Check if mode export_grades.
-    $misc = new stdclass;
+    $misc = new stdclass();
     if ($mform->get_data()->exportgrades) {
         $misc->mode = 'export_grades';
     }
@@ -199,12 +198,14 @@ function exammanagement_delete_instance($id) {
 function exammanagement_reset_course_form_definition(&$mform) {
     $mform->addElement('header', 'exammanagementheader', get_string('modulenameplural', 'exammanagement'));
     $mform->addElement('checkbox', 'reset_exammanagement_data', get_string('deleteallexamdata', 'exammanagement'));
-    $mform->disabledif ('reset_exammanagement_data', 'reset_exammanagement_participantsdata', 'checked');
+    $mform->disabledif('reset_exammanagement_data', 'reset_exammanagement_participantsdata', 'checked');
 
-    $mform->addElement('checkbox', 'reset_exammanagement_participantsdata',
-        get_string('deleteexamparticipantsdata', 'exammanagement'));
-    $mform->disabledif ('reset_exammanagement_participantsdata', 'reset_exammanagement_data', 'checked');
-
+    $mform->addElement(
+        'checkbox',
+        'reset_exammanagement_participantsdata',
+        get_string('deleteexamparticipantsdata', 'exammanagement')
+    );
+    $mform->disabledif('reset_exammanagement_participantsdata', 'reset_exammanagement_data', 'checked');
 }
 
 /**
@@ -243,7 +244,6 @@ function exammanagement_reset_userdata($data) {
 
     // Delete all exammanagement data.
     if (!empty($data->reset_exammanagement_data)) {
-
         $DB->set_field_select('exammanagement', 'password', null, 'course = ?', $params);
         $DB->set_field_select('exammanagement', 'rooms', null, 'course = ?', $params);
         $DB->set_field_select('exammanagement', 'examtime', null, 'course = ?', $params);
@@ -273,7 +273,7 @@ function exammanagement_reset_userdata($data) {
     }
 
     // Delete exam participants data.
-    if (!empty($data->reset_exammanagement_data) || !empty($data->reset_exammanagement_participantsdata) ) {
+    if (!empty($data->reset_exammanagement_data) || !empty($data->reset_exammanagement_participantsdata)) {
         foreach ($exammanagements as $eid => $unused) {
             if (!$cm = get_coursemodule_from_instance('exammanagement', $eid)) {
                 continue;
@@ -371,7 +371,7 @@ function exammanagement_pluginfile($course, $cm, $context, $filearea, $args, $fo
 function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     global $DB, $CFG;
 
-    require_once($CFG->dirroot.'/calendar/lib.php');
+    require_once($CFG->dirroot . '/calendar/lib.php');
 
     // Get CMID if not sent as part of $exammanagement.
     if (! isset($exammanagement->coursemodule)) {
@@ -384,12 +384,13 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     $event->eventtype = EXAMMANAGEMENT_EVENT_TYPE_EXAMTIME;
     $event->type = CALENDAR_EVENT_TYPE_STANDARD;
 
-    if ($event->id = $DB->get_field('event', 'id', [
+    if (
+        $event->id = $DB->get_field('event', 'id', [
         'modulename' => 'exammanagement',
         'instance' => $exammanagement->id,
         'eventtype' => $event->eventtype,
-    ])) {
-
+        ])
+    ) {
         if ((! empty($exammanagement->examtime)) && ($exammanagement->examtime > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('examtime_calendarevent', 'exammanagement', $exammanagement->name);
@@ -429,11 +430,13 @@ function exammanagement_update_calendar(stdClass $exammanagement, $cmid) {
     $event = new stdClass();
     $event->type = CALENDAR_EVENT_TYPE_STANDARD;
     $event->eventtype = EXAMMANAGEMENT_EVENT_TYPE_EXAMREVIEWTIME;
-    if ($event->id = $DB->get_field('event', 'id', [
+    if (
+        $event->id = $DB->get_field('event', 'id', [
         'modulename' => 'exammanagement',
         'instance' => $exammanagement->id,
         'eventtype' => $event->eventtype,
-    ])) {
+        ])
+    ) {
         if ((! empty($exammanagement->examreviewtime)) && ($exammanagement->examreviewtime > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('examreviewtime_calendarevent', 'exammanagement', $exammanagement->name);

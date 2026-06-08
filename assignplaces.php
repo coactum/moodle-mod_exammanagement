@@ -70,25 +70,42 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $OUTPUT, $PAGE;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } if (!helper::getroomscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('no_rooms_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 } else if (helper::gettotalnumberofseats($moduleinstance) == 0) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('no_rooms_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('no_rooms_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 // Reset all existing places for participants.
@@ -106,17 +123,25 @@ $assignedplacescount = helper::getassignedplacescount($moduleinstance);
 // Instantiate form.
 require_once($CFG->dirroot . '/mod/exammanagement/classes/forms/assignplaces_form.php');
 if ($map) {
-    $mform = new mod_exammanagement_assignplaces_form(null,
-        ['id' => $id, 'e' => $e, 'map' => $map, 'pagenr' => $pagenr]);
+    $mform = new mod_exammanagement_assignplaces_form(
+        null,
+        ['id' => $id, 'e' => $e, 'map' => $map, 'pagenr' => $pagenr]
+    );
 } else {
-    $mform = new mod_exammanagement_assignplaces_form(null,
-        ['id' => $id, 'e' => $e, 'map' => 0, 'assignedplacescount' => $assignedplacescount]);
+    $mform = new mod_exammanagement_assignplaces_form(
+        null,
+        ['id' => $id, 'e' => $e, 'map' => 0, 'assignedplacescount' => $assignedplacescount]
+    );
 }
 
 // Form processing and displaying is done here.
 if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button is present on form.
-    redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-        get_string('operation_canceled', 'mod_exammanagement'), null, 'warning');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+        get_string('operation_canceled', 'mod_exammanagement'),
+        null,
+        'warning'
+    );
 } else if ($fromform = $mform->get_data()) { // In this case you process validated data.
     if (isset($map) && $map) {
         $examrooms = helper::getrooms($moduleinstance, 'examrooms');
@@ -125,7 +150,6 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         foreach ($participants as $participant) {
             if (isset($fromform->rooms[$participant->id])) {
                 if ($fromform->rooms[$participant->id] !== 'not_selected' && $fromform->places[$participant->id]) {
-
                     if (isset($participant->moodleuserid)) {
                         $participant->login = null;
                         $participant->firstname = null;
@@ -169,9 +193,12 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
         $DB->update_record("exammanagement", $moduleinstance);
 
-        redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-            get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
-
+        redirect(
+            new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+            get_string('operation_successfull', 'mod_exammanagement'),
+            null,
+            'success'
+        );
     } else {
         // All existing seat assignments should be deleted.
         if (!(isset($fromform->keep_seat_assignment) && $fromform->keep_seat_assignment)) {
@@ -183,14 +210,22 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
             $keepseatassignment = false;
 
             // Get all exam participants sorted by sortmode.
-            $participants = helper::getexamparticipants($moduleinstance,
-                ['mode' => 'all'], ['matrnr'], $fromform->assignment_mode_places);
+            $participants = helper::getexamparticipants(
+                $moduleinstance,
+                ['mode' => 'all'],
+                ['matrnr'],
+                $fromform->assignment_mode_places
+            );
         } else {
             $moduleinstance->assignmentmode = null;
             $keepseatassignment = true;
             // Todo: get only exam participants without places sorted by sortmode.
-            $participants = helper::getexamparticipants($moduleinstance,
-                ['mode' => 'no_seats_assigned'], ['matrnr'], $fromform->assignment_mode_places);
+            $participants = helper::getexamparticipants(
+                $moduleinstance,
+                ['mode' => 'no_seats_assigned'],
+                ['matrnr'],
+                $fromform->assignment_mode_places
+            );
         }
 
         $roommode = '0';
@@ -206,20 +241,21 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         }
 
         if (!$participants) {
-            redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-                get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                get_string('no_participants_added', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         }
 
         $participantscount = 0;
 
         if ($examrooms) {
-
             foreach ($examrooms as $room) {
                 if ($room) {
                     foreach ($participants as $key => $participant) {
-
                         if ($key >= $participantscount) {
-
                             if (isset($participant->moodleuserid)) {
                                 $participant->login = null;
                                 $participant->firstname = null;
@@ -240,13 +276,11 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
                             if ($room->places == null) {  // If all places of room are assigned.
                                 break;
                             }
-
                         } else if ($participantscount == count($participants)) { // If all users have a place.
                             break 2;
                         }
                     }
                 }
-
             }
         }
 
@@ -271,11 +305,19 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
         }
 
         if ($participantscount < count($participants)) {    // If users are left without a room.
-            redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-                get_string('participants_missing_places', 'mod_exammanagement'), null, 'error');
+            redirect(
+                new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                get_string('participants_missing_places', 'mod_exammanagement'),
+                null,
+                'error'
+            );
         } else {
-            redirect(new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
-                get_string('operation_successfull', 'mod_exammanagement'), null, 'success');
+            redirect(
+                new moodle_url('/mod/exammanagement/view.php#forexam', ['id' => $id]),
+                get_string('operation_successfull', 'mod_exammanagement'),
+                null,
+                'success'
+            );
         }
     }
 } else {
@@ -317,14 +359,18 @@ if ($mform->is_cancelled()) { // Handle form cancel operation, if cancel button 
 
     // Output buttons.
     if ($map) {
-        echo '<a href="' . new moodle_url('/mod/exammanagement/assignplaces.php',
-            ['id' => $id]) . '" class="btn btn-primary float-right mr-1" title="' .
+        echo '<a href="' . new moodle_url(
+            '/mod/exammanagement/assignplaces.php',
+            ['id' => $id]
+        ) . '" class="btn btn-primary float-right mr-1" title="' .
             get_string('assign_places', 'mod_exammanagement') . '"><span class="d-none d-sm-block">' .
             get_string('assign_places', 'mod_exammanagement') .
             '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>';
     } else {
-        echo '<a href="' . new moodle_url('/mod/exammanagement/assignplaces.php',
-            ['id' => $id, 'map' => true]) . '" class="btn btn-primary float-right mr-1" title="' .
+        echo '<a href="' . new moodle_url(
+            '/mod/exammanagement/assignplaces.php',
+            ['id' => $id, 'map' => true]
+        ) . '" class="btn btn-primary float-right mr-1" title="' .
             get_string('assign_places_manually', 'mod_exammanagement') . '"><span class="d-none d-sm-block">' .
             get_string('assign_places_manually', 'mod_exammanagement') .
             '</span><i class="fa fa-repeat d-sm-none" aria-hidden="true"></i></a>';

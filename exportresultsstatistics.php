@@ -30,7 +30,6 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-
 use mod_exammanagement\local\helper;
 
 require(__DIR__ . '/../../config.php');
@@ -70,19 +69,28 @@ require_capability('mod/exammanagement:viewinstance', $context);
 global $CFG;
 
 // If user has not entered the correct password: redirect to check password page.
-if (isset($moduleinstance->password) &&
-    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)) {
-
+if (
+    isset($moduleinstance->password) &&
+    (!isset($SESSION->loggedInExamOrganizationId) || $SESSION->loggedInExamOrganizationId !== $id)
+) {
     redirect(new moodle_url('/mod/exammanagement/checkpassword.php', ['id' => $id]), null, null, null);
 }
 
 // Check if requirements are met.
 if (helper::isexamdatadeleted($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
-        get_string('err_examdata_deleted', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforeexam', ['id' => $id]),
+        get_string('err_examdata_deleted', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }if (!helper::getparticipantscount($moduleinstance)) {
-    redirect(new moodle_url('/mod/exammanagement/view.php#beforexam', ['id' => $id]),
-        get_string('no_participants_added', 'mod_exammanagement'), null, 'error');
+    redirect(
+        new moodle_url('/mod/exammanagement/view.php#beforexam', ['id' => $id]),
+        get_string('no_participants_added', 'mod_exammanagement'),
+        null,
+        'error'
+    );
 }
 
 require_once("$CFG->libdir/phpspreadsheet/vendor/autoload.php");
@@ -93,7 +101,7 @@ $spreadsheet = new Spreadsheet();
 // Set properties for document.
 $spreadsheet->getProperties()->setCreator(helper::getmoodlesystemname())
     ->setLastModifiedBy(helper::getmoodlesystemname())
-    ->setTitle(get_string('examresults_statistics', 'mod_exammanagement') . ': ' . $course->fullname . ', '. $moduleinstance->name)
+    ->setTitle(get_string('examresults_statistics', 'mod_exammanagement') . ': ' . $course->fullname . ', ' . $moduleinstance->name)
     ->setSubject(get_string('examresults_statistics', 'mod_exammanagement'))
     ->setDescription(get_string('examresults_statistics_description', 'mod_exammanagement'))
     ->setKeywords(get_string('examresults_statistics', 'mod_exammanagement') . ', ' .
@@ -157,11 +165,13 @@ if ($resultscount && $gradingscale) {
     if ($bonusstepsentered) {
         $worksheet->getStyle('A9:D9')->applyFromArray($headerstyle);
         $worksheet->getStyle('A10:D20')->getAlignment()->setHorizontal(
-            Alignment::HORIZONTAL_CENTER);
+            Alignment::HORIZONTAL_CENTER
+        );
     } else {
         $worksheet->getStyle('A9:C9')->applyFromArray($headerstyle);
         $worksheet->getStyle('A10:C20')->getAlignment()->setHorizontal(
-            Alignment::HORIZONTAL_CENTER);
+            Alignment::HORIZONTAL_CENTER
+        );
     }
 }
 
@@ -170,14 +180,16 @@ $worksheet->getStyle('A23:C23')->applyFromArray($headerstyle);
 $worksheet->getStyle('A23:A28')->applyFromArray($borderstylearray);
 $worksheet->getStyle('A24:A28')->getFont()->setBold(true);
 $worksheet->getStyle('B24:C28')->getAlignment()->setHorizontal(
-    Alignment::HORIZONTAL_CENTER);
+    Alignment::HORIZONTAL_CENTER
+);
 
 // Table 3.
 $worksheet->getStyle('A31:C31')->applyFromArray($headerstyle);
 $worksheet->getStyle('A31:A34')->applyFromArray($borderstylearray);
 $worksheet->getStyle('A32:A34')->getFont()->setBold(true);
 $worksheet->getStyle('B32:C34')->getAlignment()->setHorizontal(
-    Alignment::HORIZONTAL_CENTER);
+    Alignment::HORIZONTAL_CENTER
+);
 
 // Set general exam information.
 $semester = helper::getcleancoursecategoryname();
@@ -256,7 +268,6 @@ $bonussteptwo = 0;
 $bonusstepthree = 0;
 
 foreach ($participants as $participant) {
-
     $resultstate = helper::getexamstate($participant);
 
     if ($resultstate == "nt") {
@@ -273,7 +284,6 @@ foreach ($participants as $participant) {
         if ($result == '-') {
             $notrated++;
         } else if ($result && $gradingscale) {
-
             $summarytable[strval($result)]["countNoBonus"]++;
 
             if ($result == '5,0') {
@@ -284,7 +294,6 @@ foreach ($participants as $participant) {
                 }
             } else {
                 if ($resultwithbonus) {
-
                     if ($resultwithbonus != '5') {
                         $keysummarytable = str_pad(strval($resultwithbonus), 3, '.0');
                     } else {
@@ -314,12 +323,10 @@ foreach ($participants as $participant) {
             $bonusstepnotset++;
             break;
     }
-
 }
 
 // Output table 1.
 if ($gradingscale && $resultscount) {
-
     $worksheet->setCellValue('A9', get_string('grade', 'mod_exammanagement'));
     $worksheet->setCellValue('B9', get_string('points', 'mod_exammanagement'));
 
@@ -331,13 +338,13 @@ if ($gradingscale && $resultscount) {
     }
 
     foreach ($summarytable as $gradestep => $options) {
-        $worksheet->setCellValue("A".$rowcounter, strval($gradestep));
-        $worksheet->setCellValue("B".$rowcounter, $options["from"] . " - " . $options["to"]);
+        $worksheet->setCellValue("A" . $rowcounter, strval($gradestep));
+        $worksheet->setCellValue("B" . $rowcounter, $options["from"] . " - " . $options["to"]);
 
-        $worksheet->setCellValue("C".$rowcounter, $options["countNoBonus"]);
+        $worksheet->setCellValue("C" . $rowcounter, $options["countNoBonus"]);
 
         if ($bonusstepsentered) {
-            $worksheet->setCellValue("D".$rowcounter, $options["countBonus"]);
+            $worksheet->setCellValue("D" . $rowcounter, $options["countBonus"]);
         }
 
         $rowcounter++;
@@ -378,8 +385,8 @@ $passed = $numberparticipants - $notpassed - $notrated;
 
 if ($numberparticipants > 0) {
     $passedpercent = number_format($passed / $numberparticipants * 100, 2);
-    $notpassedpercent = number_format($notpassed / $numberparticipants * 100 , 2);
-    $notratedpercent = number_format($notrated / $numberparticipants * 100 , 2);
+    $notpassedpercent = number_format($notpassed / $numberparticipants * 100, 2);
+    $notratedpercent = number_format($notrated / $numberparticipants * 100, 2);
 } else {
     $passedpercent = 0;
     $notpassedpercent = 0;
@@ -401,7 +408,7 @@ $worksheet->setCellValue('C32', 100);
 $worksheet->setCellValue('C33', $passedpercent);
 $worksheet->setCellValue('C34', $notpassedpercent);
 
-if ( $notrated > 0 ) {
+if ($notrated > 0) {
     $worksheet->setCellValue('A35', get_string('notrated', 'mod_exammanagement'));
     $worksheet->setCellValue('B35', $notrated);
     $worksheet->setCellValue('C35', $notratedpercent);
@@ -422,7 +429,6 @@ if ($tasks) {
 }
 
 if ($tasks || $bonusstepsentered) {
-
     $spreadsheet->createSheet();
     $worksheet = $spreadsheet->setActiveSheetIndex(1);
 
@@ -460,8 +466,8 @@ if ($tasks || $bonusstepsentered) {
         $worksheet->setCellValue('C1', get_string('mean', 'mod_exammanagement'));
 
         foreach ($tasks as $tasknumber => $points) {
-            $worksheet->setCellValueByColumnAndRow(1 , $tasknumber + 1, $tasknumber);
-            $worksheet->setCellValueByColumnAndRow(2 , $tasknumber + 1, $points);
+            $worksheet->setCellValueByColumnAndRow(1, $tasknumber + 1, $tasknumber);
+            $worksheet->setCellValueByColumnAndRow(2, $tasknumber + 1, $points);
         }
     }
 
@@ -476,16 +482,16 @@ if ($tasks || $bonusstepsentered) {
         $worksheet->setCellValue('G1', get_string('bonussteps', 'mod_exammanagement'));
         $worksheet->setCellValue('H1', get_string('count', 'mod_exammanagement'));
 
-        $worksheet->setCellValueByColumnAndRow(7 , 2, '-');
-        $worksheet->setCellValueByColumnAndRow(8 , 2, $bonusstepnotset);
-        $worksheet->setCellValueByColumnAndRow(7 , 3, 0);
-        $worksheet->setCellValueByColumnAndRow(8 , 3, $bonusstepzero);
-        $worksheet->setCellValueByColumnAndRow(7 , 4, 1 .' (= 0' . $separator . '3)');
-        $worksheet->setCellValueByColumnAndRow(8 , 4, $bonusstepone);
-        $worksheet->setCellValueByColumnAndRow(7 , 5, 2 .' (= 0' . $separator . '7)');
-        $worksheet->setCellValueByColumnAndRow(8 , 5, $bonussteptwo);
-        $worksheet->setCellValueByColumnAndRow(7 , 6, 3 .' (= 1' . $separator . '0)');
-        $worksheet->setCellValueByColumnAndRow(8 , 6, $bonusstepthree);
+        $worksheet->setCellValueByColumnAndRow(7, 2, '-');
+        $worksheet->setCellValueByColumnAndRow(8, 2, $bonusstepnotset);
+        $worksheet->setCellValueByColumnAndRow(7, 3, 0);
+        $worksheet->setCellValueByColumnAndRow(8, 3, $bonusstepzero);
+        $worksheet->setCellValueByColumnAndRow(7, 4, 1 . ' (= 0' . $separator . '3)');
+        $worksheet->setCellValueByColumnAndRow(8, 4, $bonusstepone);
+        $worksheet->setCellValueByColumnAndRow(7, 5, 2 . ' (= 0' . $separator . '7)');
+        $worksheet->setCellValueByColumnAndRow(8, 5, $bonussteptwo);
+        $worksheet->setCellValueByColumnAndRow(7, 6, 3 . ' (= 1' . $separator . '0)');
+        $worksheet->setCellValueByColumnAndRow(8, 6, $bonusstepthree);
     }
 }
 
@@ -524,7 +530,6 @@ $worksheet->getColumnDimension(helper::calculatecelladdress(5 + $n))->setWidth(1
 if ($bonuspointsentered) {
     $worksheet->getColumnDimension(helper::calculatecelladdress(6 + $n))->setWidth(15);
     $worksheet->getColumnDimension(helper::calculatecelladdress(7 + $n))->setWidth(18);
-
 }
 
 $worksheet->getColumnDimension(helper::calculatecelladdress(6 + $n + $bc))->setWidth(15);
@@ -588,7 +593,6 @@ if ($bonusstepsentered) {
 $rowcounter = 2;
 
 foreach ($participants as $participant) {
-
     $state = helper::getexamstate($participant);
 
     $worksheet->setCellValue("A" . $rowcounter, $participant->matrnr);
@@ -636,8 +640,11 @@ foreach ($participants as $participant) {
 
     if ($bonuspointsentered) {
         $worksheet->setCellValueByColumnAndRow(6 + $n, $rowcounter, $bonuspoints);
-        $worksheet->setCellValueByColumnAndRow(7 + $n, $rowcounter,
-            helper::formatnumberfordisplay($totalpointswithbonus, 'number'));
+        $worksheet->setCellValueByColumnAndRow(
+            7 + $n,
+            $rowcounter,
+            helper::formatnumberfordisplay($totalpointswithbonus, 'number')
+        );
     }
 
     if ($gradingscale) {
@@ -663,13 +670,12 @@ if ($taskcount) {
     $worksheet->getStyle("C2:C" . $n)->getNumberFormat()->setFormatCode('0.00');
 
     for ($n = 1; $n <= $taskcount; $n++) {
-
-        $start = Coordinate::stringFromColumnIndex(5 + $n).'2';
-        $end = Coordinate::stringFromColumnIndex(5 + $n). ($participantscount + 1);
+        $start = Coordinate::stringFromColumnIndex(5 + $n) . '2';
+        $end = Coordinate::stringFromColumnIndex(5 + $n) . ($participantscount + 1);
 
         $mean = 0;
 
-        foreach ($spreadsheet->setActiveSheetIndex(2)->rangeToArray($start.':'.$end) as $val) {
+        foreach ($spreadsheet->setActiveSheetIndex(2)->rangeToArray($start . ':' . $end) as $val) {
             if (is_numeric($val[0])) {
                 $mean += $val[0];
             }
